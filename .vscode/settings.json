@@ -1,0 +1,18 @@
+{
+    "cSpell.words": [
+        "eurocash"
+    ],
+    "bracketPairColorizer.consecutivePairColors": [
+        "()",
+        "[]",
+        "{}",
+        ["<", "</"],
+        ["<", "/>"],
+        [
+            "Gold",
+            "Orchid",
+            "LightSkyBlue"
+        ],
+        "Red"
+    ],
+}
