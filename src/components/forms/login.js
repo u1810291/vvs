@@ -1,0 +1,135 @@
+import React, { useCallback, useState, useEffect } from "react";
+import useLanguage from "../../hook/useLanguage";
+const { GrayDot } = require("../../components/icons/grayDot");
+const { RedDot } = require("../../components/icons/redDot");
+const { GreenDot } = require("../../components/icons/greenDot");
+
+const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailValid, setEmailValid] = useState(null);
+  const [passwordValid, setPasswordValid] = useState(null);
+  const [emailEmpty, setEmailEmpty] = useState(true);
+  const [passwordEmpty, setPasswordEmpty] = useState(true);
+  const { english, lithuanian, t } = useLanguage();
+
+  const passwordFunc = useCallback(
+    async (e) => {
+      setPassword(e.target.value);
+      const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      const result = pattern.test(password);
+      if (result === true) {
+        setPasswordValid(true);
+      } else {
+        setPasswordValid(false);
+      }
+    },
+    [password, setPassword, setPasswordValid]
+  );
+
+  const emailFunc = useCallback(
+    async (e) => {
+      setEmail(e.target.value);
+      // To prevent matching multiple @ signs:
+      const pattern =
+        // eslint-disable-next-line no-useless-escape
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const result = pattern.test(email);
+      if (result === true) {
+        setEmailValid(true);
+      } else {
+        setEmailValid(false);
+      }
+    },
+    [email, setEmail, setEmailValid]
+  );
+
+  useEffect(() => {
+    if (email === "") {
+      setEmailEmpty(true);
+    } else {
+      setEmailEmpty(false);
+    }
+  }, [email]);
+
+  useEffect(() => {
+    if (password === "") {
+      setPasswordEmpty(true);
+    } else {
+      setPasswordEmpty(false);
+    }
+  }, [password]);
+
+  return (
+    <>
+      <form className="space-y-6">
+        <div>
+          <div className="mt-12">
+            <div className="flex w-full flex-row">
+              {emailEmpty ? (
+                <GrayDot />
+              ) : !emailValid ? (
+                <RedDot />
+              ) : (
+                <GreenDot />
+              )}
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={emailFunc}
+                required
+                placeholder={t("loginSystem.email")}
+                className="appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+              />
+            </div>
+            <a className="text-red-800 text-sm font-montserrat">
+              {t("loginSystem.wrongEmail")}
+            </a>
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="mt-1">
+            <div className="flex flex-row">
+              {passwordEmpty ? (
+                <GrayDot />
+              ) : !passwordValid ? (
+                <RedDot />
+              ) : (
+                <GreenDot />
+              )}
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={passwordFunc}
+                placeholder={t("loginSystem.password")}
+                className="appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+              />
+            </div>
+            <a className="text-red-800 text-sm font-montserrat mb-20">
+              {t("loginSystem.wrongEmailOrPassword")}
+            </a>
+          </div>
+        </div>
+        <div className="flex flex-row justify-end my-12">
+          <div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-normal text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none"
+            >
+              {t("loginSystem.login")}
+            </button>
+          </div>
+        </div>
+      </form>
+    </>
+  );
+};
+
+export default LoginForm;
