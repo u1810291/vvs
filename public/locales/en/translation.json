@@ -41,7 +41,8 @@
     "wantToGetAnswer": "I would like to get an answer",
     "DontToGetAnswer": "I would not like to get an answer",
     "gotAnswer": "I would like an answer",
-    "securityContracts": "Security contract or rules"
+    "securityContracts": "Security contract or rules",
+    "createTask": "Create task"
   },
   "eurocash": {
     "accounts": "Accounts",

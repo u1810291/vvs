@@ -7,6 +7,15 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { StandardMap } from "../feature/mapStandard";
+import DashboardSidebar from "../components/sidebars/dashboard";
+const { AlarmCard } = require("../components/cards/alarm");
+const { AssignCard } = require("../components/cards/assign");
+const { BackCard } = require("../components/cards/back");
+const { CancelCard } = require("../components/cards/canceled");
+const { DriveCard } = require("../components/cards/drive");
+const { EmptyCard } = require("../components/cards/empty");
+const { OffCard } = require("../components/cards/off");
+const { WarningCard } = require("../components/cards/warning");
 
 const containerStyle = {
   width: "100%",
@@ -58,25 +67,77 @@ function Dashboard() {
     <>
       <div className="container max-w-screen-xl">
         <div className="flex w-screen flex-row justify-center h-screen">
-          <div className="flex flex-col min-h-full items-center w-full px-20 border-2 border-green-500">
-            <div className="flex flex-row w-full content-center justify-center h-full border-2 border-red-500">
-                    {isLoaded ? (
-                      <div className="w-full h-full">
-                        <GoogleMap
-                          mapContainerStyle={containerStyle}
-                          center={center}
-                          zoom={12}
-                          onLoad={onLoad}
-                          onUnmount={onUnmount}
-                          onClick={onMapClick}
-                        >
-                          {clickedPos.lat ? (
-                            <Marker icon={markerIcon} position={clickedPos} />
-                          ) : null}
-                          <></>
-                        </GoogleMap>
-                      </div>
+          <div className="flex flex-col h-full items-center w-full">
+            <div className="flex flex-row w-full justify-between h-full">
+              <DashboardSidebar />
+              <div className="flex min-h-full flex-col w-3/12 bg-gray-100">
+                <div className="flex flex-row items-end border bg-white border-b-2 justify-between">
+                  <h4 className="text-lg ml-2 self-center font-normal">
+                    Užduotys
+                  </h4>
+                  <button
+                    type="submit"
+                    className="w-36 flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-normal text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none"
+                  >
+                    {t("loginSystem.createTask")}
+                  </button>
+                </div>
+                <div className="text-slate-400">
+                  <h4 className="ml-2">Prašymai</h4>
+                  <AlarmCard/>
+                  <h4>Laukiama patvirtinimo</h4>
+                  <AssignCard/>
+                  <h4>Važiuoja į objektą</h4>
+                  <BackCard/>
+                  <h4>Važiuoja į objektą</h4>
+                  <CancelCard/>
+                  <h4>Apžiūri objektą</h4>
+                  <EmptyCard/>
+                  <h4>Laukiama leidimo grįžti</h4>
+                  <WarningCard/>
+                  <h4>Atšauktos atsakingo</h4>
+                </div>
+              </div>
+              {isLoaded ? (
+                <div className="w-6/12 h-full">
+                  <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={center}
+                    zoom={12}
+                    onLoad={onLoad}
+                    onUnmount={onUnmount}
+                    onClick={onMapClick}
+                  >
+                    {clickedPos.lat ? (
+                      <Marker icon={markerIcon} position={clickedPos} />
                     ) : null}
+                    <></>
+                  </GoogleMap>
+                </div>
+              ) : null}
+              <div className="flex min-h-full flex-col w-3/12 bg-gray-100">
+                <div className="flex flex-row items-end border bg-white border-b-2 justify-between">
+                  <h4 className="text-lg ml-2 self-center font-normal">
+                    Užduotys
+                  </h4>
+                  <button
+                    type="submit"
+                    className="w-36 flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-normal text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none"
+                  >
+                    {t("loginSystem.createTask")}
+                  </button>
+                </div>
+                <div className="text-slate-400">
+                  <h4 className="ml-2">Prašymai</h4>
+                  <OffCard/>
+                  <h4>Laukiama patvirtinimo</h4>
+                  <h4>Važiuoja į objektą</h4>
+                  <h4>Važiuoja į objektą</h4>
+                  <h4>Apžiūri objektą</h4>
+                  <h4>Laukiama leidimo grįžti</h4>
+                  <h4>Atšauktos atsakingo</h4>
+                </div>
+              </div>
             </div>
           </div>
         </div>
