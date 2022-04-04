@@ -42,7 +42,8 @@
     "DontToGetAnswer": "Nenorėčiau gauti atsakymo",
     "gotAnswer": "Norėčiau gaut atsakymą",
     "securityContracts": "Apsaugos sutartis ar taisyklės",
-    "createTask": "Sukurti užduoti"
+    "createTask": "Sukurti užduoti",
+    "allData": "Visi duomenys"
   },
   "eurocash": {
     "accounts": "Paskyros",
