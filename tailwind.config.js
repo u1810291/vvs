@@ -18,10 +18,12 @@ module.exports = {
     purge: [
       "./public/**/*.html",
       "./src/**/*.{js,jsx,ts,tsx,html,vue}",
-      "./public/index.html"
+      "./public/index.html",
     ],
     mode: "jit",
-    plugins: [require("@tailwindcss/forms")],
+    plugins: [
+      require("@tailwindcss/forms"),
+    ],
     colors: ({ colors }) => ({
       inherit: colors.inherit,
       current: colors.current,

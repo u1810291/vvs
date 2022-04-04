@@ -27,7 +27,7 @@
     "dev": "react-scripts start",
     "start": "serve -s build",
     "build": "craco build",
-    "test": "jest"
+    "test": "cucumber-js -f @cucumber/pretty-formatter"
   },
   "eslintConfig": {
     "extends": [
@@ -49,15 +49,13 @@
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",
+    "@cucumber/pretty-formatter": "^1.0.0-alpha.2",
     "@welldone-software/why-did-you-render": "^6.2.3",
     "autoprefixer": "^10.4.2",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-react-perf": "^3.3.1",
-    "jest": "^27.5.1",
-    "jest-haste-map": "^27.5.1",
-    "jest-worker": "^27.5.1",
     "postcss": "^8.4.8",
     "react-devtools": "^4.24.0",
     "react-devtools-core": "^4.24.0",
