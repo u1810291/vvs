@@ -12,7 +12,7 @@ const DashboardSideLeft = () => {
   const { english, lithuanian, t } = useLanguage();
   return (
     <>
-      <div className="flex flex-row items-end border bg-white border-b-2 justify-between">
+      <div className="flex flex-row items-end border min-h-full overflow-y-auto scrollbar-gone bg-white border-b-2 justify-between">
         <h4 className="text-lg ml-2 self-center font-normal">Užduotys</h4>
         <button
           type="submit"

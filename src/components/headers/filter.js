@@ -50,18 +50,18 @@ export function FilterHeader() {
           >
             {t("loginSystem.createTask")}
           </button>
-          <a href="#" className="text-lg mx-6 font-light text-black">
+          <button  className="text-lg mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
             Pultas
-          </a>
-          <a href="#" className="text-lg mx-6 font-light text-black">
+          </button>
+          <button  className="text-lg mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
             Užduotys
-          </a>
-          <a href="#" className="text-lg mx-6 font-light text-black">
+          </button>
+          <button  className="text-lg mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
             Leidimai
-          </a>
-          <a href="#" className="text-lg mx-6 font-light text-black">
+          </button>
+          <button  className="text-lg mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
             Pažeidimai
-          </a>
+          </button>
         </div>
       </div>
   );
