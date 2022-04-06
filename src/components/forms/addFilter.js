@@ -40,7 +40,6 @@ export const AddFilter = (props) => {
             <input
               id="save"
               name="save"
-              required
               type="checkbox"
               className="h-4 w-4  text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
             />
@@ -50,7 +49,6 @@ export const AddFilter = (props) => {
             <input
               id="default-filter"
               name="default-filter"
-              required
               type="checkbox"
               className="h-4 w-4   text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
             />

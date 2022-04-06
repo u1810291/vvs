@@ -6,7 +6,7 @@ import { FiltersList } from "../components/lists/filter.js";
 import { OptionsList } from "../components/lists/options";
 import { DashboardList } from "../components/lists/dashboard";
 const { AddFilterList } = require("../components/lists/addFilter");
-const { AddFilter } = require("../components/forms/addFilter");
+// const { AddFilter } = require("../components/forms/addFilter");
 import { DashboardTestApi } from "../api/dashboardTest";
 
 function Dashboard() {
@@ -51,6 +51,35 @@ function Dashboard() {
                       </div>
                     </div>
                     <div className="flex flex-col w-1/5"></div>
+                  </div>
+                  <div className="w-full border-t py-2 grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Gauta</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Objektas</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Pavadinimas</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Ekipažas</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Spėjo laiku</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Reagavimo laikas</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Laikas objekte</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Būsena</span>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <span className="text-gray-300">Suveikimo priežastis</span>
+                    </div>
                   </div>
                   <div className="flex flex-col w-full overflow-y-auto items-center scrollbar-gone">
                     {DashboardTestApi.map((data) => (
