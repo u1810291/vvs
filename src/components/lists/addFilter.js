@@ -12,19 +12,25 @@ export const AddFilterList = (props) => {
   const { longName, setLongName } = useContext(GlobalContext);
   const { shortName, setShortName } = useContext(GlobalContext);
 
-  const deleteFunc = useCallback(async (filter) => {
-    setFilterList((currentFilter) =>
-      currentFilter.filter((x) => x.id !== filter.id)
-    );
-  }, [setFilterList]);
+  const deleteFunc = useCallback(
+    async (filter) => {
+      setFilterList((currentFilter) =>
+        currentFilter.filter((x) => x.id !== filter.id)
+      );
+    },
+    [setFilterList]
+  );
 
   const cancelFunc = useCallback(async () => {
     setEdit(false);
   }, [setEdit]);
 
-  const editFunc = useCallback(async () => {
-    setEdit(true);
-  }, [setEdit]);
+  const editFunc = useCallback(async (filter) => {
+    setFilterList((currentFilter) =>
+      currentFilter.find((x) => x.id === filter.id)
+    );
+    // setEdit(true);
+  }, []);
 
   const addFilterFunc = useCallback(async () => {
     setFilterList((currentFilter) => [
@@ -57,7 +63,7 @@ export const AddFilterList = (props) => {
         showReason: false,
       },
     ]);
-  }, []);
+  }, [setFilterList]);
 
   const longNameFunc = useCallback(
     async (e) => {
@@ -139,9 +145,9 @@ export const AddFilterList = (props) => {
         </div>
       ) : (
         <div>
-          {filterList.map((filter, index) => {
+          {filterList.filter((filter, index) => {
             return (
-              <div key={filter.id} className="ml-6 w-full">
+              <div className="ml-6 w-full">
                 <div className="flex flex-row w-full justify-between mt-2">
                   <div className="flex flex-col w-full">
                     <p className="text-gray-500">Pavadinimas</p>

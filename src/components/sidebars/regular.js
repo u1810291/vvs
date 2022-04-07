@@ -1,6 +1,5 @@
 import React, { useCallback, useContext } from "react";
 import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
 
 const DashboardSidebar = () => {
   const { filterList, setFilterList } = useContext(GlobalContext);

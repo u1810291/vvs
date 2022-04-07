@@ -52,28 +52,31 @@ export const FiltersList = ({
 
   const ReasonFunc = useCallback(async () => {}, []);
 
-  const remove = useCallback(async (data) => {}, []);
+  const remove = useCallback(async (filter) => {}, []);
 
   return (
     <div
       {...props}
       className="rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1"
     >
-
-      {/* {filterList.map((data) => (
-        <div
-          key={data.id}
-          className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200"
-        >
-          <p>{data.name}</p>
-          <button onClick={remove}>
-            <img
-              className="h-2 w-2"
-              src={require("../../assets/assets/x.png")}
-            />
-          </button>
-        </div>
-      ))} */}
+      {/* {filterList.map((filter, index) => {
+        return (
+          <div
+            className={filter.dashboardList.id ? "visible" : "hidden"}
+            key={filter.dashboardList.id}
+          >
+            <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
+              <p>{filter.dashboardList.id}</p>
+              <button onClick={remove}>
+                <img
+                  className="h-2 w-2"
+                  src={require("../../assets/assets/x.png")}
+                />
+              </button>
+            </div>
+          </div>
+        );
+      })} */}
 
       {/* <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
         <p>Gauta</p>

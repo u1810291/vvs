@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -14,7 +14,7 @@ function classNames(...classes) {
 export const OptionsList = (props) => {
   const { english, lithuanian, t } = useLanguage();
   const { filterList, setFilterList } = useContext(GlobalContext);
-  const { value, onChange } = useContext(GlobalContext);
+  const { value, onChange } = useContext(GlobalContext); 
   const { objectAddress, setObjectAddress } = useContext(GlobalContext);
   const { operator, setOperator } = useContext(GlobalContext);
   const { object, setObject } = useContext(GlobalContext);
@@ -25,6 +25,9 @@ export const OptionsList = (props) => {
   const { crew, setCrew } = useContext(GlobalContext);
   const { driver, setDriver } = useContext(GlobalContext);
   const { inTime, setInTime } = useContext(GlobalContext);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate ] = useState();
+  const [startAndEndDate, setStartAndEndDate ] = useState();
 
   const operatorFunc = useCallback(async () => {
     setOperator(1);
@@ -105,6 +108,21 @@ export const OptionsList = (props) => {
     setInTime(2);
   }, [setInTime]);
 
+  useEffect(() => {
+    const startYear = value[0]?.getFullYear();
+    const startMonth = value[0]?.getMonth() + 1;
+    const startDay = value[0]?.getDate();
+    const newStartDate = `${startYear}-${startMonth}-${startDay}`;
+    const endYear = value[1]?.getFullYear();
+    const endMonth = value[1]?.getMonth() + 1;
+    const endDay = value[1]?.getDate();
+    const newEndDate = `${endYear}-${endMonth}-${endDay}`;
+    const newStartAndEndDate = `${newStartDate} - ${newEndDate}`;
+      setStartDate(newStartDate);
+      setEndDate(newEndDate);
+      setStartAndEndDate(newStartAndEndDate);
+  },[value])
+
   return (
     <div
       {...props}
@@ -116,7 +134,9 @@ export const OptionsList = (props) => {
             Data nuo - iki
           </p>
           <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">{value}</p>
+            {startAndEndDate !== "undefined-NaN-undefined - undefined-NaN-undefined" ? (
+            <p className="text-gray-400 self-center truncate">{startAndEndDate}</p>
+            ) : ( <p className="text-gray-400 self-center truncate">-</p> )}
             <div>
               <img src={require("../../assets/assets/calendar.png")}></img>
             </div>
@@ -134,13 +154,12 @@ export const OptionsList = (props) => {
         >
           <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
+
                   <div>
-                    <Calendar onChange={onChange} value={value} />
+                    <Calendar selectRange={true} onChange={onChange} value={value} />
                   </div>
-                )}
-              </Menu.Item>
+
+
             </div>
           </Menu.Items>
         </Transition>

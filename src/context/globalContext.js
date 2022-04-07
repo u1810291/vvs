@@ -29,18 +29,21 @@ export const GlobalProvider = ({ children }) => {
       crew: "1",
       driver: "1",
       inTime: "1",
-      showDate: false,
-      showObject: false,
-      showName: false,
-      showCrew: false,
-      showInTime: false,
-      showReactionTime: false,
-      showTimeInObject: false,
-      showStatus: false,
-      showReason: false,
+      dashboardList: {
+        id: 1,
+        showDate: "Gauta",
+        showObject: "Objektas",
+        showName: "Pavadinimas",
+        showCrew: "Ekipažas",
+        showInTime: "spėjo laiku",
+        showReactionTime: "Reagavimo laikas",
+        showTimeInObject: "Laikas objekte",
+        showStatus: "Būsena",
+        showReason: "Suveikimo priežastis"
+      }
     },
   ]);
-  const [value, onChange] = useState();
+  const [value, onChange] = useState(new Date());
   const [objectAddress, setObjectAddress] = useState("");
   const [operator, setOperator] = useState(0);
   const [object, setObject] = useState(0);
