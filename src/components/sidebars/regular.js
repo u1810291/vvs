@@ -1,15 +1,18 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import GlobalContext from "../../context/globalContext";
 
 const DashboardSidebar = () => {
   const { filterList, setFilterList } = useContext(GlobalContext);
+  const [ selectedFilter, setSelectedFilter ] = useState(null);
   const menuFunc = useCallback(async () => {
     console.log("menuOpen");
   }, []);
 
-  const selectFilter = useCallback(async () => {
-    console.log("selectFilter");
-  }, []);
+  const selectFilter = useCallback(async (filter) => {
+    setFilterList((currentFilter) =>
+    currentFilter.find((x) => (x.id === filter.id ? { ...x } : x))
+  );
+  }, [setFilterList]);
 
   return (
     <div className="flex flex-col bg-slate-600 w-10 pt-6 items-center sm:w-20">

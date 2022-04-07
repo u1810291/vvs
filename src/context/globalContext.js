@@ -5,32 +5,36 @@ import {
   useCallback,
   useContext,
 } from "react";
+import { generate } from "shortid";
 
 const GlobalContext = createContext();
 
 export default GlobalContext;
 
 export const GlobalProvider = ({ children }) => {
-  const [filterList, setFilterList] = useState([
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [filterList, setFilterList] = useState(
+    [
     {
-      id: 1,
-      filterName: "M1s20csdS1",
-      filterShortName: "FAV1",
-      savedToFavorite: true,
-      savedToMenu: true,
-      date: "2021-06-09 22:00",
-      operator: "1",
-      object: "1",
-      objectAddress: "Some address",
-      type: "1",
-      group: "1",
-      status: "1",
-      reason: "1",
-      crew: "1",
-      driver: "1",
-      inTime: "1",
+      id: generate(),
+      filterName: generate(),
+      filterShortName: Math.random().toString(36).slice(-4),
+      savedToFavorite: false,
+      savedToMenu: false,
+      date: new Date().toISOString(),
+      optionsList : {
+        operator: "0",
+        object: "0",
+        objectAddress: "",
+        type: "0",
+        group: "0",
+        status: "0",
+        reason: "0",
+        crew: "0",
+        driver: "0",
+        inTime: "0"
+      },
       dashboardList: {
-        id: 1,
         showDate: "Gauta",
         showObject: "Objektas",
         showName: "Pavadinimas",
@@ -42,7 +46,9 @@ export const GlobalProvider = ({ children }) => {
         showReason: "Suveikimo priežastis"
       }
     },
-  ]);
+  ]
+  );
+  const [filter, setFilter] = useState("");
   const [value, onChange] = useState(new Date());
   const [objectAddress, setObjectAddress] = useState("");
   const [operator, setOperator] = useState(0);
@@ -68,6 +74,26 @@ export const GlobalProvider = ({ children }) => {
   const [showTimeInObject, setShowTimeInObject] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
   const [showReason, setShowReason] = useState(false);
+  const [filterEditing, setFilterEditing] = useState(null);
+  const [currentFilter, setCurrentFilter] = useState(null);
+
+  // useEffect(() => {
+  //   const temp = localStorage.getItem("filterList");
+  //   const loadedFilters = JSON.parse(temp);
+
+  //   if (loadedFilters) {
+  //     setFilterList(loadedFilters);
+  //   }
+  // },[])
+
+  // useEffect(() => {
+  //   const temp = JSON.stringify(filterList);
+  //   localStorage.setItem("filterList", temp);
+  // }, [filterList])
+
+  // useEffect(() => {
+  //   setSelectedFilter(currentFilter);
+  // },[currentFilter]);
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
@@ -123,6 +149,14 @@ export const GlobalProvider = ({ children }) => {
     setShowStatus,
     showReason,
     setShowReason,
+    filter,
+    setFilter,
+    filterEditing,
+    setFilterEditing,
+    selectedFilter,
+    setSelectedFilter,
+    currentFilter,
+    setCurrentFilter
   };
 
   return (

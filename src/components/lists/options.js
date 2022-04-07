@@ -14,7 +14,9 @@ function classNames(...classes) {
 export const OptionsList = (props) => {
   const { english, lithuanian, t } = useLanguage();
   const { filterList, setFilterList } = useContext(GlobalContext);
-  const { value, onChange } = useContext(GlobalContext); 
+  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
+  const { value, onChange } = useContext(GlobalContext);
   const { objectAddress, setObjectAddress } = useContext(GlobalContext);
   const { operator, setOperator } = useContext(GlobalContext);
   const { object, setObject } = useContext(GlobalContext);
@@ -26,8 +28,8 @@ export const OptionsList = (props) => {
   const { driver, setDriver } = useContext(GlobalContext);
   const { inTime, setInTime } = useContext(GlobalContext);
   const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate ] = useState();
-  const [startAndEndDate, setStartAndEndDate ] = useState();
+  const [endDate, setEndDate] = useState();
+  const [startAndEndDate, setStartAndEndDate] = useState();
 
   const operatorFunc = useCallback(async () => {
     setOperator(1);
@@ -118,639 +120,655 @@ export const OptionsList = (props) => {
     const endDay = value[1]?.getDate();
     const newEndDate = `${endYear}-${endMonth}-${endDay}`;
     const newStartAndEndDate = `${newStartDate} - ${newEndDate}`;
-      setStartDate(newStartDate);
-      setEndDate(newEndDate);
-      setStartAndEndDate(newStartAndEndDate);
-  },[value])
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    setStartAndEndDate(newStartAndEndDate);
+  }, [value]);
 
   return (
     <div
       {...props}
-      className="w-full sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-4 justify-between font-normal text-black gap-2 z-1"
+      className="flex"
     >
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col w-full">
-          <p className="self-start text-sm text-gray-500 truncate">
-            Data nuo - iki
-          </p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            {startAndEndDate !== "undefined-NaN-undefined - undefined-NaN-undefined" ? (
-            <p className="text-gray-400 self-center truncate">{startAndEndDate}</p>
-            ) : ( <p className="text-gray-400 self-center truncate">-</p> )}
-            <div>
-              <img src={require("../../assets/assets/calendar.png")}></img>
-            </div>
-          </Menu.Button>
-        </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-
-                  <div>
-                    <Calendar selectRange={true} onChange={onChange} value={value} />
+      {filterList.map((filter, index) => {
+        return (
+          <div key={filter.id} className="w-full sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-4 justify-between font-normal text-black gap-2 z-1">
+            {filterEditing === filter.id ? (
+                <>
+                <Menu key={filter.id} as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Data nuo - iki
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      {startAndEndDate !==
+                        "undefined-NaN-undefined - undefined-NaN-undefined" ? (
+                        <p className="text-gray-400 self-center truncate">
+                          {startAndEndDate}
+                        </p>
+                      ) : (
+                        <p className="text-gray-400 self-center truncate">-</p>
+                      )}
+                      <div>
+                        <img
+                          src={require("../../assets/assets/calendar.png")}
+                        ></img>
+                      </div>
+                    </Menu.Button>
                   </div>
 
-
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">
-            Operatorius
-          </p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {operator === 0
-                ? "Any [Multiple choices]"
-                : operator === 1
-                ? "1"
-                : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={operatorFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <div>
+                          <Calendar
+                            selectRange={true}
+                            onChange={onChange}
+                            value={value} />
+                        </div>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Operatorius
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {operator === 0
+                          ? "Any [Multiple choices]"
+                          : operator === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={operatorFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">Objektas</p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {object === 0
-                ? "Any [Multiple choices]"
-                : object === 1
-                ? "1"
-                : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={operatorFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={objectFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={operatorFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Objektas
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {object === 0
+                          ? "Any [Multiple choices]"
+                          : object === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={objectFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={objectFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={objectFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><div>
+                  <p className="self-start text-sm text-gray-500 truncate">
+                    Objekto adresas
+                  </p>
+                  <input
+                    id="search"
+                    name="search"
+                    placeholder=""
+                    onChange={handleAddress}
+                    value={objectAddress}
+                    className="flex w-full h-8 border-2 placeholder-gray-400 focus:outline-none sm:text-sm" />
+                </div><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Tipas
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {type === 0
+                          ? "Any [Multiple choices]"
+                          : type === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={typeFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-      <div>
-        <p className="self-start text-sm text-gray-500 truncate">
-          Objekto adresas
-        </p>
-        <input
-          id="search"
-          name="search"
-          placeholder=""
-          onChange={handleAddress}
-          value={objectAddress}
-          className="flex w-full h-8 border-2 placeholder-gray-400 focus:outline-none sm:text-sm"
-        />
-      </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={typeFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Grupė (?)
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {group === 0
+                          ? "Any [Multiple choices]"
+                          : group === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
 
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">Tipas</p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {type === 0 ? "Any [Multiple choices]" : type === 1 ? "1" : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={typeFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={groupFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={typeFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">Grupė (?)</p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {group === 0 ? "Any [Multiple choices]" : group === 1 ? "1" : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={groupFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Statusas
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {status === 0
+                          ? "Any [Multiple choices]"
+                          : status === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
 
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={groupFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={statusFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={groupFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">Statusas</p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {status === 0
-                ? "Any [Multiple choices]"
-                : status === 1
-                ? "1"
-                : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={statusFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Suveikimo priežastis
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {reason === 0
+                          ? "Any [Multiple choices]"
+                          : reason === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
 
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={statusFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={reasonFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={statusFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">
-            Suveikimo priežastis
-          </p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {reason === 0
-                ? "Any [Multiple choices]"
-                : reason === 1
-                ? "1"
-                : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={reasonFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Ekipažas
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {crew === 0
+                          ? "Any [Multiple choices]"
+                          : crew === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
 
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={reasonFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={crewFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={reasonFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">Ekipažas</p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {crew === 0 ? "Any [Multiple choices]" : crew === 1 ? "1" : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={crewFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Vairuotojas
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {driver === 0
+                          ? "Any [Multiple choices]"
+                          : driver === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
 
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={crewFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={driverFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={crewFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">
-            Vairuotojas
-          </p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {driver === 0
-                ? "Any [Multiple choices]"
-                : driver === 1
-                ? "1"
-                : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={driverFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu><Menu as="div" className="relative inline-block text-left">
+                  <div className="flex flex-col  w-full">
+                    <p className="self-start text-sm text-gray-500 truncate">
+                      Spėjo laiku (T/F)?
+                    </p>
+                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                      <p className="text-gray-400 self-center truncate">
+                        {inTime === 0
+                          ? "Any [Multiple choices]"
+                          : inTime === 1
+                            ? "1"
+                            : "2"}
+                      </p>
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
 
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={driverFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={inTimeFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              1
+                            </button>
+                          )}
+                        </Menu.Item>
 
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={driverFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="flex flex-col  w-full">
-          <p className="self-start text-sm text-gray-500 truncate">
-            Spėjo laiku (T/F)?
-          </p>
-          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-            <p className="text-gray-400 self-center truncate">
-              {inTime === 0
-                ? "Any [Multiple choices]"
-                : inTime === 1
-                ? "1"
-                : "2"}
-            </p>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={inTimeFunc}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
-                  >
-                    1
-                  </button>
-                )}
-              </Menu.Item>
-
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={inTimeFunc2}
-                    className={classNames(
-                      active
-                        ? "bg-gray-100 text-gray-900 w-full text-center"
-                        : "text-center w-full text-gray-700",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    2
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={inTimeFunc2}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-700",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              2
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu></>
+            ) : null}
+          </div>
+        );
+      })}
     </div>
   );
 };
