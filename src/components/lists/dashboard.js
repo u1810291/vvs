@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
 import { RedWatching } from "../buttons/redWatching";
 import { RedDriving } from "../buttons/redDriving";
@@ -20,6 +20,7 @@ export const DashboardList = ({
   ...props
 }) => {
   const { english, lithuanian, t } = useLanguage();
+
   return (
     <div
       {...props}

@@ -3,14 +3,14 @@ import GlobalContext from "../../context/globalContext";
 
 const DashboardSidebar = () => {
   const { filterList, setFilterList } = useContext(GlobalContext);
-  const [ selectedFilter, setSelectedFilter ] = useState(null);
+  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const menuFunc = useCallback(async () => {
     console.log("menuOpen");
   }, []);
 
   const selectFilter = useCallback(async (filter) => {
     setFilterList((currentFilter) =>
-    currentFilter.find((x) => (x.id === filter.id ? { ...x } : x))
+    currentFilter.map((x) => (x.id === filter.id ? { ...x, getFilterID } : x))
   );
   }, [setFilterList]);
 
@@ -23,7 +23,8 @@ const DashboardSidebar = () => {
       <div className="flex flex-col items-center text-gray-400">
         {filterList.map((filter) => {
           return (
-            <button key={filter.id} onClick={selectFilter} className="font-light text-md mt-6 hover:text-white">
+            // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+            <button key={filter.id} onClick={() => setSelectedFilter(filter.id)} className="font-light text-md mt-6 hover:text-white">
               {filter.filterShortName}
             </button>
           );

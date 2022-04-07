@@ -21,7 +21,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: false,
       savedToMenu: false,
-      date: new Date().toISOString(),
+      date: new Date().toISOString().split("T")[0],
       optionsList : {
         operator: "0",
         object: "0",
@@ -90,10 +90,6 @@ export const GlobalProvider = ({ children }) => {
   //   const temp = JSON.stringify(filterList);
   //   localStorage.setItem("filterList", temp);
   // }, [filterList])
-
-  // useEffect(() => {
-  //   setSelectedFilter(currentFilter);
-  // },[currentFilter]);
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {

@@ -1,5 +1,5 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
@@ -53,34 +53,17 @@ export const AddFilterList = (props) => {
     ]);
   };
 
-  const toggleSavedToMenu = (filter) => {
-    const updatedFilter = [...filterList].map((x) => {
-      if (x.id === filter.id) {
-        x.savedToMenu = !x.savedToMenu;
-      }
-      return x;
-    });
-    setFilterList(updatedFilter);
-  };
+  const saveFilters = useCallback(async() => {
+     // handle api call
+  },[]);
 
-  const toggleSavedToFavorite = useCallback(
-    async (e) => {
-      setSavedToFavorite(e.target.checked);
-    },
-    [setSavedToFavorite]
-  );
-
-  const saveFilters = (filter) => {
-    const updatedFilter = [...filterList].map((x) => {
-      if (x.id === filter.id) {
-        x.filterName = editingFilterName;
-      }
-      return x;
-    });
-    setFilterList(updatedFilter);
-    setFilterEditing(null);
-    setEditingFilterName("");
-  };
+  // I guess this for on page load
+  useEffect(() => {
+    if (filterList?.length > 0) {
+      filterList?.map((filter) => {
+        setSelectedFilter(filter.id);
+      })
+    }},[]);
 
   return (
     <>
@@ -94,7 +77,7 @@ export const AddFilterList = (props) => {
           return (
             <div className="w-full" key={filter.id}>
               {filterEditing !== filter.id ? (
-                <div className="w-full" key={filter.id}>
+                <div className={filterEditing ? "hidden" : "w-full"} key={filter.id}>
                   <div className="flex flex-row w-full border-l mb-4 border-b items-center justify-between">
                     <p className="flex text-gray-400 p-2">Filtro pavadinimas</p>
                     <div className="flex flex-row mx-2">
@@ -115,7 +98,6 @@ export const AddFilterList = (props) => {
                       </p>
                     </button>
                   </div>
-                  {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
                 </div>
               ) : (
                 <div className="ml-6 w-full">
@@ -163,7 +145,7 @@ export const AddFilterList = (props) => {
                         id="save"
                         name="save"
                         onChange={(e) => {
-                          const savedToMenu = e.target.value;
+                          const savedToMenu = e.target.checked;
                           setFilterList((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToMenu } : x
@@ -180,7 +162,14 @@ export const AddFilterList = (props) => {
                       <input
                         id="default-filter"
                         name="default-filter"
-                        onChange={() => toggleSavedToFavorite(filter.id)}
+                        onChange={(e) => {
+                          const savedToFavorite = e.target.checked;
+                          setFilterList((currentFilter) =>
+                            currentFilter.map((x) =>
+                              x.id === filter.id ? { ...x, savedToFavorite } : x
+                            )
+                          );
+                        }}
                         checked={filter.savedToFavorite}
                         type="checkbox"
                         className="h-4 w-4   text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
@@ -194,6 +183,7 @@ export const AddFilterList = (props) => {
                         setFilterList((currentFilter) =>
                           currentFilter.filter((x) => x.id !== filter.id)
                         );
+                        setFilterEditing(null)
                       }}
                       className="text-gray-400"
                     >
@@ -215,7 +205,7 @@ export const AddFilterList = (props) => {
           );
         })}
       </div>
-      <button className="flex flex-row justify-center items-center pb-2">
+      <button className={filterEditing ? "hidden" : "flex flex-row justify-center items-center pb-2"}>
         <img
           src={require("../../assets/assets/cross.png")}
           className="h-6 w-6 m-2"

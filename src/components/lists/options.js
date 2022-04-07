@@ -126,23 +126,24 @@ export const OptionsList = (props) => {
   }, [value]);
 
   return (
-    <div
-      {...props}
-      className="flex"
-    >
+    <div {...props} className="flex">
       {filterList.map((filter, index) => {
         return (
-          <div key={filter.id} className="w-full sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-4 justify-between font-normal text-black gap-2 z-1">
-            {filterEditing === filter.id ? (
-                <>
-                <Menu key={filter.id} as="div" className="relative inline-block text-left">
+          <div key={filter.id}>
+            {selectedFilter === filter.id ? (
+              <div className="w-full sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-4 justify-between font-normal text-black gap-2 z-1">
+                <Menu
+                  key={filter.id}
+                  as="div"
+                  className="relative inline-block text-left"
+                >
                   <div className="flex flex-col w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Data nuo - iki
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       {startAndEndDate !==
-                        "undefined-NaN-undefined - undefined-NaN-undefined" ? (
+                      "undefined-NaN-undefined - undefined-NaN-undefined" ? (
                         <p className="text-gray-400 self-center truncate">
                           {startAndEndDate}
                         </p>
@@ -172,12 +173,14 @@ export const OptionsList = (props) => {
                           <Calendar
                             selectRange={true}
                             onChange={onChange}
-                            value={value} />
+                            value={value}
+                          />
                         </div>
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Operatorius
@@ -187,12 +190,13 @@ export const OptionsList = (props) => {
                         {operator === 0
                           ? "Any [Multiple choices]"
                           : operator === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -241,7 +245,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Objektas
@@ -251,12 +256,13 @@ export const OptionsList = (props) => {
                         {object === 0
                           ? "Any [Multiple choices]"
                           : object === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -305,7 +311,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><div>
+                </Menu>
+                <div>
                   <p className="self-start text-sm text-gray-500 truncate">
                     Objekto adresas
                   </p>
@@ -315,8 +322,10 @@ export const OptionsList = (props) => {
                     placeholder=""
                     onChange={handleAddress}
                     value={objectAddress}
-                    className="flex w-full h-8 border-2 placeholder-gray-400 focus:outline-none sm:text-sm" />
-                </div><Menu as="div" className="relative inline-block text-left">
+                    className="flex w-full h-8 border-2 placeholder-gray-400 focus:outline-none sm:text-sm"
+                  />
+                </div>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Tipas
@@ -326,12 +335,13 @@ export const OptionsList = (props) => {
                         {type === 0
                           ? "Any [Multiple choices]"
                           : type === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -380,7 +390,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Grupė (?)
@@ -390,12 +401,13 @@ export const OptionsList = (props) => {
                         {group === 0
                           ? "Any [Multiple choices]"
                           : group === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -444,7 +456,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Statusas
@@ -454,12 +467,13 @@ export const OptionsList = (props) => {
                         {status === 0
                           ? "Any [Multiple choices]"
                           : status === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -508,7 +522,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Suveikimo priežastis
@@ -518,12 +533,13 @@ export const OptionsList = (props) => {
                         {reason === 0
                           ? "Any [Multiple choices]"
                           : reason === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -572,7 +588,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Ekipažas
@@ -582,12 +599,13 @@ export const OptionsList = (props) => {
                         {crew === 0
                           ? "Any [Multiple choices]"
                           : crew === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -636,7 +654,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Vairuotojas
@@ -646,12 +665,13 @@ export const OptionsList = (props) => {
                         {driver === 0
                           ? "Any [Multiple choices]"
                           : driver === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -700,7 +720,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu><Menu as="div" className="relative inline-block text-left">
+                </Menu>
+                <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">
                       Spėjo laiku (T/F)?
@@ -710,12 +731,13 @@ export const OptionsList = (props) => {
                         {inTime === 0
                           ? "Any [Multiple choices]"
                           : inTime === 1
-                            ? "1"
-                            : "2"}
+                          ? "1"
+                          : "2"}
                       </p>
                       <ChevronDownIcon
                         className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                      />
                     </Menu.Button>
                   </div>
 
@@ -764,7 +786,8 @@ export const OptionsList = (props) => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </Menu></>
+                </Menu>
+              </div>
             ) : null}
           </div>
         );

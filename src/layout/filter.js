@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import useLanguage from "../hook/useLanguage";
 import RegularSidebar from "../components/sidebars/regular";
 import { FilterHeader } from "../components/headers/filter";
@@ -6,11 +6,13 @@ import { FiltersList } from "../components/lists/filter.js";
 import { OptionsList } from "../components/lists/options";
 import { DashboardList } from "../components/lists/dashboard";
 const { AddFilterList } = require("../components/lists/addFilter");
+import GlobalContext from "../context/globalContext";
 // const { AddFilter } = require("../components/forms/addFilter");
 import { DashboardTestApi } from "../api/dashboardTest";
 
 function Dashboard() {
   const { english, lithuanian, t } = useLanguage();
+  const { filterList, setFilterList } = useContext(GlobalContext);
 
   return (
     <>
@@ -25,7 +27,6 @@ function Dashboard() {
                   <div className="flex flex-row w-full">
                     <div className="flex flex-col h-96 overflow-y-auto items-center scrollbar-gone border-r w-1/5">
                       <AddFilterList />
-                      {/* <AddFilter /> */}
                     </div>
                     <div className="flex flex-col ml-2 w-3/5">
                       <OptionsList />
@@ -50,7 +51,10 @@ function Dashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col w-1/5"></div>
+                    <div className="flex flex-col w-1/5">
+
+                                        <p>{JSON.stringify(filterList, null, 2)}</p>
+                    </div>
                   </div>
                   <div className="w-full border-t py-2 grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
                     <div className="flex flex-row items-center">
