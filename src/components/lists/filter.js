@@ -108,10 +108,6 @@ export const FiltersList = ({
                                 const showDate = "Gauta";
                                 setFilterList((currentFilter) => 
                                 currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(showDate)} : x))}}
-                                //    onClick={() => {
-                                // const showDate = "Gauta";
-                                // setFilterList((currentFilter) => 
-                                // currentFilter.entries((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat( ...x, showDate )} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -129,14 +125,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
+                            onClick={() => {
                               const object = "Objektas";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(object)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -154,14 +146,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
-                              const object = "Pavadinimas";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                            onClick={() => {
+                              const name = "Pavadinimas";
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(name)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -179,14 +167,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
-                              const object = "Ekipažas";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                            onClick={() => {
+                              const crew = "Ekipažas";
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(crew)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -204,14 +188,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
-                              const object = "Spėjo laiku";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                            onClick={() => {
+                              const inTime = "Spėjo laiku";
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(inTime)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -231,14 +211,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
-                              const object = "Reagavimo laikas";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                            onClick={() => {
+                              const reactionTime = "Reagavimo laikas";
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(reactionTime)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -258,14 +234,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
-                              const object = "Laikas objekte";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                            onClick={() => {
+                              const timeInObject = "Laikas objekte";
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(timeInObject)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -283,14 +255,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
-                              const object = "Būsena";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                            onClick={() => {
+                              const status = "Būsena";
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(status)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -310,14 +278,10 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onChange={() => {
-                              const object = "Suveikimo priežastis";
-                              setFilterList((currentFilter) =>
-                                currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
-                                )
-                              );
-                            }}
+                            onClick={() => {
+                              const reason = "Suveikimo priežastis";
+                              setFilterList((currentFilter) => 
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(reason)} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
