@@ -56,9 +56,8 @@ export const FiltersList = ({
                         <button
                           onClick={() => {
                             setFilterList((currentFilter) => 
-                              currentFilter.map((x) =>  { return {...x, dashboardList: x.dashboardList.filter((y) => y !== element)}})
-                            );
-                          }}
+                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.filter((y) => y !== element)} : x))}
+                            }
                         >
                           <img
                             className="h-2 w-2"

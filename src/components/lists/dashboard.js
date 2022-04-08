@@ -32,42 +32,42 @@ export const DashboardList = ({
           <div key={filter.id}>
             {selectedFilter === filter.id ? (
               <div className="w-full border-b grid grid-cols-1 bg-white grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center h-16">
                   {filter.dashboardList.includes("Gauta") ? (
                     <span className="bg-white text-gray-400">{date}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center h-16">
                   {filter.dashboardList.includes("Objektas") ? (
                     <span className="bg-white text-gray-400">{object}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center h-16">
                   {filter.dashboardList.includes("Pavadinimas") ? (
                     <span className="bg-white text-gray-400">{name}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center h-16">
                   {filter.dashboardList.includes("Ekipažas") ? (
                     <span className="bg-white text-gray-400">{crew}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center h-16">
                   {filter.dashboardList.includes("Spėjo laiku") ? (
                     <span className="bg-white text-gray-400">{intime}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row h-16 tems-center">
                   {filter.dashboardList.includes("Reagavimo laikas") ? (
                     <span className="bg-white text-gray-400">
                       {reactiontime}
@@ -76,7 +76,7 @@ export const DashboardList = ({
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center h-16">
                   {filter.dashboardList.includes("Laikas objekte") ? (
                     <span className="bg-white text-gray-400">
                       {timeinobject}
@@ -85,7 +85,7 @@ export const DashboardList = ({
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex whitespace-nowrap flex-row items-center">
+                <div className="flex whitespace-nowrap flex-row h-16 items-center">
                   {filter.dashboardList.includes("Būsena") ? (
                     <RedWatching />
                   ) : (
@@ -96,7 +96,7 @@ export const DashboardList = ({
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row justify-center items-center">
+                <div className="flex flex-row h-16 justify-center items-center">
                   {filter.dashboardList.includes("Suveikimo priežastis") ? (
                     <span className="bg-white text-gray-400">{reason}</span>
                   ) : (
