@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import useLanguage from "../hook/useLanguage";
 import RegularSidebar from "../components/sidebars/regular";
 import { FilterHeader } from "../components/headers/filter";
@@ -9,10 +9,15 @@ const { AddFilterList } = require("../components/lists/addFilter");
 import GlobalContext from "../context/globalContext";
 // const { AddFilter } = require("../components/forms/addFilter");
 import { DashboardTestApi } from "../api/dashboardTest";
+import Pdf from "react-to-pdf";
 
 function Dashboard() {
   const { english, lithuanian, t } = useLanguage();
   const { filterList, setFilterList } = useContext(GlobalContext);
+
+  const exportPDF = useCallback(async () => {}, []);
+
+  const ref = React.createRef();
 
   return (
     <>
@@ -42,9 +47,16 @@ function Dashboard() {
                             className="h-8 w-6 mr-2"
                             src={require("../assets/assets/doc.png")}
                           ></img>
-                          <button className="flex justify-center mr-6 p-1 text-normal font-normal">
-                            Eksportuoti
-                          </button>
+                          <Pdf targetRef={ref} filename="print.pdf">
+                            {({ toPdf }) => (
+                              <button
+                                onClick={toPdf}
+                                className="flex justify-center mr-6 p-1 text-normal font-normal"
+                              >
+                                Eksportuoti
+                              </button>
+                            )}
+                          </Pdf>
                           <button className="flex justify-center w-24 mr-2 rounded-sm p-1 border border-transparent text-xs font-normal text-white hover:shadow-none bg-slate-600 focus:outline-none">
                             Ieškoti
                           </button>
@@ -52,11 +64,10 @@ function Dashboard() {
                       </div>
                     </div>
                     <div className="flex flex-col w-1/5">
-
-                                        <p>{JSON.stringify(filterList, null, 2)}</p>
+                      <p>{JSON.stringify(filterList, null, 2)}</p>
                     </div>
                   </div>
-                  <div className="w-full border-t py-2 grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
+                  <div className="pl-4 w-full border-t py-2 grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
                     <div className="flex flex-row items-center">
                       <span className="text-gray-300">Gauta</span>
                     </div>
@@ -82,10 +93,12 @@ function Dashboard() {
                       <span className="text-gray-300">Būsena</span>
                     </div>
                     <div className="flex flex-row items-center">
-                      <span className="text-gray-300">Suveikimo priežastis</span>
+                      <span className="text-gray-300">
+                        Suveikimo priežastis
+                      </span>
                     </div>
                   </div>
-                  <div className="flex flex-col w-full overflow-y-auto items-center scrollbar-gone">
+                  <div ref={ref} className="pl-4 flex flex-col w-full overflow-y-auto items-center scrollbar-gone">
                     {DashboardTestApi.map((data) => (
                       <DashboardList
                         key={data.id}

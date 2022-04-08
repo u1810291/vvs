@@ -44,24 +44,25 @@ export const AddFilterList = (props) => {
           "Reagavimo laikas",
           "Laikas objekte",
           "Būsena",
-          "Suveikimo priežastis"
+          "Suveikimo priežastis",
         ],
       },
     ]);
   };
 
-  const saveFilters = useCallback(async() => {
-     // handle api call
-  },[]);
+  const saveFilters = useCallback(async () => {
+    // handle api call
+  }, []);
 
   // I guess this for on page load
   useEffect(() => {
     if (filterList?.length > 0) {
       filterList?.map((filter) => {
         setSelectedFilter(filter.id);
-      })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }},[]);
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
+  }, []);
 
   return (
     <>
@@ -75,28 +76,42 @@ export const AddFilterList = (props) => {
           return (
             <div className="w-full" key={filter.id}>
               {filterEditing !== filter.id ? (
-                <div className={filterEditing ? "hidden" : "w-full"} key={filter.id}>
-                  <div className="flex flex-row w-full border-l mb-4 border-b items-center justify-between">
-                    <p className="flex text-gray-400 p-2">Filtro pavadinimas</p>
-                    <div className="flex flex-row mx-2">
-                      <img
-                        className="h-4 w-4 mr-4"
-                        src={require("../../assets/assets/star.png")}
-                      />
-                      <p className="flex text-sm text-gray-200">
-                        {filter.filterShortName}
+                <button
+                  onClick={() => setSelectedFilter(filter.id)}
+                  className={filterEditing ? "hidden" : "w-full"}
+                  key={filter.id}
+                >
+                  <div
+                    className={
+                      selectedFilter === filter.id ? "shadow" : "w-full"
+                    }
+                  >
+                    <div className="flex flex-row w-full border-l mb-4 border-b items-center justify-between">
+                      <p className="flex text-gray-400 p-2">
+                        Filtro pavadinimas
                       </p>
+                      <div className="flex flex-row mx-2">
+                        {filter.savedToFavorite ? (
+                          <img
+                            className="h-4 w-4 mr-4"
+                            src={require("../../assets/assets/star.png")}
+                          />
+                        ) : null}
+                        <p className="flex text-sm text-gray-200">
+                          {filter.filterShortName}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-row w-full border-l border-b justify-between items-center">
+                      <p className="text-gray-400 p-2">{filter.filterName}</p>
+                      <a className="flex p-1 rounded-sm text-xs mx-2 px-2 mb-2 font-normal items-center text-gray-400 bg-gray-200">
+                        <p onClick={() => setFilterEditing(filter.id)}>
+                          redaguoti filtrą
+                        </p>
+                      </a>
                     </div>
                   </div>
-                  <div className="flex flex-row w-full border-l border-b justify-between items-center">
-                    <p className="text-gray-400 p-2">{filter.filterName}</p>
-                    <button className="flex p-1 rounded-sm text-xs mx-2 px-2 mb-2 font-normal items-center text-gray-400 bg-gray-200">
-                      <p onClick={() => setFilterEditing(filter.id)}>
-                        redaguoti filtrą
-                      </p>
-                    </button>
-                  </div>
-                </div>
+                </button>
               ) : (
                 <div className="ml-6 w-full">
                   <div className="flex flex-row w-full justify-between mt-2">
@@ -181,7 +196,7 @@ export const AddFilterList = (props) => {
                         setFilterList((currentFilter) =>
                           currentFilter.filter((x) => x.id !== filter.id)
                         );
-                        setFilterEditing(null)
+                        setFilterEditing(null);
                       }}
                       className="text-gray-400"
                     >
@@ -203,7 +218,13 @@ export const AddFilterList = (props) => {
           );
         })}
       </div>
-      <button className={filterEditing ? "hidden" : "flex flex-row justify-center items-center pb-2"}>
+      <button
+        className={
+          filterEditing
+            ? "hidden"
+            : "flex flex-row justify-center items-center pb-2"
+        }
+      >
         <img
           src={require("../../assets/assets/cross.png")}
           className="h-6 w-6 m-2"

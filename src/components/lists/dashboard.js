@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
-import { RedWatching } from "../buttons/redWatching";
-import { RedDriving } from "../buttons/redDriving";
-import { BlueStatus } from "../buttons/blueStatus";
-import { GreenStatus } from "../buttons/greenStatus";
-import { GrayStatus } from "../buttons/grayStatus";
+import GlobalContext from "../../context/globalContext";
+const { RedWatching } = require("../buttons/redWatching");
+const { RedDriving } = require("../buttons/redDriving");
+const { BlueStatus } = require("../buttons/blueStatus");
+const { GreenStatus } = require("../buttons/greenStatus");
+const { GrayStatus } = require("../buttons/grayStatus");
 
 export const DashboardList = ({
   id,
@@ -20,45 +21,93 @@ export const DashboardList = ({
   ...props
 }) => {
   const { english, lithuanian, t } = useLanguage();
+  const { filterList, setFilterList } = useContext(GlobalContext);
+  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
+  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
 
   return (
-    <div
-      {...props}
-      className="w-full border-b grid grid-cols-1 bg-white grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1"
-    >
-      <div className="flex flex-row items-center">
-        <span className="bg-white text-gray-400">{date}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="bg-white text-gray-400">{object}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="bg-white text-gray-500">{name}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="bg-white text-gray-400">{crew}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="bg-white text-gray-400">{intime}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="bg-white text-gray-400">{reactiontime}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="bg-white text-gray-400">{timeinobject}</span>
-      </div>
-      <div className="flex whitespace-nowrap flex-row items-center">
-        <RedWatching />
-        {/* <RedDriving/>
-      <GrayStatus/>
-      <GreenStatus/>
-      <BlueStatus/> */}
-      </div>
-      <div className="flex flex-row justify-center items-center">
-        <span className="flex bg-white text-gray-500 self-center">
-          {reason}
-        </span>
-      </div>
+    <div className="w-full" {...props}>
+      {filterList.map((filter, index) => {
+        return (
+          <div key={filter.id}>
+            {selectedFilter === filter.id ? (
+              <div className="w-full border-b grid grid-cols-1 bg-white grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
+                <div className="flex flex-row items-center">
+                  {filter.dashboardList.includes("Gauta") ? (
+                    <span className="bg-white text-gray-400">{date}</span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex flex-row items-center">
+                  {filter.dashboardList.includes("Objektas") ? (
+                    <span className="bg-white text-gray-400">{object}</span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex flex-row items-center">
+                  {filter.dashboardList.includes("Pavadinimas") ? (
+                    <span className="bg-white text-gray-400">{name}</span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex flex-row items-center">
+                  {filter.dashboardList.includes("Ekipažas") ? (
+                    <span className="bg-white text-gray-400">{crew}</span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex flex-row items-center">
+                  {filter.dashboardList.includes("Spėjo laiku") ? (
+                    <span className="bg-white text-gray-400">{intime}</span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex flex-row items-center">
+                  {filter.dashboardList.includes("Reagavimo laikas") ? (
+                    <span className="bg-white text-gray-400">
+                      {reactiontime}
+                    </span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex flex-row items-center">
+                  {filter.dashboardList.includes("Laikas objekte") ? (
+                    <span className="bg-white text-gray-400">
+                      {timeinobject}
+                    </span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex whitespace-nowrap flex-row items-center">
+                  {filter.dashboardList.includes("Būsena") ? (
+                    <RedWatching />
+                  ) : (
+                    // <RedDriving/>
+                    // <GrayStatus/>
+                    // <GreenStatus/>
+                    // <BlueStatus/>
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+                <div className="flex flex-row justify-center items-center">
+                  {filter.dashboardList.includes("Suveikimo priežastis") ? (
+                    <span className="bg-white text-gray-400">{reason}</span>
+                  ) : (
+                    <span className="bg-white text-gray-400">-</span>
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        );
+      })}
     </div>
   );
 };

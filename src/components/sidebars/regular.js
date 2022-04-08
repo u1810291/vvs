@@ -22,12 +22,14 @@ const DashboardSidebar = () => {
       <img className="pt-6" src={require("../../assets/assets/Line.png")}></img>
       <div className="flex flex-col items-center text-gray-400">
         {filterList.map((filter) => {
+          if (filter.savedToMenu === true) {
           return (
             // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-            <button key={filter.id} onClick={() => setSelectedFilter(filter.id)} className="font-light text-md mt-6 hover:text-white">
+            <button key={filter.id} onClick={() => setSelectedFilter(filter.id)} className={selectedFilter === filter.id ? "font-light text-md mt-6 text-white" : "font-light text-md mt-6 hover:text-white"}>
               {filter.filterShortName}
             </button>
           );
+          }
         })}
       </div>
     </div>

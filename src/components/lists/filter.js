@@ -26,37 +26,8 @@ export const FiltersList = ({
   const { english, lithuanian, t } = useLanguage();
   const { array, filter, pop, push } = useArray([]);
   const { filterList, setFilterList } = useContext(GlobalContext);
-  const { showDate, setShowData } = useContext(GlobalContext);
-  const { showObject, setShowObject } = useContext(GlobalContext);
-  const { showName, setShowName } = useContext(GlobalContext);
-  const { showCrew, setShowCrew } = useContext(GlobalContext);
-  const { showInTime, setShowInTime } = useContext(GlobalContext);
-  const { showReactionTime, setShowReactionTime } = useContext(GlobalContext);
-  const { showTimeInObject, setShowTimeInObject } = useContext(GlobalContext);
-  const { showStatus, setShowStatus } = useContext(GlobalContext);
-  const { showReason, setShowReason } = useContext(GlobalContext);
   const { filterEditing, setFilterEditing } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
-
-  const DateFunc = useCallback(async () => {}, []);
-
-  const ObjectFunc = useCallback(async () => {}, []);
-
-  const NameFunc = useCallback(async () => {}, []);
-
-  const CrewFunc = useCallback(async () => {}, []);
-
-  const InTimeFunc = useCallback(async () => {}, []);
-
-  const ReactionTimeFunc = useCallback(async () => {}, []);
-
-  const TimeInObjectFunc = useCallback(async () => {}, []);
-
-  const StatusFunc = useCallback(async () => {}, []);
-
-  const ReasonFunc = useCallback(async () => {}, []);
-
-  const remove = useCallback(async (filter) => {}, []);
 
   // filterList.forEach((element) => {
   //   console.log(element);
@@ -84,10 +55,9 @@ export const FiltersList = ({
                         <p>{element}</p>
                         <button
                           onClick={() => {
-                            setFilterList((currentFilter) =>
-                              currentFilter.filter((x) => x !== element)
+                            setFilterList((currentFilter) => 
+                              currentFilter.map((x) =>  { return {...x, dashboardList: x.dashboardList.filter((y) => y !== element)}})
                             );
-                            console.log(element);
                           }}
                         >
                           <img
@@ -104,43 +74,6 @@ export const FiltersList = ({
           </>
         );
       })}
-
-      {/* <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Gauta</p>
-        <button onClick={DateFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Objektas</p>
-        <button onClick={ObjectFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Pavadinimas</p>
-        <button onClick={NameFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Ekipažas</p>
-        <button onClick={CrewFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Spėjo laiku</p>
-        <button onClick={InTimeFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Reagavimo laikas</p>
-        <button onClick={ReactionFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Laikas objekte</p>
-        <button onClick={TimeInObjectFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-        <p>Būsena</p>
-        <button onClick={StatusFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div>
-      <div className="flex p-1 rounded-sm w-full text-xs font-normal justify-between items-center text-gray-400 bg-gray-200">
-        <p>Suveikimo priežastis</p>
-        <button onClick={ReasonFunc}><img className="h-2 w-2" src={require("../../assets/assets/x.png")} /></button>
-      </div> */}
 
       <Menu as="div" className="relative inline-block text-left">
         <div className="flex flex-col  w-full">
@@ -173,12 +106,10 @@ export const FiltersList = ({
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const date = "Gauta";
-                                setFilterList((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, date } : x
-                                  )
-                                );
+                                const showDate = "Gauta";
+                                setFilterList((currentFilter) => 
+                                currentFilter.map((x) =>  { return {...x, dashboardList: x.dashboardList.push({ ...x, showDate })}}) // may need to assign object
+                              );
                               }}
                               className={classNames(
                                 active
@@ -197,7 +128,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={ObjectFunc}
+                            onChange={() => {
+                              const object = "Objektas";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -215,7 +153,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={NameFunc}
+                            onChange={() => {
+                              const object = "Pavadinimas";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -233,7 +178,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={CrewFunc}
+                            onChange={() => {
+                              const object = "Ekipažas";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -251,7 +203,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={InTimeFunc}
+                            onChange={() => {
+                              const object = "Spėjo laiku";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -271,7 +230,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={ReactionTimeFunc}
+                            onChange={() => {
+                              const object = "Reagavimo laikas";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -291,7 +257,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={TimeInObjectFunc}
+                            onChange={() => {
+                              const object = "Laikas objekte";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -309,7 +282,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={StatusFunc}
+                            onChange={() => {
+                              const object = "Būsena";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -329,7 +309,14 @@ export const FiltersList = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={ReasonFunc}
+                            onChange={() => {
+                              const object = "Suveikimo priežastis";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
