@@ -107,9 +107,11 @@ export const FiltersList = ({
                               onClick={() => {
                                 const showDate = "Gauta";
                                 setFilterList((currentFilter) => 
-                                currentFilter.map((x) =>  { return {...x, dashboardList: x.dashboardList.push({ ...x, showDate })}}) // may need to assign object
-                              );
-                              }}
+                                currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(showDate)} : x))}}
+                                //    onClick={() => {
+                                // const showDate = "Gauta";
+                                // setFilterList((currentFilter) => 
+                                // currentFilter.entries((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat( ...x, showDate )} : x))}}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
