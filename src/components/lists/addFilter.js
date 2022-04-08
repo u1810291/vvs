@@ -25,30 +25,27 @@ export const AddFilterList = (props) => {
         filterShortName: Math.random().toString(36).slice(-4),
         savedToFavorite: true,
         savedToMenu: true,
+        objectAddress: "",
         date: new Date().toISOString().split("T")[0],
-        optionsList: {
-          operator: "0",
-          object: "0",
-          objectAddress: "",
-          type: "0",
-          group: "0",
-          status: "0",
-          reason: "0",
-          crew: "0",
-          driver: "0",
-          inTime: "0",
-        },
-        dashboardList: {
-          showDate: "Gauta",
-          showObject: "Objektas",
-          showName: "Pavadinimas",
-          showCrew: "Ekipažas",
-          showInTime: "spėjo laiku",
-          showReactionTime: "Reagavimo laikas",
-          showTimeInObject: "Laikas objekte",
-          showStatus: "Būsena",
-          showReason: "Suveikimo priežastis",
-        },
+        operator: "0",
+        object: "0",
+        type: "0",
+        group: "0",
+        status: "0",
+        reason: "0",
+        crew: "0",
+        driver: "0",
+        inTime: "0",
+        dashboardList: [
+          "Objektas",
+          "Pavadinimas",
+          "Ekipažas",
+          "Spėjo laiku",
+          "Reagavimo laikas",
+          "Laikas objekte",
+          "Būsena",
+          "Suveikimo priežastis"
+        ],
       },
     ]);
   };
@@ -63,6 +60,7 @@ export const AddFilterList = (props) => {
       filterList?.map((filter) => {
         setSelectedFilter(filter.id);
       })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }},[]);
 
   return (
@@ -117,7 +115,7 @@ export const AddFilterList = (props) => {
                         }}
                         value={filter.filterName}
                         placeholder=""
-                        className="flex h-8 w-40 border placeholder-gray-400 focus:outline-none sm:text-sm"
+                        className="flex h-8 w-40 border text-gray-400 placeholder-gray-400 focus:outline-none sm:text-sm"
                       />
                     </div>
                     <div className="flex flex-col mr-4">
@@ -135,7 +133,7 @@ export const AddFilterList = (props) => {
                         }}
                         value={filter.filterShortName}
                         placeholder=""
-                        className="flex h-8 w-20 mr-4 border placeholder-gray-400 focus:outline-none sm:text-sm"
+                        className="flex h-8 w-20 mr-4 border text-gray-400 placeholder-gray-400 focus:outline-none sm:text-sm"
                       />
                     </div>
                   </div>

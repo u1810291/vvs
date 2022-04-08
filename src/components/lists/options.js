@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -17,98 +18,10 @@ export const OptionsList = (props) => {
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const { filterEditing, setFilterEditing } = useContext(GlobalContext);
   const { value, onChange } = useContext(GlobalContext);
-  const { objectAddress, setObjectAddress } = useContext(GlobalContext);
-  const { operator, setOperator } = useContext(GlobalContext);
-  const { object, setObject } = useContext(GlobalContext);
-  const { type, setType } = useContext(GlobalContext);
-  const { group, setGroup } = useContext(GlobalContext);
-  const { status, setStatus } = useContext(GlobalContext);
-  const { reason, setReason } = useContext(GlobalContext);
-  const { crew, setCrew } = useContext(GlobalContext);
-  const { driver, setDriver } = useContext(GlobalContext);
-  const { inTime, setInTime } = useContext(GlobalContext);
+  // const { operator, setOperator } = useContext(GlobalContext);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [startAndEndDate, setStartAndEndDate] = useState();
-
-  const operatorFunc = useCallback(async () => {
-    setOperator(1);
-  }, [setOperator]);
-
-  const operatorFunc2 = useCallback(async () => {
-    setOperator(2);
-  }, [setOperator]);
-
-  const objectFunc = useCallback(async () => {
-    setObject(1);
-  }, [setObject]);
-
-  const objectFunc2 = useCallback(async () => {
-    setObject(2);
-  }, [setObject]);
-
-  const handleAddress = useCallback(
-    async (e) => {
-      setObjectAddress(e.target.value);
-    },
-    [setObjectAddress]
-  );
-
-  const typeFunc = useCallback(async () => {
-    setType(1);
-  }, [setType]);
-
-  const typeFunc2 = useCallback(async () => {
-    setType(2);
-  }, [setType]);
-
-  const groupFunc = useCallback(async () => {
-    setGroup(1);
-  }, [setGroup]);
-
-  const groupFunc2 = useCallback(async () => {
-    setGroup(2);
-  }, [setGroup]);
-
-  const statusFunc = useCallback(async () => {
-    setStatus(1);
-  }, [setStatus]);
-
-  const statusFunc2 = useCallback(async () => {
-    setStatus(2);
-  }, [setStatus]);
-
-  const reasonFunc = useCallback(async () => {
-    setReason(1);
-  }, [setReason]);
-
-  const reasonFunc2 = useCallback(async () => {
-    setReason(2);
-  }, [setReason]);
-
-  const crewFunc = useCallback(async () => {
-    setCrew(1);
-  }, [setCrew]);
-
-  const crewFunc2 = useCallback(async () => {
-    setCrew(2);
-  }, [setCrew]);
-
-  const driverFunc = useCallback(async () => {
-    setDriver(1);
-  }, [setDriver]);
-
-  const driverFunc2 = useCallback(async () => {
-    setDriver(2);
-  }, [setDriver]);
-
-  const inTimeFunc = useCallback(async () => {
-    setInTime(1);
-  }, [setInTime]);
-
-  const inTimeFunc2 = useCallback(async () => {
-    setInTime(2);
-  }, [setInTime]);
 
   useEffect(() => {
     const startYear = value[0]?.getFullYear();
@@ -125,8 +38,15 @@ export const OptionsList = (props) => {
     setStartAndEndDate(newStartAndEndDate);
   }, [value]);
 
+  const dateFunction = (filter) => {
+    const date = startAndEndDate;
+    setFilterList((currentFilter) =>
+      currentFilter.map((x) => (x.id === filter.id ? { ...x, date } : x))
+    );
+  };
+
   return (
-    <div {...props} className="flex">
+    <div {...props}>
       {filterList.map((filter, index) => {
         return (
           <div key={filter.id}>
@@ -187,9 +107,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {operator === 0
+                        {filter.operator === "0"
                           ? "Any [Multiple choices]"
-                          : operator === 1
+                          : filter.operator === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -214,7 +134,15 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={operatorFunc}
+                              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                              onClick={() => {
+                                const operator = "1";
+                                setFilterList((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id ? { ...x, operator } : x
+                                  )
+                                );
+                              }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -230,7 +158,15 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={operatorFunc2}
+                              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                              onClick={() => {
+                                const operator = 2;
+                                setFilterList((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id ? { ...x, operator } : x
+                                  )
+                                );
+                              }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -253,9 +189,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {object === 0
+                        {filter.object === "0"
                           ? "Any [Multiple choices]"
-                          : object === 1
+                          : filter.object === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -280,7 +216,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={objectFunc}
+                              onClick={() => {
+                                const object = "1";
+                                setFilterList((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id ? { ...x, object } : x
+                                  )
+                                );
+                              }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -296,7 +239,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={objectFunc2}
+                            onClick={() => {
+                              const object = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -320,9 +270,17 @@ export const OptionsList = (props) => {
                     id="search"
                     name="search"
                     placeholder=""
-                    onChange={handleAddress}
-                    value={objectAddress}
-                    className="flex w-full h-8 border-2 placeholder-gray-400 focus:outline-none sm:text-sm"
+                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                    onChange={(e) => {
+                      const objectAddress = e.target.value;
+                      setFilterList((currentFilter) =>
+                        currentFilter.map((x) =>
+                          x.id === filter.id ? { ...x, objectAddress } : x
+                        )
+                      );
+                    }}
+                    value={filter.objectAddress}
+                    className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
                   />
                 </div>
                 <Menu as="div" className="relative inline-block text-left">
@@ -332,9 +290,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {type === 0
+                        {filter.type === "0"
                           ? "Any [Multiple choices]"
-                          : type === 1
+                          : filter.type === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -359,7 +317,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={typeFunc}
+                            onClick={() => {
+                              const type = "1";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, type } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -375,7 +340,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={typeFunc2}
+                            onClick={() => {
+                              const type = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, type } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -398,9 +370,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {group === 0
+                        {filter.group === "0"
                           ? "Any [Multiple choices]"
-                          : group === 1
+                          : filter.group === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -425,7 +397,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={groupFunc}
+                            onClick={() => {
+                              const group = "1";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, group } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -441,7 +420,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={groupFunc2}
+                            onClick={() => {
+                              const group = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, group } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -464,9 +450,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {status === 0
+                        {filter.status === "0"
                           ? "Any [Multiple choices]"
-                          : status === 1
+                          : filter.status === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -491,7 +477,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={statusFunc}
+                            onClick={() => {
+                              const status = "1";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, status } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -507,7 +500,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={statusFunc2}
+                            onClick={() => {
+                              const status = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, status } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -530,9 +530,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {reason === 0
+                        {filter.reason === "0"
                           ? "Any [Multiple choices]"
-                          : reason === 1
+                          : filter.reason === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -557,7 +557,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={reasonFunc}
+                            onClick={() => {
+                              const reason = "1";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, reason } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -573,7 +580,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={reasonFunc2}
+                            onClick={() => {
+                              const reason = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, reason } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -596,9 +610,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {crew === 0
+                        {filter.crew === "0"
                           ? "Any [Multiple choices]"
-                          : crew === 1
+                          : filter.crew === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -623,7 +637,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={crewFunc}
+                            onClick={() => {
+                              const crew = "1";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, crew } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -639,7 +660,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={crewFunc2}
+                            onClick={() => {
+                              const crew = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, crew } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -662,9 +690,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {driver === 0
+                        {filter.driver === "0"
                           ? "Any [Multiple choices]"
-                          : driver === 1
+                          : filter.driver === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -689,7 +717,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={driverFunc}
+                            onClick={() => {
+                              const driver = "1";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, driver } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -705,7 +740,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={driverFunc2}
+                            onClick={() => {
+                              const driver = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, driver } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -728,9 +770,9 @@ export const OptionsList = (props) => {
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       <p className="text-gray-400 self-center truncate">
-                        {inTime === 0
+                        {filter.inTime === "0"
                           ? "Any [Multiple choices]"
-                          : inTime === 1
+                          : filter.inTime === "1"
                           ? "1"
                           : "2"}
                       </p>
@@ -755,7 +797,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={inTimeFunc}
+                            onClick={() => {
+                              const inTime = "1";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, inTime } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -771,7 +820,14 @@ export const OptionsList = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={inTimeFunc2}
+                            onClick={() => {
+                              const inTime = "2";
+                              setFilterList((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, inTime } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"

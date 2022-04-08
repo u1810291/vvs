@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useCallback, useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
 import { Fragment } from "react";
@@ -56,9 +57,8 @@ export const FiltersList = ({
   const ReasonFunc = useCallback(async () => {}, []);
 
   const remove = useCallback(async (filter) => {}, []);
-  
-  // const dashboardLists = filterList.dashboardList;
-  // dashboardLists.forEach((element) => {
+
+  // filterList.forEach((element) => {
   //   console.log(element);
   // });
 
@@ -69,24 +69,37 @@ export const FiltersList = ({
       {...props}
       className="rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1"
     >
-      {filterList.forEach((filter) => {
+      {filterList.map((filter) => {
         return (
           <>
             {selectedFilter === filter.id ? (
-              <div
-                className={filter.id ? "visible" : "hidden"}
-                key={generate()}
-              >
-                <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-                  <p></p>
-                  <button onClick={remove}>
-                    <img
-                      className="h-2 w-2"
-                      src={require("../../assets/assets/x.png")}
-                    />
-                  </button>
-                </div>
-              </div>
+              <>
+                {filter.dashboardList.map((element) => {
+                  return (
+                    <div
+                      className={filter.id ? "visible" : "hidden"}
+                      key={generate()}
+                    >
+                      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
+                        <p>{element}</p>
+                        <button
+                          onClick={() => {
+                            setFilterList((currentFilter) =>
+                              currentFilter.filter((x) => x !== element)
+                            );
+                            console.log(element);
+                          }}
+                        >
+                          <img
+                            className="h-2 w-2"
+                            src={require("../../assets/assets/x.png")}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
             ) : null}
           </>
         );
@@ -143,7 +156,7 @@ export const FiltersList = ({
         {filterList.map((filter, index) => {
           return (
             <div key={filter.id}>
-              {filterEditing === filter.id ? (
+              {selectedFilter === filter.id ? (
                 <Transition
                   as={Fragment}
                   enter="transition ease-out duration-100"
@@ -155,149 +168,181 @@ export const FiltersList = ({
                 >
                   <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={DateFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block px-4 py-2 text-sm"
-                            )}
-                          >
-                            Gauta
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes("Gauta") ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={() => {
+                                const date = "Gauta";
+                                setFilterList((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id ? { ...x, date } : x
+                                  )
+                                );
+                              }}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Gauta
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={ObjectFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Objektas
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes("Objektas") ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={ObjectFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Objektas
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={NameFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Pavadinimas
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes("Pavadinimas") ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={NameFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Pavadinimas
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={CrewFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Ekipažas
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes("Ekipažas") ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={CrewFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Ekipažas
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={InTimeFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Spėjo laiku
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes("Spėjo laiku") ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={InTimeFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Spėjo laiku
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={ReactionTimeFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Reagavimo laikas
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes(
+                        "Reagavimo laikas"
+                      ) ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={ReactionTimeFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Reagavimo laikas
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={TimeInObjectFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Laikas objekte
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes(
+                        "Laikas objekte"
+                      ) ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={TimeInObjectFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Laikas objekte
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={StatusFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Būsena
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes("Būsena") ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={StatusFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Būsena
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
 
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={ReasonFunc}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900 w-full text-center"
-                                : "text-center w-full text-gray-400",
-                              "block w-full text-left px-4 py-2 text-sm"
-                            )}
-                          >
-                            Suveikimo priežastis
-                          </button>
-                        )}
-                      </Menu.Item>
+                      {filter.dashboardList.includes(
+                        "Suveikimo priežastis"
+                      ) ? null : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={ReasonFunc}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900 w-full text-center"
+                                  : "text-center w-full text-gray-400",
+                                "block w-full text-left px-4 py-2 text-sm"
+                              )}
+                            >
+                              Suveikimo priežastis
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
+                      
                     </div>
                   </Menu.Items>
                 </Transition>
