@@ -37,6 +37,7 @@ export const AddFilterList = (props) => {
         driver: "0",
         inTime: "0",
         dashboardList: [
+          "Gauta",
           "Objektas",
           "Pavadinimas",
           "Ekipažas",
@@ -48,7 +49,22 @@ export const AddFilterList = (props) => {
         ],
       },
     ]);
+    filterList.map((value, index, array) => {
+      if (filterList.length - 1 === index) {
+        const id = value.id;
+        setSelectedFilter(id);
+      }
+    });
   };
+
+  const checkFilters = useCallback(async() => {
+    if (filterList.length === 1) {
+      setSelectedFilter(null)
+    } else {
+    const topID = filterList[0].id;
+    setSelectedFilter(topID);
+    }
+  },[filterList, setSelectedFilter])
 
   const saveFilters = useCallback(async () => {
     // handle api call
@@ -57,13 +73,13 @@ export const AddFilterList = (props) => {
   // I guess this for on page load
   useEffect(() => {
     if (filterList?.length > 0) {
-      filterList?.map((filter) => {
-        setSelectedFilter(filter.id);
-      });
+      const topId = filterList[0].id;
+      setSelectedFilter(topId);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, []);
 
+  console.log(selectedFilter)
   return (
     <>
       <div className="flex flex-col w-full items-center">
@@ -197,6 +213,7 @@ export const AddFilterList = (props) => {
                           currentFilter.filter((x) => x.id !== filter.id)
                         );
                         setFilterEditing(null);
+                        checkFilters();
                       }}
                       className="text-gray-400"
                     >

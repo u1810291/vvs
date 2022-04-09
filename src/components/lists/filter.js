@@ -26,19 +26,13 @@ export const FiltersList = ({
   const { english, lithuanian, t } = useLanguage();
   const { array, filter, pop, push } = useArray([]);
   const { filterList, setFilterList } = useContext(GlobalContext);
-  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
-
-  // filterList.forEach((element) => {
-  //   console.log(element);
-  // });
-
-  // console.log(filterList[1].dashboardList);
+  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
 
   return (
     <div
       {...props}
-      className="rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1"
+      className={selectedFilter ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"}
     >
       {filterList.map((filter) => {
         return (
@@ -51,8 +45,8 @@ export const FiltersList = ({
                       className={filter.id ? "visible" : "hidden"}
                       key={generate()}
                     >
-                      <div className="flex p-1 rounded-sm text-xs font-normal justify-between  items-center text-gray-400 bg-gray-200">
-                        <p>{element}</p>
+                      <div className="flex p-1 rounded-sm text-xs font-normal justify-between items-center text-gray-400 bg-gray-200">
+                        <p className="truncate">{element}</p>
                         <button
                           onClick={() => {
                             setFilterList((currentFilter) => 
@@ -81,7 +75,7 @@ export const FiltersList = ({
               className="h-4 w-4 mr-4"
               src={require("../../assets/assets/plus.png")}
             />
-            <p>Pridėti stulpelį</p>
+            <p className="truncate">Pridėti stulpelį</p>
           </Menu.Button>
         </div>
 

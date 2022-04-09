@@ -10,6 +10,17 @@ export default GlobalContext;
 
 export const GlobalProvider = ({ children }) => {
   const [selectedFilter, setSelectedFilter] = useState(null);
+  const [filter, setFilter] = useState("");
+  const [value, onChange] = useState(new Date());
+  const [objectAddress, setObjectAddress] = useState("");
+  const [edit, setEdit] = useState(false);
+  const [savedToMenu, setSavedToMenu] = useState(false);
+  const [savedToFavorite, setSavedToFavorite] = useState(false);
+  const [longName, setLongName] = useState("");
+  const [shortName, setShortName] = useState("");
+  const [filterEditing, setFilterEditing] = useState(null);
+  const [currentFilter, setCurrentFilter] = useState(null);
+  const [search, setSearch] = useState("");
   const [filterList, setFilterList] = useState(
     [
     {
@@ -30,6 +41,7 @@ export const GlobalProvider = ({ children }) => {
       driver: "0",
       inTime: "0",
       dashboardList: [
+        "Gauta",
         "Objektas",
         "Pavadinimas",
         "Ekipažas",
@@ -42,16 +54,6 @@ export const GlobalProvider = ({ children }) => {
     },
   ]
   );
-  const [filter, setFilter] = useState("");
-  const [value, onChange] = useState(new Date());
-  const [objectAddress, setObjectAddress] = useState("");
-  const [edit, setEdit] = useState(false);
-  const [savedToMenu, setSavedToMenu] = useState(false);
-  const [savedToFavorite, setSavedToFavorite] = useState(false);
-  const [longName, setLongName] = useState("");
-  const [shortName, setShortName] = useState("");
-  const [filterEditing, setFilterEditing] = useState(null);
-  const [currentFilter, setCurrentFilter] = useState(null);
 
   // useEffect(() => {
   //   const temp = localStorage.getItem("filterList");
@@ -92,7 +94,9 @@ export const GlobalProvider = ({ children }) => {
     selectedFilter,
     setSelectedFilter,
     currentFilter,
-    setCurrentFilter
+    setCurrentFilter,
+    search,
+    setSearch
   };
 
   return (

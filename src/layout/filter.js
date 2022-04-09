@@ -7,13 +7,13 @@ import { OptionsList } from "../components/lists/options";
 import { DashboardList } from "../components/lists/dashboard";
 const { AddFilterList } = require("../components/lists/addFilter");
 import GlobalContext from "../context/globalContext";
-// const { AddFilter } = require("../components/forms/addFilter");
 import { DashboardTestApi } from "../api/dashboardTest";
 import Pdf from "react-to-pdf";
 
 function Dashboard() {
   const { english, lithuanian, t } = useLanguage();
   const { filterList, setFilterList } = useContext(GlobalContext);
+  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
 
   const exportPDF = useCallback(async () => {}, []);
 
@@ -28,30 +28,30 @@ function Dashboard() {
               <RegularSidebar />
               <div className="flex flex-col min-h-full w-full justify-between">
                 <FilterHeader />
-                <div className="flex flex-col h-full">
+                <div className="flex flex-col min-h-full sm:h-full">
                   <div className="flex flex-row w-full">
-                    <div className="flex flex-col h-96 overflow-y-auto items-center scrollbar-gone border-r w-1/5">
+                    <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">  {/* problematic guy */}
                       <AddFilterList />
                     </div>
-                    <div className="flex flex-col ml-2 w-3/5">
+                    <div className="flex flex-col ml-2 w-3/6 lg:w-3/5"> {/* problematic guy */}
                       <OptionsList />
                       <FiltersList />
-                      <div className="flex flex-col sm:flex-row justify-between">
-                        <div className="flex flex-row items-center">
+                      <div className={selectedFilter ? "flex flex-col md:flex-row justify-between" : "hidden"}>
+                        <div className="flex flex-col md:flex-row mt-8 md:mt-0 items-center">
                           <button className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs font-normal hover:shadow-none bg-gray-200 focus:outline-none">
                             Išsaugoti filtrą
                           </button>
                         </div>
-                        <div className="flex flex-row items-center my-6">
+                        <div className="flex flex-col md:flex-row items-center my-6">
                           <img
-                            className="h-8 w-6 mr-2"
+                            className="h-8 w-6 mr-2 hidden lg:inline-block"
                             src={require("../assets/assets/doc.png")}
                           ></img>
                           <Pdf targetRef={ref} filename="print.pdf">
                             {({ toPdf }) => (
                               <button
                                 onClick={toPdf}
-                                className="flex justify-center mr-6 p-1 text-normal font-normal"
+                                className="flex justify-center md:mr-6 p-1 text-normal font-normal"
                               >
                                 Eksportuoti
                               </button>
@@ -63,11 +63,11 @@ function Dashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col w-1/5">
-                      <p>{JSON.stringify(filterList, null, 2)}</p>
+                    <div className="flex flex-col w-0 xl:w-1/5">
+                      {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
                     </div>
                   </div>
-                  <div className="pl-4 w-full border-t py-2 grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
+                  <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
                     <div className="flex flex-row items-center">
                       <span className="text-gray-300">Gauta</span>
                     </div>
@@ -98,7 +98,10 @@ function Dashboard() {
                       </span>
                     </div>
                   </div>
-                  <div ref={ref} className="pl-4 flex flex-col w-full overflow-y-auto items-center scrollbar-gone">
+                  <div
+                    ref={ref}
+                    className="pl-4 flex flex-col w-full overflow-y-auto items-center scrollbar-gone"
+                  >
                     {DashboardTestApi.map((data) => (
                       <DashboardList
                         key={data.id}
