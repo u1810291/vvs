@@ -16,6 +16,11 @@ function Dashboard() {
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
 
   const ref = React.createRef();
+  const options = {
+    orientation: 'landscape',
+    unit: 'in',
+    format: [4,2]
+};
 
   return (
     <>
@@ -26,7 +31,7 @@ function Dashboard() {
               <RegularSidebar />
               <div className="flex flex-col min-h-full w-full justify-between">
                 <FilterHeader />
-                <div className="flex flex-col min-h-screen overflow-scroll sm:h-full"> 
+                <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full"> 
                   <div className="flex flex-row w-full">
                     <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5"> 
                       <AddFilterList />

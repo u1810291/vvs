@@ -96,7 +96,7 @@ export const DashboardList = ({
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex col-span-2 flex-row h-16 justify-center items-center">
+                <div className="flex col-span-2 flex-row h-16 items-center">
                   {filter.dashboardList.includes("Suveikimo priežastis") ? (
                     <span className="bg-white text-gray-400 truncate">{reason}</span>
                   ) : (
