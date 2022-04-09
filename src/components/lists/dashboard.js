@@ -31,7 +31,7 @@ export const DashboardList = ({
         return (
           <div key={filter.id}>
             {selectedFilter === filter.id ? (
-              <div className="w-full border-b grid grid-cols-1 bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
+              <div className="w-full border-b grid grid-cols-1 bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                 <div className="flex flex-row items-center h-16">
                   {filter.dashboardList.includes("Gauta") ? (
                     <span className="bg-white text-gray-400 truncate">{date}</span>
@@ -39,14 +39,14 @@ export const DashboardList = ({
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center h-16">
+                <div className="flex col-span-2 flex-row items-center h-16">
                   {filter.dashboardList.includes("Objektas") ? (
                     <span className="bg-white text-gray-400 truncate">{object}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row items-center h-16">
+                <div className="flex col-span-2 flex-row items-center h-16">
                   {filter.dashboardList.includes("Pavadinimas") ? (
                     <span className="bg-white text-gray-400 truncate">{name}</span>
                   ) : (
@@ -96,7 +96,7 @@ export const DashboardList = ({
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row h-16 justify-center items-center">
+                <div className="flex col-span-2 flex-row h-16 justify-center items-center">
                   {filter.dashboardList.includes("Suveikimo priežastis") ? (
                     <span className="bg-white text-gray-400 truncate">{reason}</span>
                   ) : (

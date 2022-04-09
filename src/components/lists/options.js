@@ -87,7 +87,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <div>
                           <Calendar
@@ -129,7 +129,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -145,8 +145,8 @@ export const OptionsList = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -169,8 +169,8 @@ export const OptionsList = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -211,7 +211,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -226,8 +226,8 @@ export const OptionsList = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -249,8 +249,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -312,7 +312,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -327,8 +327,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -350,8 +350,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -392,7 +392,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -407,8 +407,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -430,8 +430,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -472,7 +472,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -487,8 +487,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -510,8 +510,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -552,7 +552,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -567,8 +567,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -590,8 +590,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -632,7 +632,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -647,8 +647,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -670,8 +670,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -712,7 +712,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -727,8 +727,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -750,8 +750,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >
@@ -792,7 +792,7 @@ export const OptionsList = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -807,8 +807,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block px-4 py-2 text-sm"
                               )}
                             >
@@ -830,8 +830,8 @@ export const OptionsList = (props) => {
                             }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full text-center"
-                                  : "text-center w-full text-gray-700",
+                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                  : "text-center truncate w-full text-gray-700",
                                 "block w-full text-left px-4 py-2 text-sm"
                               )}
                             >

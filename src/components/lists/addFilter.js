@@ -102,7 +102,7 @@ export const AddFilterList = (props) => {
                       selectedFilter === filter.id ? "shadow" : "w-full"
                     }
                   >
-                    <div className="flex flex-row w-full border-l mb-4 border-b items-center justify-between">
+                    <div className="flex flex-col sm:flex-row w-full border-l mb-4 border-b items-center justify-between">
                       <p className="flex text-gray-400 p-2">
                         Filtro pavadinimas
                       </p>
@@ -118,9 +118,9 @@ export const AddFilterList = (props) => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex flex-row w-full border-l border-b justify-between items-center">
+                    <div className="flex flex-col sm:flex-row w-full border-l border-b justify-between items-center">
                       <p className="text-gray-400 p-2">{filter.filterName}</p>
-                      <a className="flex p-1 rounded-sm text-xs mx-2 px-2 mb-2 font-normal items-center text-gray-400 bg-gray-200">
+                      <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 bg-gray-200">
                         <p onClick={() => setFilterEditing(filter.id)}>
                           redaguoti filtrą
                         </p>
@@ -130,7 +130,7 @@ export const AddFilterList = (props) => {
                 </button>
               ) : (
                 <div className="ml-6 w-full">
-                  <div className="flex flex-row w-full justify-between mt-2">
+                  <div className="flex flex-col sm:flex-row w-full justify-between mt-2">
                     <div className="flex flex-col w-full">
                       <p className="text-gray-500">Pavadinimas</p>
                       <input
@@ -146,7 +146,7 @@ export const AddFilterList = (props) => {
                         }}
                         value={filter.filterName}
                         placeholder=""
-                        className="flex h-8 w-40 border text-gray-400 placeholder-gray-400 focus:outline-none sm:text-sm"
+                        className="flex h-8 w-20 sm:w-40 border text-gray-400 placeholder-gray-400 focus:outline-none sm:text-sm"
                       />
                     </div>
                     <div className="flex flex-col mr-4">
@@ -168,8 +168,8 @@ export const AddFilterList = (props) => {
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col justify-between w-full">
-                    <div className="flex flex-row items-center mt-4">
+                  <div className="flex flex-col sm:justify-between w-20 sm:w-full">
+                    <div className="flex flex-col sm:flex-row items-center mt-4">
                       <input
                         id="save"
                         name="save"
@@ -185,9 +185,9 @@ export const AddFilterList = (props) => {
                         type="checkbox"
                         className="h-4 w-4  text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500">Išsaugoti į meniu</p>
+                      <p className="ml-4 text-gray-500 truncate">Išsaugoti į meniu</p>
                     </div>
-                    <div className="flex flex-row items-center mt-2">
+                    <div className="flex flex-col sm:flex-row items-center mt-2">
                       <input
                         id="default-filter"
                         name="default-filter"
@@ -203,10 +203,10 @@ export const AddFilterList = (props) => {
                         type="checkbox"
                         className="h-4 w-4   text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500">Numatytasis filtras</p>
+                      <p className="ml-4 text-gray-500 truncate">Numatytasis filtras</p>
                     </div>
                   </div>
-                  <div className=" flex flex-row justify-around items-center w-full mt-8">
+                  <div className=" flex flex-col sm:flex-row justify-around items-center w-20 sm:w-full mt-8">
                     <button
                       onClick={() => {
                         setFilterList((currentFilter) =>

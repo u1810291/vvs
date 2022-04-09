@@ -15,25 +15,23 @@ function Dashboard() {
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
 
-  const exportPDF = useCallback(async () => {}, []);
-
   const ref = React.createRef();
 
   return (
     <>
       <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center h-screen relative overflow-hidden">
+        <div className="flex w-screen flex-row justify-center min-h-screen sm:h-screen relative overflow-hidden">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <RegularSidebar />
               <div className="flex flex-col min-h-full w-full justify-between">
                 <FilterHeader />
-                <div className="flex flex-col min-h-full sm:h-full">
+                <div className="flex flex-col min-h-screen overflow-scroll sm:h-full"> 
                   <div className="flex flex-row w-full">
-                    <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">  {/* problematic guy */}
+                    <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5"> 
                       <AddFilterList />
                     </div>
-                    <div className="flex flex-col ml-2 w-3/6 lg:w-3/5"> {/* problematic guy */}
+                    <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
                       <OptionsList />
                       <FiltersList />
                       <div className={selectedFilter ? "flex flex-col md:flex-row justify-between" : "hidden"}>
@@ -67,14 +65,14 @@ function Dashboard() {
                       {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
                     </div>
                   </div>
-                  <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-9 grid-gap-6 justify-between font-normal text-black z-1">
+                  <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                     <div className="flex flex-row items-center">
                       <span className="text-gray-300">Gauta</span>
                     </div>
-                    <div className="flex flex-row items-center">
+                    <div className="flex col-span-2 flex-row items-center">
                       <span className="text-gray-300">Objektas</span>
                     </div>
-                    <div className="flex flex-row items-center">
+                    <div className="flex col-span-2 flex-row items-center">
                       <span className="text-gray-300">Pavadinimas</span>
                     </div>
                     <div className="flex flex-row items-center">
@@ -92,7 +90,7 @@ function Dashboard() {
                     <div className="flex flex-row items-center">
                       <span className="text-gray-300">Būsena</span>
                     </div>
-                    <div className="flex flex-row items-center">
+                    <div className="flex col-span-2 flex-row items-center">
                       <span className="text-gray-300">
                         Suveikimo priežastis
                       </span>
