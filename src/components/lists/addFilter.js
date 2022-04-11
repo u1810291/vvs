@@ -79,7 +79,6 @@ export const AddFilterList = (props) => {
     }
   }, []);
 
-  console.log(selectedFilter)
   return (
     <>
       <div className="flex flex-col w-full items-center">
