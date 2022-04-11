@@ -1,12 +1,14 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
+import AuthContext from "../../context/authContext";
 const { GrayDot } = require("../../components/icons/grayDot");
 const { RedDot } = require("../../components/icons/redDot");
 const { GreenDot } = require("../../components/icons/greenDot");
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { email, setEmail } = useContext(AuthContext);
+  const { password, setPassword } = useContext(AuthContext);
+  const { LoginUser } = useContext(AuthContext);
   const [emailValid, setEmailValid] = useState(null);
   const [passwordValid, setPasswordValid] = useState(null);
   const [emailEmpty, setEmailEmpty] = useState(true);
@@ -16,7 +18,8 @@ const LoginForm = () => {
   const passwordFunc = useCallback(
     async (e) => {
       setPassword(e.target.value);
-      const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+       // Minimum eight characters, at least one upper case letter, one symbol and one number
+      const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
       const result = pattern.test(password);
       if (result === true) {
         setPasswordValid(true);
@@ -62,7 +65,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <form className="space-y-6">
+      <form onSubmit={LoginUser} className="space-y-6">
         <div>
           <div className="mt-12">
             <div className="flex w-full flex-row">

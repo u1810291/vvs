@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { GlobalProvider } from "./context/globalContext";
+import { AuthProvider } from "./context/authContext";
+import ProtectedRoute from "./feature/protected";
 
 import Login from "./layout/login";
 import Dashboard from "./layout/dashboard";
@@ -12,15 +14,19 @@ import NotFound from "./layout/notFound";
 function App() {
   return (
     <Router>
-      <GlobalProvider>
-        <Routes>
-          <Route path="/" exec element={<Login />} />
-          <Route path="Dashboard" element={<Dashboard />} />
-          <Route path="Filter" element={<Filter />} />
-          <Route path="TaskList" element={<TaskList />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </GlobalProvider>
+      <AuthProvider>
+        <GlobalProvider>
+          <Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" exec element={<Login />} />
+            <Route path="Dashboard" element={<Dashboard />} />
+            <Route path="Filter" element={<Filter />} />
+            <Route path="TaskList" element={<TaskList />} />
+            <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </GlobalProvider>
+      </AuthProvider>
     </Router>
   );
 }
