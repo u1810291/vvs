@@ -4,8 +4,11 @@ import GlobalContext from "../../context/globalContext";
 const { RedWatching } = require("../buttons/redWatching");
 const { RedDriving } = require("../buttons/redDriving");
 const { BlueStatus } = require("../buttons/blueStatus");
+const { CancelStatus } = require("../buttons/darkBlueStatus");
 const { GreenStatus } = require("../buttons/greenStatus");
 const { GrayStatus } = require("../buttons/grayStatus");
+const { YellowWaitingStatus } = require("../buttons/yellowWaiting");
+const { InspectedStatus } = require("../buttons/yellowInspected");
 
 export const DashboardList = ({
   id,
@@ -89,10 +92,13 @@ export const DashboardList = ({
                   {filter.dashboardList.includes("Būsena") ? (
                     <RedWatching />
                   ) : (
+                    // <InspectedStatus />
+                    // <YellowWaitingStatus />
                     // <RedDriving/>
                     // <GrayStatus/>
                     // <GreenStatus/>
                     // <BlueStatus/>
+                    // <CancelStatus/>
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
