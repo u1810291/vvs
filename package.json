@@ -36,9 +36,10 @@
   },
   "scripts": {
     "dev": "cross-env REACT_APP_STAGE=DEV react-scripts start",
-    "start": "cross-env REACT_APP_STAGE=PROD npm run serve -s build",
-    "stage": "cross-env REACT_APP_STAGE=STAGE npm run serve -s build",
-    "build": "cross-end REACT_APP_STAGE=STAGE craco build",
+    "build:prod": "cross-env REACT_APP_STAGE=PROD npm run serve -s build",
+    "build:dev": "cross-env REACT_APP_STAGE=DEV npm run serve -s build",
+    "build:stage": "cross-env REACT_APP_STAGE=STAGE npm run serve -s build",
+    "start": "craco build",
     "test": "cucumber-js -f @cucumber/pretty-formatter"
   },
   "eslintConfig": {
