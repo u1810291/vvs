@@ -24,6 +24,7 @@ const stage = {
   clientPort: 8080,
   serverPort: 9000,
   fusionAuthPort: 9011,
+  googleMaps: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs"
 };
 
 const prod = {
@@ -52,9 +53,12 @@ const prod = {
   clientPort: 8080,
   serverPort: 9000,
   fusionAuthPort: 9011,
+  googleMaps: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs"
 };
 
-const dev = {};
+const dev = {
+  googleMaps: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs"
+};
 
 const config =
   process.env.REACT_APP_STAGE === "DEV"

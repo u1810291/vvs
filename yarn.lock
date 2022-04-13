@@ -5392,6 +5392,13 @@
   "resolved" "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
   "version" "1.0.0-beta.2"
 
+"geolocation-utils@^1.2.5":
+  "integrity" "sha512-ts7KTV7dSs0nrBh6q9M6Z7+tpponHMHKQ39ieloQizUjIOO8ZT7mAmQX+M313Y+2J0ifiS3Culjq3Eu1s0YYHw=="
+  "resolved" "https://registry.npmjs.org/geolocation-utils/-/geolocation-utils-1.2.5.tgz"
+  "version" "1.2.5"
+  dependencies:
+    "point-in-polygon" "1.0.1"
+
 "get-caller-file@^2.0.5":
   "integrity" "sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg=="
   "resolved" "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz"
@@ -7938,6 +7945,11 @@
   "version" "3.1.0"
   dependencies:
     "find-up" "^3.0.0"
+
+"point-in-polygon@1.0.1":
+  "integrity" "sha1-1Ztk6P7kHElFiqyCtWcYxZV7Kvc="
+  "resolved" "https://registry.npmjs.org/point-in-polygon/-/point-in-polygon-1.0.1.tgz"
+  "version" "1.0.1"
 
 "portfinder@^1.0.28":
   "integrity" "sha512-Se+2isanIcEqf2XMHjyUKskczxbPH7dQnlMjXX6+dybayyHvAf/TCgyMRlzf/B6QDhAEFOGes0pzRo3by4AbMA=="

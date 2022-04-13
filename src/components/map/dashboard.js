@@ -4,6 +4,9 @@ import {
   Marker,
   InfoWindow,
   useJsApiLoader,
+  Polygon,
+  DirectionsRenderer,
+  DrawingManager,
 } from "@react-google-maps/api";
 import { StandardMap } from "../../feature/mapStandard";
 import useLanguage from "../../hook/useLanguage";
@@ -15,6 +18,11 @@ const containerStyle = {
 
 const center = {
   lat: 55.95,
+  lng: 23.33,
+};
+
+const center2 = {
+  lat: 56.00,
   lng: 23.33,
 };
 
@@ -35,9 +43,45 @@ const DashboardMap = () => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [clickedPos, setClickedPos] = useState({});
+  const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
+  const [path, setPath] = useState([
+    { lat: 55.95000000000000, lng: 23.33300000000000 },
+    { lat: 56.00000000000000, lng: 23.43300000000000 },
+    { lat: 55.95000000000000, lng: 23.53300000000000 },
+  ]);
+
+  const originRef = useRef();
+  const destinationRef = useRef();
+
+async function calculateRoute() { // sez undefined
+    if (originRef.current.value === '' || destinationRef.current.value === '') {
+      return;
+  }
+  const directionService = new google.maps.DirectionsService();
+  const results = await directionService.route({
+    origin: originRef.current.value,
+    destination: destinationRef.current.value,
+    travelMode: google.maps.TravelMode.DRIVING,
+  })
+  setDirectionsResponse(results);
+  setDistance(results.routes[0].legs[0].distance.text);
+  setDuration(results.routes[0].legs[0].duration.text);
+}
+
+function clearRoute() {
+  setDirectionsResponse(null);
+  setDistance('');
+  setDuration('');
+  originRef.current.value = ""
+  destinationRef.current.value = ""
+}
 
   const onMapClick = useCallback((e) => {
     // console.log(e);
+    calculateRoute();
+    // calculateRoute is for routes service. ClearRoute() to clear
     setClickedPos({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   }, []);
 
@@ -54,6 +98,43 @@ const DashboardMap = () => {
     googleMapsApiKey: "AIzaSyCM9HFBcLjd0qeL0dgtFwOpeqUWy-aAB5M",
   });
 
+  // Define refs for Polygon instance and listeners
+  const polygonRef = useRef(null);
+  const listenersRef = useRef([]);
+
+  // Call setPath with new edited path
+  const onEditPolygon = useCallback(() => {
+    if (polygonRef.current) {
+      const nextPath = polygonRef.current
+        .getPath()
+        .getArray()
+        .map((latLng) => {
+          return { lat: latLng.lat(), lng: latLng.lng() };
+        });
+      setPath(nextPath);
+    }
+  }, [setPath]);
+
+  // Bind refs to current Polygon and listeners
+  const onLoadPolygon = useCallback(
+    (polygon) => {
+      polygonRef.current = polygon;
+      const path = polygon.getPath();
+      listenersRef.current.push(
+        path.addListener("set_at", onEditPolygon),
+        path.addListener("insert_at", onEditPolygon),
+        path.addListener("remove_at", onEditPolygon)
+      );
+    },
+    [onEditPolygon]
+  );
+
+  // Clean up refs
+  const onUnmountPolygon = useCallback(() => {
+    listenersRef.current.forEach((lis) => lis.remove());
+    polygonRef.current = null;
+  }, []);
+
   return (
     <>
       {isLoaded ? (
@@ -66,10 +147,25 @@ const DashboardMap = () => {
             onUnmount={onUnmount}
             onClick={onMapClick}
           >
+            <Marker position={center} ref={originRef}/>
+            <Marker position={center2} ref={destinationRef}/>
             {clickedPos.lat ? (
               <Marker icon={markerIcon} position={clickedPos} />
             ) : null}
             <></>
+            {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
+            <Polygon
+              // Make the Polygon editable / draggable
+              editable
+              draggable
+              path={path}
+              // Event used when manipulating and adding points
+              onMouseUp={onEditPolygon}
+              // Event used when dragging the whole Polygon
+              onDragEnd={onEditPolygon}
+              onLoad={onLoadPolygon}
+              onUnmount={onUnmountPolygon}
+            />
           </GoogleMap>
         </div>
       ) : null}
