@@ -1,0 +1,48 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+.setup_ssh: &setup_ssh |
+  eval $(ssh-agent -s)
+  echo "$SSH_PRIVATE_KEY" | ssh-add -
+  mkdir -p ~/.ssh
+  ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+
+stages:
+  - Deploy Staging
+
+variables:
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: node:17.9.0-alpine3.15
+
+deploy_staging:
+  interruptible: true
+  stage: Deploy Staging
+  variables:
+    DOCKER_HOST: ssh://root@$HOST
+    VIRTUAL_HOST: ecbackend.swarm.testavimui.eu
+    CONTAINER_NAME: ec-backend
+  only:
+    refs:
+      - master
+      - staging
+  environment:
+    name: staging
+    url: $VIRTUAL_HOST
+  script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+    - export DOCKER_HOST=ssh://root@$HOST
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker rm --force --volumes $CONTAINER_NAME || echo 'No running prior images'
+    - >
+      docker run -d
+      -e VIRTUAL_HOST=$VIRTUAL_HOST
+      -e LETSENCRYPT_HOST=$VIRTUAL_HOST
+      --name $CONTAINER_NAME
+      --network nginx-proxy
+      $IMAGE_TAG
