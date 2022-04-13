@@ -33,6 +33,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "build:staging": "REACT_APP_ENV=staging react-scripts build",
+    "build:production": "REACT_APP_ENV=production react-scripts build",
     "dev": "react-scripts start",
     "start": "serve -s build",
     "build": "craco build",
