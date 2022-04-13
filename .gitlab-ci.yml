@@ -27,6 +27,7 @@ deploy_staging:
     refs:
       - master
       - staging
+      - main
   environment:
     name: staging
     url: $VIRTUAL_HOST
