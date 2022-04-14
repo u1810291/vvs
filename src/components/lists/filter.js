@@ -37,6 +37,7 @@ export const FiltersList = ({
       {filterList.map((filter) => {
         return (
           <>
+          {/* gets one additional div around ( visible : hidden div ) and collapse filters if do here key={generate()}*/}
             {selectedFilter === filter.id ? (
               <>
                 {filter.dashboardList.map((element) => {
@@ -64,6 +65,7 @@ export const FiltersList = ({
                 })}
               </>
             ) : null}
+            {/* </> */}
           </>
         );
       })}
