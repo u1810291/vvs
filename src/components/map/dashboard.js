@@ -7,6 +7,7 @@ import {
   Polygon,
   DirectionsRenderer,
   DrawingManager,
+  Autocomplete,
 } from "@react-google-maps/api";
 import { StandardMap } from "../../feature/mapStandard";
 import useLanguage from "../../hook/useLanguage";
@@ -18,11 +19,6 @@ const containerStyle = {
 
 const center = {
   lat: 55.95,
-  lng: 23.33,
-};
-
-const center2 = {
-  lat: 56.00,
   lng: 23.33,
 };
 
@@ -44,44 +40,49 @@ const DashboardMap = () => {
   const [map, setMap] = useState(null);
   const [clickedPos, setClickedPos] = useState({});
   const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [distance, setDistance] = useState("");
+  const [duration, setDuration] = useState("");
   const [path, setPath] = useState([
-    { lat: 55.95000000000000, lng: 23.33300000000000 },
-    { lat: 56.00000000000000, lng: 23.43300000000000 },
-    { lat: 55.95000000000000, lng: 23.53300000000000 },
+    { lat: 55.95, lng: 23.333 },
+    { lat: 56.0, lng: 23.433 },
+    { lat: 55.95, lng: 23.533 },
   ]);
 
   const originRef = useRef();
   const destinationRef = useRef();
+  
+  const originValue = "Siauliai tilžes g 1";
+  const destinationValue = "Siauliai tilžes g 400";
 
-async function calculateRoute() { // sez undefined
-    if (originRef.current.value === '' || destinationRef.current.value === '') {
+  originRef.current = originValue
+  destinationRef.current = destinationValue
+
+  async function calculateRoute() {
+    if (originRef.current === "" || destinationRef.current === "") {
       return;
+    }
+    const directionService = new google.maps.DirectionsService();
+    const results = await directionService.route({
+      origin:  String(originRef.current),
+      destination: String(destinationRef.current),
+      travelMode: google.maps.TravelMode.DRIVING,
+    });
+    setDirectionsResponse(results);
+    setDistance(results.routes[0].legs[0].distance.text);
+    setDuration(results.routes[0].legs[0].duration.text);
   }
-  const directionService = new google.maps.DirectionsService();
-  const results = await directionService.route({
-    origin: originRef.current.value,
-    destination: destinationRef.current.value,
-    travelMode: google.maps.TravelMode.DRIVING,
-  })
-  setDirectionsResponse(results);
-  setDistance(results.routes[0].legs[0].distance.text);
-  setDuration(results.routes[0].legs[0].duration.text);
-}
 
-function clearRoute() {
-  setDirectionsResponse(null);
-  setDistance('');
-  setDuration('');
-  originRef.current.value = ""
-  destinationRef.current.value = ""
-}
+  function clearRoute() {
+    setDirectionsResponse(null);
+    setDistance("");
+    setDuration("");
+    originRef.current = "";
+    destinationRef.current = "";
+  }
 
   const onMapClick = useCallback((e) => {
     // console.log(e);
     calculateRoute();
-    // calculateRoute is for routes service. ClearRoute() to clear
     setClickedPos({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   }, []);
 
@@ -95,7 +96,7 @@ function clearRoute() {
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCM9HFBcLjd0qeL0dgtFwOpeqUWy-aAB5M",
+    googleMapsApiKey: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs",
   });
 
   // Define refs for Polygon instance and listeners
@@ -137,6 +138,14 @@ function clearRoute() {
 
   return (
     <>
+      {/* <div>
+        <Autocomplete>
+        <input ref={originRef} className="border"></input>
+        </Autocomplete>
+        <Autocomplete>
+        <input ref={destinationRef} className="border"></input>
+        </Autocomplete>
+      </div> */}
       {isLoaded ? (
         <div className="w-6/12 h-full">
           <GoogleMap
@@ -147,21 +156,19 @@ function clearRoute() {
             onUnmount={onUnmount}
             onClick={onMapClick}
           >
-            <Marker position={center} ref={originRef}/>
-            <Marker position={center2} ref={destinationRef}/>
+           {/* <Marker position={center} ref={originRef} /> Do reverse geocoding instead */}
             {clickedPos.lat ? (
               <Marker icon={markerIcon} position={clickedPos} />
             ) : null}
             <></>
-            {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
+            {directionsResponse && (
+              <DirectionsRenderer directions={directionsResponse} />
+            )}
             <Polygon
-              // Make the Polygon editable / draggable
               editable
               draggable
               path={path}
-              // Event used when manipulating and adding points
               onMouseUp={onEditPolygon}
-              // Event used when dragging the whole Polygon
               onDragEnd={onEditPolygon}
               onLoad={onLoadPolygon}
               onUnmount={onUnmountPolygon}
