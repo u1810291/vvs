@@ -36,7 +36,7 @@ deploy_staging:
   stage: deploy
   variables:
     DOCKER_HOST: ssh://root@$HOST
-    VIRTUAL_HOST: ecvvs.testavimui.eu
+    VIRTUAL_HOST: ecvvs.swarm.testavimui.eu
     CONTAINER_NAME: ec-vvs
   only:
     refs:
