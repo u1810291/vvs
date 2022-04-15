@@ -30,7 +30,7 @@ const overLayView1 = {
 };
 
 const overLayView2 = {
-  lat: 55.90,
+  lat: 55.9,
   lng: 23.42,
 };
 
@@ -152,7 +152,7 @@ const DashboardMap = () => {
       originLat: 55.97,
       originLon: 23.35,
       destination: "alert",
-      destinationLat: 55.90,
+      destinationLat: 55.9,
       destinationLon: 23.42,
     },
     {
@@ -267,7 +267,7 @@ const DashboardMap = () => {
     listenersRef.current.forEach((lis) => lis.remove());
     polygonRef.current = null;
   }, []);
-
+console.log(directionsResponse);
   return (
     <>
       {isLoaded ? (
@@ -290,13 +290,14 @@ const DashboardMap = () => {
             )} */}
             {directionsResponse && (
               <>
-                {directionsResponse.map((item) => {
-                  <Polyline
-                    path={item}
-                    geodesic={true}
-                    options={routesOptions}
-                  />;
-                })}
+                {/* {directionsResponse.map((item, index) => { */}
+                <Polyline
+                  // path={{key: item, ...index}}
+                  path={directionsResponse}
+                  geodesic={true}
+                  options={routesOptions}
+                />
+                ;{/* })} */}
               </>
             )}
             {originAndDestination.map((marker) => (
