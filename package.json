@@ -39,7 +39,7 @@
     "dev": "cross-env REACT_APP_STAGE=DEV react-scripts start",
     "build:prod": "cross-env REACT_APP_STAGE=PROD npm run serve -s build",
     "build:dev": "cross-env REACT_APP_STAGE=DEV npm run serve -s build",
-    "build": "cross-env REACT_APP_STAGE=STAGE npm run serve -s build",
+    "build": "cross-env REACT_APP_STAGE=STAGE /bin/sh -c yarn build",
     "start": "craco build",
     "test": "cucumber-js -f @cucumber/pretty-formatter"
   },
