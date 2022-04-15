@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.gitlab-ci-copy.yml
+
 # dependencies
 /node_modules
 /build
