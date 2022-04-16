@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   const [forgotEmail, setForgotEmail] = useState("");
   const [user, setUser] = useState(() =>
     localStorage.getItem("userData")
-      ? jwt_decode(localStorage.getItem("userData"))
+      ? localStorage.getItem("userData") // jwt_decode
       : null
   );
   const [authToken, setAuthToken] = useState(() =>
@@ -49,18 +49,17 @@ export const AuthProvider = ({ children }) => {
       e.preventDefault();
       try {
         const res = await fetch(
-          "https://valued-termite-15.hasura.app/v1/graphql",
+          "http://ec.swarm.testavimui.eu/v1/graphql",
           {
             method: "POST",
             body: JSON.stringify({
-              query: `query checkUser($User: user_select_column!) {
-                  select_user(objects: [$User]) {
-                      returning {
-                        token
-                        refresh
-                      }
-                    }
-                  }`,
+              query: `query loginUser($username: String!, $password: String!) {
+                login(password: $password, username: $username) {
+                  refreshToken
+                  token
+                }
+              }
+              `,
               variables: {
                 newUser: {
                   email: email,
@@ -71,7 +70,7 @@ export const AuthProvider = ({ children }) => {
             headers: {
               "content-type": "application/json",
               "x-hasura-admin-secret":
-                "0A525p4HhXHOEy1YbfT9jiduyuYcljkp9VrIxV1mmvd1SlHVPpMGpBNqg7hpr0yN",
+                "secret",
             },
           }
         );
@@ -84,7 +83,7 @@ export const AuthProvider = ({ children }) => {
           console.log("data", data);
           const accessToken = data?.token;
           const refreshToken = data?.refresh;
-          setUser(jwt_decode(accessToken));
+          setUser(accessToken); // jwt_decode
           setAuthToken(data);
           localStorage.setItem("userData", JSON.stringify(user));
           navigate("/dashboard");
@@ -101,25 +100,20 @@ export const AuthProvider = ({ children }) => {
       e.preventDefault();
       try {
         const res = await fetch(
-          "https://valued-termite-15.hasura.app/v1/graphql",
+          "http://ec.swarm.testavimui.eu/v1/graphql",
           {
             method: "POST",
             body: JSON.stringify({
-              query: `mutation addUser($newUser: user_insert_input!) {
-                    insert_user(objects: [$newUser]) {
-                      returning {
-                        name
-                        surname
-                        phone
-                        email
-                        refresh
-                        token
-                      }
-                    }
-                  }`,
+              query: `query loginUser($password: String!, $firstName: String!, $lastName: String!, $mobilePhone: String!, $email: String!, $role: String!) {
+                login(password: $password, username: $username) {
+                  refreshToken
+                  token
+                }
+              }
+              `,
               variables: {
                 newUser: {
-                  name: registerName,
+                  birthDate: registerName,
                   surname: registerSurname,
                   phone: registerPhone,
                   email: registerEmail,
@@ -130,7 +124,7 @@ export const AuthProvider = ({ children }) => {
             headers: {
               "content-type": "application/json",
               "x-hasura-admin-secret":
-                "0A525p4HhXHOEy1YbfT9jiduyuYcljkp9VrIxV1mmvd1SlHVPpMGpBNqg7hpr0yN",
+                "secret",
             },
           }
         );
@@ -142,7 +136,7 @@ export const AuthProvider = ({ children }) => {
           console.log("data", data);
           const accessToken = data.token;
           const refreshToken = data.refresh;
-          setUser(jwt_decode(accessToken));
+          setUser(accessToken); // jwt_decode
           setAuthToken(data);
           localStorage.setItem("userData", JSON.stringify(user));
           navigate("/dashboard");
@@ -165,21 +159,21 @@ export const AuthProvider = ({ children }) => {
   const RefreshTokenUpdate = useCallback(async () => {
     try {
       const res = await fetch(
-        "https://valued-termite-15.hasura.app/v1/graphql/refresh",
+        "http://ec.swarm.testavimui.eu/v1/graphql/",
         {
           method: "POST",
           body: JSON.stringify({ refresh: authToken?.refresh }),
           headers: {
             "content-type": "application/json",
             "x-hasura-admin-secret":
-              "0A525p4HhXHOEy1YbfT9jiduyuYcljkp9VrIxV1mmvd1SlHVPpMGpBNqg7hpr0yN",
+              "secret",
           },
         }
       );
       const data = await res.json();
 
       if (data.status === 200) {
-        setUser(jwt_decode(accessToken));
+        setUser(accessToken); // jwt_decode
         setAuthToken(data);
         localStorage.setItem("userData", JSON.stringify(user));
       } else {
@@ -200,16 +194,17 @@ export const AuthProvider = ({ children }) => {
       const expiringID = localStorage.getItem("changePasswordID", JSON.stringify(changePasswordId));
       try {
         const res = await fetch(
-          "https://valued-termite-15.hasura.app/v1/graphql",
+          "http://ec.swarm.testavimui.eu/v1/graphql",
           {
             method: "POST",
             body: JSON.stringify({
-              query: `query checkPassword($Password: user_select_column!) {
-                  select_password(objects: [$Password]) {
-                      returning {
-                      }
-                    }
-                  }`,
+              query: `query loginUser($changePasswordId: String!, $password: String!) {
+                recoverPassword(password: $password, changePasswordId: $changePasswordId) {
+                  refreshToken
+                  token
+                }
+              }
+              `,
               variables: {
                 User: {
                   changePasswordId: expiringID,
@@ -220,7 +215,7 @@ export const AuthProvider = ({ children }) => {
             headers: {
               "content-type": "application/json",
               "x-hasura-admin-secret":
-                "0A525p4HhXHOEy1YbfT9jiduyuYcljkp9VrIxV1mmvd1SlHVPpMGpBNqg7hpr0yN",
+                "secret",
             },
           }
         );
@@ -245,17 +240,17 @@ export const AuthProvider = ({ children }) => {
       e.preventDefault();
       try {
         const res = await fetch(
-          "https://valued-termite-15.hasura.app/v1/graphql",
+          "http://ec.swarm.testavimui.eu/v1/graphql",
           {
             method: "POST",
             body: JSON.stringify({
-              query: `query checkEmail($Email: user_select_column!) {
-                  select_email(objects: [$Email]) {
-                      returning {
-                        changePasswordId
-                      }
-                    }
-                  }`,
+              query: `query ($email: String!) {
+                forgotPassword(email: $email) {
+                  refreshToken
+                  token
+                }
+              }
+              `,
               variables: {
                 User: {
                   email: forgotEmail,
@@ -265,7 +260,7 @@ export const AuthProvider = ({ children }) => {
             headers: {
               "content-type": "application/json",
               "x-hasura-admin-secret":
-                "0A525p4HhXHOEy1YbfT9jiduyuYcljkp9VrIxV1mmvd1SlHVPpMGpBNqg7hpr0yN",
+                "secret",
             },
           }
         );

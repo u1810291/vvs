@@ -13,6 +13,7 @@ import {
 import { StandardMap } from "../../feature/mapStandard";
 import useLanguage from "../../hook/useLanguage";
 import { generate } from "shortid";
+import { RoutesPolyline } from "../../components/buttons/polyline";
 
 const containerStyle = {
   width: "100%",
@@ -105,8 +106,14 @@ const getDestinationIcons = (icons) => {
   }
 };
 
+const randomColor = () => {
+  const randomize = Math.floor(Math.random() * 16777215).toString(16);
+  const result = "#" + randomize;
+  return result;
+};
+
 const routesOptions = {
-  strokeColor: "#ff2343",
+  strokeColor: randomColor(),
   strokeOpacity: 0.8,
   strokeWeight: 5,
   clickable: true,
@@ -118,6 +125,8 @@ const DashboardMap = () => {
   const [map, setMap] = useState(null);
   const [clickedPos, setClickedPos] = useState({});
   const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [singleDirectionsResponse, setSingleDirectionsResponse] =
+    useState(null);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [path, setPath] = useState([
@@ -138,6 +147,7 @@ const DashboardMap = () => {
       destination: "alert",
       destinationLat: 55.88,
       destinationLon: 23.4,
+      routeColor: "#0000FF",
     },
     {
       crew: "T3",
@@ -146,6 +156,7 @@ const DashboardMap = () => {
       destination: "alert",
       destinationLat: 55.89,
       destinationLon: 23.41,
+      routeColor: "#FF0000",
     },
     {
       crew: "T3",
@@ -154,6 +165,7 @@ const DashboardMap = () => {
       destination: "alert",
       destinationLat: 55.9,
       destinationLon: 23.42,
+      routeColor: "#FFFF00",
     },
     {
       crew: "T3",
@@ -162,6 +174,7 @@ const DashboardMap = () => {
       destination: "alert",
       destinationLat: 55.92,
       destinationLon: 23.46,
+      routeColor: "#006400",
     },
   ]);
 
@@ -191,8 +204,12 @@ const DashboardMap = () => {
         },
         function (response, status) {
           if (status === "OK") {
-            const coords = response.routes[0].overview_path;
-            setDirectionsResponse(coords);
+            const coords = response.routes;
+            const singleCoords = response.routes[0].overview_path;
+            // const statsPlaceInResponse = response.routes[0];
+            const mergeStats = Object.keys(coords[0]).concat(item);
+
+            setSingleDirectionsResponse(singleCoords);
           } else {
             console.log("Directions request failed due to " + status);
           }
@@ -267,7 +284,7 @@ const DashboardMap = () => {
     listenersRef.current.forEach((lis) => lis.remove());
     polygonRef.current = null;
   }, []);
-console.log(directionsResponse);
+
   return (
     <>
       {isLoaded ? (
@@ -280,24 +297,20 @@ console.log(directionsResponse);
             onUnmount={onUnmount}
             onClick={onMapClick}
           >
-            {/* <Marker position={center} ref={originRef} /> Do reverse geocoding instead */}
             {clickedPos.lat ? (
               <Marker icon={markerIcon} position={clickedPos} />
             ) : null}
             <></>
-            {/* {directionsResponse && (
-              <DirectionsRenderer directions={directionsResponse} />
-            )} */}
-            {directionsResponse && (
+            {singleDirectionsResponse && (
               <>
-                {/* {directionsResponse.map((item, index) => { */}
                 <Polyline
-                  // path={{key: item, ...index}}
-                  path={directionsResponse}
+                  key={generate()}
+                  // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+                  path={singleDirectionsResponse}
                   geodesic={true}
                   options={routesOptions}
                 />
-                ;{/* })} */}
+                ;
               </>
             )}
             {originAndDestination.map((marker) => (

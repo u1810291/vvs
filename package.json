@@ -36,7 +36,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "REACT_APP_STAGE=DEV react-scripts start",
+    "dev": "react-scripts start",
     "start": "REACT_APP_STAGE=PROD npm run serve -s build",
     "stage": "REACT_APP_STAGE=STAGE npm run serve -s build",
     "build": "craco build",
