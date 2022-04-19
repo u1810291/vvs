@@ -7,226 +7,236 @@ import {
 } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import {
+  getAccessTokenSession,
+  setAccessTokenSession,
+  getRefreshTokenSession,
+  setRefreshTokenSession,
+  removeAccessTokenSession,
+  removeRefreshTokenSession
+} from "../feature/sessions";
 
 const AuthContext = createContext();
 
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(() =>
+    getAccessTokenSession() ? jwt_decode(getAccessTokenSession()) : null
+  );
+  const [accessToken, setAccessToken] = useState(() =>
+    getAccessTokenSession() ? getAccessTokenSession() : null
+  );
+
+  const navigate = useNavigate();
   const [registerName, setRegisterName] = useState("");
   const [registerSurname, setRegisterSurname] = useState("");
   const [registerPhone, setRegisterPhone] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
+  const [registerBirthday, setRegisterBirthday] = useState("2000-01-01");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [recoverPassword, setRecoverPassword] = useState("");
   const [repeatRecoverPassword, setRepeatRecoverPassword] = useState("");
   const [forgotEmail, setForgotEmail] = useState("");
-  const [user, setUser] = useState(() =>
-    localStorage.getItem("userData")
-      ? localStorage.getItem("userData") // jwt_decode
-      : null
-  );
-  const [authToken, setAuthToken] = useState(() =>
-    localStorage.getItem("userData")
-      ? JSON.parse(localStorage.getItem("userData"))
-      : null
-  );
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [initPage, setInitPage] = useState(true);
+  const [loginError, setLoginError] = useState(false);
+
+  const [refreshTokens, setRefreshTokens] = useState(null);
+  const [applicationId, setApplicationId] = useState(null);
+  const [startInstant, setStartInstant] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const Logout = useCallback(async () => {
     setUser(null);
-    setAuthToken(null);
-    localStorage.removeItem("userData");
+    setAccessToken(null);
+    removeAccessTokenSession();
+    removeRefreshTokenSession();
     () => navigate("/");
   }, [navigate]);
 
   const LoginUser = useCallback(
     async (e) => {
-      e.preventDefault();
       try {
-        const res = await fetch(
-          "http://ec.swarm.testavimui.eu/v1/graphql",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: `query loginUser($username: String!, $password: String!) {
+        e.preventDefault();
+        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+          method: "POST",
+          body: JSON.stringify({
+            query: `query loginUser($username: String!, $password: String!) {
                 login(password: $password, username: $username) {
                   refreshToken
                   token
                 }
               }
               `,
-              variables: {
-                newUser: {
-                  email: email,
-                  password: password,
-                },
-              },
-            }),
-            headers: {
-              "content-type": "application/json",
-              "x-hasura-admin-secret":
-                "secret",
+            variables: {
+              username: email,
+              password: password,
             },
-          }
-        );
+          }),
+          headers: {
+            "content-type": "application/json",
+            "x-hasura-admin-secret": "secret",
+          },
+        });
         const data = await res.json();
-        if (data.errors) {
-          console.log("errors ", data.errors);
-          // handle errors appropriately
-        }
         if (data) {
-          console.log("data", data);
-          const accessToken = data?.token;
-          const refreshToken = data?.refresh;
-          setUser(accessToken); // jwt_decode
-          setAuthToken(data);
-          localStorage.setItem("userData", JSON.stringify(user));
+          console.log(data)
+          const accessToken = data?.data?.login?.token;
+          const refreshToken = data?.data?.login?.refreshToken;
+          setUser(jwt_decode(accessToken));
+          setAccessToken(data);
+          setAccessTokenSession(accessToken);
+          setRefreshTokenSession(refreshToken);
           navigate("/dashboard");
         }
       } catch (err) {
-        console.log(err);
+        setLoginError(true);
       }
     },
-    [email, navigate, password, user]
+    [email, navigate, password]
   );
 
   const RegisterUser = useCallback(
     async (e) => {
-      e.preventDefault();
       try {
-        const res = await fetch(
-          "http://ec.swarm.testavimui.eu/v1/graphql",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: `query loginUser($password: String!, $firstName: String!, $lastName: String!, $mobilePhone: String!, $email: String!, $role: String!) {
-                login(password: $password, username: $username) {
+        e.preventDefault();
+        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+          method: "POST",
+          body: JSON.stringify({
+            query: `query registerUser($firstName: String!, $lastName: String!, $mobilePhone: String!, $email: String!, $birthDate: String!, $password: String!, $role: String!) {
+                register(firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, email: $email, password: $password, birthDate: $birthDate, role: $role) {
                   refreshToken
                   token
                 }
               }
               `,
-              variables: {
-                newUser: {
-                  birthDate: registerName,
-                  surname: registerSurname,
-                  phone: registerPhone,
-                  email: registerEmail,
-                  password: registerPassword,
-                },
-              },
-            }),
-            headers: {
-              "content-type": "application/json",
-              "x-hasura-admin-secret":
-                "secret",
+            variables: {
+              firstName: registerName,
+              lastName: registerSurname,
+              mobilePhone: registerPhone,
+              email: registerEmail,
+              birthDate: registerBirthday,
+              password: registerPassword,
+              role: "customer",
             },
-          }
-        );
+          }),
+          headers: {
+            "content-type": "application/json",
+            "x-hasura-admin-secret": "secret",
+          },
+        });
         const data = await res.json();
-        if (data.errors) {
-          // handle errors
-        }
-        if (data) {
-          console.log("data", data);
-          const accessToken = data.token;
-          const refreshToken = data.refresh;
-          setUser(accessToken); // jwt_decode
-          setAuthToken(data);
-          localStorage.setItem("userData", JSON.stringify(user));
+        if (res.status === 200) {
+          console.log(data);
+          const accessToken = data?.data?.register?.token;
+          const refreshToken = data?.data?.register?.refreshToken;
+          setUser(jwt_decode(accessToken));
+          setAccessToken(data);
+          setAccessTokenSession(accessToken);
+          setRefreshTokenSession(refreshToken);
           navigate("/dashboard");
         }
       } catch (err) {
         console.log(err);
       }
     },
-    [
-      navigate,
-      registerEmail,
-      registerName,
-      registerPassword,
-      registerPhone,
-      registerSurname,
-      user,
-    ]
+    [navigate, registerBirthday, registerEmail, registerName, registerPassword, registerPhone, registerSurname]
   );
 
   const RefreshTokenUpdate = useCallback(async () => {
     try {
-      const res = await fetch(
-        "http://ec.swarm.testavimui.eu/v1/graphql/",
-        {
-          method: "POST",
-          body: JSON.stringify({ refresh: authToken?.refresh }),
-          headers: {
-            "content-type": "application/json",
-            "x-hasura-admin-secret":
-              "secret",
+      const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql/", {
+        method: "POST",
+        body: JSON.stringify({
+          query: `query getRefresh($refreshTokens: String!, $applicationId: String!, $startInstant: String!, $token: String!, $userId: String!) {
+                refresh(refreshTokens: $refreshTokens, applicationId: $applicationId, startInstant: $startInstant, token: $token, userId: $userId) {
+                  refreshToken
+                  token
+                }
+              }
+              `,
+          variables: {
+            refreshTokens: refreshTokens,
+            applicationId: applicationId,
+            startInstant: startInstant,
+            token: accessToken,
+            userId: userId,
           },
-        }
-      );
+        }),
+        headers: {
+          "content-type": "application/json",
+          "x-hasura-admin-secret": "secret",
+        },
+      });
       const data = await res.json();
 
-      if (data.status === 200) {
-        setUser(accessToken); // jwt_decode
-        setAuthToken(data);
-        localStorage.setItem("userData", JSON.stringify(user));
+      if (data) {
+        // running this code every time!
+        const accessToken = data?.data?.refresh?.token;
+        const refreshToken = data?.data?.refresh?.refreshToken;
+        setUser(jwt_decode(accessToken));
+        setAccessToken(data);
+        setAccessTokenSession(accessToken);
+        setRefreshTokenSession(refreshToken);
       } else {
         Logout();
       }
 
-      if (loading) {
-        setLoading(false);
+      if (initPage) {
+        setInitPage(false);
       }
     } catch (err) {
       console.log(err);
     }
-  }, [Logout, authToken?.refresh, loading, user]);
+  }, [
+    Logout,
+    accessToken,
+    applicationId,
+    initPage,
+    refreshTokens,
+    startInstant,
+    userId,
+  ]);
 
   const HandleRecoverPassword = useCallback(
     async (e) => {
-      e.preventDefault();
-      const expiringID = localStorage.getItem("changePasswordID", JSON.stringify(changePasswordId));
       try {
-        const res = await fetch(
-          "http://ec.swarm.testavimui.eu/v1/graphql",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: `query loginUser($changePasswordId: String!, $password: String!) {
+        e.preventDefault();
+        // const expiringID = sessionStorage.getItem(
+        //   "changePasswordID"
+        //   // ,JSON.stringify(changePasswordId)
+        // );
+        // check if expiringID not null and handle if null
+        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+          method: "POST",
+          body: JSON.stringify({
+            query: `query loginUser($changePasswordId: String!, $password: String!) {
                 recoverPassword(password: $password, changePasswordId: $changePasswordId) {
                   refreshToken
                   token
                 }
               }
               `,
-              variables: {
-                User: {
-                  changePasswordId: expiringID,
-                  password: recoverPassword,
-                },
-              },
-            }),
-            headers: {
-              "content-type": "application/json",
-              "x-hasura-admin-secret":
-                "secret",
+            variables: {
+              changePasswordId: expiringID,
+              password: recoverPassword,
             },
-          }
-        );
+          }),
+          headers: {
+            "content-type": "application/json",
+            "x-hasura-admin-secret": "secret",
+          },
+        });
         const data = await res.json();
-        if (data.errors) {
-          console.log("errors ", data.errors);
-          // handle errors appropriately
-        }
-        if (data) {
+        if (res.status === 200) {
           console.log("data", data);
           navigate("/forgotSuccess");
+        } else {
+          console.log("errors ", data.errors);
+          // handle errors appropriately
         }
       } catch (err) {
         console.log(err);
@@ -237,63 +247,54 @@ export const AuthProvider = ({ children }) => {
 
   const ForgotPassword = useCallback(
     async (e) => {
-      e.preventDefault();
       try {
-        const res = await fetch(
-          "http://ec.swarm.testavimui.eu/v1/graphql",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: `query ($email: String!) {
-                forgotPassword(email: $email) {
-                  refreshToken
-                  token
+        e.preventDefault();
+        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+          method: "POST",
+          body: JSON.stringify({
+            query: `query ($loginId: String!) {
+              loginId(loginId: $loginId) {
+                changePasswordId
                 }
               }
               `,
-              variables: {
-                User: {
-                  email: forgotEmail,
-                },
-              },
-            }),
-            headers: {
-              "content-type": "application/json",
-              "x-hasura-admin-secret":
-                "secret",
+            variables: {
+              loginId: forgotEmail,
             },
-          }
-        );
+          }),
+          headers: {
+            "content-type": "application/json",
+            "x-hasura-admin-secret": "secret",
+          },
+        });
         const data = await res.json();
-        if (data.errors) {
-          console.log("errors ", data.errors);
-          localStorage.setItem("changePasswordID", JSON.stringify(data.changePasswordId));
+        if (res.status === 200) {
+          console.log("data", data);
+          // sessionStorage.setItem(
+          //   "changePasswordID",
+          //   JSON.stringify(data.changePasswordId)
+          // );
+          // navigate("/forgotEmail");
+        } else {
+          console.log("errors ", res);
           // handle errors appropriately
         }
-        if (data) {
-          console.log("data", data);
-          navigate("/forgotEmail");
-        }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
-    [forgotEmail, navigate]
+    [forgotEmail]
   );
 
   useEffect(() => {
-    if (loading) {
+    if (initPage) {
       RefreshTokenUpdate();
     }
+  }, [RefreshTokenUpdate, initPage]);
 
-    // let fourMinutes = 1000 * 60 * 4;
-    // let interval = setInterval(() => {
-    //   if (authToken) {
-    //     RefreshTokenUpdate();
-    //   }
-    // }, fourMinutes);
-    // return () => clearInterval(interval);
-  }, [RefreshTokenUpdate, authToken, loading]);
+  if (!getAccessTokenSession()) {
+    () => navigate("/");
+  }
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
@@ -304,13 +305,13 @@ export const AuthProvider = ({ children }) => {
     HandleRecoverPassword: HandleRecoverPassword,
     ForgotPassword: ForgotPassword,
     user: user,
-    authToken: authToken,
+    accessToken: accessToken,
     email,
     setEmail,
     password,
     setPassword,
-    loading,
-    setLoading,
+    initPage,
+    setInitPage,
     registerName,
     setRegisterName,
     registerSurname,
@@ -329,11 +330,13 @@ export const AuthProvider = ({ children }) => {
     setRepeatRecoverPassword,
     forgotEmail,
     setForgotEmail,
+    loginError,
+    setLoginError,
   };
 
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
-    // {loading ? null : children}
+    // {initPage ? null : children}
   );
 };
