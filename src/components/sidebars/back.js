@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 const SidebarBack = () => {
+  const menuFunc = useCallback(async () => {
+    console.log("menuOpen");
+  }, []);
+
   return (
-    <div className="flex flex-col bg-slate-600 w-60 pt-4 items-center sm:w-32">
-      <img
-        href="#"
-        className="w-4 h-4"
-        src={require("../../assets/assets/hamburger.png")}
-      />
+    <div className="flex flex-col bg-slate-600 w-10 pt-6 items-center sm:w-20">
+      <button onClick={menuFunc}>
+        <img src={require("../../assets/assets/left.png")}></img>
+      </button>
+      <img className="pt-6" src={require("../../assets/assets/Line.png")}></img>
+      <button onClick={menuFunc} className="w-4 h-4 pt-6">
+        <img src={require("../../assets/assets/hamburger.png")} />
+      </button>
     </div>
   );
 };

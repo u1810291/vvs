@@ -185,14 +185,13 @@ const DashboardMap = () => {
 
   // loop over here to get polyline routes
   async function calculateRoute() {
-    if (originRef.current === "" || destinationRef.current === "") {
+    if (originAndDestination === "") {
       return;
     }
     const directionService = new google.maps.DirectionsService();
     originAndDestination.map((item) => {
       const results = directionService.route(
         {
-          // await
           origin: new window.google.maps.LatLng(item.originLat, item.originLon),
           destination: new window.google.maps.LatLng(
             item.destinationLat,

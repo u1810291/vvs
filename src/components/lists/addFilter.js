@@ -75,8 +75,8 @@ export const AddFilterList = (props) => {
     if (filterList?.length > 0) {
       const topId = filterList[0].id;
       setSelectedFilter(topId);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
