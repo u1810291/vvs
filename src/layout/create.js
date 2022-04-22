@@ -98,7 +98,7 @@ function Create() {
                 <CreateHeader />
                 <div className="flex flex-col h-screen">
                   <div className="pl-4 flex-col w-full h-screen">
-                    <div className="flex h-full flex-col w-2/6">
+                    <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/5 lg:w-2/6">
                       <div className="flex flex-col">
                         <div className="flex flex-row w-full">
                           <Menu
