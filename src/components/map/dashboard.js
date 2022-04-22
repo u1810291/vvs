@@ -232,6 +232,7 @@ const DashboardMap = () => {
     // console.log(e);
     calculateRoute();
     setClickedPos({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onLoad = useCallback(function callback(map) {

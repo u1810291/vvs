@@ -9,7 +9,7 @@ import useLanguage from "../hook/useLanguage";
 import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
 import GlobalContext from "../context/globalContext";
-import { StandardMap } from "../api/mapStandard";
+import { StandardMap } from "../feature/mapStandard";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";

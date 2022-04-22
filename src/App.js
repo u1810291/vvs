@@ -9,6 +9,7 @@ import Dashboard from "./layout/dashboard";
 import Filter from "./layout/filter";
 import TaskList from "./layout/taskList";
 import Create from "./layout/create";
+import New from "./layout/new";
 
 import NotFound from "./layout/notFound";
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="Filter" element={<Filter />} />
             <Route path="TaskList" element={<TaskList />} />
             <Route path="Create" element={<Create />} />
+            <Route path="New" element={<New />} />
             <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
