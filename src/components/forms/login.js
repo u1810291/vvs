@@ -14,6 +14,15 @@ const LoginForm = () => {
   const [emailEmpty, setEmailEmpty] = useState(true);
   const [passwordEmpty, setPasswordEmpty] = useState(true);
   const { english, lithuanian, t } = useLanguage();
+  const { loginError, setLoginError } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (loginError === true) {
+      setTimeout(() => {
+        setLoginError(false);
+      }, 3000);
+    }
+  }, [loginError, setLoginError]);
 
   const passwordFunc = useCallback(
     async (e) => {
@@ -21,7 +30,7 @@ const LoginForm = () => {
        // Minimum eight characters, at least one upper case letter, one symbol and one number
       const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
       const result = pattern.test(password);
-      if (result === true) {
+      if (result === true || password === "") {
         setPasswordValid(true);
       } else {
         setPasswordValid(false);
@@ -38,7 +47,7 @@ const LoginForm = () => {
         // eslint-disable-next-line no-useless-escape
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const result = pattern.test(email);
-      if (result === true) {
+      if (result === true || email === "") {
         setEmailValid(true);
       } else {
         setEmailValid(false);
@@ -80,7 +89,6 @@ const LoginForm = () => {
                 id="email"
                 name="email"
                 type="email"
-                autoComplete="email"
                 value={email}
                 onChange={emailFunc}
                 required
@@ -88,9 +96,6 @@ const LoginForm = () => {
                 className="appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
               />
             </div>
-            <a className="text-red-800 text-sm font-montserrat">
-              {t("loginSystem.wrongEmail")}
-            </a>
           </div>
         </div>
         <div className="space-y-1">
@@ -107,7 +112,6 @@ const LoginForm = () => {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
                 required
                 value={password}
                 onChange={passwordFunc}
@@ -115,9 +119,11 @@ const LoginForm = () => {
                 className="appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
               />
             </div>
-            <a className="text-red-800 text-sm font-montserrat mb-20">
-              {t("loginSystem.wrongEmailOrPassword")}
-            </a>
+            {loginError ? (
+              <a className="text-red-800 text-sm font-montserrat">
+                {t("loginSystem.wrongEmailOrPassword")}
+              </a>
+            ) : null}
           </div>
         </div>
         <div className="flex flex-row justify-end my-12">

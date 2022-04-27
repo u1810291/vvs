@@ -21,6 +21,10 @@ function Dashboard() {
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
+  const [sortedDashboardTestApiKeys, setSortedDashboardTestApiKeys] =
+    useState("");
+  const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
+    useState("");
 
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -33,11 +37,162 @@ function Dashboard() {
     }, 1000);
   }, []);
 
-  const sortName = useCallback(() => {
-    console.log('sortName');
-    DashboardTestApi.sort(function (a, b) {
-    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-  })},[]);
+  function sortToggle(arr, key, way) {
+    return arr.sort(function (a, b) {
+      let x = a[key];
+      let y = b[key];
+      if (way === "asc") {
+        return x < y ? -1 : x > y ? 1 : 0;
+      }
+      if (way === "desc") {
+        return x > y ? -1 : x < y ? 1 : 0;
+      }
+      if (way === "") {
+        return Math.random() - 0.5;
+      }
+    });
+  }
+
+  function sortedDashboardTestDate() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("date");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("date");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("date");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestObject() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("object");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("object");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("object");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestName() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("name");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("name");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("name");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestCrew() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("crew");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("crew");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("crew");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestInTime() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("intime");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("intime");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("intime");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestReactionTime() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("reactiontime");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("reactiontime");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("reactiontime");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestTimeInObject() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("timeinobject");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("timeinobject");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("timeinobject");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestStatus() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("status");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("status");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("status");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  function sortedDashboardTestReason() {
+    if (sortedDashboardTestApiOrder === "") {
+      setSortedDashboardTestApiKeys("reason");
+      setSortedDashboardTestApiOrder("asc");
+    }
+    if (sortedDashboardTestApiOrder === "asc") {
+      setSortedDashboardTestApiKeys("reason");
+      setSortedDashboardTestApiOrder("desc");
+    }
+    if (sortedDashboardTestApiOrder === "desc") {
+      setSortedDashboardTestApiKeys("reason");
+      setSortedDashboardTestApiOrder("");
+    }
+  }
+
+  const sortedDashboardTestApi = sortToggle(
+    DashboardTestApi,
+    sortedDashboardTestApiKeys,
+    sortedDashboardTestApiOrder
+  );
 
   return (
     <>
@@ -103,7 +258,7 @@ function Dashboard() {
                         <div className="flex col-span-2 flex-row items-center">
                           <span className="text-gray-300">Objektas</span>
                         </div>
-                        <div onClick={sortName} href="#" className="flex col-span-2 flex-row items-center">
+                        <div className="flex col-span-2 flex-row items-center">
                           <span className="text-gray-300">Pavadinimas</span>
                         </div>
                         <div className="flex flex-row items-center">
@@ -130,19 +285,19 @@ function Dashboard() {
                         </div>
                       </div>
                       <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto">
-                        {DashboardTestApi.map((data) => (
+                        {sortedDashboardTestApi.map((data) => (
                           <DashboardList
                             key={data.id}
-                            id="uniqueId()"
-                            date="2021-06-09 22:00"
-                            object="Objekto pavadinimas Adresas"
-                            name="Signalizacija laiku neišjungta"
-                            crew="9 RG"
-                            intime="Taip"
-                            reactiontime="0:00"
-                            timeinobject="0:00"
-                            status="Status"
-                            reason="*3* Netyčia paspaustas mygtukas"
+                            id={data.id}
+                            date={data.date}
+                            object={data.object}
+                            name={data.name}
+                            crew={data.crew}
+                            intime={data.intime}
+                            reactiontime={data.reactiontime}
+                            timeinobject={data.timeinobject}
+                            status={data.status}
+                            reason={data.reason}
                           />
                         ))}
                       </div>
@@ -150,53 +305,90 @@ function Dashboard() {
                   ) : (
                     <>
                       <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Gauta</span>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <span className="text-gray-300">Objektas</span>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <span className="text-gray-300">Pavadinimas</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Ekipažas</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Spėjo laiku</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">
+                        <button
+                          onClick={sortedDashboardTestDate}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">Gauta</span>
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestObject}
+                          className="flex col-span-2 flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">
+                            Objektas
+                          </span>
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestName}
+                          className="flex col-span-2 flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">
+                            Pavadinimas
+                          </span>
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestCrew}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">
+                            Ekipažas
+                          </span>
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestInTime}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">
+                            Spėjo laiku
+                          </span>
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestReactionTime}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">
                             Reagavimo laikas
                           </span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Laikas objekte</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Būsena</span>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <span className="text-gray-300">
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestTimeInObject}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">
+                            Laikas objekte
+                          </span>
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestStatus}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">Būsena</span>
+                        </button>
+                        <button
+                          onClick={sortedDashboardTestReason}
+                          className="flex col-span-2 flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">
                             Suveikimo priežastis
                           </span>
-                        </div>
+                        </button>
                       </div>
 
                       <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto">
-                        {DashboardTestApi.map((data) => (
+                        {sortedDashboardTestApi.map((data) => (
                           <DashboardList
                             key={data.id}
-                            id="uniqueId()"
-                            date="2021-06-09 22:00"
-                            object="Objekto pavadinimas Adresas"
-                            name="Signalizacija laiku neišjungta"
-                            crew="9 RG"
-                            intime="Taip"
-                            reactiontime="0:00"
-                            timeinobject="0:00"
-                            status="Status"
-                            reason="*3* Netyčia paspaustas mygtukas"
+                            id={data.id}
+                            date={data.date}
+                            object={data.object}
+                            name={data.name}
+                            crew={data.crew}
+                            intime={data.intime}
+                            reactiontime={data.reactiontime}
+                            timeinobject={data.timeinobject}
+                            status={data.status}
+                            reason={data.reason}
                           />
                         ))}
                       </div>

@@ -4,30 +4,25 @@ import {
   useEffect,
   useCallback,
   useContext,
+  useRef,
 } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import {
-  getAccessTokenSession,
-  setAccessTokenSession,
   getRefreshTokenSession,
   setRefreshTokenSession,
-  removeAccessTokenSession,
-  removeRefreshTokenSession
+  removeRefreshTokenSession,
+  setEmailRecoverySession,
+  getEmailRecoverySession,
+  removeEmailRecoverySession
 } from "../feature/sessions";
+import dayjs from "dayjs";
 
 const AuthContext = createContext();
 
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() =>
-    getAccessTokenSession() ? jwt_decode(getAccessTokenSession()) : null
-  );
-  const [accessToken, setAccessToken] = useState(() =>
-    getAccessTokenSession() ? getAccessTokenSession() : null
-  );
-
   const navigate = useNavigate();
   const [registerName, setRegisterName] = useState("");
   const [registerSurname, setRegisterSurname] = useState("");
@@ -43,16 +38,37 @@ export const AuthProvider = ({ children }) => {
   const [forgotEmail, setForgotEmail] = useState("");
   const [initPage, setInitPage] = useState(true);
   const [loginError, setLoginError] = useState(false);
+  const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const [passwordRecoveryToken, setPasswordRecoveryToken] = useState(null);
+  const [role, setRole] = useState("customer");
+  const [emailValidationError, setEmailValidationError] = useState(false);
+  const [phoneValidationError, setPhoneValidationError] = useState(false);
+  // const abortController = useRef(null);
+  // const cancelRequest = () => abortController.current && abortController.current.abort();
 
-  const [refreshTokens, setRefreshTokens] = useState(null);
-  const [applicationId, setApplicationId] = useState(null);
-  const [startInstant, setStartInstant] = useState(null);
-  const [userId, setUserId] = useState(null);
+  useEffect(() => {
+    // RefreshTokenUpdate();
+    window.addEventListener("beforeunload", RefreshTokenUpdate())
+    if (user) {
+      const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
+
+      if (isExpired) {
+        RefreshTokenUpdate();
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!accessToken) {
+      () => navigate("/");
+    }
+  }, [accessToken, navigate]);
 
   const Logout = useCallback(async () => {
     setUser(null);
     setAccessToken(null);
-    removeAccessTokenSession();
     removeRefreshTokenSession();
     () => navigate("/");
   }, [navigate]);
@@ -60,8 +76,10 @@ export const AuthProvider = ({ children }) => {
   const LoginUser = useCallback(
     async (e) => {
       try {
+        // abortController.current = newAbortController();
         e.preventDefault();
         const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+          // signal: abortController.current.signal,
           method: "POST",
           body: JSON.stringify({
             query: `query loginUser($username: String!, $password: String!) {
@@ -83,17 +101,16 @@ export const AuthProvider = ({ children }) => {
         });
         const data = await res.json();
         if (data) {
-          console.log(data)
-          const accessToken = data?.data?.login?.token;
-          const refreshToken = data?.data?.login?.refreshToken;
-          setUser(jwt_decode(accessToken));
-          setAccessToken(data);
-          setAccessTokenSession(accessToken);
-          setRefreshTokenSession(refreshToken);
+          const token = data?.data?.login?.token;
+          const refresh = data?.data?.login?.refreshToken;
+          setUser(jwt_decode(token));
+          setAccessToken(token);
+          setRefreshTokenSession(refresh);
           navigate("/dashboard");
         }
       } catch (err) {
         setLoginError(true);
+        // console.log(err);
       }
     },
     [email, navigate, password]
@@ -120,7 +137,7 @@ export const AuthProvider = ({ children }) => {
               email: registerEmail,
               birthDate: registerBirthday,
               password: registerPassword,
-              role: "customer",
+              role: role,
             },
           }),
           headers: {
@@ -129,41 +146,50 @@ export const AuthProvider = ({ children }) => {
           },
         });
         const data = await res.json();
-        if (res.status === 200) {
-          console.log(data);
-          const accessToken = data?.data?.register?.token;
-          const refreshToken = data?.data?.register?.refreshToken;
-          setUser(jwt_decode(accessToken));
-          setAccessToken(data);
-          setAccessTokenSession(accessToken);
-          setRefreshTokenSession(refreshToken);
+        if (data) {
+          const token = data?.data?.register?.token;
+          const refresh = data?.data?.register?.refreshToken;
+          if (data.errors) {
+            const emailError = data?.errors[0]?.extensions.internal.response.body.fieldErrors["user.email"][0].code;
+            setEmailValidationError(true);
+            const phoneError = data?.errors[0]?.extensions.internal.response.body.fieldErrors;
+          }
+          setUser(jwt_decode(token));
+          setAccessToken(token);
+          setRefreshTokenSession(refresh);
           navigate("/dashboard");
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
-    [navigate, registerBirthday, registerEmail, registerName, registerPassword, registerPhone, registerSurname]
+    [
+      navigate,
+      registerBirthday,
+      registerEmail,
+      registerName,
+      registerPassword,
+      registerPhone,
+      registerSurname,
+      role,
+    ]
   );
 
   const RefreshTokenUpdate = useCallback(async () => {
     try {
+    const currentRefreshToken = getRefreshTokenSession();
       const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql/", {
         method: "POST",
         body: JSON.stringify({
-          query: `query getRefresh($refreshTokens: String!, $applicationId: String!, $startInstant: String!, $token: String!, $userId: String!) {
-                refresh(refreshTokens: $refreshTokens, applicationId: $applicationId, startInstant: $startInstant, token: $token, userId: $userId) {
+          query: `query refreshSession($refreshToken: String!) {
+                refresh(refreshToken: $refreshToken) {
                   refreshToken
                   token
                 }
               }
               `,
           variables: {
-            refreshTokens: refreshTokens,
-            applicationId: applicationId,
-            startInstant: startInstant,
-            token: accessToken,
-            userId: userId,
+            refreshToken: currentRefreshToken,
           },
         }),
         headers: {
@@ -174,54 +200,36 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
 
       if (data) {
-        // running this code every time!
-        const accessToken = data?.data?.refresh?.token;
-        const refreshToken = data?.data?.refresh?.refreshToken;
-        setUser(jwt_decode(accessToken));
-        setAccessToken(data);
-        setAccessTokenSession(accessToken);
-        setRefreshTokenSession(refreshToken);
+        const token = data?.data?.refresh?.token;
+        const refresh = data?.data?.refresh?.refreshToken;
+        setUser(jwt_decode(token));
+        setAccessToken(token);
+        setRefreshTokenSession(refresh);
       } else {
         Logout();
       }
-
-      if (initPage) {
-        setInitPage(false);
-      }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
-  }, [
-    Logout,
-    accessToken,
-    applicationId,
-    initPage,
-    refreshTokens,
-    startInstant,
-    userId,
-  ]);
+  }, [Logout]);
 
   const HandleRecoverPassword = useCallback(
     async (e) => {
+      const getEmailRecoveryId = getEmailRecoverySession();
       try {
         e.preventDefault();
-        // const expiringID = sessionStorage.getItem(
-        //   "changePasswordID"
-        //   // ,JSON.stringify(changePasswordId)
-        // );
-        // check if expiringID not null and handle if null
         const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
           method: "POST",
           body: JSON.stringify({
-            query: `query loginUser($changePasswordId: String!, $password: String!) {
-                recoverPassword(password: $password, changePasswordId: $changePasswordId) {
+            query: `query recoverPassword($changePasswordId: String!, $password: String!) {
+                remind(password: $password, changePasswordId: $changePasswordId) {
                   refreshToken
                   token
                 }
               }
               `,
             variables: {
-              changePasswordId: expiringID,
+              changePasswordId: getEmailRecoveryId,
               password: recoverPassword,
             },
           }),
@@ -231,11 +239,11 @@ export const AuthProvider = ({ children }) => {
           },
         });
         const data = await res.json();
-        if (res.status === 200) {
-          console.log("data", data);
-          navigate("/forgotSuccess");
+        if (data) {
+          removeEmailRecoverySession();
+          navigate("/");
         } else {
-          console.log("errors ", data.errors);
+          console.log("errors ", data);
           // handle errors appropriately
         }
       } catch (err) {
@@ -252,14 +260,15 @@ export const AuthProvider = ({ children }) => {
         const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
           method: "POST",
           body: JSON.stringify({
-            query: `query ($loginId: String!) {
-              loginId(loginId: $loginId) {
+            query: `query forgotPassword($loginId: String! $sendForgotPasswordEmail: Boolean!) {
+              forgot(loginId: $loginId, sendForgotPasswordEmail: $sendForgotPasswordEmail ) {
                 changePasswordId
                 }
               }
               `,
             variables: {
               loginId: forgotEmail,
+              sendForgotPasswordEmail: true, // false
             },
           }),
           headers: {
@@ -268,33 +277,22 @@ export const AuthProvider = ({ children }) => {
           },
         });
         const data = await res.json();
-        if (res.status === 200) {
-          console.log("data", data);
-          // sessionStorage.setItem(
-          //   "changePasswordID",
-          //   JSON.stringify(data.changePasswordId)
-          // );
-          // navigate("/forgotEmail");
+        if (data) {
+          const expiringID = data?.data?.forgot?.changePasswordId;
+          console.log(expiringID)
+          // setPasswordRecoveryToken(expiringID);
+          setEmailRecoverySession(expiringID);
+          navigate("/forgotSuccess");
         } else {
           console.log("errors ", res);
           // handle errors appropriately
         }
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     },
-    [forgotEmail]
+    [forgotEmail, navigate]
   );
-
-  useEffect(() => {
-    if (initPage) {
-      RefreshTokenUpdate();
-    }
-  }, [RefreshTokenUpdate, initPage]);
-
-  if (!getAccessTokenSession()) {
-    () => navigate("/");
-  }
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
@@ -332,11 +330,14 @@ export const AuthProvider = ({ children }) => {
     setForgotEmail,
     loginError,
     setLoginError,
+    emailValidationError,
+    setEmailValidationError,
+    phoneValidationError,
+    setPhoneValidationError,
   };
 
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
-    // {initPage ? null : children}
   );
 };

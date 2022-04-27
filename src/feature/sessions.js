@@ -1,23 +1,23 @@
-export function getAccessTokenSession() {
-  return sessionStorage.getItem("jwt");
+export function setEmailRecoverySession(token) {
+  return localStorage.setItem("ets", token);
 }
 
-export function setAccessTokenSession(token) {
-  sessionStorage.setItem("jwt", token);
+export function getEmailRecoverySession(token) {
+  return localStorage.getItem("ets", token);
 }
 
-export function removeAccessTokenSession(token) {
-  sessionStorage.removeItem("jwt", token);
+export function removeEmailRecoverySession(token) {
+  return localStorage.removeItem("ets", token);
 }
 
 export function getRefreshTokenSession() {
-  return sessionStorage.getItem("refreshToken");
+  return sessionStorage.getItem("rt");
 }
 
 export function setRefreshTokenSession(token) {
-  sessionStorage.setItem("refreshToken", token);
+  sessionStorage.setItem("rt", token);
 }
 
 export function removeRefreshTokenSession(token) {
-  sessionStorage.removeItem("refreshToken", token);
+  sessionStorage.removeItem("rt", token);
 }

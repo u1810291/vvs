@@ -243,7 +243,7 @@ export const AddFilterList = (props) => {
       >
         <img
           src={require("../../assets/assets/cross.png")}
-          className="h-6 w-6 m-2"
+          className="h-4 w-4 m-2"
         />
         <p onClick={addFilterFunc} className="text-gray-400 text-sm">
           Pridėti filtrą
