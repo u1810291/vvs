@@ -83,7 +83,7 @@ export const AddFilterList = (props) => {
     <>
       <div className="flex flex-col w-full items-center">
         <div className="flex flex-row w-full border-l border-b justify-between">
-          <p className="text-gray-500 p-2 border-r-4 border-blue-400 w-full">
+          <p className="text-gray-500 p-2 border-r-4 border-blue-400 w-full text-sm">
             Visi duomenys
           </p>
         </div>
@@ -102,7 +102,7 @@ export const AddFilterList = (props) => {
                     }
                   >
                     <div className="flex flex-col sm:flex-row w-full border-l mb-4 border-b items-center justify-between">
-                      <p className="flex text-gray-400 p-2">
+                      <p className="flex text-gray-400 p-2 text-sm">
                         Filtro pavadinimas
                       </p>
                       <div className="flex flex-row mx-2">
@@ -118,7 +118,7 @@ export const AddFilterList = (props) => {
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row w-full border-l border-b justify-between items-center">
-                      <p className="text-gray-400 p-2">{filter.filterName}</p>
+                      <p className="text-gray-400 p-2 text-sm">{filter.filterName}</p>
                       <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 bg-gray-200">
                         <p onClick={() => setFilterEditing(filter.id)}>
                           redaguoti filtrą
@@ -131,7 +131,7 @@ export const AddFilterList = (props) => {
                 <div className="ml-6 w-full">
                   <div className="flex flex-col sm:flex-row w-full justify-between mt-2">
                     <div className="flex flex-col w-full">
-                      <p className="text-gray-500">Pavadinimas</p>
+                      <p className="text-gray-500 text-sm">Pavadinimas</p>
                       <input
                         id="name"
                         name="name"
@@ -149,7 +149,7 @@ export const AddFilterList = (props) => {
                       />
                     </div>
                     <div className="flex flex-col mr-4">
-                      <p className="text-gray-500">Trumpinys</p>
+                      <p className="text-gray-500 text-sm">Trumpinys</p>
                       <input
                         id="short-name"
                         name="short-name"
@@ -184,7 +184,7 @@ export const AddFilterList = (props) => {
                         type="checkbox"
                         className="h-4 w-4  text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500 truncate">Išsaugoti į meniu</p>
+                      <p className="ml-4 text-gray-500 truncate text-sm">Išsaugoti į meniu</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center mt-2">
                       <input
@@ -202,7 +202,7 @@ export const AddFilterList = (props) => {
                         type="checkbox"
                         className="h-4 w-4   text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500 truncate">Numatytasis filtras</p>
+                      <p className="ml-4 text-gray-500 truncate text-sm">Numatytasis filtras</p>
                     </div>
                   </div>
                   <div className=" flex flex-col sm:flex-row justify-around items-center w-20 sm:w-full mt-8">
@@ -214,13 +214,13 @@ export const AddFilterList = (props) => {
                         setFilterEditing(null);
                         checkFilters();
                       }}
-                      className="text-gray-400"
+                      className="text-gray-400 text-sm"
                     >
                       Ištrinti
                     </button>
                     <button
                       onClick={() => setFilterEditing(null)}
-                      className="text-gray-400"
+                      className="text-gray-400 text-sm"
                     >
                       Atšaukti
                     </button>
@@ -245,7 +245,7 @@ export const AddFilterList = (props) => {
           src={require("../../assets/assets/cross.png")}
           className="h-6 w-6 m-2"
         />
-        <p onClick={addFilterFunc} className="text-gray-400">
+        <p onClick={addFilterFunc} className="text-gray-400 text-sm">
           Pridėti filtrą
         </p>
       </button>

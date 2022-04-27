@@ -33,6 +33,12 @@ function Dashboard() {
     }, 1000);
   }, []);
 
+  const sortName = useCallback(() => {
+    console.log('sortName');
+    DashboardTestApi.sort(function (a, b) {
+    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+  })},[]);
+
   return (
     <>
       <div className="container max-w-screen-xl">
@@ -69,7 +75,7 @@ function Dashboard() {
                           ></img>
                           <button
                             onClick={handleExportWithComponent}
-                            className="flex justify-center md:mr-6 p-1 text-normal font-normal"
+                            className="flex justify-center md:mr-6 p-1 text-sm font-normal"
                           >
                             Eksportuoti
                           </button>
@@ -97,7 +103,7 @@ function Dashboard() {
                         <div className="flex col-span-2 flex-row items-center">
                           <span className="text-gray-300">Objektas</span>
                         </div>
-                        <div className="flex col-span-2 flex-row items-center">
+                        <div onClick={sortName} href="#" className="flex col-span-2 flex-row items-center">
                           <span className="text-gray-300">Pavadinimas</span>
                         </div>
                         <div className="flex flex-row items-center">

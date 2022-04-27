@@ -64,11 +64,11 @@ export const OptionsList = (props) => {
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       {startAndEndDate !==
                       "undefined-NaN-undefined - undefined-NaN-undefined" ? (
-                        <p className="text-gray-400 self-center truncate">
+                        <p className="text-gray-400 self-center truncate text-xs">
                           {startAndEndDate}
                         </p>
                       ) : (
-                        <p className="text-gray-400 self-center truncate">-</p>
+                        <p className="text-gray-400 self-center truncate text-xs">-</p>
                       )}
                       <div>
                         <img
@@ -106,7 +106,7 @@ export const OptionsList = (props) => {
                       Operatorius
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.operator === "0"
                           ? "Any [Multiple choices]"
                           : filter.operator === "1"
@@ -188,7 +188,7 @@ export const OptionsList = (props) => {
                       Objektas
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.object === "0"
                           ? "Any [Multiple choices]"
                           : filter.object === "1"
@@ -289,7 +289,7 @@ export const OptionsList = (props) => {
                       Tipas
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.type === "0"
                           ? "Any [Multiple choices]"
                           : filter.type === "1"
@@ -369,7 +369,7 @@ export const OptionsList = (props) => {
                       Grupė (?)
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.group === "0"
                           ? "Any [Multiple choices]"
                           : filter.group === "1"
@@ -449,7 +449,7 @@ export const OptionsList = (props) => {
                       Statusas
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.status === "0"
                           ? "Any [Multiple choices]"
                           : filter.status === "1"
@@ -529,7 +529,7 @@ export const OptionsList = (props) => {
                       Suveikimo priežastis
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.reason === "0"
                           ? "Any [Multiple choices]"
                           : filter.reason === "1"
@@ -609,7 +609,7 @@ export const OptionsList = (props) => {
                       Ekipažas
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.crew === "0"
                           ? "Any [Multiple choices]"
                           : filter.crew === "1"
@@ -689,7 +689,7 @@ export const OptionsList = (props) => {
                       Vairuotojas
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.driver === "0"
                           ? "Any [Multiple choices]"
                           : filter.driver === "1"
@@ -769,7 +769,7 @@ export const OptionsList = (props) => {
                       Spėjo laiku (T/F)?
                     </p>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate">
+                      <p className="text-gray-400 self-center truncate text-xs">
                         {filter.inTime === "0"
                           ? "Any [Multiple choices]"
                           : filter.inTime === "1"
