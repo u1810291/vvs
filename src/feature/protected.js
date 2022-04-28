@@ -4,9 +4,9 @@ import Login from "../layout/login";
 import AuthContext from "../context/authContext";
 
 const ProtectedRoute = () => {
-  const { authToken, setAuthToken } = useContext(AuthContext);
-  const [fake, setFake] = useState(true)
-  return fake ? <Outlet /> : <Login />;
+  const { user } = useContext(AuthContext);
+  // const [fake, setFake] = useState(true)
+  return user ? <Outlet /> : <Login />;
 };
 
 export default ProtectedRoute;
