@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
       try {
         // abortController.current = newAbortController();
         e.preventDefault();
-        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
           // signal: abortController.current.signal,
           method: "POST",
           body: JSON.stringify({
@@ -120,7 +120,7 @@ export const AuthProvider = ({ children }) => {
     async (e) => {
       try {
         e.preventDefault();
-        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
           method: "POST",
           body: JSON.stringify({
             query: `query registerUser($firstName: String!, $lastName: String!, $mobilePhone: String!, $email: String!, $birthDate: String!, $password: String!, $role: String!) {
@@ -178,7 +178,7 @@ export const AuthProvider = ({ children }) => {
   const RefreshTokenUpdate = useCallback(async () => {
     try {
     const currentRefreshToken = getRefreshTokenSession();
-      const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql/", {
+      const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql/", {
         method: "POST",
         body: JSON.stringify({
           query: `query refreshSession($refreshToken: String!) {
@@ -218,7 +218,7 @@ export const AuthProvider = ({ children }) => {
       const getEmailRecoveryId = getEmailRecoverySession();
       try {
         e.preventDefault();
-        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
           method: "POST",
           body: JSON.stringify({
             query: `query recoverPassword($changePasswordId: String!, $password: String!) {
@@ -257,7 +257,7 @@ export const AuthProvider = ({ children }) => {
     async (e) => {
       try {
         e.preventDefault();
-        const res = await fetch("http://ec.swarm.testavimui.eu/v1/graphql", {
+        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
           method: "POST",
           body: JSON.stringify({
             query: `query forgotPassword($loginId: String! $sendForgotPasswordEmail: Boolean!) {

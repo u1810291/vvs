@@ -8,7 +8,7 @@ import React, {
 import useLanguage from "../hook/useLanguage";
 import RegularSidebar from "../components/sidebars/regular";
 import { FilterHeader } from "../components/headers/filter";
-import { TaskListDashboard } from "../components/lists/taskListDashboard";
+import { DriversList } from "../components/lists/driversList";
 const { AddFilterList } = require("../components/lists/addFilter");
 import GlobalContext from "../context/globalContext";
 import { DashboardTestApi } from "../api/dashboardTest";
@@ -34,53 +34,22 @@ function TaskList() {
               <div className="flex flex-col h-screen w-full justify-between">
                 <FilterHeader />
                 <div className="flex flex-col h-screen">
-                  <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+                  <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-2 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-2 grid-gap-6 justify-between font-normal text-black z-1">
                     <div className="flex flex-row items-center">
-                      <span className="text-gray-300 text-sm">Gauta</span>
-                    </div>
-                    <div className="flex col-span-2 flex-row items-center">
-                      <span className="text-gray-300 text-sm">Objektas</span>
-                    </div>
-                    <div className="flex col-span-2 flex-row items-center">
-                      <span className="text-gray-300 text-sm">Pavadinimas</span>
+                      <span className="text-gray-300 grid-span-2 text-sm">Vardas Pavarde</span>
                     </div>
                     <div className="flex flex-row items-center">
-                      <span className="text-gray-300 text-sm">Ekipažas</span>
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <span className="text-gray-300 text-sm">Spėjo laiku</span>
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <span className="text-gray-300 text-sm">Reagavimo laikas</span>
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <span className="text-gray-300 text-sm">Laikas objekte</span>
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <span className="text-gray-300 text-sm">Būsena</span>
-                    </div>
-                    <div className="flex col-span-2 flex-row items-center">
-                      <span className="text-gray-300 text-sm">
-                        Suveikimo priežastis
-                      </span>
+                      <span className="text-gray-300 text-sm">Busena</span>
                     </div>
                   </div>
 
 
                   <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto h-screen">
                         {DashboardTestApi.map((data) => (
-                          <TaskListDashboard
+                          <DriversList
                             key={data.id}
-                            id="uniqueId()"
-                            date="2021-06-09 22:00"
-                            object="Objekto pavadinimas Adresas"
                             name="Signalizacija laiku neišjungta"
-                            crew="9 RG"
-                            intime="Taip"
-                            reactiontime="0:00"
-                            timeinobject="0:00"
                             status="Status"
-                            reason="*3* Netyčia paspaustas mygtukas"
                           />
                         ))}
                     <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">

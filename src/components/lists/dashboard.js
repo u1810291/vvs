@@ -91,7 +91,6 @@ export const DashboardList = ({
                 <div className="flex whitespace-nowrap flex-row h-12 items-center">
                   {filter.dashboardList.includes("Būsena") ? (
                     <RedWatching />
-                  ) : (
                     // <InspectedStatus />
                     // <YellowWaitingStatus />
                     // <RedDriving/>
@@ -99,6 +98,7 @@ export const DashboardList = ({
                     // <GreenStatus/>
                     // <BlueStatus/>
                     // <CancelStatus/>
+                  ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
