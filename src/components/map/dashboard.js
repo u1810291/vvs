@@ -14,6 +14,17 @@ import { StandardMap } from "../../feature/mapStandard";
 import useLanguage from "../../hook/useLanguage";
 import { generate } from "shortid";
 import { RoutesPolyline } from "../../components/buttons/polyline";
+import {mergeClassName} from "../../util/react";
+import {
+  tap,
+  map,
+  safe,
+  and,
+  isArray,
+  pipe,
+} from 'crocks';
+import getPath from "crocks/Maybe/getPath";
+import getPathOr from "crocks/helpers/getPathOr";
 
 const containerStyle = {
   width: "100%",
@@ -113,14 +124,14 @@ const routesOptions = {
   clickable: true,
 };
 
-export default function DashboardMap() {
+export default function DashboardMap(props) {
+  const [directions, setDirections] = useState([]);
   const { english, lithuanian, t } = useLanguage();
   const mapRef = useRef(null);
-  const [map, setMap] = useState(null);
+  const [_map, setMap] = useState(null);
   const [clickedPos, setClickedPos] = useState({});
   const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [singleDirectionsResponse, setSingleDirectionsResponse] =
-    useState(null);
+  const [singleDirectionsResponse, setSingleDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [path, setPath] = useState([
@@ -172,75 +183,23 @@ export default function DashboardMap() {
     },
   ]);
 
-  const originRef = useRef();
-  const destinationRef = useRef();
-  originRef.current = originRef;
-  destinationRef.current = destinationRef;
-
-  // loop over here to get polyline routes
-  async function calculateRoute() {
-    if (originAndDestination === "") {
-      return;
-    }
-    var directionService = new google.maps.DirectionsService();
-    originAndDestination.map((item) => {
-      const results = directionService.route(
-        {
-          origin: new window.google.maps.LatLng(item.originLat, item.originLon),
-          destination: new window.google.maps.LatLng(
-            item.destinationLat,
-            item.destinationLon
-          ),
-          travelMode: google.maps.TravelMode.DRIVING,
-          provideRouteAlternatives: true,
-          optimizeWaypoints: true,
-        },
-        function (response, status) {
-          if (status === "OK") {
-            const coords = response.routes;
-            const singleCoords = response.routes[0].overview_path;
-            // const statsPlaceInResponse = response.routes[0];
-            const mergeStats = Object.keys(coords[0]).concat(item);
-
-            setSingleDirectionsResponse(singleCoords);
-          } else {
-            console.log("Directions request failed due to " + status);
-          }
-        }
-      );
-    });
-    // setDirectionsResponse(results);
-    // setDistance(results.routes[0].legs[0].distance.text);
-    // setDuration(results.routes[0].legs[0].duration.text);
-  }
-
-  function clearRoute() {
-    setDirectionsResponse(null);
-    setDistance("");
-    setDuration("");
-    originRef.current = "";
-    destinationRef.current = "";
-  }
-
-  const onMapClick = useCallback((e) => {
-    // console.log(e);
-    calculateRoute();
-    // setClickedPos({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onLoad = useCallback(function callback(map) {
-    mapRef.current = map;
-  }, []);
-
-  const onUnmount = useCallback(function callback(map) {
-    mapRef.current = null;
-  }, []);
-
-  // const { isLoaded } = useJsApiLoader({
-  //   id: "google-map-script",
-  //   googleMapsApiKey: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs",
-  // });
+  useEffect(() => {
+    const directionService = new google.maps.DirectionsService();
+    pipe(
+      safe(and(isArray, a => a.length > 0)),
+      map(map(item => directionService.route({
+        origin: new window.google.maps.LatLng(item.originLat, item.originLon),
+        destination: new window.google.maps.LatLng(
+          item.destinationLat,
+          item.destinationLon
+        ),
+        travelMode: google.maps.TravelMode.DRIVING,
+        provideRouteAlternatives: true,
+        optimizeWaypoints: true,
+      }))),
+      map(ps => Promise.all(ps).then(setDirections))
+    )(originAndDestination)
+  }, [originAndDestination]);
 
   // Define refs for Polygon instance and listeners
   const polygonRef = useRef(null);
@@ -282,138 +241,143 @@ export default function DashboardMap() {
   const google = window.google;
 
   return (
-    <>
-      {/* {isLoaded ? ( */}
-        <div className="w-6/12 h-full">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-            zoom={12}
-            mapContainerClassName="map-container"
-            onLoad={onLoad}
-            onUnmount={onUnmount}
-            onClick={onMapClick}
-            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-            mapOptions={{
-              mapId: "b181cac70f27f5e6",
-            }}
-          >
-            {clickedPos.lat ? (
-              <Marker icon={markerIcon} position={clickedPos} />
-            ) : null}
-            <></>
-            {singleDirectionsResponse && (
-              <>
-                <Polyline
-                  key={generate()}
-                  // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                  path={singleDirectionsResponse}
-                  geodesic={true}
-                  options={routesOptions}
-                />
-                ;
-              </>
-            )}
-            {originAndDestination?.map((marker) => (
-              <Marker
-                key={generate()}
-                // onMouseOver={toggle}
-                // onMouseOut={toggle}
-                icon={getCrewIcons(marker.crew)}
-                position={
-                  new window.google.maps.LatLng(
-                    marker.originLat,
-                    marker.originLon
-                  )
-                }
-              />
-            ))}
-            {originAndDestination?.map((marker) => (
-              <Marker
-                key={generate()}
-                // onMouseOver={toggle}
-                // onMouseOut={toggle}
-                icon={getDestinationIcons(marker.destination)}
-                position={
-                  new window.google.maps.LatLng(
-                    marker.destinationLat,
-                    marker.destinationLon
-                  )
-                }
-              />
-            ))}
-            <OverlayView
-              position={overLayView1}
-              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-              getPixelPositionOffset={(width, height) => ({
-                x: -(width / 2),
-                y: -(height / 2),
-              })}
-            >
-              <div
-                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                className="flex text-light font-normal rounded-sm h-6 "
-              >
-                <div className="flex flex-row rounded-md bg-red-600 truncate items-center px-2">
-                  <p className="text-white">Aliarmas 256 Zona</p>
-                </div>
-              </div>
-            </OverlayView>
-            <OverlayView
-              position={overLayView3}
-              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-              getPixelPositionOffset={(width, height) => ({
-                x: -(width / 2),
-                y: -(height / 2),
-              })}
-            >
-              <div
-                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                className="flex text-light font-normal rounded-md text-light h-6 bg-white"
-              >
-                <div className="flex flex-row rounded-md bg-yellow-600 truncate items-center px-2">
-                  <p className="text-white">grįžta</p>
-                </div>
-              </div>
-            </OverlayView>
-            <OverlayView
-              position={overLayView2}
-              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-              getPixelPositionOffset={(width, height) => ({
-                x: -(width / 2),
-                y: -(height / 2),
-              })}
-            >
-              <div
-                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                className="flex text-normal font-normal rounded-md w-52 h-6 bg-white"
-              >
-                <div className="flex flex-row rounded-md bg-red-600 truncate items-center px-2">
-                  <p className="text-white">Ekipažas</p>
-                </div>
-                <div className="flex flex-row truncate items-center pl-2">
-                  <p className="text-red-600">Įvykis + Objektas + Klientas</p>
-                </div>
-              </div>
-            </OverlayView>
-            <Polygon
-              editable
-              draggable
-              options={polygonBlack}
-              path={path}
-              onMouseUp={onEditPolygon}
-              onDragEnd={onEditPolygon}
-              onLoad={onLoadPolygon}
-              onUnmount={onUnmountPolygon}
+    <div {...mergeClassName('w-full h-full', props)}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+        zoom={12}
+        mapContainerClassName="map-container"
+        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+        mapOptions={{
+          mapId: "b181cac70f27f5e6",
+        }}
+      >
+        {clickedPos.lat ? (
+          <Marker icon={markerIcon} position={clickedPos} />
+        ) : null}
+        <></>
+        {/*
+          // show all routes from all directions
+          directions
+          .reduce((c, i) => [...c, ...i.routes.map(r => r.overview_path)], [])
+          .map((data, index) => (
+            <Polyline
+              key={index}
+              // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+              path={data}
+              geodesic={true}
+              options={routesOptions}
             />
-            <Polygon path={polygon} options={polygonSetup} />
-          </GoogleMap>
-        </div>
-      {/* ) : null} */}
-    </>
+          ))
+        */}
+        { // show first route from all directions
+          directions.map((d, index) => (
+            <Polyline
+              key={index}
+              path={getPathOr(null, ['routes',0, 'overview_path'], d)}
+              geodesic={true}
+              options={routesOptions}
+            />
+          ))
+        }
+        {originAndDestination?.map((marker) => (
+          <Marker
+            key={generate()}
+            // onMouseOver={toggle}
+            // onMouseOut={toggle}
+            icon={getCrewIcons(marker.crew)}
+            position={
+              new window.google.maps.LatLng(
+                marker.originLat,
+                marker.originLon
+              )
+            }
+          />
+        ))}
+        {originAndDestination?.map((marker) => (
+          <Marker
+            key={generate()}
+            // onMouseOver={toggle}
+            // onMouseOut={toggle}
+            icon={getDestinationIcons(marker.destination)}
+            position={
+              new window.google.maps.LatLng(
+                marker.destinationLat,
+                marker.destinationLon
+              )
+            }
+          />
+        ))}
+        <OverlayView
+          position={overLayView1}
+          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+          getPixelPositionOffset={(width, height) => ({
+            x: -(width / 2),
+            y: -(height / 2),
+          })}
+        >
+          <div
+            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+            className="flex text-light font-normal rounded-sm h-6 "
+          >
+            <div className="flex flex-row rounded-md bg-red-600 truncate items-center px-2">
+              <p className="text-white">Aliarmas 256 Zona</p>
+            </div>
+          </div>
+        </OverlayView>
+        <OverlayView
+          position={overLayView3}
+          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+          getPixelPositionOffset={(width, height) => ({
+            x: -(width / 2),
+            y: -(height / 2),
+          })}
+        >
+          <div
+            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+            className="flex text-light font-normal rounded-md text-light h-6 bg-white"
+          >
+            <div className="flex flex-row rounded-md bg-yellow-600 truncate items-center px-2">
+              <p className="text-white">grįžta</p>
+            </div>
+          </div>
+        </OverlayView>
+        <OverlayView
+          position={overLayView2}
+          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+          getPixelPositionOffset={(width, height) => ({
+            x: -(width / 2),
+            y: -(height / 2),
+          })}
+        >
+          <div
+            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+            className="flex text-normal font-normal rounded-md w-52 h-6 bg-white"
+          >
+            <div className="flex flex-row rounded-md bg-red-600 truncate items-center px-2">
+              <p className="text-white">Ekipažas</p>
+            </div>
+            <div className="flex flex-row truncate items-center pl-2">
+              <p className="text-red-600">Įvykis + Objektas + Klientas</p>
+            </div>
+          </div>
+        </OverlayView>
+        <Polygon
+          editable
+          draggable
+          options={polygonBlack}
+          path={path}
+          onMouseUp={onEditPolygon}
+          onDragEnd={onEditPolygon}
+          onLoad={onLoadPolygon}
+          onUnmount={onUnmountPolygon}
+        />
+        <Polygon path={polygon} options={polygonSetup} />
+      </GoogleMap>
+    </div>
   );
 }

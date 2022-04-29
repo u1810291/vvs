@@ -31,8 +31,8 @@ export const AuthProvider = ({ children }) => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
   const [registerBirthday, setRegisterBirthday] = useState("2000-01-01");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("lukas.l@s-e.lt");
+  const [password, setPassword] = useState("EuroCash2022");
   const [recoverPassword, setRecoverPassword] = useState("");
   const [repeatRecoverPassword, setRepeatRecoverPassword] = useState("");
   const [forgotEmail, setForgotEmail] = useState("");
