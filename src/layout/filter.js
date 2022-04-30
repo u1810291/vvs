@@ -25,7 +25,6 @@ function Dashboard() {
     useState("");
   const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
     useState("");
-
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
     setToPrint(true);
@@ -37,17 +36,21 @@ function Dashboard() {
     }, 1000);
   }, []);
 
-  function sortToggle(arr, key, way) {
+  function sortToggle(arr, key, order) {
+    const collator = new Intl.Collator(undefined, {
+      numeric: true,
+      sensitivity: 'base'
+    });
     return arr.sort(function (a, b) {
       let x = a[key];
       let y = b[key];
-      if (way === "asc") {
-        return x < y ? -1 : x > y ? 1 : 0;
+      if (order === "asc") {
+        return collator.compare(x, y);
       }
-      if (way === "desc") {
-        return x > y ? -1 : x < y ? 1 : 0;
+      if (order === "desc") {
+        return collator.compare(x, y) * -1;
       }
-      if (way === "") {
+      if (order === "") {
         return Math.random() - 0.5;
       }
     });

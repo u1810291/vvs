@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from "react";
 import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
 
-export function FilterHeader() {
+export function DriversListHeader() {
   const { english, lithuanian, t } = useLanguage();
   const { search, setSearch } = useContext(GlobalContext);
 
@@ -50,19 +50,16 @@ export function FilterHeader() {
           type="submit"
           className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none"
         >
-          Sukurti užduoti
+          Sukurti vairuotoją
         </button>
         <button className="text-normal mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          Pultas
+          Ekipažai
         </button>
         <button className="text-normal mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          Užduotys
+          Vairuotojai
         </button>
         <button className="text-normal mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          Leidimai
-        </button>
-        <button className="text-normal mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          Pažeidimai
+          Dislokacijos zonos
         </button>
       </div>
     </div>

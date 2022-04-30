@@ -1,11 +1,22 @@
-import React, { useCallback, useContext, useState, useRef } from "react";
-import GlobalContext from "../../context/globalContext";
+import React, { useContext, useRef, useCallback } from "react";
 import useLanguage from "../../hook/useLanguage";
 import { GreenStatusTop } from "../buttons/greenStatusTop";
-import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import GlobalContext from "../../context/globalContext";
 
 export function FinishedHeader() {
   const { english, lithuanian, t } = useLanguage();
+  const { pdfExportComponentNew } = useContext(GlobalContext);
+  const { toPrintNew, setToPrintNew } = useContext(GlobalContext);
+
+  const handleExportWithComponent = useCallback(async (event) => {
+    setToPrintNew(true);
+    setTimeout(() => {
+      pdfExportComponentNew.current.save();
+    }, 2000);
+    setTimeout(() => {
+      setToPrintNew(false);
+    }, 3000);
+  }, [pdfExportComponentNew, setToPrintNew]);
 
   return (
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between w-full">
@@ -24,7 +35,7 @@ export function FinishedHeader() {
           src={require("../../assets/assets/doc.png")}
         ></img>
         <button
-          // onClick={handleExportWithComponent}
+          onClick={handleExportWithComponent}
           className="flex justify-center md:mr-6 p-1 text-normal font-normal"
         >
           Eksportuoti

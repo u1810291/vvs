@@ -144,7 +144,7 @@ function Create() {
                                   <Menu.Item>
                                     {({ active }) => (
                                       <button
-                                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+
                                         // onClick={}
                                         className={classNames(
                                           active
@@ -161,7 +161,7 @@ function Create() {
                                   <Menu.Item>
                                     {({ active }) => (
                                       <button
-                                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+
                                         // onClick={}
                                         className={classNames(
                                           active
@@ -191,7 +191,6 @@ function Create() {
                               id="search"
                               name="search"
                               placeholder=""
-                              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                               // onChange={}
                               // value={item.objectAddress}
                               className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
@@ -267,7 +266,6 @@ function Create() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={}
                                       className={classNames(
                                         active
@@ -284,7 +282,6 @@ function Create() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={}
                                       className={classNames(
                                         active
@@ -366,7 +363,6 @@ function Create() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={}
                                       className={classNames(
                                         active
@@ -383,7 +379,6 @@ function Create() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={}
                                       className={classNames(
                                         active

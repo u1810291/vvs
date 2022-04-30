@@ -1,5 +1,4 @@
-import React, { useCallback, useContext } from "react";
-import GlobalContext from "../../context/globalContext";
+import React from "react";
 import useLanguage from "../../hook/useLanguage";
 
 export function CreateHeader() {
@@ -8,9 +7,9 @@ export function CreateHeader() {
   return (
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between">
       <div className="md:flex hidden md:flex-row ml-4 items-center">
-        <h4 className="text-lg ml-2 font-normal">Užduotys</h4>
+        <h4 className="ml-2 text-normal font-normal">Užduotys</h4>
         <p className="pl-2 text-gray-600">/</p>
-        <h4 className="text-lg ml-2  font-normal text-gray-500">
+        <h4 className="ml-2  text-normal font-normal text-gray-500">
           Nauja užduotis
         </h4>
         <div className="flex flex-col justify-center items-end"></div>

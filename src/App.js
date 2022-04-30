@@ -10,6 +10,7 @@ import Filter from "./layout/filter";
 import TaskList from "./layout/taskList";
 import DriversList from "./layout/driversList";
 import Create from "./layout/create";
+import Driver from "./layout/driver";
 import New from "./layout/new";
 
 import NotFound from "./layout/notFound";
@@ -28,6 +29,7 @@ function App() {
             <Route path="DriversList" element={<DriversList />} />
             <Route path="Create" element={<Create />} />
             <Route path="New" element={<New />} />
+            <Route path="Driver" element={<Driver />} />
             <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

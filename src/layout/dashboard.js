@@ -15,11 +15,11 @@ function Dashboard() {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <DashboardSidebar />
-              <div className="flex min-h-full overflow-y-auto scrollbar-gone flex-col w-3/12 bg-gray-100">
+              <div className="flex min-h-full overflow-y-auto scrollbar-gone flex-col w-2/4 bg-gray-100">
                 <DashboardSideLeft />
               </div>
               <DashboardMap />
-              <div className="flex flex-col h-screen justify-between overflow-y-auto scrollbar-gone w-1/5 bg-gray-100">
+              <div className="flex flex-col h-screen justify-between overflow-y-auto scrollbar-gone w-2/4 bg-gray-100">
                 <DashboardSideRight />
               </div>
             </div>

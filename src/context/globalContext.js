@@ -1,7 +1,4 @@
-import {
-  createContext,
-  useState
-} from "react";
+import { createContext, useState, useRef } from "react";
 import { generate } from "shortid";
 
 const GlobalContext = createContext();
@@ -9,6 +6,7 @@ const GlobalContext = createContext();
 export default GlobalContext;
 
 export const GlobalProvider = ({ children }) => {
+  const pdfExportComponentNew = useRef(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [filter, setFilter] = useState("");
   const [value, onChange] = useState(new Date());
@@ -21,8 +19,12 @@ export const GlobalProvider = ({ children }) => {
   const [filterEditing, setFilterEditing] = useState(null);
   const [currentFilter, setCurrentFilter] = useState(null);
   const [search, setSearch] = useState("");
-  const [filterList, setFilterList] = useState(
-    [
+  const [sortedDashboardTestApiKeys, setSortedDashboardTestApiKeys] =
+    useState("");
+  const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
+    useState("");
+  const [toPrintNew, setToPrintNew] = useState(null);
+  const [filterList, setFilterList] = useState([
     {
       id: generate(),
       filterName: generate(),
@@ -49,11 +51,10 @@ export const GlobalProvider = ({ children }) => {
         "Reagavimo laikas",
         "Laikas objekte",
         "Būsena",
-        "Suveikimo priežastis"
+        "Suveikimo priežastis",
       ],
     },
-  ]
-  );
+  ]);
 
   // useEffect(() => {
   //   const temp = localStorage.getItem("filterList");
@@ -71,6 +72,9 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    pdfExportComponentNew,
+    toPrintNew,
+    setToPrintNew,
     filterList,
     setFilterList,
     value,
@@ -96,7 +100,11 @@ export const GlobalProvider = ({ children }) => {
     currentFilter,
     setCurrentFilter,
     search,
-    setSearch
+    setSearch,
+    sortedDashboardTestApiKeys,
+    setSortedDashboardTestApiKeys,
+    sortedDashboardTestApiOrder,
+    setSortedDashboardTestApiOrder,
   };
 
   return (
