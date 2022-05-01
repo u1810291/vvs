@@ -1,10 +1,31 @@
-import React from "react";
+import React, { useContext, useCallback } from "react";
 import useLanguage from "../hook/useLanguage";
 import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
+import GlobalContext from "../context/globalContext";
 
 function Driver() {
   const { english, lithuanian, t } = useLanguage();
+  const { driverName, setDriverName } = useContext(GlobalContext);
+  const { driverSurname, setDriverSurname } = useContext(GlobalContext);
+  const { driverUser, setDriverUser } = useContext(GlobalContext);
+  const { driverPassword, setDriverPassword } = useContext(GlobalContext);
+
+  const driverNameFunc = useCallback(async (e) => {
+    setDriverName(e.target.value);
+  }, [setDriverName]);
+
+  const driverSurnameFunc = useCallback(async (e) => {
+    setDriverSurname(e.target.value);
+  }, [setDriverSurname]);
+  
+  const driverUserFunc = useCallback(async (e) => {
+    setDriverUser(e.target.value);
+  }, [setDriverUser]);
+
+  const driverPasswordFunc = useCallback(async (e) => {
+    setDriverPassword(e.target.value);
+  }, [setDriverPassword]);
 
   return (
     <>
@@ -31,8 +52,10 @@ function Driver() {
                             </div>
                             <input
                               id="name"
-                              name="search"
+                              name="name"
                               placeholder=""
+                              value={driverName}
+                              onChange={driverNameFunc}
                               className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
                             />
                           </div>
@@ -50,6 +73,8 @@ function Driver() {
                               id="surname"
                               name="search"
                               placeholder=""
+                              value={driverSurname}
+                              onChange={driverSurnameFunc}
                               className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
                             />
                           </div>
@@ -69,6 +94,8 @@ function Driver() {
                               id="connect"
                               name="search"
                               placeholder="User"
+                              value={driverUser}
+                              onChange={driverUserFunc}
                               className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
                             />
                           </div>
@@ -83,6 +110,8 @@ function Driver() {
                               id="search"
                               name="password"
                               placeholder=""
+                              value={driverPassword}
+                              onChange={driverPasswordFunc}
                               type="password"
                               className="flex w-full h-8 border-2 focus:outline-none sm:text-sm"
                             />

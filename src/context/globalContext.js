@@ -24,6 +24,10 @@ export const GlobalProvider = ({ children }) => {
   const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
     useState("");
   const [toPrintNew, setToPrintNew] = useState(null);
+  const [driverName, setDriverName] = useState("");
+  const [driverSurname, setDriverSurname] = useState("");
+  const [driverUser, setDriverUser] = useState("");
+  const [driverPassword, setDriverPassword] = useState("");
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -72,6 +76,14 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    driverName,
+    setDriverName,
+    driverSurname,
+    setDriverSurname,
+    driverUser,
+    setDriverUser,
+    driverPassword,
+    setDriverPassword,
     pdfExportComponentNew,
     toPrintNew,
     setToPrintNew,

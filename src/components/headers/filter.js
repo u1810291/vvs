@@ -37,6 +37,8 @@ export function FilterHeader() {
               id="search"
               name="search"
               placeholder="Greita paieška"
+              value={search}
+              onChange={searchFunc}
               className="appearance-none sm:w-96 px-3 py-2 border-2 rounded-full border-b shadow-sm text-xl text-gray-400 placeholder-gray-400 focus:outline-none sm:text-sm"
             />
           </div>

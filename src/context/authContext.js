@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import {
   createContext,
   useState,
@@ -14,9 +15,11 @@ import {
   removeRefreshTokenSession,
   setEmailRecoverySession,
   getEmailRecoverySession,
-  removeEmailRecoverySession
+  removeEmailRecoverySession,
 } from "../feature/sessions";
-import dayjs from "dayjs";
+import { compareAsc, format, differenceInMinutes } from "date-fns";
+import { Spinner } from "react-activity";
+import "react-activity/dist/library.css";
 
 const AuthContext = createContext();
 
@@ -30,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
-  const [registerBirthday, setRegisterBirthday] = useState("2000-01-01");
+  const [registerBirthday, setRegisterBirthday] = useState("");
   const [email, setEmail] = useState("lukas.l@s-e.lt");
   const [password, setPassword] = useState("EuroCash2022");
   const [recoverPassword, setRecoverPassword] = useState("");
@@ -44,20 +47,26 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState("customer");
   const [emailValidationError, setEmailValidationError] = useState(false);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
+  const [spinner, setSpinner] = useState(false);
   // const abortController = useRef(null);
   // const cancelRequest = () => abortController.current && abortController.current.abort();
 
-  useEffect(() => {
-    // RefreshTokenUpdate();
-    window.addEventListener("beforeunload", RefreshTokenUpdate())
-    if (user) {
-      const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
+  //Must handle scenarios:
+  //User opens an SPA view in a new browser tab
 
+  useEffect(() => {
+    RefreshTokenUpdate();
+    if (getRefreshTokenSession() && !accessToken) {
+      setSpinner(true);
+    }
+    if (user) {
+      const isExpired =
+        differenceInMinutes(new Date(user.exp * 1000), new Date()) < 1;
       if (isExpired) {
         RefreshTokenUpdate();
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -150,9 +159,13 @@ export const AuthProvider = ({ children }) => {
           const token = data?.data?.register?.token;
           const refresh = data?.data?.register?.refreshToken;
           if (data.errors) {
-            const emailError = data?.errors[0]?.extensions.internal.response.body.fieldErrors["user.email"][0].code;
+            const emailError =
+              data?.errors[0]?.extensions.internal.response.body.fieldErrors[
+                "user.email"
+              ][0].code;
             setEmailValidationError(true);
-            const phoneError = data?.errors[0]?.extensions.internal.response.body.fieldErrors;
+            const phoneError =
+              data?.errors[0]?.extensions.internal.response.body.fieldErrors;
           }
           setUser(jwt_decode(token));
           setAccessToken(token);
@@ -176,8 +189,9 @@ export const AuthProvider = ({ children }) => {
   );
 
   const RefreshTokenUpdate = useCallback(async () => {
+    console.log("refresh token update");
     try {
-    const currentRefreshToken = getRefreshTokenSession();
+      const currentRefreshToken = getRefreshTokenSession();
       const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql/", {
         method: "POST",
         body: JSON.stringify({
@@ -211,6 +225,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       // console.log(err);
     }
+    setSpinner(false);
   }, [Logout]);
 
   const HandleRecoverPassword = useCallback(
@@ -279,7 +294,7 @@ export const AuthProvider = ({ children }) => {
         const data = await res.json();
         if (data) {
           const expiringID = data?.data?.forgot?.changePasswordId;
-          console.log(expiringID)
+          console.log(expiringID);
           // setPasswordRecoveryToken(expiringID);
           setEmailRecoverySession(expiringID);
           navigate("/forgotSuccess");
@@ -334,10 +349,14 @@ export const AuthProvider = ({ children }) => {
     setEmailValidationError,
     phoneValidationError,
     setPhoneValidationError,
+    spinner,
+    setSpinner,
   };
 
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
-    <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={contextData}>
+      {spinner ? <div className="flex h-screen w-screen bg-gray-100 justify-center items-center"><Spinner color="green" size={40} /></div> : children}
+    </AuthContext.Provider>
   );
 };
