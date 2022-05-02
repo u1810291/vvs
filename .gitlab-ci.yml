@@ -54,7 +54,7 @@ deploy_staging:
     - >
         docker run -d
         -e VIRTUAL_HOST=$VIRTUAL_HOST
-        -e HOST=$VIRTUAL_HOST
+        -e LETSENCRYPT_HOST=$VIRTUAL_HOST
         --name $CONTAINER_NAME
         --network nginx-proxy
         --restart unless-stopped
