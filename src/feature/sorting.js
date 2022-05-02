@@ -1,23 +1,30 @@
 import { useContext } from "react";
 import GlobalContext from "../context/globalContext";
+import { Clients } from "../api/clients";
 
 export function Sorting() {
   const { sortedDashboardTestApiKeys, setSortedDashboardTestApiKeys } =
     useContext(GlobalContext);
   const { sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder } =
     useContext(GlobalContext);
+    const {sortedClientsOrder, setSortedClientsOrder} = useContext(GlobalContext);
+    const {sortedClientsKeys, setSortedClientsKeys} = useContext(GlobalContext);
 
-  function sortToggle(arr, key, way) {
+  function sortToggle(arr, key, order) {
+    const collator = new Intl.Collator(undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
     return arr.sort(function (a, b) {
       let x = a[key];
       let y = b[key];
-      if (way === "asc") {
-        return x < y ? -1 : x > y ? 1 : 0;
+      if (order === "asc") {
+        return collator.compare(x, y);
       }
-      if (way === "desc") {
-        return x > y ? -1 : x < y ? 1 : 0;
+      if (order === "desc") {
+        return collator.compare(x, y) * -1;
       }
-      if (way === "") {
+      if (order === "") {
         return Math.random() - 0.5;
       }
     });
@@ -157,4 +164,70 @@ export function Sorting() {
       setSortedDashboardTestApiOrder("");
     }
   }
+
+  function sortedClientsNames() {
+    if (sortedClientsOrder === "") {
+      setSortedClientsKeys("name");
+      setSortedClientsOrder("asc");
+    }
+    if (sortedClientsOrder === "asc") {
+      setSortedClientsKeys("name");
+      setSortedClientsOrder("desc");
+    }
+    if (sortedClientsOrder === "desc") {
+      setSortedClientsKeys("name");
+      setSortedClientsOrder("");
+    }
+  }
+
+  function sortedClientsContracts() {
+    if (sortedClientsOrder === "") {
+      setSortedClientsKeys("contract");
+      setSortedClientsOrder("asc");
+    }
+    if (sortedClientsOrder === "asc") {
+      setSortedClientsKeys("contract");
+      setSortedClientsOrder("desc");
+    }
+    if (sortedClientsOrder === "desc") {
+      setSortedClientsKeys("contract");
+      setSortedClientsOrder("");
+    }
+  }
+
+  function sortedClientsPhones() {
+    if (sortedClientsOrder === "") {
+      setSortedClientsKeys("phone");
+      setSortedClientsOrder("asc");
+    }
+    if (sortedClientsOrder === "asc") {
+      setSortedClientsKeys("phone");
+      setSortedClientsOrder("desc");
+    }
+    if (sortedClientsOrder === "desc") {
+      setSortedClientsKeys("phone");
+      setSortedClientsOrder("");
+    }
+  }
+
+  function sortedClientsEmails() {
+    if (sortedClientsOrder === "") {
+      setSortedClientsKeys("email");
+      setSortedClientsOrder("asc");
+    }
+    if (sortedClientsOrder === "asc") {
+      setSortedClientsKeys("email");
+      setSortedClientsOrder("desc");
+    }
+    if (sortedClientsOrder === "desc") {
+      setSortedClientsKeys("email");
+      setSortedClientsOrder("");
+    }
+  }
+
+  const sortedClients = sortToggle(
+    Clients,
+    sortedClientsKeys,
+    sortedClientsOrder
+  );
 }

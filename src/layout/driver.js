@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import useLanguage from "../hook/useLanguage";
 import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
@@ -6,10 +6,10 @@ import GlobalContext from "../context/globalContext";
 
 function Driver() {
   const { english, lithuanian, t } = useLanguage();
-  const { driverName, setDriverName } = useContext(GlobalContext);
-  const { driverSurname, setDriverSurname } = useContext(GlobalContext);
-  const { driverUser, setDriverUser } = useContext(GlobalContext);
-  const { driverPassword, setDriverPassword } = useContext(GlobalContext);
+  const [driverName, setDriverName] = useState("");
+  const [driverSurname, setDriverSurname] = useState("");
+  const [driverUser, setDriverUser] = useState("");
+  const [driverPassword, setDriverPassword] = useState("");
 
   const driverNameFunc = useCallback(async (e) => {
     setDriverName(e.target.value);
@@ -56,7 +56,7 @@ function Driver() {
                               placeholder=""
                               value={driverName}
                               onChange={driverNameFunc}
-                              className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
 
@@ -75,7 +75,7 @@ function Driver() {
                               placeholder=""
                               value={driverSurname}
                               onChange={driverSurnameFunc}
-                              className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
                         </div>
@@ -96,7 +96,7 @@ function Driver() {
                               placeholder="User"
                               value={driverUser}
                               onChange={driverUserFunc}
-                              className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
 
@@ -126,7 +126,7 @@ function Driver() {
                       </button>
                     </div>
 
-                    <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-3/5 lg:w-2/6 border-b border-l">
+                    <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-1/4 lg:w-1/4 border-b border-l">
                       <div className="flex flex-col">
                         <div className="flex flex-row w-full">
                           <div className="flex flex-row w-full border-b h-12 items-center justify-between">

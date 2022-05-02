@@ -23,11 +23,9 @@ export const GlobalProvider = ({ children }) => {
     useState("");
   const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
     useState("");
+  const [sortedClientsOrder, setSortedClientsOrder] = useState("");
+  const [sortedClientsKeys, setSortedClientsKeys] = useState("");
   const [toPrintNew, setToPrintNew] = useState(null);
-  const [driverName, setDriverName] = useState("");
-  const [driverSurname, setDriverSurname] = useState("");
-  const [driverUser, setDriverUser] = useState("");
-  const [driverPassword, setDriverPassword] = useState("");
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -60,30 +58,8 @@ export const GlobalProvider = ({ children }) => {
     },
   ]);
 
-  // useEffect(() => {
-  //   const temp = localStorage.getItem("filterList");
-  //   const loadedFilters = JSON.parse(temp);
-
-  //   if (loadedFilters) {
-  //     setFilterList(loadedFilters);
-  //   }
-  // },[])
-
-  // useEffect(() => {
-  //   const temp = JSON.stringify(filterList);
-  //   localStorage.setItem("filterList", temp);
-  // }, [filterList])
-
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
-    driverName,
-    setDriverName,
-    driverSurname,
-    setDriverSurname,
-    driverUser,
-    setDriverUser,
-    driverPassword,
-    setDriverPassword,
     pdfExportComponentNew,
     toPrintNew,
     setToPrintNew,
@@ -117,6 +93,10 @@ export const GlobalProvider = ({ children }) => {
     setSortedDashboardTestApiKeys,
     sortedDashboardTestApiOrder,
     setSortedDashboardTestApiOrder,
+    sortedClientsOrder,
+    setSortedClientsOrder,
+    sortedClientsKeys,
+    setSortedClientsKeys,
   };
 
   return (

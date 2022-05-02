@@ -356,7 +356,7 @@ export const AuthProvider = ({ children }) => {
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <AuthContext.Provider value={contextData}>
-      {spinner ? <div className="flex h-screen w-screen bg-gray-100 justify-center items-center"><Spinner color="green" size={40} /></div> : children}
+      {spinner ? <div className="flex h-screen w-screen bg-gray-100 justify-center items-center"><Spinner color="dark-blue" size={40} /></div> : children}
     </AuthContext.Provider>
   );
 };
