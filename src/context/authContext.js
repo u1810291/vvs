@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }) => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
   const [registerBirthday, setRegisterBirthday] = useState("");
-  const [email, setEmail] = useState("lukas.l@s-e.lt");
-  const [password, setPassword] = useState("EuroCash2022");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [recoverPassword, setRecoverPassword] = useState("");
   const [repeatRecoverPassword, setRepeatRecoverPassword] = useState("");
   const [forgotEmail, setForgotEmail] = useState("");
@@ -43,21 +43,20 @@ export const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [passwordRecoveryToken, setPasswordRecoveryToken] = useState(null);
   const [role, setRole] = useState("customer");
   const [emailValidationError, setEmailValidationError] = useState(false);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
   const [spinner, setSpinner] = useState(false);
+  const [sent, setSent] = useState(null);
   // const abortController = useRef(null);
   // const cancelRequest = () => abortController.current && abortController.current.abort();
-
   //Must handle scenarios:
   //User opens an SPA view in a new browser tab
 
   useEffect(() => {
-    RefreshTokenUpdate();
     if (getRefreshTokenSession() && !accessToken) {
       setSpinner(true);
+      RefreshTokenUpdate();
     }
     if (user) {
       const isExpired =
@@ -189,7 +188,6 @@ export const AuthProvider = ({ children }) => {
   );
 
   const RefreshTokenUpdate = useCallback(async () => {
-    console.log("refresh token update");
     try {
       const currentRefreshToken = getRefreshTokenSession();
       const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql/", {
@@ -268,6 +266,49 @@ export const AuthProvider = ({ children }) => {
     [navigate, recoverPassword]
   );
 
+  const ForgotPasswordFromUI = useCallback(
+    async (e) => {
+      try {
+        e.preventDefault();
+        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
+          method: "POST",
+          body: JSON.stringify({
+            query: `query forgotPassword($loginId: String! $sendForgotPasswordEmail: Boolean!) {
+              forgot(loginId: $loginId, sendForgotPasswordEmail: $sendForgotPasswordEmail ) {
+                changePasswordId
+                }
+              }
+              `,
+            variables: {
+              loginId: user?.email,
+              sendForgotPasswordEmail: true, // false
+            },
+          }),
+          headers: {
+            "content-type": "application/json",
+            "x-hasura-admin-secret": "secret",
+          },
+        });
+        const data = await res.json();
+        if (data) {
+          const expiringID = data?.data?.forgot?.changePasswordId;
+          console.log(expiringID);
+          setSent("true");
+          // setPasswordRecoveryToken(expiringID);
+          setEmailRecoverySession(expiringID);
+          // navigate("/forgotSuccess");
+        } else {
+          console.log("errors ", res);
+          setSent("false");
+          // handle errors appropriately
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [user?.email]
+  );
+
   const ForgotPassword = useCallback(
     async (e) => {
       try {
@@ -317,6 +358,7 @@ export const AuthProvider = ({ children }) => {
     RefreshTokenUpdate: RefreshTokenUpdate,
     HandleRecoverPassword: HandleRecoverPassword,
     ForgotPassword: ForgotPassword,
+    ForgotPasswordFromUI: ForgotPasswordFromUI,
     user: user,
     accessToken: accessToken,
     email,
@@ -351,12 +393,20 @@ export const AuthProvider = ({ children }) => {
     setPhoneValidationError,
     spinner,
     setSpinner,
+    sent,
+    setSent
   };
 
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <AuthContext.Provider value={contextData}>
-      {spinner ? <div className="flex h-screen w-screen bg-gray-100 justify-center items-center"><Spinner color="dark-blue" size={40} /></div> : children}
+      {spinner ? (
+        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
+          <Spinner color="dark-blue" size={40} />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import BPM from "../components/logos/bpm";
 import LoginForm from "../components/forms/login";
+import AuthContext from "../context/authContext";
 import useLanguage from "../hook/useLanguage";
 
 function Login() {
   const { english, lithuanian, t } = useLanguage();
+  const { accessToken } = useContext(AuthContext);
+
+  useEffect(() => {
+      if (accessToken) {
+        window.location.href = "/dashboard";
+      }
+  },[accessToken]);
 
   return (
     <>

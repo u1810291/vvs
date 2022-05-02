@@ -1,9 +1,9 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import useLanguage from "../hook/useLanguage";
 import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
 import { ObjectsList } from "../components/lists/objectsList";
-import GlobalContext from "../context/globalContext";
+import AuthContext from "../context/authContext";
 import { clientList } from "../api/client";
 import { generate } from "shortid";
 
@@ -13,6 +13,15 @@ function Client() {
   const [clientSurname, setClientSurname] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [clientPhone, setClientPhone] = useState("");
+  const [clientLastLogin, setClientLastLogin] = useState("");
+  const { sent, setSent, user, ForgotPasswordFromUI } = useContext(AuthContext);
+
+  useEffect(() => { // get iat for all users
+      if (user.iat) {
+        const lastLogin = new Date(user.iat * 1000).toLocaleString();
+        setClientLastLogin(String(lastLogin));
+      }
+  },[user.iat])
 
   const clientNameFunc = useCallback(
     async (e) => {
@@ -42,6 +51,18 @@ function Client() {
     [setClientPhone]
   );
 
+  useEffect(() => {
+    if (sent === "true") {
+      setTimeout(() => {
+        setSent(null);
+      }, 5000);
+    }
+    if (sent === "false")
+      setTimeout(() => {
+        setSent(null);
+      }, 5000);
+  }, [sent, setSent]);
+
   return (
     <>
       <div className="container max-w-screen-xl">
@@ -55,7 +76,7 @@ function Client() {
                   <div className="flex pl-4 flex-row w-full h-full justify-between">
                     <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
                       <div className="flex flex-col">
-                        <div className="flex flex-row  ">
+                        <div className="flex flex-row">
                           <div className="flex mr-2 flex-col  mb-4 ">
                             <div className="flex flex-row">
                               <p className="self-start text-sm text-gray-500 truncate my-2">
@@ -69,6 +90,7 @@ function Client() {
                               id="name"
                               name="name"
                               placeholder=""
+                              required
                               value={clientName}
                               onChange={clientNameFunc}
                               className="flex h-8 w-52 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
@@ -88,6 +110,7 @@ function Client() {
                               id="surname"
                               name="search"
                               placeholder=""
+                              required
                               value={clientSurname}
                               onChange={clientSurnameFunc}
                               className="flex h-8 w-52 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
@@ -110,6 +133,7 @@ function Client() {
                               name="search"
                               placeholder=""
                               type="email"
+                              required
                               value={clientEmail}
                               onChange={clientEmailFunc}
                               className="flex h-8 w-52 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
@@ -132,13 +156,11 @@ function Client() {
                               className="flex h-8 w-52 border-2 focus:outline-none sm:text-sm"
                             />
                           </div>
-
                           <div className="flex ml-2 flex-col  mb-4 ">
                             <div className="flex flex-row mt-10">
                               <input
                                 id="email-me"
                                 name="email-me"
-                                required
                                 type="checkbox"
                                 className="ml-8 h-6 w-6 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                               />
@@ -148,14 +170,26 @@ function Client() {
                             </div>
                           </div>
                         </div>
-                        <div className="flex">
-                          <button className="flex p-1 rounded-sm text-xs px-2 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
-                            <p>Priminti slaptažodi</p>
-                          </button>
-                        </div>
+                        <div className="flex flex-col">
+                        <button
+                          onClick={ForgotPasswordFromUI}
+                          className="flex p-1 w-32 rounded-sm text-xs px-2 mb-2 font-normal justify-center items-center text-gray-400 hover:text-gray-500 bg-gray-200"
+                        >
+                          <p>Priminti slaptažodi</p>
+                        </button>
+                        {sent === "true" ? (
+                          <p className="self-start text-xs text-green-500 truncate my-2">
+                            Slaptažodžio priminimas sekmingai išsiųstas
+                          </p>
+                          ) : ( sent === "true" ? (
+                            <p className="self-start text-xs text-red-500 truncate my-2">
+                            Prašome pakartoti vėliau
+                          </p>
+                          ) : (null))}
+                      </div>
                       </div>
                       <div>
-                      <div className="flex w-full justify-between">
+                        <div className="flex w-full justify-between">
                           <a className="flex rounded-sm text-normal px-2 mb-2 font-normal items-center text-black">
                             <p>Objektai</p>
                           </a>
@@ -163,18 +197,18 @@ function Client() {
                             <p>Pridėti objektą</p>
                           </button>
                         </div>
-                      <div className="overflow-y-auto h-96 scrollbar-gone">
-                        {clientList.map((data) => (
-                        <ObjectsList
-                          key={generate()}
-                          object={data.object}
-                          name={data.name}
-                          address={data.address}
-                          contract={data.contract}
-                          remove={data.remove}
-                        />
-                        ))}
-                      </div>
+                        <div className="overflow-y-auto h-96 scrollbar-gone">
+                          {clientList.map((data) => (
+                            <ObjectsList
+                              key={generate()}
+                              object={data.object}
+                              name={data.name}
+                              address={data.address}
+                              contract={data.contract}
+                              remove={data.remove}
+                            />
+                          ))}
+                        </div>
                       </div>
                       <button
                         type="submit"
@@ -196,7 +230,7 @@ function Client() {
 
                             <div className="flex ml-4 flex-row w-full">
                               <p className="text-sm truncate my-2">
-                                2020-01-11 18:57
+                                {clientLastLogin}
                               </p>
                             </div>
                           </div>
