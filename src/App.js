@@ -6,6 +6,7 @@ import ProtectedRoute from "./feature/protected";
 
 import Login from "./layout/login";
 import Dashboard from "./layout/dashboard";
+import Object from "./layout/object";
 import Filter from "./layout/filter";
 import TaskList from "./layout/taskList";
 import DriversList from "./layout/driversList";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" exec element={<Login />} />
             <Route path="Dashboard" element={<Dashboard />} />
             <Route path="Filter" element={<Filter />} />
+            <Route path="Object" element={<Object />} />
             <Route path="TaskList" element={<TaskList />} />
             <Route path="DriversList" element={<DriversList />} />
             <Route path="ClientsList" element={<ClientsList />} />

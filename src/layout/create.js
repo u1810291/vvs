@@ -193,7 +193,7 @@ function Create() {
                               placeholder=""
                               // onChange={}
                               // value={item.objectAddress}
-                              className="flex w-full h-8 border-2 placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
                             />
                           </div>
                         </div>

@@ -26,6 +26,7 @@ export const GlobalProvider = ({ children }) => {
   const [sortedClientsOrder, setSortedClientsOrder] = useState("");
   const [sortedClientsKeys, setSortedClientsKeys] = useState("");
   const [toPrintNew, setToPrintNew] = useState(null);
+  const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -60,6 +61,8 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    objectName,
+    setObjectName,
     pdfExportComponentNew,
     toPrintNew,
     setToPrintNew,

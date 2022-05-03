@@ -93,7 +93,7 @@ function Client() {
                               required
                               value={clientName}
                               onChange={clientNameFunc}
-                              className="flex h-8 w-52 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                              className="flex h-8 w-52 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
 
@@ -113,7 +113,7 @@ function Client() {
                               required
                               value={clientSurname}
                               onChange={clientSurnameFunc}
-                              className="flex h-8 w-52 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                              className="flex h-8 w-52 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
                         </div>
@@ -136,7 +136,7 @@ function Client() {
                               required
                               value={clientEmail}
                               onChange={clientEmailFunc}
-                              className="flex h-8 w-52 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                              className="flex h-8 w-52 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
 
@@ -153,7 +153,7 @@ function Client() {
                               value={clientPhone}
                               onChange={clientPhoneFunc}
                               type="phone"
-                              className="flex h-8 w-52 border-2 focus:outline-none sm:text-sm"
+                              className="flex h-8 w-52 border focus:outline-none sm:text-sm"
                             />
                           </div>
                           <div className="flex ml-2 flex-col  mb-4 ">

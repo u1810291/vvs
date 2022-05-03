@@ -19,7 +19,7 @@ const DashboardSidebar = () => {
       <button onClick={menuFunc} className="w-4 h-4">
         <img src={require("../../assets/assets/hamburger.png")} />
       </button>
-      <img className="pt-6" src={require("../../assets/assets/Line.png")}></img>
+      <img className="pt-4" src={require("../../assets/assets/Line.png")}></img>
       <div className="flex flex-col items-center text-gray-400">
         {filterList.map((filter) => {
           if (filter.savedToMenu === true) {

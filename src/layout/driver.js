@@ -56,7 +56,7 @@ function Driver() {
                               placeholder=""
                               value={driverName}
                               onChange={driverNameFunc}
-                              className="flex w-full h-8 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
 
@@ -75,7 +75,7 @@ function Driver() {
                               placeholder=""
                               value={driverSurname}
                               onChange={driverSurnameFunc}
-                              className="flex w-full h-8 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
                         </div>
@@ -96,7 +96,7 @@ function Driver() {
                               placeholder="User"
                               value={driverUser}
                               onChange={driverUserFunc}
-                              className="flex w-full h-8 border-2 placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
                             />
                           </div>
 
@@ -113,7 +113,7 @@ function Driver() {
                               value={driverPassword}
                               onChange={driverPasswordFunc}
                               type="password"
-                              className="flex w-full h-8 border-2 focus:outline-none sm:text-sm"
+                              className="flex w-full h-8 border focus:outline-none sm:text-sm"
                             />
                           </div>
                         </div>
