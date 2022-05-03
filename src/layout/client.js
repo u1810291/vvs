@@ -2,7 +2,7 @@ import React, { useState, useContext, useCallback, useEffect } from "react";
 import useLanguage from "../hook/useLanguage";
 import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
-import { ObjectsList } from "../components/lists/objectsList";
+import { Objects } from "../components/lists/objects";
 import AuthContext from "../context/authContext";
 import { clientList } from "../api/client";
 import { generate } from "shortid";
@@ -199,7 +199,7 @@ function Client() {
                         </div>
                         <div className="overflow-y-auto h-96 scrollbar-gone">
                           {clientList.map((data) => (
-                            <ObjectsList
+                            <Objects
                               key={generate()}
                               object={data.object}
                               name={data.name}

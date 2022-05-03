@@ -10,6 +10,7 @@ import Filter from "./layout/filter";
 import TaskList from "./layout/taskList";
 import DriversList from "./layout/driversList";
 import ClientsList from "./layout/clientsList";
+import Objects from "./layout/objects";
 import Create from "./layout/create";
 import Driver from "./layout/driver";
 import Client from "./layout/client";
@@ -30,6 +31,7 @@ function App() {
             <Route path="TaskList" element={<TaskList />} />
             <Route path="DriversList" element={<DriversList />} />
             <Route path="ClientsList" element={<ClientsList />} />
+            <Route path="Objects" element={<Objects />} />
             <Route path="Create" element={<Create />} />
             <Route path="New" element={<New />} />
             <Route path="Driver" element={<Driver />} />
