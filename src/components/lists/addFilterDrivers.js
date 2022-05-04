@@ -4,7 +4,7 @@ import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
 
-export const AddFilterListDriversDrivers = (props) => {
+export const AddFilterListDrivers = (props) => {
   const { english, lithuanian, t } = useLanguage();
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const { filterEditingDrivers, setFilterEditingDrivers } = useContext(GlobalContext);
@@ -31,15 +31,8 @@ export const AddFilterListDriversDrivers = (props) => {
         driver: "0",
         inTime: "0",
         dashboardList: [
-          "Gauta",
-          "Objektas",
-          "Pavadinimas",
-          "Ekipažas",
-          "Spėjo laiku",
-          "Reagavimo laikas",
-          "Laikas objekte",
-          "Būsena",
-          "Suveikimo priežastis",
+          "Vardas Pavardė",
+          "Būsena"
         ],
       },
     ]);

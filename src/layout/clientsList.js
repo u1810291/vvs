@@ -5,14 +5,13 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import useLanguage from "../hook/useLanguage";
 import RegularSidebarClients from "../components/sidebars/regularClients";
 import { ClientsListHeader } from "../components/headers/clientsList";
 import { ClientList } from "../components/lists/clientsList";
 import { FiltersListClients } from "../components/lists/filterClientsList";
 import { OptionsListClients } from "../components/lists/optionsClientsList";
 const {
-  AddFilterListClientsClients,
+  AddFilterListClients,
 } = require("../components/lists/addFilterClients");
 import GlobalContext from "../context/globalContext";
 import { Clients } from "../api/clients";
@@ -27,7 +26,6 @@ function classNames(...classes) {
 }
 
 function ClientsList() {
-  const { english, lithuanian, t } = useLanguage();
   const [sortedClientsOrder, setSortedClientsOrder] = useState("");
   const [sortedClientsKeys, setSortedClientsKeys] = useState("");
   const { expandFilterClients, setExpandFilterClients } =
@@ -146,7 +144,7 @@ function ClientsList() {
                     {expandFilterClients ? (
                       <>
                         <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">
-                          <AddFilterListClientsClients />
+                          <AddFilterListClients />
                         </div>
                         <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
                           <OptionsListClients />
@@ -194,6 +192,7 @@ function ClientsList() {
                       paperSize="A4"
                       margin="1cm"
                     >
+                      
                       <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                         <div className="flex flex-row items-center col-span-5">
                           <button
@@ -244,7 +243,7 @@ function ClientsList() {
                             email={data.email}
                           />
                         ))}
-                        <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav>
+                        {/* <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav> */}
                       </div>
                     </PDFExport>
                   ) : (

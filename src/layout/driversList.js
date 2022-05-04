@@ -5,29 +5,49 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import useLanguage from "../hook/useLanguage";
-import RegularSidebar from "../components/sidebars/regular";
+import RegularSidebarDrivers from "../components/sidebars/regularDrivers";
 import { DriversListHeader } from "../components/headers/driversList";
-import { DriversList } from "../components/lists/driversList";
-const { AddFilterList } = require("../components/lists/addFilter");
+import { DriverList } from "../components/lists/driversList";
+import { FiltersListDrivers } from "../components/lists/filterDriversList";
+import { OptionsListDrivers } from "../components/lists/optionsDriversList";
+const {
+  AddFilterListDrivers,
+} = require("../components/lists/addFilterDrivers");
+import GlobalContext from "../context/globalContext";
 import { Drivers } from "../api/drivers";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { generate } from "shortid";
+import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function TaskList() {
-  const { english, lithuanian, t } = useLanguage();
+function DriversList() {
   const [sortedDriversOrder, setSortedDriversOrder] = useState("");
   const [sortedDriversKeys, setSortedDriversKeys] = useState("");
+  const { expandFilterDrivers, setExpandFilterDrivers } =
+    useContext(GlobalContext);
+  const { selectedFilterDrivers, setSelectedFilterDrivers } =
+    useContext(GlobalContext);
+  const [toPrint, setToPrint] = useState(false);
+  const pdfExportComponent = useRef(null);
+  const handleExportWithComponent = useCallback(async (event) => {
+    setToPrint(true);
+    setTimeout(() => {
+      pdfExportComponent.current.save();
+    }, 1000);
+    setTimeout(() => {
+      setToPrint(false);
+    }, 1000);
+  }, []);
 
   function sortToggle(arr, key, order) {
     const collator = new Intl.Collator(undefined, {
       numeric: true,
-      sensitivity: 'base'
+      sensitivity: "base",
     });
     return arr.sort(function (a, b) {
       let x = a[key];
@@ -83,46 +103,136 @@ function TaskList() {
   return (
     <>
       <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center h-screen relative overflow-hidden">
-          <div className="flex flex-col h-screen items-center w-full ">
-            <div className="flex flex-row w-full justify-between h-screen ">
-              <RegularSidebar />
-              <div className="flex flex-col h-screen w-full justify-between">
+        <div className="flex w-screen flex-row justify-center min-h-screen sm:h-screen relative overflow-hidden">
+          <div className="flex flex-col h-full items-center w-full">
+            <div className="flex flex-row w-full justify-between h-full">
+              <RegularSidebarDrivers />
+              <div className="flex flex-col min-h-full w-full justify-between">
                 <DriversListHeader />
-                <div className="flex flex-col h-screen">
-                  <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-3 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-3 grid-gap-6 justify-between font-normal text-black z-1">
-                    
-                    <div className="flex flex-row items-center col-span-2">
-                      <button
-                        onClick={sortedDriversNames}
-                        className="flex flex-row items-center"
-                      >
-                        <span className="text-gray-300 text-sm">
-                          Vardas Pavardė
-                        </span>
-                        <img
-                          src={require("../assets/assets/down.png")}
-                          className="h-2 w-4 ml-2"
-                        />
-                      </button>
+                <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
+                  <div className="flex flex-row w-full">
+                    {expandFilterDrivers ? (
+                      <>
+                        <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">
+                          <AddFilterListDrivers />
+                        </div>
+                        <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
+                          <OptionsListDrivers />
+                          <FiltersListDrivers />
+                          <div
+                            className={
+                              selectedFilterDrivers
+                                ? "flex flex-col md:flex-row justify-between"
+                                : "hidden"
+                            }
+                          >
+                            <div className="flex flex-col md:flex-row mt-8 md:mt-0 items-center">
+                              <button className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
+                                Išsaugoti filtrą
+                              </button>
+                            </div>
+                            <div className="flex flex-col md:flex-row items-center my-6">
+                              <img
+                                className="h-8 w-6 mr-2 hidden lg:inline-block"
+                                src={require("../assets/assets/doc.png")}
+                              ></img>
+                              <button
+                                onClick={handleExportWithComponent}
+                                className="flex justify-center md:mr-6 p-1 text-sm font-normal hover:text-gray-500"
+                              >
+                                Eksportuoti
+                              </button>
+                              <button className="flex justify-center w-24 mr-2 rounded-sm p-1 border border-transparent text-xs font-normal text-white hover:shadow-none bg-slate-600 focus:outline-none">
+                                Ieškoti
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
+                    <div className="flex flex-col w-0 xl:w-1/5">
+                      {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
                     </div>
-                    <button
-                      onClick={sortedDriversStatus}
-                      className="flex flex-row items-center"
-                    >
-                      <span className="text-gray-300 text-sm">Būsena</span>
-                    </button>
                   </div>
-                  <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto h-screen">
-                    {sortedDrivers.map((data) => (
-                      <DriversList
-                        key={data.id}
-                        name={data.name}
-                        status={data.status}
-                      />
-                    ))}
-                    {/* <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav> */}
-                    <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
+
+                  {toPrint ? (
+                    <PDFExport
+                      ref={pdfExportComponent}
+                      scale={0.2}
+                      paperSize="A4"
+                      margin="1cm"
+                    >
+                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-3 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-3 grid-gap-6 justify-between font-normal text-black z-1">
+                        <div className="flex flex-row items-center col-span-2">
+                          <button
+                            onClick={sortedDriversNames}
+                            className="flex flex-row items-center"
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Vardas Pavardė
+                            </span>
+                            <img
+                              src={require("../assets/assets/down.png")}
+                              className="h-2 w-4 ml-2"
+                            />
+                          </button>
+                        </div>
+                        <button
+                          onClick={sortedDriversStatus}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">Būsena</span>
+                        </button>
+                      </div>
+                      <div className="pl-4 flex-col w-full items-center">
+                        {sortedDrivers.map((data) => (
+                          <DriverList
+                            key={data.id}
+                            name={data.name}
+                            status={data.status}
+                          />
+                        ))}
+                        <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav>
+                      </div>
+                    </PDFExport>
+                  ) : (
+                    <>
+                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-3 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-3 grid-gap-6 justify-between font-normal text-black z-1">
+                        <div className="flex flex-row items-center col-span-2">
+                          <button
+                            onClick={sortedDriversNames}
+                            className="flex flex-row items-center"
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Vardas Pavardė
+                            </span>
+                            <img
+                              src={require("../assets/assets/down.png")}
+                              className="h-2 w-4 ml-2"
+                            />
+                          </button>
+                        </div>
+                        <button
+                          onClick={sortedDriversStatus}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm">Būsena</span>
+                        </button>
+                      </div>
+                      <div className="pl-4 flex-col w-full items-center">
+                        {sortedDrivers.map((data) => (
+                          <DriverList
+                            key={data.id}
+                            name={data.name}
+                            status={data.status}
+                          />
+                        ))}
+                        <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav>
+                      </div>
+                    </>
+                  )}
+
+                  <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>
                         <Menu
@@ -256,7 +366,6 @@ function TaskList() {
                       </a>
                     </div>
                   </nav>
-                  </div>
                 </div>
               </div>
             </div>
@@ -267,4 +376,4 @@ function TaskList() {
   );
 }
 
-export default TaskList;
+export default DriversList;

@@ -4,6 +4,7 @@ import GlobalContext from "../../context/globalContext";
 const RegularSidebarDrivers = () => {
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const { selectedFilterDrivers, setSelectedFilterDrivers } = useContext(GlobalContext);
+  
   const menuFunc = useCallback(async () => {
     console.log("menuOpen");
   }, []);

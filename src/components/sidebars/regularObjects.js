@@ -4,6 +4,7 @@ import GlobalContext from "../../context/globalContext";
 const RegularSidebarObjects = () => {
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
+  
   const menuFunc = useCallback(async () => {
     console.log("menuOpen");
   }, []);

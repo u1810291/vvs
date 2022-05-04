@@ -16,7 +16,6 @@ export const GlobalProvider = ({ children }) => {
   const [longName, setLongName] = useState("");
   const [shortName, setShortName] = useState("");
   const [filterEditing, setFilterEditing] = useState(null);
-  const [filterEditingTask, setFilterEditingTask] = useState(null);
   const [filterEditingDrivers, setFilterEditingDrivers] = useState(null);
   const [filterEditingClients, setFilterEditingClients] = useState(null);
   const [filterEditingObjects, setFilterEditingObjects] = useState(null);
@@ -30,45 +29,12 @@ export const GlobalProvider = ({ children }) => {
   const [sortedClientsKeys, setSortedClientsKeys] = useState("");
   const [toPrintNew, setToPrintNew] = useState(null);
   const [expandFilter, setExpandFilter] = useState(true);
-  const [expandFilterTask, setExpandFilterTask] = useState(true);
   const [expandFilterDrivers, setExpandFilterDrivers] = useState(true);
   const [expandFilterObjects, setExpandFilterObjects] = useState(true);
   const [expandFilterClients, setExpandFilterClients] = useState(true);
   const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterList, setFilterList] = useState([
-    {
-      id: generate(),
-      filterName: generate(),
-      filterShortName: Math.random().toString(36).slice(-4),
-      savedToFavorite: true,
-      savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
-      dashboardList: [
-        "Gauta",
-        "Objektas",
-        "Pavadinimas",
-        "Ekipažas",
-        "Spėjo laiku",
-        "Reagavimo laikas",
-        "Laikas objekte",
-        "Būsena",
-        "Suveikimo priežastis",
-      ],
-    },
-  ]);
-  const [selectedFilterTask, setSelectedFilterTask] = useState(null);
-  const [filterListTask, setFilterListTask] = useState([
     {
       id: generate(),
       filterName: generate(),
@@ -119,15 +85,8 @@ export const GlobalProvider = ({ children }) => {
       driver: "0",
       inTime: "0",
       dashboardList: [
-        "Gauta",
-        "Objektas",
-        "Pavadinimas",
-        "Ekipažas",
-        "Spėjo laiku",
-        "Reagavimo laikas",
-        "Laikas objekte",
-        "Būsena",
-        "Suveikimo priežastis",
+        "Vardas Pavardė",
+        "Būsena"
       ],
     },
   ]);
@@ -178,23 +137,18 @@ export const GlobalProvider = ({ children }) => {
       driver: "0",
       inTime: "0",
       dashboardList: [
-        "Gauta",
-        "Objektas",
-        "Pavadinimas",
-        "Ekipažas",
-        "Spėjo laiku",
-        "Reagavimo laikas",
-        "Laikas objekte",
-        "Būsena",
-        "Suveikimo priežastis",
+        "Vardas Pavardė",
+        "Miestas",
+        "Adresas",
+        "Objekto nr.",
+        "Sutarties nr.",
+        "Siusti ekipaža",
       ],
     },
   ]);
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
-    filterEditingTask,
-    setFilterEditingTask,
     filterEditingDrivers,
     setFilterEditingDrivers,
     filterEditingClients,
@@ -210,10 +164,6 @@ export const GlobalProvider = ({ children }) => {
     setToPrintNew,
     filterList,
     setFilterList,
-    selectedFilterTask,
-    setSelectedFilterTask,
-    filterListTask,
-    setFilterListTask,
     selectedFilterDrivers,
     setSelectedFilterDrivers,
     filterListDrivers,
@@ -258,8 +208,6 @@ export const GlobalProvider = ({ children }) => {
     setSortedClientsOrder,
     sortedClientsKeys,
     setSortedClientsKeys,
-    expandFilterTask,
-    setExpandFilterTask,
     expandFilterDrivers,
     setExpandFilterDrivers,
     expandFilterObjects,

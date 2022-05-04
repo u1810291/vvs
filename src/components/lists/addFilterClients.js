@@ -4,11 +4,13 @@ import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
 
-export const AddFilterListClientsClients = (props) => {
+export const AddFilterListClients = (props) => {
   const { english, lithuanian, t } = useLanguage();
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const { filterEditingClients, setFilterEditingClients } = useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
+  const { filterEditingClients, setFilterEditingClients } =
+    useContext(GlobalContext);
+  const { selectedFilterClients, setSelectedFilterClients } =
+    useContext(GlobalContext);
 
   const addFilterFunc = () => {
     setFilterListClients((currentFilter) => [
@@ -34,7 +36,7 @@ export const AddFilterListClientsClients = (props) => {
           "Vardas Pavardė",
           "Sutarties nr.",
           "Telefonas",
-          "El. paštas"
+          "El. paštas",
         ],
       },
     ]);
@@ -46,14 +48,14 @@ export const AddFilterListClientsClients = (props) => {
     });
   };
 
-  const checkFilters = useCallback(async() => {
+  const checkFilters = useCallback(async () => {
     if (filterListClients.length === 1) {
-      setSelectedFilterClients(null)
+      setSelectedFilterClients(null);
     } else {
-    const topID = filterListClients[0].id;
-    setSelectedFilterClients(topID);
+      const topID = filterListClients[0].id;
+      setSelectedFilterClients(topID);
     }
-  },[filterListClients, setSelectedFilterClients])
+  }, [filterListClients, setSelectedFilterClients]);
 
   const saveFilters = useCallback(async () => {
     // handle api call
@@ -65,7 +67,7 @@ export const AddFilterListClientsClients = (props) => {
       const topId = filterListClients[0].id;
       setSelectedFilterClients(topId);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -107,7 +109,9 @@ export const AddFilterListClientsClients = (props) => {
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row w-full border-l border-b justify-between items-center">
-                      <p className="text-gray-400 p-2 text-sm">{filter.filterName}</p>
+                      <p className="text-gray-400 p-2 text-sm">
+                        {filter.filterName}
+                      </p>
                       <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
                         <p onClick={() => setFilterEditingClients(filter.id)}>
                           redaguoti filtrą
@@ -173,7 +177,9 @@ export const AddFilterListClientsClients = (props) => {
                         type="checkbox"
                         className="h-4 w-4  text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500 truncate text-sm">Išsaugoti į meniu</p>
+                      <p className="ml-4 text-gray-500 truncate text-sm">
+                        Išsaugoti į meniu
+                      </p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center mt-2">
                       <input
@@ -191,7 +197,9 @@ export const AddFilterListClientsClients = (props) => {
                         type="checkbox"
                         className="h-4 w-4   text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500 truncate text-sm">Numatytasis filtras</p>
+                      <p className="ml-4 text-gray-500 truncate text-sm">
+                        Numatytasis filtras
+                      </p>
                     </div>
                   </div>
                   <div className=" flex flex-col sm:flex-row justify-around items-center w-20 sm:w-full mt-8">
@@ -234,7 +242,10 @@ export const AddFilterListClientsClients = (props) => {
           src={require("../../assets/assets/cross.png")}
           className="h-4 w-4 m-2"
         />
-        <p onClick={addFilterFunc} className="text-gray-400 text-sm hover:text-gray-500">
+        <p
+          onClick={addFilterFunc}
+          className="text-gray-400 text-sm hover:text-gray-500"
+        >
           Pridėti filtrą
         </p>
       </button>

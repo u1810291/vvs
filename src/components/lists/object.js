@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
 import GlobalContext from "../../context/globalContext";
 
-export const Objects = ({
+export const Object = ({
   id,
   object,
   name,

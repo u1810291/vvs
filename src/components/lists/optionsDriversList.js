@@ -14,8 +14,8 @@ function classNames(...classes) {
 
 export const OptionsListDrivers = (props) => {
   const { english, lithuanian, t } = useLanguage();
-  const { filterList, setFilterList } = useContext(GlobalContext);
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+  const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
+  const { selectedFilterDrivers, setSelectedFilterDrivers } = useContext(GlobalContext);
   const { value, onChange } = useContext(GlobalContext);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -38,17 +38,17 @@ export const OptionsListDrivers = (props) => {
 
   // const dateFunction = (filter) => {
   //   const date = startAndEndDate;
-  //   setFilterList((currentFilter) =>
+  //   setFilterListDrivers((currentFilter) =>
   //     currentFilter.map((x) => (x.id === filter.id ? { ...x, date } : x))
   //   );
   // };
 
   return (
     <div {...props}>
-      {filterList.map((filter, index) => {
+      {filterListDrivers.map((filter, index) => {
         return (
           <div key={filter.id}>
-            {selectedFilter === filter.id ? (
+            {selectedFilterDrivers === filter.id ? (
               <div className="w-full sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-4 justify-between font-normal text-black gap-2 z-1">
                 <Menu
                   key={filter.id}
@@ -135,7 +135,7 @@ export const OptionsListDrivers = (props) => {
                               // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                               onClick={() => {
                                 const operator = "1";
-                                setFilterList((currentFilter) =>
+                                setFilterListDrivers((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, operator } : x
                                   )
@@ -159,7 +159,7 @@ export const OptionsListDrivers = (props) => {
                               // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                               onClick={() => {
                                 const operator = 2;
-                                setFilterList((currentFilter) =>
+                                setFilterListDrivers((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, operator } : x
                                   )
@@ -216,7 +216,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                               onClick={() => {
                                 const object = "1";
-                                setFilterList((currentFilter) =>
+                                setFilterListDrivers((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, object } : x
                                   )
@@ -239,7 +239,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const object = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, object } : x
                                 )
@@ -271,7 +271,7 @@ export const OptionsListDrivers = (props) => {
                     // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                     onChange={(e) => {
                       const objectAddress = e.target.value;
-                      setFilterList((currentFilter) =>
+                      setFilterListDrivers((currentFilter) =>
                         currentFilter.map((x) =>
                           x.id === filter.id ? { ...x, objectAddress } : x
                         )
@@ -317,7 +317,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const type = "1";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, type } : x
                                 )
@@ -340,7 +340,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const type = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, type } : x
                                 )
@@ -397,7 +397,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const group = "1";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, group } : x
                                 )
@@ -420,7 +420,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const group = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, group } : x
                                 )
@@ -477,7 +477,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const status = "1";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, status } : x
                                 )
@@ -500,7 +500,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const status = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, status } : x
                                 )
@@ -557,7 +557,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const reason = "1";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, reason } : x
                                 )
@@ -580,7 +580,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const reason = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, reason } : x
                                 )
@@ -637,7 +637,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const crew = "1";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, crew } : x
                                 )
@@ -660,7 +660,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const crew = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, crew } : x
                                 )
@@ -717,7 +717,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const driver = "1";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, driver } : x
                                 )
@@ -740,7 +740,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const driver = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, driver } : x
                                 )
@@ -797,7 +797,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const inTime = "1";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, inTime } : x
                                 )
@@ -820,7 +820,7 @@ export const OptionsListDrivers = (props) => {
                             <button
                             onClick={() => {
                               const inTime = "2";
-                              setFilterList((currentFilter) =>
+                              setFilterListDrivers((currentFilter) =>
                                 currentFilter.map((x) =>
                                   x.id === filter.id ? { ...x, inTime } : x
                                 )
