@@ -44,7 +44,7 @@ export const DashboardList = ({
                 </div>
                 <div className="flex col-span-2 flex-row items-center h-12">
                   {filter.dashboardList.includes("Objektas") ? (
-                    <span className="bg-white text-sm text-gray-400 truncate">{object}</span>
+                    <span className="bg-white text-sm text-blue-300 truncate">{object}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
@@ -58,7 +58,7 @@ export const DashboardList = ({
                 </div>
                 <div className="flex row-span-2 items-center h-12">
                   {filter.dashboardList.includes("Ekipažas") ? (
-                    <span className="bg-white text-sm text-gray-400 truncate">{crew}</span>
+                    <span className="bg-white text-sm text-blue-300 truncate">{crew}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
@@ -104,7 +104,7 @@ export const DashboardList = ({
                 </div>
                 <div className="flex col-span-2 flex-row h-12 items-center">
                   {filter.dashboardList.includes("Suveikimo priežastis") ? (
-                    <span className="bg-white text-sm text-gray-400 truncate">{reason}</span>
+                    <span className="bg-white text-sm text-gray-500 truncate">{reason}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}

@@ -33,7 +33,8 @@ export function ObjectsHeader() {
         </button>
         <Search />
       </div>
-      <div className="flex flex-row items-center h-10 mt-2 mb-1">
+      <div className="flex flex-row items-center">
+        <a className="hidden h-10 sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 text-sm"></a>
         <button className="text-normal mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
           Objektai
         </button>

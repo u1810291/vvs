@@ -27,7 +27,7 @@ export const DriverList = ({ id, name, status, ...props }) => {
               <div className="w-full border-b grid grid-cols-3 bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-3 grid-gap-6 justify-between font-normal text-black z-1">
                 <div className="flex flex-row items-center h-12 col-span-2">
                   {filter.dashboardList.includes("Vardas Pavardė") ? (
-                    <span className="bg-white text-gray-400 truncate text-sm">
+                    <span className="bg-white text-gray-500 truncate text-sm">
                       {name}
                     </span>
                   ) : (
