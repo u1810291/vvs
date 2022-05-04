@@ -10,7 +10,6 @@ import RegularSidebar from "../components/sidebars/regular";
 import { ObjectsHeader } from "../components/headers/objects";
 import { ObjectsList } from "../components/lists/objectsList";
 const { AddFilterList } = require("../components/lists/addFilter");
-import GlobalContext from "../context/globalContext";
 import { Orders } from "../api/orders";
 import { generate } from "shortid";
 

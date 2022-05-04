@@ -1,10 +1,7 @@
-import React, { useCallback, useContext } from "react";
-import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
+import React from "react";
 const { BlueStatusTop } = require("../buttons/blueStatusTop");
 
 export function NewHeader() {
-  const { english, lithuanian, t } = useLanguage();
 
   return (
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between w-full">

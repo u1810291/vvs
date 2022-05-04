@@ -34,7 +34,7 @@ export const DashboardList = ({
         return (
           <div key={filter.id}>
             {selectedFilter === filter.id ? (
-              <div className="w-full border-b grid grid-cols-1 bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+              <div className="w-full border-b grid grid-cols-12 bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                 <div className="flex flex-row items-center h-12">
                   {filter.dashboardList.includes("Gauta") ? (
                     <span className="bg-white text-sm text-gray-400 truncate">{date}</span>

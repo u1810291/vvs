@@ -73,7 +73,7 @@ function Object() {
     <>
       <div className="container max-w-screen-xl">
         <div className="flex w-screen flex-row justify-center min-h-screen relative overflow-hidden">
-          <div className="flex flex-col min-h-screen items-center w-full ">
+          <div className="flex flex-col min-h-screen items-center w-full">
             <div className="flex flex-row w-full justify-between min-h-screen ">
               <SidebarBack />
               <div className="flex flex-col min-h-screen w-full justify-between">
@@ -465,7 +465,7 @@ function Object() {
                             <div className="flex flex-row w-full border-b h-12 items-center justify-between">
                               <div className="flex ml-4 flex-row w-full justify-between">
                                 <p className="text-sm text-gray-400 font-normal truncate my-2">
-                                  Navisaion ID.
+                                  Navision ID.
                                 </p>
                                 <p className="text-sm font-normal truncate my-2 mr-36">
                                   1167

@@ -2,17 +2,17 @@ import React, { useCallback, useContext } from "react";
 import GlobalContext from "../../context/globalContext";
 import { Search } from "../../components/input/search";
 
-export function FilterHeader() {
-  const { expandFilter, setExpandFilter } = useContext(GlobalContext);
+export function TaskHeader() {
+  const { expandFilterTask, setExpandFilterTask } = useContext(GlobalContext);
 
   const filterFunc = useCallback(async () => {
-    if (expandFilter) {
-      setExpandFilter(false);
+    if (expandFilterTask) {
+      setExpandFilterTask(false);
     }
-    if (!expandFilter) {
-      setExpandFilter(true);
+    if (!expandFilterTask) {
+      setExpandFilterTask(true);
     }
-  }, [expandFilter, setExpandFilter]);
+  }, [expandFilterTask, setExpandFilterTask]);
 
   return (
     <div className="flex flex-row h-16 bg-white border-b justify-between">

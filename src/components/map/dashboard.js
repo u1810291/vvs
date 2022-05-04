@@ -199,6 +199,7 @@ export default function DashboardMap(props) {
       }))),
       map(ps => Promise.all(ps).then(setDirections))
     )(originAndDestination)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [originAndDestination]);
 
   // Define refs for Polygon instance and listeners
@@ -245,13 +246,7 @@ export default function DashboardMap(props) {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
         zoom={12}
-        mapContainerClassName="map-container"
-        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-        mapOptions={{
-          mapId: "b181cac70f27f5e6",
-        }}
       >
         {clickedPos.lat ? (
           <Marker icon={markerIcon} position={clickedPos} />

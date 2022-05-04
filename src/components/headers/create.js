@@ -1,9 +1,6 @@
 import React from "react";
-import useLanguage from "../../hook/useLanguage";
 
 export function CreateHeader() {
-  const { english, lithuanian, t } = useLanguage();
-
   return (
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between">
       <div className="md:flex hidden md:flex-row ml-4 items-center">

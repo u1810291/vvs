@@ -6,11 +6,10 @@ import React, {
   useRef,
 } from "react";
 import useLanguage from "../hook/useLanguage";
-import RegularSidebar from "../components/sidebars/regular";
-import { FilterHeader } from "../components/headers/filter";
+import RegularSidebarTask from "../components/sidebars/regular";
+import { TaskHeader } from "../components/headers/task";
 import { TaskListDashboard } from "../components/lists/taskListDashboard";
 const { AddFilterList } = require("../components/lists/addFilter");
-import GlobalContext from "../context/globalContext";
 import { DashboardTestApi } from "../api/dashboardTest";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -22,7 +21,6 @@ function classNames(...classes) {
 
 function TaskList() {
   const { english, lithuanian, t } = useLanguage();
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
 
   return (
     <>
@@ -30,9 +28,9 @@ function TaskList() {
         <div className="flex w-screen flex-row justify-center h-screen relative overflow-hidden">
           <div className="flex flex-col h-screen items-center w-full ">
             <div className="flex flex-row w-full justify-between h-screen ">
-              <RegularSidebar />
+              <RegularSidebarTask />
               <div className="flex flex-col h-screen w-full justify-between">
-                <FilterHeader />
+                <TaskHeader />
                 <div className="flex flex-col h-screen">
                   <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                     <div className="flex flex-row items-center">

@@ -1,9 +1,10 @@
 import React, { useCallback, useContext } from "react";
 import GlobalContext from "../../context/globalContext";
 
-const RegularSidebar = () => {
-  const { filterList, setFilterList } = useContext(GlobalContext);
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+const RegularSidebarClients = () => {
+  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
+  const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
+  
   const menuFunc = useCallback(async () => {
     console.log("menuOpen");
   }, []);
@@ -21,11 +22,11 @@ const RegularSidebar = () => {
       </button>
       <img className="pt-4" src={require("../../assets/assets/Line.png")}></img>
       <div className="flex flex-col items-center text-gray-400">
-        {filterList.map((filter) => {
+        {filterListClients.map((filter) => {
           if (filter.savedToMenu === true) {
           return (
             // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-            <button key={filter.id} onClick={() => setSelectedFilter(filter.id)} className={selectedFilter === filter.id ? "font-light text-md mt-6 text-white" : "font-light text-md mt-6 hover:text-white"}>
+            <button key={filter.id} onClick={() => setSelectedFilterClients(filter.id)} className={selectedFilterClients === filter.id ? "font-light text-md mt-6 text-white" : "font-light text-md mt-6 hover:text-white"}>
               {filter.filterShortName}
             </button>
           );
@@ -36,4 +37,4 @@ const RegularSidebar = () => {
   );
 };
 
-export default RegularSidebar;
+export default RegularSidebarClients;

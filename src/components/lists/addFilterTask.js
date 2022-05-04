@@ -4,14 +4,14 @@ import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
 
-export const AddFilterList = (props) => {
+export const AddFilterListTask = (props) => {
   const { english, lithuanian, t } = useLanguage();
-  const { filterList, setFilterList } = useContext(GlobalContext);
-  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+  const { filterListTask, setFilterListTask } = useContext(GlobalContext);
+  const { filterEditingTask, setFilterEditingTask } = useContext(GlobalContext);
+  const { selectedFilterTask, setSelectedFilterTask } = useContext(GlobalContext);
 
   const addFilterFunc = () => {
-    setFilterList((currentFilter) => [
+    setFilterListTask((currentFilter) => [
       ...currentFilter,
       {
         id: generate(),
@@ -31,34 +31,29 @@ export const AddFilterList = (props) => {
         driver: "0",
         inTime: "0",
         dashboardList: [
-          "Gauta",
-          "Objektas",
-          "Pavadinimas",
-          "Ekipažas",
-          "Spėjo laiku",
-          "Reagavimo laikas",
-          "Laikas objekte",
-          "Būsena",
-          "Suveikimo priežastis",
+          "Vardas Pavardė",
+          "Sutarties nr.",
+          "Telefonas",
+          "El. paštas"
         ],
       },
     ]);
-    filterList.map((value, index, array) => {
-      if (filterList.length - 1 === index) {
+    filterListTask.map((value, index, array) => {
+      if (filterListTask.length - 1 === index) {
         const id = value.id;
-        setSelectedFilter(id);
+        setSelectedFilterTask(id);
       }
     });
   };
 
   const checkFilters = useCallback(async() => {
-    if (filterList.length === 1) {
-      setSelectedFilter(null)
+    if (filterListTask.length === 1) {
+      setSelectedFilterTask(null)
     } else {
-    const topID = filterList[0].id;
-    setSelectedFilter(topID);
+    const topID = filterListTask[0].id;
+    setSelectedFilterTask(topID);
     }
-  },[filterList, setSelectedFilter])
+  },[filterListTask, setSelectedFilterTask])
 
   const saveFilters = useCallback(async () => {
     // handle api call
@@ -66,9 +61,9 @@ export const AddFilterList = (props) => {
 
   // I guess this for on page load
   useEffect(() => {
-    if (filterList?.length > 0) {
-      const topId = filterList[0].id;
-      setSelectedFilter(topId);
+    if (filterListTask?.length > 0) {
+      const topId = filterListTask[0].id;
+      setSelectedFilterTask(topId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -81,13 +76,13 @@ export const AddFilterList = (props) => {
             Visi duomenys
           </p>
         </div>
-        {filterList.map((filter, index) => {
+        {filterListTask.map((filter, index) => {
           return (
             <div className="w-full" key={filter.id}>
-              {filterEditing !== filter.id ? (
+              {filterEditingTask !== filter.id ? (
                 <button
                   onClick={() => setSelectedFilter(filter.id)}
-                  className={filterEditing ? "hidden" : "w-full"}
+                  className={filterEditingTask ? "hidden" : "w-full"}
                   key={filter.id}
                 >
                   <div
@@ -114,7 +109,7 @@ export const AddFilterList = (props) => {
                     <div className="flex flex-col sm:flex-row w-full border-l border-b justify-between items-center">
                       <p className="text-gray-400 p-2 text-sm">{filter.filterName}</p>
                       <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
-                        <p onClick={() => setFilterEditing(filter.id)}>
+                        <p onClick={() => setFilterEditingTask(filter.id)}>
                           redaguoti filtrą
                         </p>
                       </a>
@@ -131,7 +126,7 @@ export const AddFilterList = (props) => {
                         name="name"
                         onChange={(e) => {
                           const filterName = e.target.value;
-                          setFilterList((currentFilter) =>
+                          setFilterListTaskTask((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterName } : x
                             )
@@ -149,7 +144,7 @@ export const AddFilterList = (props) => {
                         name="short-name"
                         onChange={(e) => {
                           const filterShortName = e.target.value;
-                          setFilterList((currentFilter) =>
+                          setFilterListTaskTask((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterShortName } : x
                             )
@@ -168,7 +163,7 @@ export const AddFilterList = (props) => {
                         name="save"
                         onChange={(e) => {
                           const savedToMenu = e.target.checked;
-                          setFilterList((currentFilter) =>
+                          setFilterListTaskTask((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToMenu } : x
                             )
@@ -186,7 +181,7 @@ export const AddFilterList = (props) => {
                         name="default-filter"
                         onChange={(e) => {
                           const savedToFavorite = e.target.checked;
-                          setFilterList((currentFilter) =>
+                          setFilterListTask((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToFavorite } : x
                             )
@@ -202,10 +197,10 @@ export const AddFilterList = (props) => {
                   <div className=" flex flex-col sm:flex-row justify-around items-center w-20 sm:w-full mt-8">
                     <button
                       onClick={() => {
-                        setFilterList((currentFilter) =>
+                        setFilterListTask((currentFilter) =>
                           currentFilter.filter((x) => x.id !== filter.id)
                         );
-                        setFilterEditing(null);
+                        setFilterEditingTask(null);
                         checkFilters();
                       }}
                       className="text-gray-400 text-sm"
@@ -213,7 +208,7 @@ export const AddFilterList = (props) => {
                       Ištrinti
                     </button>
                     <button
-                      onClick={() => setFilterEditing(null)}
+                      onClick={() => setFilterEditingTask(null)}
                       className="text-gray-400 text-sm"
                     >
                       Atšaukti

@@ -69,7 +69,7 @@ export const TaskListDashboard = ({
                     <GreenStatus/>
                     <BlueStatus/>
                     <CancelStatus/> */}
-                <span className="bg-white text-gray-400 text-sm">-</span>
+                {/* <span className="bg-white text-gray-400 text-sm">-</span> */}
               </div>
               <div className="flex col-span-2 flex-row h-12 items-center">
                 <span className="bg-white text-gray-400 truncate text-sm">

@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
-import useLanguage from "../../hook/useLanguage";
 import GlobalContext from "../../context/globalContext";
 
 export function ObjectHeader() {
-  const { english, lithuanian, t } = useLanguage();
   const {objectName, setObjectName} = useContext(GlobalContext);
 
   return (

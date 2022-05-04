@@ -1,10 +1,8 @@
-import React, { useContext, useRef, useCallback } from "react";
-import useLanguage from "../../hook/useLanguage";
+import React, { useContext, useCallback } from "react";
 import { GreenStatusTop } from "../buttons/greenStatusTop";
 import GlobalContext from "../../context/globalContext";
 
 export function FinishedHeader() {
-  const { english, lithuanian, t } = useLanguage();
   const { pdfExportComponentNew } = useContext(GlobalContext);
   const { toPrintNew, setToPrintNew } = useContext(GlobalContext);
 

@@ -1,21 +1,19 @@
 import React, { useCallback, useContext } from "react";
+import { Search } from "../../components/input/search";
 import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
 
 export function DriversListHeader() {
-  const { english, lithuanian, t } = useLanguage();
-  const { search, setSearch } = useContext(GlobalContext);
-
-  const searchFunc = useCallback(
-    async (e) => {
-      setSearch(e.target.value);
-    },
-    [setSearch]
-  );
+  const { expandFilterDrivers, setExpandFilterDrivers } =
+    useContext(GlobalContext);
 
   const filterFunc = useCallback(async () => {
-    console.log("filter");
-  }, []);
+    if (expandFilterDrivers) {
+      setExpandFilterDrivers(false);
+    }
+    if (!expandFilterDrivers) {
+      setExpandFilterDrivers(true);
+    }
+  }, [expandFilterDrivers, setExpandFilterDrivers]);
 
   return (
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between">
@@ -31,19 +29,7 @@ export function DriversListHeader() {
           className="h-4 w-4 ml-4 mr-8"
           alt="filter"
         />
-        <div className="flex flex-col justify-center items-end">
-          <div className="flex relative overflow-hidden">
-            <input
-              id="search"
-              name="search"
-              placeholder="Greita paieška"
-              className="appearance-none sm:w-96 px-3 py-2 border-2 rounded-full border-b shadow-sm text-xl text-gray-400 placeholder-gray-400 focus:outline-none sm:text-sm"
-            />
-          </div>
-          <div onClick={searchFunc} className="flex h-6 w-6 absolute mr-4">
-            <img src={require("../../assets/assets/search.png")} alt="filter" />
-          </div>
-        </div>
+        <Search />
       </div>
       <div className="flex flex-row items-center">
         <button

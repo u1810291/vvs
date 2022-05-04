@@ -1,11 +1,8 @@
-import React, { useCallback, useContext } from "react";
-import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
+import React from "react";
 import { RedStatusTop } from "../buttons/redStatusTop";
 
 
 export function InProcessHeader() {
-  const { english, lithuanian, t } = useLanguage();
 
   return (
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between w-full">

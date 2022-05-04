@@ -6,7 +6,7 @@ const SidebarBack = () => {
   }, []);
 
   return (
-    <div className="flex flex-col bg-slate-600 w-10 pt-4 items-center sm:w-20 h-full">
+    <div className="flex flex-col bg-slate-600 w-10 pt-6 items-center sm:w-20 h-full">
       <button onClick={menuFunc}>
         <img src={require("../../assets/assets/left.png")}></img>
       </button>

@@ -4,14 +4,14 @@ import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
 
-export const AddFilterList = (props) => {
+export const AddFilterListClientsClients = (props) => {
   const { english, lithuanian, t } = useLanguage();
-  const { filterList, setFilterList } = useContext(GlobalContext);
-  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
+  const { filterEditingClients, setFilterEditingClients } = useContext(GlobalContext);
+  const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
 
   const addFilterFunc = () => {
-    setFilterList((currentFilter) => [
+    setFilterListClients((currentFilter) => [
       ...currentFilter,
       {
         id: generate(),
@@ -31,34 +31,29 @@ export const AddFilterList = (props) => {
         driver: "0",
         inTime: "0",
         dashboardList: [
-          "Gauta",
-          "Objektas",
-          "Pavadinimas",
-          "Ekipažas",
-          "Spėjo laiku",
-          "Reagavimo laikas",
-          "Laikas objekte",
-          "Būsena",
-          "Suveikimo priežastis",
+          "Vardas Pavardė",
+          "Sutarties nr.",
+          "Telefonas",
+          "El. paštas"
         ],
       },
     ]);
-    filterList.map((value, index, array) => {
-      if (filterList.length - 1 === index) {
+    filterListClients.map((value, index, array) => {
+      if (filterListClients.length - 1 === index) {
         const id = value.id;
-        setSelectedFilter(id);
+        setSelectedFilterClients(id);
       }
     });
   };
 
   const checkFilters = useCallback(async() => {
-    if (filterList.length === 1) {
-      setSelectedFilter(null)
+    if (filterListClients.length === 1) {
+      setSelectedFilterClients(null)
     } else {
-    const topID = filterList[0].id;
-    setSelectedFilter(topID);
+    const topID = filterListClients[0].id;
+    setSelectedFilterClients(topID);
     }
-  },[filterList, setSelectedFilter])
+  },[filterListClients, setSelectedFilterClients])
 
   const saveFilters = useCallback(async () => {
     // handle api call
@@ -66,9 +61,9 @@ export const AddFilterList = (props) => {
 
   // I guess this for on page load
   useEffect(() => {
-    if (filterList?.length > 0) {
-      const topId = filterList[0].id;
-      setSelectedFilter(topId);
+    if (filterListClients?.length > 0) {
+      const topId = filterListClients[0].id;
+      setSelectedFilterClients(topId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -81,18 +76,18 @@ export const AddFilterList = (props) => {
             Visi duomenys
           </p>
         </div>
-        {filterList.map((filter, index) => {
+        {filterListClients.map((filter, index) => {
           return (
             <div className="w-full" key={filter.id}>
-              {filterEditing !== filter.id ? (
+              {filterEditingClients !== filter.id ? (
                 <button
-                  onClick={() => setSelectedFilter(filter.id)}
-                  className={filterEditing ? "hidden" : "w-full"}
+                  onClick={() => setSelectedFilterClients(filter.id)}
+                  className={filterEditingClients ? "hidden" : "w-full"}
                   key={filter.id}
                 >
                   <div
                     className={
-                      selectedFilter === filter.id ? "shadow" : "w-full"
+                      selectedFilterClients === filter.id ? "shadow" : "w-full"
                     }
                   >
                     <div className="flex flex-col sm:flex-row w-full border-l mb-4 border-b items-center justify-between">
@@ -114,7 +109,7 @@ export const AddFilterList = (props) => {
                     <div className="flex flex-col sm:flex-row w-full border-l border-b justify-between items-center">
                       <p className="text-gray-400 p-2 text-sm">{filter.filterName}</p>
                       <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
-                        <p onClick={() => setFilterEditing(filter.id)}>
+                        <p onClick={() => setFilterEditingClients(filter.id)}>
                           redaguoti filtrą
                         </p>
                       </a>
@@ -131,7 +126,7 @@ export const AddFilterList = (props) => {
                         name="name"
                         onChange={(e) => {
                           const filterName = e.target.value;
-                          setFilterList((currentFilter) =>
+                          setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterName } : x
                             )
@@ -149,7 +144,7 @@ export const AddFilterList = (props) => {
                         name="short-name"
                         onChange={(e) => {
                           const filterShortName = e.target.value;
-                          setFilterList((currentFilter) =>
+                          setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterShortName } : x
                             )
@@ -168,7 +163,7 @@ export const AddFilterList = (props) => {
                         name="save"
                         onChange={(e) => {
                           const savedToMenu = e.target.checked;
-                          setFilterList((currentFilter) =>
+                          setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToMenu } : x
                             )
@@ -186,7 +181,7 @@ export const AddFilterList = (props) => {
                         name="default-filter"
                         onChange={(e) => {
                           const savedToFavorite = e.target.checked;
-                          setFilterList((currentFilter) =>
+                          setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToFavorite } : x
                             )
@@ -202,10 +197,10 @@ export const AddFilterList = (props) => {
                   <div className=" flex flex-col sm:flex-row justify-around items-center w-20 sm:w-full mt-8">
                     <button
                       onClick={() => {
-                        setFilterList((currentFilter) =>
+                        setFilterListClients((currentFilter) =>
                           currentFilter.filter((x) => x.id !== filter.id)
                         );
-                        setFilterEditing(null);
+                        setFilterEditingClients(null);
                         checkFilters();
                       }}
                       className="text-gray-400 text-sm"
@@ -213,7 +208,7 @@ export const AddFilterList = (props) => {
                       Ištrinti
                     </button>
                     <button
-                      onClick={() => setFilterEditing(null)}
+                      onClick={() => setFilterEditingClients(null)}
                       className="text-gray-400 text-sm"
                     >
                       Atšaukti
@@ -230,7 +225,7 @@ export const AddFilterList = (props) => {
       </div>
       <button
         className={
-          filterEditing
+          filterEditingClients
             ? "hidden"
             : "flex flex-row justify-center items-center pb-2"
         }
