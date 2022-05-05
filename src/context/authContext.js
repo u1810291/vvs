@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }) => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
   const [registerBirthday, setRegisterBirthday] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("audrius@s-e.lt");
+  const [password, setPassword] = useState("EuroCash2022");
   const [recoverPassword, setRecoverPassword] = useState("");
   const [repeatRecoverPassword, setRepeatRecoverPassword] = useState("");
   const [forgotEmail, setForgotEmail] = useState("");
@@ -50,8 +50,9 @@ export const AuthProvider = ({ children }) => {
   const [sent, setSent] = useState(null);
   // const abortController = useRef(null);
   // const cancelRequest = () => abortController.current && abortController.current.abort();
+
   //Must handle scenarios:
-  //User opens an SPA view in a new browser tab
+  //User opens an SPA view in a new browser tab (old token stay in another tab) 
 
   useEffect(() => {
     if (getRefreshTokenSession() && !accessToken) {
@@ -266,7 +267,7 @@ export const AuthProvider = ({ children }) => {
     [navigate, recoverPassword]
   );
 
-  const ForgotPasswordFromUI = useCallback(
+  const ForgotPasswordFromAdmin = useCallback(
     async (e) => {
       try {
         e.preventDefault();
@@ -358,7 +359,7 @@ export const AuthProvider = ({ children }) => {
     RefreshTokenUpdate: RefreshTokenUpdate,
     HandleRecoverPassword: HandleRecoverPassword,
     ForgotPassword: ForgotPassword,
-    ForgotPasswordFromUI: ForgotPasswordFromUI,
+    ForgotPasswordFromAdmin: ForgotPasswordFromAdmin,
     user: user,
     accessToken: accessToken,
     email,

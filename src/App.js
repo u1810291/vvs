@@ -35,7 +35,7 @@ function App() {
             <Route path="Create" element={<Create />} />
             <Route path="New" element={<New />} />
             <Route path="Driver" element={<Driver />} />
-            <Route path="Client" element={<Client />} />
+            <Route path="Client/:id" element={<Client />} /> {/* /:id */}
             <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

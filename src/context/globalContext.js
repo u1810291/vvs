@@ -1,4 +1,4 @@
-import { createContext, useState, useRef } from "react";
+import { createContext, useState, useRef, useContext, useEffect } from "react";
 import { generate } from "shortid";
 
 const GlobalContext = createContext();
@@ -84,12 +84,10 @@ export const GlobalProvider = ({ children }) => {
       crew: "0",
       driver: "0",
       inTime: "0",
-      dashboardList: [
-        "Vardas Pavardė",
-        "Būsena"
-      ],
+      dashboardList: ["Vardas Pavardė", "Būsena"],
     },
   ]);
+
   const [selectedFilterClients, setSelectedFilterClients] = useState(null);
   const [filterListClients, setFilterListClients] = useState([
     {
@@ -117,6 +115,7 @@ export const GlobalProvider = ({ children }) => {
       ],
     },
   ]);
+
   const [selectedFilterObjects, setSelectedFilterObjects] = useState(null);
   const [filterListObjects, setFilterListObjects] = useState([
     {
@@ -146,7 +145,7 @@ export const GlobalProvider = ({ children }) => {
       ],
     },
   ]);
-
+  
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
     filterEditingDrivers,

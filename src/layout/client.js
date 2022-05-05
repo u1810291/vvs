@@ -3,9 +3,10 @@ import useLanguage from "../hook/useLanguage";
 import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
 import { Object } from "../components/lists/object";
-import AuthContext from "../context/authContext";
 import { clientList } from "../api/client";
 import { generate } from "shortid";
+import GlobalContext from "../context/globalContext";
+import AuthContext from "../context/authContext";
 
 function Client() {
   const { english, lithuanian, t } = useLanguage();
@@ -14,7 +15,7 @@ function Client() {
   const [clientEmail, setClientEmail] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [clientLastLogin, setClientLastLogin] = useState("");
-  const { sent, setSent, user, ForgotPasswordFromUI } = useContext(AuthContext);
+  const { sent, setSent, user, ForgotPasswordFromAdmin } = useContext(AuthContext);
 
   useEffect(() => { // get iat for all users
       if (user.iat) {
@@ -172,7 +173,7 @@ function Client() {
                         </div>
                         <div className="flex flex-col">
                         <button
-                          onClick={ForgotPasswordFromUI}
+                          onClick={ForgotPasswordFromAdmin}
                           className="flex p-1 w-32 rounded-sm text-xs px-2 mb-2 font-normal justify-center items-center text-gray-400 hover:text-gray-500 bg-gray-200"
                         >
                           <p>Priminti slaptažodi</p>

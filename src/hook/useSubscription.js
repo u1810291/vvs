@@ -1,44 +1,49 @@
-import { useState } from "react";
+import { useState, useContext, useCallback } from "react";
+import AuthContext from "../context/authContext";
+import { WebSocketLink } from "apollo-link-ws";
+import { SubscriptionClient } from "subscriptions-transport-ws";
 
-function useSubscription(api, authToken) {
+export function useSubscription(queryString, variables, authToken) {
+  const { Logout, RefreshTokenUpdate } = useContext(AuthContext);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [logoutUser, setLogoutUser] = useState(false);
 
   const subscription = useCallback(async () => {
       try {
         setLoading(true);
-        const response = await new WebSocketLink({
-          uri: "wss://ec.swarm.testavimui.eu/v1/graphql",
+        const res = await new WebSocketLink(
+          new SubscriptionClient("wss://ec.swarm.testavimui.eu/v1/graphql", {
           options: {
             reconnect: true,
-            // lazy: true,
+            lazy: true,
             inactivityTimeout: 30000,
             connectionParams: {
               headers: {
                 "content-type": "application/json",
-                Authorization: "Bearer" + String(authToken?.access),
+                "x-hasura-admin-secret": "secret",
+                Authorization: "Bearer" + String(authToken),
               },
             },
             body: JSON.stringify({
-              query: api,
+              query: queryString,
+              variables: variables,
             }),
           },
-        });
-        const data = await response.json();
-        if (response.status === 200) {
+        }));
+        const data = await res.json();
+        if (res.status === 200) {
           setData(data);
-        } else if (response.statusText === "Unauthorized") {
-          setLogoutUser(true);
+        } else if (res.statusText === "Unauthorized") {
+          Logout();
         }
       } catch (e) {
         setError(e);
       }
       setLoading(false);
-  }, [authToken?.access, api]);
+  }, [Logout, authToken, queryString, variables]);
 
-  return { data, loading, error, logoutUser, subscription };
+  return { data, loading, error, subscription };
 }
 
 export default useSubscription;
