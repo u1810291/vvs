@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -24,12 +25,19 @@ import { generate } from "shortid";
 const { AddFilterList } = require("../components/lists/addFilter");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import { Orders } from "../api/orders";
+import SlideOver from "../components/sidebars/slideOver";
+import { OverlayProvider, usePreventScroll } from "react-aria";
+import MainSidebar from "../components/sidebars/main";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function Objects() {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+
+  usePreventScroll({ isDisabled: !isOpen });
   const [sortedObjectsOrder, setSortedObjectsOrder] = useState("");
   const [sortedObjectsKeys, setSortedObjectsKeys] = useState("");
   const { expandFilterObjects, setExpandFilterObjects } =
@@ -165,12 +173,21 @@ function Objects() {
   );
 
   return (
-    <>
-      <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center min-h-screen sm:h-screen relative overflow-hidden">
-          <div className="flex flex-col h-full items-center w-full">
-            <div className="flex flex-row w-full justify-between h-full">
-              <RegularSidebarObjects />
+    <OverlayProvider>
+    <div className="container max-w-screen-xl">
+      <div className="flex w-screen flex-row justify-center h-screen">
+        <div className="flex flex-col h-full items-center w-full">
+          <div className="flex flex-row w-full justify-between h-full">
+
+            <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+              <button className="flex flex-col items-center">
+                <img
+                  onClick={() => setIsOpen(true)}
+                  className="w-4 h-4 mx-16"
+                  src={require("../assets/assets/hamburger.png")}
+                />
+              </button>
+            </div>
               <div className="flex flex-col min-h-full w-full justify-between">
                 <ObjectsHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
@@ -498,11 +515,14 @@ function Objects() {
                   </nav>
                 </div>
               </div>
+              </div>
+              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+                <MainSidebar />
+              </SlideOver>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </OverlayProvider>
   );
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -16,19 +17,35 @@ import InProcessRightSide from "../components/sides/inProcessRight";
 import DashboardMap from "../components/map/dashboard";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import GlobalContext from "../context/globalContext";
+import SlideOver from "../components/sidebars/slideOver";
+import { OverlayProvider, usePreventScroll } from "react-aria";
+import MainSidebar from "../components/sidebars/main";
 
 function New() {
   const { english, lithuanian, t } = useLanguage();
   const { pdfExportComponentNew } = useContext(GlobalContext);
   const { toPrintNew, setToPrintNew } = useContext(GlobalContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+
+  usePreventScroll({ isDisabled: !isOpen });
 
   return (
-    <>
-      <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center h-screen">
-          <div className="flex flex-col h-full items-center w-full">
-            <div className="flex flex-row w-full justify-between h-full">
-              <SidebarBack />
+      <OverlayProvider>
+        <div className="container max-w-screen-xl">
+          <div className="flex w-screen flex-row justify-center h-screen">
+            <div className="flex flex-col h-full items-center w-full">
+              <div className="flex flex-row w-full justify-between h-full">
+
+                <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                  <button className="flex flex-col items-center">
+                    <img
+                      onClick={() => setIsOpen(true)}
+                      className="w-4 h-4 mx-16"
+                      src={require("../assets/assets/hamburger.png")}
+                    />
+                  </button>
+                </div>
               <div className="flex flex-col h-full w-full">
                 {/* <NewHeader /> */}
                 {/* <InProcessHeader /> */}
@@ -72,11 +89,14 @@ function New() {
                   )}
                 </div>
               </div>
+              </div>
+              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+                <MainSidebar />
+              </SlideOver>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </OverlayProvider>
   );
 }
 

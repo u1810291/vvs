@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import RegularSidebarDrivers from "../components/sidebars/regularDrivers";
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import { DriversListHeader } from "../components/headers/driversList";
 import { DriverList } from "../components/lists/driversList";
 import { FiltersListDrivers } from "../components/lists/filterDriversList";
@@ -20,6 +21,9 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { generate } from "shortid";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import SlideOver from "../components/sidebars/slideOver";
+import { OverlayProvider, usePreventScroll } from "react-aria";
+import MainSidebar from "../components/sidebars/main";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -43,6 +47,10 @@ function DriversList() {
       setToPrint(false);
     }, 1000);
   }, []);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+
+  usePreventScroll({ isDisabled: !isOpen });
 
   function sortToggle(arr, key, order) {
     const collator = new Intl.Collator(undefined, {
@@ -101,12 +109,20 @@ function DriversList() {
   );
 
   return (
-    <>
-      <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center min-h-screen sm:h-screen relative overflow-hidden">
-          <div className="flex flex-col h-full items-center w-full">
-            <div className="flex flex-row w-full justify-between h-full">
-              <RegularSidebarDrivers />
+    <OverlayProvider>
+    <div className="container max-w-screen-xl">
+      <div className="flex w-screen flex-row justify-center h-screen">
+        <div className="flex flex-col h-full items-center w-full">
+          <div className="flex flex-row w-full justify-between h-full">
+          <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                  <button className="flex flex-col items-center">
+                    <img
+                      onClick={() => setIsOpen(true)}
+                      className="w-4 h-4 mx-16"
+                      src={require("../assets/assets/hamburger.png")}
+                    />
+                  </button>
+                </div>
               <div className="flex flex-col min-h-full w-full justify-between">
                 <DriversListHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
@@ -368,11 +384,14 @@ function DriversList() {
                   </nav>
                 </div>
               </div>
+              </div>
+              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+                <MainSidebar />
+              </SlideOver>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </OverlayProvider>
   );
 }
 

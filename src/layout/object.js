@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import useLanguage from "../hook/useLanguage";
 import SidebarBack from "../components/sidebars/back";
@@ -8,6 +9,9 @@ import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
 import { EventsList } from "../api/events";
 import { generate } from "shortid";
+import SlideOver from "../components/sidebars/slideOver";
+import { OverlayProvider, usePreventScroll } from "react-aria";
+import MainSidebar from "../components/sidebars/main";
 
 function Object() {
   const { english, lithuanian, t } = useLanguage();
@@ -22,6 +26,10 @@ function Object() {
   const [to, setTo] = useState("");
   const [time, setTime] = useState("");
   const [modem, setModem] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+
+  usePreventScroll({ isDisabled: !isOpen });
 
   const objectDescriptionFunc = useCallback(async (e) => {
     setObjectDescription(e.target.value);
@@ -70,17 +78,25 @@ function Object() {
   }, []);
 
   return (
-    <>
+    <OverlayProvider>
       <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center min-h-screen relative overflow-hidden">
-          <div className="flex flex-col min-h-screen items-center w-full">
-            <div className="flex flex-row w-full justify-between min-h-screen ">
-              <SidebarBack />
-              <div className="flex flex-col min-h-screen w-full justify-between">
+        <div className="flex w-screen flex-row justify-center h-screen">
+          <div className="flex flex-col h-full items-center w-full">
+            <div className="flex flex-row w-full justify-between h-full">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                <button className="flex flex-col items-center">
+                  <img
+                    onClick={() => setIsOpen(true)}
+                    className="w-4 h-4 mx-16"
+                    src={require("../assets/assets/hamburger.png")}
+                  />
+                </button>
+              </div>
+              <div className="flex flex-col min-h-full w-full justify-between">
                 <ObjectHeader />
-                <div className="flex flex-row min-h-screen">
-                  <div className="flex pl-4 flex-row w-full h-full justify-between">
-                    <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
+                <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
+                  <div className="flex pl-4 flex-row justify-between">
+                    <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
                       <div className="flex flex-col">
                         <div className="flex flex-row justify-between">
                           <div className="flex flex-col">
@@ -254,7 +270,7 @@ function Object() {
                       </div>
 
                       <div>
-                        <p className="font-semibold ml-6 mt-4 text-sm mb-2 text-gray-900">
+                        <p className="font-semibold ml-6 text-sm mb-2 text-gray-900">
                           Reagavimo informacija
                         </p>
                         <div className="flex flex-col">
@@ -348,7 +364,7 @@ function Object() {
                             Įvykiai
                           </p>
                         </div>
-                        <div className="overflow-y-auto h-96 scrollbar-gone">
+                        <div className="h-full">
                           {EventsList.map((data) => (
                             <Events
                               key={generate()}
@@ -369,7 +385,7 @@ function Object() {
 
                     <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-1/4 lg:w-1/4 border-b border-l">
                       <div className="flex flex-col">
-                        <div className="flex flex-col w-full">
+                        <div className="flex flex-col w-full h-full">
                           <div className="flex flex-row w-full border-b h-12 items-center justify-between">
                             <div className="flex ml-4 flex-row w-full">
                               <p className="text-sm truncate my-2 font-semibold">
@@ -378,7 +394,9 @@ function Object() {
                             </div>
                           </div>
 
-                          <div className="overflow-y-auto h-96 scrollbar-gone">
+                          <div className="overflow-y-auto scrollbar-gone">
+                            {" "}
+                            {/* h-96 */}
                             {PhonesList.map((data) => (
                               <div
                                 key={data.id}
@@ -404,10 +422,10 @@ function Object() {
                             </div>
                           </div>
 
-                          <div className="flex flex-col w-full ml-4">
-                            <div className="flex flex-col w-20">
+                          <div className="flex flex-col w-full">
+                            <div className="flex flex-col w-full">
                               <div className="flex flex-row">
-                                <p className="text-sm truncate mt-2 mb-1">
+                                <p className="text-sm ml-4 truncate mt-2 mb-1">
                                   Modemo nr.
                                 </p>
                               </div>
@@ -417,7 +435,7 @@ function Object() {
                                 placeholder=""
                                 value={modem}
                                 onChange={modemFunc}
-                                className="flex w-32 border h-6 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
+                                className="flex w-32 ml-4 border h-6 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
                               />
                             </div>
                             <div className="flex flex-row items-center mt-6">
@@ -425,7 +443,7 @@ function Object() {
                                 id="control"
                                 name="control"
                                 type="checkbox"
-                                className="h-6 w-6 text-gray-600  focus:ring-gray-500 border-gray-300 rounded-sm"
+                                className="h-6 w-6 ml-4 text-gray-600  focus:ring-gray-500 rounded-sm"
                               />
                               <p className="ml-4 self-start text-sm truncate my-2">
                                 Signalizacijos valdymas
@@ -441,7 +459,7 @@ function Object() {
                             </div>
                           </div>
 
-                          <div className="overflow-y-auto h-96 scrollbar-gone">
+                          <div className="h-full">
                             <div className="flex flex-row w-full border-b h-12 items-center justify-between">
                               <div className="flex ml-4 flex-row w-full justify-between">
                                 <p className="text-sm text-gray-400 font-normal truncate my-2">
@@ -490,10 +508,13 @@ function Object() {
                 </div>
               </div>
             </div>
+            <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+              <MainSidebar />
+            </SlideOver>
           </div>
         </div>
       </div>
-    </>
+    </OverlayProvider>
   );
 }
 

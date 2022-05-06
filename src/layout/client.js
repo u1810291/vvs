@@ -5,7 +5,7 @@ import { CreateHeader } from "../components/headers/create";
 import { Object } from "../components/lists/object";
 import { clientList } from "../api/client";
 import { generate } from "shortid";
-import GlobalContext from "../context/globalContext";
+// import GlobalContext from "../context/globalContext";
 import AuthContext from "../context/authContext";
 
 function Client() {

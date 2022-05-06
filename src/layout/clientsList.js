@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -5,7 +6,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import RegularSidebarClients from "../components/sidebars/regularClients";
+// import RegularSidebarClients from "../components/sidebars/regularClients";
 import { ClientsListHeader } from "../components/headers/clientsList";
 import { ClientList } from "../components/lists/clientsList";
 import { FiltersListClients } from "../components/lists/filterClientsList";
@@ -15,7 +16,7 @@ const {
 } = require("../components/lists/addFilterClients");
 import GlobalContext from "../context/globalContext";
 import AuthContext from "../context/authContext";
-import { Clients } from "../api/clients";
+// import { Clients } from "../api/clients";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -26,6 +27,9 @@ import { Spinner } from "react-activity";
 import { getUsers } from "../api/queryForms/queryString/users";
 import { getAllUsers } from "../api/queryForms/variables/users";
 import { Link } from "react-router-dom";
+import SlideOver from "../components/sidebars/slideOver";
+import { OverlayProvider, usePreventScroll } from "react-aria";
+import MainSidebar from "../components/sidebars/main";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -51,7 +55,10 @@ function ClientsList() {
       setToPrint(false);
     }, 1000);
   }, []);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+  usePreventScroll({ isDisabled: !isOpen });
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -170,11 +177,22 @@ function ClientsList() {
           </Link>
         </div>
       ) : (
+        <OverlayProvider>
         <div className="container max-w-screen-xl">
-          <div className="flex w-screen flex-row justify-center min-h-screen sm:h-screen relative overflow-hidden">
+          <div className="flex w-screen flex-row justify-center h-screen">
             <div className="flex flex-col h-full items-center w-full">
               <div className="flex flex-row w-full justify-between h-full">
-                <RegularSidebarClients />
+
+                <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                  <button className="flex flex-col items-center">
+                    <img
+                      onClick={() => setIsOpen(true)}
+                      className="w-4 h-4 mx-16"
+                      src={require("../assets/assets/hamburger.png")}
+                    />
+                  </button>
+                </div>
+
                 <div className="flex flex-col min-h-full w-full justify-between">
                   <ClientsListHeader />
                   <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
@@ -474,10 +492,14 @@ function ClientsList() {
                     </nav>
                   </div>
                 </div>
-              </div>
+</div>
+              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+                <MainSidebar />
+              </SlideOver>
             </div>
           </div>
         </div>
+      </OverlayProvider>
       )}
     </>
   );

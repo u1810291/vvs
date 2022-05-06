@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -6,9 +7,8 @@ import React, {
   useRef,
 } from "react";
 import useLanguage from "../hook/useLanguage";
-import SidebarBack from "../components/sidebars/back";
+// import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
-import GlobalContext from "../context/globalContext";
 import { StandardMap } from "../feature/mapStandard";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -19,6 +19,9 @@ import {
   InfoWindow,
   useJsApiLoader,
 } from "@react-google-maps/api";
+import SlideOver from "../components/sidebars/slideOver";
+import { OverlayProvider, usePreventScroll } from "react-aria";
+import MainSidebar from "../components/sidebars/main";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -52,6 +55,10 @@ function Create() {
   const [map, setMap] = useState(null);
   const [clickedPos, setClickedPos] = useState({});
   const [textArea, setTextArea] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+
+  usePreventScroll({ isDisabled: !isOpen });
 
   const onMapClick = useCallback((e) => {
     // console.log(e);
@@ -88,16 +95,25 @@ function Create() {
   );
 
   return (
-    <>
-      <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center h-screen relative overflow-hidden">
-          <div className="flex flex-col h-screen items-center w-full ">
-            <div className="flex flex-row w-full justify-between h-screen ">
-              <SidebarBack />
-              <div className="flex flex-col h-screen w-full justify-between">
+      <OverlayProvider>
+        <div className="container max-w-screen-xl">
+          <div className="flex w-screen flex-row justify-center h-screen">
+            <div className="flex flex-col h-full items-center w-full">
+              <div className="flex flex-row w-full justify-between h-full">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                  <button className="flex flex-col items-center">
+                    <img
+                      onClick={() => setIsOpen(true)}
+                      className="w-4 h-4 mx-16"
+                      src={require("../assets/assets/hamburger.png")}
+                    />
+                  </button>
+                </div>
+
+              <div className="flex flex-col h-full w-full justify-between">
                 <CreateHeader />
-                <div className="flex flex-col h-screen">
-                  <div className="pl-4 flex-col w-full h-screen">
+                <div className="flex flex-col h-full">
+                  <div className="pl-4 flex-col w-full h-full">
                     <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/5 lg:w-2/6">
                       <div className="flex flex-col">
                         <div className="flex flex-row w-full">
@@ -400,11 +416,14 @@ function Create() {
                   </div>
                 </div>
               </div>
+              </div>
+              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+                <MainSidebar />
+              </SlideOver>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </OverlayProvider>
   );
 }
 

@@ -24,6 +24,7 @@ function Navigation() {
                   />
                 </button>
               </div>
+              {/* */}
               <SlideOver isOpen={isOpen} onClose={handleOnClose}>
                 <div className="flex flex-col justify-between text-white w-96 h-full">
                   <div className="flex flex-row">

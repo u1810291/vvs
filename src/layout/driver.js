@@ -1,15 +1,21 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback } from "react";
-import useLanguage from "../hook/useLanguage";
-import SidebarBack from "../components/sidebars/back";
+// import SidebarBack from "../components/sidebars/back";
+// import GlobalContext from "../context/globalContext";
 import { CreateHeader } from "../components/headers/create";
-import GlobalContext from "../context/globalContext";
+import SlideOver from "../components/sidebars/slideOver";
+import { OverlayProvider, usePreventScroll } from "react-aria";
+import MainSidebar from "../components/sidebars/main";
 
 function Driver() {
-  const { english, lithuanian, t } = useLanguage();
   const [driverName, setDriverName] = useState("");
   const [driverSurname, setDriverSurname] = useState("");
   const [driverUser, setDriverUser] = useState("");
   const [driverPassword, setDriverPassword] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+
+  usePreventScroll({ isDisabled: !isOpen });
 
   const driverNameFunc = useCallback(async (e) => {
     setDriverName(e.target.value);
@@ -28,12 +34,20 @@ function Driver() {
   }, [setDriverPassword]);
 
   return (
-    <>
-      <div className="container max-w-screen-xl">
-        <div className="flex w-screen flex-row justify-center h-screen relative overflow-hidden">
-          <div className="flex flex-col h-screen items-center w-full ">
-            <div className="flex flex-row w-full justify-between h-screen ">
-              <SidebarBack />
+    <OverlayProvider>
+    <div className="container max-w-screen-xl">
+      <div className="flex w-screen flex-row justify-center h-screen">
+        <div className="flex flex-col h-full items-center w-full">
+          <div className="flex flex-row w-full justify-between h-full">
+          <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                  <button className="flex flex-col items-center">
+                    <img
+                      onClick={() => setIsOpen(true)}
+                      className="w-4 h-4 mx-16"
+                      src={require("../assets/assets/hamburger.png")}
+                    />
+                  </button>
+                </div>
               <div className="flex flex-col h-screen w-full justify-between">
                 <CreateHeader />
                 <div className="flex flex-row h-screen">
@@ -146,11 +160,14 @@ function Driver() {
                   </div>
                 </div>
               </div>
+              </div>
+              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+                <MainSidebar />
+              </SlideOver>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </OverlayProvider>
   );
 }
 
