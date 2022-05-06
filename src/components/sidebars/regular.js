@@ -1,12 +1,18 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import GlobalContext from "../../context/globalContext";
 
 const RegularSidebar = () => {
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = () => setIsOpen(false);
+
+  // usePreventScroll({ isDisabled: !isOpen });
+  
   const menuFunc = useCallback(async () => {
-    console.log("menuOpen");
-  }, []);
+    setIsOpen(true)
+    console.log(isOpen)
+  }, [isOpen]);
 
   // const selectFilter = useCallback(async (filter) => {
   //   setFilterList((currentFilter) =>
@@ -23,12 +29,20 @@ const RegularSidebar = () => {
       <div className="flex flex-col items-center text-gray-400">
         {filterList.map((filter) => {
           if (filter.savedToMenu === true) {
-          return (
-            // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-            <button key={filter.id} onClick={() => setSelectedFilter(filter.id)} className={selectedFilter === filter.id ? "font-light text-md mt-6 text-white" : "font-light text-md mt-6 hover:text-white"}>
-              {filter.filterShortName}
-            </button>
-          );
+            return (
+              <button
+                key={filter.id}
+                // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                onClick={() => setSelectedFilter(filter.id)}
+                className={
+                  selectedFilter === filter.id
+                    ? "font-light text-md mt-6 text-white"
+                    : "font-light text-md mt-6 hover:text-white"
+                }
+              >
+                {filter.filterShortName}
+              </button>
+            );
           }
         })}
       </div>

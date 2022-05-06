@@ -3,8 +3,9 @@ import GlobalContext from "../../context/globalContext";
 
 const RegularSidebarObjects = () => {
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
-  const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
-  
+  const { selectedFilterObjects, setSelectedFilterObjects } =
+    useContext(GlobalContext);
+
   const menuFunc = useCallback(async () => {
     console.log("menuOpen");
   }, []);
@@ -24,12 +25,20 @@ const RegularSidebarObjects = () => {
       <div className="flex flex-col items-center text-gray-400">
         {filterListObjects.map((filter) => {
           if (filter.savedToMenu === true) {
-          return (
-            // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-            <button key={filter.id} onClick={() => setSelectedFilterObjects(filter.id)} className={selectedFilterObjects === filter.id ? "font-light text-md mt-6 text-white" : "font-light text-md mt-6 hover:text-white"}>
-              {filter.filterShortName}
-            </button>
-          );
+            return (
+              <button
+                key={filter.id}
+                // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                onClick={() => setSelectedFilterObjects(filter.id)}
+                className={
+                  selectedFilterObjects === filter.id
+                    ? "font-light text-md mt-6 text-white"
+                    : "font-light text-md mt-6 hover:text-white"
+                }
+              >
+                {filter.filterShortName}
+              </button>
+            );
           }
         })}
       </div>

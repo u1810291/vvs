@@ -5,6 +5,7 @@ import { AuthProvider } from "./context/authContext";
 import ProtectedRoute from "./feature/protected";
 
 import Login from "./layout/login";
+import Navigation from "./layout/navigation";
 import Dashboard from "./layout/dashboard";
 import Object from "./layout/object";
 import Filter from "./layout/filter";
@@ -26,6 +27,7 @@ function App() {
           <Routes>
           <Route element={<ProtectedRoute />}>
             <Route path="/" exec element={<Login />} />
+            <Route path="Navigation" element={<Navigation />} />
             <Route path="Dashboard" element={<Dashboard />} />
             <Route path="Filter" element={<Filter />} />
             <Route path="Object" element={<Object />} />
