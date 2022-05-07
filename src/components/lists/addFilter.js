@@ -147,6 +147,7 @@ export const AddFilterList = (props) => {
                       <input
                         id="short-name"
                         name="short-name"
+                        maxLength={4}
                         onChange={(e) => {
                           const filterShortName = e.target.value;
                           setFilterList((currentFilter) =>
@@ -208,17 +209,17 @@ export const AddFilterList = (props) => {
                         setFilterEditing(null);
                         checkFilters();
                       }}
-                      className="text-gray-400 text-sm"
+                      className="text-gray-400  hover:text-gray-500 text-sm"
                     >
                       Ištrinti
                     </button>
                     <button
                       onClick={() => setFilterEditing(null)}
-                      className="text-gray-400 text-sm"
+                      className="text-gray-400 text-sm hover:text-gray-500"
                     >
                       Atšaukti
                     </button>
-                    <button className="flex py-2 px-4 mr-4 rounded-sm text-xs mx-2 font-normal items-center text-white bg-slate-600">
+                    <button className="flex py-2 px-4 mr-4 rounded-sm text-xs mx-2 font-normal items-center text-white hover:bg-slate-500 bg-slate-600">
                       <p onClick={saveFilters}>Išsaugoti</p>
                     </button>
                   </div>

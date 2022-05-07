@@ -7,12 +7,9 @@ import React, {
   useRef,
 } from "react";
 import useLanguage from "../hook/useLanguage";
-import SidebarBack from "../components/sidebars/back";
-import { NewHeader } from "../components/headers/new";
-import { InProcessHeader } from "../components/headers/inProcess";
+import { useNavigate } from "react-router-dom";
 import { FinishedHeader } from "../components/headers/finished";
 import NewSideLeft from "../components/sides/newSideLeft";
-import NewSideRight from "../components/sides/newSideRight";
 import InProcessRightSide from "../components/sides/inProcessRight";
 import DashboardMap from "../components/map/dashboard";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
@@ -23,12 +20,17 @@ import MainSidebar from "../components/sidebars/main";
 
 function New() {
   const { english, lithuanian, t } = useLanguage();
+  const navigate = useNavigate();
   const { pdfExportComponentNew } = useContext(GlobalContext);
   const { toPrintNew, setToPrintNew } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
 
   usePreventScroll({ isDisabled: !isOpen });
+
+  const backFunc = useCallback(async () => {
+    navigate(-1);
+  }, [navigate]);
 
   return (
       <OverlayProvider>
@@ -37,15 +39,22 @@ function New() {
             <div className="flex flex-col h-full items-center w-full">
               <div className="flex flex-row w-full justify-between h-full">
 
-                <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                  <button className="flex flex-col items-center">
-                    <img
-                      onClick={() => setIsOpen(true)}
-                      className="w-4 h-4 mx-16"
-                      src={require("../assets/assets/hamburger.png")}
-                    />
-                  </button>
-                </div>
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                <button onClick={backFunc}>
+                  <img src={require("../assets/assets/left.png")}></img>
+                </button>
+                <img
+                  className="pt-6"
+                  src={require("../assets/assets/Line.png")}
+                ></img>
+                <button className="flex flex-col items-center pt-6">
+                  <img
+                    onClick={() => setIsOpen(true)}
+                    className="w-4 h-4 mx-16"
+                    src={require("../assets/assets/hamburger.png")}
+                  />
+                </button>
+              </div>
               <div className="flex flex-col h-full w-full">
                 {/* <NewHeader /> */}
                 {/* <InProcessHeader /> */}

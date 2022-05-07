@@ -6,8 +6,6 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import useLanguage from "../hook/useLanguage";
-import RegularSidebarObjects from "../components/sidebars/regularObjects";
 import { ObjectsHeader } from "../components/headers/objects";
 import { ObjectsList } from "../components/lists/objectsList";
 
@@ -28,6 +26,7 @@ import { Orders } from "../api/orders";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
+import { SearchButton } from "../components/buttons/searchButton";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -44,6 +43,7 @@ function Objects() {
     useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
+  const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -174,20 +174,41 @@ function Objects() {
 
   return (
     <OverlayProvider>
-    <div className="container max-w-screen-xl">
-      <div className="flex w-screen flex-row justify-center h-screen">
-        <div className="flex flex-col h-full items-center w-full">
-          <div className="flex flex-row w-full justify-between h-full">
-
-            <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-              <button className="flex flex-col items-center">
+      <div className="container max-w-screen-xl">
+        <div className="flex w-screen flex-row justify-center h-screen">
+          <div className="flex flex-col h-full items-center w-full">
+            <div className="flex flex-row w-full justify-between h-full">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                <button className="flex flex-col items-center">
+                  <img
+                    onClick={() => setIsOpen(true)}
+                    className="w-4 h-4 mx-16"
+                    src={require("../assets/assets/hamburger.png")}
+                  />
+                </button>
                 <img
-                  onClick={() => setIsOpen(true)}
-                  className="w-4 h-4 mx-16"
-                  src={require("../assets/assets/hamburger.png")}
-                />
-              </button>
-            </div>
+                  className="pt-6"
+                  src={require("../assets/assets/Line.png")}
+                ></img>
+                {filterListObjects.map((filter) => {
+                  if (filter.savedToMenu === true) {
+                    return (
+                      <button
+                        key={filter.id}
+                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                        onClick={() => setSelectedFilterObjects(filter.id)}
+                        className={
+                          selectedFilterObjects === filter.id
+                            ? "font-light text-md mt-6 text-white"
+                            : "font-light text-md mt-6 text-gray-400 hover:text-white"
+                        }
+                      >
+                        {filter.filterShortName}
+                      </button>
+                    );
+                  }
+                })}
+              </div>
               <div className="flex flex-col min-h-full w-full justify-between">
                 <ObjectsHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
@@ -223,9 +244,7 @@ function Objects() {
                               >
                                 Eksportuoti
                               </button>
-                              <button className="flex justify-center w-24 mr-2 rounded-sm p-1 border border-transparent text-xs font-normal text-white hover:shadow-none bg-slate-600 focus:outline-none">
-                                Ieškoti
-                              </button>
+                              <SearchButton />
                             </div>
                           </div>
                         </div>
@@ -515,14 +534,14 @@ function Objects() {
                   </nav>
                 </div>
               </div>
-              </div>
-              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
-                <MainSidebar />
-              </SlideOver>
             </div>
+            <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+              <MainSidebar />
+            </SlideOver>
           </div>
         </div>
-      </OverlayProvider>
+      </div>
+    </OverlayProvider>
   );
 }
 

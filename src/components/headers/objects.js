@@ -23,13 +23,18 @@ export function ObjectsHeader() {
         <h4 className="text-normal ml-2 hidden xxl:inline-block font-normal text-gray-500">
           Visi duomenys
         </h4>
-        <button>
-          <img
-            onClick={filterFunc}
-            src={require("../../assets/assets/filter.png")}
-            className="h-4 w-4 ml-4 mr-8 hover:h-6 hover:w-6 hover:ml-6"
-            alt="filter"
-          />
+        <button onClick={filterFunc}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 ml-4 mr-8 fill-gray-300 hover:fill-gray-400"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+              clipRule="evenodd"
+            />
+          </svg>
         </button>
         <Search />
       </div>

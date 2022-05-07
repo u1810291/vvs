@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   // const cancelRequest = () => abortController.current && abortController.current.abort();
 
   //Must handle scenarios:
-  //User opens an SPA view in a new browser tab (old token stay in another tab) 
+  //User opens an view in a new browser tab (old token stay in another tab) 
 
   useEffect(() => {
     if (getRefreshTokenSession() && !accessToken) {

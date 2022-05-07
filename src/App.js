@@ -5,12 +5,11 @@ import { AuthProvider } from "./context/authContext";
 import ProtectedRoute from "./feature/protected";
 
 import Login from "./layout/login";
-import Navigation from "./layout/navigation";
 import Dashboard from "./layout/dashboard";
 import Object from "./layout/object";
-import Filter from "./layout/filter";
-import DriversList from "./layout/driversList";
-import ClientsList from "./layout/clientsList";
+import Tasks from "./layout/tasks";
+import Drivers from "./layout/drivers";
+import Clients from "./layout/clients";
 import Objects from "./layout/objects";
 import Create from "./layout/create";
 import Driver from "./layout/driver";
@@ -27,12 +26,11 @@ function App() {
           <Routes>
           <Route element={<ProtectedRoute />}>
             <Route path="/" exec element={<Login />} />
-            <Route path="Navigation" element={<Navigation />} />
             <Route path="Dashboard" element={<Dashboard />} />
-            <Route path="Filter" element={<Filter />} />
+            <Route path="Tasks" element={<Tasks />} />
             <Route path="Object" element={<Object />} />
-            <Route path="DriversList" element={<DriversList />} />
-            <Route path="ClientsList" element={<ClientsList />} />
+            <Route path="Drivers" element={<Drivers />} />
+            <Route path="Clients" element={<Clients />} />
             <Route path="Objects" element={<Objects />} />
             <Route path="Create" element={<Create />} />
             <Route path="New" element={<New />} />

@@ -6,13 +6,13 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import useLanguage from "../hook/useLanguage";
 // import SidebarBack from "../components/sidebars/back";
 import { CreateHeader } from "../components/headers/create";
 import { StandardMap } from "../feature/mapStandard";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   GoogleMap,
   Marker,
@@ -50,7 +50,7 @@ const markerIcon = {
 };
 
 function Create() {
-  const { english, lithuanian, t } = useLanguage();
+  const navigate = useNavigate();
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [clickedPos, setClickedPos] = useState({});
@@ -73,10 +73,10 @@ function Create() {
     mapRef.current = null;
   }, []);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCM9HFBcLjd0qeL0dgtFwOpeqUWy-aAB5M",
-  });
+  // const { isLoaded } = useJsApiLoader({
+  //   id: "google-map-script",
+  //   googleMapsApiKey: "AIzaSyCM9HFBcLjd0qeL0dgtFwOpeqUWy-aAB5M",
+  // });
 
   const textAreaFunc = useCallback(
     async (e) => {
@@ -94,6 +94,10 @@ function Create() {
     [textArea]
   );
 
+  const backFunc = useCallback(async () => {
+    navigate(-1);
+  }, [navigate]);
+
   return (
       <OverlayProvider>
         <div className="container max-w-screen-xl">
@@ -101,14 +105,21 @@ function Create() {
             <div className="flex flex-col h-full items-center w-full">
               <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                  <button className="flex flex-col items-center">
-                    <img
-                      onClick={() => setIsOpen(true)}
-                      className="w-4 h-4 mx-16"
-                      src={require("../assets/assets/hamburger.png")}
-                    />
-                  </button>
-                </div>
+                <button onClick={backFunc}>
+                  <img src={require("../assets/assets/left.png")}></img>
+                </button>
+                <img
+                  className="pt-6"
+                  src={require("../assets/assets/Line.png")}
+                ></img>
+                <button className="flex flex-col items-center pt-6">
+                  <img
+                    onClick={() => setIsOpen(true)}
+                    className="w-4 h-4 mx-16"
+                    src={require("../assets/assets/hamburger.png")}
+                  />
+                </button>
+              </div>
 
               <div className="flex flex-col h-full w-full justify-between">
                 <CreateHeader />
@@ -314,8 +325,6 @@ function Create() {
                             </Menu.Items>
                           </Transition>
                         </Menu>
-
-                        {isLoaded ? (
                           <div className="w-full h-72 relative overflow-hidden">
                             <GoogleMap
                               mapContainerStyle={containerStyle}
@@ -334,8 +343,6 @@ function Create() {
                               <></>
                             </GoogleMap>
                           </div>
-                        ) : null}
-
                         <Menu
                           as="div"
                           className="relative inline-block text-left w-full my-4"

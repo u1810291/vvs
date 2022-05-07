@@ -23,7 +23,7 @@ export function Assign2timesCard() {
           0.07s
         </button>
         <div className="flex">
-          <button className="flex justify-center py-1 mr-2 rounded-sm px-4 border border-transparent mx-1  text-xs font-normal text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none">
+          <button className="flex justify-center py-1 mr-2 rounded-sm px-4 border border-transparent mx-1  text-xs font-normal text-white font-montserrat hover:shadow-none hover:bg-slate-500  bg-slate-600 focus:outline-none">
             Priskirti
           </button>
         </div>

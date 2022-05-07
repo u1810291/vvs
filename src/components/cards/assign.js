@@ -16,7 +16,7 @@ export function AssignCard() {
         </div>
       </div>
       <div className="flex">
-        <button className="flex justify-center py-1 mr-2 rounded-sm px-4 border border-transparent text-xs font-normal text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none">
+        <button className="flex justify-center py-1 mr-2 rounded-sm px-4 border border-transparent text-xs font-normal text-white font-montserrat hover:shadow-none bg-slate-600 hover:bg-slate-500 focus:outline-none">
           Priskirti
         </button>
       </div>

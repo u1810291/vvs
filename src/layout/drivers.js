@@ -5,9 +5,8 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import RegularSidebarDrivers from "../components/sidebars/regularDrivers";
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
-import { DriversListHeader } from "../components/headers/driversList";
+import { DriversHeader } from "../components/headers/drivers";
 import { DriverList } from "../components/lists/driversList";
 import { FiltersListDrivers } from "../components/lists/filterDriversList";
 import { OptionsListDrivers } from "../components/lists/optionsDriversList";
@@ -19,11 +18,11 @@ import { Drivers } from "../api/drivers";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { generate } from "shortid";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
+import { SearchButton } from "../components/buttons/searchButton";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -36,6 +35,7 @@ function DriversList() {
     useContext(GlobalContext);
   const { selectedFilterDrivers, setSelectedFilterDrivers } =
     useContext(GlobalContext);
+  const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -110,21 +110,43 @@ function DriversList() {
 
   return (
     <OverlayProvider>
-    <div className="container max-w-screen-xl">
-      <div className="flex w-screen flex-row justify-center h-screen">
-        <div className="flex flex-col h-full items-center w-full">
-          <div className="flex flex-row w-full justify-between h-full">
-          <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                  <button className="flex flex-col items-center">
-                    <img
-                      onClick={() => setIsOpen(true)}
-                      className="w-4 h-4 mx-16"
-                      src={require("../assets/assets/hamburger.png")}
-                    />
-                  </button>
-                </div>
+      <div className="container max-w-screen-xl">
+        <div className="flex w-screen flex-row justify-center h-screen">
+          <div className="flex flex-col h-full items-center w-full">
+            <div className="flex flex-row w-full justify-between h-full">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                <button className="flex flex-col items-center text-gray-400">
+                  <img
+                    onClick={() => setIsOpen(true)}
+                    className="w-4 h-4 mx-16"
+                    src={require("../assets/assets/hamburger.png")}
+                  />
+                </button>
+                <img
+                  className="pt-6"
+                  src={require("../assets/assets/Line.png")}
+                ></img>
+                {filterListDrivers.map((filter) => {
+                  if (filter.savedToMenu === true) {
+                    return (
+                      <button
+                        key={filter.id}
+                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                        onClick={() => setSelectedFilterDrivers(filter.id)}
+                        className={
+                          selectedFilterDrivers === filter.id
+                            ? "font-light text-md mt-6 text-white"
+                            : "font-light text-md mt-6 text-gray-400 hover:text-white"
+                        }
+                      >
+                        {filter.filterShortName}
+                      </button>
+                    );
+                  }
+                })}
+              </div>
               <div className="flex flex-col min-h-full w-full justify-between">
-                <DriversListHeader />
+                <DriversHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                   <div className="flex flex-row w-full">
                     {expandFilterDrivers ? (
@@ -158,9 +180,7 @@ function DriversList() {
                               >
                                 Eksportuoti
                               </button>
-                              <button className="flex justify-center w-24 mr-2 rounded-sm p-1 border border-transparent text-xs font-normal text-white hover:shadow-none bg-slate-600 focus:outline-none">
-                                Ieškoti
-                              </button>
+                              <SearchButton />
                             </div>
                           </div>
                         </div>
@@ -384,14 +404,14 @@ function DriversList() {
                   </nav>
                 </div>
               </div>
-              </div>
-              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
-                <MainSidebar />
-              </SlideOver>
             </div>
+            <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+              <MainSidebar />
+            </SlideOver>
           </div>
         </div>
-      </OverlayProvider>
+      </div>
+    </OverlayProvider>
   );
 }
 

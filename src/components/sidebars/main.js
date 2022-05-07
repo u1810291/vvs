@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useContext, useCallback } from "react";
+import { Link } from "react-router-dom";
+import AuthContext from "../../context/authContext";
 
 const MainSidebar = () => {
+  const { Logout } = useContext(AuthContext);
+  const selfService = useCallback(() => {
+    console.log("selfService");
+  }, []);
+
   return (
     <div className="flex flex-col justify-between text-white w-96 h-full">
       <div className="flex flex-row">
@@ -10,114 +17,176 @@ const MainSidebar = () => {
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col items-start w-full">
-          <button className="text-gray-200 hover:text-gray-400">Pultas</button>
-        </div>
-        <div className="items-start flex flex-col w-full">
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          <Link to="/dashboard" className="text-gray-200 hover:text-gray-400">
             Pultas
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+        </div>
+        <div className="items-start flex flex-col w-full">
+          <Link
+            to="/dashboard"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
+            Pultas
+          </Link>
+          <Link
+            to="/task"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Užduotys
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/task"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Leidimai
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/violations"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Pažeidimai
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col items-start w-full">
-          <button className="text-gray-200 hover:text-gray-400">
+          <Link to="/crews" className="text-gray-200 hover:text-gray-400">
             Ekipažai
-          </button>
+          </Link>
         </div>
         <div className="items-start flex flex-col w-full">
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          <Link
+            to="/crews"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Ekipažai
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/drivers"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Vairuotojai
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/dislocation"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Dislokacijos zonos
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col items-start w-full">
-          <button className="text-gray-200 hover:text-gray-400">
+          <Link to="/objects" className="text-gray-200 hover:text-gray-400">
             Objektai
-          </button>
+          </Link>
         </div>
         <div className="items-start flex flex-col w-full">
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          <Link
+            to="/objects"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Objektai
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/objects"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Modemai
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/keys"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Raktai
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col items-start w-full">
-          <button className="text-gray-200 hover:text-gray-400">
+          <button
+            onClick={selfService}
+            className="text-gray-200 hover:text-gray-400"
+          >
             Savitarna
           </button>
         </div>
         <div className="items-start flex flex-col w-full">
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          <Link
+            to="/clients"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Klientai
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/help"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Pagalba
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col items-start w-full">
-          <button className="text-gray-200 hover:text-gray-400">
+          <Link to="/reports" className="text-gray-200 hover:text-gray-400">
             Ataskaitos
-          </button>
+          </Link>
         </div>
         <div className="items-start flex flex-col w-full">
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          <Link
+            to="/report"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Ataskaita 1
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/report"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Ataskaita 2
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col items-start w-full">
-          <button className="text-gray-200 hover:text-gray-400">
+          <Link to="/settings" className="text-gray-200 hover:text-gray-400">
             Nustatymai
-          </button>
+          </Link>
         </div>
         <div className="items-start flex flex-col w-full">
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          <Link
+            to="/settings"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Nustatymai?
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/classifiers"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Klasifikatoriai
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <Link
+            to="/users"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Vartotojai
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col text-sm items-start font-light">
           <img src={require("../../assets/assets/Line.png")}></img>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          <Link
+            to="/user"
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Mano paskyra
-          </button>
-          <button className="font-light text-normal text-gray-200 hover:text-gray-400">
+          </Link>
+          <button
+            onClick={Logout}
+            className="font-light text-normal text-gray-200 hover:text-gray-400"
+          >
             Atsijungti
           </button>
         </div>

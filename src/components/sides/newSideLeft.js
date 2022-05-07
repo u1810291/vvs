@@ -9,10 +9,10 @@ const NewSideLeft = () => {
     <>
       <div className="flex flex-row items-end border bg-white border-b-2 justify-between">
         <div className="flex flex-col h-28">
-          <h4 className="text-lg ml-2 font-normal font-dosis mt-4">
+          <h2 className="text-normal ml-2 font-light mt-4 w-3/4">
             UAB &quot;Įmonė&quot; Sekretoriatas + direktorius, paradinės pusės 2
             aukštas
-          </h4>
+          </h2>
           <h5 className="text-sm ml-2 text-gray-400 font-normal mt-2">
             Vilnius, pievu g. 9
           </h5>

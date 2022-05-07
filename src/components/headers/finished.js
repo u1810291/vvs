@@ -34,7 +34,7 @@ export function FinishedHeader() {
         ></img>
         <button
           onClick={handleExportWithComponent}
-          className="flex justify-center md:mr-6 p-1 text-normal font-normal"
+          className="flex justify-center md:mr-6 p-1 text-normal font-normal hover:text-gray-500"
         >
           Eksportuoti
         </button>

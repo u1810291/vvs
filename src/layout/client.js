@@ -1,12 +1,11 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import useLanguage from "../hook/useLanguage";
-import SidebarBack from "../components/sidebars/back";
+import { useNavigate } from "react-router-dom";
 import { CreateHeader } from "../components/headers/create";
 import { Object } from "../components/lists/object";
 import { clientList } from "../api/client";
 import { generate } from "shortid";
-// import GlobalContext from "../context/globalContext";
 import AuthContext from "../context/authContext";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
@@ -15,7 +14,7 @@ import MainSidebar from "../components/sidebars/main";
 function Client() {
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
-
+  const navigate = useNavigate();
   usePreventScroll({ isDisabled: !isOpen });
   const { english, lithuanian, t } = useLanguage();
   const [clientName, setClientName] = useState("");
@@ -23,14 +22,16 @@ function Client() {
   const [clientEmail, setClientEmail] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [clientLastLogin, setClientLastLogin] = useState("");
-  const { sent, setSent, user, ForgotPasswordFromAdmin } = useContext(AuthContext);
+  const { sent, setSent, user, ForgotPasswordFromAdmin } =
+    useContext(AuthContext);
 
-  useEffect(() => { // get iat for all users
-      if (user.iat) {
-        const lastLogin = new Date(user.iat * 1000).toLocaleString();
-        setClientLastLogin(String(lastLogin));
-      }
-  },[user.iat])
+  useEffect(() => {
+    // get iat for all users
+    if (user.iat) {
+      const lastLogin = new Date(user.iat * 1000).toLocaleString();
+      setClientLastLogin(String(lastLogin));
+    }
+  }, [user.iat]);
 
   const clientNameFunc = useCallback(
     async (e) => {
@@ -72,22 +73,32 @@ function Client() {
       }, 5000);
   }, [sent, setSent]);
 
+  const backFunc = useCallback(async () => {
+    navigate(-1);
+  }, [navigate]);
+
   return (
     <OverlayProvider>
-    <div className="container max-w-screen-xl">
-      <div className="flex w-screen flex-row justify-center h-screen">
-        <div className="flex flex-col h-full items-center w-full">
-          <div className="flex flex-row w-full justify-between h-full">
-
-            <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-              <button className="flex flex-col items-center">
+      <div className="container max-w-screen-xl">
+        <div className="flex w-screen flex-row justify-center h-screen">
+          <div className="flex flex-col h-full items-center w-full">
+            <div className="flex flex-row w-full justify-between h-full">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                <button onClick={backFunc}>
+                  <img src={require("../assets/assets/left.png")}></img>
+                </button>
                 <img
-                  onClick={() => setIsOpen(true)}
-                  className="w-4 h-4 mx-16"
-                  src={require("../assets/assets/hamburger.png")}
-                />
-              </button>
-            </div>
+                  className="pt-6"
+                  src={require("../assets/assets/Line.png")}
+                ></img>
+                <button className="flex flex-col items-center pt-6">
+                  <img
+                    onClick={() => setIsOpen(true)}
+                    className="w-4 h-4 mx-16"
+                    src={require("../assets/assets/hamburger.png")}
+                  />
+                </button>
+              </div>
               <div className="flex flex-col h-screen w-full justify-between">
                 <CreateHeader />
                 <div className="flex flex-row h-screen">
@@ -189,22 +200,22 @@ function Client() {
                           </div>
                         </div>
                         <div className="flex flex-col">
-                        <button
-                          onClick={ForgotPasswordFromAdmin}
-                          className="flex p-1 w-32 rounded-sm text-xs px-2 mb-2 font-normal justify-center items-center text-gray-400 hover:text-gray-500 bg-gray-200"
-                        >
-                          <p>Priminti slaptažodi</p>
-                        </button>
-                        {sent === "true" ? (
-                          <p className="self-start text-xs text-green-500 truncate my-2">
-                            Slaptažodžio priminimas sekmingai išsiųstas
-                          </p>
-                          ) : ( sent === "true" ? (
+                          <button
+                            onClick={ForgotPasswordFromAdmin}
+                            className="flex p-1 w-32 rounded-sm text-xs px-2 mb-2 font-normal justify-center items-center text-gray-400 hover:text-gray-500 bg-gray-200"
+                          >
+                            <p>Priminti slaptažodi</p>
+                          </button>
+                          {sent === "true" ? (
+                            <p className="self-start text-xs text-green-500 truncate my-2">
+                              Slaptažodžio priminimas sekmingai išsiųstas
+                            </p>
+                          ) : sent === "true" ? (
                             <p className="self-start text-xs text-red-500 truncate my-2">
-                            Prašome pakartoti vėliau
-                          </p>
-                          ) : (null))}
-                      </div>
+                              Prašome pakartoti vėliau
+                            </p>
+                          ) : null}
+                        </div>
                       </div>
                       <div>
                         <div className="flex w-full justify-between">
@@ -230,7 +241,7 @@ function Client() {
                       </div>
                       <button
                         type="submit"
-                        className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 focus:outline-none"
+                        className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
                       >
                         Archyvuoti
                       </button>
@@ -258,14 +269,14 @@ function Client() {
                   </div>
                 </div>
               </div>
-              </div>
-              <SlideOver isOpen={isOpen} onClose={handleOnClose}>
-                <MainSidebar />
-              </SlideOver>
             </div>
+            <SlideOver isOpen={isOpen} onClose={handleOnClose}>
+              <MainSidebar />
+            </SlideOver>
           </div>
         </div>
-      </OverlayProvider>
+      </div>
+    </OverlayProvider>
   );
 }
 

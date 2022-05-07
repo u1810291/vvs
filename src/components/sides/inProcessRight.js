@@ -15,7 +15,7 @@ const InProcessRightSide = () => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex flex-row border bg-white border-b-2 justify-between">
+        <div className="flex flex-row bg-white justify-between">
         </div>
         <div className="text-slate-400">
           <ActiveCard />

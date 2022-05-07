@@ -16,7 +16,7 @@ const DashboardSideLeft = () => {
         <h4 className="text-lg ml-2 self-center font-normal">Užduotys</h4>
         <button
           type="submit"
-          className="w-52 h-10 flex mr-2 mt-2 mb-1 justify-center py-2 rounded-sm px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none"
+          className="w-52 h-10 flex mr-2 mt-2 mb-1 justify-center py-2 rounded-sm px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 hover:bg-slate-500 focus:outline-none"
         >
           {t("loginSystem.createTask")}
         </button>

@@ -10,7 +10,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const FiltersList = ({
+export const TasksList = ({
   get,
   object,
   name,

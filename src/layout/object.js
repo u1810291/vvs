@@ -1,20 +1,19 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback, useEffect } from "react";
-import useLanguage from "../hook/useLanguage";
-import SidebarBack from "../components/sidebars/back";
 import { ObjectHeader } from "../components/headers/object";
 import { Events } from "../components/lists/events";
 import { PhonesList } from "../api/phones";
 import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
 import { EventsList } from "../api/events";
+import { useNavigate } from "react-router-dom";
 import { generate } from "shortid";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 
 function Object() {
-  const { english, lithuanian, t } = useLanguage();
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const { objectName, setObjectName } = useContext(GlobalContext);
   const [objectAddress, setObjectAddress] = useState("");
@@ -77,14 +76,25 @@ function Object() {
     setModem(e.target.value);
   }, []);
 
+  const backFunc = useCallback(async () => {
+    navigate(-1);
+  }, [navigate]);
+
   return (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
         <div className="flex w-screen flex-row justify-center h-screen">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center">
+            <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                <button onClick={backFunc}>
+                  <img src={require("../assets/assets/left.png")}></img>
+                </button>
+                <img
+                  className="pt-6"
+                  src={require("../assets/assets/Line.png")}
+                ></img>
+                <button className="flex flex-col items-center pt-6">
                   <img
                     onClick={() => setIsOpen(true)}
                     className="w-4 h-4 mx-16"
@@ -377,7 +387,7 @@ function Object() {
                       </div>
                       <button
                         type="submit"
-                        className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 focus:outline-none"
+                        className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
                       >
                         Archyvuoti
                       </button>
