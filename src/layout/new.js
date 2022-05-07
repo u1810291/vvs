@@ -17,20 +17,16 @@ import GlobalContext from "../context/globalContext";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
+import useUtils from "../hook/useUtils";
 
 function New() {
-  const { english, lithuanian, t } = useLanguage();
-  const navigate = useNavigate();
   const { pdfExportComponentNew } = useContext(GlobalContext);
   const { toPrintNew, setToPrintNew } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
 
   usePreventScroll({ isDisabled: !isOpen });
-
-  const backFunc = useCallback(async () => {
-    navigate(-1);
-  }, [navigate]);
+  const { backFunc } = useUtils();
 
   return (
       <OverlayProvider>

@@ -1,10 +1,10 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { CreateHeader } from "../components/headers/create";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
+import useUtils from "../hook/useUtils";
 
 function Driver() {
   const [driverName, setDriverName] = useState("");
@@ -13,7 +13,7 @@ function Driver() {
   const [driverPassword, setDriverPassword] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
-  const navigate = useNavigate();
+  const { backFunc } = useUtils();
   usePreventScroll({ isDisabled: !isOpen });
 
   const driverNameFunc = useCallback(
@@ -43,11 +43,6 @@ function Driver() {
     },
     [setDriverPassword]
   );
-
-  const backFunc = useCallback(async () => {
-    navigate(-1);
-  }, [navigate]);
-
 
   return (
     <OverlayProvider>

@@ -22,6 +22,7 @@ import {
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
+import useUtils from "../hook/useUtils";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -57,6 +58,7 @@ function Create() {
   const [textArea, setTextArea] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
+  const { backFunc } = useUtils();
 
   usePreventScroll({ isDisabled: !isOpen });
 
@@ -73,11 +75,6 @@ function Create() {
     mapRef.current = null;
   }, []);
 
-  // const { isLoaded } = useJsApiLoader({
-  //   id: "google-map-script",
-  //   googleMapsApiKey: "AIzaSyCM9HFBcLjd0qeL0dgtFwOpeqUWy-aAB5M",
-  // });
-
   const textAreaFunc = useCallback(
     async (e) => {
       setTextArea(e.target.value);
@@ -93,10 +90,6 @@ function Create() {
     },
     [textArea]
   );
-
-  const backFunc = useCallback(async () => {
-    navigate(-1);
-  }, [navigate]);
 
   return (
       <OverlayProvider>

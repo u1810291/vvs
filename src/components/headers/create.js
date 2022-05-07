@@ -1,13 +1,13 @@
 import React from "react";
 
-export function CreateHeader() {
+export function CreateHeader({ fullName }) {
   return (
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between">
       <div className="md:flex hidden md:flex-row ml-4 items-center">
         <h4 className="ml-2 text-normal font-normal">Klientai</h4>
         <p className="pl-2 text-gray-600">/</p>
         <h4 className="ml-2  text-normal font-normal">
-          Vardenis Pavardenis
+          {fullName}
         </h4>
       </div>
       <div className="flex flex-row items-center">

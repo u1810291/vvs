@@ -23,14 +23,14 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
+import useSort from "../hook/useSort";
+import { sortToggle } from "../util/utils";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function DriversList() {
-  const [sortedDriversOrder, setSortedDriversOrder] = useState("");
-  const [sortedDriversKeys, setSortedDriversKeys] = useState("");
   const { expandFilterDrivers, setExpandFilterDrivers } =
     useContext(GlobalContext);
   const { selectedFilterDrivers, setSelectedFilterDrivers } =
@@ -52,55 +52,12 @@ function DriversList() {
 
   usePreventScroll({ isDisabled: !isOpen });
 
-  function sortToggle(arr, key, order) {
-    const collator = new Intl.Collator(undefined, {
-      numeric: true,
-      sensitivity: "base",
-    });
-    return arr.sort(function (a, b) {
-      let x = a[key];
-      let y = b[key];
-      if (order === "asc") {
-        return collator.compare(x, y);
-      }
-      if (order === "desc") {
-        return collator.compare(x, y) * -1;
-      }
-      if (order === "") {
-        return Math.random() - 0.5;
-      }
-    });
-  }
-
-  function sortedDriversNames() {
-    if (sortedDriversOrder === "") {
-      setSortedDriversKeys("name");
-      setSortedDriversOrder("asc");
-    }
-    if (sortedDriversOrder === "asc") {
-      setSortedDriversKeys("name");
-      setSortedDriversOrder("desc");
-    }
-    if (sortedDriversOrder === "desc") {
-      setSortedDriversKeys("name");
-      setSortedDriversOrder("");
-    }
-  }
-
-  function sortedDriversStatus() {
-    if (sortedDriversOrder === "") {
-      setSortedDriversKeys("status");
-      setSortedDriversOrder("asc");
-    }
-    if (sortedDriversOrder === "asc") {
-      setSortedDriversKeys("status");
-      setSortedDriversOrder("desc");
-    }
-    if (sortedDriversOrder === "desc") {
-      setSortedDriversKeys("status");
-      setSortedDriversOrder("");
-    }
-  }
+  const {
+    sortedDriversKeys,
+    sortedDriversOrder,
+    sortedDriversStatus,
+    sortedDriversNames,
+  } = useSort();
 
   const sortedDrivers = sortToggle(
     Drivers,
@@ -204,7 +161,7 @@ function DriversList() {
                             onClick={sortedDriversNames}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300 text-sm">
+                            <span className="text-gray-300 text-sm hover:text-gray-500">
                               Vardas Pavardė
                             </span>
                             <img
@@ -217,13 +174,16 @@ function DriversList() {
                           onClick={sortedDriversStatus}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">Būsena</span>
+                          <span className="text-gray-300 text-sm hover:text-gray-500">
+                            Būsena
+                          </span>
                         </button>
                       </div>
                       <div className="pl-4 flex-col w-full items-center">
                         {sortedDrivers.map((data) => (
                           <DriverList
                             key={data.id}
+                            id={data.id}
                             name={data.name}
                             status={data.status}
                           />
@@ -239,7 +199,7 @@ function DriversList() {
                             onClick={sortedDriversNames}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300 text-sm">
+                            <span className="text-gray-300 text-sm hover:text-gray-400">
                               Vardas Pavardė
                             </span>
                             <img
@@ -252,13 +212,16 @@ function DriversList() {
                           onClick={sortedDriversStatus}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">Būsena</span>
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
+                            Būsena
+                          </span>
                         </button>
                       </div>
                       <div className="pl-4 flex-col w-full items-center">
                         {sortedDrivers.map((data) => (
                           <DriverList
                             key={data.id}
+                            id={data.id}
                             name={data.name}
                             status={data.status}
                           />
@@ -344,43 +307,34 @@ function DriversList() {
 
                       <div className="hidden md:-mt-px md:flex">
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          1{" "}
+                          1
                         </a>
                         <a
                           className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
                           aria-current="page"
                         >
-                          {" "}
-                          2{" "}
+                          2
                         </a>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          3{" "}
+                          3
                         </a>
                         <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          ...{" "}
+                          ...
                         </span>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          8{" "}
+                          8
                         </a>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          9{" "}
+                          9
                         </a>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          10{" "}
+                          10
                         </a>
                         <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          ...{" "}
+                          ...
                         </span>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          999{" "}
+                          999
                         </a>
                       </div>
 

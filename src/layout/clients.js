@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -6,7 +5,6 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-// import RegularSidebarClients from "../components/sidebars/regularClients";
 import { ClientsHeader } from "../components/headers/clients";
 import { ClientList } from "../components/lists/clientsList";
 import { FiltersListClients } from "../components/lists/filterClientsList";
@@ -19,7 +17,6 @@ import AuthContext from "../context/authContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { generate } from "shortid";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import { useFetch } from "../hook/useFetch";
 import { Spinner } from "react-activity";
@@ -30,6 +27,8 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
+import { sortToggle } from "../util/utils";
+import useSort from "../hook/useSort";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -37,9 +36,7 @@ function classNames(...classes) {
 
 function ClientsList() {
   const { accessToken } = useContext(AuthContext);
-  const [apiData, setApiData] = useState("");
-  const [sortedClientsOrder, setSortedClientsOrder] = useState("");
-  const [sortedClientsKeys, setSortedClientsKeys] = useState("");
+  const { apiData, setApiData } = useContext(GlobalContext);
   const { expandFilterClients, setExpandFilterClients } =
     useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } =
@@ -47,7 +44,7 @@ function ClientsList() {
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
-  const handleExportWithComponent = useCallback(async (event) => {
+  const handleExportWithComponent = useCallback(async () => {
     setToPrint(true);
     setTimeout(() => {
       pdfExportComponent.current.save();
@@ -57,18 +54,19 @@ function ClientsList() {
     }, 1000);
   }, []);
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = () => setIsOpen(false);
+  const handleOnClose = useCallback(() => { setIsOpen(false)},[]);
+  const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
   usePreventScroll({ isDisabled: !isOpen });
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
     getAllUsers,
     accessToken
   );
+
+  useEffect(() => {
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (data) {
@@ -77,93 +75,13 @@ function ClientsList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  function sortedClientsNames() {
-    if (sortedClientsOrder === "") {
-      setSortedClientsKeys("fullName");
-      setSortedClientsOrder("asc");
-    }
-    if (sortedClientsOrder === "asc") {
-      setSortedClientsKeys("fullName");
-      setSortedClientsOrder("desc");
-    }
-    if (sortedClientsOrder === "desc") {
-      setSortedClientsKeys("fullName");
-      setSortedClientsOrder("");
-    }
-  }
-
-  function sortedClientsContracts() {
-    if (sortedClientsOrder === "") {
-      setSortedClientsKeys("contract");
-      setSortedClientsOrder("asc");
-    }
-    if (sortedClientsOrder === "asc") {
-      setSortedClientsKeys("contract");
-      setSortedClientsOrder("desc");
-    }
-    if (sortedClientsOrder === "desc") {
-      setSortedClientsKeys("contract");
-      setSortedClientsOrder("");
-    }
-  }
-
-  function sortedClientsPhones() {
-    if (sortedClientsOrder === "") {
-      setSortedClientsKeys("mobilePhone");
-      setSortedClientsOrder("asc");
-    }
-    if (sortedClientsOrder === "asc") {
-      setSortedClientsKeys("mobilePhone");
-      setSortedClientsOrder("desc");
-    }
-    if (sortedClientsOrder === "desc") {
-      setSortedClientsKeys("mobilePhone");
-      setSortedClientsOrder("");
-    }
-  }
-
-  function sortedClientsEmails() {
-    if (sortedClientsOrder === "") {
-      setSortedClientsKeys("email");
-      setSortedClientsOrder("asc");
-    }
-    if (sortedClientsOrder === "asc") {
-      setSortedClientsKeys("email");
-      setSortedClientsOrder("desc");
-    }
-    if (sortedClientsOrder === "desc") {
-      setSortedClientsKeys("email");
-      setSortedClientsOrder("");
-    }
-  }
+  const { sortedClientsKeys, sortedClientsOrder, sortedClientsNames, sortedClientsContracts, sortedClientsPhones, sortedClientsEmails } = useSort();
 
   const sortedClients = sortToggle(
     apiData?.users,
     sortedClientsKeys,
     sortedClientsOrder
   );
-
-  function sortToggle(arr, key, order) {
-    const collator = new Intl.Collator(undefined, {
-      numeric: true,
-      sensitivity: "base",
-    });
-    if (arr) {
-      return arr.sort(function (a, b) {
-        let x = a[key];
-        let y = b[key];
-        if (order === "asc") {
-          return collator.compare(x, y);
-        }
-        if (order === "desc") {
-          return collator.compare(x, y) * -1;
-        }
-        if (order === "") {
-          return Math.random() - 0.5;
-        }
-      });
-    }
-  }
 
   return (
     <>
@@ -175,7 +93,7 @@ function ClientsList() {
         <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
           <Link to="/">
             <button className="flex text-gray-400 justify-center rounded-sm text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
-              something went wrong
+              go back
             </button>
           </Link>
         </div>
@@ -188,7 +106,7 @@ function ClientsList() {
                   <div className="flex flex-col bg-slate-600 pt-6 items-center w-20 text-gray-400">
                     <button className="flex flex-col items-center">
                       <img
-                        onClick={() => setIsOpen(true)}
+                        onClick={handleOnOpen}
                         className="w-4 h-4 mx-16 hover:fill-white"
                         src={require("../assets/assets/hamburger.png")}
                       />
@@ -276,7 +194,7 @@ function ClientsList() {
                                 onClick={sortedClientsNames}
                                 className="flex flex-row items-center"
                               >
-                                <span className="text-gray-300 col-span-4 text-sm">
+                                <span className="text-gray-300 col-span-4 text-sm hover:text-gray-500">
                                   Vardas Pavardė
                                 </span>
                                 <img
@@ -313,7 +231,8 @@ function ClientsList() {
                           <div className="pl-4 flex-col w-full items-center">
                             {sortedClients.map((data) => (
                               <ClientList
-                                key={generate()}
+                                key={data.id}
+                                id={data.id}
                                 name={data.fullName}
                                 contract={data.contract}
                                 phone={data.mobilePhone}
@@ -330,7 +249,7 @@ function ClientsList() {
                                 onClick={sortedClientsNames}
                                 className="flex flex-row items-center"
                               >
-                                <span className="text-gray-300 col-span-4 text-sm">
+                                <span className="text-gray-300 col-span-4 text-sm hover:text-gray-400">
                                   Vardas Pavardė
                                 </span>
                                 <img
@@ -343,7 +262,7 @@ function ClientsList() {
                               onClick={sortedClientsContracts}
                               className="flex flex-row items-center"
                             >
-                              <span className="text-gray-300 text-sm">
+                              <span className="text-gray-300 text-sm hover:text-gray-400">
                                 Sutarties nr.
                               </span>
                             </button>
@@ -351,7 +270,7 @@ function ClientsList() {
                               onClick={sortedClientsPhones}
                               className="flex flex-row items-center"
                             >
-                              <span className="text-gray-300 text-sm">
+                              <span className="text-gray-300 text-sm hover:text-gray-400">
                                 Telefonas
                               </span>
                             </button>
@@ -359,7 +278,7 @@ function ClientsList() {
                               onClick={sortedClientsEmails}
                               className="flex flex-row items-center"
                             >
-                              <span className="text-gray-300 col-span-5 text-sm">
+                              <span className="text-gray-300 col-span-5 text-sm hover:text-gray-400">
                                 El. paštas
                               </span>
                             </button>
@@ -367,7 +286,8 @@ function ClientsList() {
                           <div className="pl-4 flex-col w-full items-center">
                             {sortedClients.map((data) => (
                               <ClientList
-                                key={generate()}
+                                key={data.id}
+                                id={data.id}
                                 name={data.fullName}
                                 contract={data.contract}
                                 phone={data.mobilePhone}
@@ -453,49 +373,20 @@ function ClientsList() {
                             </svg>
                             Previous
                           </a>
-
                           <div className="hidden md:-mt-px md:flex">
-                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              1{" "}
-                            </a>
+                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">1</a>
                             <a
                               className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
                               aria-current="page"
-                            >
-                              {" "}
-                              2{" "}
-                            </a>
-                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              3{" "}
-                            </a>
-                            <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              ...{" "}
-                            </span>
-                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              8{" "}
-                            </a>
-                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              9{" "}
-                            </a>
-                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              10{" "}
-                            </a>
-                            <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              ...{" "}
-                            </span>
-                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                              {" "}
-                              999{" "}
-                            </a>
+                            >2</a>
+                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">3</a>
+                            <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">...</span>
+                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">8</a>
+                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">9</a>
+                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">10</a>
+                            <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">...</span>
+                            <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">999</a>
                           </div>
-
                           <a className="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Next
                             <svg

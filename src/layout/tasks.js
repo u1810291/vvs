@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -6,7 +5,6 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-// import RegularSidebar from "../components/sidebars/regular";
 import { TasksHeader } from "../components/headers/tasks";
 import { TasksList } from "../components/lists/tasks";
 import { OptionsList } from "../components/lists/options";
@@ -22,21 +20,18 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
+import useSort from "../hook/useSort";
+import { sortToggle } from "../util/utils";
 
 function Tasks() {
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+  const handleOnClose = useCallback(() => { setIsOpen(false)},[]);
+  const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
   usePreventScroll({ isDisabled: !isOpen });
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const { expandFilter, setExpandFilter } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
-  const [sortedDashboardTestApiKeys, setSortedDashboardTestApiKeys] =
-    useState("");
-  const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
-    useState("");
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
     setToPrint(true);
@@ -48,165 +43,24 @@ function Tasks() {
     }, 1000);
   }, []);
 
-  function sortToggle(arr, key, order) {
-    const collator = new Intl.Collator(undefined, {
-      numeric: true,
-      sensitivity: "base",
-    });
-    return arr.sort(function (a, b) {
-      let x = a[key];
-      let y = b[key];
-      if (order === "asc") {
-        return collator.compare(x, y);
-      }
-      if (order === "desc") {
-        return collator.compare(x, y) * -1;
-      }
-      if (order === "") {
-        return Math.random() - 0.5;
-      }
-    });
-  }
-
-  function sortedDashboardTestDate() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("date");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("date");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("date");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestObject() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("object");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("object");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("object");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestName() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("name");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("name");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("name");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestCrew() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("crew");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("crew");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("crew");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestInTime() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("intime");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("intime");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("intime");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestReactionTime() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("reactiontime");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("reactiontime");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("reactiontime");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestTimeInObject() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("timeinobject");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("timeinobject");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("timeinobject");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestStatus() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("status");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("status");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("status");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
-
-  function sortedDashboardTestReason() {
-    if (sortedDashboardTestApiOrder === "") {
-      setSortedDashboardTestApiKeys("reason");
-      setSortedDashboardTestApiOrder("asc");
-    }
-    if (sortedDashboardTestApiOrder === "asc") {
-      setSortedDashboardTestApiKeys("reason");
-      setSortedDashboardTestApiOrder("desc");
-    }
-    if (sortedDashboardTestApiOrder === "desc") {
-      setSortedDashboardTestApiKeys("reason");
-      setSortedDashboardTestApiOrder("");
-    }
-  }
+  const {
+    sortedDashboardKeys,
+    sortedDashboardOrder,
+    sortedDashboardDate,
+    sortedDashboardObject,
+    sortedDashboardName,
+    sortedDashboardCrew,
+    sortedDashboardInTime,
+    sortedDashboardReactionTime,
+    sortedDashboardTimeInObject,
+    sortedDashboardStatus,
+    sortedDashboardReason
+  } = useSort();
 
   const sortedDashboardTestApi = sortToggle(
     DashboardTestApi,
-    sortedDashboardTestApiKeys,
-    sortedDashboardTestApiOrder
+    sortedDashboardKeys,
+    sortedDashboardOrder
   );
 
   return (
@@ -218,7 +72,7 @@ function Tasks() {
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button className="flex flex-col items-center text-gray-400">
                   <img
-                    onClick={() => setIsOpen(true)}
+                    onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../assets/assets/hamburger.png")}
                   />
@@ -358,74 +212,74 @@ function Tasks() {
                     <>
                       <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                         <button
-                          onClick={sortedDashboardTestDate}
+                          onClick={sortedDashboardDate}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">Gauta</span>
+                          <span className="text-gray-300 text-sm hover:text-gray-400">Gauta</span>
                           <img
                             src={require("../assets/assets/down.png")}
                             className="h-2 w-4 ml-2"
                           />
                         </button>
                         <button
-                          onClick={sortedDashboardTestObject}
+                          onClick={sortedDashboardObject}
                           className="flex col-span-2 flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Objektas
                           </span>
                         </button>
                         <button
-                          onClick={sortedDashboardTestName}
+                          onClick={sortedDashboardName}
                           className="flex col-span-2 flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Pavadinimas
                           </span>
                         </button>
                         <button
-                          onClick={sortedDashboardTestCrew}
+                          onClick={sortedDashboardCrew}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Ekipažas
                           </span>
                         </button>
                         <button
-                          onClick={sortedDashboardTestInTime}
+                          onClick={sortedDashboardInTime}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Spėjo laiku
                           </span>
                         </button>
                         <button
-                          onClick={sortedDashboardTestReactionTime}
+                          onClick={sortedDashboardReactionTime}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Reagavimo laikas
                           </span>
                         </button>
                         <button
-                          onClick={sortedDashboardTestTimeInObject}
+                          onClick={sortedDashboardTimeInObject}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Laikas objekte
                           </span>
                         </button>
                         <button
-                          onClick={sortedDashboardTestStatus}
+                          onClick={sortedDashboardStatus}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">Būsena</span>
+                          <span className="text-gray-300 text-sm hover:text-gray-400">Būsena</span>
                         </button>
                         <button
-                          onClick={sortedDashboardTestReason}
+                          onClick={sortedDashboardReason}
                           className="flex col-span-2 flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Suveikimo priežastis
                           </span>
                         </button>

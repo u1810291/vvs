@@ -1,37 +1,48 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback, useEffect } from "react";
-import useLanguage from "../hook/useLanguage";
-import { useNavigate } from "react-router-dom";
 import { CreateHeader } from "../components/headers/create";
 import { Object } from "../components/lists/object";
 import { clientList } from "../api/client";
 import { generate } from "shortid";
+import { useParams } from "react-router-dom";
 import AuthContext from "../context/authContext";
+import GlobalContext from "../context/globalContext";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
+import useUtils from "../hook/useUtils";
 
 function Client() {
+  const { id } = useParams();
+  const { apiData, setApiData } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = () => setIsOpen(false);
-  const navigate = useNavigate();
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
   usePreventScroll({ isDisabled: !isOpen });
-  const { english, lithuanian, t } = useLanguage();
   const [clientName, setClientName] = useState("");
   const [clientSurname, setClientSurname] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [clientLastLogin, setClientLastLogin] = useState("");
+  const [fullName, setFullName] = useState("")
   const { sent, setSent, user, ForgotPasswordFromAdmin } =
-    useContext(AuthContext);
+    useContext(AuthContext); // do dat
+  const { backFunc } = useUtils();
 
   useEffect(() => {
-    // get iat for all users
-    if (user.iat) {
-      const lastLogin = new Date(user.iat * 1000).toLocaleString();
-      setClientLastLogin(String(lastLogin));
-    }
-  }, [user.iat]);
+    const obj = apiData.users
+    const data = obj.find(x => x.id === id)
+    setFullName(data.fullName);
+    setClientName(data.firstName);
+    setClientSurname(data.lastName);
+    setClientEmail(data.email);
+    setClientPhone(data.mobilePhone);
+    setClientLastLogin(new Date(data.lastLoginInstant).toLocaleString());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const clientNameFunc = useCallback(
     async (e) => {
@@ -73,10 +84,6 @@ function Client() {
       }, 5000);
   }, [sent, setSent]);
 
-  const backFunc = useCallback(async () => {
-    navigate(-1);
-  }, [navigate]);
-
   return (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
@@ -93,14 +100,14 @@ function Client() {
                 ></img>
                 <button className="flex flex-col items-center pt-6">
                   <img
-                    onClick={() => setIsOpen(true)}
+                    onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../assets/assets/hamburger.png")}
                   />
                 </button>
               </div>
               <div className="flex flex-col h-screen w-full justify-between">
-                <CreateHeader />
+                <CreateHeader fullName={fullName} />
                 <div className="flex flex-row h-screen">
                   <div className="flex pl-4 flex-row w-full h-full justify-between">
                     <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">

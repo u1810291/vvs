@@ -1,21 +1,13 @@
 import React, { useContext } from "react";
 import GlobalContext from "../../context/globalContext";
 import { Link } from "react-router-dom";
-import AuthContext from "../../context/authContext";
 
 export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
-  const { user } = useContext(AuthContext);
 
-  const path = {
-    pathname: `/client/${user.sub}`,
-  };
-
-  function selectedUser() {
-    console.log("redirect to user page");
-  }
+  const path = { pathname: `/client/${id}` };
 
   return (
     <div className="w-full" {...props}>
@@ -28,7 +20,7 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                   {filter.dashboardList.includes("Vardas Pavardė") ? (
                     <Link
                       to={path}
-                      className="bg-white text-gray-500 truncate text-sm"
+                      className="bg-white text-gray-500 hover:text-gray-600 truncate text-sm"
                     >
                       {name}
                     </Link>
@@ -40,7 +32,7 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                   {filter.dashboardList.includes("Sutarties nr.") ? (
                     <Link
                       to={path}
-                      className="bg-white text-gray-400 truncate text-sm"
+                      className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                     >
                       {contract}
                     </Link>
@@ -54,7 +46,7 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                   {filter.dashboardList.includes("Telefonas") ? (
                     <Link
                       to={path}
-                      className="bg-white text-gray-400 truncate text-sm"
+                      className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                     >
                       {phone}
                     </Link>
@@ -66,7 +58,7 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                   {filter.dashboardList.includes("El. paštas") ? (
                     <Link
                       to={path}
-                      className="bg-white text-gray-400 truncate text-sm"
+                      className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                     >
                       {email}
                     </Link>

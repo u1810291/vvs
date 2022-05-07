@@ -29,7 +29,7 @@ const MainSidebar = () => {
             Pultas
           </Link>
           <Link
-            to="/task"
+            to="/tasks"
             className="font-light text-normal text-gray-200 hover:text-gray-400"
           >
             Užduotys

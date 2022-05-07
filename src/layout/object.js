@@ -1,20 +1,16 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import { ObjectHeader } from "../components/headers/object";
 import { Events } from "../components/lists/events";
 import { PhonesList } from "../api/phones";
-import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
 import { EventsList } from "../api/events";
-import { useNavigate } from "react-router-dom";
 import { generate } from "shortid";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
+import useUtils from "../hook/useUtils";
 
 function Object() {
-  const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
   const { objectName, setObjectName } = useContext(GlobalContext);
   const [objectAddress, setObjectAddress] = useState("");
   const [objectCity, setObjectCity] = useState("");
@@ -26,9 +22,15 @@ function Object() {
   const [time, setTime] = useState("");
   const [modem, setModem] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = () => setIsOpen(false);
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
   usePreventScroll({ isDisabled: !isOpen });
+  const { backFunc } = useUtils();
 
   const objectDescriptionFunc = useCallback(async (e) => {
     setObjectDescription(e.target.value);
@@ -76,10 +78,6 @@ function Object() {
     setModem(e.target.value);
   }, []);
 
-  const backFunc = useCallback(async () => {
-    navigate(-1);
-  }, [navigate]);
-
   return (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
@@ -96,7 +94,7 @@ function Object() {
                 ></img>
                 <button className="flex flex-col items-center pt-6">
                   <img
-                    onClick={() => setIsOpen(true)}
+                    onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../assets/assets/hamburger.png")}
                   />

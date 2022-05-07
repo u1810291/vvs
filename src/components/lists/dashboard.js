@@ -37,51 +37,51 @@ export const DashboardList = ({
               <div className="w-full border-b grid grid-cols-12 bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                 <div className="flex flex-row items-center h-12">
                   {filter.dashboardList.includes("Gauta") ? (
-                    <span className="bg-white text-sm text-gray-400 truncate">{date}</span>
+                    <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">{date}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
                 <div className="flex col-span-2 flex-row items-center h-12">
                   {filter.dashboardList.includes("Objektas") ? (
-                    <span className="bg-white text-sm text-blue-300 truncate">{object}</span>
+                    <span className="bg-white text-sm text-blue-300 truncate hover:text-gray-500">{object}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
                 <div className="flex col-span-2 flex-row items-center h-12">
                   {filter.dashboardList.includes("Pavadinimas") ? (
-                    <span className="bg-white text-sm text-gray-400 truncate">{name}</span>
+                    <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">{name}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
                 <div className="flex row-span-2 items-center h-12">
                   {filter.dashboardList.includes("Ekipažas") ? (
-                    <span className="bg-white text-sm text-blue-300 truncate">{crew}</span>
+                    <span className="bg-white text-sm text-blue-300 truncate hover:text-gray-500">{crew}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
                 <div className="flex flex-row items-center h-12">
                   {filter.dashboardList.includes("Spėjo laiku") ? (
-                    <span className="bg-white text-sm text-gray-400 truncate">{intime}</span>
+                    <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">{intime}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}
                 </div>
-                <div className="flex flex-row h-12 items-center">
+                <div className="flex flex-row h-12 items-center hover:text-gray-500">
                   {filter.dashboardList.includes("Reagavimo laikas") ? (
-                    <span className="bg-white text-gray-400">
+                    <span className="bg-white text-gray-400 hover:text-gray-500">
                       {reactiontime}
                     </span>
                   ) : (
-                    <span className="bg-white text-gray-400">-</span>
+                    <span className="bg-white text-gray-400 hover:text-gray-500">-</span>
                   )}
                 </div>
                 <div className="flex flex-row items-center h-12">
                   {filter.dashboardList.includes("Laikas objekte") ? (
-                    <span className="bg-white text-gray-400">
+                    <span className="bg-white text-gray-400 hover:text-gray-500">
                       {timeinobject}
                     </span>
                   ) : (
@@ -104,7 +104,7 @@ export const DashboardList = ({
                 </div>
                 <div className="flex col-span-2 flex-row h-12 items-center">
                   {filter.dashboardList.includes("Suveikimo priežastis") ? (
-                    <span className="bg-white text-sm text-gray-500 truncate">{reason}</span>
+                    <span className="bg-white text-sm text-gray-500 truncate hover:text-gray-400">{reason}</span>
                   ) : (
                     <span className="bg-white text-gray-400">-</span>
                   )}

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import useLanguage from "../../hook/useLanguage";
+import { Link } from "react-router-dom";
 import GlobalContext from "../../context/globalContext";
 
 export const ObjectsList = ({
@@ -12,10 +12,11 @@ export const ObjectsList = ({
   sentCrew,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
+
+    const path = { pathname: `/object/${id}` };
 
   return (
     <div className="w-full" {...props}>
@@ -26,54 +27,54 @@ export const ObjectsList = ({
             <div className="w-full border-b grid grid-cols-12 bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
               <div className="flex flex-row items-center h-12 col-span-2">
                 {filter.dashboardList.includes("Vardas Pavardė") ? (
-                  <span className="bg-white text-gray-500 truncate text-sm">
+                  <Link to={path} className="bg-white text-gray-500 truncate text-sm hover:text-gray-400">
                     {name}
-                  </span>
+                  </Link>
                 ) : (
                   <span className="bg-white text-gray-400">-</span>
                 )}
               </div>
               <div className="flex flex-row items-center h-12">
                 {filter.dashboardList.includes("Miestas") ? (
-                  <span className="bg-white text-gray-400 truncate text-sm">
+                  <Link to={path} className="bg-white text-gray-400 truncate text-sm hover:text-gray-500">
                     {city}
-                  </span>
+                  </Link>
                 ) : (
                   <span className="bg-white text-gray-400">-</span>
                 )}
               </div>
               <div className="flex flex-row items-center h-12 col-span-3">
                 {filter.dashboardList.includes("Adresas") ? (
-                  <span className="bg-white text-gray-500 truncate text-sm">
+                  <Link to={path} className="bg-white text-gray-500 truncate text-sm hover:text-gray-400">
                     {address}
-                  </span>
+                  </Link>
                 ) : (
                   <span className="bg-white text-gray-400">-</span>
                 )}
               </div>
               <div className="flex flex-row items-center h-12">
                 {filter.dashboardList.includes("Objekto nr.") ? (
-                  <span className="bg-white text-gray-400 truncate text-sm">
+                  <Link to={path} className="bg-white text-gray-400 truncate text-sm hover:text-gray-500">
                     {object}
-                  </span>
+                  </Link>
                 ) : (
                   <span className="bg-white text-gray-400">-</span>
                 )}
               </div>
               <div className="flex flex-row items-center h-12">
                 {filter.dashboardList.includes("Sutarties nr.") ? (
-                  <span className="bg-white text-gray-400 truncate text-sm">
+                  <Link to={path} className="bg-white text-gray-400 truncate text-sm hover:text-gray-500">
                     {contract}
-                  </span>
+                  </Link>
                 ) : (
                   <span className="bg-white text-gray-400">-</span>
                 )}
               </div>
               <div className="flex flex-row items-center h-12">
                 {filter.dashboardList.includes("Siusti ekipaža") ? (
-                  <span className="bg-white text-gray-400 truncate text-sm">
+                  <Link to={path} className="bg-white text-gray-400 truncate text-sm hover:text-gray-500">
                     {sentCrew}
-                  </span>
+                  </Link>
                 ) : (
                   <span className="bg-white text-gray-400">-</span>
                 )}

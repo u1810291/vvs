@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -27,6 +26,8 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
+import { sortToggle } from "../util/utils";
+import useSort from "../hook/useSort";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -34,11 +35,14 @@ function classNames(...classes) {
 
 function Objects() {
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = () => setIsOpen(false);
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
   usePreventScroll({ isDisabled: !isOpen });
-  const [sortedObjectsOrder, setSortedObjectsOrder] = useState("");
-  const [sortedObjectsKeys, setSortedObjectsKeys] = useState("");
   const { expandFilterObjects, setExpandFilterObjects } =
     useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
@@ -56,115 +60,16 @@ function Objects() {
     }, 1000);
   }, []);
 
-  function sortToggle(arr, key, order) {
-    const collator = new Intl.Collator(undefined, {
-      numeric: true,
-      sensitivity: "base",
-    });
-    return arr.sort(function (a, b) {
-      let x = a[key];
-      let y = b[key];
-      if (order === "asc") {
-        return collator.compare(x, y);
-      }
-      if (order === "desc") {
-        return collator.compare(x, y) * -1;
-      }
-      if (order === "") {
-        return Math.random() - 0.5;
-      }
-    });
-  }
-
-  function sortedObjectsNames() {
-    if (sortedObjectsOrder === "") {
-      setSortedObjectsKeys("name");
-      setSortedObjectsOrder("asc");
-    }
-    if (sortedObjectsOrder === "asc") {
-      setSortedObjectsKeys("name");
-      setSortedObjectsOrder("desc");
-    }
-    if (sortedObjectsOrder === "desc") {
-      setSortedObjectsKeys("name");
-      setSortedObjectsOrder("");
-    }
-  }
-
-  function sortedObjectsCity() {
-    if (sortedObjectsOrder === "") {
-      setSortedObjectsKeys("city");
-      setSortedObjectsOrder("asc");
-    }
-    if (sortedObjectsOrder === "asc") {
-      setSortedObjectsKeys("city");
-      setSortedObjectsOrder("desc");
-    }
-    if (sortedObjectsOrder === "desc") {
-      setSortedObjectsKeys("city");
-      setSortedObjectsOrder("");
-    }
-  }
-
-  function sortedObjectsAddress() {
-    if (sortedObjectsOrder === "") {
-      setSortedObjectsKeys("address");
-      setSortedObjectsOrder("asc");
-    }
-    if (sortedObjectsOrder === "asc") {
-      setSortedObjectsKeys("address");
-      setSortedObjectsOrder("desc");
-    }
-    if (sortedObjectsOrder === "desc") {
-      setSortedObjectsKeys("address");
-      setSortedObjectsOrder("");
-    }
-  }
-
-  function sortedObjectsObject() {
-    if (sortedObjectsOrder === "") {
-      setSortedObjectsKeys("object");
-      setSortedObjectsOrder("asc");
-    }
-    if (sortedObjectsOrder === "asc") {
-      setSortedObjectsKeys("object");
-      setSortedObjectsOrder("desc");
-    }
-    if (sortedObjectsOrder === "desc") {
-      setSortedObjectsKeys("object");
-      setSortedObjectsOrder("");
-    }
-  }
-
-  function sortedObjectsContract() {
-    if (sortedObjectsOrder === "") {
-      setSortedObjectsKeys("contract");
-      setSortedObjectsOrder("asc");
-    }
-    if (sortedObjectsOrder === "asc") {
-      setSortedObjectsKeys("contract");
-      setSortedObjectsOrder("desc");
-    }
-    if (sortedObjectsOrder === "desc") {
-      setSortedObjectsKeys("contract");
-      setSortedObjectsOrder("");
-    }
-  }
-
-  function sortedObjectsSentCrew() {
-    if (sortedObjectsOrder === "") {
-      setSortedObjectsKeys("sentCrew");
-      setSortedObjectsOrder("asc");
-    }
-    if (sortedObjectsOrder === "asc") {
-      setSortedObjectsKeys("sentCrew");
-      setSortedObjectsOrder("desc");
-    }
-    if (sortedObjectsOrder === "desc") {
-      setSortedObjectsKeys("sentCrew");
-      setSortedObjectsOrder("");
-    }
-  }
+  const {
+    sortedObjectsKeys,
+    sortedObjectsOrder,
+    sortedObjectsNames,
+    sortedObjectsCity,
+    sortedObjectsAddress,
+    sortedObjectsObject,
+    sortedObjectsSentCrew,
+    sortedObjectsContract,
+  } = useSort();
 
   const sortedObjects = sortToggle(
     Orders,
@@ -181,7 +86,7 @@ function Objects() {
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button className="flex flex-col items-center">
                   <img
-                    onClick={() => setIsOpen(true)}
+                    onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../assets/assets/hamburger.png")}
                   />
@@ -317,7 +222,8 @@ function Objects() {
                       <div className="pl-4 flex-col w-full items-center">
                         {sortedObjects.map((data) => (
                           <ObjectsList
-                            key={generate()}
+                            key={data.id}
+                            id={data.id}
                             name={data.name}
                             city={data.city}
                             address={data.address}
@@ -336,7 +242,7 @@ function Objects() {
                             onClick={sortedObjectsNames}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300 text-sm">
+                            <span className="text-gray-300 text-sm hover:text-gray-400">
                               Vardas Pavardė
                             </span>
                             <img
@@ -349,19 +255,23 @@ function Objects() {
                           onClick={sortedObjectsCity}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">Miestas</span>
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
+                            Miestas
+                          </span>
                         </button>
                         <button
                           onClick={sortedObjectsAddress}
                           className="flex flex-row items-center col-span-3"
                         >
-                          <span className="text-gray-300 text-sm">Adresas</span>
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
+                            Adresas
+                          </span>
                         </button>
                         <button
                           onClick={sortedObjectsObject}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Objekto nr.
                           </span>
                         </button>
@@ -369,7 +279,7 @@ function Objects() {
                           onClick={sortedObjectsContract}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Sutarties nr.
                           </span>
                         </button>
@@ -377,7 +287,7 @@ function Objects() {
                           onClick={sortedObjectsSentCrew}
                           className="flex flex-row items-center"
                         >
-                          <span className="text-gray-300 text-sm">
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
                             Siusti ekipažą
                           </span>
                         </button>
@@ -385,7 +295,8 @@ function Objects() {
                       <div className="pl-4 flex-col w-full items-center">
                         {sortedObjects.map((data) => (
                           <ObjectsList
-                            key={generate()}
+                            key={data.id}
+                            id={data.id}
                             name={data.name}
                             city={data.city}
                             address={data.address}
@@ -474,43 +385,34 @@ function Objects() {
 
                       <div className="hidden md:-mt-px md:flex">
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          1{" "}
+                          1
                         </a>
                         <a
                           className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
                           aria-current="page"
                         >
-                          {" "}
-                          2{" "}
+                          2
                         </a>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          3{" "}
+                          3
                         </a>
                         <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          ...{" "}
+                          ...
                         </span>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          8{" "}
+                          8
                         </a>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          9{" "}
+                          9
                         </a>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          10{" "}
+                          10
                         </a>
                         <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          ...{" "}
+                          ...
                         </span>
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-                          {" "}
-                          999{" "}
+                          999
                         </a>
                       </div>
 
