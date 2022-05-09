@@ -36,12 +36,12 @@ function classNames(...classes) {
 
 function ClientsList() {
   const { accessToken } = useContext(AuthContext);
-  const { apiData, setApiData } = useContext(GlobalContext);
   const { expandFilterClients, setExpandFilterClients } =
     useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
+  const {customers, setCustomers} = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async () => {
@@ -70,15 +70,22 @@ function ClientsList() {
 
   useEffect(() => {
     if (data) {
-      setApiData(data.data.users);
-    }
+      const allUsers = data.data.users.users;
+      allUsers.map((u) => {
+        u.registrations.map((f) => {
+          if (f.roles[0] === 'customer') {
+            let obj = { users: [ u ]};
+            setCustomers(obj);
+        }
+      })
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }}, [data]);
 
   const { sortedClientsKeys, sortedClientsOrder, sortedClientsNames, sortedClientsContracts, sortedClientsPhones, sortedClientsEmails } = useSort();
 
   const sortedClients = sortToggle(
-    apiData?.users,
+    customers?.users,
     sortedClientsKeys,
     sortedClientsOrder
   );

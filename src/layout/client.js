@@ -13,7 +13,7 @@ import useUtils from "../hook/useUtils";
 
 function Client() {
   const { id } = useParams();
-  const { apiData, setApiData } = useContext(GlobalContext);
+  const { customers, setCustomers } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -33,13 +33,13 @@ function Client() {
   const { backFunc } = useUtils();
 
   useEffect(() => {
-    const obj = apiData.users
+    const obj = customers.users
     const data = obj.find(x => x.id === id)
-    setFullName(data.fullName);
-    setClientName(data.firstName);
-    setClientSurname(data.lastName);
-    setClientEmail(data.email);
-    setClientPhone(data.mobilePhone);
+    setFullName(data?.fullName);
+    setClientName(data?.firstName);
+    setClientSurname(data?.lastName);
+    setClientEmail(data?.email);
+    setClientPhone(data?.mobilePhone);
     setClientLastLogin(new Date(data.lastLoginInstant).toLocaleString());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

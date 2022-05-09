@@ -10,7 +10,11 @@ export function useFetch(queryString, variables, authToken) {
   // const cancelRequest = () => abortController.current && abortController.current.abort(); // on window
 
   // abortController.current = newAbortController();
-  const fetchData = async () => {
+  let prevValue = [];
+  const fetchData = async (n) => {
+    if (prevValue[n] != null) {
+      return prevValue[n];
+    }
     try {
       setLoading(true);
       const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
@@ -28,6 +32,7 @@ export function useFetch(queryString, variables, authToken) {
       });
       const data = await res.json();
       if (res.status === 200) {
+        prevValue[n] = data;
         setData(data);
       } else if (res.statusText === "Unauthorized") {
         RefreshTokenUpdate();

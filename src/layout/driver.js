@@ -1,12 +1,17 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import { CreateHeader } from "../components/headers/create";
 import SlideOver from "../components/sidebars/slideOver";
+import GlobalContext from "../context/globalContext";
+import { useParams } from "react-router-dom";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import useUtils from "../hook/useUtils";
 
 function Driver() {
+  const { id } = useParams();
+  const { crew, setCrew } = useContext(GlobalContext);
+  const [driverFullName, setDriverFullName] = useState("");
   const [driverName, setDriverName] = useState("");
   const [driverSurname, setDriverSurname] = useState("");
   const [driverUser, setDriverUser] = useState("");
@@ -15,6 +20,17 @@ function Driver() {
   const handleOnClose = () => setIsOpen(false);
   const { backFunc } = useUtils();
   usePreventScroll({ isDisabled: !isOpen });
+
+  useEffect(() => {
+    const obj = crew.users;
+    const data = obj.find(x => x.id === id)
+    setDriverFullName(data?.fullName)
+    setDriverName(data?.firstName);
+    setDriverName(data?.firstName);
+    setDriverSurname(data?.lastName);
+    setDriverUser(data?.uniqueUsername);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const driverNameFunc = useCallback(
     async (e) => {
@@ -67,7 +83,7 @@ function Driver() {
                 </button>
               </div>
               <div className="flex flex-col h-screen w-full justify-between">
-                <CreateHeader />
+                <CreateHeader fullName={driverFullName} />
                 <div className="flex flex-row h-screen">
                   <div className="flex pl-4 flex-row w-full h-full justify-between">
                     <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-3/5 lg:w-2/6">

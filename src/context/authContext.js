@@ -353,7 +353,6 @@ export const AuthProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
-    GetAccessToken: GetAccessToken,
     LoginUser: LoginUser,
     RegisterUser: RegisterUser,
     Logout: Logout,

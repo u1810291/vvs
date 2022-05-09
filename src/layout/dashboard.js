@@ -6,7 +6,7 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import AuthContext from "../context/authContext";
-import { useQuery, useSubscription, useMutation } from "graphql-hooks";
+// import { useQuery, useSubscription, useMutation } from "graphql-hooks";
 
 const test2 = `subscription ($invoices: String!, $objects: String!) {
   test (invoices: $invoices, objects: $objects) {
@@ -40,32 +40,35 @@ subscription {
 function Dashboard() {
   const { accessToken } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
   }, []);
 
   usePreventScroll({ isDisabled: !isOpen });
 
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+  // const [data, setData] = useState(null);
+  // const [error, setError] = useState(null);
 
-  useSubscription({ query: test }, ({ data, errors }) => { // ,variables: { invoices: "invoices", objects: "objects" }
-    if (errors && errors.length > 0) {
-      setError(errors[0]);
-      return;
-    }
+  // useSubscription({ query: test }, ({ data, errors }) => { // ,variables: { invoices: "invoices", objects: "objects" }
+  //   if (errors && errors.length > 0) {
+  //     setError(errors[0]);
+  //     return;
+  //   }
 
-    console.log(data);
-    setData(data);
-  });
+  //   console.log(data);
+  //   setData(data);
+  // });
 
-  if (error) {
-    return <span>An error occurred {error.message}</span>;
-  }
+  // if (error) {
+  //   return <span>An error occurred {error.message}</span>;
+  // }
 
-  if (data) {
-    return <div>Current data: {data}</div>;
-  }
+  // if (data) {
+  //   return <div>Current data: {data}</div>;
+  // }
 
   return (
     <OverlayProvider>
@@ -76,7 +79,7 @@ function Dashboard() {
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button className="flex flex-col items-center">
                   <img
-                    onClick={handleOnClose}
+                    onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../assets/assets/hamburger.png")}
                   />
