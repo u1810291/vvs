@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   const [forgotEmail, setForgotEmail] = useState("");
   const [initPage, setInitPage] = useState(true);
   const [loginError, setLoginError] = useState(false);
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken, setAccessToken] = useState("");
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("customer");
   const [emailValidationError, setEmailValidationError] = useState(false);
@@ -353,6 +353,7 @@ export const AuthProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    GetAccessToken: GetAccessToken,
     LoginUser: LoginUser,
     RegisterUser: RegisterUser,
     Logout: Logout,

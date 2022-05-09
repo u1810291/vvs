@@ -6610,6 +6610,13 @@
   "resolved" "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.9.tgz"
   "version" "4.2.9"
 
+"graphql-hooks-memcache@^2.3.1":
+  "integrity" "sha512-s3T+3MKI0RTEvK+udKzNuJ2cygA2B0g5kaMyhL0NesM7xJh93KxpYrztAvcsqYYjlh50kDAiKLr7qb9NVE77gg=="
+  "resolved" "https://registry.npmjs.org/graphql-hooks-memcache/-/graphql-hooks-memcache-2.3.1.tgz"
+  "version" "2.3.1"
+  dependencies:
+    "tiny-lru" "^8.0.1"
+
 "graphql-hooks@^5.11.2":
   "integrity" "sha512-Bt8ys/X0jcnQKYy2OYDg9L5qnZdeo+CT1XXp3BTzQQ2AMIaLcmTOFgYzodkWUSA58p/cSsnKTSWZFjWeYIWp2Q=="
   "resolved" "https://registry.npmjs.org/graphql-hooks/-/graphql-hooks-5.11.2.tgz"
@@ -6620,7 +6627,12 @@
     "events" "^3.3.0"
     "extract-files" "^11.0.0"
 
-"graphql@^15.7.2 || ^16.0.0":
+"graphql-ws@^5.8.1":
+  "integrity" "sha512-UVf/fxlHultC1+12tX9ShTIipqQFNZ96g7N51RFQlk7MFPsDUUMCR3QXVEzHEd5xlTp16rs5vCyfBljvcPN3fA=="
+  "resolved" "https://registry.npmjs.org/graphql-ws/-/graphql-ws-5.8.1.tgz"
+  "version" "5.8.1"
+
+"graphql@^15.7.2 || ^16.0.0", "graphql@>=0.11 <=16":
   "integrity" "sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw=="
   "resolved" "https://registry.npmjs.org/graphql/-/graphql-15.8.0.tgz"
   "version" "15.8.0"
@@ -11222,6 +11234,11 @@
   "integrity" "sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q="
   "resolved" "https://registry.npmjs.org/timsort/-/timsort-0.3.0.tgz"
   "version" "0.3.0"
+
+"tiny-lru@^8.0.1":
+  "integrity" "sha512-ApGvZ6vVvTNdsmt676grvCkUCGwzG9IqXma5Z07xJgiC5L7akUMof5U8G2JTI9Rz/ovtVhJBlY6mNhEvtjzOIg=="
+  "resolved" "https://registry.npmjs.org/tiny-lru/-/tiny-lru-8.0.2.tgz"
+  "version" "8.0.2"
 
 "tmp@^0.2.1":
   "integrity" "sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ=="
