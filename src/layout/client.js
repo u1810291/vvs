@@ -4,8 +4,12 @@ import { Object } from "../components/lists/object";
 import { clientList } from "../api/client";
 import { generate } from "shortid";
 import { useParams } from "react-router-dom";
+import { getUsers } from "../api/queryForms/queryString/users";
+import { getAllUsers } from "../api/queryForms/variables/users";
 import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
+import { Spinner } from "react-activity";
+import { Link } from "react-router-dom";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
@@ -13,7 +17,8 @@ import useUtils from "../hook/useUtils";
 
 function Client() {
   const { id } = useParams();
-  const { customers, setCustomers } = useContext(GlobalContext);
+  const { accessToken } = useContext(AuthContext);
+  const [ customers, setCustomers ] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -32,6 +37,31 @@ function Client() {
     useContext(AuthContext); // do dat
   const { backFunc } = useUtils();
 
+  const { data, error, loading, fetchData } = useFetch(
+    getUsers,
+    getAllUsers,
+    accessToken
+  );
+
+  useEffect(() => {
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      const allUsers = data.data.users.users;
+      allUsers.map((u) => {
+        u.registrations.map((f) => {
+          if (f.roles[0] === 'customer') {
+            let obj = { users: [ u ]};
+            setCustomers(obj);
+        }
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }}, [data]);
+
   useEffect(() => {
     const obj = customers.users
     const data = obj.find(x => x.id === id)
@@ -42,7 +72,7 @@ function Client() {
     setClientPhone(data?.mobilePhone);
     setClientLastLogin(new Date(data.lastLoginInstant).toLocaleString());
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [customers]);
 
   const clientNameFunc = useCallback(
     async (e) => {
@@ -85,6 +115,12 @@ function Client() {
   }, [sent, setSent]);
 
   return (
+    <>
+    {!customers ? (
+      <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
+        <Spinner color="dark-blue" size={40} />
+      </div>
+    ) : (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
         <div className="flex w-screen flex-row justify-center h-screen">
@@ -284,6 +320,8 @@ function Client() {
         </div>
       </div>
     </OverlayProvider>
+          )}
+          </>
   );
 }
 

@@ -96,14 +96,6 @@ function ClientsList() {
         <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
           <Spinner color="dark-blue" size={40} />
         </div>
-      ) : error ? (
-        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
-          <Link to="/">
-            <button className="flex text-gray-400 justify-center rounded-sm text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
-              go back
-            </button>
-          </Link>
-        </div>
       ) : (
         <OverlayProvider>
           <div className="container max-w-screen-xl">

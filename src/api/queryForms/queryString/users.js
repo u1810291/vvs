@@ -4,3 +4,9 @@ export const getUsers = `query users($queryString: String!) {
     }
     }
   `;
+
+export const archiveDriver = `query delete($userId: String!, $hardDelete: Boolean) {
+  delete(userId: $userId, hardDelete: $hardDelete) {
+    users
+  }
+}`;

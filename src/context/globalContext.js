@@ -35,8 +35,6 @@ export const GlobalProvider = ({ children }) => {
   const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [apiData, setApiData] = useState("");
-  const [crew, setCrew] = useState("");
-  const [customers, setCustomers] = useState("");
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -151,10 +149,6 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
-    customers,
-    setCustomers,
-    crew,
-    setCrew,
     apiData,
     setApiData,
     filterEditingDrivers,
