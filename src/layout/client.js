@@ -6,8 +6,10 @@ import { generate } from "shortid";
 import { useParams } from "react-router-dom";
 import { getUsers } from "../api/queryForms/queryString/users";
 import { getAllUsers } from "../api/queryForms/variables/users";
+import { archiveClient } from "../api/queryForms/queryString/users";
 import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
+import { useFetch } from "../hook/useFetch";
 import { Spinner } from "react-activity";
 import { Link } from "react-router-dom";
 import SlideOver from "../components/sidebars/slideOver";
@@ -18,6 +20,7 @@ import useUtils from "../hook/useUtils";
 function Client() {
   const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
+  const { clientEmail, setClientEmail } = useContext(AuthContext);
   const [ customers, setCustomers ] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
@@ -29,13 +32,24 @@ function Client() {
   usePreventScroll({ isDisabled: !isOpen });
   const [clientName, setClientName] = useState("");
   const [clientSurname, setClientSurname] = useState("");
-  const [clientEmail, setClientEmail] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [clientLastLogin, setClientLastLogin] = useState("");
   const [fullName, setFullName] = useState("")
   const { sent, setSent, user, ForgotPasswordFromAdmin } =
     useContext(AuthContext); // do dat
   const { backFunc } = useUtils();
+
+  const getClient = {
+    userId: id,
+    hardDelete: false,
+  };
+
+  const {
+    data: archiveData,
+    error: archiveError,
+    loading: archiveLoading,
+    fetchData: archiveFetch,
+  } = useFetch(archiveClient, getClient, accessToken);
 
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
@@ -63,6 +77,7 @@ function Client() {
   }}, [data]);
 
   useEffect(() => {
+    if (customers) {
     const obj = customers.users
     const data = obj.find(x => x.id === id)
     setFullName(data?.fullName);
@@ -72,7 +87,7 @@ function Client() {
     setClientPhone(data?.mobilePhone);
     setClientLastLogin(new Date(data.lastLoginInstant).toLocaleString());
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customers]);
+  }}, [customers]);
 
   const clientNameFunc = useCallback(
     async (e) => {
@@ -120,6 +135,13 @@ function Client() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[error])
+
+  const confirmArchiveFetch = useCallback(() => {
+    let text = "Ar tikrai norite archyvuoti?";
+    if (confirm(text) === true) {
+      archiveFetch();
+    }
+  }, [archiveFetch]);
 
   return (
     <>
@@ -290,7 +312,7 @@ function Client() {
                         </div>
                       </div>
                       <button
-                        type="submit"
+                        onClick={confirmArchiveFetch}
                         className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
                       >
                         Archyvuoti

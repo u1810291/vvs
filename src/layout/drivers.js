@@ -235,7 +235,7 @@ function DriversList() {
                                 key={data.id}
                                 id={data.id}
                                 name={data.fullName}
-                                status={data.status}
+                                status={data.active}
                               />
                             ))}
                             <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav>
@@ -273,7 +273,7 @@ function DriversList() {
                                 key={data.id}
                                 id={data.id}
                                 name={data.fullName}
-                                status={data.status}
+                                status={data.active}
                               />
                             ))}
                             <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav>

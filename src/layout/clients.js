@@ -41,7 +41,7 @@ function ClientsList() {
   const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const {customers, setCustomers} = useContext(GlobalContext);
+  const [customers, setCustomers] = useState("");
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async () => {
@@ -71,10 +71,14 @@ function ClientsList() {
   useEffect(() => {
     if (data) {
       const allUsers = data.data.users.users;
+      let array = [];
       allUsers.map((u) => {
         u.registrations.map((f) => {
           if (f.roles[0] === 'customer') {
-            let obj = { users: [ u ]};
+            console.log(u)
+            let obj = { users: [u] };
+            // obj.users[u];
+            // console.log(u)
             setCustomers(obj);
         }
       })
@@ -90,13 +94,15 @@ function ClientsList() {
     sortedClientsOrder
   );
 
+  console.log(customers?.users)
+
   useEffect(() => {
     if(error) {
       backFunc()
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[error])
-  
+
   return (
     <>
       {!sortedClients ? (

@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }) => {
   const [phoneValidationError, setPhoneValidationError] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const [sent, setSent] = useState(null);
+  const [clientEmail, setClientEmail] = useState("");
   // const abortController = useRef(null);
   // const cancelRequest = () => abortController.current && abortController.current.abort();
 
@@ -289,8 +290,8 @@ export const AuthProvider = ({ children }) => {
               }
               `,
             variables: {
-              loginId: user?.email,
-              sendForgotPasswordEmail: true, // false
+              loginId: clientEmail,
+              sendForgotPasswordEmail: true,
             },
           }),
           headers: {
@@ -301,10 +302,12 @@ export const AuthProvider = ({ children }) => {
         const data = await res.json();
         if (data) {
           const expiringID = data?.data?.forgot?.changePasswordId;
-          console.log(expiringID);
+          // console.log(expiringID);
           setSent("true");
+          // must handle email template url
+          
           // setPasswordRecoveryToken(expiringID);
-          setEmailRecoverySession(expiringID);
+          // setEmailRecoverySession(expiringID);
           // navigate("/forgotSuccess");
         } else {
           console.log("errors ", res);
@@ -315,7 +318,7 @@ export const AuthProvider = ({ children }) => {
         console.log(err);
       }
     },
-    [user?.email]
+    [clientEmail]
   );
 
   const ForgotPassword = useCallback(
@@ -368,6 +371,8 @@ export const AuthProvider = ({ children }) => {
     HandleRecoverPassword: HandleRecoverPassword,
     ForgotPassword: ForgotPassword,
     ForgotPasswordFromAdmin: ForgotPasswordFromAdmin,
+    clientEmail,
+    setClientEmail,
     user: user,
     accessToken: accessToken,
     email,

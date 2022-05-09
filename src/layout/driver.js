@@ -18,7 +18,7 @@ import useUtils from "../hook/useUtils";
 function Driver() {
   const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
-  const [ crew, setCrew ] = useState("");
+  const [crew, setCrew] = useState("");
   const [driverFullName, setDriverFullName] = useState("");
   const [driverName, setDriverName] = useState("");
   const [driverSurname, setDriverSurname] = useState("");
@@ -40,6 +40,8 @@ function Driver() {
     loading: archiveLoading,
     fetchData: archiveFetch,
   } = useFetch(archiveDriver, getDriver, accessToken);
+
+  console.log(archiveData, archiveError, archiveLoading);
 
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
@@ -109,11 +111,18 @@ function Driver() {
   );
 
   useEffect(() => {
-    if(error) {
-      backFunc()
+    if (error) {
+      backFunc();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[error])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
+  const confirmArchiveFetch = useCallback(() => {
+    let text = "Ar tikrai norite archyvuoti?";
+    if (confirm(text) === true) {
+      archiveFetch();
+    }
+  }, [archiveFetch]);
 
   return (
     <>
@@ -228,7 +237,7 @@ function Driver() {
                             </div>
                           </div>
                           <button
-                            onClick={fetchData}
+                            onClick={confirmArchiveFetch}
                             className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
                           >
                             Archyvuoti

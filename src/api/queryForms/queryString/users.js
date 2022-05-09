@@ -10,3 +10,9 @@ export const archiveDriver = `query delete($userId: String!, $hardDelete: Boolea
     users
   }
 }`;
+
+export const archiveClient = `query delete($userId: String!, $hardDelete: Boolean) {
+  delete(userId: $userId, hardDelete: $hardDelete) {
+    users
+  }
+}`;
