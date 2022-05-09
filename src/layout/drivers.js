@@ -28,6 +28,7 @@ import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
 import useSort from "../hook/useSort";
+import useUtils from "../hook/useUtils";
 import { sortToggle } from "../util/utils";
 
 function classNames(...classes) {
@@ -44,6 +45,7 @@ function DriversList() {
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
+  const { backFunc } = useUtils();
   const handleExportWithComponent = useCallback(async (event) => {
     setToPrint(true);
     setTimeout(() => {
@@ -99,6 +101,13 @@ function DriversList() {
     sortedDriversKeys,
     sortedDriversOrder
   );
+
+  useEffect(() => {
+    if(error) {
+      backFunc()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[error])
 
   return (
     <>

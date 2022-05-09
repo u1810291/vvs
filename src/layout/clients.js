@@ -90,6 +90,13 @@ function ClientsList() {
     sortedClientsOrder
   );
 
+  useEffect(() => {
+    if(error) {
+      backFunc()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[error])
+  
   return (
     <>
       {!sortedClients ? (

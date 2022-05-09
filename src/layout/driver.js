@@ -18,7 +18,7 @@ import useUtils from "../hook/useUtils";
 function Driver() {
   const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
-  const { crew, setCrew } = useContext(GlobalContext);
+  const [ crew, setCrew ] = useState("");
   const [driverFullName, setDriverFullName] = useState("");
   const [driverName, setDriverName] = useState("");
   const [driverSurname, setDriverSurname] = useState("");
@@ -76,8 +76,8 @@ function Driver() {
       setDriverName(data?.firstName);
       setDriverSurname(data?.lastName);
       setDriverUser(data?.uniqueUsername);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [crew]);
 
   const driverNameFunc = useCallback(
@@ -107,6 +107,13 @@ function Driver() {
     },
     [setDriverPassword]
   );
+
+  useEffect(() => {
+    if(error) {
+      backFunc()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[error])
 
   return (
     <>

@@ -114,6 +114,13 @@ function Client() {
       }, 5000);
   }, [sent, setSent]);
 
+  useEffect(() => {
+    if(error) {
+      backFunc()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[error])
+
   return (
     <>
     {!customers ? (

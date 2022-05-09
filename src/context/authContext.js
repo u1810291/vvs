@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   // const cancelRequest = () => abortController.current && abortController.current.abort();
 
   //Must handle scenarios:
-  //User opens an view in a new browser tab (old token stay in another tab) 
+  //User opens an view in a new browser tab (old token stay in another tab)
 
   useEffect(() => {
     if (getRefreshTokenSession() && !accessToken) {
@@ -81,6 +81,14 @@ export const AuthProvider = ({ children }) => {
     removeRefreshTokenSession();
     () => navigate("/");
   }, [navigate]);
+
+  useEffect(() => {
+    if (user?.roles[0] === "crew") {
+      console.log(user?.roles);
+      Logout();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const LoginUser = useCallback(
     async (e) => {
@@ -395,7 +403,7 @@ export const AuthProvider = ({ children }) => {
     spinner,
     setSpinner,
     sent,
-    setSent
+    setSent,
   };
 
   return (
