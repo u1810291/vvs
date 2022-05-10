@@ -18,6 +18,7 @@ import Objects from "./layout/objects";
 import Create from "./layout/create";
 import Driver from "./layout/driver";
 import Client from "./layout/client";
+import Key from "./layout/key";
 import New from "./layout/new";
 
 import NotFound from "./layout/notFound";
@@ -69,6 +70,7 @@ function App() {
                 <Route path="New" element={<New />} />
                 <Route path="Driver/:id" element={<Driver />} />
                 <Route path="Client/:id" element={<Client />} />
+                <Route path="Key" element={<Key />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

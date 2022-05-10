@@ -199,7 +199,6 @@ function ClientsList() {
                           <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                             <div className="flex flex-row items-center col-span-5">
                               <button
-                                onClick={sortedClientsNames}
                                 className="flex flex-row items-center"
                               >
                                 <span className="text-gray-300 col-span-4 text-sm hover:text-gray-500">
@@ -212,7 +211,6 @@ function ClientsList() {
                               </button>
                             </div>
                             <button
-                              onClick={sortedClientsContracts}
                               className="flex flex-row items-center"
                             >
                               <span className="text-gray-300 text-sm">
@@ -220,7 +218,6 @@ function ClientsList() {
                               </span>
                             </button>
                             <button
-                              onClick={sortedClientsPhones}
                               className="flex flex-row items-center"
                             >
                               <span className="text-gray-300 text-sm">
@@ -228,7 +225,6 @@ function ClientsList() {
                               </span>
                             </button>
                             <button
-                              onClick={sortedClientsEmails}
                               className="flex flex-row items-center"
                             >
                               <span className="text-gray-300 col-span-5 text-sm">

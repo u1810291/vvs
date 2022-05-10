@@ -7,7 +7,7 @@ const NewSideLeft = () => {
   const { english, lithuanian, t } = useLanguage();
   return (
     <>
-      <div className="flex flex-row items-end border bg-white border-b-2 justify-between">
+      <div className="flex flex-row items-end border bg-white justify-between">
         <div className="flex flex-col h-28">
           <h2 className="text-normal ml-2 font-light mt-4 w-3/4">
             UAB &quot;Įmonė&quot; Sekretoriatas + direktorius, paradinės pusės 2
