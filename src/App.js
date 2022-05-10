@@ -10,6 +10,7 @@ import ProtectedRoute from "./feature/protected";
 import Login from "./layout/login";
 import Dashboard from "./layout/dashboard";
 import Object from "./layout/object";
+import Keys from "./layout/keys";
 import Tasks from "./layout/tasks";
 import Drivers from "./layout/drivers";
 import Clients from "./layout/clients";
@@ -58,6 +59,7 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/" exec element={<Login />} />
                 <Route path="Dashboard" element={<Dashboard />} />
+                <Route path="Keys" element={<Keys />} />
                 <Route path="Tasks" element={<Tasks />} />
                 <Route path="Object" element={<Object />} />
                 <Route path="Drivers" element={<Drivers />} />

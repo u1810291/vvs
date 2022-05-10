@@ -29,6 +29,7 @@ import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
 import { sortToggle } from "../util/utils";
 import useSort from "../hook/useSort";
+import { stringify } from "postcss";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -70,21 +71,18 @@ function ClientsList() {
 
   useEffect(() => {
     if (data) {
-      const allUsers = data.data.users.users;
-      let array = [];
-      allUsers.map((u) => {
+      const allUsers = data.data.users.users; // filter here
+      let concatArray = allUsers.map((u, i) => {
         u.registrations.map((f) => {
           if (f.roles[0] === 'customer') {
-            console.log(u)
-            let obj = { users: [u] };
-            // obj.users[u];
-            // console.log(u)
-            setCustomers(obj);
+            let example = { users: [u] };
+            setCustomers(example);
         }
       })
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }}, [data]);
+  }
+}, [data]);
 
   const { sortedClientsKeys, sortedClientsOrder, sortedClientsNames, sortedClientsContracts, sortedClientsPhones, sortedClientsEmails } = useSort();
 
@@ -93,8 +91,6 @@ function ClientsList() {
     sortedClientsKeys,
     sortedClientsOrder
   );
-
-  console.log(customers?.users)
 
   useEffect(() => {
     if(error) {

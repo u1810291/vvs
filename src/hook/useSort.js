@@ -9,6 +9,8 @@ function useSort() {
   const [sortedObjectsKeys, setSortedObjectsKeys] = useState("");
   const [sortedDashboardKeys, setSortedDashboardKeys] = useState("");
   const [sortedDashboardOrder, setSortedDashboardOrder] = useState("");
+  const [sortedKeysKeys, setSortedKeysKeys] = useState("");
+  const [sortedKeysOrder, setSortedKeysOrder] = useState("");
 
   function sortedClientsNames() {
     if (sortedClientsOrder === "") {
@@ -325,6 +327,36 @@ function useSort() {
     }
   }
 
+  function sortedKeysSet() {
+    if (sortedKeysOrder === "") {
+      setSortedKeysKeys("set");
+      setSortedKeysOrder("asc");
+    }
+    if (sortedKeysOrder === "asc") {
+      setSortedKeysKeys("set");
+      setSortedKeysOrder("desc");
+    }
+    if (sortedKeysOrder === "desc") {
+      setSortedKeysKeys("set");
+      setSortedKeysOrder("");
+    }
+  }
+
+  function sortedKeysCrew() {
+    if (sortedKeysOrder === "") {
+      setSortedKeysKeys("crew");
+      setSortedKeysOrder("asc");
+    }
+    if (sortedKeysOrder === "asc") {
+      setSortedKeysKeys("crew");
+      setSortedKeysOrder("desc");
+    }
+    if (sortedKeysOrder === "desc") {
+      setSortedKeysKeys("crew");
+      setSortedKeysOrder("");
+    }
+  }
+
   return {
     sortedClientsKeys,
     sortedClientsOrder,
@@ -334,6 +366,8 @@ function useSort() {
     sortedObjectsKeys,
     sortedDashboardKeys,
     sortedDashboardOrder,
+    sortedKeysKeys,
+    sortedKeysOrder,
     sortedDriversNames,
     sortedDriversStatus,
     sortedClientsNames,
@@ -354,7 +388,9 @@ function useSort() {
     sortedDashboardReactionTime,
     sortedDashboardTimeInObject,
     sortedDashboardStatus,
-    sortedDashboardReason
+    sortedDashboardReason,
+    sortedKeysSet,
+    sortedKeysCrew
   };
 }
 
