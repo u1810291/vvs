@@ -22,14 +22,12 @@ import { useFetch } from "../hook/useFetch";
 import { Spinner } from "react-activity";
 import { getUsers } from "../api/queryForms/queryString/users";
 import { getAllUsers } from "../api/queryForms/variables/users";
-import { Link } from "react-router-dom";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
 import { sortToggle } from "../util/utils";
 import useSort from "../hook/useSort";
-import { stringify } from "postcss";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -69,19 +67,31 @@ function ClientsList() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (data) {
-      const allUsers = data.data.users.users; // filter here
-      let concatArray = allUsers.map((u, i) => {
-        u.registrations.map((f) => {
-          if (f.roles[0] === 'customer') {
-            let example = { users: [u] };
-            setCustomers(example);
-        }
-      })
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }
+//   useEffect(() => {
+//     if (data) {
+//       const allUsers = data.data.users.users; // filter here
+//       let concatArray = allUsers.map((u) => {
+//         u.registrations.map((f) => {
+//           if (f.roles[0] === 'customer') {
+//             let example = { users: [u] };
+//             setCustomers(example);
+//         }
+//       })
+//     })
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }
+// }, [data]);
+
+useEffect(() => {
+  if (data) {
+    const allUsers = data.data.users.users;
+    const searchRole = (name, arr) => arr.filter(
+      ({ registrations }) => registrations.find(role => role.roles[0] === "customer")
+    )
+    const searchResult = searchRole('customer', allUsers)
+    let obj = { users: searchResult };
+    setCustomers(obj);
+}
 }, [data]);
 
   const { sortedClientsKeys, sortedClientsOrder, sortedClientsNames, sortedClientsContracts, sortedClientsPhones, sortedClientsEmails } = useSort();

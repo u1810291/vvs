@@ -77,17 +77,13 @@ function DriversList() {
   useEffect(() => {
     if (data) {
       const allUsers = data.data.users.users;
-      allUsers.map((u) => {
-        u.registrations.map((f) => {
-          if (f.roles[0] === "crew") {
-            let obj = { users: [u] };
-            setCrew(obj); // later attach status
-          }
-        });
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+      const searchRole = (name, arr) => arr.filter(
+        ({ registrations }) => registrations.find(role => role.roles[0] === "crew")
+      )
+      const searchResult = searchRole('crew', allUsers)
+      let obj = { users: searchResult };
+      setCrew(obj);
+  }}, [data]);
 
   const {
     sortedDriversKeys,

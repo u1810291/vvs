@@ -65,15 +65,12 @@ function Client() {
   useEffect(() => {
     if (data) {
       const allUsers = data.data.users.users;
-      allUsers.map((u) => {
-        u.registrations.map((f) => {
-          if (f.roles[0] === 'customer') {
-            let obj = { users: [ u ]};
-            setCustomers(obj);
-        }
-      })
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      const searchRole = (name, arr) => arr.filter(
+        ({ registrations }) => registrations.find(role => role.roles[0] === "customer")
+      )
+      const searchResult = searchRole('customer', allUsers)
+      let obj = { users: searchResult };
+      setCustomers(obj);
   }}, [data]);
 
   useEffect(() => {
