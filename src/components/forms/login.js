@@ -15,6 +15,7 @@ const LoginForm = () => {
   const [passwordEmpty, setPasswordEmpty] = useState(true);
   const { english, lithuanian, t } = useLanguage();
   const { loginError, setLoginError } = useContext(AuthContext);
+  const { invalidUserLogin, setInvalidUserLogin } = useContext(AuthContext);
 
   useEffect(() => {
     if (loginError === true) {
@@ -22,12 +23,17 @@ const LoginForm = () => {
         setLoginError(false);
       }, 3000);
     }
-  }, [loginError, setLoginError]);
+    if (invalidUserLogin === "Sorry, you don't have right permissions to login") {
+      setTimeout(() => {
+        setInvalidUserLogin(null);
+      }, 3000);
+    }
+  }, [loginError, setLoginError, setInvalidUserLogin, invalidUserLogin]);
 
   const passwordFunc = useCallback(
     async (e) => {
       setPassword(e.target.value);
-       // Minimum eight characters, at least one upper case letter, one symbol and one number
+      // Minimum eight characters, at least one upper case letter, one symbol and one number
       const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
       const result = pattern.test(password);
       if (result === true || password === "") {
@@ -122,6 +128,11 @@ const LoginForm = () => {
             {loginError ? (
               <a className="text-red-800 text-sm font-montserrat">
                 {t("loginSystem.wrongEmailOrPassword")}
+              </a>
+            ) : null}
+                      {invalidUserLogin ? (
+              <a className="text-red-800 text-sm font-montserrat">
+                {invalidUserLogin}
               </a>
             ) : null}
           </div>

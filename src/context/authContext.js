@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
   const [spinner, setSpinner] = useState(false);
   const [sent, setSent] = useState(null);
   const [clientEmail, setClientEmail] = useState("");
+  const [invalidUserLogin, setInvalidUserLogin] = useState(null)
   // const abortController = useRef(null);
   // const cancelRequest = () => abortController.current && abortController.current.abort();
 
@@ -83,14 +84,6 @@ export const AuthProvider = ({ children }) => {
     () => navigate("/");
   }, [navigate]);
 
-  useEffect(() => {
-    if (user?.roles[0] === "crew") {
-      console.log(user?.roles);
-      Logout();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
   const LoginUser = useCallback(
     async (e) => {
       try {
@@ -120,12 +113,16 @@ export const AuthProvider = ({ children }) => {
         const data = await res.json();
         if (data) {
           const token = data?.data?.login?.token;
-          const refresh = data?.data?.login?.refreshToken;
+          const encode = jwt_decode(token);
+          if(encode.roles[0] === "crew") {
+            setInvalidUserLogin("Sorry, you don't have right permissions to login");
+          } else {
           setUser(jwt_decode(token));
+          const refresh = data?.data?.login?.refreshToken;
           setAccessToken(token);
           setRefreshTokenSession(refresh);
           navigate("/dashboard");
-        }
+        }}
       } catch (err) {
         setLoginError(true);
         // console.log(err);
@@ -371,6 +368,8 @@ export const AuthProvider = ({ children }) => {
     HandleRecoverPassword: HandleRecoverPassword,
     ForgotPassword: ForgotPassword,
     ForgotPasswordFromAdmin: ForgotPasswordFromAdmin,
+    invalidUserLogin, 
+    setInvalidUserLogin,
     clientEmail,
     setClientEmail,
     user: user,

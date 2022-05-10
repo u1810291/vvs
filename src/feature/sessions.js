@@ -11,13 +11,13 @@ export function removeEmailRecoverySession(token) {
 }
 
 export function getRefreshTokenSession() {
-  return sessionStorage.getItem("rt");
+  return sessionStorage.getItem("9_OnIzf7Xsys5Fds2");
 }
 
 export function setRefreshTokenSession(token) {
-  sessionStorage.setItem("rt", token);
+  sessionStorage.setItem("9_OnIzf7Xsys5Fds2", token);
 }
 
 export function removeRefreshTokenSession(token) {
-  sessionStorage.removeItem("rt", token);
+  sessionStorage.removeItem("9_OnIzf7Xsys5Fds2", token);
 }
