@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { GlobalProvider } from "./context/globalContext";
+// import { GlobalProvider } from "./context/globalContext";
 import { AuthProvider } from "./context/authContext";
+import GlobalContext from "./context/globalContext";
 import ProtectedRoute from "./feature/protected";
-// import { GraphQLClient, ClientContext } from "graphql-hooks";
-// import { createClient } from "graphql-ws";
-// import memCache from "graphql-hooks-memcache";
+import { GraphQLClient, ClientContext } from "graphql-hooks";
+import { createClient } from "graphql-ws";
+import memCache from "graphql-hooks-memcache";
 
 import Login from "./layout/login";
 import Dashboard from "./layout/dashboard";
@@ -24,38 +25,39 @@ import New from "./layout/new";
 import NotFound from "./layout/notFound";
 
 function App() {
-
-  // const client = new GraphQLClient({
-  //   // returnJWT() and apply middleware
-  //   url: "https://ec.swarm.testavimui.eu/v1/graphql",
-  //   cache: memCache(),
-  //   fullWsTransport: false,
-  //   subscriptionClient: () =>
-  //     createClient({
-  //       url: "ws://ec.swarm.testavimui.eu/v1/graphql",
-  //       options: {
-  //         reconnect: true,
-  //         lazy: true,
-  //         inactivityTimeout: 30000,
-  //         connectionParams: () => {
-  //           const token = getAccessToken();
-  //           return {
-  //           headers: {
-  //             "content-type": "application/json",
-  //             "x-hasura-admin-secret": "secret",
-  //             Authorization: token ? "Bearer" + String(accessToken) : "",
-  //           },
-  //         }
-  //         },
-  //       },
-  //     }),
-  // });
+  const {globalToken, setGlobalToken} = useContext(GlobalContext);
+  console.log(globalToken);
+  const client = new GraphQLClient({
+    // returnJWT() and apply middleware
+    url: "https://ec.swarm.testavimui.eu/v1/graphql",
+    cache: memCache(),
+    fullWsTransport: false,
+    subscriptionClient: () =>
+      createClient({
+        url: "ws://ec.swarm.testavimui.eu/v1/graphql",
+        options: {
+          reconnect: true,
+          lazy: true,
+          inactivityTimeout: 30000,
+          connectionParams: () => {
+            const token = getAccessToken();
+            return {
+            headers: {
+              "content-type": "application/json",
+              "x-hasura-admin-secret": "secret",
+              Authorization: globalToken ? "Bearer" + String(globalToken) : "",
+            },
+          }
+          },
+        },
+      }),
+  });
 
   return (
     <Router>
       <AuthProvider>
-        <GlobalProvider>
-          {/* <ClientContext.Provider value={client}> */}
+        {/* <GlobalProvider> */}
+          <ClientContext.Provider value={globalToken ? client : null}>
             <Routes>
               <Route element={<ProtectedRoute />}>
                 <Route path="/" exec element={<Login />} />
@@ -74,8 +76,8 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
-          {/* </ClientContext.Provider> */}
-        </GlobalProvider>
+          </ClientContext.Provider>
+        {/* </GlobalProvider> */}
       </AuthProvider>
     </Router>
   );

@@ -6,6 +6,7 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import AuthContext from "../context/authContext";
+import GlobalContext from "../context/globalContext";
 // import { useQuery, useSubscription, useMutation } from "graphql-hooks";
 
 const test2 = `subscription ($invoices: String!, $objects: String!) {
@@ -38,7 +39,8 @@ subscription {
 // };
 
 function Dashboard() {
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken, user } = useContext(AuthContext);
+  const { globalToken, setGlobalToken } = useContext(GlobalContext)
   const [isOpen, setIsOpen] = useState(false);
   const handleOnOpen = useCallback(() => {
     setIsOpen(true);
@@ -48,6 +50,13 @@ function Dashboard() {
   }, [setIsOpen]);
 
   usePreventScroll({ isDisabled: !isOpen });
+
+  useEffect(() => {
+    if(accessToken) {
+      setGlobalToken(accessToken);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[accessToken])
 
   // const [data, setData] = useState(null);
   // const [error, setError] = useState(null);

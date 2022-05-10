@@ -67,21 +67,6 @@ function ClientsList() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-//   useEffect(() => {
-//     if (data) {
-//       const allUsers = data.data.users.users; // filter here
-//       let concatArray = allUsers.map((u) => {
-//         u.registrations.map((f) => {
-//           if (f.roles[0] === 'customer') {
-//             let example = { users: [u] };
-//             setCustomers(example);
-//         }
-//       })
-//     })
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }
-// }, [data]);
-
 useEffect(() => {
   if (data) {
     const allUsers = data.data.users.users;
