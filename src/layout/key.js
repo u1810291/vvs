@@ -8,6 +8,8 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useParams } from "react-router-dom";
 import AuthContext from "../context/authContext";
+import GlobalContext from "../context/globalContext";
+import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../components/sidebars/slideOver";
 import { Spinner } from "react-activity";
 import { OverlayProvider, usePreventScroll } from "react-aria";
@@ -21,6 +23,8 @@ function classNames(...classes) {
 function Key() {
   const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
+  const { pdfExportComponentKey } = useContext(GlobalContext);
+  const { toPrintKey, setToPrintKey } = useContext(GlobalContext);
   const [keySet, setKeySet] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
@@ -30,14 +34,13 @@ function Key() {
     setIsOpen(true);
   }, []);
   usePreventScroll({ isDisabled: !isOpen });
-  const [keysSet, setKeysSet] = useState("");
   const { backFunc } = useUtils();
 
   const keySetFunc = useCallback(
     async (e) => {
-      setKeysSet(e.target.value);
+      setKeySet(e.target.value);
     },
-    [setKeysSet]
+    [setKeySet]
   );
 
   // useEffect(() => {
@@ -89,7 +92,6 @@ function Key() {
                         <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-4/6 lg:w-4/6">
                           <div className="flex flex-col">
                             <div className="flex flex-row">
-
                               <div className="flex mr-2 flex-col  mb-4 ">
                                 <div className="flex flex-row">
                                   <p className="self-start text-sm text-gray-500 truncate my-2">
@@ -178,45 +180,96 @@ function Key() {
                               </button>
                             </div>
 
-                            <div className="hidden pl-1 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                              <div className="flex flex-row items-center">
-                                <span className="text-gray-300 text-sm">
-                                  Nr
-                                </span>
-                              </div>
-                              <div className="flex flex-row items-center col-span-2">
-                                <span className="text-gray-300 text-sm">
-                                  Objekto Nr
-                                </span>
-                              </div>
-                              <div className="flex flex-row items-center col-span-4">
-                                <span className="text-gray-300 text-sm">
-                                  Objektas
-                                </span>
-                              </div>
-                              <div className="flex flex-row items-center col-span-4">
-                                <span className="text-gray-300 col-span-5 text-sm">
-                                  Adresas
-                                </span>
-                              </div>
-                              <div className="flex flex-row items-center">
-                                <span className="text-gray-300 col-span-5 text-sm"></span>
-                              </div>
-                            </div>
+                            {toPrintKey ? (
+                              <PDFExport
+                                ref={pdfExportComponentKey}
+                                scale={0.4}
+                                paperSize="A4"
+                                margin="1cm"
+                              >
+                                <div className="hidden pl-1 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+                                  <div className="flex flex-row items-center">
+                                    <span className="text-gray-300 text-sm">
+                                      Nr
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center col-span-2">
+                                    <span className="text-gray-300 text-sm">
+                                      Objekto Nr
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center col-span-4">
+                                    <span className="text-gray-300 text-sm">
+                                      Objektas
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center col-span-4">
+                                    <span className="text-gray-300 col-span-5 text-sm">
+                                      Adresas
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center">
+                                    <span className="text-gray-300 col-span-5 text-sm"></span>
+                                  </div>
+                                </div>
 
-                            <div className="overflow-y-auto h-96 scrollbar-gone">
-                              {keyObjectList.map((data) => (
-                                <KeyList
-                                  key={generate()}
-                                  id={data.id}
-                                  nr={data.nr}
-                                  objectnr={data.objectnr}
-                                  object={data.object}
-                                  address={data.address}
-                                  remove={data.remove}
-                                />
-                              ))}
-                            </div>
+                                <div className="overflow-y-auto h-96 scrollbar-gone">
+                                  {keyObjectList.map((data) => (
+                                    <KeyList
+                                      key={generate()}
+                                      id={data.id}
+                                      nr={data.nr}
+                                      objectnr={data.objectnr}
+                                      object={data.object}
+                                      address={data.address}
+                                      remove={data.remove}
+                                    />
+                                  ))}
+                                </div>
+                              </PDFExport>
+                            ) : (
+                              <>
+                                <div className="hidden pl-1 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+                                  <div className="flex flex-row items-center">
+                                    <span className="text-gray-300 text-sm">
+                                      Nr
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center col-span-2">
+                                    <span className="text-gray-300 text-sm">
+                                      Objekto Nr
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center col-span-4">
+                                    <span className="text-gray-300 text-sm">
+                                      Objektas
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center col-span-4">
+                                    <span className="text-gray-300 col-span-5 text-sm">
+                                      Adresas
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-row items-center">
+                                    <span className="text-gray-300 col-span-5 text-sm"></span>
+                                  </div>
+                                </div>
+
+                                <div className="overflow-y-auto h-96 scrollbar-gone">
+                                  {keyObjectList.map((data) => (
+                                    <KeyList
+                                      key={generate()}
+                                      id={data.id}
+                                      nr={data.nr}
+                                      objectnr={data.objectnr}
+                                      object={data.object}
+                                      address={data.address}
+                                      remove={data.remove}
+                                    />
+                                  ))}
+                                </div>
+                              </>
+                            )}
                           </div>
                           <button
                             // onClick={confirmArchiveFetch}

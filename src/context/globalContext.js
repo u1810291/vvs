@@ -7,6 +7,7 @@ export default GlobalContext;
 
 export const GlobalProvider = ({ children }) => {
   const pdfExportComponentNew = useRef(null);
+  const pdfExportComponentKey = useRef(null);
   const [filter, setFilter] = useState("");
   const [value, onChange] = useState(new Date());
   const [objectAddress, setObjectAddress] = useState("");
@@ -28,6 +29,7 @@ export const GlobalProvider = ({ children }) => {
   const [sortedClientsOrder, setSortedClientsOrder] = useState("");
   const [sortedClientsKeys, setSortedClientsKeys] = useState("");
   const [toPrintNew, setToPrintNew] = useState(null);
+  const [toPrintKey, setToPrintKey] = useState(null);
   const [expandFilter, setExpandFilter] = useState(true);
   const [expandFilterDrivers, setExpandFilterDrivers] = useState(true);
   const [expandFilterObjects, setExpandFilterObjects] = useState(true);
@@ -162,8 +164,11 @@ export const GlobalProvider = ({ children }) => {
     objectName,
     setObjectName,
     pdfExportComponentNew,
+    pdfExportComponentKey,
     toPrintNew,
     setToPrintNew,
+    toPrintKey,
+    setToPrintKey,
     filterList,
     setFilterList,
     selectedFilterDrivers,

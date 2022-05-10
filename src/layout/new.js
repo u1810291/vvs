@@ -6,8 +6,6 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import useLanguage from "../hook/useLanguage";
-import { useNavigate } from "react-router-dom";
 import { FinishedHeader } from "../components/headers/finished";
 import NewSideLeft from "../components/sides/newSideLeft";
 import InProcessRightSide from "../components/sides/inProcessRight";
