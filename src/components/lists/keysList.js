@@ -8,8 +8,8 @@ export const KeysList = ({
   ...props
 }) => {
 
-    // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-    const path = { pathname: `/key/${id}` };
+  // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+  const path = { pathname: `/key/${id}` };
 
   return (
     <div className="w-full" {...props}>

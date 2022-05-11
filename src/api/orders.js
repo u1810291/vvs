@@ -6,6 +6,9 @@ export const Orders = [
     "object": "object1",
     "name": "Vardenis Pavardenis 1",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract2",
@@ -14,6 +17,9 @@ export const Orders = [
     "object": "object2",
     "name": "Vardenis Pavardenis 2",
     "sentCrew": "Ne",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract3",
@@ -22,6 +28,9 @@ export const Orders = [
     "object": "object3",
     "name": "Vardenis Pavardenis 3",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract4",
@@ -30,6 +39,9 @@ export const Orders = [
     "object": "object4",
     "name": "Vardenis Pavardenis 4",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract5",
@@ -38,6 +50,9 @@ export const Orders = [
     "object": "object5",
     "name": "Vardenis Pavardenis 5",
     "sentCrew": "NE",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract1",
@@ -46,6 +61,9 @@ export const Orders = [
     "object": "object1",
     "name": "Vardenis Pavardenis 1",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract2",
@@ -54,6 +72,9 @@ export const Orders = [
     "object": "object2",
     "name": "Vardenis Pavardenis 2",
     "sentCrew": "Ne",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract3",
@@ -62,6 +83,9 @@ export const Orders = [
     "object": "object3",
     "name": "Vardenis Pavardenis 3",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract4",
@@ -70,6 +94,9 @@ export const Orders = [
     "object": "object4",
     "name": "Vardenis Pavardenis 4",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract5",
@@ -78,6 +105,9 @@ export const Orders = [
     "object": "object5",
     "name": "Vardenis Pavardenis 5",
     "sentCrew": "NE",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract1",
@@ -86,6 +116,9 @@ export const Orders = [
     "object": "object1",
     "name": "Vardenis Pavardenis 1",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract2",
@@ -94,6 +127,8 @@ export const Orders = [
     "object": "object2",
     "name": "Vardenis Pavardenis 2",
     "sentCrew": "Ne",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479"
   },
   {
     "contract": "contract3",
@@ -102,6 +137,9 @@ export const Orders = [
     "object": "object3",
     "name": "Vardenis Pavardenis 3",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract4",
@@ -110,6 +148,9 @@ export const Orders = [
     "object": "object4",
     "name": "Vardenis Pavardenis 4",
     "sentCrew": "TAIP",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
   {
     "contract": "contract5",
@@ -118,5 +159,8 @@ export const Orders = [
     "object": "object5",
     "name": "Vardenis Pavardenis 5",
     "sentCrew": "NE",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
   },
 ];

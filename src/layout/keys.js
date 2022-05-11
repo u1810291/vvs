@@ -45,18 +45,10 @@ function Keys() {
     }, 1000);
   }, []);
 
-  const {
-    sortedKeysKeys,
-    sortedKeysOrder,
-    sortedKeysSet,
-    sortedKeysCrew,
-  } = useSort();
+  const { sortedKeysKeys, sortedKeysOrder, sortedKeysSet, sortedKeysCrew } =
+    useSort();
 
-  const sortedKeys = sortToggle(
-    keys,
-    sortedKeysKeys,
-    sortedKeysOrder
-  );
+  const sortedKeys = sortToggle(keys, sortedKeysKeys, sortedKeysOrder);
 
   return (
     <OverlayProvider>
@@ -65,8 +57,8 @@ function Keys() {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-              <button className="flex flex-col items-center">
-              <img
+                <button className="flex flex-col items-center">
+                  <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../assets/assets/hamburger.png")}
@@ -76,9 +68,7 @@ function Keys() {
               <div className="flex flex-col min-h-full w-full justify-between">
                 <KeysHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
-                  <div className="flex flex-row w-full">
-
-                  </div>
+                  <div className="flex flex-row w-full"></div>
 
                   {toPrint ? (
                     <PDFExport
@@ -103,24 +93,20 @@ function Keys() {
                           </button>
                         </div>
                         <div className="flex flex-row items-center col-span-2">
-                        <button
-                          onClick={sortedKeysCrew}
-                          className="flex flex-row items-center "
-                        >
-                          <span className="text-gray-300 text-sm">Ekipažas</span>
-                        </button>
+                          <button
+                            onClick={sortedKeysCrew}
+                            className="flex flex-row items-center "
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Ekipažas
+                            </span>
+                          </button>
                         </div>
-                        <span
-                          className="flex flex-row items-center col-span-2"
-                        >
-                        </span>
-                        <span
-                          className="flex flex-row items-center col-span-2"
-                        >
-                        </span>
+                        <span className="flex flex-row items-center col-span-2"></span>
+                        <span className="flex flex-row items-center col-span-2"></span>
                       </div>
                       <div className="pl-4 flex-col w-full items-center">
-                      {sortedKeys.map((data) => (
+                        {sortedKeys.map((data) => (
                           <KeysList
                             key={data.id}
                             id={data.id}
@@ -133,7 +119,7 @@ function Keys() {
                   ) : (
                     <>
                       <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-8 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-8 grid-gap-6 justify-between font-normal text-black z-1">
-                      <div className="flex flex-row items-center col-span-2">
+                        <div className="flex flex-row items-center col-span-2">
                           <button
                             onClick={sortedKeysSet}
                             className="flex flex-row items-center"
@@ -148,21 +134,17 @@ function Keys() {
                           </button>
                         </div>
                         <div className="flex flex-row items-center col-span-2">
-                        <button
-                          onClick={sortedKeysCrew}
-                          className="flex flex-row items-center "
-                        >
-                          <span className="text-gray-300 text-sm">Ekipažas</span>
-                        </button>
+                          <button
+                            onClick={sortedKeysCrew}
+                            className="flex flex-row items-center "
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Ekipažas
+                            </span>
+                          </button>
                         </div>
-                        <span
-                          className="flex flex-row items-center col-span-2"
-                        >
-                        </span>
-                        <span
-                          className="flex flex-row items-center col-span-2"
-                        >
-                        </span>
+                        <span className="flex flex-row items-center col-span-2"></span>
+                        <span className="flex flex-row items-center col-span-2"></span>
                       </div>
                       <div className="pl-4 flex-col w-full items-center">
                         {sortedKeys.map((data) => (

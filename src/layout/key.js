@@ -1,4 +1,6 @@
 import React, { useState, useContext, useCallback, useEffect } from "react";
+import { Orders } from "../api/orders";
+import { KeyInternal } from "../components/lists/keyInternal";
 import { KeyHeader } from "../components/headers/key";
 import { KeyList } from "../components/lists/key";
 import { keyObjectList } from "../api/keyObjectList";
@@ -7,6 +9,7 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useParams } from "react-router-dom";
+import { Search } from "../components/input/search";
 import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
@@ -26,6 +29,7 @@ function Key() {
   const { pdfExportComponentKey } = useContext(GlobalContext);
   const { toPrintKey, setToPrintKey } = useContext(GlobalContext);
   const [keySet, setKeySet] = useState("");
+  const [openModal, setOpenModal] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -55,6 +59,14 @@ function Key() {
     if (confirm(text) === true) {
       // archiveFetch();
     }
+  }, []);
+
+  const openObjectList = useCallback(() => {
+    setOpenModal(true);
+  }, []);
+
+  const closeObjectList = useCallback(() => {
+    setOpenModal(false);
   }, []);
 
   return (
@@ -175,11 +187,117 @@ function Key() {
                               <a className="flex rounded-sm text-normal px-2 mb-2 font-normal items-center text-black">
                                 <p>Objektai</p>
                               </a>
-                              <button className="flex rounded-sm text-xs px-4 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
+                              <button
+                                onClick={openObjectList}
+                                className="flex rounded-sm text-xs px-4 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200"
+                              >
                                 <p>Pridėti objektą</p>
                               </button>
                             </div>
 
+                            {openModal ? (
+                              <div
+                                className="relative z-10"
+                                aria-labelledby="modal-title"
+                                role="dialog"
+                                aria-modal="true"
+                              >
+                                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+                                <div className="fixed z-10 inset-0 overflow-auto">
+                                  <div className="flex items-center justify-center h-full my-4 px-4 pb-20 text-center">
+                                    <span
+                                      className="hidden sm:inline-block sm:align-middle sm:h-full"
+                                      aria-hidden="true"
+                                    >
+                                      &#8203;
+                                    </span>
+                                    <div className="relative inline-block align-bottom bg-white px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle mx-10 h-full w-screen sm:p-6">
+                                      <div className="flex flex-row border-b h-16 bg-white justify-between">
+                                        <div className="xl:flex hidden xl:flex-row ml-4 items-center">
+                                          <h4 className="ml-2 text-normal font-normal">
+                                            Užduotys
+                                          </h4>
+                                          <p className="pl-2 text-gray-600">
+                                            /
+                                          </p>
+                                          <h4 className="text-normal ml-2 font-normal text-gray-500">
+                                            Visi duomenys
+                                          </h4>
+                                          <div className="px-8">
+                                            <Search />
+                                          </div>
+                                        </div>
+                                        <div className="flex flex-col justify-center">
+                                          <button
+                                            onClick={closeObjectList}
+                                            className=""
+                                          >
+                                            <img
+                                              className="h-6 w-6"
+                                              src={require("../assets/assets/close.png")}
+                                            ></img>
+                                          </button>
+                                        </div>
+                                      </div>
+
+                                      <div className="hidden pl-1 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+                                        <div className="flex flex-row items-center col-span-2">
+                                          <span className="text-gray-300 text-sm">
+                                            Pavadinimas
+                                          </span>
+                                        </div>
+                                        <div className="flex flex-row items-center">
+                                          <span className="text-gray-300 text-sm">
+                                            Miestas
+                                          </span>
+                                        </div>
+                                        <div className="flex flex-row items-center col-span-2">
+                                          <span className="text-gray-300 text-sm">
+                                            Adresas
+                                          </span>
+                                        </div>
+                                        <div className="flex flex-row items-center">
+                                          <span className="text-gray-300 text-sm">
+                                            Objekto Nr.
+                                          </span>
+                                        </div>
+                                        <div className="flex flex-row items-center">
+                                          <span className="text-gray-300 text-sm">
+                                            Sutarties Nr.
+                                          </span>
+                                        </div>
+                                        <div className="flex flex-row items-center">
+                                          <span className="text-gray-300 text-sm">
+                                            Siųsti Ekipažą
+                                          </span>
+                                        </div>
+                                        <div className="flex flex-row items-center">
+                                          <span className="text-gray-300 text-sm"></span>
+                                        </div>
+                                        <div className="flex flex-row items-center col-span-3">
+                                          <span className="text-gray-300 text-sm"></span>
+                                        </div>
+                                      </div>
+                                      <div className="overflow-y-auto h-96 scrollbar-gone">
+                                        {Orders.map((data) => (
+                                          <KeyInternal
+                                            key={generate()}
+                                            id={data.id}
+                                            name={data.name}
+                                            city={data.city}
+                                            address={data.address}
+                                            objectnr={data.objectnr}
+                                            contractnr={data.contractnr}
+                                            sendcrew={data.sentCrew}
+                                            add={data.add}
+                                          />
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : null}
                             {toPrintKey ? (
                               <PDFExport
                                 ref={pdfExportComponentKey}
