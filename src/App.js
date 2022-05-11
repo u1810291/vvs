@@ -25,7 +25,6 @@ import NotFound from "./layout/notFound";
 
 function App() {
   const {globalToken, setGlobalToken} = useContext(GlobalContext);
-  console.log('got token ', globalToken);
   const client = new GraphQLClient({
     // returnJWT() and apply middleware
     url: "https://ec.swarm.testavimui.eu/v1/graphql",
@@ -55,7 +54,6 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        {/* <GlobalProvider> */}
           <ClientContext.Provider value={globalToken ? client : null}>
             <Routes>
               <Route element={<ProtectedRoute />}>
@@ -76,7 +74,6 @@ function App() {
               </Route>
             </Routes>
           </ClientContext.Provider>
-        {/* </GlobalProvider> */}
       </AuthProvider>
     </Router>
   );

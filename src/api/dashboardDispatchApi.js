@@ -6,8 +6,11 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "true",
     "inTask": "false",
-    "askForBreak": "passive",
-    "dislocation": "true"
+    "askForBreak": "active",
+    "dislocation": "true",
+    "dislocationStatus": "Į degalinę",
+    "connection": "Prarastas rišys",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "2",
@@ -17,17 +20,23 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "false",
     "askForBreak": "active",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "gryžta",
+    "connection": "good",
+    "event": "užpuolimas: spindulio nr X sabotažas"
   },
   {
     "id": "3",
     "crew": "G3",
     "name": "B03 RG Kaunas",
-    "status": "Prarastas rišys",
+    "status": "online",
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "active",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "Prarastas rišys",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "4",
@@ -37,7 +46,10 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "active",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "gryžta",
+    "connection": "good",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "5",
@@ -47,7 +59,10 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "false",
     "askForBreak": "active",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "6",
@@ -56,18 +71,24 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "passive",
-    "dislocation": "true"
+    "askForBreak": "active",
+    "dislocation": "true",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "8",
     "crew": "G7",
     "name": "B07 RG Kaunas",
-    "status": "Prarastas rišys",
+    "status": "online",
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "false",
-    "dislocation": "true"
+    "dislocation": "true",
+    "dislocationStatus": "gryžta",
+    "connection": "Prarastas rišys",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "9",
@@ -77,7 +98,10 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "10",
@@ -87,17 +111,23 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "active",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "gryžta",
+    "connection": "good",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "11",
     "crew": "G10",
     "name": "B010 RG Kaunas",
-    "status": "Prarastas rišys",
+    "status": "online",
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "Prarastas rišys",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "12",
@@ -107,7 +137,10 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "false",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "gryžta",
+    "connection": "good",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "13",
@@ -117,17 +150,23 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "false",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "14",
     "crew": "G13",
     "name": "B13 RG Kaunas",
-    "status": "Prarastas rišys",
+    "status": "online",
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "gryžta",
+    "connection": "Prarastas rišys",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "15",
@@ -137,7 +176,10 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "active",
-    "dislocation": "true"
+    "dislocation": "true",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "16",
@@ -147,17 +189,23 @@ export const DDAPI = [
     "inBreak": "true",
     "inTask": "false",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "gryžta",
+    "connection": "good",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "17",
     "crew": "G16",
     "name": "B16 RG Kaunas",
-    "status": "Prarastas rišys",
+    "status": "online",
     "inBreak": "true",
     "inTask": "false",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "Prarastas rišys",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "18",
@@ -167,7 +215,10 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "gryžta",
+    "connection": "Prarastas rišys",
+    "event": "užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "19",
@@ -177,6 +228,49 @@ export const DDAPI = [
     "inBreak": "false",
     "inTask": "true",
     "askForBreak": "false",
-    "dislocation": "false"
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "Prarastas rišys",
+    "event": "užpuolimas, spindulio N sabotažas"
+  },
+  {
+    "id": "20",
+    "crew": "G12",
+    "name": "B12 RG Kaunas",
+    "status": "offline",
+    "inBreak": "false",
+    "inTask": "false",
+    "askForBreak": "false",
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "įvykis: spindulio nr N sabotažas"
+  },
+  {
+    "id": "21",
+    "crew": "G12",
+    "name": "B12 RG Kaunas",
+    "status": "offline",
+    "inBreak": "false",
+    "inTask": "false",
+    "askForBreak": "false",
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "įvykis: spindulio nr N sabotažas"
+  },
+  {
+    "id": "22",
+    "crew": "G12",
+    "name": "B12 RG Kaunas",
+    "status": "offline",
+    "inBreak": "false",
+    "inTask": "false",
+    "askForBreak": "false",
+    "dislocation": "false",
+    "dislocationStatus": "Į degalinę",
+    "connection": "good",
+    "event": "įvykis: spindulio nr N sabotažas"
   },
 ];
+
