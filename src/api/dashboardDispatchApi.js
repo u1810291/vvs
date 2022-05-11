@@ -6,7 +6,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "true",
     "inTask": "false",
-    "askForBreak": "passive"
+    "askForBreak": "passive",
+    "dislocation": "true"
   },
   {
     "id": "2",
@@ -15,7 +16,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "false",
-    "askForBreak": "active"
+    "askForBreak": "active",
+    "dislocation": "false"
   },
   {
     "id": "3",
@@ -24,7 +26,8 @@ export const DDAPI = [
     "status": "Prarastas rišys",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "active"
+    "askForBreak": "active",
+    "dislocation": "false"
   },
   {
     "id": "4",
@@ -33,7 +36,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "active"
+    "askForBreak": "active",
+    "dislocation": "false"
   },
   {
     "id": "5",
@@ -42,7 +46,8 @@ export const DDAPI = [
     "status": "offline",
     "inBreak": "false",
     "inTask": "false",
-    "askForBreak": "active"
+    "askForBreak": "active",
+    "dislocation": "false"
   },
   {
     "id": "6",
@@ -51,7 +56,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "passive"
+    "askForBreak": "passive",
+    "dislocation": "true"
   },
   {
     "id": "8",
@@ -60,7 +66,8 @@ export const DDAPI = [
     "status": "Prarastas rišys",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "true"
   },
   {
     "id": "9",
@@ -69,7 +76,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "10",
@@ -78,7 +86,8 @@ export const DDAPI = [
     "status": "offline",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "active"
+    "askForBreak": "active",
+    "dislocation": "false"
   },
   {
     "id": "11",
@@ -87,7 +96,8 @@ export const DDAPI = [
     "status": "Prarastas rišys",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "12",
@@ -96,7 +106,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "false",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "13",
@@ -105,7 +116,8 @@ export const DDAPI = [
     "status": "offline",
     "inBreak": "false",
     "inTask": "false",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "14",
@@ -114,7 +126,8 @@ export const DDAPI = [
     "status": "Prarastas rišys",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "15",
@@ -123,7 +136,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "active"
+    "askForBreak": "active",
+    "dislocation": "true"
   },
   {
     "id": "16",
@@ -132,7 +146,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "true",
     "inTask": "false",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "17",
@@ -141,7 +156,8 @@ export const DDAPI = [
     "status": "Prarastas rišys",
     "inBreak": "true",
     "inTask": "false",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "18",
@@ -150,7 +166,8 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
   {
     "id": "19",
@@ -159,6 +176,7 @@ export const DDAPI = [
     "status": "online",
     "inBreak": "false",
     "inTask": "true",
-    "askForBreak": "false"
+    "askForBreak": "false",
+    "dislocation": "false"
   },
 ];

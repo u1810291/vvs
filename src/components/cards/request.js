@@ -9,10 +9,11 @@ export function RequestCard({
   inBreak,
   inTask,
   askForBreak,
+  dislocation,
 }) {
   return (
     <>
-      {askForBreak === "active" ? (
+      {dislocation === "true" ? (
         <div
           href="#"
           className="flex flex-row border w-full h-16 bg-white justify-between hover:shadow items-center"
@@ -27,9 +28,11 @@ export function RequestCard({
             </div>
           </div>
           <div className="flex flex-col">
-            <a className="flex justify-center mr-2 mb-1 px-4 text-xs font-normal text-gray-400">
-              atšaukti
-            </a>
+            {askForBreak === "active" ? (
+              <button className="flex justify-center mr-2 mb-1 px-4 text-xs font-normal text-gray-400 hover:text-gray-500">
+                atšaukti
+              </button>
+            ) : null}
             <div className="flex justify-center mr-2 rounded-sm px-4 border border-transparent text-xs font-normal text-gray-600 hover:shadow-none bg-gray-200 focus:outline-none">
               0.07s
             </div>

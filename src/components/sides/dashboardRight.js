@@ -39,6 +39,7 @@ const DashboardSideRight = () => {
               inBreak={data.inBreak}
               inTask={data.inTask}
               askForBreak={data.askForBreak}
+              dislocation={data.dislocation}
             />
           ))}
         </div>
