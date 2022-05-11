@@ -18,7 +18,7 @@ const DashboardSideLeft = () => {
           type="submit"
           className="w-52 h-10 flex mr-2 mt-2 mb-1 justify-center py-2 rounded-sm px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 hover:bg-slate-500 focus:outline-none"
         >
-          {t("loginSystem.createTask")}
+          Sukurti užduoti
         </button>
       </div>
       <div className="text-slate-400">

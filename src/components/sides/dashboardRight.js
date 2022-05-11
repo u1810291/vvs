@@ -1,5 +1,5 @@
 import React from "react";
-import useLanguage from "../../hook/useLanguage";
+import { DDAPI } from "../../api/dashboardDispatchApi";
 
 const { AlarmCard } = require("../../components/cards/alarm");
 const { OffCard } = require("../../components/cards/off");
@@ -8,7 +8,6 @@ const { RequestCard } = require("../../components/cards/request");
 const { TaskCard } = require("../../components/cards/tasks");
 
 const DashboardSideRight = () => {
-  const { english, lithuanian, t } = useLanguage();
   return (
     <>
       <div className="flex flex-col">
@@ -18,14 +17,44 @@ const DashboardSideRight = () => {
         </div>
         <div className="text-slate-400">
           <h4 className="ml-6 py-2">Aktyvūs</h4>
-          <ActiveCard />
-          <ActiveCard />
-          <ActiveCard />
-          <RequestCard />
-          <RequestCard />
+          {DDAPI.map((data) => (
+            <ActiveCard
+              id={data.id}
+              key={data.id}
+              crew={data.crew}
+              name={data.name}
+              status={data.status}
+              inBreak={data.inBreak}
+              inTask={data.inTask}
+              askForBreak={data.askForBreak}
+            />
+          ))}
+          {DDAPI.map((data) => (
+            <RequestCard
+              id={data.id}
+              key={data.id}
+              crew={data.crew}
+              name={data.name}
+              status={data.status}
+              inBreak={data.inBreak}
+              inTask={data.inTask}
+              askForBreak={data.askForBreak}
+            />
+          ))}
         </div>
         <h4 className="ml-6 py-2 text-slate-400">Užduotyse</h4>
-        <TaskCard />
+        {DDAPI.map((data) => (
+          <TaskCard
+            id={data.id}
+            key={data.id}
+            crew={data.crew}
+            name={data.name}
+            status={data.status}
+            inBreak={data.inBreak}
+            inTask={data.inTask}
+            askForBreak={data.askForBreak}
+          />
+        ))}
       </div>
       <div className="flex flex-col text-slate-400">
         <div className="flex flex-row items-center justify-between ml-6 py-2">
@@ -35,7 +64,18 @@ const DashboardSideRight = () => {
             src={require("../../assets/assets/up.png")}
           ></img>
         </div>
-        <OffCard />
+        {DDAPI.map((data) => (
+          <OffCard
+            id={data.id}
+            key={data.id}
+            crew={data.crew}
+            name={data.name}
+            status={data.status}
+            inBreak={data.inBreak}
+            inTask={data.inTask}
+            askForBreak={data.askForBreak}
+          />
+        ))}
       </div>
     </>
   );

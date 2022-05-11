@@ -163,4 +163,15 @@ export const Orders = [
     "contractnr": "SPS-00479",
     "add": "true"
   },
+  {
+    "contract": "contract52",
+    "city": "city52",
+    "address": "address52",
+    "object": "object25",
+    "name": "Vardenis Pavardenis 52",
+    "sentCrew": "NE",
+    "objectnr": "SPS-00479",
+    "contractnr": "SPS-00479",
+    "add": "true"
+  },
 ];

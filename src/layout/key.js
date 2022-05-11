@@ -240,7 +240,7 @@ function Key() {
                                         </div>
                                       </div>
 
-                                      <div className="hidden pl-1 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+                                      <div className="hidden pl-1 w-full py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                                         <div className="flex flex-row items-center col-span-2">
                                           <span className="text-gray-300 text-sm">
                                             Pavadinimas
@@ -278,7 +278,7 @@ function Key() {
                                           <span className="text-gray-300 text-sm"></span>
                                         </div>
                                       </div>
-                                      <div className="overflow-y-auto h-96 scrollbar-gone">
+                                      <div className="overflow-y-auto h-96">
                                         {Orders.map((data) => (
                                           <KeyInternal
                                             key={generate()}
