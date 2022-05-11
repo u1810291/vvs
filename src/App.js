@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { GlobalProvider } from "./context/globalContext";
 import { AuthProvider } from "./context/authContext";
 import GlobalContext from "./context/globalContext";
 import ProtectedRoute from "./feature/protected";
@@ -26,7 +25,7 @@ import NotFound from "./layout/notFound";
 
 function App() {
   const {globalToken, setGlobalToken} = useContext(GlobalContext);
-  console.log(globalToken);
+  console.log('got token ', globalToken);
   const client = new GraphQLClient({
     // returnJWT() and apply middleware
     url: "https://ec.swarm.testavimui.eu/v1/graphql",

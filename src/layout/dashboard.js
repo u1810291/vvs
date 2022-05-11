@@ -7,7 +7,7 @@ import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
-// import { useQuery, useSubscription, useMutation } from "graphql-hooks";
+import { useQuery, useSubscription, useMutation } from "graphql-hooks";
 
 const test2 = `subscription ($invoices: String!, $objects: String!) {
   test (invoices: $invoices, objects: $objects) {
@@ -61,7 +61,7 @@ function Dashboard() {
   // const [data, setData] = useState(null);
   // const [error, setError] = useState(null);
 
-  // useSubscription({ query: test }, ({ data, errors }) => { // ,variables: { invoices: "invoices", objects: "objects" }
+  // useSubscription({ query: test}, ({ data, errors }) => { // ,variables: { invoices: "invoices", objects: "objects" }
   //   if (errors && errors.length > 0) {
   //     setError(errors[0]);
   //     return;
