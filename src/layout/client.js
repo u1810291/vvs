@@ -36,7 +36,7 @@ function Client() {
   const [clientLastLogin, setClientLastLogin] = useState("");
   const [fullName, setFullName] = useState("")
   const { sent, setSent, user, ForgotPasswordFromAdmin } =
-    useContext(AuthContext); // do dat
+    useContext(AuthContext);
   const { backFunc } = useUtils();
 
   const getClient = {

@@ -18,16 +18,12 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import GlobalContext from "../context/globalContext";
-import { generate } from "shortid";
 const { AddFilterList } = require("../components/lists/addFilter");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import { Orders } from "../api/orders";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
-import { sortToggle } from "../util/utils";
-import useSort from "../hook/useSort";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -59,23 +55,6 @@ function Objects() {
       setToPrint(false);
     }, 1000);
   }, []);
-
-  const {
-    sortedObjectsKeys,
-    sortedObjectsOrder,
-    sortedObjectsNames,
-    sortedObjectsCity,
-    sortedObjectsAddress,
-    sortedObjectsObject,
-    sortedObjectsSentCrew,
-    sortedObjectsContract,
-  } = useSort();
-
-  const sortedObjects = sortToggle(
-    Orders,
-    sortedObjectsKeys,
-    sortedObjectsOrder
-  );
 
   return (
     <OverlayProvider>
@@ -167,148 +146,13 @@ function Objects() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedObjectsNames}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Vardas Pavardė
-                            </span>
-                            <img
-                              src={require("../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <button
-                          onClick={sortedObjectsCity}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm">Miestas</span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsAddress}
-                          className="flex flex-row items-center col-span-3"
-                        >
-                          <span className="text-gray-300 text-sm">Adresas</span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsObject}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm">
-                            Objekto nr.
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsContract}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm">
-                            Sutarties nr.
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsSentCrew}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm">
-                            Siusti ekipažą
-                          </span>
-                        </button>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedObjects.map((data) => (
-                          <ObjectsList
-                            key={data.id}
-                            id={data.id}
-                            name={data.name}
-                            city={data.city}
-                            address={data.address}
-                            object={data.object}
-                            contract={data.contract}
-                            sentCrew={data.sentCrew}
-                          />
-                        ))}
-                      </div>
+                      <ObjectsList />
                     </PDFExport>
                   ) : (
                     <>
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-12 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedObjectsNames}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300 text-sm hover:text-gray-400">
-                              Vardas Pavardė
-                            </span>
-                            <img
-                              src={require("../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <button
-                          onClick={sortedObjectsCity}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Miestas
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsAddress}
-                          className="flex flex-row items-center col-span-3"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Adresas
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsObject}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Objekto nr.
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsContract}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Sutarties nr.
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedObjectsSentCrew}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Siusti ekipažą
-                          </span>
-                        </button>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedObjects.map((data) => (
-                          <ObjectsList
-                            key={data.id}
-                            id={data.id}
-                            name={data.name}
-                            city={data.city}
-                            address={data.address}
-                            object={data.object}
-                            contract={data.contract}
-                            sentCrew={data.sentCrew}
-                          />
-                        ))}
-                      </div>
+                      <ObjectsList />
                     </>
                   )}
-                  {/* <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav> */}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>

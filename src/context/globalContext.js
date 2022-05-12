@@ -38,6 +38,26 @@ export const GlobalProvider = ({ children }) => {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [apiData, setApiData] = useState("");
   const [globalToken, setGlobalToken] = useState("empty");
+  const [objectDefault, setObjectDefault] = useState("default");
+  const [nameDefault, setNameDefault] = useState("default");
+  const [crewDefault, setCrewDefault] = useState("default");
+  const [inTimeDefault, setInTimeDefault] = useState("default");
+  const [reactionTimeDefault, setReactionTimeDefault] = useState("default");
+  const [timeInObjectDefault, setTimeInObjectDefault] = useState("default");
+  const [statusDefault, setStatusDefault] = useState("default");
+  const [reasonDefault, setReasonDefault] = useState("default");
+  const [dateDefault, setDateDefault] = useState("default");
+  const [objectNamesDefault, setObjectNamesDefault] = useState("default");
+  const [objectCityDefault, setObjectCityDefault] = useState("default");
+  const [objectAddressDefault, setObjectAddressDefault] = useState("default");
+  const [objectObjectsDefault, setObjectObjectsDefault] = useState("default");
+  const [objectContractDefault, setObjectContractDefault] = useState("default");
+  const [objectSentCrewDefault, setObjectSentCrewDefault] = useState("default");
+  const [clientNamesDefault, setClientNamesDefault] = useState("default");
+  const [clientContractsDefault, setClientContractsDefault] =
+    useState("default");
+  const [clientPhonesDefault, setClientPhonesDefault] = useState("default");
+  const [clientEmailsDefault, setClientEmailsDefault] = useState("default");
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -149,9 +169,47 @@ export const GlobalProvider = ({ children }) => {
       ],
     },
   ]);
-  
+
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    clientNamesDefault,
+    setClientNamesDefault,
+    clientContractsDefault,
+    setClientContractsDefault,
+    clientPhonesDefault,
+    setClientPhonesDefault,
+    clientEmailsDefault,
+    setClientEmailsDefault,
+    objectNamesDefault,
+    setObjectNamesDefault,
+    objectCityDefault,
+    setObjectCityDefault,
+    objectAddressDefault,
+    setObjectAddressDefault,
+    objectObjectsDefault,
+    setObjectObjectsDefault,
+    objectContractDefault,
+    setObjectContractDefault,
+    objectSentCrewDefault,
+    setObjectSentCrewDefault,
+    objectDefault,
+    setObjectDefault,
+    nameDefault,
+    setNameDefault,
+    crewDefault,
+    setCrewDefault,
+    inTimeDefault,
+    setInTimeDefault,
+    reactionTimeDefault,
+    setReactionTimeDefault,
+    timeInObjectDefault,
+    setTimeInObjectDefault,
+    statusDefault,
+    setStatusDefault,
+    reasonDefault,
+    setReasonDefault,
+    dateDefault,
+    setDateDefault,
     globalToken,
     setGlobalToken,
     apiData,

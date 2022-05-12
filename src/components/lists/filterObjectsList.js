@@ -4,7 +4,6 @@ import useLanguage from "../../hook/useLanguage";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import GlobalContext from "../../context/globalContext";
-import useArray from "../../hook/useArray";
 import { generate } from "shortid";
 
 function classNames(...classes) {
@@ -26,6 +25,17 @@ export const FiltersListObjects = ({
   const { english, lithuanian, t } = useLanguage();
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
+  const { objectNamesDefault, setObjectNamesDefault } =
+  useContext(GlobalContext);
+const { objectCityDefault, setObjectCityDefault } = useContext(GlobalContext);
+const { objectAddressDefault, setObjectAddressDefault } =
+  useContext(GlobalContext);
+const { objectObjectsDefault, setObjectObjectsDefault } =
+  useContext(GlobalContext);
+const { objectContractDefault, setObjectContractDefault } =
+  useContext(GlobalContext);
+const { objectSentCrewDefault, setObjectSentCrewDefault } =
+  useContext(GlobalContext);
 
   return (
     <div
@@ -94,12 +104,13 @@ export const FiltersListObjects = ({
                 >
                   <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                      {filter.dashboardList.includes("Vardas Pavardė") ? null : (
+                      {filter.dashboardList.includes("Vardas Pavardė") ? null : ( // when no menu items left you can see parent div 
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
                                 const showDate = "Vardas Pavardė";
+                                setObjectNamesDefault("true");
                                 setFilterListObjects((currentFilter) => 
                                 currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(showDate)} : x))}}
                               className={classNames(
@@ -121,6 +132,7 @@ export const FiltersListObjects = ({
                             <button
                             onClick={() => {
                               const object = "Miestas";
+                              setObjectCityDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(object)} : x))}}
                               className={classNames(
@@ -142,6 +154,7 @@ export const FiltersListObjects = ({
                             <button
                             onClick={() => {
                               const name = "Adresas";
+                              setObjectAddressDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(name)} : x))}}
                               className={classNames(
@@ -163,6 +176,7 @@ export const FiltersListObjects = ({
                             <button
                             onClick={() => {
                               const crew = "Objekto nr.";
+                              setObjectObjectsDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(crew)} : x))}}
                               className={classNames(
@@ -184,6 +198,7 @@ export const FiltersListObjects = ({
                             <button
                             onClick={() => {
                               const inTime = "Sutarties nr.";
+                              setObjectContractDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(inTime)} : x))}}
                               className={classNames(
@@ -207,6 +222,7 @@ export const FiltersListObjects = ({
                             <button
                             onClick={() => {
                               const reactionTime = "Siusti ekipaža";
+                              setObjectSentCrewDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(reactionTime)} : x))}}
                               className={classNames(

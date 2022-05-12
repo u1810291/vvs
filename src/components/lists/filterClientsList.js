@@ -1,6 +1,5 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useCallback, useContext } from "react";
-import useLanguage from "../../hook/useLanguage";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import GlobalContext from "../../context/globalContext";
@@ -22,19 +21,31 @@ export const FiltersListClients = ({
   reason,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
+  const { selectedFilterClients, setSelectedFilterClients } =
+    useContext(GlobalContext);
+  const { clientNamesDefault, setClientNamesDefault } =
+    useContext(GlobalContext);
+  const { clientContractsDefault, setClientContractsDefault } =
+    useContext(GlobalContext);
+  const { clientPhonesDefault, setClientPhonesDefault } =
+    useContext(GlobalContext);
+  const { clientEmailsDefault, setClientEmailsDefault } =
+    useContext(GlobalContext);
 
   return (
     <div
       {...props}
-      className={selectedFilterClients ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"}
+      className={
+        selectedFilterClients
+          ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1"
+          : "hidden"
+      }
     >
       {filterListClients.map((filter) => {
         return (
           <>
-          {/* gets one additional div around ( visible : hidden div ) and collapse filters if do here key={generate()}*/}
+            {/* gets one additional div around ( visible : hidden div ) and collapse filters if do here key={generate()}*/}
             {selectedFilterClients === filter.id ? (
               <>
                 {filter.dashboardList.map((element) => {
@@ -47,9 +58,19 @@ export const FiltersListClients = ({
                         <p className="truncate">{element}</p>
                         <button
                           onClick={() => {
-                            setFilterListClients((currentFilter) => 
-                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.filter((y) => y !== element)} : x))}
-                            }
+                            setFilterListClients((currentFilter) =>
+                              currentFilter.map((x) =>
+                                x.id === filter.id
+                                  ? {
+                                      ...x,
+                                      dashboardList: x.dashboardList.filter(
+                                        (y) => y !== element
+                                      ),
+                                    }
+                                  : x
+                              )
+                            );
+                          }}
                         >
                           <img
                             className="h-2 w-2"
@@ -93,14 +114,27 @@ export const FiltersListClients = ({
                 >
                   <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                      {filter.dashboardList.includes("Vardas Pavardė") ? null : (
+                      {filter.dashboardList.includes(
+                        "Vardas Pavardė"
+                      ) ? null : (
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
                                 const name = "Vardas Pavardė";
-                                setFilterListClients((currentFilter) => 
-                                currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(name)} : x))}}
+                                setClientNamesDefault("true");
+                                setFilterListClients((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id
+                                      ? {
+                                          ...x,
+                                          dashboardList:
+                                            x.dashboardList.concat(name),
+                                        }
+                                      : x
+                                  )
+                                );
+                              }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -118,10 +152,21 @@ export const FiltersListClients = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onClick={() => {
-                              const contract = "Sutarties nr.";
-                              setFilterListClients((currentFilter) => 
-                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(contract)} : x))}}
+                              onClick={() => {
+                                const contract = "Sutarties nr.";
+                                setClientContractsDefault("true");
+                                setFilterListClients((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id
+                                      ? {
+                                          ...x,
+                                          dashboardList:
+                                            x.dashboardList.concat(contract),
+                                        }
+                                      : x
+                                  )
+                                );
+                              }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -139,10 +184,21 @@ export const FiltersListClients = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onClick={() => {
-                              const phone = "Telefonas";
-                              setFilterListClients((currentFilter) => 
-                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(phone)} : x))}}
+                              onClick={() => {
+                                const phone = "Telefonas";
+                                setClientPhonesDefault("true");
+                                setFilterListClients((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id
+                                      ? {
+                                          ...x,
+                                          dashboardList:
+                                            x.dashboardList.concat(phone),
+                                        }
+                                      : x
+                                  )
+                                );
+                              }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -160,10 +216,21 @@ export const FiltersListClients = ({
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                            onClick={() => {
-                              const email = "El. paštas";
-                              setFilterListClients((currentFilter) => 
-                              currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(email)} : x))}}
+                              onClick={() => {
+                                const email = "El. paštas";
+                                setClientEmailsDefault("true");
+                                setFilterListClients((currentFilter) =>
+                                  currentFilter.map((x) =>
+                                    x.id === filter.id
+                                      ? {
+                                          ...x,
+                                          dashboardList:
+                                            x.dashboardList.concat(email),
+                                        }
+                                      : x
+                                  )
+                                );
+                              }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full text-center"
@@ -176,7 +243,6 @@ export const FiltersListClients = ({
                           )}
                         </Menu.Item>
                       )}
-
                     </div>
                   </Menu.Items>
                 </Transition>

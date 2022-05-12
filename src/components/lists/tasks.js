@@ -25,6 +25,15 @@ export const TasksList = ({
   const { english, lithuanian, t } = useLanguage();
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+  const { dateDefault, setDateDefault } = useContext(GlobalContext);
+  const { objectDefault, setObjectDefault } = useContext(GlobalContext);
+  const { nameDefault, setNameDefault } = useContext(GlobalContext);
+  const { crewDefault, setCrewDefault } = useContext(GlobalContext);
+  const { inTimeDefault, setInTimeDefault } = useContext(GlobalContext);
+  const { reactionTimeDefault, setReactionTimeDefault } = useContext(GlobalContext);
+  const { timeInObjectDefault, setTimeInObjectDefault } = useContext(GlobalContext);
+  const { statusDefault, setStatusDefault } = useContext(GlobalContext);
+  const { reasonDefault, setReasonDefault } = useContext(GlobalContext);
 
   return (
     <div
@@ -99,6 +108,7 @@ export const TasksList = ({
                             <button
                               onClick={() => {
                                 const showDate = "Gauta";
+                                setDateDefault("true");
                                 setFilterList((currentFilter) => 
                                 currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(showDate)} : x))}}
                               className={classNames(
@@ -120,6 +130,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const object = "Objektas";
+                              setObjectDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(object)} : x))}}
                               className={classNames(
@@ -141,6 +152,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const name = "Pavadinimas";
+                              setNameDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(name)} : x))}}
                               className={classNames(
@@ -162,6 +174,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const crew = "Ekipažas";
+                              setCrewDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(crew)} : x))}}
                               className={classNames(
@@ -183,6 +196,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const inTime = "Spėjo laiku";
+                              setInTimeDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(inTime)} : x))}}
                               className={classNames(
@@ -206,6 +220,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const reactionTime = "Reagavimo laikas";
+                              setReactionTimeDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(reactionTime)} : x))}}
                               className={classNames(
@@ -229,6 +244,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const timeInObject = "Laikas objekte";
+                              setTimeInObjectDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(timeInObject)} : x))}}
                               className={classNames(
@@ -250,6 +266,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const status = "Būsena";
+                              setStatusDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(status)} : x))}}
                               className={classNames(
@@ -273,6 +290,7 @@ export const TasksList = ({
                             <button
                             onClick={() => {
                               const reason = "Suveikimo priežastis";
+                              setReasonDefault("true");
                               setFilterList((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(reason)} : x))}}
                               className={classNames(

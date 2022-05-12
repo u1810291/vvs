@@ -14,15 +14,11 @@ import GlobalContext from "../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { DashboardTestApi } from "../api/dashboardTest";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
-import useSort from "../hook/useSort";
-import { sortToggle } from "../util/utils";
-
 function Tasks() {
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => { setIsOpen(false)},[]);
@@ -42,26 +38,6 @@ function Tasks() {
       setToPrint(false);
     }, 1000);
   }, []);
-
-  const {
-    sortedDashboardKeys,
-    sortedDashboardOrder,
-    sortedDashboardDate,
-    sortedDashboardObject,
-    sortedDashboardName,
-    sortedDashboardCrew,
-    sortedDashboardInTime,
-    sortedDashboardReactionTime,
-    sortedDashboardTimeInObject,
-    sortedDashboardStatus,
-    sortedDashboardReason
-  } = useSort();
-
-  const sortedDashboardTestApi = sortToggle(
-    DashboardTestApi,
-    sortedDashboardKeys,
-    sortedDashboardOrder
-  );
 
   return (
     <OverlayProvider>
@@ -190,118 +166,13 @@ function Tasks() {
                           </span>
                         </div>
                       </div>
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedDashboardTestApi.map((data) => (
                           <DashboardList
-                            key={data.id}
-                            id={data.id}
-                            date={data.date}
-                            object={data.object}
-                            name={data.name}
-                            crew={data.crew}
-                            intime={data.intime}
-                            reactiontime={data.reactiontime}
-                            timeinobject={data.timeinobject}
-                            status={data.status}
-                            reason={data.reason}
                           />
-                        ))}
-                      </div>
                     </PDFExport>
                   ) : (
                     <>
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <button
-                          onClick={sortedDashboardDate}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">Gauta</span>
-                          <img
-                            src={require("../assets/assets/down.png")}
-                            className="h-2 w-4 ml-2"
-                          />
-                        </button>
-                        <button
-                          onClick={sortedDashboardObject}
-                          className="flex col-span-2 flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Objektas
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedDashboardName}
-                          className="flex col-span-2 flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Pavadinimas
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedDashboardCrew}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Ekipažas
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedDashboardInTime}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Spėjo laiku
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedDashboardReactionTime}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Reagavimo laikas
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedDashboardTimeInObject}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Laikas objekte
-                          </span>
-                        </button>
-                        <button
-                          onClick={sortedDashboardStatus}
-                          className="flex flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">Būsena</span>
-                        </button>
-                        <button
-                          onClick={sortedDashboardReason}
-                          className="flex col-span-2 flex-row items-center"
-                        >
-                          <span className="text-gray-300 text-sm hover:text-gray-400">
-                            Suveikimo priežastis
-                          </span>
-                        </button>
-                      </div>
-
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedDashboardTestApi.map((data) => (
                           <DashboardList
-                            key={data.id}
-                            id={data.id}
-                            date={data.date}
-                            object={data.object}
-                            name={data.name}
-                            crew={data.crew}
-                            intime={data.intime}
-                            reactiontime={data.reactiontime}
-                            timeinobject={data.timeinobject}
-                            status={data.status}
-                            reason={data.reason}
                           />
-                        ))}
-                      </div>
                       <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                         <div className="flex flex-col items-start">
                           <div>
@@ -410,7 +281,6 @@ function Tasks() {
                               999
                             </a>
                           </div>
-
                           <a className="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Next
                             <svg
