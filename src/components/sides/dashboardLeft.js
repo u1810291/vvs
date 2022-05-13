@@ -81,6 +81,7 @@ const DashboardSideLeft = () => {
             connection={data.connection}
             event={data.event}
             address={data.address}
+            newEvent={data.newEvent}
           />
         ))}
         <h4 className="ml-6 py-2 text-slate-400 text-sm">Važiuoja į objektą</h4>
@@ -117,6 +118,7 @@ const DashboardSideLeft = () => {
             connection={data.connection}
             event={data.event}
             address={data.address}
+            inspect={data.inspect}
           />
         ))}
         <h4 className="ml-6 py-2 text-slate-400 text-sm">

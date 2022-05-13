@@ -15,10 +15,11 @@ export function WaitingForConfirmationCard({
   connection,
   event,
   address,
+  newEvent
 }) {
   return (
     <>
-    {dislocation === "true" ? (
+    {newEvent ? (
       <div className="flex flex-row border-t w-full h-16 bg-white">
         <div className="flex flex-row w-full">
           <div className="flex flex-col items-center justify-center">

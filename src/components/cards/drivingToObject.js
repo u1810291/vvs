@@ -20,7 +20,7 @@ export function DrivingToObjectCard({
   // bring in google distance matrix values 
   return (
     <>
-      {dislocation === "true" ? (
+      {inTask === "true" ? (
         <div className="flex flex-row border-t w-full h-16 bg-white">
           <div className="flex flex-row w-full">
             <div className="flex flex-col items-center justify-center">
