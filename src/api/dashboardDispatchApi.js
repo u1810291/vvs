@@ -87,7 +87,7 @@ export const DDAPI = [
     "askForBreak": "false",
     "dislocation": "true",
     "dislocationStatus": "gryžta",
-    "connection": "Prarastas rišys",
+    "connection": "good",
     "event": "įvykis: spindulio nr N sabotažas"
   },
   {

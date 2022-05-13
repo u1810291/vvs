@@ -35,13 +35,13 @@ export function TaskCard({
                     <div className="flex flex-row items-end">
                       <p className="text-xs text-gray-500 truncate">{event}</p>
                     </div>
-                    <div className="flex justify-center mr-8 items-end rounded-sm w-20 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none">
-                    <p className="flex flex-row text-xs">
+                    <div className="flex justify-center mr-8 items-end rounded-sm w-16 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none">
+                    <a className="flex flex-row text-xs">
                         <Timer active duration={null}>
                           <Timecode />
                         </Timer>
                         s
-                      </p>
+                      </a>
                     </div>
                   </>
                 ) : null}
@@ -52,13 +52,13 @@ export function TaskCard({
                     <div className="flex flex-row items-end">
                       <p className="text-xs text-gray-500">Prarastas rišys</p>
                     </div>
-                    <div className="flex justify-center mr-8 mt-1 items-end rounded-sm w-20 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none">
-                      <p className="flex flex-row text-xs">
+                    <div className="flex justify-center mr-8 mt-1 items-end rounded-sm w-16 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none">
+                      <a className="flex flex-row text-xs">
                         <Timer active duration={null}>
                           <Timecode />
                         </Timer>
                         s
-                      </p>
+                      </a>
                     </div>
                   </>
                 ) : null}
