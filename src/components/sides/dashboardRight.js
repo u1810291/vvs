@@ -2,8 +2,6 @@ import React from "react";
 import { DDAPI } from "../../api/dashboardDispatchApi";
 import { generate } from "shortid";
 
-const { AlarmCard } = require("../../components/cards/alarm");
-const { OffCard } = require("../../components/cards/off");
 const { ActiveCard } = require("../../components/cards/active");
 const { RequestCard } = require("../../components/cards/request");
 const { TaskCard } = require("../../components/cards/tasks");

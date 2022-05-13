@@ -3,7 +3,6 @@ import React from "react";
 export function NewCallingCard() {
   return (
     <div
-      href="#"
       className="flex flex-row border w-full h-10 bg-white justify-between hover:shadow items-center text-sm"
     >
       <div className="flex flex-row mx-6 items-center justify-between w-full">

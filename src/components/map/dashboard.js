@@ -184,10 +184,11 @@ export default function DashboardMap(props) {
   ]);
 
   useEffect(() => {
+    let results;
     const directionService = new google.maps.DirectionsService();
     pipe(
       safe(and(isArray, a => a.length > 0)),
-      map(map(item => directionService.route({
+      map(map(item => results = directionService.route({
         origin: new window.google.maps.LatLng(item.originLat, item.originLon),
         destination: new window.google.maps.LatLng(
           item.destinationLat,
@@ -196,8 +197,12 @@ export default function DashboardMap(props) {
         travelMode: google.maps.TravelMode.DRIVING,
         provideRouteAlternatives: true,
         optimizeWaypoints: true,
-      }))),
-      map(ps => Promise.all(ps).then(setDirections))
+      }),
+      // setDirectionsResponse(results),
+      // setDistance(results.routes[0].legs[0].distance.text),
+      // setDuration(results.routes[0].legs[0].duration.text)
+      )),
+      map(ps => Promise.all(ps).then(setDirections)),
     )(originAndDestination)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [originAndDestination]);

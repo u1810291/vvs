@@ -4,8 +4,6 @@ import { NewStatusCard } from "../cards/newStatus";
 import { NewCallingCard } from "../cards/newCalling";
 import { NewEventCard } from "../cards/newEvent";
 import { NewConfirmCard } from "../cards/newConfirm";
-const { AlarmCard } = require("../../components/cards/alarm");
-const { OffCard } = require("../../components/cards/off");
 const { ActiveCard } = require("../../components/cards/active");
 const { RequestCard } = require("../../components/cards/request");
 const { TaskCard } = require("../../components/cards/tasks");

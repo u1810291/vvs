@@ -13,7 +13,8 @@ export function RequestCard({
   dislocation,
   dislocationStatus,
   connection,
-  event
+  event,
+  address
 }) {
   return (
     <>

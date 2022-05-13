@@ -10,7 +10,8 @@ export const DDAPI = [
     "dislocation": "true",
     "dislocationStatus": "Į degalinę",
     "connection": "Prarastas rišys",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "2",
@@ -23,7 +24,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "gryžta",
     "connection": "good",
-    "event": "užpuolimas: spindulio nr X sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas: spindulio nr X sabotažas"
   },
   {
     "id": "3",
@@ -36,7 +38,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "Prarastas rišys",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "4",
@@ -49,7 +52,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "gryžta",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "5",
@@ -62,7 +66,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "6",
@@ -75,7 +80,8 @@ export const DDAPI = [
     "dislocation": "true",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "8",
@@ -88,7 +94,8 @@ export const DDAPI = [
     "dislocation": "true",
     "dislocationStatus": "gryžta",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "9",
@@ -101,7 +108,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "10",
@@ -114,7 +122,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "gryžta",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "11",
@@ -127,7 +136,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "Prarastas rišys",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "12",
@@ -140,7 +150,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "gryžta",
     "connection": "good",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "13",
@@ -153,7 +164,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "14",
@@ -166,7 +178,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "gryžta",
     "connection": "Prarastas rišys",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "15",
@@ -179,7 +192,8 @@ export const DDAPI = [
     "dislocation": "true",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "16",
@@ -192,7 +206,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "gryžta",
     "connection": "good",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "17",
@@ -205,7 +220,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "Prarastas rišys",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "18",
@@ -218,7 +234,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "gryžta",
     "connection": "Prarastas rišys",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "19",
@@ -231,7 +248,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "Prarastas rišys",
-    "event": "užpuolimas, spindulio N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Užpuolimas, spindulio N sabotažas"
   },
   {
     "id": "20",
@@ -244,7 +262,8 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas"
   },
   {
     "id": "21",
@@ -257,7 +276,10 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas",
+    "newEvent": "Įvykio pavadinimas",
+    "type": "Užpuolimas"
   },
   {
     "id": "22",
@@ -270,7 +292,10 @@ export const DDAPI = [
     "dislocation": "false",
     "dislocationStatus": "Į degalinę",
     "connection": "good",
-    "event": "įvykis: spindulio nr N sabotažas"
+    "address": "Vilnius, A goštauto g. 7",
+    "event": "Įvykis: spindulio nr N sabotažas",
+    "newEvent": "Įvykio pavadinimas",
+    "type": "Užpuolimas"
   },
 ];
 

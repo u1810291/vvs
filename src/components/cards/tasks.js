@@ -10,8 +10,11 @@ export function TaskCard({
   inBreak,
   inTask,
   askForBreak,
-  event,
+  dislocation,
+  dislocationStatus,
   connection,
+  event,
+  address
 }) {
   return (
     <>

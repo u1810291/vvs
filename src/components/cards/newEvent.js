@@ -3,7 +3,6 @@ import React from "react";
 export function NewEventCard() {
   return (
     <div
-      href="#"
       className="flex flex-row border w-full h-10 bg-white justify-start hover:shadow items-center text-sm"
     >
       <div className="flex flex-row mx-6 items-center justify-start w-full">
