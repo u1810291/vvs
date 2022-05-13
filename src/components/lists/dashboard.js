@@ -49,79 +49,78 @@ export const DashboardList = () => {
     sortedDashboardOrder
   );
 
-  useEffect(() => {
-    // if (dateDefault === "false") {
-    //   setGridState((state, props) => ({
-    //     gridState: state.counter + props.increment
-    //   }));
-    // }
-    if (dateDefault === "false") {
-      setGridState((prevNum) => prevNum - 1);
-    }
-    if (dateDefault === "true") {
-      setGridState((prevNum) => prevNum + 1);
-    }
-    if (objectDefault === "false") {
-      setGridState((prevNum) => prevNum - 2);
-    }
-    if (objectDefault === "true") {
-      setGridState((prevNum) => prevNum + 2);
-    }
-    if (nameDefault === "false") {
-      setGridState((prevNum) => prevNum - 2);
-    }
-    if (nameDefault === "true") {
-      setGridState((prevNum) => prevNum + 2);
-    }
-    if (crewDefault === "false") {
-      setGridState((prevNum) => prevNum - 1);
-    }
-    if (crewDefault === "true") {
-      setGridState((prevNum) => prevNum + 1);
-    }
-    if (inTimeDefault === "false") {
-      setGridState((prevNum) => prevNum - 1);
-    }
-    if (inTimeDefault === "true") {
-      setGridState((prevNum) => prevNum + 1);
-    }
-    if (reactionTimeDefault === "false") {
-      setGridState((prevNum) => prevNum - 1);
-    }
-    if (reactionTimeDefault === "true") {
-      setGridState((prevNum) => prevNum + 1);
-    }
-    if (timeInObjectDefault === "false") {
-      setGridState((prevNum) => prevNum - 1);
-    }
-    if (timeInObjectDefault === "true") {
-      setGridState((prevNum) => prevNum + 1);
-    }
-    if (statusDefault === "false") {
-      setGridState((prevNum) => prevNum - 1);
-    }
-    if (statusDefault === "true") {
-      setGridState((prevNum) => prevNum + 1);
-    }
-    if (reasonDefault === "false") {
-      setGridState((prevNum) => prevNum - 2);
-    }
-    if (reasonDefault === "true") {
-      setGridState((prevNum) => prevNum + 2);
-    }
-  }, [
-    crewDefault,
-    dateDefault,
-    inTimeDefault,
-    nameDefault,
-    objectDefault,
-    reactionTimeDefault,
-    reasonDefault,
-    statusDefault,
-    timeInObjectDefault,
-  ]);
-
-  console.log(gridState);
+  // useTable here
+  // useEffect(() => {
+  //   // if (dateDefault === "false") {
+  //   //   setGridState((state, props) => ({
+  //   //     gridState: state.counter + props.increment
+  //   //   }));
+  //   // }
+  //   if (dateDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 1);
+  //   }
+  //   if (dateDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 1);
+  //   }
+  //   if (objectDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 2);
+  //   }
+  //   if (objectDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 2);
+  //   }
+  //   if (nameDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 2);
+  //   }
+  //   if (nameDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 2);
+  //   }
+  //   if (crewDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 1);
+  //   }
+  //   if (crewDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 1);
+  //   }
+  //   if (inTimeDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 1);
+  //   }
+  //   if (inTimeDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 1);
+  //   }
+  //   if (reactionTimeDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 1);
+  //   }
+  //   if (reactionTimeDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 1);
+  //   }
+  //   if (timeInObjectDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 1);
+  //   }
+  //   if (timeInObjectDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 1);
+  //   }
+  //   if (statusDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 1);
+  //   }
+  //   if (statusDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 1);
+  //   }
+  //   if (reasonDefault === "false") {
+  //     setGridState((prevNum) => prevNum - 2);
+  //   }
+  //   if (reasonDefault === "true") {
+  //     setGridState((prevNum) => prevNum + 2);
+  //   }
+  // }, [
+  //   crewDefault,
+  //   dateDefault,
+  //   inTimeDefault,
+  //   nameDefault,
+  //   objectDefault,
+  //   reactionTimeDefault,
+  //   reasonDefault,
+  //   statusDefault,
+  //   timeInObjectDefault,
+  // ]);
 
   return (
     <>

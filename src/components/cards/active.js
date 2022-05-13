@@ -1,4 +1,6 @@
 import React from "react";
+import Timer from "react-timer-wrapper";
+import Timecode from "react-timecode";
 
 export function ActiveCard({
   id,
@@ -34,7 +36,12 @@ export function ActiveCard({
                       <p className="text-xs text-gray-500">Prarastas rišys</p>
                     </div>
                     <div className="flex justify-center mr-12 my-2 items-center rounded-sm px-4 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none">
-                      <p className="text-xs">0.07s</p>
+                    <p className="flex flex-row text-xs">
+                        <Timer active duration={null}>
+                          <Timecode />
+                        </Timer>
+                        s
+                      </p>
                     </div>
                   </>
                 ) : null}

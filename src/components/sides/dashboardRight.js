@@ -30,7 +30,7 @@ const DashboardSideRight = () => {
           ))}
           {DDAPI.map((data) => (
             <RequestCard
-              id={data.id}
+              id={generate()}
               key={data.id}
               crew={data.crew}
               name={data.name}
@@ -48,7 +48,7 @@ const DashboardSideRight = () => {
         <h4 className="ml-6 py-2 text-slate-400 text-sm">Užduotyse</h4>
         {DDAPI.map((data) => (
           <TaskCard
-            id={data.id}
+            id={generate()}
             key={data.id}
             crew={data.crew}
             name={data.name}

@@ -21,8 +21,12 @@ import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
 function Tasks() {
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = useCallback(() => { setIsOpen(false)},[]);
-  const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
   usePreventScroll({ isDisabled: !isOpen });
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
@@ -133,46 +137,13 @@ function Tasks() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Gauta</span>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <span className="text-gray-300">Objektas</span>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <span className="text-gray-300">Pavadinimas</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Ekipažas</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Spėjo laiku</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">
-                            Reagavimo laikas
-                          </span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Laikas objekte</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <span className="text-gray-300">Būsena</span>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <span className="text-gray-300">
-                            Suveikimo priežastis
-                          </span>
-                        </div>
-                      </div>
-                          <DashboardList
-                          />
+                      <DashboardList />
                     </PDFExport>
                   ) : (
                     <>
-                          <DashboardList
-                          />
+                      <DashboardList />
+                      </>
+                  )}
                       <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                         <div className="flex flex-col items-start">
                           <div>
@@ -299,8 +270,8 @@ function Tasks() {
                           </a>
                         </div>
                       </nav>
-                    </>
-                  )}
+                    {/* </>
+                  )} */}
                 </div>
               </div>
             </div>
