@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import GlobalContext from "../../context/globalContext";
 import { DashboardTestApi } from "../../api/dashboardTest";
 import useSort from "../../hook/useSort";
@@ -13,6 +19,16 @@ const { YellowWaitingStatus } = require("../buttons/yellowWaiting");
 const { InspectedStatus } = require("../buttons/yellowInspected");
 
 export const DashboardList = () => {
+  const dateRef = useRef();
+  const objectRef = useRef();
+  const nameRef = useRef();
+  const crewRef = useRef();
+  const inTimeRef = useRef();
+  const reactionTimeRef = useRef();
+  const statusRef = useRef();
+  const reasonRef = useRef();
+  const timeInObjectRef = useRef();
+
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { filterEditing, setFilterEditing } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
@@ -49,83 +65,128 @@ export const DashboardList = () => {
     sortedDashboardOrder
   );
 
-  // useTable here
-  // useEffect(() => {
-  //   // if (dateDefault === "false") {
-  //   //   setGridState((state, props) => ({
-  //   //     gridState: state.counter + props.increment
-  //   //   }));
-  //   // }
-  //   if (dateDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 1);
-  //   }
-  //   if (dateDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 1);
-  //   }
-  //   if (objectDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 2);
-  //   }
-  //   if (objectDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 2);
-  //   }
-  //   if (nameDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 2);
-  //   }
-  //   if (nameDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 2);
-  //   }
-  //   if (crewDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 1);
-  //   }
-  //   if (crewDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 1);
-  //   }
-  //   if (inTimeDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 1);
-  //   }
-  //   if (inTimeDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 1);
-  //   }
-  //   if (reactionTimeDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 1);
-  //   }
-  //   if (reactionTimeDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 1);
-  //   }
-  //   if (timeInObjectDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 1);
-  //   }
-  //   if (timeInObjectDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 1);
-  //   }
-  //   if (statusDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 1);
-  //   }
-  //   if (statusDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 1);
-  //   }
-  //   if (reasonDefault === "false") {
-  //     setGridState((prevNum) => prevNum - 2);
-  //   }
-  //   if (reasonDefault === "true") {
-  //     setGridState((prevNum) => prevNum + 2);
-  //   }
-  // }, [
-  //   crewDefault,
-  //   dateDefault,
-  //   inTimeDefault,
-  //   nameDefault,
-  //   objectDefault,
-  //   reactionTimeDefault,
-  //   reasonDefault,
-  //   statusDefault,
-  //   timeInObjectDefault,
-  // ]);
+  useEffect(() => {
+    if (dateDefault === "false") {
+      setGridState(gridState - 1);
+    }
+    if (dateDefault === "true") {
+      setGridState(gridState + 1);
+      dateRef.current = undefined;
+    }
+    if (objectDefault === "false") {
+      setGridState(gridState - 2);
+      objectRef.current = undefined;
+    }
+    if (objectDefault === "true") {
+      setGridState(gridState + 2);
+    }
+    if (nameDefault === "false") {
+      setGridState(gridState - 2);
+      nameRef.current = undefined;
+    }
+    if (nameDefault === "true") {
+      setGridState(gridState + 2);
+    }
+    if (crewDefault === "false") {
+      setGridState(gridState - 1);
+      crewRef.current = undefined;
+    }
+    if (crewDefault === "true") {
+      setGridState(gridState + 1);
+    }
+    if (inTimeDefault === "false") {
+      setGridState(gridState - 1);
+      inTimeRef.current = undefined;
+    }
+    if (inTimeDefault === "true") {
+      setGridState(gridState + 1);
+    }
+    if (reactionTimeDefault === "false") {
+      setGridState(gridState - 1);
+      reactionTimeRef.current = undefined;
+    }
+    if (reactionTimeDefault === "true") {
+      setGridState(gridState + 1);
+    }
+    if (timeInObjectDefault === "false") {
+      setGridState(gridState - 1);
+      timeInObjectRef.current = undefined;
+    }
+    if (timeInObjectDefault === "true") {
+      setGridState(gridState + 1);
+    }
+    if (statusDefault === "false") {
+      setGridState(gridState - 1);
+      statusRef.current = undefined;
+    }
+    if (statusDefault === "true") {
+      setGridState(gridState + 1);
+    }
+    if (reasonDefault === "false") {
+      setGridState(gridState - 2);
+      reasonRef.current = undefined;
+    }
+    if (reasonDefault === "true") {
+      setGridState(gridState + 2);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    crewDefault,
+    dateDefault,
+    inTimeDefault,
+    nameDefault,
+    objectDefault,
+    reactionTimeDefault,
+    reasonDefault,
+    statusDefault,
+    timeInObjectDefault,
+  ]);
+
+  useEffect(() => {
+    if (dateRef.current === null) {
+      setDateDefault("false");
+    }
+    if (objectRef.current === null) {
+      setObjectDefault("false");
+    }
+    if (nameRef.current === null) {
+      setNameDefault("false");
+    }
+    if (crewRef.current === null) {
+      setCrewDefault("false");
+    }
+    if (inTimeRef.current === null) {
+      setInTimeDefault("false");
+    }
+    if (reactionTimeRef.current === null) {
+      setReactionTimeDefault("false");
+    }
+    if (statusRef.current === null) {
+      setStatusDefault("false");
+    }
+    if (reasonRef.current === null) {
+      setReasonDefault("false");
+    }
+    if (timeInObjectRef.current === null) {
+      setTimeInObjectDefault("false");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dateRef.current,
+    objectRef.current,
+    nameRef.current,
+    crewRef.current,
+    inTimeRef.current,
+    reactionTimeRef.current,
+    statusRef.current,
+    reasonRef.current,
+    timeInObjectRef.current,
+  ]);
 
   return (
     <>
       <div
-        className={`hidden pl-4 w-full border-t py-2 md:grid grid-cols-${gridState} bg-gray-100 grid-rows-1 grid-flow-row table-auto grid-gap-6 justify-between font-normal text-black z-1`}
+        className={`hidden pl-4 w-full border-t py-2 md:grid grid-cols-${gridState} bg-gray-100 grid-rows-1 table-auto grid-gap-6 justify-between font-normal text-black z-1`}
       >
         {dateDefault === "true" || dateDefault === "default" ? (
           <button
@@ -181,7 +242,7 @@ export const DashboardList = () => {
             </span>
           </button>
         ) : null}
-        {reactionTimeDefault === "true" || dateDefault === "default" ? (
+        {reactionTimeDefault === "true" || reactionTimeDefault === "default" ? (
           <button
             onClick={sortedDashboardReactionTime}
             className="flex flex-row items-center"
@@ -230,8 +291,12 @@ export const DashboardList = () => {
                 <div key={filter.id}>
                   {selectedFilter === filter.id ? (
                     <div
-                      className={`w-full border-b grid grid-cols-${gridState} bg-white grid-rows-1 grid-flow-row table-auto grid-gap-6 justify-between font-normal text-black z-1`}
+                      className={`w-full border-b grid grid-cols-${gridState} bg-white grid-rows-1 grid-gap-6 justify-between font-normal text-black z-1`}
                     >
+
+
+
+
                       {filter.dashboardList.includes("Gauta") ? (
                         <div className="flex flex-row items-center h-12">
                           <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">
@@ -239,34 +304,34 @@ export const DashboardList = () => {
                           </span>
                         </div>
                       ) : (
-                        setDateDefault("false")
+                        (dateRef.current = null)
                       )}
                       {filter.dashboardList.includes("Objektas") ? (
-                        <div className="flex col-span-2 flex-row items-center h-12">
+                        <div className="flex flex-row col-span-2 items-center h-12">
                           <span className="bg-white text-sm text-blue-300 truncate hover:text-gray-500">
                             {data.object}
                           </span>
                         </div>
                       ) : (
-                        setObjectDefault("false")
+                        (objectRef.current = null)
                       )}
                       {filter.dashboardList.includes("Pavadinimas") ? (
-                        <div className="flex col-span-2 flex-row items-center h-12">
+                        <div className="flex flex-row col-span-2 items-center h-12">
                           <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">
                             {data.name}
                           </span>
                         </div>
                       ) : (
-                        setNameDefault("false")
+                        (nameRef.current = null)
                       )}
                       {filter.dashboardList.includes("Ekipažas") ? (
-                        <div className="flex row-span-2 items-center h-12">
+                        <div className="flex flex-row items-center h-12">
                           <span className="bg-white text-sm text-blue-300 truncate hover:text-gray-500">
                             {data.crew}
                           </span>
                         </div>
                       ) : (
-                        setCrewDefault("false")
+                        (crewRef.current = null)
                       )}
                       {filter.dashboardList.includes("Spėjo laiku") ? (
                         <div className="flex flex-row items-center h-12">
@@ -275,16 +340,16 @@ export const DashboardList = () => {
                           </span>
                         </div>
                       ) : (
-                        setInTimeDefault("false")
+                        (inTimeRef.current = null)
                       )}
                       {filter.dashboardList.includes("Reagavimo laikas") ? (
-                        <div className="flex flex-row h-12 items-center hover:text-gray-500">
+                        <div className="flex flex-row items-center h-12">
                           <span className="bg-white text-gray-400 hover:text-gray-500">
                             {data.reactiontime}
                           </span>
                         </div>
                       ) : (
-                        setReactionTimeDefault("false")
+                        (reactionTimeRef.current = null)
                       )}
                       {filter.dashboardList.includes("Laikas objekte") ? (
                         <div className="flex flex-row items-center h-12">
@@ -293,31 +358,28 @@ export const DashboardList = () => {
                           </span>
                         </div>
                       ) : (
-                        setTimeInObjectDefault("false")
+                        (timeInObjectRef.current = null)
                       )}
                       {filter.dashboardList.includes("Būsena") ? (
-                        <div className="flex whitespace-nowrap flex-row h-12 items-center">
+                        <div className="flex flex-row items-center h-12">
                           <RedWatching />
-                          {/* <InspectedStatus />
-                                    <YellowWaitingStatus />
-                                    <RedDriving/>
-                                    <GrayStatus/>
-                                    <GreenStatus/>
-                                    <BlueStatus/>
-                                    <CancelStatus/> */}
                         </div>
                       ) : (
-                        setStatusDefault("false")
+                        (statusRef.current = null)
                       )}
                       {filter.dashboardList.includes("Suveikimo priežastis") ? (
-                        <div className="flex col-span-2 flex-row h-12 items-center">
+                        <div className="flex flex-row col-span-2 items-center h-12">
                           <span className="bg-white text-sm text-gray-500 truncate hover:text-gray-400">
                             {data.reason}
                           </span>
                         </div>
                       ) : (
-                        setReasonDefault("false")
+                        (reasonRef.current = null)
                       )}
+
+
+
+
                     </div>
                   ) : null}
                 </div>
@@ -329,3 +391,11 @@ export const DashboardList = () => {
     </>
   );
 };
+
+                          {/* <InspectedStatus />
+                          <YellowWaitingStatus />
+                          <RedDriving/>
+                          <GrayStatus/>
+                          <GreenStatus/>
+                          <BlueStatus/>
+                          <CancelStatus/> */}

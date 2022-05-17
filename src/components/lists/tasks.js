@@ -1,6 +1,5 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useContext } from "react";
-import useLanguage from "../../hook/useLanguage";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import GlobalContext from "../../context/globalContext";
@@ -22,7 +21,6 @@ export const TasksList = ({
   reason,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const { dateDefault, setDateDefault } = useContext(GlobalContext);
@@ -34,6 +32,14 @@ export const TasksList = ({
   const { timeInObjectDefault, setTimeInObjectDefault } = useContext(GlobalContext);
   const { statusDefault, setStatusDefault } = useContext(GlobalContext);
   const { reasonDefault, setReasonDefault } = useContext(GlobalContext);
+  const { dateRef } = useContext(GlobalContext);
+  const { objectRef } = useContext(GlobalContext);
+  const { nameRef } = useContext(GlobalContext);
+  const { crewRef } = useContext(GlobalContext);
+  const { inTimeRef } = useContext(GlobalContext);
+  const { reactionTimeRef } = useContext(GlobalContext);
+  const { statusRef } = useContext(GlobalContext);
+  const { reasonRef } = useContext(GlobalContext);
 
   return (
     <div

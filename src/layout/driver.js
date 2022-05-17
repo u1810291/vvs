@@ -10,6 +10,7 @@ import { archiveDriver } from "../api/queryForms/queryString/users";
 import { getUsers } from "../api/queryForms/queryString/users";
 import { getAllUsers } from "../api/queryForms/variables/users";
 import { useFetch } from "../hook/useFetch";
+import { useDeleteFetch } from "../hook/useDeleteFetch";
 import { useParams } from "react-router-dom";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
@@ -29,20 +30,20 @@ function Driver() {
   const { backFunc } = useUtils();
   usePreventScroll({ isDisabled: !isOpen });
 
+  console.log("id ", id);
   const getDriver = {
-    userId: id,
-    hardDelete: false,
+    userId: "d23291f0-1e56-48d4-b9c6-5d76d4b7e993",
   };
 
   const {
-    data: archiveData,
-    error: archiveError,
-    loading: archiveLoading,
+    data: DData,
+    error: DError,
+    loading: DLoading,
     fetchData: archiveFetch,
-  } = useFetch(archiveDriver, getDriver, accessToken);
+  } = useDeleteFetch(archiveDriver, getDriver, accessToken);
 
-  console.log(archiveData, archiveError, archiveLoading);
-
+  console.log( DData, DError, DLoading)
+  
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
     getAllUsers,
@@ -57,13 +58,15 @@ function Driver() {
   useEffect(() => {
     if (data) {
       const allUsers = data.data.users.users;
-      const searchRole = (name, arr) => arr.filter(
-        ({ registrations }) => registrations.find(role => role.roles[0] === "crew")
-      )
-      const searchResult = searchRole('crew', allUsers)
+      const searchRole = (name, arr) =>
+        arr.filter(({ registrations }) =>
+          registrations.find((role) => role.roles[0] === "crew")
+        );
+      const searchResult = searchRole("crew", allUsers);
       let obj = { users: searchResult };
       setCrew(obj);
-  }}, [data]);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (crew) {

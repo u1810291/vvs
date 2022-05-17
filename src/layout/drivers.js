@@ -63,6 +63,7 @@ function DriversList() {
     setIsOpen(true);
   }, []);
   usePreventScroll({ isDisabled: !isOpen });
+  
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
     getAllUsers,
@@ -98,12 +99,12 @@ function DriversList() {
     sortedDriversOrder
   );
 
-  useEffect(() => {
-    if(error) {
-      backFunc()
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[error])
+  // useEffect(() => {
+  //   if(error) {
+  //     backFunc()
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // },[error])
 
   return (
     <>

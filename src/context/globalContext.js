@@ -6,6 +6,16 @@ const GlobalContext = createContext();
 export default GlobalContext;
 
 export const GlobalProvider = ({ children }) => {
+  const dateRef = useRef();
+  const objectRef = useRef();
+  const nameRef = useRef();
+  const crewRef = useRef();
+  const inTimeRef = useRef();
+  const reactionTimeRef = useRef();
+  const statusRef = useRef();
+  const reasonRef = useRef();
+  const timeInObjectRef = useRef();
+
   const pdfExportComponentNew = useRef(null);
   const pdfExportComponentKey = useRef(null);
   const [filter, setFilter] = useState("");
@@ -282,6 +292,15 @@ export const GlobalProvider = ({ children }) => {
     setExpandFilterObjects,
     expandFilterClients,
     setExpandFilterClients,
+    dateRef,
+    objectRef,
+    nameRef,
+    crewRef,
+    inTimeRef,
+    reactionTimeRef,
+    statusRef,
+    reasonRef,
+    timeInObjectRef
   };
 
   return (

@@ -31,6 +31,7 @@ function Tasks() {
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const { expandFilter, setExpandFilter } = useContext(GlobalContext);
+  const timeInObjectRef = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
