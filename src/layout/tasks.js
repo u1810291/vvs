@@ -46,7 +46,11 @@ function Tasks() {
     }, 1000);
   }, []);
 
-  const onFilterChange = useCallback(value => {console.warn(value)}, []);
+  const onFilterChange = useCallback((newValue) => {console.warn({newValue})}, []);
+  const onFilterValues = useCallback(values => {
+    console.log('filter values', values)
+    // update DashboardList props
+  }, []);
 
   return (
     <OverlayProvider>
@@ -102,7 +106,7 @@ function Tasks() {
                         <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
                           <OptionsList />
                           <TasksList />
-                          <Filter onChange={onFilterChange}>
+                          <Filter onChange={onFilterChange} onValues={onFilterValues}>
                             <FilterItem active propPath="propName">translation</FilterItem>
                             <FilterItem propPath="received">Gauta</FilterItem>
                             <FilterItem propPath="object">Objektas</FilterItem>
