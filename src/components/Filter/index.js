@@ -1,8 +1,9 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {mergeClassName} from '../../util/react';
 import ComboBox from '../ComboBox';
 import {
   defaultProps,
+  isTruthy,
   getPathOr,
   getPropOr,
   identity,
@@ -30,13 +31,13 @@ export const FilterItem = ({propPath = [], children, onDelete = identity, ...pro
   </div>
 );
 
-const Filter = ({children, onChange = identity, ...props}) => {
+const Filter = ({children, onChange = identity, onValues = identity, ...props}, ref) => {
   children = pipe(
     putIntoArray,
     map(pipe(
       getPropOr({}, 'props'),
       defaultProps({
-        onDelete: value => () => setActive(as => as.filter(a => a !== value))
+        onDelete: value => () => setActive(as => as.filter(a => a !== value && a))
       }),
       props => <FilterItem {...props} />
     )),
@@ -47,6 +48,8 @@ const Filter = ({children, onChange = identity, ...props}) => {
     a => a.filter(pathSatisfies(['props', 'active'], isTrue)),
     mapToNames,
   )(children));
+
+  useEffect(() => onValues(active), [active]);
 
   return (
     <div {...mergeClassName('flex-wrap flex rounded-md w-full border p-1 bg-white sm:grid-cols-6 font-normal text-black', props)}>
@@ -66,7 +69,7 @@ const Filter = ({children, onChange = identity, ...props}) => {
 
         onChange={
           pipe(
-            tap(value => setActive(actives => [...actives, value])),
+            tap(value => setActive(actives => [...actives, value].filter(isTruthy))),
             onChange,
           )
         }
