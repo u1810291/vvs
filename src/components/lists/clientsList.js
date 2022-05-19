@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import GlobalContext from "../../context/globalContext";
 import AuthContext from "../../context/authContext";
 import { Spinner } from "react-activity";
@@ -10,16 +10,23 @@ import { getUsers } from "../../api/queryForms/queryString/users";
 import { getAllUsers } from "../../api/queryForms/variables/users";
 
 export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
+  const clientNamesRef = useRef();
+  const clientContractsRef = useRef();
+  const clientPhonesRef = useRef();
+  const clientEmailsRef = useRef();
   const { accessToken } = useContext(AuthContext);
   const [customers, setCustomers] = useState("");
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
-  const [gridState, setGridState] = useState(12);
-  const {clientNamesDefault, setClientNamesDefault } = useContext(GlobalContext);
-  const {clientContractsDefault, setClientContractsDefault } = useContext(GlobalContext);
-  const {clientPhonesDefault, setClientPhonesDefault } = useContext(GlobalContext);
-  const {clientEmailsDefault, setClientEmailsDefault } = useContext(GlobalContext);
+  const { clientNamesDefault, setClientNamesDefault } =
+    useContext(GlobalContext);
+  const { clientContractsDefault, setClientContractsDefault } =
+    useContext(GlobalContext);
+  const { clientPhonesDefault, setClientPhonesDefault } =
+    useContext(GlobalContext);
+  const { clientEmailsDefault, setClientEmailsDefault } =
+    useContext(GlobalContext);
 
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
@@ -52,8 +59,6 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
-  // const path = { pathname: `/client/${id}` };
-
   const {
     sortedClientsKeys,
     sortedClientsOrder,
@@ -69,6 +74,27 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
     sortedClientsOrder
   );
 
+  useEffect(() => {
+    if (clientNamesRef.current === null) {
+      setClientNamesDefault("false");
+    }
+    if (clientContractsRef.current === null) {
+      setClientContractsDefault("false");
+    }
+    if (clientPhonesRef.current === null) {
+      setClientPhonesDefault("false");
+    }
+    if (clientEmailsRef.current === null) {
+      setClientEmailsDefault("false");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    clientNamesRef.current,
+    clientContractsRef.current,
+    clientPhonesRef.current,
+    clientEmailsRef.current,
+  ]);
+
   return (
     <>
       {!sortedClients ? (
@@ -77,17 +103,15 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
         </div>
       ) : (
         <>
-          <div
-            className={`hidden pl-4 w-full border-t py-2 md:grid grid-cols-${gridState} bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1`}
-          >
+          <div className="flex pl-4 w-full border-t py-2 bg-gray-100 justify-between font-normal text-black z-1">
             {clientNamesDefault === "true" ||
             clientNamesDefault === "default" ? (
-              <div className="flex flex-row items-center col-span-5">
+              <div className="flex flex-row items-center w-40">
                 <button
                   onClick={sortedClientsNames}
                   className="flex flex-row items-center"
                 >
-                  <span className="text-gray-300 col-span-4 text-sm hover:text-gray-400">
+                  <span className="text-gray-300 text-sm hover:text-gray-400">
                     Vardas Pavardė
                   </span>
                   <img
@@ -101,7 +125,7 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
             clientContractsDefault === "default" ? (
               <button
                 onClick={sortedClientsContracts}
-                className="flex flex-row items-center"
+                className="flex flex-row items-center w-40"
               >
                 <span className="text-gray-300 text-sm hover:text-gray-400">
                   Sutarties nr.
@@ -112,7 +136,7 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
             clientPhonesDefault === "default" ? (
               <button
                 onClick={sortedClientsPhones}
-                className="flex flex-row items-center"
+                className="flex flex-row items-center w-40"
               >
                 <span className="text-gray-300 text-sm hover:text-gray-400">
                   Telefonas
@@ -123,9 +147,9 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
             clientEmailsDefault === "default" ? (
               <button
                 onClick={sortedClientsEmails}
-                className="flex flex-row items-center"
+                className="flex flex-row items-center w-40"
               >
-                <span className="text-gray-300 col-span-5 text-sm hover:text-gray-400">
+                <span className="text-gray-300 text-sm hover:text-gray-400">
                   El. paštas
                 </span>
               </button>
@@ -138,11 +162,9 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                   return (
                     <div key={filter.id}>
                       {selectedFilterClients === filter.id ? (
-                        <div
-                          className={`w-full border-b grid grid-cols-${gridState} bg-white grid-rows-1 grid-flow-row table-auto md:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1`}
-                        >
+                        <div className="flex w-full border-t py-2 bg-white justify-between font-normal text-black z-1">
                           {filter.dashboardList.includes("Vardas Pavardė") ? (
-                            <div className="flex flex-row items-center h-12 col-span-5">
+                            <div className="flex flex-row items-center h-12 w-40">
                               <Link
                                 // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
@@ -151,9 +173,11 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                                 {data.fullName}
                               </Link>
                             </div>
-                          ) : setClientNamesDefault("false")}
+                          ) : (
+                            (clientNamesRef.current = null)
+                          )}
                           {filter.dashboardList.includes("Sutarties nr.") ? (
-                            <div className="flex flex-row items-center h-12">
+                            <div className="flex flex-row items-center h-12 w-40">
                               <Link
                                 // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
@@ -162,9 +186,11 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                                 {data.contract}
                               </Link>
                             </div>
-                          ) : setClientContractsDefault("false")}
+                          ) : (
+                            (clientContractsRef.current = null)
+                          )}
                           {filter.dashboardList.includes("Telefonas") ? (
-                            <div className="flex flex-row items-center h-12">
+                            <div className="flex flex-row items-center h-12 w-40">
                               <Link
                                 // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
@@ -173,9 +199,11 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                                 {data.mobilePhone}
                               </Link>
                             </div>
-                          ) : setClientPhonesDefault("false")}
+                          ) : (
+                            (clientPhonesRef.current = null)
+                          )}
                           {filter.dashboardList.includes("El. paštas") ? (
-                            <div className="flex flex-row items-center h-12 col-span-5">
+                            <div className="flex flex-row items-center h-12 w-40">
                               <Link
                                 // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
@@ -184,7 +212,9 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
                                 {data.email}
                               </Link>
                             </div>
-                          ) : setClientEmailsDefault("false")}
+                          ) : (
+                            (clientEmailsRef.current = null)
+                          )}
                         </div>
                       ) : null}
                     </div>

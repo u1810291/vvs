@@ -1,3 +1,4 @@
+// alphanumeric sort
 export function sortToggle(arr, key, order) {
     const collator = new Intl.Collator(undefined, {
       numeric: true,

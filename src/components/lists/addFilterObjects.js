@@ -2,10 +2,8 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
 
 export const AddFilterListObjects = (props) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { filterEditingObjects, setFilterEditingObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);

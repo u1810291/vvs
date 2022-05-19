@@ -2,10 +2,8 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
 
 export const AddFilterListDrivers = (props) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const { filterEditingDrivers, setFilterEditingDrivers } = useContext(GlobalContext);
   const { selectedFilterDrivers, setSelectedFilterDrivers } = useContext(GlobalContext);

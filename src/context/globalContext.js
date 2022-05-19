@@ -6,16 +6,6 @@ const GlobalContext = createContext();
 export default GlobalContext;
 
 export const GlobalProvider = ({ children }) => {
-  const dateRef = useRef();
-  const objectRef = useRef();
-  const nameRef = useRef();
-  const crewRef = useRef();
-  const inTimeRef = useRef();
-  const reactionTimeRef = useRef();
-  const statusRef = useRef();
-  const reasonRef = useRef();
-  const timeInObjectRef = useRef();
-
   const pdfExportComponentNew = useRef(null);
   const pdfExportComponentKey = useRef(null);
   const [filter, setFilter] = useState("");
@@ -68,6 +58,8 @@ export const GlobalProvider = ({ children }) => {
     useState("default");
   const [clientPhonesDefault, setClientPhonesDefault] = useState("default");
   const [clientEmailsDefault, setClientEmailsDefault] = useState("default");
+  const [driversStatusDefault, setDriversStatusDefault] = useState("default");
+  const [driversNamesDefault, setDriversNamesDefault] = useState("default");
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -182,6 +174,10 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    driversStatusDefault,
+    setDriversStatusDefault,
+    driversNamesDefault,
+    setDriversNamesDefault,
     clientNamesDefault,
     setClientNamesDefault,
     clientContractsDefault,
@@ -292,15 +288,6 @@ export const GlobalProvider = ({ children }) => {
     setExpandFilterObjects,
     expandFilterClients,
     setExpandFilterClients,
-    dateRef,
-    objectRef,
-    nameRef,
-    crewRef,
-    inTimeRef,
-    reactionTimeRef,
-    statusRef,
-    reasonRef,
-    timeInObjectRef
   };
 
   return (

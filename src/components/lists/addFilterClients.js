@@ -5,7 +5,6 @@ import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
 
 export const AddFilterListClients = (props) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { filterEditingClients, setFilterEditingClients } =
     useContext(GlobalContext);

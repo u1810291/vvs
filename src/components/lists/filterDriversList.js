@@ -1,6 +1,5 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useCallback, useContext } from "react";
-import useLanguage from "../../hook/useLanguage";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import GlobalContext from "../../context/globalContext";
@@ -22,9 +21,13 @@ export const FiltersListDrivers = ({
   reason,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const { selectedFilterDrivers, setSelectedFilterDrivers } = useContext(GlobalContext);
+  const { driversStatusDefault, setDriversStatusDefault } =
+  useContext(GlobalContext);
+const { driversNamesDefault, setDriversNamesDefault } =
+  useContext(GlobalContext);
+
 
   return (
     <div
@@ -99,6 +102,7 @@ export const FiltersListDrivers = ({
                             <button
                               onClick={() => {
                                 const showDate = "Vardas Pavardė";
+                                setDriversNamesDefault("true");
                                 setFilterListDrivers((currentFilter) => 
                                 currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(showDate)} : x))}}
                               className={classNames(
@@ -120,6 +124,7 @@ export const FiltersListDrivers = ({
                             <button
                             onClick={() => {
                               const object = "Būsena";
+                              setDriversStatusDefault("true");
                               setFilterListDrivers((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(object)} : x))}}
                               className={classNames(

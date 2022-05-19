@@ -5,8 +5,8 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import Filter from '../components/Filter';
-import { FilterItem } from '../components/Filter';
+// import Filter from '../components/Filter';
+// import { FilterItem } from '../components/Filter';
 import { TasksHeader } from "../components/headers/tasks";
 import { TasksList } from "../components/lists/tasks";
 import { OptionsList } from "../components/lists/options";
@@ -106,18 +106,20 @@ function Tasks() {
                         <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
                           <OptionsList />
                           <TasksList />
-                          <Filter onChange={onFilterChange} onValues={onFilterValues}>
+
+                          {/* <Filter onChange={onFilterChange} onValues={onFilterValues}>
                             <FilterItem active propPath="propName">translation</FilterItem>
                             <FilterItem propPath="received">Gauta</FilterItem>
                             <FilterItem propPath="object">Objektas</FilterItem>
                             <FilterItem propPath="name">Pavadinimas</FilterItem>
                             <FilterItem propPath="crew">Ekipažas</FilterItem>
                             <FilterItem propPath="inTime">Spėjo laiku</FilterItem>
-                            <FilterItem active propPath="reactionTime">Reagavimo laikas</FilterItem>
+                            <FilterItem propPath="reactionTime">Reagavimo laikas</FilterItem>
                             <FilterItem propPath="timeInObject">Laikas objekte</FilterItem>
                             <FilterItem propPath="status">Būsena</FilterItem>
                             <FilterItem propPath="reason">Suveikimo priežastis</FilterItem>
-                          </Filter>
+                          </Filter> */}
+
                           <div
                             className={
                               selectedFilter

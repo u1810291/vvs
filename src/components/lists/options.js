@@ -4,7 +4,6 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
@@ -13,7 +12,6 @@ function classNames(...classes) {
 }
 
 export const OptionsList = (props) => {
-  const { english, lithuanian, t } = useLanguage();
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const { value, onChange } = useContext(GlobalContext);
