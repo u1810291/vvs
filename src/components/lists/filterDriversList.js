@@ -23,11 +23,6 @@ export const FiltersListDrivers = ({
 }) => {
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const { selectedFilterDrivers, setSelectedFilterDrivers } = useContext(GlobalContext);
-  const { driversStatusDefault, setDriversStatusDefault } =
-  useContext(GlobalContext);
-const { driversNamesDefault, setDriversNamesDefault } =
-  useContext(GlobalContext);
-
 
   return (
     <div
@@ -102,7 +97,6 @@ const { driversNamesDefault, setDriversNamesDefault } =
                             <button
                               onClick={() => {
                                 const showDate = "Vardas Pavardė";
-                                setDriversNamesDefault("true");
                                 setFilterListDrivers((currentFilter) => 
                                 currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(showDate)} : x))}}
                               className={classNames(
@@ -124,7 +118,6 @@ const { driversNamesDefault, setDriversNamesDefault } =
                             <button
                             onClick={() => {
                               const object = "Būsena";
-                              setDriversStatusDefault("true");
                               setFilterListDrivers((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(object)} : x))}}
                               className={classNames(

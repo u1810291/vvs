@@ -19,14 +19,6 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
-  const { clientNamesDefault, setClientNamesDefault } =
-    useContext(GlobalContext);
-  const { clientContractsDefault, setClientContractsDefault } =
-    useContext(GlobalContext);
-  const { clientPhonesDefault, setClientPhonesDefault } =
-    useContext(GlobalContext);
-  const { clientEmailsDefault, setClientEmailsDefault } =
-    useContext(GlobalContext);
 
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
@@ -74,27 +66,6 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
     sortedClientsOrder
   );
 
-  useEffect(() => {
-    if (clientNamesRef.current === null) {
-      setClientNamesDefault("false");
-    }
-    if (clientContractsRef.current === null) {
-      setClientContractsDefault("false");
-    }
-    if (clientPhonesRef.current === null) {
-      setClientPhonesDefault("false");
-    }
-    if (clientEmailsRef.current === null) {
-      setClientEmailsDefault("false");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    clientNamesRef.current,
-    clientContractsRef.current,
-    clientPhonesRef.current,
-    clientEmailsRef.current,
-  ]);
-
   return (
     <>
       {!sortedClients ? (
@@ -103,58 +74,63 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
         </div>
       ) : (
         <>
-          <div className="flex pl-4 w-full border-t py-2 bg-gray-100 justify-between font-normal text-black z-1">
-            {clientNamesDefault === "true" ||
-            clientNamesDefault === "default" ? (
-              <div className="flex flex-row items-center w-40">
-                <button
-                  onClick={sortedClientsNames}
-                  className="flex flex-row items-center"
-                >
-                  <span className="text-gray-300 text-sm hover:text-gray-400">
-                    Vardas Pavardė
-                  </span>
-                  <img
-                    src={require("../../assets/assets/down.png")}
-                    className="h-2 w-4 ml-2"
-                  />
-                </button>
+          {filterListClients.map((filter, index) => {
+            return (
+              <div key={filter.id}>
+                {selectedFilterClients === filter.id ? (
+                  <div className="flex pl-4 w-full border-t py-2 bg-gray-100 justify-between font-normal text-black z-1">
+                    {filter.dashboardList.includes("Vardas Pavardė") ? (
+                      <div className="flex flex-row items-center w-40">
+                        <button
+                          onClick={sortedClientsNames}
+                          className="flex flex-row items-center"
+                        >
+                          <span className="text-gray-300 text-sm hover:text-gray-400">
+                            Vardas Pavardė
+                          </span>
+                          <img
+                            src={require("../../assets/assets/down.png")}
+                            className="h-2 w-4 ml-2"
+                          />
+                        </button>
+                      </div>
+                    ) : null}
+                    {filter.dashboardList.includes("Sutarties nr.") ? (
+                      <button
+                        onClick={sortedClientsContracts}
+                        className="flex flex-row items-center w-40"
+                      >
+                        <span className="text-gray-300 text-sm hover:text-gray-400">
+                          Sutarties nr.
+                        </span>
+                      </button>
+                    ) : null}
+                    {filter.dashboardList.includes("Telefonas") ? (
+                      <button
+                        onClick={sortedClientsPhones}
+                        className="flex flex-row items-center w-40"
+                      >
+                        <span className="text-gray-300 text-sm hover:text-gray-400">
+                          Telefonas
+                        </span>
+                      </button>
+                    ) : null}
+                    {filter.dashboardList.includes("El. paštas") ? (
+                      <button
+                        onClick={sortedClientsEmails}
+                        className="flex flex-row items-center w-40"
+                      >
+                        <span className="text-gray-300 text-sm hover:text-gray-400">
+                          El. paštas
+                        </span>
+                      </button>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-            {clientContractsDefault === "true" ||
-            clientContractsDefault === "default" ? (
-              <button
-                onClick={sortedClientsContracts}
-                className="flex flex-row items-center w-40"
-              >
-                <span className="text-gray-300 text-sm hover:text-gray-400">
-                  Sutarties nr.
-                </span>
-              </button>
-            ) : null}
-            {clientPhonesDefault === "true" ||
-            clientPhonesDefault === "default" ? (
-              <button
-                onClick={sortedClientsPhones}
-                className="flex flex-row items-center w-40"
-              >
-                <span className="text-gray-300 text-sm hover:text-gray-400">
-                  Telefonas
-                </span>
-              </button>
-            ) : null}
-            {clientEmailsDefault === "true" ||
-            clientEmailsDefault === "default" ? (
-              <button
-                onClick={sortedClientsEmails}
-                className="flex flex-row items-center w-40"
-              >
-                <span className="text-gray-300 text-sm hover:text-gray-400">
-                  El. paštas
-                </span>
-              </button>
-            ) : null}
-          </div>
+            );
+          })}
+
           <div className="pl-4 flex-col w-full items-center">
             {sortedClients.map((data) => (
               <div className="w-full" key={data.id} {...props}>

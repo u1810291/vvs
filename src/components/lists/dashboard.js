@@ -32,17 +32,6 @@ export const DashboardList = () => {
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { filterEditing, setFilterEditing } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
-  const { objectDefault, setObjectDefault } = useContext(GlobalContext);
-  const { nameDefault, setNameDefault } = useContext(GlobalContext);
-  const { crewDefault, setCrewDefault } = useContext(GlobalContext);
-  const { inTimeDefault, setInTimeDefault } = useContext(GlobalContext);
-  const { reactionTimeDefault, setReactionTimeDefault } =
-    useContext(GlobalContext);
-  const { timeInObjectDefault, setTimeInObjectDefault } =
-    useContext(GlobalContext);
-  const { statusDefault, setStatusDefault } = useContext(GlobalContext);
-  const { reasonDefault, setReasonDefault } = useContext(GlobalContext);
-  const { dateDefault, setDateDefault } = useContext(GlobalContext);
 
   const {
     sortedDashboardKeys,
@@ -64,147 +53,117 @@ export const DashboardList = () => {
     sortedDashboardOrder
   );
 
-  useEffect(() => {
-    if (dateRef.current === null) {
-      setDateDefault("false");
-    }
-    if (objectRef.current === null) {
-      setObjectDefault("false");
-    }
-    if (nameRef.current === null) {
-      setNameDefault("false");
-    }
-    if (crewRef.current === null) {
-      setCrewDefault("false");
-    }
-    if (inTimeRef.current === null) {
-      setInTimeDefault("false");
-    }
-    if (reactionTimeRef.current === null) {
-      setReactionTimeDefault("false");
-    }
-    if (statusRef.current === null) {
-      setStatusDefault("false");
-    }
-    if (reasonRef.current === null) {
-      setReasonDefault("false");
-    }
-    if (timeInObjectRef.current === null) {
-      setTimeInObjectDefault("false");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dateRef.current,
-    objectRef.current,
-    nameRef.current,
-    crewRef.current,
-    inTimeRef.current,
-    reactionTimeRef.current,
-    statusRef.current,
-    reasonRef.current,
-    timeInObjectRef.current,
-  ]);
-
   return (
     <>
-      <div
-        className="flex pl-4 w-full border-t py-2 bg-gray-100 justify-between font-normal text-black z-1"
-      >
-        {dateDefault === "true" || dateDefault === "default" ? (
-          <button
-            onClick={sortedDashboardDate}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Gauta
-            </span>
-            <img
-              src={require("../../assets/assets/down.png")}
-              className="h-2 w-4 ml-2"
-            />
-          </button>
-        ) : null}
-        {objectDefault === "true" || objectDefault === "default" ? (
-          <button
-            onClick={sortedDashboardObject}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Objektas
-            </span>
-          </button>
-        ) : null}
-        {nameDefault === "true" || nameDefault === "default" ? (
-          <button
-            onClick={sortedDashboardName}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Pavadinimas
-            </span>
-          </button>
-        ) : null}
-        {crewDefault === "true" || crewDefault === "default" ? (
-          <button
-            onClick={sortedDashboardCrew}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Ekipažas
-            </span>
-          </button>
-        ) : null}
-        {inTimeDefault === "true" || inTimeDefault === "default" ? (
-          <button
-            onClick={sortedDashboardInTime}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Spėjo laiku
-            </span>
-          </button>
-        ) : null}
-        {reactionTimeDefault === "true" || reactionTimeDefault === "default" ? (
-          <button
-            onClick={sortedDashboardReactionTime}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Reagavimo laikas
-            </span>
-          </button>
-        ) : null}
-        {timeInObjectDefault === "true" || timeInObjectDefault === "default" ? (
-          <button
-            onClick={sortedDashboardTimeInObject}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Laikas objekte
-            </span>
-          </button>
-        ) : null}
-        {statusDefault === "true" || statusDefault === "default" ? (
-          <button
-            onClick={sortedDashboardStatus}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Būsena
-            </span>
-          </button>
-        ) : null}
-        {reasonDefault === "true" || reasonDefault === "default" ? (
-          <button
-            onClick={sortedDashboardReason}
-            className="flex flex-row items-center justify-start w-40"
-          >
-            <span className="text-gray-300 text-sm hover:text-gray-400">
-              Suveikimo priežastis
-            </span>
-          </button>
-        ) : null}
-      </div>
+      {filterList.map((filter, index) => {
+        return (
+          <div key={filter.id}>
+            {selectedFilter === filter.id ? (
+              <div className="flex pl-4 w-full border-t py-2 bg-gray-100 justify-between font-normal text-black z-1">
+                {filter.dashboardList.includes("Gauta") ? (
+                  <>
+                    <button
+                      onClick={sortedDashboardDate}
+                      className="flex flex-row items-center justify-start w-40"
+                    >
+                      <span className="text-gray-300 text-sm hover:text-gray-400">
+                        Gauta
+                      </span>
+                      <img
+                        src={require("../../assets/assets/down.png")}
+                        className="h-2 w-4 ml-2"
+                      />
+                    </button>
+                  </>
+                ) : (
+                  (dateRef.current = null)
+                )}
+                {filter.dashboardList.includes("Objektas") ? (
+                  <button
+                    onClick={sortedDashboardObject}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Objektas
+                    </span>
+                  </button>
+                ) : null}
+                {filter.dashboardList.includes("Pavadinimas") ? (
+                  <button
+                    onClick={sortedDashboardName}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Pavadinimas
+                    </span>
+                  </button>
+                ) : null}
+                {filter.dashboardList.includes("Ekipažas") ? (
+                  <button
+                    onClick={sortedDashboardCrew}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Ekipažas
+                    </span>
+                  </button>
+                ) : null}
+                {filter.dashboardList.includes("Spėjo laiku") ? (
+                  <button
+                    onClick={sortedDashboardInTime}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Spėjo laiku
+                    </span>
+                  </button>
+                ) : null}
+                {filter.dashboardList.includes("Reagavimo laikas") ? (
+                  <button
+                    onClick={sortedDashboardReactionTime}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Reagavimo laikas
+                    </span>
+                  </button>
+                ) : null}
+                {filter.dashboardList.includes("Laikas objekte") ? (
+                  <button
+                    onClick={sortedDashboardTimeInObject}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Laikas objekte
+                    </span>
+                  </button>
+                ) : null}
+                {filter.dashboardList.includes("Būsena") ? (
+                  <button
+                    onClick={sortedDashboardStatus}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Būsena
+                    </span>
+                  </button>
+                ) : null}
+                {filter.dashboardList.includes("Suveikimo priežastis") ? (
+                  <button
+                    onClick={sortedDashboardReason}
+                    className="flex flex-row items-center justify-start w-40"
+                  >
+                    <span className="text-gray-300 text-sm hover:text-gray-400">
+                      Suveikimo priežastis
+                    </span>
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+        );
+      })}
+
       <div className="pl-4 flex-col w-full items-center">
         {sortedDashboardTestApi.map((data) => (
           <div className="w-full" key={data.id}>
@@ -212,9 +171,7 @@ export const DashboardList = () => {
               return (
                 <div key={filter.id}>
                   {selectedFilter === filter.id ? (
-                    <div
-                      className="flex w-full border-t py-2 bg-white justify-between font-normal text-black z-1"
-                    >
+                    <div className="flex w-full border-t py-2 bg-white justify-between font-normal text-black z-1">
                       {filter.dashboardList.includes("Gauta") ? (
                         <div className="flex flex-row justify-start items-center h-12 w-40 ">
                           <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">

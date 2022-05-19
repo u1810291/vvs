@@ -24,14 +24,6 @@ export const FiltersListClients = ({
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
-  const { clientNamesDefault, setClientNamesDefault } =
-    useContext(GlobalContext);
-  const { clientContractsDefault, setClientContractsDefault } =
-    useContext(GlobalContext);
-  const { clientPhonesDefault, setClientPhonesDefault } =
-    useContext(GlobalContext);
-  const { clientEmailsDefault, setClientEmailsDefault } =
-    useContext(GlobalContext);
 
   return (
     <div
@@ -122,7 +114,6 @@ export const FiltersListClients = ({
                             <button
                               onClick={() => {
                                 const name = "Vardas Pavardė";
-                                setClientNamesDefault("true");
                                 setFilterListClients((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id
@@ -154,7 +145,6 @@ export const FiltersListClients = ({
                             <button
                               onClick={() => {
                                 const contract = "Sutarties nr.";
-                                setClientContractsDefault("true");
                                 setFilterListClients((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id
@@ -186,7 +176,6 @@ export const FiltersListClients = ({
                             <button
                               onClick={() => {
                                 const phone = "Telefonas";
-                                setClientPhonesDefault("true");
                                 setFilterListClients((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id
@@ -218,7 +207,6 @@ export const FiltersListClients = ({
                             <button
                               onClick={() => {
                                 const email = "El. paštas";
-                                setClientEmailsDefault("true");
                                 setFilterListClients((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id
