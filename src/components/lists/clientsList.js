@@ -9,7 +9,7 @@ import { useFetch } from "../../hook/useFetch";
 import { getUsers } from "../../api/queryForms/queryString/users";
 import { getAllUsers } from "../../api/queryForms/variables/users";
 
-export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
+export const ClientList = () => {
   const clientNamesRef = useRef();
   const clientContractsRef = useRef();
   const clientPhonesRef = useRef();
@@ -133,7 +133,7 @@ export const ClientList = ({ id, name, contract, phone, email, ...props }) => {
 
           <div className="pl-4 flex-col w-full items-center">
             {sortedClients.map((data) => (
-              <div className="w-full" key={data.id} {...props}>
+              <div className="w-full" key={data.id} >
                 {filterListClients.map((filter, index) => {
                   return (
                     <div key={filter.id}>

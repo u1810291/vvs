@@ -25,17 +25,6 @@ export const FiltersListObjects = ({
   const { english, lithuanian, t } = useLanguage();
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
-  const { objectNamesDefault, setObjectNamesDefault } =
-  useContext(GlobalContext);
-const { objectCityDefault, setObjectCityDefault } = useContext(GlobalContext);
-const { objectAddressDefault, setObjectAddressDefault } =
-  useContext(GlobalContext);
-const { objectObjectsDefault, setObjectObjectsDefault } =
-  useContext(GlobalContext);
-const { objectContractDefault, setObjectContractDefault } =
-  useContext(GlobalContext);
-const { objectSentCrewDefault, setObjectSentCrewDefault } =
-  useContext(GlobalContext);
 
   return (
     <div
@@ -110,7 +99,6 @@ const { objectSentCrewDefault, setObjectSentCrewDefault } =
                             <button
                               onClick={() => {
                                 const showDate = "Vardas Pavardė";
-                                setObjectNamesDefault("true");
                                 setFilterListObjects((currentFilter) => 
                                 currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(showDate)} : x))}}
                               className={classNames(
@@ -132,7 +120,6 @@ const { objectSentCrewDefault, setObjectSentCrewDefault } =
                             <button
                             onClick={() => {
                               const object = "Miestas";
-                              setObjectCityDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(object)} : x))}}
                               className={classNames(
@@ -154,7 +141,6 @@ const { objectSentCrewDefault, setObjectSentCrewDefault } =
                             <button
                             onClick={() => {
                               const name = "Adresas";
-                              setObjectAddressDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(name)} : x))}}
                               className={classNames(
@@ -176,7 +162,6 @@ const { objectSentCrewDefault, setObjectSentCrewDefault } =
                             <button
                             onClick={() => {
                               const crew = "Objekto nr.";
-                              setObjectObjectsDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(crew)} : x))}}
                               className={classNames(
@@ -198,7 +183,6 @@ const { objectSentCrewDefault, setObjectSentCrewDefault } =
                             <button
                             onClick={() => {
                               const inTime = "Sutarties nr.";
-                              setObjectContractDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(inTime)} : x))}}
                               className={classNames(
@@ -222,7 +206,6 @@ const { objectSentCrewDefault, setObjectSentCrewDefault } =
                             <button
                             onClick={() => {
                               const reactionTime = "Siusti ekipaža";
-                              setObjectSentCrewDefault("true");
                               setFilterListObjects((currentFilter) => 
                               currentFilter.map((x) => x.id === filter.id ? {...x, dashboardList: x.dashboardList.concat(reactionTime)} : x))}}
                               className={classNames(

@@ -19,7 +19,7 @@ export function useDeleteFetch(queryString, variables, authToken) {
       setLoading(true);
       const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
         // signal: abortController.current.signal,
-        method: "POST", // DELETE
+        method: "DELETE", // DELETE
         body: JSON.stringify({
           Authorization: "Bearer" + String(authToken),
           query: queryString,
@@ -29,7 +29,7 @@ export function useDeleteFetch(queryString, variables, authToken) {
           "content-type": "application/json",
           "x-hasura-admin-secret": "secret",
         },
-      });
+      })
       const data = await res.json();
       if (res.status === 200) {
         prevValue[n] = data;
