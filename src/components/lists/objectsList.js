@@ -6,14 +6,7 @@ import { sortToggle } from "../../util/utils";
 import GlobalContext from "../../context/globalContext";
 
 export const ObjectsList = () => {
-  const objectsNamesRef = useRef();
-  const objectsCityRef = useRef();
-  const objectsAddressRef = useRef();
-  const objectsObjectRef = useRef();
-  const objectsContractRef = useRef();
-  const objectsSentCrewRef = useRef();
-
-  const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
+const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
 
@@ -123,9 +116,7 @@ export const ObjectsList = () => {
                             {data.name}
                           </Link>
                         </div>
-                      ) : (
-                        objectsNamesRef.current = null
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Miestas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
@@ -136,9 +127,7 @@ export const ObjectsList = () => {
                             {data.city}
                           </Link>
                         </div>
-                      ) : (
-                        objectsCityRef.current = null
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Adresas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
@@ -149,9 +138,7 @@ export const ObjectsList = () => {
                             {data.address}
                           </Link>
                         </div>
-                      ) : (
-                        objectsAddressRef.current = null
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Objekto nr.") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
@@ -162,9 +149,7 @@ export const ObjectsList = () => {
                             {data.object}
                           </Link>
                         </div>
-                      ) : (
-                        objectsObjectRef.current = null
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Sutarties nr.") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
@@ -175,9 +160,7 @@ export const ObjectsList = () => {
                             {data.contract}
                           </Link>
                         </div>
-                      ) : (
-                        objectsContractRef.current = null
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Siusti ekipaža") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
@@ -188,9 +171,7 @@ export const ObjectsList = () => {
                             {data.sentCrew}
                           </Link>
                         </div>
-                      ) : (
-                        objectsSentCrewRef.current = null
-                      )}
+                      ) : null}
                     </div>
                   ) : null}
                 </div>

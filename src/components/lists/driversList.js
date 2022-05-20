@@ -14,8 +14,6 @@ import { sortToggle } from "../../util/utils";
 import { generate } from "shortid";
 
 export const DriverList = () => {
-  const driversNamesRef = useRef();
-  const driversStatusRef = useRef();
   const { accessToken } = useContext(AuthContext);
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
   const { selectedFilterDrivers, setSelectedFilterDrivers } =
@@ -120,9 +118,7 @@ export const DriverList = () => {
                               >
                                 {data.firstName}
                               </Link>
-                            ) : (
-                              (driversNamesRef.current = null)
-                            )}
+                            ) : null}
                           </div>
                           <div className="flex whitespace-nowrap flex-row justify-start h-12 items-center w-40">
                             {filter.dashboardList.includes("Būsena") ? (
@@ -131,10 +127,9 @@ export const DriverList = () => {
                               ) : (
                                 <Disconnected data={data.id} />
                               )
-                            ) : (
+                            ) : 
                               // deactivated
-                              (driversStatusRef.current = null)
-                            )}
+                              null}
                           </div>
                         </div>
                       ) : null}

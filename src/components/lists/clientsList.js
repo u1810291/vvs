@@ -10,10 +10,6 @@ import { getUsers } from "../../api/queryForms/queryString/users";
 import { getAllUsers } from "../../api/queryForms/variables/users";
 
 export const ClientList = () => {
-  const clientNamesRef = useRef();
-  const clientContractsRef = useRef();
-  const clientPhonesRef = useRef();
-  const clientEmailsRef = useRef();
   const { accessToken } = useContext(AuthContext);
   const [customers, setCustomers] = useState("");
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
@@ -149,9 +145,7 @@ export const ClientList = () => {
                                 {data.fullName}
                               </Link>
                             </div>
-                          ) : (
-                            (clientNamesRef.current = null)
-                          )}
+                          ) : null}
                           {filter.dashboardList.includes("Sutarties nr.") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
@@ -162,9 +156,7 @@ export const ClientList = () => {
                                 {data.contract}
                               </Link>
                             </div>
-                          ) : (
-                            (clientContractsRef.current = null)
-                          )}
+                          ) : null}
                           {filter.dashboardList.includes("Telefonas") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
@@ -175,9 +167,7 @@ export const ClientList = () => {
                                 {data.mobilePhone}
                               </Link>
                             </div>
-                          ) : (
-                            (clientPhonesRef.current = null)
-                          )}
+                          ) : null}
                           {filter.dashboardList.includes("El. paštas") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
@@ -188,9 +178,7 @@ export const ClientList = () => {
                                 {data.email}
                               </Link>
                             </div>
-                          ) : (
-                            (clientEmailsRef.current = null)
-                          )}
+                          ) : null}
                         </div>
                       ) : null}
                     </div>

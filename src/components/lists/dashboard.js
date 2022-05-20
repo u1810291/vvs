@@ -19,17 +19,7 @@ const { YellowWaitingStatus } = require("../buttons/yellowWaiting");
 const { InspectedStatus } = require("../buttons/yellowInspected");
 
 export const DashboardList = () => {
-  const dateRef = useRef();
-  const objectRef = useRef();
-  const nameRef = useRef();
-  const crewRef = useRef();
-  const inTimeRef = useRef();
-  const reactionTimeRef = useRef();
-  const statusRef = useRef();
-  const reasonRef = useRef();
-  const timeInObjectRef = useRef();
-
-  const { filterList, setFilterList } = useContext(GlobalContext);
+const { filterList, setFilterList } = useContext(GlobalContext);
   const { filterEditing, setFilterEditing } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
 
@@ -178,63 +168,49 @@ export const DashboardList = () => {
                             {data.date}
                           </span>
                         </div>
-                      ) : (
-                        (dateRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Objektas") ? (
                         <div className="flex flex-row justify-start items-center h-12 w-40">
                           <span className="bg-white text-sm text-blue-300 truncate hover:text-gray-500">
                             {data.object}
                           </span>
                         </div>
-                      ) : (
-                        (objectRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Pavadinimas") ? (
                         <div className="flex flex-row justify-start items-center h-12 w-40">
                           <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">
                             {data.name}
                           </span>
                         </div>
-                      ) : (
-                        (nameRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Ekipažas") ? (
                         <div className="flex flex-row items-center justify-start h-12 w-40">
                           <span className="bg-white text-sm text-blue-300 truncate hover:text-gray-500">
                             {data.crew}
                           </span>
                         </div>
-                      ) : (
-                        (crewRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Spėjo laiku") ? (
                         <div className="flex flex-row items-center justify-start h-12 w-40">
                           <span className="bg-white text-sm text-gray-400 truncate hover:text-gray-500">
                             {data.intime}
                           </span>
                         </div>
-                      ) : (
-                        (inTimeRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Reagavimo laikas") ? (
                         <div className="flex flex-row items-center justify-start h-12 w-40">
                           <span className="bg-white text-gray-400 hover:text-gray-500">
                             {data.reactiontime}
                           </span>
                         </div>
-                      ) : (
-                        (reactionTimeRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Laikas objekte") ? (
                         <div className="flex flex-row items-center justify-start h-12 w-40">
                           <span className="bg-white text-gray-400 hover:text-gray-500">
                             {data.timeinobject}
                           </span>
                         </div>
-                      ) : (
-                        (timeInObjectRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Būsena") ? (
                         <div className="flex flex-row items-center justify-start h-12 w-40">
                           <RedWatching />
@@ -246,18 +222,14 @@ export const DashboardList = () => {
                           <BlueStatus/>
                           <CancelStatus/> */}
                         </div>
-                      ) : (
-                        (statusRef.current = null)
-                      )}
+                      ) : null}
                       {filter.dashboardList.includes("Suveikimo priežastis") ? (
                         <div className="flex flex-row items-center justify-start h-12 w-40">
                           <span className="bg-white text-sm text-gray-500 truncate hover:text-gray-400">
                             {data.reason}
                           </span>
                         </div>
-                      ) : (
-                        (reasonRef.current = null)
-                      )}
+                      ) : null}
                     </div>
                   ) : null}
                 </div>
