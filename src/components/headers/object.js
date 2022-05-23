@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import GlobalContext from "../../context/globalContext";
 
-export function ObjectHeader() {
+export function ObjectHeader({ fetch, ...props}) {
   const {objectName, setObjectName} = useContext(GlobalContext);
 
   return (
@@ -21,7 +21,7 @@ export function ObjectHeader() {
           Atšaukti
         </button>
         <button
-          type="submit"
+          onClick={fetch}
           className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 hover:bg-slate-500 focus:outline-none"
         >
           Įšsaugoti

@@ -1,17 +1,35 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
+import React, {
+  useState,
+  useContext,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { ObjectHeader } from "../components/headers/object";
 import { Events } from "../components/lists/events";
 import { PhonesList } from "../api/phones";
 import GlobalContext from "../context/globalContext";
+import AuthContext from "../context/authContext";
 import { EventsList } from "../api/events";
 import { generate } from "shortid";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import useUtils from "../hook/useUtils";
+import { objectPageImagesQuery } from "../api/queryForms/queryString/query";
+import {
+  objectPageImagesAPImutation,
+  objectPageImagesMutation,
+} from "../api/queryForms/queryString/mutation";
+import { useImage } from "../hook/useImage";
+const Buffer = require('buffer/').Buffer
 
 function Object() {
+  const hiddenFileInput = useRef(null);
   const { objectName, setObjectName } = useContext(GlobalContext);
+  const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
+  const { accessToken } = useContext(AuthContext);
   const [objectAddress, setObjectAddress] = useState("");
   const [objectCity, setObjectCity] = useState("");
   const [objectDescription, setObjectDescription] = useState("");
@@ -22,6 +40,82 @@ function Object() {
   const [time, setTime] = useState("");
   const [modem, setModem] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
+  let verBinary = objectPageImages.toString();
+  // function string2Bin(str) {
+  //   var result = [];
+  //   for (var i = 0; i < str.length; i++) {
+  //     result.push(str.charCodeAt(i).toString(2));
+  //   }
+  //   return result;
+  // }
+
+  // const binary = string2Bin(objectPageImages.toString());
+  
+  // const str2blob = txt => new Blob([txt])
+  // const blob = str2blob(objectPageImages.toString());
+
+  // let file = objectPageImages;
+  // useEffect(() => {
+  //   let myBuffer = [];
+  //   let str = blob;
+  //   let buffer = Buffer.alloc(str, "utf16le");
+  //   for (let i = 0; i < buffer.length; i++) {
+  //     const result = myBuffer.push(buffer[i]);
+  //     setBinary(result)
+  //   }
+  // }, [blob, objectPageImages]);
+
+  // const handleReaderLoaded = (e) => {
+  //   let binaryString = e.target.result
+  //   setBinary({base64TextString: btoa(binaryString)})
+  //   console.log(binary);
+  // }
+
+  // if (file) {
+  //   const reader = new FileReader();
+  //   reader.onload = handleReaderLoaded();
+  //   reader.readAsBinaryString(file);
+  // }
+
+  // const fileData = new FormData();
+  // fileData.append("File", file);
+
+  // const str2blob = txt => new Blob([txt])
+  // const blob = str2blob(objectPageImages.toString());
+
+  // const reader = new FileReader();
+  // const binary = reader.readAsBinaryString(blob);
+
+  // objectPageImages.toString().charCodeAt(0).toString(2) + " "
+  const objectPageImagesVariables = {
+    imagename: "example",
+    image: verBinary,
+    Id: 123123123
+  };
+
+  const { data, error, loading, fetchImages } = useImage(
+    objectPageImagesQuery,
+    {},
+    accessToken
+  );
+
+  const {
+    data: dataMutation,
+    error: dataError,
+    loading: dataLoading,
+    fetchImages: dataFetchImages,
+  } = useImage(
+    objectPageImagesMutation,
+    objectPageImagesVariables,
+    accessToken
+  );
+
+  console.log("img upload ", dataMutation);
+  console.log("objectPageImages ", objectPageImages);
+  // console.log("form ", fileData);
+  // console.log('img fetch ', data)
+
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
   }, []);
@@ -78,13 +172,64 @@ function Object() {
     setModem(e.target.value);
   }, []);
 
+  useEffect(() => {
+    fetchImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function onImageChange(e) {
+    if (e.target.files) {
+      const fileArray = Array.from(e.target.files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setObjectPageImages((prev) => prev.concat(fileArray));
+      Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
+    }
+  }
+
+  const renderPhotos = (source) => {
+    return source.map((photo, index) => {
+      return (
+        <div key={photo} className="flex flex-col">
+          <div className="flex flex-row justify-between">
+            <p className="text-xs text-gray-400 py-1">
+              {photo.substr(photo.length - 10)}
+            </p>
+            <button
+              onClick={() => removeImage(photo)}
+              className="text-xs text-red-700 py-1"
+            >
+              ištrinti
+            </button>
+          </div>
+          <a>
+            <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
+              <img className="flex bg-cover w-full h-full" src={photo}></img>
+            </div>
+          </a>
+        </div>
+      );
+    });
+  };
+
+  const removeImage = useCallback(
+    async (id) => {
+      setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
+    },
+    [setObjectPageImages]
+  );
+
+  const handleClick = useCallback((event) => {
+    hiddenFileInput.current.click();
+  }, []);
+
   return (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
         <div className="flex w-screen flex-row justify-center h-screen">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-            <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button onClick={backFunc}>
                   <img src={require("../assets/assets/left.png")}></img>
                 </button>
@@ -101,7 +246,7 @@ function Object() {
                 </button>
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
-                <ObjectHeader />
+                <ObjectHeader fetch={dataFetchImages} />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                   <div className="flex pl-4 flex-row justify-between">
                     <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
@@ -236,44 +381,63 @@ function Object() {
                           Objekto nuotraukos
                         </p>
                         <div className="w-80 grid sm:grid-cols-1 gap-2 lg:grid-cols-2">
-                          <div className="flex flex-col">
-                            <p className="text-xs text-gray-400 py-1">
-                              202005-01-b
-                            </p>
-                            <a href="#">
-                              <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
-                                <img
-                                  className="flex bg-cover w-2/4 h-2/4"
-                                  src={require("../assets/assets/apple.png")}
-                                ></img>
+                          {objectPageImages.length === 0 ? (
+                            <>
+                              <div className="flex flex-col">
+                                <p className="text-xs h-6 text-gray-400 py-1"></p>
+                                <a>
+                                  <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
+                                    <img
+                                      className="flex bg-cover w-2/4 h-2/4"
+                                      src={require("../assets/assets/apple.png")}
+                                    ></img>
+                                  </div>
+                                </a>
                               </div>
-                            </a>
-                          </div>
-
-                          <div className="flex flex-col">
-                            <div className="flex flex-row justify-between">
-                              <p className="text-xs text-gray-400 py-1">
-                                202005-01-b
-                              </p>
-                              <button className="text-xs text-red-700 py-1">
-                                ištrinti
-                              </button>
+                              <div className="flex flex-col">
+                                <p className="text-xs h-6 text-gray-400 py-1"></p>
+                                <a>
+                                  <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
+                                    <img
+                                      className="flex bg-cover w-2/4 h-2/4"
+                                      src={require("../assets/assets/apple.png")}
+                                    ></img>
+                                  </div>
+                                </a>
+                              </div>
+                            </>
+                          ) : objectPageImages.length === 1 ? (
+                            <div className="flex flex-col">
+                              <p className="text-xs h-6 text-gray-400 py-1"></p>
+                              <a>
+                                <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
+                                  <img
+                                    className="flex bg-cover w-2/4 h-2/4"
+                                    src={require("../assets/assets/apple.png")}
+                                  ></img>
+                                </div>
+                              </a>
                             </div>
-                            <a href="#">
-                              <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
-                                <img
-                                  className="flex bg-cover w-2/4 h-2/4"
-                                  src={require("../assets/assets/apple.png")}
-                                ></img>
-                              </div>
-                            </a>
-                          </div>
+                          ) : null}
+                          {renderPhotos(objectPageImages)}
                         </div>
 
                         <div className="w-80 mt-4 flex justify-end">
-                          <button className="flex rounded-sm text-xs px-4 mb-2 py-1 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
-                            <p>Įkelti nuotrauką</p>
+                          <button
+                            className="flex rounded-sm text-xs px-4 mb-2 py-1 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200"
+                            disabled={objectPageImages.length === 4}
+                            onClick={handleClick}
+                          >
+                            Ikelti nuotrauką
                           </button>
+                          <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            ref={hiddenFileInput}
+                            onChange={onImageChange}
+                            className="hidden"
+                          ></input>
                         </div>
                       </div>
 
@@ -403,8 +567,6 @@ function Object() {
                           </div>
 
                           <div className="overflow-y-auto scrollbar-gone">
-                            {" "}
-                            {/* h-96 */}
                             {PhonesList.map((data) => (
                               <div
                                 key={data.id}

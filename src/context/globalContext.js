@@ -38,6 +38,7 @@ export const GlobalProvider = ({ children }) => {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [apiData, setApiData] = useState("");
   const [globalToken, setGlobalToken] = useState("empty");
+  const [objectPageImages, setObjectPageImages] = useState([]);
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -152,6 +153,8 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    objectPageImages,
+    setObjectPageImages,
     globalToken,
     setGlobalToken,
     apiData,
