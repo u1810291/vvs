@@ -6,6 +6,7 @@ import ProtectedRoute from "./feature/protected";
 import { GraphQLClient, ClientContext } from "graphql-hooks";
 import { createClient } from "graphql-ws";
 import memCache from "graphql-hooks-memcache";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 
 import Login from "./layout/login";
 import Dashboard from "./layout/dashboard";
@@ -23,8 +24,10 @@ import New from "./layout/new";
 
 import NotFound from "./layout/notFound";
 
+const queryClient = new QueryClient();
+
 function App() {
-  const {globalToken, setGlobalToken} = useContext(GlobalContext);
+  const { globalToken, setGlobalToken } = useContext(GlobalContext);
   const client = new GraphQLClient({
     // returnJWT() and apply middleware
     url: "https://ec.swarm.testavimui.eu/v1/graphql",
@@ -40,12 +43,14 @@ function App() {
           connectionParams: () => {
             const token = getAccessToken();
             return {
-            headers: {
-              "content-type": "application/json",
-              "x-hasura-admin-secret": "secret",
-              Authorization: globalToken ? "Bearer" + String(globalToken) : "",
-            },
-          }
+              headers: {
+                "content-type": "application/json",
+                "x-hasura-admin-secret": "secret",
+                Authorization: globalToken
+                  ? "Bearer" + String(globalToken)
+                  : "",
+              },
+            };
           },
         },
       }),
@@ -53,7 +58,8 @@ function App() {
 
   return (
     <Router>
-      <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
           <ClientContext.Provider value={globalToken ? client : null}>
             <Routes>
               <Route element={<ProtectedRoute />}>
@@ -74,7 +80,8 @@ function App() {
               </Route>
             </Routes>
           </ClientContext.Provider>
-      </AuthProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </Router>
   );
 }
