@@ -7,6 +7,8 @@ function useSort() {
   const [sortedDriversKeys, setSortedDriversKeys] = useState("");
   const [sortedObjectsOrder, setSortedObjectsOrder] = useState("");
   const [sortedObjectsKeys, setSortedObjectsKeys] = useState("");
+  const [sortedModemsOrder, setSortedModemsOrder] = useState("");
+  const [sortedModemsKeys, setSortedModemsKeys] = useState("");
   const [sortedDashboardKeys, setSortedDashboardKeys] = useState("");
   const [sortedDashboardOrder, setSortedDashboardOrder] = useState("");
   const [sortedKeysKeys, setSortedKeysKeys] = useState("");
@@ -192,6 +194,81 @@ function useSort() {
     }
   }
 
+  function sortedModemsNumber() {
+    if (sortedModemsOrder === "") {
+      setSortedModemsKeys("number");
+      setSortedModemsOrder("asc");
+    }
+    if (sortedModemsOrder === "asc") {
+      setSortedModemsKeys("number");
+      setSortedModemsOrder("desc");
+    }
+    if (sortedModemsOrder === "desc") {
+      setSortedModemsKeys("number");
+      setSortedModemsOrder("");
+    }
+  }
+
+  function sortedModemsObjectName() {
+    if (sortedModemsOrder === "") {
+      setSortedModemsKeys("objectName");
+      setSortedModemsOrder("asc");
+    }
+    if (sortedModemsOrder === "asc") {
+      setSortedModemsKeys("objectName");
+      setSortedModemsOrder("desc");
+    }
+    if (sortedModemsOrder === "desc") {
+      setSortedModemsKeys("objectName");
+      setSortedModemsOrder("");
+    }
+  }
+
+  function sortedModemsObjectNo() {
+    if (sortedModemsOrder === "") {
+      setSortedModemsKeys("objectNo");
+      setSortedModemsOrder("asc");
+    }
+    if (sortedModemsOrder === "asc") {
+      setSortedModemsKeys("objectNo");
+      setSortedModemsOrder("desc");
+    }
+    if (sortedModemsOrder === "desc") {
+      setSortedModemsKeys("objectNo");
+      setSortedModemsOrder("");
+    }
+  }
+
+  function sortedModemsContractNo() {
+    if (sortedModemsOrder === "") {
+      setSortedModemsKeys("contractNo");
+      setSortedModemsOrder("asc");
+    }
+    if (sortedModemsOrder === "asc") {
+      setSortedModemsKeys("contractNo");
+      setSortedModemsOrder("desc");
+    }
+    if (sortedModemsOrder === "desc") {
+      setSortedModemsKeys("contractNo");
+      setSortedModemsOrder("");
+    }
+  }
+
+  function sortedModemsStatus() {
+    if (sortedModemsOrder === "") {
+      setSortedModemsKeys("status");
+      setSortedModemsOrder("asc");
+    }
+    if (sortedModemsOrder === "asc") {
+      setSortedModemsKeys("status");
+      setSortedModemsOrder("desc");
+    }
+    if (sortedModemsOrder === "desc") {
+      setSortedModemsKeys("status");
+      setSortedModemsOrder("");
+    }
+  }
+
   function sortedDashboardDate() {
     if (sortedDashboardOrder === "") {
       setSortedDashboardKeys("date");
@@ -364,6 +441,8 @@ function useSort() {
     sortedDriversKeys,
     sortedObjectsOrder,
     sortedObjectsKeys,
+    sortedModemsOrder,
+    sortedModemsKeys,
     sortedDashboardKeys,
     sortedDashboardOrder,
     sortedKeysKeys,
@@ -380,6 +459,11 @@ function useSort() {
     sortedObjectsObject,
     sortedObjectsSentCrew,
     sortedObjectsContract,
+    sortedModemsNumber,
+    sortedModemsObjectName,
+    sortedModemsObjectNo,
+    sortedModemsContractNo,
+    sortedModemsStatus,
     sortedDashboardDate,
     sortedDashboardObject,
     sortedDashboardName,

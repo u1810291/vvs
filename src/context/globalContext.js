@@ -20,23 +20,23 @@ export const GlobalProvider = ({ children }) => {
   const [filterEditingDrivers, setFilterEditingDrivers] = useState(null);
   const [filterEditingClients, setFilterEditingClients] = useState(null);
   const [filterEditingObjects, setFilterEditingObjects] = useState(null);
+  const [filterEditingModems, setFilterEditingModems] = useState(null);
   const [currentFilter, setCurrentFilter] = useState(null);
   const [search, setSearch] = useState("");
   const [sortedDashboardTestApiKeys, setSortedDashboardTestApiKeys] =
     useState("");
   const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
     useState("");
-  const [sortedClientsOrder, setSortedClientsOrder] = useState("");
-  const [sortedClientsKeys, setSortedClientsKeys] = useState("");
   const [toPrintNew, setToPrintNew] = useState(null);
   const [toPrintKey, setToPrintKey] = useState(null);
   const [expandFilter, setExpandFilter] = useState(true);
   const [expandFilterDrivers, setExpandFilterDrivers] = useState(true);
   const [expandFilterObjects, setExpandFilterObjects] = useState(true);
   const [expandFilterClients, setExpandFilterClients] = useState(true);
+  const [expandFilterModems, setExpandFilterModems] = useState(true);
   const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
   const [selectedFilter, setSelectedFilter] = useState(null);
-  const [apiData, setApiData] = useState("");
+  const [apiData, setApiData] = useState(""); // not used
   const [globalToken, setGlobalToken] = useState("empty");
   const [objectPageImages, setObjectPageImages] = useState([]);
   const [filterList, setFilterList] = useState([
@@ -151,6 +151,35 @@ export const GlobalProvider = ({ children }) => {
     },
   ]);
 
+  const [selectedFilterModems, setSelectedFilterModems] = useState(null);
+  const [filterListModems, setFilterListModems] = useState([
+    {
+      id: generate(),
+      filterName: generate(),
+      filterShortName: Math.random().toString(36).slice(-4),
+      savedToFavorite: true,
+      savedToMenu: true,
+      date: new Date().toISOString().split("T")[0],
+      objectAddress: "",
+      operator: "0",
+      object: "0",
+      type: "0",
+      group: "0",
+      status: "0",
+      reason: "0",
+      crew: "0",
+      driver: "0",
+      inTime: "0",
+      dashboardList: [
+        "Numeris",
+        "Objekto Pavadinimas",
+        "Objekto nr.",
+        "Sutarties nr.",
+        "Būsena",
+      ],
+    },
+  ]);
+
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
     objectPageImages,
@@ -165,6 +194,8 @@ export const GlobalProvider = ({ children }) => {
     setFilterEditingClients,
     filterEditingObjects,
     setFilterEditingObjects,
+    filterEditingModems,
+    setFilterEditingModems,
     expandFilter,
     setExpandFilter,
     objectName,
@@ -187,6 +218,10 @@ export const GlobalProvider = ({ children }) => {
     setFilterListClients,
     selectedFilterObjects,
     setSelectedFilterObjects,
+    selectedFilterModems,
+    setSelectedFilterModems,
+    filterListModems,
+    setFilterListModems,
     filterListObjects,
     setFilterListObjects,
     value,
@@ -217,16 +252,14 @@ export const GlobalProvider = ({ children }) => {
     setSortedDashboardTestApiKeys,
     sortedDashboardTestApiOrder,
     setSortedDashboardTestApiOrder,
-    sortedClientsOrder,
-    setSortedClientsOrder,
-    sortedClientsKeys,
-    setSortedClientsKeys,
     expandFilterDrivers,
     setExpandFilterDrivers,
     expandFilterObjects,
     setExpandFilterObjects,
     expandFilterClients,
     setExpandFilterClients,
+    expandFilterModems,
+    setExpandFilterModems,
   };
 
   return (

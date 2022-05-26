@@ -5,20 +5,19 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { ObjectsHeader } from "../components/headers/objects";
-import { ObjectsList } from "../components/lists/objectsList";
+import { ThreeTabHeader } from "../components/headers/threeTab";
+import { ModemsList } from "../components/lists/modemsList";
 
-import { FiltersListObjects } from "../components/filters/filterObjectsList";
-import { OptionsListObjects } from "../components/options/optionsObjectsList";
+import { FiltersListModems } from "../components/filters/filterModemsList";
+import { OptionsListModems } from "../components/options/optionsModemsList";
 const {
-  AddFilterListObjects,
-} = require("../components/addFilter/addFilterObjects");
+  AddFilterListModems,
+} = require("../components/addFilter/addFilterModems");
 
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import GlobalContext from "../context/globalContext";
-const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
@@ -39,11 +38,11 @@ function Modems() {
   }, []);
 
   usePreventScroll({ isDisabled: !isOpen });
-  const { expandFilterObjects, setExpandFilterObjects } =
+  const { expandFilterModems, setExpandFilterModems } =
     useContext(GlobalContext);
-  const { selectedFilterObjects, setSelectedFilterObjects } =
+  const { selectedFilterModems, setSelectedFilterModems } =
     useContext(GlobalContext);
-  const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
+  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -74,15 +73,15 @@ function Modems() {
                   className="pt-6"
                   src={require("../assets/assets/Line.png")}
                 ></img>
-                {filterListObjects.map((filter) => {
+                {filterListModems.map((filter) => {
                   if (filter.savedToMenu === true) {
                     return (
                       <button
                         key={filter.id}
                         // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-                        onClick={() => setSelectedFilterObjects(filter.id)}
+                        onClick={() => setSelectedFilterModems(filter.id)}
                         className={
-                          selectedFilterObjects === filter.id
+                          selectedFilterModems === filter.id
                             ? "font-light text-md mt-6 text-white"
                             : "font-light text-md mt-6 text-gray-400 hover:text-white"
                         }
@@ -94,20 +93,20 @@ function Modems() {
                 })}
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
-                <ObjectsHeader />
+                <ThreeTabHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                   <div className="flex flex-row w-full">
-                    {expandFilterObjects ? (
+                    {expandFilterModems ? (
                       <>
                         <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">
-                          <AddFilterListObjects />
+                          <AddFilterListModems />
                         </div>
                         <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
-                          <OptionsListObjects />
-                          <FiltersListObjects />
+                          <OptionsListModems />
+                          <FiltersListModems />
                           <div
                             className={
-                              selectedFilterObjects
+                              selectedFilterModems
                                 ? "flex flex-col md:flex-row justify-between"
                                 : "hidden"
                             }
@@ -146,11 +145,11 @@ function Modems() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <ObjectsList />
+                      <ModemsList />
                     </PDFExport>
                   ) : (
                     <>
-                      <ObjectsList />
+                      <ModemsList />
                     </>
                   )}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
