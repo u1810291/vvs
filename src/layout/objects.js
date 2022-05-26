@@ -8,17 +8,17 @@ import React, {
 import { ObjectsHeader } from "../components/headers/objects";
 import { ObjectsList } from "../components/lists/objectsList";
 
-import { FiltersListObjects } from "../components/lists/filterObjectsList";
-import { OptionsListObjects } from "../components/lists/optionsObjectsList";
+import { FiltersListObjects } from "../components/filters/filterObjectsList";
+import { OptionsListObjects } from "../components/options/optionsObjectsList";
 const {
   AddFilterListObjects,
-} = require("../components/lists/addFilterObjects");
+} = require("../components/addFilter/addFilterObjects");
 
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import GlobalContext from "../context/globalContext";
-const { AddFilterList } = require("../components/lists/addFilter");
+const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";

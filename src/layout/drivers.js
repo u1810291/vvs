@@ -7,11 +7,11 @@ import React, {
 } from "react";
 import { DriversHeader } from "../components/headers/drivers";
 import { DriverList } from "../components/lists/driversList";
-import { FiltersListDrivers } from "../components/lists/filterDriversList";
-import { OptionsListDrivers } from "../components/lists/optionsDriversList";
+import { FiltersListDrivers } from "../components/filters/filterDriversList";
+import { OptionsListDrivers } from "../components/options/optionsDriversList";
 const {
   AddFilterListDrivers,
-} = require("../components/lists/addFilterDrivers");
+} = require("../components/addFilter/addFilterDrivers");
 import GlobalContext from "../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";

@@ -33,7 +33,7 @@ import {
 import { useImage } from "../hook/useImage";
 import { useQuery } from "react-query";
 
-function Object() {
+function Modem() {
   const hiddenFileInput = useRef(null);
   const { objectName, setObjectName } = useContext(GlobalContext);
   const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
@@ -732,4 +732,4 @@ function Object() {
   );
 }
 
-export default Object;
+export default Modem;

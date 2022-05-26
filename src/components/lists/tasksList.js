@@ -18,7 +18,7 @@ const { GrayStatus } = require("../buttons/grayStatus");
 const { YellowWaitingStatus } = require("../buttons/yellowWaiting");
 const { InspectedStatus } = require("../buttons/yellowInspected");
 
-export const DashboardList = () => {
+export const TasksList = () => {
 const { filterList, setFilterList } = useContext(GlobalContext);
   const { filterEditing, setFilterEditing } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
@@ -65,9 +65,7 @@ const { filterList, setFilterList } = useContext(GlobalContext);
                       />
                     </button>
                   </>
-                ) : (
-                  (dateRef.current = null)
-                )}
+                ) : null}
                 {filter.dashboardList.includes("Objektas") ? (
                   <button
                     onClick={sortedDashboardObject}

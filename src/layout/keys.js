@@ -10,7 +10,7 @@ import { KeysList } from "../components/lists/keysList";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-const { AddFilterList } = require("../components/lists/addFilter");
+const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import { keys } from "../api/keys";
 import SlideOver from "../components/sidebars/slideOver";

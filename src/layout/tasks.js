@@ -8,10 +8,10 @@ import React, {
 // import Filter from '../components/Filter';
 // import { FilterItem } from '../components/Filter';
 import { TasksHeader } from "../components/headers/tasks";
-import { TasksList } from "../components/lists/tasks";
-import { OptionsList } from "../components/lists/options";
-import { DashboardList } from "../components/lists/dashboard";
-const { AddFilterList } = require("../components/lists/addFilter");
+import { TasksFilter } from "../components/filters/filterTasksList";
+import { OptionsList } from "../components/options/options";
+import { TasksList } from "../components/lists/tasksList";
+const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import GlobalContext from "../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -160,11 +160,11 @@ function Tasks() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <DashboardList />
+                      <TasksList />
                     </PDFExport>
                   ) : (
                     <>
-                      <DashboardList />
+                      <TasksList />
                       </>
                   )}
                       <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">

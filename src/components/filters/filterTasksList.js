@@ -9,7 +9,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const TasksList = ({
+export const TasksFilter = ({
   get,
   object,
   name,
