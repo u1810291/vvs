@@ -96,6 +96,7 @@ export const OptionsList = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
+                
                 <Menu as="div" className="relative inline-block text-left">
                   <div className="flex flex-col  w-full">
                     <p className="self-start text-sm text-gray-500 truncate">

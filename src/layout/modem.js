@@ -6,127 +6,38 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { ObjectHeader } from "../components/headers/object";
-import { Events } from "../components/lists/events";
-import { PhonesList } from "../api/phones";
+import { ModemHeader } from "../components/headers/modem";
 import GlobalContext from "../context/globalContext";
 import AuthContext from "../context/authContext";
 import { Spinner } from "react-activity";
-import { EventsList } from "../api/events";
 import { generate } from "shortid";
 import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import useUtils from "../hook/useUtils";
-import {
-  objectPageImagesQuery,
-  objectPageQuery,
-  objectPage,
-  imagesUpdate,
-} from "../api/queryForms/queryString/query";
-import {
-  objectPageImagesAPImutation,
-  objectPageImagesMutation,
-  objectPageQueryCorrespondPersons,
-  imagesUpdateMutation,
-} from "../api/queryForms/queryString/mutation";
-import { useImage } from "../hook/useImage";
+import { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useQuery } from "react-query";
+import { zones } from "../api/zones";
 
 function Modem() {
-  const hiddenFileInput = useRef(null);
-  const { objectName, setObjectName } = useContext(GlobalContext);
-  const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
   const { accessToken } = useContext(AuthContext);
+  const { expandFilterModems, setExpandFilterModems } =
+    useContext(GlobalContext);
+  const { selectedFilterModems, setSelectedFilterModems } =
+    useContext(GlobalContext);
+  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
   const [objectAddress, setObjectAddress] = useState("");
   const [objectCity, setObjectCity] = useState("");
-  const [objectDescription, setObjectDescription] = useState("");
-  const [objectLatitude, setObjectLatitude] = useState("");
-  const [objectLongitude, setObjectLongitude] = useState("");
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
-  const [time, setTime] = useState("");
   const [modem, setModem] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [responsiblePersons, setResponsiblePersons] = useState({});
-  const [objectImages, setObjectImages] = useState({});
-  const [objectPageData, setObjectPageData] = useState({});
-  const [pictures, setPictures] = useState("");
-  const [blobImage, setBlobImage] = useState("");
 
-  // let filePath = objectPageImages;
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
 
-  // useEffect(() => {
-  //   filePath.forEach((element) => {
-  //     let string = element.toString();
-  //     setPictures(string);
-  //   });
-  // }, [filePath]);
-
-  const imageUpdateVariables = {
-    image: JSON.stringify(blobImage),
-    id: generate(),
-    authToken: accessToken.toString(),
-  };
-
-  const { data, error, loading, fetchImages } = useImage(
-    objectPage,
-    {},
-    accessToken
-  );
-
-  const {
-    data: dataData,
-    error: dataError,
-    loading: dataLoading,
-    fetchImages: dataFetchImages,
-  } = useImage(imagesUpdate, imageUpdateVariables, accessToken);
-
-  console.log("dataData ", dataData, dataError, dataLoading);
-  console.log("data ", data, error, loading);
-
-  useEffect(() => {
-    fetchImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (data !== null) {
-    const base64images = data.data.images;
-    base64images.map(a => {
-      const images = a.imagepath;
-      if (images) {
-      setPictures([images]);
-      }
-      console.log(pictures)
-    })}
-  },[data])
-
-  // useEffect(() => {
-  //     console.log('data ', data);
-  //   // setQueryObject(data);
-  //   setResponsiblePersons(data?.data?.corresppersons);
-  //   setObjectImages(data?.data?.objectimages);
-  //   setObjectPageData(data?.data?.objects);
-  //   console.log(data?.data?.objects)
-  //   // console.log(objectPageData, objectImages, responsiblePersons);
-  //   // console.log(queryObject.data.corresppersons[0]);
-  //   // console.log(queryObject.data.objectimages)
-  //   // console.log(queryObject.data.objects[0])
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [data]);
-
-  // console.log(data);
-  //   const { isLoading: queryLoading, error: queryError, data: queryData } = useQuery('universal', () =>
-
-  //   fetch('https://ec.swarm.testavimui.eu/v1/graphql').then(res =>
-
-  //     res.json()
-
-  //   )
-
-  // )
-  // console.log(queryData)
+  const modems = "here";
 
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -137,17 +48,6 @@ function Modem() {
 
   usePreventScroll({ isDisabled: !isOpen });
   const { backFunc } = useUtils();
-
-  const objectDescriptionFunc = useCallback(async (e) => {
-    setObjectDescription(e.target.value);
-  }, []);
-
-  const objectNameFunc = useCallback(
-    async (e) => {
-      setObjectName(e.target.value);
-    },
-    [setObjectName]
-  );
 
   const objectAddressFunc = useCallback(async (e) => {
     setObjectAddress(e.target.value);
@@ -160,103 +60,13 @@ function Modem() {
     [setObjectCity]
   );
 
-  const objectLongitudeFunc = useCallback(async (e) => {
-    setObjectLongitude(e.target.value);
-  }, []);
-
-  const objectLatitudeFunc = useCallback(async (e) => {
-    setObjectLatitude(e.target.value);
-  }, []);
-
-  const fromFunc = useCallback(async (e) => {
-    setFrom(e.target.value);
-  }, []);
-
-  const toFunc = useCallback(async (e) => {
-    setTo(e.target.value);
-  }, []);
-
-  const timeFunc = useCallback(async (e) => {
-    setTime(e.target.value);
-  }, []);
-
   const modemFunc = useCallback(async (e) => {
     setModem(e.target.value);
   }, []);
 
-  async function onImageChange(e) {
-    if (e.target.files) {
-      let files = [...e.target.files];
-      let image = await Promise.all(
-        files.map((f) => {
-          return readAsDataURL(f);
-        })
-      );
-      setBlobImage(image); // do fetch here
-      dataFetchImages();
-      const fileArray = Array.from(e.target.files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setObjectPageImages((prev) => prev.concat(fileArray));
-      Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
-    }
-  }
-
-  function readAsDataURL(file) {
-    return new Promise((resolve, reject) => {
-      let fileReader = new FileReader();
-      fileReader.onload = function () {
-        return resolve({
-          data: fileReader.result,
-          name: file.name,
-          size: file.size,
-          type: file.type,
-        });
-      };
-      fileReader.readAsDataURL(file);
-    });
-  }
-
-  const renderPhotos = (source) => {
-    if (source) {
-    return source.map((photo, index) => {
-      return (
-        <div key={generate()} className="flex flex-col">
-          <div className="flex flex-row justify-between">
-            <p className="text-xs text-gray-400 py-1">
-              {photo.substr(photo.length - 10)}
-            </p>
-            <button
-              onClick={() => removeImage(photo)}
-              className="text-xs text-red-700 py-1"
-            >
-              ištrinti
-            </button>
-          </div>
-          <a>
-            <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
-              <img className="flex bg-cover w-full h-full" src={photo}></img>
-            </div>
-          </a>
-        </div>
-      );
-    })}
-  };
-
-  const removeImage = useCallback(
-    async (id) => {
-      setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
-    },
-    [setObjectPageImages]
-  );
-
-  const handleClick = useCallback((event) => {
-    hiddenFileInput.current.click();
-  }, []);
-
   return (
     <>
-      {!data ? (
+      {!modems ? (
         <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
           <Spinner color="dark-blue" size={40} />
         </div>
@@ -283,51 +93,29 @@ function Modem() {
                     </button>
                   </div>
                   <div className="flex flex-col min-h-full w-full justify-between">
-                    <ObjectHeader fetch={dataFetchImages} />
+                    <ModemHeader />
                     <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
-                      <div className="flex pl-4 flex-row justify-between">
-                        <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
+                      <div className="flex pl-4 flex-row h-full justify-between">
+                        <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6 justify-between">
                           <div className="flex flex-col">
                             <div className="flex flex-row justify-between">
                               <div className="flex flex-col">
-                                <div className="flex flex-row">
-                                  <div className="flex flex-col">
-                                    <div className="flex flex-row w-full">
-                                      <p className="self-start text-sm text-gray-500 truncate my-2">
-                                        Pavadinimas
-                                      </p>
-                                      <p className="self-start ml-1 text-red-600 text-sm truncate my-2">
-                                        *
-                                      </p>
-                                    </div>
-                                    <input
-                                      id="name"
-                                      name="name"
-                                      placeholder=""
-                                      required
-                                      value={data?.data?.objects[0].name} // objectName
-                                      onChange={objectNameFunc}
-                                      className="flex h-8 w-96 border placeholder-gray-400 text-black pl-2 focus:outline-none sm:text-sm"
-                                    />
-                                  </div>
-                                </div>
                                 <div className="flex flex-row w-full">
                                   <div className="flex mr-2 flex-col">
                                     <div className="flex flex-row">
                                       <p className="self-start text-sm text-gray-500 truncate my-2">
-                                        Adresas
+                                        Modemas
                                       </p>
                                       <p className="self-start ml-1 text-red-600 text-sm truncate my-2">
                                         *
                                       </p>
                                     </div>
                                     <input
-                                      id="address"
-                                      name="address"
+                                      id="modem"
+                                      name="modem"
                                       placeholder=""
-                                      type="address"
                                       required
-                                      value={data?.data?.objects[0].address} // objectAddress
+                                      value={objectAddress}
                                       onChange={objectAddressFunc}
                                       className="flex h-8 w-72 border placeholder-gray-400 text-black pl-2 focus:outline-none sm:text-sm"
                                     />
@@ -336,330 +124,319 @@ function Modem() {
                                   <div className="flex flex-col">
                                     <div className="flex flex-row">
                                       <p className="self-start text-sm text-gray-500 truncate my-2">
-                                        Miestas
+                                        Srities nr.
                                       </p>
                                     </div>
                                     <input
                                       id="city"
                                       name="city"
                                       placeholder=""
-                                      value={data?.data?.objects[0].city} // objectCity
+                                      value={objectCity}
                                       onChange={objectCityFunc}
-                                      type="city"
                                       className="flex h-8 w-full border focus:outline-none pl-2 sm:text-sm"
                                     />
                                   </div>
                                 </div>
-                              </div>
-
-                              <div className="flex pl-2 flex-col w-full h-full">
-                                <div className="flex flex-row w-full">
-                                  <p className="self-start text-sm text-gray-500 truncate my-2">
-                                    Pavadinimas
-                                  </p>
-                                </div>
-                                <textarea
-                                  id="answer"
-                                  name="answer"
-                                  placeholder=""
-                                  aria-describedby="answer"
-                                  rows={4}
-                                  value={data?.data?.objects[0].notes} // objectDescription
-                                  onChange={objectDescriptionFunc}
-                                  className="text-sm h-full w-full border pl-2 focus:outline-none"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="flex flex-row justify-between">
-                              <div className="flex flex-col">
-                                <div className="flex flex-row">
-                                  <div className="flex flex-row justify-between w-96">
-                                    <div className="flex mr-2 flex-col w-full">
-                                      <div className="flex flex-row">
-                                        <p className="self-start text-sm text-gray-500 truncate my-2">
-                                          Latitude
-                                        </p>
-                                      </div>
-                                      <input
-                                        id="longitude"
-                                        name="longitude"
-                                        placeholder=""
-                                        required
-                                        value={objectLongitude}
-                                        onChange={objectLongitudeFunc}
-                                        className="flex h-8 w-full border placeholder-gray-400 pl-2 text-black focus:outline-none sm:text-sm"
-                                      />
-                                    </div>
-
-                                    <div className="flex flex-col w-full">
-                                      <div className="flex flex-row">
-                                        <p className="self-start text-sm text-gray-500 truncate my-2">
-                                          Longitude
-                                        </p>
-                                      </div>
-                                      <input
-                                        id="latitude"
-                                        name="latitude"
-                                        placeholder=""
-                                        value={objectLatitude}
-                                        onChange={objectLatitudeFunc}
-                                        className="flex h-8 w-full border placeholder-gray-400 pl-2 text-black focus:outline-none sm:text-sm"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div>
-                            <p className="font-semibold ml-6 mt-4 text-sm mb-2 text-gray-900">
-                              Objekto nuotraukos
-                            </p>
-                            <div className="w-80 grid sm:grid-cols-1 gap-2 lg:grid-cols-2">
-                              {pictures.length === 0 || objectPageImages.length === 0 ? (
-                                <>
-                                  <div className="flex flex-col">
-                                    <p className="text-xs h-6 text-gray-400 py-1"></p>
-                                    <a>
-                                      <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
-                                        <img
-                                          className="flex bg-cover w-2/4 h-2/4"
-                                          src={require("../assets/assets/apple.png")}
-                                        ></img>
-                                      </div>
-                                    </a>
-                                  </div>
-                                  <div className="flex flex-col">
-                                    <p className="text-xs h-6 text-gray-400 py-1"></p>
-                                    <a>
-                                      <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
-                                        <img
-                                          className="flex bg-cover w-2/4 h-2/4"
-                                          src={require("../assets/assets/apple.png")}
-                                        ></img>
-                                      </div>
-                                    </a>
-                                  </div>
-                                </>
-                              ) : pictures.length === 1 || objectPageImages.length === 1 ? (
-                                <div className="flex flex-col">
-                                  <p className="text-xs h-6 text-gray-400 py-1"></p>
-                                  <a>
-                                    <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
-                                      <img
-                                        className="flex bg-cover w-2/4 h-2/4"
-                                        src={require("../assets/assets/apple.png")}
-                                      ></img>
-                                    </div>
-                                  </a>
-                                </div>
-                              ) : null}
-                              {renderPhotos(pictures)}
-                              {renderPhotos(objectPageImages)} {/* objectPageImages */}
-                            </div>
-
-                            <div className="w-80 mt-4 flex justify-end">
-                              <button
-                                className="flex rounded-sm text-xs px-4 mb-2 py-1 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200"
-                                onClick={handleClick}
-                              >
-                                Ikelti nuotrauką
-                              </button>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                ref={hiddenFileInput}
-                                onChange={onImageChange}
-                                className="hidden"
-                              ></input>
-                            </div>
-                          </div>
-
-                          <div>
-                            <p className="font-semibold ml-6 text-sm mb-2 text-gray-900">
-                              Reagavimo informacija
-                            </p>
-                            <div className="flex flex-col">
-                              <div className="flex flex-row items-end mb-2">
-                                <input
-                                  id="send-crew"
-                                  name="send-crew"
-                                  type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
-                                />
-                                <p className="mr-8 ml-4 text-sm text-normal truncate">
-                                  Siusti ekipažą automatiškai
-                                </p>
-
-                                <div className="flex flex-col ml-4 w-20">
+                                <div className="flex flex-col justify-between">
                                   <div className="flex flex-row">
-                                    <p className="self-start text-xs truncate my-2">
-                                      Nuo
-                                    </p>
-                                  </div>
-                                  <input
-                                    id="from"
-                                    name="from"
-                                    placeholder=""
-                                    type="text"
-                                    pattern="[0-9]*"
-                                    value={from}
-                                    onChange={fromFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
-                                  />
-                                </div>
+                                    <div className="flex flex-col justify-between w-72">
+                                      <Menu
+                                        as="div"
+                                        className="relative inline-block text-left"
+                                      >
+                                        <div className="flex flex-col  w-full">
+                                          <div className="flex flex-row">
+                                            <p className="self-start text-sm text-gray-500 truncate my-2">
+                                              Objektas
+                                            </p>
+                                            <p className="self-start ml-1 text-red-600 text-sm truncate my-2">
+                                              *
+                                            </p>
+                                          </div>
+                                          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal focus:outline-none">
+                                            <p className="text-gray-600 self-center truncate text-xs">
+                                              Namas Greta Grauvelivičiute
+                                            </p>
+                                            <ChevronDownIcon
+                                              className="-mr-1 ml-2 h-5 w-5"
+                                              aria-hidden="true"
+                                            />
+                                          </Menu.Button>
+                                        </div>
 
-                                <div className="flex flex-col ml-4 w-20">
-                                  <div className="flex flex-row">
-                                    <p className="self-start text-xs truncate my-2">
-                                      Iki
-                                    </p>
-                                  </div>
-                                  <input
-                                    id="to"
-                                    name="to"
-                                    placeholder=""
-                                    type="text"
-                                    pattern="[0-9]*"
-                                    value={to}
-                                    onChange={toFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
-                                  />
-                                </div>
+                                        <Transition
+                                          as={Fragment}
+                                          enter="transition ease-out duration-100"
+                                          enterFrom="transform opacity-0 scale-95"
+                                          enterTo="transform opacity-100 scale-100"
+                                          leave="transition ease-in duration-75"
+                                          leaveFrom="transform opacity-100 scale-100"
+                                          leaveTo="transform opacity-0 scale-95"
+                                        >
+                                          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <div className="py-1">
+                                              <Menu.Item>
+                                                {({ active }) => (
+                                                  <button
+                                                    // onClick={() => {
+                                                    //   const operator = "1";
+                                                    //   setFilterListModems(
+                                                    //     (currentFilter) =>
+                                                    //       currentFilter.map(
+                                                    //         (x) =>
+                                                    //           x.id === filter.id
+                                                    //             ? {
+                                                    //                 ...x,
+                                                    //                 operator,
+                                                    //               }
+                                                    //             : x
+                                                    //       )
+                                                    //   );
+                                                    // }}
+                                                    className={classNames(
+                                                      active
+                                                        ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                                        : "text-center truncate w-full text-gray-700",
+                                                      "block px-4 py-2 text-sm"
+                                                    )}
+                                                  >
+                                                    1
+                                                  </button>
+                                                )}
+                                              </Menu.Item>
 
-                                <div className="flex flex-col ml-4 w-20">
-                                  <div className="flex flex-row">
-                                    <p className="self-start text-xs truncate my-2">
-                                      SLA laikas min.
-                                    </p>
+                                              <Menu.Item>
+                                                {({ active }) => (
+                                                  <button
+                                                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                                                    // onClick={() => {
+                                                    //   const operator = 2;
+                                                    //   setFilterListModems((currentFilter) =>
+                                                    //     currentFilter.map((x) =>
+                                                    //       x.id === filter.id ? { ...x, operator } : x
+                                                    //     )
+                                                    //   );
+                                                    // }}
+                                                    className={classNames(
+                                                      active
+                                                        ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                                        : "text-center truncate w-full text-gray-700",
+                                                      "block w-full text-left px-4 py-2 text-sm"
+                                                    )}
+                                                  >
+                                                    2
+                                                  </button>
+                                                )}
+                                              </Menu.Item>
+                                            </div>
+                                          </Menu.Items>
+                                        </Transition>
+                                      </Menu>
+
+                                      <Menu
+                                        as="div"
+                                        className="relative inline-block text-left"
+                                      >
+                                        <div className="flex flex-col  w-full">
+                                          <p className="self-start text-sm mt-4 mb-2 text-gray-500 truncate">
+                                            Centralė
+                                          </p>
+                                          <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal focus:outline-none">
+                                            <p className="text-gray-600 self-center truncate text-xs">
+                                              {/* {filter.operator === "0"
+                          ? "Any [Multiple choices]"
+                          : filter.operator === "1"
+                          ? "1"
+                          : "2"} */}
+                                              Sekolink
+                                            </p>
+                                            <ChevronDownIcon
+                                              className="-mr-1 ml-2 h-5 w-5"
+                                              aria-hidden="true"
+                                            />
+                                          </Menu.Button>
+                                        </div>
+
+                                        <Transition
+                                          as={Fragment}
+                                          enter="transition ease-out duration-100"
+                                          enterFrom="transform opacity-0 scale-95"
+                                          enterTo="transform opacity-100 scale-100"
+                                          leave="transition ease-in duration-75"
+                                          leaveFrom="transform opacity-100 scale-100"
+                                          leaveTo="transform opacity-0 scale-95"
+                                        >
+                                          <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <div className="py-1">
+                                              <Menu.Item>
+                                                {({ active }) => (
+                                                  <button
+                                                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                                                    // onClick={() => {
+                                                    //   const operator = "1";
+                                                    //   setFilterListModems((currentFilter) =>
+                                                    //     currentFilter.map((x) =>
+                                                    //       x.id === filter.id ? { ...x, operator } : x
+                                                    //     )
+                                                    //   );
+                                                    // }}
+                                                    className={classNames(
+                                                      active
+                                                        ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                                        : "text-center truncate w-full text-gray-700",
+                                                      "block px-4 py-2 text-sm"
+                                                    )}
+                                                  >
+                                                    1
+                                                  </button>
+                                                )}
+                                              </Menu.Item>
+
+                                              <Menu.Item>
+                                                {({ active }) => (
+                                                  <button
+                                                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                                                    // onClick={() => {
+                                                    //   const operator = 2;
+                                                    //   setFilterListModems((currentFilter) =>
+                                                    //     currentFilter.map((x) =>
+                                                    //       x.id === filter.id ? { ...x, operator } : x
+                                                    //     )
+                                                    //   );
+                                                    // }}
+                                                    className={classNames(
+                                                      active
+                                                        ? "bg-gray-100 text-gray-900 w-full truncate text-center"
+                                                        : "text-center truncate w-full text-gray-700",
+                                                      "block w-full text-left px-4 py-2 text-sm"
+                                                    )}
+                                                  >
+                                                    2
+                                                  </button>
+                                                )}
+                                              </Menu.Item>
+                                            </div>
+                                          </Menu.Items>
+                                        </Transition>
+                                      </Menu>
+                                    </div>
                                   </div>
-                                  <input
-                                    id="time"
-                                    name="time"
-                                    placeholder=""
-                                    type="text"
-                                    pattern="[0-9]*"
-                                    value={time}
-                                    onChange={timeFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
-                                  />
                                 </div>
-                              </div>
-                              <div className="flex flex-row items-center">
-                                <input
-                                  id="send-crew"
-                                  name="send-crew"
-                                  type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
-                                />
-                                <p className="ml-4 self-start text-sm truncate my-2">
-                                  Skambinti po apžiuros
-                                </p>
-                              </div>
-                              <div className="flex flex-row items-center">
-                                <input
-                                  id="send-crew"
-                                  name="send-crew"
-                                  type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
-                                />
-                                <p className="ml-4 self-start text-sm truncate my-2">
-                                  Bankomatas
-                                </p>
                               </div>
                             </div>
                           </div>
 
-                          <div>
-                            <div className="flex w-full mt-12 justify-between">
-                              <p className="font-semibold ml-6 mb-4 text-sm text-gray-900">
-                                Įvykiai
-                              </p>
-                            </div>
-                            <div className="h-full">
-                              {EventsList.map((data) => (
-                                <Events
-                                  key={generate()}
-                                  date={data.date}
-                                  test={data.test}
-                                  signal={data.signal}
-                                />
-                              ))}
-                            </div>
-                          </div>
                           <button
                             type="submit"
                             className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
                           >
-                            Archyvuoti
+                            Ištrinti
                           </button>
                         </div>
 
-                        <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-1/4 lg:w-1/4 border-b border-l">
+                        <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-1/4">
                           <div className="flex flex-col">
                             <div className="flex flex-col w-full h-full">
                               <div className="flex flex-row w-full border-b h-12 items-center justify-between">
-                                <div className="flex ml-4 flex-row w-full">
+                                <div className="flex ml-4 flex-row justify-between items-center w-full">
                                   <p className="text-sm truncate my-2 font-semibold">
-                                    Atsakingi asmenys
+                                    Zonos
                                   </p>
+                                  <button className="flex text-gray-400 w-20 h-6 items-center justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none mr-4">
+                                    <p className="text-xs">Pridėti zoną</p>
+                                  </button>
                                 </div>
                               </div>
 
-                              <div className="overflow-y-auto scrollbar-gone">
-                                {data?.data?.corresppersons.map((data) => (
+                              {zones.map((a) => (
+                                <>
                                   <div
-                                    key={generate()}
-                                    className="flex flex-row w-full border-b h-12 items-center justify-between"
+                                    key={a.id}
+                                    className="flex flex-row w-full border-b h-20 items-center justify-around"
                                   >
-                                    <div className="flex ml-4 flex-row w-full justify-between">
-                                      <p className="text-sm text-blue-300 font-normal truncate my-2">
-                                        {data.name}
-                                      </p>
-                                      <p className="text-sm font-normal truncate my-2 mr-36">
-                                        {data.phone}
-                                      </p>
-                                    </div>
+                                    <p className="text-sm font-normal truncate">
+                                      Pavadinimas
+                                    </p>
+                                    <p className="text-sm font-normal truncate">
+                                      1
+                                    </p>
+                                    <button className="text-xs font-normal truncate text-red-600">
+                                      trinti
+                                    </button>
                                   </div>
-                                ))}
+                                </>
+                              ))}
+
+                              <div className="flex flex-row items-center mt-6">
+                                <input
+                                  id="control"
+                                  name="control"
+                                  type="checkbox"
+                                  className="h-6 w-6 ml-4 text-gray-600  focus:ring-gray-500 rounded-sm"
+                                />
+                                <p className="ml-4 self-start text-sm truncate my-2">
+                                  ignoruoti zonas
+                                </p>
                               </div>
 
-                              <div className="flex flex-row w-full mt-4 h-12 items-center border-b justify-between">
+                              <div className="flex flex-row w-full mt-4 h-12 items-center justify-between">
                                 <div className="flex ml-4 flex-row w-full">
                                   <p className="text-sm truncate my-2 font-semibold">
-                                    Modemas
+                                    Valdymas
                                   </p>
                                 </div>
                               </div>
 
                               <div className="flex flex-col w-full">
-                                <div className="flex flex-col w-full">
-                                  <div className="flex flex-row">
-                                    <p className="text-sm ml-4 truncate mt-2 mb-1">
-                                      Modemo nr.
-                                    </p>
-                                  </div>
-                                  <input
-                                    id="modem"
-                                    name="modem"
-                                    placeholder=""
-                                    value={modem}
-                                    onChange={modemFunc}
-                                    className="flex w-32 ml-4 border h-6 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
-                                  />
+                                <div className="flex flex-row w-full items-end justify-start">
+                                  <button className="flex text-gray-400 ml-4 w-20 h-6 items-center justify-center mt-4 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none mr-4">
+                                    <p className="text-xs">Siūsti</p>
+                                  </button>
                                 </div>
-                                <div className="flex flex-row items-center mt-6">
-                                  <input
-                                    id="control"
-                                    name="control"
-                                    type="checkbox"
-                                    className="h-6 w-6 ml-4 text-gray-600  focus:ring-gray-500 rounded-sm"
-                                  />
-                                  <p className="ml-4 self-start text-sm truncate my-2">
-                                    Signalizacijos valdymas
-                                  </p>
+
+                                <div className="flex flex-row w-full items-end justify-between">
+                                  <div className="flex flex-col w-full">
+                                    <div className="flex flex-row">
+                                      <p className="text-sm ml-4 truncate mt-2 mb-1">
+                                        PIN
+                                      </p>
+                                    </div>
+                                    <input
+                                      id="modem"
+                                      name="modem"
+                                      placeholder=""
+                                      value={modem}
+                                      onChange={modemFunc}
+                                      className="flex w-32 ml-4 border h-6 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
+                                    />
+                                  </div>
+                                  <button className="flex text-gray-400 w-60 h-6 items-center justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none mr-4">
+                                    <p className="text-xs">Aktyvuoti</p>
+                                  </button>
+                                  <button className="flex text-gray-400 w-60 h-6 items-center justify-center rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none mr-4">
+                                    <p className="text-xs">Deaktyvuoti</p>
+                                  </button>
+                                </div>
+
+                                <div className="flex flex-row w-full items-end justify-between">
+                                  <div className="flex flex-col w-full">
+                                    <div className="flex flex-row">
+                                      <p className="text-sm ml-4 truncate mt-2 mb-1">
+                                        Komanda
+                                      </p>
+                                    </div>
+                                    <input
+                                      id="modem"
+                                      name="modem"
+                                      placeholder=""
+                                      value={modem}
+                                      onChange={modemFunc}
+                                      className="flex ml-4 w-52 border h-6 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
+                                    />
+                                  </div>
+                                  <button className="flex text-gray-400 w-60 h-6 items-center justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none mr-4">
+                                    <p className="text-xs">Siūsti</p>
+                                  </button>
                                 </div>
                               </div>
 
@@ -678,7 +455,7 @@ function Modem() {
                                       Objekto nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {data?.data?.objects[0].obdindx}
+                                      smth
                                     </p>
                                   </div>
                                 </div>
@@ -688,7 +465,7 @@ function Modem() {
                                       Sutarties nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {data?.data?.objects[0].contract}
+                                      will
                                     </p>
                                   </div>
                                 </div>
@@ -709,6 +486,16 @@ function Modem() {
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
                                       81652
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex flex-row w-full border-b h-12 items-center justify-between">
+                                  <div className="flex ml-4 flex-row w-full justify-between">
+                                    <p className="text-sm text-gray-400 font-normal truncate my-2">
+                                      Miestas
+                                    </p>
+                                    <p className="text-sm font-normal truncate my-2 mr-36">
+                                      Šiauliai
                                     </p>
                                   </div>
                                 </div>

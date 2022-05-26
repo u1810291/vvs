@@ -9,7 +9,7 @@ import React, {
 // import { FilterItem } from '../components/Filter';
 import { TasksHeader } from "../components/headers/tasks";
 import { TasksFilter } from "../components/filters/filterTasksList";
-import { OptionsList } from "../components/options/options";
+import { OptionsList } from "../components/options/optionsTasksList";
 import { TasksList } from "../components/lists/tasksList";
 const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import GlobalContext from "../context/globalContext";
