@@ -105,7 +105,7 @@ function Tasks() {
                         </div>
                         <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
                           <OptionsList />
-                          <TasksList />
+                          <TasksFilter />
 
                           {/* <Filter onChange={onFilterChange} onValues={onFilterValues}>
                             <FilterItem active propPath="propName">translation</FilterItem>
