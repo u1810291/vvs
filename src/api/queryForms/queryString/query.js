@@ -12,6 +12,7 @@ export const objectPage = `query MyQuery {
     objectid
     obdindx
     receivernr
+    Id
   }
   corresppersons {
     phone

@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
-  const [registerBirthday, setRegisterBirthday] = useState("");
+  const [registerBirthday, setRegisterBirthday] = useState(""); // birthday not included for vvs so its fixed value
   const [email, setEmail] = useState("audrius@s-e.lt");
   const [password, setPassword] = useState("EuroCash2022");
   const [recoverPassword, setRecoverPassword] = useState("");
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }) => {
         if (data) {
           const token = data?.data?.login?.token;
           const encode = jwt_decode(token);
-          if(encode.roles[0] === "crew") {
+          if(encode.roles[0] === "crew") { // this logic doesn't work for user with many roles
             setInvalidUserLogin("Sorry, you don't have right permissions to login");
           } else {
           setUser(jwt_decode(token));

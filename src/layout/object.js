@@ -726,7 +726,7 @@ function Object() {
                                       Monas MS ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      81652
+                                    {data?.data?.objects[0].Id}
                                     </p>
                                   </div>
                                 </div>

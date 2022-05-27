@@ -20,6 +20,8 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useQuery } from "react-query";
 import { zones } from "../api/zones";
+import { useImage } from "../hook/useImage";
+import { objectPage } from "../api/queryForms/queryString/query";
 
 function Modem() {
   const { accessToken } = useContext(AuthContext);
@@ -38,6 +40,12 @@ function Modem() {
   }
 
   const modems = "here";
+
+  const { data, error, loading, fetchImages } = useImage(
+    objectPage,
+    {},
+    accessToken
+  );
 
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -62,6 +70,11 @@ function Modem() {
 
   const modemFunc = useCallback(async (e) => {
     setModem(e.target.value);
+  }, []);
+
+  useEffect(() => {
+    fetchImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -200,12 +213,12 @@ function Modem() {
                                                       "block px-4 py-2 text-sm"
                                                     )}
                                                   >
-                                                    1
+                                                    Namas Greta Grauvelivičiute
                                                   </button>
                                                 )}
                                               </Menu.Item>
 
-                                              <Menu.Item>
+                                              {/* <Menu.Item>
                                                 {({ active }) => (
                                                   <button
                                                     // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
@@ -227,7 +240,7 @@ function Modem() {
                                                     2
                                                   </button>
                                                 )}
-                                              </Menu.Item>
+                                              </Menu.Item> */}
                                             </div>
                                           </Menu.Items>
                                         </Transition>
@@ -287,34 +300,11 @@ function Modem() {
                                                       "block px-4 py-2 text-sm"
                                                     )}
                                                   >
-                                                    1
+                                                    Sekolink
                                                   </button>
                                                 )}
                                               </Menu.Item>
 
-                                              <Menu.Item>
-                                                {({ active }) => (
-                                                  <button
-                                                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-                                                    // onClick={() => {
-                                                    //   const operator = 2;
-                                                    //   setFilterListModems((currentFilter) =>
-                                                    //     currentFilter.map((x) =>
-                                                    //       x.id === filter.id ? { ...x, operator } : x
-                                                    //     )
-                                                    //   );
-                                                    // }}
-                                                    className={classNames(
-                                                      active
-                                                        ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                                        : "text-center truncate w-full text-gray-700",
-                                                      "block w-full text-left px-4 py-2 text-sm"
-                                                    )}
-                                                  >
-                                                    2
-                                                  </button>
-                                                )}
-                                              </Menu.Item>
                                             </div>
                                           </Menu.Items>
                                         </Transition>
@@ -455,7 +445,7 @@ function Modem() {
                                       Objekto nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      smth
+                                    {data?.data?.objects[0].obdindx}
                                     </p>
                                   </div>
                                 </div>
@@ -465,7 +455,7 @@ function Modem() {
                                       Sutarties nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      will
+                                    {data?.data?.objects[0].contract}
                                     </p>
                                   </div>
                                 </div>
@@ -495,7 +485,7 @@ function Modem() {
                                       Miestas
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      Šiauliai
+                                      Šiauliai {/*  {data?.data?.objects[0].city} */}
                                     </p>
                                   </div>
                                 </div>
