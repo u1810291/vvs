@@ -9,6 +9,7 @@ import React, {
 import { ObjectHeader } from "../components/headers/object";
 import { Events } from "../components/lists/events";
 import { PhonesList } from "../api/phones";
+import { useParams } from "react-router-dom";
 import GlobalContext from "../context/globalContext";
 import AuthContext from "../context/authContext";
 import { Spinner } from "react-activity";
@@ -30,10 +31,12 @@ import {
   objectPageQueryCorrespondPersons,
   imagesUpdateMutation,
 } from "../api/queryForms/queryString/mutation";
+import { objectPageImagesUpdate } from "../api/queryForms/queryString/update";
 import { useImage } from "../hook/useImage";
 import { useQuery } from "react-query";
 
 function Object() {
+  const { id } = useParams();
   const hiddenFileInput = useRef(null);
   const { objectName, setObjectName } = useContext(GlobalContext);
   const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
@@ -51,23 +54,22 @@ function Object() {
   const [responsiblePersons, setResponsiblePersons] = useState({});
   const [objectImages, setObjectImages] = useState({});
   const [objectPageData, setObjectPageData] = useState({});
-  const [pictures, setPictures] = useState("");
+  const [pictures, setPictures] = useState([]);
   const [blobImage, setBlobImage] = useState("");
+  const [photoId, setPhotoId] = useState("")
 
-  // let filePath = objectPageImages;
-
-  // useEffect(() => {
-  //   filePath.forEach((element) => {
-  //     let string = element.toString();
-  //     setPictures(string);
-  //   });
-  // }, [filePath]);
-
-  const imageUpdateVariables = {
-    image: JSON.stringify(blobImage),
-    id: generate(),
-    authToken: accessToken.toString(),
+  // remember to swap that with user id
+  const imageInsertVariables = {
+    imagepath: blobImage[0]?.data,
+    id: blobImage[0]?.name,
+    user: id,
+    imagename: blobImage[0]?.name,
   };
+
+    const imageUpdateVariables = {
+      imagepath: photoId,
+      imagename: "test",
+    };
 
   const { data, error, loading, fetchImages } = useImage(
     objectPage,
@@ -80,9 +82,17 @@ function Object() {
     error: dataError,
     loading: dataLoading,
     fetchImages: dataFetchImages,
-  } = useImage(imagesUpdate, imageUpdateVariables, accessToken);
+  } = useImage(objectPageImagesMutation, imageInsertVariables, accessToken); // imagesUpdate
+
+  const {
+    data: updateData,
+    error: updateError,
+    loading: updateLoading,
+    fetchImages: updateFetchImages,
+  } = useImage(objectPageImagesUpdate, imageUpdateVariables, accessToken);
 
   console.log("dataData ", dataData, dataError, dataLoading);
+  console.log("updateData ", updateData, updateError, updateLoading);
   console.log("data ", data, error, loading);
 
   useEffect(() => {
@@ -93,14 +103,14 @@ function Object() {
   useEffect(() => {
     if (data !== null) {
     const base64images = data.data.images;
-    base64images.map(a => {
-      const images = a.imagepath;
-      if (images) {
-      setPictures([images]);
+    let arr = base64images.map(b => {
+      if (b.imagename !== null) {
+      return b.imagepath
       }
-      console.log(pictures)
-    })}
-  },[data])
+    })
+    setPictures(arr);
+  }
+  },[data]);
 
   // useEffect(() => {
   //     console.log('data ', data);
@@ -192,8 +202,7 @@ function Object() {
           return readAsDataURL(f);
         })
       );
-      setBlobImage(image); // do fetch here
-      dataFetchImages();
+      setBlobImage(image);
       const fileArray = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
       );
@@ -201,6 +210,12 @@ function Object() {
       Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
     }
   }
+
+  useEffect(() => {
+    if (blobImage) {
+    dataFetchImages();
+    }
+  },[blobImage])
 
   function readAsDataURL(file) {
     return new Promise((resolve, reject) => {
@@ -224,7 +239,7 @@ function Object() {
         <div key={generate()} className="flex flex-col">
           <div className="flex flex-row justify-between">
             <p className="text-xs text-gray-400 py-1">
-              {photo.substr(photo.length - 10)}
+              {generate()}
             </p>
             <button
               onClick={() => removeImage(photo)}
@@ -245,9 +260,12 @@ function Object() {
 
   const removeImage = useCallback(
     async (id) => {
-      setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
+      console.log('id', id)
+      setPhotoId(id);
+      // setObjectPageImages((oldState) => oldState.filter((item) => item !== id)); 
+      updateFetchImages();
     },
-    [setObjectPageImages]
+    []
   );
 
   const handleClick = useCallback((event) => {
@@ -418,7 +436,7 @@ function Object() {
                               Objekto nuotraukos
                             </p>
                             <div className="w-80 grid sm:grid-cols-1 gap-2 lg:grid-cols-2">
-                              {pictures.length === 0 || objectPageImages.length === 0 ? (
+                              {pictures.length === 0 ? (
                                 <>
                                   <div className="flex flex-col">
                                     <p className="text-xs h-6 text-gray-400 py-1"></p>
@@ -443,7 +461,7 @@ function Object() {
                                     </a>
                                   </div>
                                 </>
-                              ) : pictures.length === 1 || objectPageImages.length === 1 ? (
+                              ) : pictures.length === 1 ? (
                                 <div className="flex flex-col">
                                   <p className="text-xs h-6 text-gray-400 py-1"></p>
                                   <a>
@@ -457,7 +475,7 @@ function Object() {
                                 </div>
                               ) : null}
                               {renderPhotos(pictures)}
-                              {renderPhotos(objectPageImages)} {/* objectPageImages */}
+                              {renderPhotos(objectPageImages)}
                             </div>
 
                             <div className="w-80 mt-4 flex justify-end">

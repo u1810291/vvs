@@ -1,5 +1,6 @@
 export const Orders = [
   {
+    "id": "1",
     "contract": "contract1",
     "city": "city1",
     "address": "address1",
@@ -11,6 +12,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "2",
     "contract": "contract2",
     "city": "city2",
     "address": "address2",
@@ -22,6 +24,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "3",
     "contract": "contract3",
     "city": "city3",
     "address": "address3",
@@ -33,6 +36,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "4",
     "contract": "contract4",
     "city": "city4",
     "address": "address4",
@@ -44,6 +48,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "5",
     "contract": "contract5",
     "city": "city5",
     "address": "address5",
@@ -55,6 +60,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "6",
     "contract": "contract1",
     "city": "city1",
     "address": "address1",
@@ -66,6 +72,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "7",
     "contract": "contract2",
     "city": "city2",
     "address": "address2",
@@ -77,6 +84,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "8",
     "contract": "contract3",
     "city": "city3",
     "address": "address3",
@@ -88,6 +96,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "9",
     "contract": "contract4",
     "city": "city4",
     "address": "address4",
@@ -99,6 +108,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "10",
     "contract": "contract5",
     "city": "city5",
     "address": "address5",
@@ -110,6 +120,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "11",
     "contract": "contract1",
     "city": "city1",
     "address": "address1",
@@ -121,6 +132,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "12",
     "contract": "contract2",
     "city": "city2",
     "address": "address2",
@@ -131,6 +143,7 @@ export const Orders = [
     "contractnr": "SPS-00479"
   },
   {
+    "id": "13",
     "contract": "contract3",
     "city": "city3",
     "address": "address3",
@@ -142,6 +155,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "14",
     "contract": "contract4",
     "city": "city4",
     "address": "address4",
@@ -153,6 +167,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "15",
     "contract": "contract5",
     "city": "city5",
     "address": "address5",
@@ -164,6 +179,7 @@ export const Orders = [
     "add": "true"
   },
   {
+    "id": "16",
     "contract": "contract52",
     "city": "city52",
     "address": "address52",

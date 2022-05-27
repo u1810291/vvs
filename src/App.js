@@ -69,7 +69,6 @@ function App() {
                 <Route path="Dashboard" element={<Dashboard />} />
                 <Route path="Keys" element={<Keys />} />
                 <Route path="Tasks" element={<Tasks />} />
-                <Route path="Object" element={<Object />} />
                 <Route path="Drivers" element={<Drivers />} />
                 <Route path="Clients" element={<Clients />} />
                 <Route path="Objects" element={<Objects />} />
@@ -80,6 +79,7 @@ function App() {
                 <Route path="Client/:id" element={<Client />} />
                 <Route path="Modem/:id" element={<Modem />} />
                 <Route path="Key/:id" element={<Key />} />
+                <Route path="Object/:id" element={<Object />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

@@ -8,10 +8,13 @@ export const objectPageImagesAPImutation = `mutation MyMutation ($newObjects: ob
   }
   `;
 
-export const objectPageImagesMutation = `mutation MyMutation ($image: binary!, $imagename: String!, $Id: Int!) {
-  insert_objectimages(objects: {image: $image, imagename: $imagename, Id: $Id}) {
-    returning{
-      Id
+export const objectPageImagesMutation = `mutation MyMutation($imagepath: String!, $imagename: String!, $id: String!, $user: String!) {
+  insert_images(objects: {imagepath: $imagepath, imagename: $imagename, id: $id, user: $user}) {
+    returning {
+      id
+      imagename
+      imagepath
+      user
     }
   }
 }`;
