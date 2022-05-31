@@ -31,6 +31,8 @@ export const objectPage = `query MyQuery {
     assign_car
     modem
     area_no
+    monasid
+    navid
   }
   events {
     receivedtime

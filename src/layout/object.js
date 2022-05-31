@@ -57,6 +57,8 @@ function Object() {
   const [pictures, setPictures] = useState([]);
   const [blobImage, setBlobImage] = useState("");
   const [photoId, setPhotoId] = useState("");
+  const [navId, setNavId] = useState("");
+  const [monasId, setMonasId] = useState("");
 
   // remember to swap that with user id
   const imageInsertVariables = {
@@ -124,8 +126,10 @@ function Object() {
 
   useEffect(() => {
     setModem(objectPageData.modem);
-    console.log(objectPageData);
-  }, [data.status]);
+    setNavId(objectPageData.navid);
+    setMonasId(objectPageData.monasdid);
+  }, [data.data]);
+
   // useEffect(() => {
   //     console.log('data ', data);
   //   // setQueryObject(data);
@@ -260,13 +264,12 @@ function Object() {
   };
 
   const removeImage = useCallback(async (id) => {
-    console.log("id", id);
     setPhotoId(id);
     // setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
     // updateFetchImages();
   }, []);
 
-  const handleClick = useCallback((event) => {
+  const handleClick = useCallback(() => {
     hiddenFileInput.current.click();
   }, []);
 
@@ -694,7 +697,7 @@ function Object() {
                                       Objekto nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {data?.data?.objects[0].obdindx}
+                                      {objectPageData?.obdindx}
                                     </p>
                                   </div>
                                 </div>
@@ -704,7 +707,7 @@ function Object() {
                                       Sutarties nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {data?.data?.objects[0].contract}
+                                      {objectPageData?.contract}
                                     </p>
                                   </div>
                                 </div>
@@ -714,7 +717,7 @@ function Object() {
                                       Navision ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      1167
+                                      {objectPageData?.navid}
                                     </p>
                                   </div>
                                 </div>
@@ -724,7 +727,7 @@ function Object() {
                                       Monas MS ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {data?.data?.objects[0].Id}
+                                      {objectPageData?.monasid}
                                     </p>
                                   </div>
                                 </div>
