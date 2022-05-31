@@ -32,15 +32,15 @@ import {
   imagesUpdateMutation,
 } from "../api/queryForms/queryString/mutation";
 import { objectPageImagesUpdate } from "../api/queryForms/queryString/update";
-import { useImage } from "../hook/useImage";
-import { useQuery } from "react-query";
+import useReactQuery from "../hook/useQuery";
+import { useFetch } from "../hook/useFetch";
 
 function Object() {
   const { id } = useParams();
   const hiddenFileInput = useRef(null);
   const { objectName, setObjectName } = useContext(GlobalContext);
   const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken, user } = useContext(AuthContext);
   const [objectAddress, setObjectAddress] = useState("");
   const [objectCity, setObjectCity] = useState("");
   const [objectDescription, setObjectDescription] = useState("");
@@ -71,7 +71,7 @@ function Object() {
       imagename: "test",
     };
 
-  const { data, error, loading, fetchImages } = useImage(
+  const data = useReactQuery( // fetchImages
     objectPage,
     {},
     accessToken
@@ -82,27 +82,13 @@ function Object() {
     error: dataError,
     loading: dataLoading,
     fetchImages: dataFetchImages,
-  } = useImage(objectPageImagesMutation, imageInsertVariables, accessToken); // imagesUpdate
+  } = useFetch(objectPageImagesMutation, imageInsertVariables, accessToken); // imagesUpdate
 
-  const {
-    data: updateData,
-    error: updateError,
-    loading: updateLoading,
-    fetchImages: updateFetchImages,
-  } = useImage(objectPageImagesUpdate, imageUpdateVariables, accessToken);
-
-  console.log("dataData ", dataData, dataError, dataLoading);
-  console.log("updateData ", updateData, updateError, updateLoading);
-  console.log("data ", data, error, loading);
+  const { data: imageData } = useReactQuery(objectPageImagesUpdate, imageUpdateVariables, accessToken);
 
   useEffect(() => {
-    fetchImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (data !== null) {
-    const base64images = data.data.images;
+    if (data.status === "success") {
+    const base64images = data?.data?.images;
     let arr = base64images.map(b => {
       if (b.imagename !== null) {
       return b.imagepath
@@ -110,7 +96,7 @@ function Object() {
     })
     setPictures(arr);
   }
-  },[data]);
+  },[data.status]);
 
   // useEffect(() => {
   //     console.log('data ', data);
@@ -125,18 +111,6 @@ function Object() {
   //   // console.log(queryObject.data.objects[0])
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [data]);
-
-  // console.log(data);
-  //   const { isLoading: queryLoading, error: queryError, data: queryData } = useQuery('universal', () =>
-
-  //   fetch('https://ec.swarm.testavimui.eu/v1/graphql').then(res =>
-
-  //     res.json()
-
-  //   )
-
-  // )
-  // console.log(queryData)
 
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -263,7 +237,7 @@ function Object() {
       console.log('id', id)
       setPhotoId(id);
       // setObjectPageImages((oldState) => oldState.filter((item) => item !== id)); 
-      updateFetchImages();
+      // updateFetchImages();
     },
     []
   );

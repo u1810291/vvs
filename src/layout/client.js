@@ -16,6 +16,7 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import useUtils from "../hook/useUtils";
+import { updateRegister } from "../api/queryForms/queryString/query";
 
 function Client() {
   const { id } = useParams();
@@ -35,6 +36,8 @@ function Client() {
   const [clientPhone, setClientPhone] = useState("");
   const [clientLastLogin, setClientLastLogin] = useState("");
   const [fullName, setFullName] = useState("");
+  const [administrator, setAdministrator] = useState("");
+  const [administratorHandle, setAdministratorHandle] = useState("");
   const { sent, setSent, user, ForgotPasswordFromAdmin } =
     useContext(AuthContext);
   const { backFunc } = useUtils();
@@ -50,6 +53,29 @@ function Client() {
     loading: archiveLoading,
     fetchData: archiveFetch,
   } = useFetch(archiveClient, getClient, accessToken);
+
+  const updateRegisterVariables = {
+    registration: {
+      useId: id,
+      roles: administrator,
+    },
+  };
+
+  const {
+    error: updateRegisterError,
+    data: updateRegisterData,
+    loading: updateRegisterLoading,
+    fetchData: updateRegisterFetchData,
+  } = useFetch(updateRegister, updateRegisterVariables, accessToken);
+
+  console.log(
+    "error",
+    updateRegisterError,
+    "data",
+    updateRegisterData,
+    "loading",
+    updateRegisterLoading
+  );
 
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
@@ -143,6 +169,21 @@ function Client() {
     }
   }, [archiveFetch]);
 
+  const handleAdministratorCheckBox = useCallback(
+    async (e) => {
+      const { value, checked } = e.target;
+      setAdministratorHandle(initialState => !initialState);
+      if (checked) {
+        setAdministrator("corporate-admin");
+        updateRegisterFetchData();
+      } else {
+        setAdministrator("corporate-regular");
+        updateRegisterFetchData();
+      }
+    },
+    [updateRegisterFetchData]
+  );
+
   return (
     <>
       {!customers ? (
@@ -224,6 +265,8 @@ function Client() {
                                       id="administrator"
                                       name="administrator"
                                       type="checkbox"
+                                      checked={administratorHandle}
+                                      onChange={handleAdministratorCheckBox}
                                       className="ml-8 h-6 w-6 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                     />
                                     <p className="ml-4 self-start text-xs text-gray-500 truncate my-2">

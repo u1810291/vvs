@@ -1,8 +1,6 @@
-import { useState, useContext, useRef } from "react";
-import AuthContext from "../context/authContext";
+import { useState } from "react";
 
-export function useDeleteFetch(queryString, variables, authToken) {
-  const { Logout, RefreshTokenUpdate } = useContext(AuthContext);
+export function useDeleteFetch(authToken, userId) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,27 +15,20 @@ export function useDeleteFetch(queryString, variables, authToken) {
     }
     try {
       setLoading(true);
-      const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
+      const res = await fetch(`http://ecfa.swarm.testavimui.eu/userId=${userId}`, {
         // signal: abortController.current.signal,
-        method: "POST", // DELETE
+        method: "DELETE", // DELETE
         body: JSON.stringify({
           Authorization: "Bearer" + String(authToken),
-          query: queryString,
-          variables: variables,
         }),
         headers: {
-          "content-type": "application/json",
-          "x-hasura-admin-secret": "secret",
+          "content-type": "application/json"
         },
       })
-      const data = await res.json();
+      const data = await res.text();
       if (res.status === 200) {
         prevValue[n] = data;
-        setData(data);
-      } else if (res.statusText === "Unauthorized") {
-        RefreshTokenUpdate();
-      } else {
-        Logout();
+        setData(data, "success");
       }
     } catch (e) {
       setError(e);

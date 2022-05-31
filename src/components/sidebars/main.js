@@ -89,7 +89,7 @@ const MainSidebar = () => {
             Objektai
           </Link>
           <Link
-            to="/objects"
+            to="/modems"
             className="font-light text-normal text-gray-200 hover:text-gray-400"
           >
             Modemai

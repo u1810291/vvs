@@ -9649,6 +9649,11 @@
   "resolved" "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   "version" "1.2.3"
 
+"quick-lint-js@^2.5.0":
+  "integrity" "sha512-5MYMhFQVPAYtkYMUKuUGOf7oDNbuS/v2GXkzfVDhrtOTOjsblc3W04AOs26T54rFRdC4yoM68r/rRePcaX1IIw=="
+  "resolved" "https://registry.npmjs.org/quick-lint-js/-/quick-lint-js-2.5.0.tgz"
+  "version" "2.5.0"
+
 "quick-lru@^5.1.1":
   "integrity" "sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA=="
   "resolved" "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz"

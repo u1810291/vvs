@@ -13,7 +13,7 @@ import { OptionsListModems } from "../components/options/optionsModemsList";
 const {
   AddFilterListModems,
 } = require("../components/addFilter/addFilterModems");
-
+import AuthContext from "../context/authContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -29,6 +29,7 @@ function classNames(...classes) {
 }
 
 function Modems() {
+  const { accessToken } = useContext(AuthContext) 
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -36,6 +37,7 @@ function Modems() {
   const handleOnOpen = useCallback(() => {
     setIsOpen(true);
   }, []);
+  
 
   usePreventScroll({ isDisabled: !isOpen });
   const { expandFilterModems, setExpandFilterModems } =
@@ -45,7 +47,7 @@ function Modems() {
   const { filterListModems, setFilterListModems } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
-  const handleExportWithComponent = useCallback(async (event) => {
+  const handleExportWithComponent = useCallback(async () => {
     setToPrint(true);
     setTimeout(() => {
       pdfExportComponent.current.save();
@@ -145,11 +147,11 @@ function Modems() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <ModemsList />
+                      <ModemsList token={accessToken}/>
                     </PDFExport>
                   ) : (
                     <>
-                      <ModemsList />
+                      <ModemsList token={accessToken} />
                     </>
                   )}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">

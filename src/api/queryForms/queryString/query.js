@@ -13,6 +13,7 @@ export const objectPage = `query MyQuery {
     obdindx
     receivernr
     Id
+    name
   }
   corresppersons {
     phone
@@ -24,19 +25,16 @@ export const objectPage = `query MyQuery {
     imagename
   }
   monas_related {
-    id
+    Id
     atm
     contact
     assign_car
+    modem
+    area_no
   }
   events {
     receivedtime
     status
-  }
-  images {
-    id
-    imagename
-    imagepath
   }
 }`
 
@@ -48,6 +46,36 @@ export const imagesUpdate = `query uploadImage($image: String!, $id: String!, $a
   }
 }`;
 
+
+export const modemsPage = `query MyQuery {
+  objects {
+    name
+    address
+    phone
+    city
+    street
+    contract
+    notes
+    objectstate
+    objectstatus
+    objectid
+    obdindx
+    receivernr
+    Id
+  }
+  corresppersons {
+    phone
+    name
+  }
+  monas_related {
+    id
+    atm
+    contact
+    assign_car
+    modem
+    area_no
+  }
+}`
 // export const imagesUpdate = `query uploadImage($imageName: String!, $imagePath: String!, $id: String!, $deleted: String!, $authToken: String!) {
 //   uploadImages(imageName: $imageName, imagePath: $imagePath, id: $id, deleted: $deleted, authToken: $authToken) {
 //     imageName
@@ -64,3 +92,12 @@ export const getUsers = `query users($queryString: String!) {
   }
   }
 `;
+
+export const updateRegister = `query updateRegisterQuery($userId: String!, $roles: String!) {
+  updateRegister(object{userId: $userId, roles: $roles}) {
+    userId
+    roles
+  }
+}
+`
+

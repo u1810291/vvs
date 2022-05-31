@@ -40,7 +40,7 @@ function Driver() {
     error: DError,
     loading: DLoading,
     fetchData: archiveFetch,
-  } = useDeleteFetch(archiveDriver, getDriver, accessToken);
+  } = useDeleteFetch(id);
 
   console.log( DData, DError, DLoading)
   
