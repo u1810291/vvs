@@ -24,6 +24,7 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
+import AuthContext from "../context/authContext";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -44,6 +45,7 @@ function Objects() {
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
+  const { accessToken } = useContext(AuthContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -74,7 +76,7 @@ function Objects() {
                   className="pt-6"
                   src={require("../assets/assets/Line.png")}
                 ></img>
-                {filterListObjects.map((filter) => {
+                {filterListObjects?.map((filter) => {
                   if (filter.savedToMenu === true) {
                     return (
                       <button
@@ -146,11 +148,11 @@ function Objects() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <ObjectsList />
+                      <ObjectsList token={accessToken} />
                     </PDFExport>
                   ) : (
                     <>
-                      <ObjectsList />
+                      <ObjectsList token={accessToken} />
                     </>
                   )}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">

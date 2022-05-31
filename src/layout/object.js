@@ -56,7 +56,7 @@ function Object() {
   const [objectPageData, setObjectPageData] = useState({});
   const [pictures, setPictures] = useState([]);
   const [blobImage, setBlobImage] = useState("");
-  const [photoId, setPhotoId] = useState("")
+  const [photoId, setPhotoId] = useState("");
 
   // remember to swap that with user id
   const imageInsertVariables = {
@@ -66,12 +66,13 @@ function Object() {
     imagename: blobImage[0]?.name,
   };
 
-    const imageUpdateVariables = {
-      imagepath: photoId,
-      imagename: "test",
-    };
+  const imageUpdateVariables = {
+    imagepath: photoId,
+    imagename: "test",
+  };
 
-  const data = useReactQuery( // fetchImages
+  const data = useReactQuery(
+    // fetchImages
     objectPage,
     {},
     accessToken
@@ -84,20 +85,47 @@ function Object() {
     fetchImages: dataFetchImages,
   } = useFetch(objectPageImagesMutation, imageInsertVariables, accessToken); // imagesUpdate
 
-  const { data: imageData } = useReactQuery(objectPageImagesUpdate, imageUpdateVariables, accessToken);
+  const { data: imageData } = useReactQuery(
+    objectPageImagesUpdate,
+    imageUpdateVariables,
+    accessToken
+  );
 
   useEffect(() => {
+    let hasura;
+    let monas;
     if (data.status === "success") {
-    const base64images = data?.data?.images;
-    let arr = base64images.map(b => {
-      if (b.imagename !== null) {
-      return b.imagepath
-      }
-    })
-    setPictures(arr);
-  }
-  },[data.status]);
+      hasura = data.data.monas_related;
+      monas = data.data.objects;
+      const mergeDB = monas.map((monas) => ({
+        ...monas,
+        ...hasura.find((hasura) => String(hasura.Id) === String(monas.Id)),
+      }));
+      const object = mergeDB.find((obj) => {
+        return obj.Id === Number(id);
+      });
+      setObjectPageData(object);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.data]);
 
+  // correct database pathes for images
+  useEffect(() => {
+    if (data.status === "success") {
+      const base64images = data?.data?.images;
+      let arr = base64images.map((b) => {
+        if (b.imagename !== null) {
+          return b.imagepath;
+        }
+      });
+      setPictures(arr);
+    }
+  }, [data.status]);
+
+  useEffect(() => {
+    setModem(objectPageData.modem);
+    console.log(objectPageData);
+  }, [data.status]);
   // useEffect(() => {
   //     console.log('data ', data);
   //   // setQueryObject(data);
@@ -187,9 +215,9 @@ function Object() {
 
   useEffect(() => {
     if (blobImage) {
-    dataFetchImages();
+      dataFetchImages();
     }
-  },[blobImage])
+  }, [blobImage]);
 
   function readAsDataURL(file) {
     return new Promise((resolve, reject) => {
@@ -208,39 +236,35 @@ function Object() {
 
   const renderPhotos = (source) => {
     if (source) {
-    return source.map((photo, index) => {
-      return (
-        <div key={generate()} className="flex flex-col">
-          <div className="flex flex-row justify-between">
-            <p className="text-xs text-gray-400 py-1">
-              {generate()}
-            </p>
-            <button
-              onClick={() => removeImage(photo)}
-              className="text-xs text-red-700 py-1"
-            >
-              ištrinti
-            </button>
-          </div>
-          <a>
-            <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
-              <img className="flex bg-cover w-full h-full" src={photo}></img>
+      return source.map((photo, index) => {
+        return (
+          <div key={generate()} className="flex flex-col">
+            <div className="flex flex-row justify-between">
+              <p className="text-xs text-gray-400 py-1">{generate()}</p>
+              <button
+                onClick={() => removeImage(photo)}
+                className="text-xs text-red-700 py-1"
+              >
+                ištrinti
+              </button>
             </div>
-          </a>
-        </div>
-      );
-    })}
+            <a>
+              <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
+                <img className="flex bg-cover w-full h-full" src={photo}></img>
+              </div>
+            </a>
+          </div>
+        );
+      });
+    }
   };
 
-  const removeImage = useCallback(
-    async (id) => {
-      console.log('id', id)
-      setPhotoId(id);
-      // setObjectPageImages((oldState) => oldState.filter((item) => item !== id)); 
-      // updateFetchImages();
-    },
-    []
-  );
+  const removeImage = useCallback(async (id) => {
+    console.log("id", id);
+    setPhotoId(id);
+    // setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
+    // updateFetchImages();
+  }, []);
 
   const handleClick = useCallback((event) => {
     hiddenFileInput.current.click();
@@ -410,7 +434,7 @@ function Object() {
                               Objekto nuotraukos
                             </p>
                             <div className="w-80 grid sm:grid-cols-1 gap-2 lg:grid-cols-2">
-                              {pictures.length === 0 ? (
+                              {pictures?.length === 0 ? (
                                 <>
                                   <div className="flex flex-col">
                                     <p className="text-xs h-6 text-gray-400 py-1"></p>
@@ -435,7 +459,7 @@ function Object() {
                                     </a>
                                   </div>
                                 </>
-                              ) : pictures.length === 1 ? (
+                              ) : pictures?.length === 1 ? (
                                 <div className="flex flex-col">
                                   <p className="text-xs h-6 text-gray-400 py-1"></p>
                                   <a>
@@ -700,7 +724,7 @@ function Object() {
                                       Monas MS ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                    {data?.data?.objects[0].Id}
+                                      {data?.data?.objects[0].Id}
                                     </p>
                                   </div>
                                 </div>

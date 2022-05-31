@@ -1,14 +1,32 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Orders } from "../../api/orders";
+// import { Orders } from "../../api/orders";
 import useSort from "../../hook/useSort";
+import { objectPage } from "../../api/queryForms/queryString/query";
+import useReactQuery from "../../hook/useQuery";
 import { sortToggle } from "../../util/utils";
 import GlobalContext from "../../context/globalContext";
 
-export const ObjectsList = () => {
+export const ObjectsList = ({ token, ...props}) => {
 const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
+    const [orders, setOrders] = useState("");
+
+    const data = useReactQuery(objectPage, {}, token);
+    useEffect(() => {
+      let hasura;
+      let monas;
+      if (data.status === "success") {
+      hasura = data.data.monas_related;
+      monas = data.data.objects;
+      const mergeDB = monas.map((monas) => ({
+        ...monas, ...hasura.find(hasura => String(hasura.Id) === String(monas.Id))
+      }))
+      setOrders({result:mergeDB});
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data.data]);
 
   const {
     sortedObjectsKeys,
@@ -21,8 +39,10 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
     sortedObjectsContract,
   } = useSort();
 
+  console.log(orders);
+
   const sortedObjects = sortToggle(
-    Orders,
+    orders.result,
     sortedObjectsKeys,
     sortedObjectsOrder
   );
@@ -99,8 +119,8 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
       })}
 
       <div className="pl-4 flex-col w-full items-center">
-        {sortedObjects.map((data) => (
-          <div className="w-full" key={data.id} >
+        {sortedObjects?.map((data) => (
+          <div className="w-full" key={data.Id} >
             {filterListObjects.map((filter, index) => {
               return (
                 <div key={filter.id}>
@@ -110,7 +130,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                            to={{ pathname: `/object/${data.id}` }}
+                            to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-500 truncate text-sm hover:text-gray-400"
                           >
                             {data.name}
@@ -121,7 +141,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                            to={{ pathname: `/object/${data.id}` }}
+                            to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
                             {data.city}
@@ -132,7 +152,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                            to={{ pathname: `/object/${data.id}` }}
+                            to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-500 truncate text-sm hover:text-gray-400"
                           >
                             {data.address}
@@ -143,10 +163,10 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                            to={{ pathname: `/object/${data.id}` }}
+                            to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
-                            {data.object}
+                            {data.objectid}
                           </Link>
                         </div>
                       ) : null}
@@ -154,7 +174,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                            to={{ pathname: `/object/${data.id}` }}
+                            to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
                             {data.contract}
@@ -165,7 +185,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-                            to={{ pathname: `/object/${data.id}` }}
+                            to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
                             {data.sentCrew}

@@ -36,7 +36,13 @@ export const objectPage = `query MyQuery {
     receivedtime
     status
   }
-}`
+  images {
+    user
+    imagename
+    imagepath
+    Id
+  }
+}`;
 
 export const imagesUpdate = `query uploadImage($image: String!, $id: String!, $authToken: String!) {
   uploadImages(image: $image, id: $id, authToken: $authToken) {
@@ -45,7 +51,6 @@ export const imagesUpdate = `query uploadImage($image: String!, $id: String!, $a
     authToken
   }
 }`;
-
 
 export const modemsPage = `query MyQuery {
   objects {
@@ -75,7 +80,7 @@ export const modemsPage = `query MyQuery {
     modem
     area_no
   }
-}`
+}`;
 // export const imagesUpdate = `query uploadImage($imageName: String!, $imagePath: String!, $id: String!, $deleted: String!, $authToken: String!) {
 //   uploadImages(imageName: $imageName, imagePath: $imagePath, id: $id, deleted: $deleted, authToken: $authToken) {
 //     imageName
@@ -99,5 +104,4 @@ export const updateRegister = `query updateRegisterQuery($userId: String!, $role
     roles
   }
 }
-`
-
+`;
