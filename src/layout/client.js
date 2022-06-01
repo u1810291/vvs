@@ -55,10 +55,8 @@ function Client() {
   } = useFetch(archiveClient, getClient, accessToken);
 
   const updateRegisterVariables = {
-    registration: {
-      useId: id,
+      userId: id,
       roles: administrator,
-    },
   };
 
   const {
@@ -104,13 +102,13 @@ function Client() {
   useEffect(() => {
     if (customers) {
       const obj = customers.users;
-      const data = obj.find((x) => x.id === id);
-      setFullName(data?.fullName);
-      setClientName(data?.firstName);
-      setClientSurname(data?.lastName);
-      setClientEmail(data?.email);
-      setClientPhone(data?.mobilePhone);
-      setClientLastLogin(new Date(data.lastLoginInstant).toLocaleString());
+      const userData = obj.find((x) => x.id === id);
+      setFullName(userData?.fullName);
+      setClientName(userData?.firstName);
+      setClientSurname(userData?.lastName);
+      setClientEmail(userData?.email);
+      setClientPhone(userData?.mobilePhone);
+      setClientLastLogin(new Date(userData?.lastLoginInstant).toLocaleString());
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [customers]);
@@ -174,12 +172,11 @@ function Client() {
       const { value, checked } = e.target;
       setAdministratorHandle(initialState => !initialState);
       if (checked) {
-        setAdministrator("corporate-admin");
-        updateRegisterFetchData();
-      } else {
         setAdministrator("corporate-regular");
-        updateRegisterFetchData();
+      } else {
+        setAdministrator("corporate-admin");
       }
+      updateRegisterFetchData();
     },
     [updateRegisterFetchData]
   );

@@ -101,9 +101,8 @@ export const getUsers = `query users($queryString: String!) {
 `;
 
 export const updateRegister = `query updateRegisterQuery($userId: String!, $roles: String!) {
-  updateRegister(object{userId: $userId, roles: $roles}) {
+  updateRegister(userId: $userId, roles: $roles) {
     userId
     roles
   }
-}
-`;
+}`;
