@@ -6,7 +6,7 @@ import { generate } from "shortid";
 import { useParams } from "react-router-dom";
 import { getUsers } from "../api/queryForms/queryString/users";
 import { getAllUsers } from "../api/queryForms/variables/users";
-import { archiveClient } from "../api/queryForms/queryString/users";
+import { archive } from "../api/queryForms/queryString/users";
 import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
 import { useFetch } from "../hook/useFetch";
@@ -43,8 +43,7 @@ function Client() {
   const { backFunc } = useUtils();
 
   const getClient = {
-    userId: id,
-    hardDelete: false,
+    userId: id
   };
 
   const {
@@ -52,7 +51,7 @@ function Client() {
     error: archiveError,
     loading: archiveLoading,
     fetchData: archiveFetch,
-  } = useFetch(archiveClient, getClient, accessToken);
+  } = useFetch(archive, getClient, accessToken);
 
   const updateRegisterVariables = {
       userId: id,
@@ -65,15 +64,6 @@ function Client() {
     loading: updateRegisterLoading,
     fetchData: updateRegisterFetchData,
   } = useFetch(updateRegister, updateRegisterVariables, accessToken);
-
-  console.log(
-    "error",
-    updateRegisterError,
-    "data",
-    updateRegisterData,
-    "loading",
-    updateRegisterLoading
-  );
 
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
@@ -91,6 +81,7 @@ function Client() {
       const allUsers = data.data.users.users;
       const searchRole = (name, arr) =>
         arr.filter(({ registrations }) =>
+        // handle find function error if no users
           registrations.find((role) => role.roles[0] === "customer")
         );
       const searchResult = searchRole("customer", allUsers);

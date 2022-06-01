@@ -6,7 +6,7 @@ import GlobalContext from "../context/globalContext";
 import AuthContext from "../context/authContext";
 import { Spinner } from "react-activity";
 import { Link } from "react-router-dom";
-import { archiveDriver } from "../api/queryForms/queryString/users";
+import { archive } from "../api/queryForms/queryString/users";
 import { getUsers } from "../api/queryForms/queryString/users";
 import { getAllUsers } from "../api/queryForms/variables/users";
 import { useFetch } from "../hook/useFetch";
@@ -30,19 +30,16 @@ function Driver() {
   const { backFunc } = useUtils();
   usePreventScroll({ isDisabled: !isOpen });
 
-  console.log("id ", id);
   const getDriver = {
     userId: id,
   };
 
   const {
-    data: DData,
-    error: DError,
-    loading: DLoading,
+    data: archiveData,
+    error: archiveError,
+    loading: archiveLoading,
     fetchData: archiveFetch,
-  } = useDeleteFetch(id);
-
-  console.log( DData, DError, DLoading)
+  } = useFetch(archive, getDriver, accessToken);
   
   const { data, error, loading, fetchData } = useFetch(
     getUsers,
@@ -60,6 +57,7 @@ function Driver() {
       const allUsers = data.data.users.users;
       const searchRole = (name, arr) =>
         arr.filter(({ registrations }) =>
+        // handle find function error if no users
           registrations.find((role) => role.roles[0] === "crew")
         );
       const searchResult = searchRole("crew", allUsers);

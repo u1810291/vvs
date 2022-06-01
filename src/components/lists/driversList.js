@@ -36,6 +36,7 @@ export const DriverList = () => {
       const allUsers = data.data.users.users;
       const searchRole = (name, arr) =>
         arr.filter(({ registrations }) =>
+        // handle find function error if no users
           registrations.find((role) => role.roles[0] === "crew")
         );
       const searchResult = searchRole("crew", allUsers);

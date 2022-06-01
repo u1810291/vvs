@@ -29,10 +29,12 @@ export const ClientList = () => {
 
   useEffect(() => {
     if (data) {
-      const allUsers = data.data.users.users;
+      const allUsers = data?.data?.users?.users;
+      console.log(allUsers);
       const searchRole = (name, arr) =>
-        arr.filter(({ registrations }) =>
-          registrations.find((role) => role.roles[0] === "customer")
+        arr.filter(({ registrations }) => 
+        // handle find function error if no users
+          registrations.find((role) => role.roles[0] === 'customer')
         );
       const searchResult = searchRole("customer", allUsers);
       let obj = { users: searchResult };
