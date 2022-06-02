@@ -21,9 +21,9 @@ export const ModemsList = ({ token, ...props }) => {
   useEffect(() => {
     let hasura;
     let monas;
-    if (data.status === "success") {
-    hasura = data.data.monas_related;
-    monas = data.data.objects;
+    if (data.data) {
+    hasura = data?.data?.monas_related;
+    monas = data?.data?.objects;
     const mergeDB = monas.map((monas) => ({
       ...monas, ...hasura.find(hasura => String(hasura.Id) === String(monas.Id))
     }))
@@ -107,7 +107,7 @@ export const ModemsList = ({ token, ...props }) => {
       })}
 
       <div className="pl-4 flex-col w-full items-center">
-        {sortedModems.map((data) => (
+        {sortedModems?.map((data) => (
           <div className="w-full" key={generate()}>
             {filterListModems.map((filter, index) => {
               return (

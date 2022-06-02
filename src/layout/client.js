@@ -155,8 +155,9 @@ function Client() {
     let text = "Ar tikrai norite archyvuoti?";
     if (confirm(text) === true) {
       archiveFetch();
+      backFunc()
     }
-  }, [archiveFetch]);
+  }, [archiveFetch, backFunc]);
 
   const handleAdministratorCheckBox = useCallback(
     async (e) => {

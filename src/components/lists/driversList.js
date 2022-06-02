@@ -35,10 +35,11 @@ export const DriverList = () => {
     if (data) {
       const allUsers = data.data.users.users;
       const searchRole = (name, arr) =>
-        arr.filter(({ registrations }) =>
-        // handle find function error if no users
-          registrations.find((role) => role.roles[0] === "crew")
-        );
+        arr.filter(({ registrations }) => {
+        if (registrations) {
+          const reg = registrations.find((role) => role.roles[0] === "crew")
+          return reg
+      }});
       const searchResult = searchRole("crew", allUsers);
       let obj = { users: searchResult };
       setCrew(obj);

@@ -21,8 +21,8 @@ export function AssignCard({
       {newEvent ? (
         <div className="flex flex-row border-b w-full h-16 bg-white justify-between items-center">
           <div className="flex flex-row items-center">
-            <div className="flex rounded-full border-4 border-red-600 bg-white w-8 h-8 ml-6 text-black text-sm font-normal justify-center items-center">
-              <p className="flex"></p>
+            <div className="flex rounded-full border-4 border-red-600 bg-white w-8 h-8 ml-4 text-black text-sm font-normal justify-center items-center">
+              <p className="flex w-8 h-8"></p>
             </div>
             <div className="flex flex-col ml-4">
               <p className="text-xs text-black">
