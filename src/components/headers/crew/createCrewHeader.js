@@ -1,11 +1,11 @@
-import React, { useCallback, useContext } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, {useCallback, useContext} from "react";
+import {useNavigate} from "react-router-dom";
 import GlobalContext from "../../../context/globalContext";
 import useLanguage from "../../../hook/useLanguage";
 
-export function CreateCrewHeader() {
-  const { english, lithuanian, t } = useLanguage();
-  const { search, setSearch } = useContext(GlobalContext);
+const CreateCrewHeader = () => {
+  const {english, lithuanian, t} = useLanguage();
+  const {search, setSearch} = useContext(GlobalContext);
 
   const searchFunc = useCallback(async (e) => {
     setSearch(e.target.value);
@@ -17,7 +17,7 @@ export function CreateCrewHeader() {
 
   const navigate = useNavigate();
   const navigateToCrewList = useCallback(() => {
-    navigate("/Crew")
+    navigate("/Crews")
   }, []);
 
   return (
@@ -28,8 +28,11 @@ export function CreateCrewHeader() {
         </h4>
         <p className="pl-2 text-gray-600">/</p>
         <h4 className="text-lg ml-2 hidden xxl:inline-block font-normal text-gray-500">
-          {t("eurocash.allData")}
+          9 GRE
         </h4>
+        <div className={"ml-4 text-white bg-[#92C46B] px-2 py-1 rounded-md text-sm"}>
+          <p>LAISVAS</p>
+        </div>
       </div>
       <div className="flex flex-row items-center">
         <button
@@ -48,4 +51,6 @@ export function CreateCrewHeader() {
       </div>
     </div>
   );
-}
+};
+
+export default CreateCrewHeader;

@@ -10,7 +10,7 @@ const { GrayStatus } = require("../buttons/grayStatus");
 const { YellowWaitingStatus } = require("../buttons/yellowWaiting");
 const { InspectedStatus } = require("../buttons/yellowInspected");
 
-export const CrewList = ({
+const CrewList = ({
   id,
   name,
   abbreviation,
@@ -74,3 +74,5 @@ export const CrewList = ({
     </div>
   );
 };
+
+export default CrewList;
