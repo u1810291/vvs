@@ -12,6 +12,13 @@ const changeLanguage = useCallback(
   [i18n]
 );
 
+const getLanguage = useCallback(
+  () => {
+    return i18n.resolvedLanguage;
+  },
+  [i18n],
+);
+
 const english = useCallback(
   async () => changeLanguage("en"),
   [changeLanguage]
@@ -21,7 +28,7 @@ const lithuanian = useCallback(
   [changeLanguage]
 );
 
-    return {english, lithuanian, t}
+  return {english, lithuanian, getLanguage, t}
 }
 
 export default useLanguage;

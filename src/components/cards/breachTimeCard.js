@@ -7,7 +7,7 @@ const BreachTimeCard = ({timeOutOfZone, receivedAt}) => {
     <div className="flex flex-col w-full bg-white pl-8 pr-6 pt-4 pb-4 border hover:shadow">
       <div className="flex flex-row">
         <p className="flex w-1/2">
-          {t("loginSystem.timeOutOfZone")}
+          {t("eurocash.timeOutOfZone")}
         </p>
         <p className="flex w-1/2 text-black">
           {timeOutOfZone}
@@ -15,7 +15,7 @@ const BreachTimeCard = ({timeOutOfZone, receivedAt}) => {
       </div>
       <div className="flex flex-row">
         <p className="flex w-1/2">
-          {t("loginSystem.received")}
+          {t("eurocash.received")}
         </p>
         <p className="flex w-1/2 text-black">
           {receivedAt}

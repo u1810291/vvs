@@ -151,7 +151,7 @@ function Breaches() {
                             onClick={sortedDashboardDate}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.dateFrom")}</span>
+                            <span className="text-gray-300">{t("eurocash.dateFrom")}</span>
                             <img
                               src={require("../../assets/assets/down.png")}
                               className="h-2 w-4 ml-2"
@@ -163,7 +163,7 @@ function Breaches() {
                             onClick={sortedDashboardTimeOutOfZone}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.timeOutOfZone")}</span>
+                            <span className="text-gray-300">{t("eurocash.timeOutOfZone")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-1 flex-row items-center">
@@ -171,7 +171,7 @@ function Breaches() {
                             onClick={sortedDashboardCrew}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.crew")}</span>
+                            <span className="text-gray-300">{t("eurocash.crew")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-2 flex-row items-center">
@@ -179,7 +179,7 @@ function Breaches() {
                             onClick={sortedDashboardDrivers}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.drivers")}</span>
+                            <span className="text-gray-300">{t("eurocash.drivers")}</span>
                           </button>
                         </div>
                       </div>
@@ -204,7 +204,7 @@ function Breaches() {
                             onClick={sortedDashboardDate}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.dateFrom")}</span>
+                            <span className="text-gray-300">{t("eurocash.dateFrom")}</span>
                             <img
                               src={require("../../assets/assets/down.png")}
                               className="h-2 w-4 ml-2"
@@ -216,7 +216,7 @@ function Breaches() {
                             onClick={sortedDashboardDate}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.timeOutOfZone")}</span>
+                            <span className="text-gray-300">{t("eurocash.timeOutOfZone")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-1 flex-row items-center">
@@ -224,7 +224,7 @@ function Breaches() {
                             onClick={sortedDashboardDate}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.crew")}</span>
+                            <span className="text-gray-300">{t("eurocash.crew")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-2 flex-row items-center">
@@ -232,7 +232,7 @@ function Breaches() {
                             onClick={sortedDashboardDate}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.drivers")}</span>
+                            <span className="text-gray-300">{t("eurocash.drivers")}</span>
                           </button>
                         </div>
                       </div>

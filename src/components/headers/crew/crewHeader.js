@@ -28,12 +28,12 @@ export function CrewHeader() {
       <div className="xl:flex hidden xl:flex-row ml-4 items-center">
         <Link to="/crew">
           <h4 className="text-lg ml-2 font-normal">
-            {t("loginSystem.crew")}
+            {t("eurocash.crew")}
           </h4>
         </Link>
         <p className="pl-2 text-gray-600">/</p>
         <h4 className="text-lg ml-2 hidden xxl:inline-block font-normal text-gray-500">
-          {t("loginSystem.allData")}
+          {t("eurocash.allData")}
         </h4>
         <button onClick={filterFunc}>
           <svg
@@ -56,16 +56,16 @@ export function CrewHeader() {
           onClick={navigateToCreateCrew}
           className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none"
         >
-          {t("loginSystem.createCrew")}
+          {t("eurocash.createCrew")}
         </button>
         <button  className="text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          {t("loginSystem.crew")}
+          {t("eurocash.crew")}
         </button>
         <button  className="text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          {t("loginSystem.drivers")}
+          {t("eurocash.drivers")}
         </button>
         <button  className="text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          {t("loginSystem.dislocationZones")}
+          {t("eurocash.dislocationZones")}
         </button>
       </div>
     </div>
