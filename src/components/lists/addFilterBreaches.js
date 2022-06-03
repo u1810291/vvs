@@ -2,14 +2,16 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
+import useLanguage from "../../hook/useLanguage";
 
-export const AddFilterList = (props) => {
-  const { filterList, setFilterList } = useContext(GlobalContext);
-  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+export const AddFilterListBreaches = (props) => {
+  const {english, lithuanian, t} = useLanguage();
+  const {filterListBreaches, setFilterListBreaches} = useContext(GlobalContext);
+  const {filterEditingBreaches, setFilterEditingBreaches} = useContext(GlobalContext);
+  const {selectedFilterBreaches, setSelectedFilterBreaches} = useContext(GlobalContext);
 
   const addFilterFunc = () => {
-    setFilterList((currentFilter) => [
+    setFilterListBreaches((currentFilter) => [
       ...currentFilter,
       {
         id: generate(),
@@ -28,35 +30,30 @@ export const AddFilterList = (props) => {
         crew: "0",
         driver: "0",
         inTime: "0",
-        dashboardList: [
-          "Gauta",
-          "Objektas",
-          "Pavadinimas",
-          "Ekipažas",
-          "Spėjo laiku",
-          "Reagavimo laikas",
-          "Laikas objekte",
-          "Būsena",
-          "Suveikimo priežastis",
-        ],
+        breachesList: [
+          "Data nuo",
+          "Laikas už zonos ribų",
+          "Ekipažai",
+          "Vairuotojai"
+        ]
       },
     ]);
-    filterList.map((value, index, array) => {
-      if (filterList.length - 1 === index) {
+    filterListBreaches.map((value, index, array) => {
+      if (filterListBreaches.length - 1 === index) {
         const id = value.id;
-        setSelectedFilter(id);
+        setSelectedFilterBreaches(id);
       }
     });
   };
 
   const checkFilters = useCallback(async() => {
-    if (filterList.length === 1) {
-      setSelectedFilter(null)
+    if (filterListBreaches.length === 1) {
+      setSelectedFilterBreaches(null)
     } else {
-    const topID = filterList[0].id;
-    setSelectedFilter(topID);
+      const topID = filterListBreaches[0].id;
+      setSelectedFilterBreaches(topID);
     }
-  },[filterList, setSelectedFilter])
+  },[filterListBreaches, setSelectedFilterBreaches])
 
   const saveFilters = useCallback(async () => {
     // handle api call
@@ -64,37 +61,37 @@ export const AddFilterList = (props) => {
 
   // I guess this for on page load
   useEffect(() => {
-    if (filterList?.length > 0) {
-      const topId = filterList[0].id;
-      setSelectedFilter(topId);
+    if (filterListBreaches?.length > 0) {
+      const topId = filterListBreaches[0].id;
+      setSelectedFilterBreaches(topId);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
       <div className="flex flex-col w-full items-center">
         <div className="flex flex-row w-full border-l border-b justify-between">
-          <p className="text-gray-500 p-2 border-r-4 border-blue-400 w-full">
+          <p className="text-gray-500 p-2 border-r-4 border-blue-400 w-full text-sm">
             Visi duomenys
           </p>
         </div>
-        {filterList.map((filter, index) => {
+        {filterListBreaches.map((filter, index) => {
           return (
             <div className="w-full" key={filter.id}>
-              {filterEditing !== filter.id ? (
+              {filterEditingBreaches !== filter.id ? (
                 <button
-                  onClick={() => setSelectedFilter(filter.id)}
-                  className={filterEditing ? "hidden" : "w-full"}
+                  onClick={() => setSelectedFilterBreaches(filter.id)}
+                  className={filterEditingBreaches ? "hidden" : "w-full"}
                   key={filter.id}
                 >
                   <div
                     className={
-                      selectedFilter === filter.id ? "shadow" : "w-full"
+                      filterEditingBreaches === filter.id ? "shadow" : "w-full"
                     }
                   >
                     <div className="flex flex-col sm:flex-row w-full border-l mb-4 border-b items-center justify-between">
-                      <p className="flex text-gray-400 p-2">
+                      <p className="flex text-gray-400 p-2 text-sm">
                         Filtro pavadinimas
                       </p>
                       <div className="flex flex-row mx-2">
@@ -110,9 +107,9 @@ export const AddFilterList = (props) => {
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row w-full border-l border-b justify-between items-center">
-                      <p className="text-gray-400 p-2">{filter.filterName}</p>
-                      <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 bg-gray-200">
-                        <p onClick={() => setFilterEditing(filter.id)}>
+                      <p className="text-gray-400 p-2 text-sm">{filter.filterName}</p>
+                      <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
+                        <p onClick={() => setFilterEditingBreaches(filter.id)}>
                           redaguoti filtrą
                         </p>
                       </a>
@@ -123,13 +120,13 @@ export const AddFilterList = (props) => {
                 <div className="ml-6 w-full">
                   <div className="flex flex-col sm:flex-row w-full justify-between mt-2">
                     <div className="flex flex-col w-full">
-                      <p className="text-gray-500">Pavadinimas</p>
+                      <p className="text-gray-500 text-sm">Pavadinimas</p>
                       <input
                         id="name"
                         name="name"
                         onChange={(e) => {
                           const filterName = e.target.value;
-                          setFilterList((currentFilter) =>
+                          setFilterListBreaches((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterName } : x
                             )
@@ -141,13 +138,14 @@ export const AddFilterList = (props) => {
                       />
                     </div>
                     <div className="flex flex-col mr-4">
-                      <p className="text-gray-500">Trumpinys</p>
+                      <p className="text-gray-500 text-sm">Trumpinys</p>
                       <input
                         id="short-name"
                         name="short-name"
+                        maxLength={4}
                         onChange={(e) => {
                           const filterShortName = e.target.value;
-                          setFilterList((currentFilter) =>
+                          setFilterListBreaches((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterShortName } : x
                             )
@@ -166,7 +164,7 @@ export const AddFilterList = (props) => {
                         name="save"
                         onChange={(e) => {
                           const savedToMenu = e.target.checked;
-                          setFilterList((currentFilter) =>
+                          setFilterListBreaches((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToMenu } : x
                             )
@@ -176,7 +174,7 @@ export const AddFilterList = (props) => {
                         type="checkbox"
                         className="h-4 w-4  text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500 truncate">Išsaugoti į meniu</p>
+                      <p className="ml-4 text-gray-500 truncate text-sm">Išsaugoti į meniu</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center mt-2">
                       <input
@@ -184,7 +182,7 @@ export const AddFilterList = (props) => {
                         name="default-filter"
                         onChange={(e) => {
                           const savedToFavorite = e.target.checked;
-                          setFilterList((currentFilter) =>
+                          setFilterListBreaches((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToFavorite } : x
                             )
@@ -194,29 +192,29 @@ export const AddFilterList = (props) => {
                         type="checkbox"
                         className="h-4 w-4   text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <p className="ml-4 text-gray-500 truncate">Numatytasis filtras</p>
+                      <p className="ml-4 text-gray-500 truncate text-sm">Numatytasis filtras</p>
                     </div>
                   </div>
                   <div className=" flex flex-col sm:flex-row justify-around items-center w-20 sm:w-full mt-8">
                     <button
                       onClick={() => {
-                        setFilterList((currentFilter) =>
+                        setFilterListBreaches((currentFilter) =>
                           currentFilter.filter((x) => x.id !== filter.id)
                         );
-                        setFilterEditing(null);
+                        setFilterEditingBreaches(null);
                         checkFilters();
                       }}
-                      className="text-gray-400"
+                      className="text-gray-400 text-sm hover:text-gray-500"
                     >
                       Ištrinti
                     </button>
                     <button
-                      onClick={() => setFilterEditing(null)}
-                      className="text-gray-400"
+                      onClick={() => setFilterEditingBreaches(null)}
+                      className="text-gray-400 text-sm hover:text-gray-500"
                     >
                       Atšaukti
                     </button>
-                    <button className="flex py-2 px-4 mr-4 rounded-sm text-xs mx-2 font-normal items-center text-white bg-slate-600">
+                    <button className="flex py-2 px-4 mr-4 rounded-sm text-xs mx-2 font-normal items-center text-white hover:bg-slate-500 bg-slate-600">
                       <p onClick={saveFilters}>Išsaugoti</p>
                     </button>
                   </div>
@@ -228,7 +226,7 @@ export const AddFilterList = (props) => {
       </div>
       <button
         className={
-          filterEditing
+          filterEditingBreaches
             ? "hidden"
             : "flex flex-row justify-center items-center pb-2"
         }
