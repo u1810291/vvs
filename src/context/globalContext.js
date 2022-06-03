@@ -73,7 +73,7 @@ export const GlobalProvider = ({ children }) => {
         "Laikas objekte",
         "Būsena",
         "Suveikimo priežastis",
-      ],
+      ]
     },
   ]);
   const [selectedFilterDrivers, setSelectedFilterDrivers] = useState(null);

@@ -1,16 +1,18 @@
 import React, {
   useState,
   useContext,
+  useEffect,
   useCallback,
   useRef,
   Fragment
 } from "react";
 import useLanguage from "../../hook/useLanguage";
+import RegularSidebar from "../../components/sidebars/main";
 import {CrewHeader} from "../../components/headers/crew/crewHeader";
 import {CrewList} from '../../components/lists/crewList';
 import GlobalContext from "../../context/globalContext";
 import {CrewTestApi} from "../../api/crewTest";
-import {PDFExport} from "@progress/kendo-react-pdf";
+import {PDFExport, savePDF} from "@progress/kendo-react-pdf";
 import useSort from '../../hook/useSort';
 import {sortToggle} from '../../util/utils';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
@@ -151,7 +153,7 @@ function Crew() {
                             onClick={sortedDashboardName}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.name")}</span>
+                            <span className="text-gray-300">{t("eurocash.name")}</span>
                             <img
                               src={require("../../assets/assets/down.png")}
                               className="h-2 w-4 ml-2"
@@ -163,7 +165,7 @@ function Crew() {
                             onClick={sortedDashboardAbbreviation}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.abbreviation")}</span>
+                            <span className="text-gray-300">{t("eurocash.abbreviation")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-6 flex-row items-center">
@@ -171,7 +173,7 @@ function Crew() {
                             onClick={sortedDashboardDislocationZone}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.dislocationZone")}</span>
+                            <span className="text-gray-300">{t("eurocash.dislocationZone")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-1 flex-row items-center">
@@ -179,7 +181,7 @@ function Crew() {
                             onClick={sortedDashboardStatus}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.status")}</span>
+                            <span className="text-gray-300">{t("eurocash.status")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-2 flex-row items-center">
@@ -187,7 +189,7 @@ function Crew() {
                             onClick={sortedDashboardIsAssignedAutomatically}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.assignAutomatically")}</span>
+                            <span className="text-gray-300">{t("eurocash.assignAutomatically")}</span>
                           </button>
                         </div>
                       </div>
@@ -213,7 +215,7 @@ function Crew() {
                             onClick={sortedDashboardName}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.name")}</span>
+                            <span className="text-gray-300">{t("eurocash.name")}</span>
                             <img
                               src={require("../../assets/assets/down.png")}
                               className="h-2 w-4 ml-2"
@@ -225,7 +227,7 @@ function Crew() {
                             onClick={sortedDashboardAbbreviation}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.abbreviation")}</span>
+                            <span className="text-gray-300">{t("eurocash.abbreviation")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-6 flex-row items-center">
@@ -233,7 +235,7 @@ function Crew() {
                             onClick={sortedDashboardDislocationZone}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.dislocationZone")}</span>
+                            <span className="text-gray-300">{t("eurocash.dislocationZone")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-1 flex-row items-center">
@@ -241,7 +243,7 @@ function Crew() {
                             onClick={sortedDashboardStatus}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.status")}</span>
+                            <span className="text-gray-300">{t("eurocash.status")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-2 flex-row items-center">
@@ -249,7 +251,7 @@ function Crew() {
                             onClick={sortedDashboardIsAssignedAutomatically}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.assignAutomatically")}</span>
+                            <span className="text-gray-300">{t("eurocash.assignAutomatically")}</span>
                           </button>
                         </div>
                       </div>

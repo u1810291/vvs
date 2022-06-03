@@ -23,7 +23,6 @@ import {FiltersListPermissions} from '../../components/lists/filterPermissionsLi
 import {SearchButton} from '../../components/buttons/searchButton';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
-import { ThreeTabHeader } from "../../components/headers/threeTab";
 
 function Permissions() {
   const {english, lithuanian, t} = useLanguage();
@@ -152,7 +151,7 @@ function Permissions() {
                             onClick={sortedDashboardDate}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.date")}</span>
+                            <span className="text-gray-300">{t("eurocash.date")}</span>
                             <img
                               src={require("../../assets/assets/down.png")}
                               className="h-2 w-4 ml-2"
@@ -164,7 +163,7 @@ function Permissions() {
                             onClick={sortedDashboardName}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.name")}</span>
+                            <span className="text-gray-300">{t("eurocash.name")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-3 flex-row items-center">
@@ -172,7 +171,7 @@ function Permissions() {
                             onClick={sortedDashboardStatus}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.status")}</span>
+                            <span className="text-gray-300">{t("eurocash.status")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-1 flex-row items-center">
@@ -180,7 +179,7 @@ function Permissions() {
                             onClick={sortedDashboardCrew}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.crew")}</span>
+                            <span className="text-gray-300">{t("eurocash.crew")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-2 flex-row items-center">
@@ -188,7 +187,7 @@ function Permissions() {
                             onClick={sortedDashboardStatus}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.drivers")}</span>
+                            <span className="text-gray-300">{t("eurocash.drivers")}</span>
                           </button>
                         </div>
                       </div>
@@ -214,7 +213,7 @@ function Permissions() {
                             onClick={sortedDashboardDate}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.date")}</span>
+                            <span className="text-gray-300">{t("eurocash.date")}</span>
                             <img
                               src={require("../../assets/assets/down.png")}
                               className="h-2 w-4 ml-2"
@@ -226,7 +225,7 @@ function Permissions() {
                             onClick={sortedDashboardName}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.name")}</span>
+                            <span className="text-gray-300">{t("eurocash.name")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-3 flex-row items-center">
@@ -234,7 +233,7 @@ function Permissions() {
                             onClick={sortedDashboardStatus}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.status")}</span>
+                            <span className="text-gray-300">{t("eurocash.status")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-1 flex-row items-center">
@@ -242,7 +241,7 @@ function Permissions() {
                             onClick={sortedDashboardCrew}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.crew")}</span>
+                            <span className="text-gray-300">{t("eurocash.crew")}</span>
                           </button>
                         </div>
                         <div className="flex col-span-2 flex-row items-center">
@@ -250,7 +249,7 @@ function Permissions() {
                             onClick={sortedDashboardStatus}
                             className="flex flex-row items-center"
                           >
-                            <span className="text-gray-300">{t("loginSystem.drivers")}</span>
+                            <span className="text-gray-300">{t("eurocash.drivers")}</span>
                           </button>
                         </div>
                       </div>

@@ -93,13 +93,13 @@ const GoogleMapTools = ({onMapLoad}) => {
         className="absolute z-1 top-24 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white"
         onClick={clearAllPolygons}
       >
-        {t("loginSystem.clear")}
+        {t("eurocash.clear")}
       </button>
       <button
         className="absolute z-1 top-36 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white"
         onClick={undoPreviousPolygon}
       >
-        {t("loginSystem.undo")}
+        {t("eurocash.undo")}
       </button>
       <DrawingManager
         onLoad={onMapLoad}

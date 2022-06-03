@@ -10,7 +10,7 @@ const PermissionConfirmationTimeCard = ({receivedAt, Status}) => {
           {receivedAt}
         </p>
         <p className="flex mr-auto text-gray-600">
-          {t("loginSystem.requestReceived")}
+          {t("eurocash.requestReceived")}
         </p>
         <div className="flex text-gray-600">
           <Status />

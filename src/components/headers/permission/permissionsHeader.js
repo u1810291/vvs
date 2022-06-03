@@ -22,12 +22,12 @@ export function PermissionsHeader() {
       <div className="xl:flex hidden xl:flex-row ml-4 items-center">
         <Link to="/permissions">
           <h4 className="text-lg ml-2 font-normal">
-            {t("loginSystem.permissions")}
+            {t("eurocash.permissions")}
           </h4>
         </Link>
         <p className="pl-2 text-gray-600">/</p>
         <h4 className="text-lg ml-2 hidden xxl:inline-block font-normal text-gray-500">
-          {t("loginSystem.allData")}
+          {t("eurocash.allData")}
         </h4>
         <button onClick={filterFunc}>
           <svg
@@ -46,16 +46,16 @@ export function PermissionsHeader() {
       </div>
       <div className="flex flex-row items-center">
         <button  className="text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          {t("loginSystem.console")}
+          {t("eurocash.console")}
         </button>
         <button  className="text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          {t("loginSystem.tasks")}
+          {t("eurocash.tasks")}
         </button>
         <button  className="text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          {t("loginSystem.permissions")}
+          {t("eurocash.permissions")}
         </button>
         <button  className="text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400">
-          {t("loginSystem.violations")}
+          {t("eurocash.violations")}
         </button>
       </div>
     </div>

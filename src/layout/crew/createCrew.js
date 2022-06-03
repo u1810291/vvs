@@ -1,15 +1,25 @@
 import React, {useCallback, useState} from "react";
+
+import MainSidebar from "../../components/sidebars/main";
+import RegularSidebar from "../../components/sidebars/main";
+import SlideOver from "../../components/sidebars/slideOver";
+import CalendarTimeline from "../../components/calendar/CalendarTimeline";
+import {CrewList} from "../../components/lists/crewList";
+import {OverlayProvider, usePreventScroll} from "react-aria";
+import {CreateCrewHeader} from "../../components/headers/crew/createCrewHeader";
+
+import useBoolean from '../../hook/useBoolean';
 import useLanguage from "../../hook/useLanguage";
-import { CreateCrewHeader } from "../../components/headers/crew/createCrewHeader";
-import {OverlayProvider, usePreventScroll} from 'react-aria';
-import SlideOver from '../../components/sidebars/slideOver';
-import MainSidebar from '../../components/sidebars/main';
+
+import {generate} from "shortid";
 
 function CreateCrew() {
-  const {english, lithuanian, t} = useLanguage();
+  const {t} = useLanguage();
+  const [events, setEvents] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
-  const handleOnClose = useCallback(() => { setIsOpen(false)},[]);
+  const handleOnOpen = useCallback(() => {setIsOpen(true)},[]);
+  const handleOnClose = useCallback(() => {setIsOpen(false)},[]);
+
   return (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
@@ -25,8 +35,15 @@ function CreateCrew() {
                   />
                 </button>
               </div>
-              <div className="flex flex-col min-h-full w-full justify-between">
+              <div className="flex flex-col min-h-full w-full">
                 <CreateCrewHeader />
+                <CalendarTimeline
+                  titleText={t("eurocash.dislocationZoneSchedule")}
+                  actionButtonTitle={t("eurocash.addZone")}
+                  columnsTimeInterval={4}
+                  events={events}
+                  setEvents={setEvents}
+                />
               </div>
             </div>
           </div>

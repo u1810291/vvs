@@ -17,7 +17,6 @@ export const PermissionsList = ({
   status,
   crew,
   drivers,
-  token,
   ...props
 }) => {
   const {english, lithuanian, t} = useLanguage();
