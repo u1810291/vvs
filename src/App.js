@@ -23,6 +23,12 @@ import Client from "./layout/client";
 import Key from "./layout/key";
 import Modem from "./layout/modem";
 import New from "./layout/new";
+import Crew from "./layout/crew/crew";
+import CreateCrew from './layout/crew/createCrew';
+import Permission from './layout/permission/permissions';
+import Breach from './layout/breach/breach';
+import Breaches from './layout/breach/breaches';
+import PermissionConfirmation from './layout/permission/permissionConfirmation';
 
 import NotFound from "./layout/notFound";
 
@@ -80,6 +86,12 @@ function App() {
                 <Route path="Modem/:id" element={<Modem />} />
                 <Route path="Key/:id" element={<Key />} />
                 <Route path="Object/:id" element={<Object />} />
+                <Route path="Crew" element={<Crew />} />
+                <Route path="CreateCrew" element={<CreateCrew />} />
+                <Route path="Permissions" element={<Permission />} />
+                <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
+                <Route path="Breaches" element={<Breaches />} />
+                <Route path="Breach" element={<Breach />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

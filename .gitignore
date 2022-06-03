@@ -2,6 +2,9 @@
 
 .gitlab-ci-copy.yml
 
+# IDE folders
+.idea
+
 # dependencies
 /node_modules
 /build
