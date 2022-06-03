@@ -23,6 +23,7 @@ import {FiltersListPermissions} from '../../components/lists/filterPermissionsLi
 import {SearchButton} from '../../components/buttons/searchButton';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
+import { ThreeTabHeader } from "../../components/headers/threeTab";
 
 function Permissions() {
   const {english, lithuanian, t} = useLanguage();

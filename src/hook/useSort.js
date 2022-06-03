@@ -329,6 +329,21 @@ function useSort() {
     }
   }
 
+  function sortedDashboardInTime() {
+    if (sortedDashboardOrder === "") {
+      setSortedDashboardKeys("intime");
+      setSortedDashboardOrder("asc");
+    }
+    if (sortedDashboardOrder === "asc") {
+      setSortedDashboardKeys("intime");
+      setSortedDashboardOrder("desc");
+    }
+    if (sortedDashboardOrder === "desc") {
+      setSortedDashboardKeys("intime");
+      setSortedDashboardOrder("");
+    }
+  }
+
   function sortedDashboardReactionTime() {
     if (sortedDashboardOrder === "") {
       setSortedDashboardKeys("reactiontime");
@@ -462,21 +477,6 @@ function useSort() {
     if (sortedDriversOrder === "desc") {
       setSortedDriversKeys("abbreviation");
       setSortedDriversOrder("");
-    }
-  }
-
-  function sortedDashboardInTime() {
-    if (sortedDashboardOrder === "") {
-      setSortedDashboardKeys("intime");
-      setSortedDashboardOrder("asc");
-    }
-    if (sortedDashboardOrder === "asc") {
-      setSortedDashboardKeys("intime");
-      setSortedDashboardOrder("desc");
-    }
-    if (sortedDashboardOrder === "desc") {
-      setSortedDashboardKeys("intime");
-      setSortedDashboardOrder("");
     }
   }
 

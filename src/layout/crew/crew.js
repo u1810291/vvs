@@ -1,18 +1,16 @@
 import React, {
   useState,
   useContext,
-  useEffect,
   useCallback,
   useRef,
   Fragment
 } from "react";
 import useLanguage from "../../hook/useLanguage";
-import RegularSidebar from "../../components/sidebars/main";
 import {CrewHeader} from "../../components/headers/crew/crewHeader";
-import {CrewList} from '../../components/lists/crewList';
+import CrewList from '../../components/lists/crewList';
 import GlobalContext from "../../context/globalContext";
 import {CrewTestApi} from "../../api/crewTest";
-import {PDFExport, savePDF} from "@progress/kendo-react-pdf";
+import {PDFExport} from "@progress/kendo-react-pdf";
 import useSort from '../../hook/useSort';
 import {sortToggle} from '../../util/utils';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
