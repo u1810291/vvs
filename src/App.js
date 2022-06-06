@@ -7,6 +7,7 @@ import { GraphQLClient, ClientContext } from "graphql-hooks";
 import { createClient } from "graphql-ws";
 import memCache from "graphql-hooks-memcache";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { SubscriptionClient } from "subscriptions-transport-ws";
 
 import Login from "./layout/login";
 import Dashboard from "./layout/dashboard";
@@ -31,31 +32,26 @@ const queryClient = new QueryClient();
 function App() {
   const { globalToken, setGlobalToken } = useContext(GlobalContext);
   const client = new GraphQLClient({
-    // returnJWT() and apply middleware
     url: "https://ec.swarm.testavimui.eu/v1/graphql",
+    headers: {
+      "x-hasura-admin-secret": "secret",
+    },
     cache: memCache(),
-    fullWsTransport: false,
-    subscriptionClient: () =>
-      createClient({
-        url: "ws://ec.swarm.testavimui.eu/v1/graphql",
-        options: {
-          reconnect: true,
-          lazy: true,
-          inactivityTimeout: 30000,
-          connectionParams: () => {
-            const token = getAccessToken();
-            return {
-              headers: {
-                "content-type": "application/json",
-                "x-hasura-admin-secret": "secret",
-                Authorization: globalToken
-                  ? "Bearer" + String(globalToken)
-                  : "",
-              },
-            };
+    subscriptionClient: new SubscriptionClient(
+      "ws://ec.swarm.testavimui.eu/v1/graphql",
+      {
+        reconnect: true,
+        lazy: true,
+        inactivityTimeout: 30000,
+        connectionParams: {
+          headers: {
+            "content-type": "application/json",
+            "x-hasura-admin-secret": "secret",
+            Authorization: globalToken ? "Bearer" + String(globalToken) : "",
           },
         },
-      }),
+      }
+    ),
   });
 
   return (
