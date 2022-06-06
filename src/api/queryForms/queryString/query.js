@@ -42,6 +42,7 @@ export const objectPage = `query MyQuery {
     status
     isAssignedAutomatically
     id
+    phone
   }
   events {
     receivedtime

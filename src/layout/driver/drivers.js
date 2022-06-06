@@ -54,13 +54,6 @@ function DriversList() {
   }, []);
   usePreventScroll({ isDisabled: !isOpen });
 
-  // useEffect(() => {
-  //   if(error) {
-  //     backFunc()
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // },[error])
-
   return (
     <>
       <OverlayProvider>

@@ -23,7 +23,7 @@ import Client from "./layout/client/client";
 import Key from "./layout/key/key";
 import Modem from "./layout/modem/modem";
 import New from "./layout/new";
-import Crews from "./layout/crew/crew";
+import Crews from "./layout/crew/crews";
 import CreateCrew from './layout/crew/createCrew';
 import Permission from './layout/permission/permissions';
 import Breach from './layout/breach/breach';

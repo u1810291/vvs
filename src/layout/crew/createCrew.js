@@ -16,6 +16,9 @@ import ControlledInput from "../../components/input/ControlledInput";
 import CalendarTimeline from "../../components/calendar/CalendarTimeline";
 import CreateCrewHeader from "../../components/headers/crew/createCrewHeader";
 import AuthContext from "../../context/authContext";
+import { useParams } from "react-router-dom";
+import { objectPage } from "../../api/queryForms/queryString/query";
+import useReactQuery from "../../hook/useQuery";
 
 import useBoolean from "../../hook/useBoolean";
 import useLanguage from "../../hook/useLanguage";
@@ -23,6 +26,7 @@ import useLanguage from "../../hook/useLanguage";
 import {generate} from "shortid";
 
 const CreateCrew = () => {
+  const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
   const {t, english, lithuanian} = useLanguage();
   const [events, setEvents] = useState([]);
@@ -55,6 +59,31 @@ const CreateCrew = () => {
   const updateVariables = {
     updateCalendar: events,
   };
+
+  const [crew, setCrew] = useState("");
+
+  const data = useReactQuery(objectPage, {}, accessToken);
+  useEffect(() => {
+    let hasura;
+    // let monas;
+    if (data.data) {
+      hasura = data?.data?.monas_crew_related;
+
+      setCrew({ result: hasura });
+    }
+  }, [data.data]);
+
+  useEffect(() => {
+    if (crew) {
+      const obj = crew.result;
+      const data = obj.find((x) => x.id === id);
+      setCrewName(data.name);
+      setCrewPhoneNumber(data.phone);
+      // setDriverFullName(data?.fullName);
+      // setDriverName(data?.firstName);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [crew]);
 
   const {
     error: calendarErrors,
