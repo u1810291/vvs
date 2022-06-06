@@ -44,21 +44,21 @@ function Crew() {
     }, 1000);
   }, []);
 
-  const {
-    sortedDashboardKeys,
-    sortedDashboardOrder,
-    sortedDashboardName,
-    sortedDashboardAbbreviation,
-    sortedDashboardDislocationZone,
-    sortedDashboardStatus,
-    sortedDashboardIsAssignedAutomatically,
-  } = useSort();
+  // const {
+  //   sortedDashboardKeys,
+  //   sortedDashboardOrder,
+  //   sortedDashboardName,
+  //   sortedDashboardAbbreviation,
+  //   sortedDashboardDislocationZone,
+  //   sortedDashboardStatus,
+  //   sortedDashboardIsAssignedAutomatically,
+  // } = useSort();
 
-  const sortedCrewTestApi = sortToggle(
-    CrewTestApi,
-    sortedDashboardKeys,
-    sortedDashboardOrder
-  );
+  // const sortedCrewTestApi = sortToggle(
+  //   CrewTestApi,
+  //   sortedDashboardKeys,
+  //   sortedDashboardOrder
+  // );
 
   return (
     <OverlayProvider>
@@ -145,7 +145,7 @@ function Crew() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+                      {/* <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                         <div className="flex col-span-2 flex-row items-center">
                           <button
                             onClick={sortedDashboardName}
@@ -203,11 +203,12 @@ function Crew() {
                             isAssignedAutomatically={data.isAssignedAutomatically}
                           />
                         ))}
-                      </div>
+                      </div> */}
+                      <CrewList />
                     </PDFExport>
                   ) : (
                     <>
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
+                      {/* <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
                         <div className="flex col-span-2 flex-row items-center">
                           <button
                             onClick={sortedDashboardName}
@@ -266,7 +267,8 @@ function Crew() {
                             isAssignedAutomatically={data.isAssignedAutomatically}
                           />
                         ))}
-                      </div>
+                      </div> */}
+                        <CrewList />
                       <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                         <div className="flex flex-col items-start">
                           <div>

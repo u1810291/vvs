@@ -81,8 +81,8 @@ function App() {
                 <Route path="Modem/:id" element={<Modem />} />
                 <Route path="Key/:id" element={<Key />} />
                 <Route path="Object/:id" element={<Object />} />
+                <Route path="CreateCrew/:id" element={<CreateCrew />} />
                 <Route path="Crews" element={<Crews />} />
-                <Route path="CreateCrew" element={<CreateCrew />} />
                 <Route path="Permissions" element={<Permission />} />
                 <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
                 <Route path="Breaches" element={<Breaches />} />

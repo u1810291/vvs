@@ -5,31 +5,28 @@ import { Spinner } from "react-activity";
 import { Link } from "react-router-dom";
 import { sortToggle } from "../../util/utils";
 import useSort from "../../hook/useSort";
-import { useFetch } from "../../hook/useFetch";
+import useReactQuery from "../../hook/useQuery";
 import { getUsers } from "../../api/queryForms/queryString/users";
 import { getAllUsers } from "../../api/queryForms/variables/users";
 
 export const ClientList = () => {
   const { accessToken } = useContext(AuthContext);
   const [customers, setCustomers] = useState("");
+  const [crew, setCrew] = useState("");
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
 
-  const { data, error, loading, fetchData } = useFetch(
+  const { data, error, loading } = useReactQuery(
     getUsers,
     getAllUsers,
     accessToken
   );
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (data) {
-      const allUsers = data?.data?.users?.users;
+      const allUsers = data?.users?.users;
       const searchRole = (name, arr) =>
         arr.filter(({ registrations }) => {
           if (registrations) {
@@ -40,7 +37,7 @@ export const ClientList = () => {
         );
       const searchResult = searchRole("customer", allUsers);
       let obj = { users: searchResult };
-      setCustomers(obj);
+      setCrew(obj);
     }
   }, [data]);
 
@@ -51,6 +48,8 @@ export const ClientList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
+  console.log(crew);
+  
   const {
     sortedClientsKeys,
     sortedClientsOrder,
@@ -61,7 +60,7 @@ export const ClientList = () => {
   } = useSort();
 
   const sortedClients = sortToggle(
-    customers?.users,
+    crew?.users,
     sortedClientsKeys,
     sortedClientsOrder
   );

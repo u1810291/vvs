@@ -34,6 +34,15 @@ export const objectPage = `query MyQuery {
     monasid
     navid
   }
+  monas_crew_related {
+    Id
+    name
+    abbreviation
+    dislocationZone
+    status
+    isAssignedAutomatically
+    id
+  }
   events {
     receivedtime
     status
