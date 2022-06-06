@@ -1,9 +1,11 @@
-import React, {useCallback, useState, useRef, useEffect} from "react";
+import React, {useCallback, useState, useRef, useEffect, useContext } from "react";
 
 import {Polygon} from "@react-google-maps/api";
 import {GoogleMap} from "@react-google-maps/api";
 import {ActiveCard} from "../../components/cards/active";
 import {OverlayProvider, usePreventScroll} from "react-aria";
+import { useFetch } from "../../hook/useFetch";
+import { updateCalendar } from "../../api/queryForms/queryString/mutation";
 
 import CheckBox from '../../components/input/CheckBox';
 import CrewList from "../../components/lists/crewList";
@@ -13,6 +15,7 @@ import SlideOver from "../../components/sidebars/slideOver";
 import ControlledInput from "../../components/input/ControlledInput";
 import CalendarTimeline from "../../components/calendar/CalendarTimeline";
 import CreateCrewHeader from "../../components/headers/crew/createCrewHeader";
+import AuthContext from "../../context/authContext";
 
 import useBoolean from "../../hook/useBoolean";
 import useLanguage from "../../hook/useLanguage";
@@ -20,6 +23,7 @@ import useLanguage from "../../hook/useLanguage";
 import {generate} from "shortid";
 
 const CreateCrew = () => {
+  const { accessToken } = useContext(AuthContext);
   const {t, english, lithuanian} = useLanguage();
   const [events, setEvents] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +52,17 @@ const CreateCrew = () => {
     lng: 23.33,
   });
 
+  const updateVariables = {
+    updateCalendar: events,
+  };
+
+  const {
+    error: calendarErrors,
+    data: calendarResponse,
+    loading,
+    fetchData: saveCalendarRecords,
+  } = useFetch(updateCalendar, updateVariables, accessToken);
+
   const crewName = useRef("9 GRE");
   const setCrewName = useCallback(event => {
     crewName.current = event
@@ -63,14 +78,15 @@ const CreateCrew = () => {
     crewID.current = event
   }, []);
 
-  const crewPhoneNubmer = useRef("+37065612345");
-  const setCrewPhoneNubmer = useCallback(event => {
-    crewPhoneNubmer.current = event
+  const crewPhoneNumber = useRef("+37065612345");
+  const setCrewPhoneNumber = useCallback(event => {
+    crewPhoneNumber.current = event
   }, []);
 
-  const crewAvailabelToCallFrom = useRef("");
-  const setCrewAvailabelToCallFrom = useCallback(event => {
-    crewAvailabelToCallFrom.current = event
+  const crewAvailableToCallFrom = useRef("");
+  const setCrewAvailableToCallFrom = useCallback(event => {
+    crewAvailableToCallFrom.current = event
+    // take this value in order to set delay for the call
   }, []);
 
   const crewAutomaticallyAssign = useRef(false);
@@ -82,6 +98,10 @@ const CreateCrew = () => {
   const setCrewAssignUntilBreaks = useCallback(event => {
     crewAssignUntilBreaks.current = event
   }, []);
+  
+  useEffect(() => {
+    saveCalendarRecords();
+  },[events])
 
   return (
     <OverlayProvider>
@@ -139,15 +159,15 @@ const CreateCrew = () => {
                           />
                           <ControlledInput
                             title={"Telefonas"}
-                            value={crewPhoneNubmer.current}
-                            setValue={setCrewPhoneNubmer}
+                            value={crewPhoneNumber.current}
+                            setValue={setCrewPhoneNumber}
                             twBody={"w-2/5"}
                             placeholder={"įveskite numerį"}
                           />
                           <ControlledInput
                             title={"Skambinti po, s."}
-                            value={crewAvailabelToCallFrom.current}
-                            setValue={setCrewAvailabelToCallFrom}
+                            value={crewAvailableToCallFrom.current}
+                            setValue={setCrewAvailableToCallFrom}
                             twBody={"w-1/5"}
                             placeholder={"įveskite numerį"}
                           />

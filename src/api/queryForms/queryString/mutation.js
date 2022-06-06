@@ -29,3 +29,17 @@ export const imagesUpdateMutation = `mutation MyMutation ($imageName: String!, $
       authToken
   }
 }`;
+// , on_conflict: { constraint: monas_events_related_pkey ,update_columns: [id, crew, endTime, startTime, position, weekDay] }
+export const updateCalendar = `mutation MyMutation ($updateCalendar: [monas_calendar_related_insert_input!]!) {
+  insert_monas_calendar_related(objects: $updateCalendar) {
+    returning {
+      id
+      crew
+      endTime
+      startTime
+      position
+      weekDay
+    }
+  }
+}
+`;

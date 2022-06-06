@@ -4,7 +4,6 @@ import { AuthProvider } from "./context/authContext";
 import GlobalContext from "./context/globalContext";
 import ProtectedRoute from "./feature/protected";
 import { GraphQLClient, ClientContext } from "graphql-hooks";
-import { createClient } from "graphql-ws";
 import memCache from "graphql-hooks-memcache";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { SubscriptionClient } from "subscriptions-transport-ws";
