@@ -6,22 +6,22 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { ModemHeader } from "../components/headers/modem";
-import GlobalContext from "../context/globalContext";
-import AuthContext from "../context/authContext";
+import { ModemHeader } from "../../components/headers/modem";
+import GlobalContext from "../../context/globalContext";
+import AuthContext from "../../context/authContext";
 import { Spinner } from "react-activity";
 import { generate } from "shortid";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import useUtils from "../hook/useUtils";
+import MainSidebar from "../../components/sidebars/main";
+import useUtils from "../../hook/useUtils";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { zones } from "../api/zones";
+import { zones } from "../../api/zones";
 import { useParams } from "react-router-dom";
-import useReactQuery from "../hook/useQuery";
-import { objectPage } from "../api/queryForms/queryString/query";
+import useReactQuery from "../../hook/useQuery";
+import { objectPage } from "../../api/queryForms/queryString/query";
 
 function Modem() {
   const { id } = useParams();
@@ -97,17 +97,17 @@ function Modem() {
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button onClick={backFunc}>
-                  <img src={require("../assets/assets/left.png")}></img>
+                  <img src={require("../../assets/assets/left.png")}></img>
                 </button>
                 <img
                   className="pt-6"
-                  src={require("../assets/assets/Line.png")}
+                  src={require("../../assets/assets/Line.png")}
                 ></img>
                 <button className="flex flex-col items-center pt-6">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
-                    src={require("../assets/assets/hamburger.png")}
+                    src={require("../../assets/assets/hamburger.png")}
                   />
                 </button>
               </div>

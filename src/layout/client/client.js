@@ -1,22 +1,22 @@
 import React, { useState, useContext, useCallback, useEffect } from "react";
-import { CreateHeader } from "../components/headers/create";
-import { Object } from "../components/lists/object";
-import { clientList } from "../api/client";
+import { CreateHeader } from "../../components/headers/create";
+import { Object } from "../../components/lists/object";
+import { clientList } from "../../api/client";
 import { generate } from "shortid";
 import { useParams } from "react-router-dom";
-import { getUsers } from "../api/queryForms/queryString/users";
-import { getAllUsers } from "../api/queryForms/variables/users";
-import { archive } from "../api/queryForms/queryString/users";
-import AuthContext from "../context/authContext";
-import GlobalContext from "../context/globalContext";
-import { useFetch } from "../hook/useFetch";
+import { getUsers } from "../../api/queryForms/queryString/users";
+import { getAllUsers } from "../../api/queryForms/variables/users";
+import { archive } from "../../api/queryForms/queryString/users";
+import AuthContext from "../../context/authContext";
+import GlobalContext from "../../context/globalContext";
+import { useFetch } from "../../hook/useFetch";
 import { Spinner } from "react-activity";
 import { Link } from "react-router-dom";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import useUtils from "../hook/useUtils";
-import { updateRegister } from "../api/queryForms/queryString/query";
+import MainSidebar from "../../components/sidebars/main";
+import useUtils from "../../hook/useUtils";
+import { updateRegister } from "../../api/queryForms/queryString/query";
 
 function Client() {
   const { id } = useParams();
@@ -187,17 +187,17 @@ function Client() {
                 <div className="flex flex-row w-full justify-between h-full">
                   <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                     <button onClick={backFunc}>
-                      <img src={require("../assets/assets/left.png")}></img>
+                      <img src={require("../../assets/assets/left.png")}></img>
                     </button>
                     <img
                       className="pt-6"
-                      src={require("../assets/assets/Line.png")}
+                      src={require("../../assets/assets/Line.png")}
                     ></img>
                     <button className="flex flex-col items-center pt-6">
                       <img
                         onClick={handleOnOpen}
                         className="w-4 h-4 mx-16"
-                        src={require("../assets/assets/hamburger.png")}
+                        src={require("../../assets/assets/hamburger.png")}
                       />
                     </button>
                   </div>

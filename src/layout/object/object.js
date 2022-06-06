@@ -6,34 +6,34 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { ObjectHeader } from "../components/headers/object";
-import { Events } from "../components/lists/events";
-import { PhonesList } from "../api/phones";
+import { ObjectHeader } from "../../components/headers/object";
+import { Events } from "../../components/lists/events";
+import { PhonesList } from "../../api/phones";
 import { useParams } from "react-router-dom";
-import GlobalContext from "../context/globalContext";
-import AuthContext from "../context/authContext";
+import GlobalContext from "../../context/globalContext";
+import AuthContext from "../../context/authContext";
 import { Spinner } from "react-activity";
-import { EventsList } from "../api/events";
+import { EventsList } from "../../api/events";
 import { generate } from "shortid";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import useUtils from "../hook/useUtils";
+import MainSidebar from "../../components/sidebars/main";
+import useUtils from "../../hook/useUtils";
 import {
   objectPageImagesQuery,
   objectPageQuery,
   objectPage,
   imagesUpdate,
-} from "../api/queryForms/queryString/query";
+} from "../../api/queryForms/queryString/query";
 import {
   objectPageImagesAPImutation,
   objectPageImagesMutation,
   objectPageQueryCorrespondPersons,
   imagesUpdateMutation,
-} from "../api/queryForms/queryString/mutation";
-import { objectPageImagesUpdate } from "../api/queryForms/queryString/update";
-import useReactQuery from "../hook/useQuery";
-import { useFetch } from "../hook/useFetch";
+} from "../../api/queryForms/queryString/mutation";
+import { objectPageImagesUpdate } from "../../api/queryForms/queryString/update";
+import useReactQuery from "../../hook/useQuery";
+import { useFetch } from "../../hook/useFetch";
 
 function Object() {
   const { id } = useParams();
@@ -287,17 +287,17 @@ function Object() {
                 <div className="flex flex-row w-full justify-between h-full">
                   <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                     <button onClick={backFunc}>
-                      <img src={require("../assets/assets/left.png")}></img>
+                      <img src={require("../../assets/assets/left.png")}></img>
                     </button>
                     <img
                       className="pt-6"
-                      src={require("../assets/assets/Line.png")}
+                      src={require("../../assets/assets/Line.png")}
                     ></img>
                     <button className="flex flex-col items-center pt-6">
                       <img
                         onClick={handleOnOpen}
                         className="w-4 h-4 mx-16"
-                        src={require("../assets/assets/hamburger.png")}
+                        src={require("../../assets/assets/hamburger.png")}
                       />
                     </button>
                   </div>
@@ -445,7 +445,7 @@ function Object() {
                                       <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
                                         <img
                                           className="flex bg-cover w-2/4 h-2/4"
-                                          src={require("../assets/assets/apple.png")}
+                                          src={require("../../assets/assets/apple.png")}
                                         ></img>
                                       </div>
                                     </a>
@@ -456,7 +456,7 @@ function Object() {
                                       <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
                                         <img
                                           className="flex bg-cover w-2/4 h-2/4"
-                                          src={require("../assets/assets/apple.png")}
+                                          src={require("../../assets/assets/apple.png")}
                                         ></img>
                                       </div>
                                     </a>
@@ -469,7 +469,7 @@ function Object() {
                                     <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
                                       <img
                                         className="flex bg-cover w-2/4 h-2/4"
-                                        src={require("../assets/assets/apple.png")}
+                                        src={require("../../assets/assets/apple.png")}
                                       ></img>
                                     </div>
                                   </a>

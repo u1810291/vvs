@@ -5,23 +5,23 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { DriversHeader } from "../components/headers/drivers";
-import { DriverList } from "../components/lists/driversList";
-import { FiltersListDrivers } from "../components/filters/filterDriversList";
-import { OptionsListDrivers } from "../components/options/optionsDriversList";
+import { DriversHeader } from "../../components/headers/drivers";
+import { DriverList } from "../../components/lists/driversList";
+import { FiltersListDrivers } from "../../components/filters/filterDriversList";
+import { OptionsListDrivers } from "../../components/options/optionsDriversList";
 const {
   AddFilterListDrivers,
-} = require("../components/addFilter/addFilterDrivers");
-import GlobalContext from "../context/globalContext";
+} = require("../../components/addFilter/addFilterDrivers");
+import GlobalContext from "../../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import { SearchButton } from "../components/buttons/searchButton";
-import useUtils from "../hook/useUtils";
+import MainSidebar from "../../components/sidebars/main";
+import { SearchButton } from "../../components/buttons/searchButton";
+import useUtils from "../../hook/useUtils";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -73,12 +73,12 @@ function DriversList() {
                     <img
                       onClick={handleOnOpen}
                       className="w-4 h-4 mx-16"
-                      src={require("../assets/assets/hamburger.png")}
+                      src={require("../../assets/assets/hamburger.png")}
                     />
                   </button>
                   <img
                     className="pt-6"
-                    src={require("../assets/assets/Line.png")}
+                    src={require("../../assets/assets/Line.png")}
                   ></img>
                   {filterListDrivers.map((filter) => {
                     if (filter.savedToMenu === true) {
@@ -126,7 +126,7 @@ function DriversList() {
                               <div className="flex flex-col md:flex-row items-center my-6">
                                 <img
                                   className="h-8 w-6 mr-2 hidden lg:inline-block"
-                                  src={require("../assets/assets/doc.png")}
+                                  src={require("../../assets/assets/doc.png")}
                                 ></img>
                                 <button
                                   onClick={handleExportWithComponent}

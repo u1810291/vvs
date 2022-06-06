@@ -86,7 +86,7 @@ const CreateCrew = () => {
   const crewAvailableToCallFrom = useRef("");
   const setCrewAvailableToCallFrom = useCallback(event => {
     crewAvailableToCallFrom.current = event
-    // take this value in order to set delay for the call
+    // present value of database event 
   }, []);
 
   const crewAutomaticallyAssign = useRef(false);
@@ -169,7 +169,7 @@ const CreateCrew = () => {
                             value={crewAvailableToCallFrom.current}
                             setValue={setCrewAvailableToCallFrom}
                             twBody={"w-1/5"}
-                            placeholder={"įveskite numerį"}
+                            placeholder={"10"}
                           />
                         </div>
                         <div className={"mt-4"}>

@@ -5,32 +5,25 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { ThreeTabHeader } from "../components/headers/threeTab";
-import { ObjectsList } from "../components/lists/objectsList";
-
-import { FiltersListObjects } from "../components/filters/filterObjectsList";
-import { OptionsListObjects } from "../components/options/optionsObjectsList";
-const {
-  AddFilterListObjects,
-} = require("../components/addFilter/addFilterObjects");
-
+import { KeysHeader } from "../../components/headers/keys";
+import { KeysList } from "../../components/lists/keysList";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import GlobalContext from "../context/globalContext";
-const { AddFilterList } = require("../components/addFilter/addFilterTasks");
+const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import SlideOver from "../components/sidebars/slideOver";
+import { keys } from "../../api/keys";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import { SearchButton } from "../components/buttons/searchButton";
-import AuthContext from "../context/authContext";
+import MainSidebar from "../../components/sidebars/main";
+import { sortToggle } from "../../util/utils";
+import useSort from "../../hook/useSort";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Objects() {
+function Keys() {
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -40,12 +33,6 @@ function Objects() {
   }, []);
 
   usePreventScroll({ isDisabled: !isOpen });
-  const { expandFilterObjects, setExpandFilterObjects } =
-    useContext(GlobalContext);
-  const { selectedFilterObjects, setSelectedFilterObjects } =
-    useContext(GlobalContext);
-  const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
-  const { accessToken } = useContext(AuthContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -58,6 +45,11 @@ function Objects() {
     }, 1000);
   }, []);
 
+  const { sortedKeysKeys, sortedKeysOrder, sortedKeysSet, sortedKeysCrew } =
+    useSort();
+
+  const sortedKeys = sortToggle(keys, sortedKeysKeys, sortedKeysOrder);
+
   return (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
@@ -69,77 +61,14 @@ function Objects() {
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
-                    src={require("../assets/assets/hamburger.png")}
+                    src={require("../../assets/assets/hamburger.png")}
                   />
                 </button>
-                <img
-                  className="pt-6"
-                  src={require("../assets/assets/Line.png")}
-                ></img>
-                {filterListObjects?.map((filter) => {
-                  if (filter.savedToMenu === true) {
-                    return (
-                      <button
-                        key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-                        onClick={() => setSelectedFilterObjects(filter.id)}
-                        className={
-                          selectedFilterObjects === filter.id
-                            ? "font-light text-md mt-6 text-white"
-                            : "font-light text-md mt-6 text-gray-400 hover:text-white"
-                        }
-                      >
-                        {filter.filterShortName}
-                      </button>
-                    );
-                  }
-                })}
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
-                <ThreeTabHeader />
+                <KeysHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
-                  <div className="flex flex-row w-full">
-                    {expandFilterObjects ? (
-                      <>
-                        <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">
-                          <AddFilterListObjects />
-                        </div>
-                        <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
-                          <OptionsListObjects />
-                          <FiltersListObjects />
-                          <div
-                            className={
-                              selectedFilterObjects
-                                ? "flex flex-col md:flex-row justify-between"
-                                : "hidden"
-                            }
-                          >
-                            <div className="flex flex-col md:flex-row mt-8 md:mt-0 items-center">
-                              <button className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
-                                Išsaugoti filtrą
-                              </button>
-                            </div>
-                            <div className="flex flex-col md:flex-row items-center my-6">
-                              <img
-                                className="h-8 w-6 mr-2 hidden lg:inline-block"
-                                src={require("../assets/assets/doc.png")}
-                              ></img>
-                              <button
-                                onClick={handleExportWithComponent}
-                                className="flex justify-center md:mr-6 p-1 text-sm font-normal hover:text-gray-500"
-                              >
-                                Eksportuoti
-                              </button>
-                              <SearchButton />
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    ) : null}
-                    <div className="flex flex-col w-0 xl:w-1/5">
-                      {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
-                    </div>
-                  </div>
+                  <div className="flex flex-row w-full"></div>
 
                   {toPrint ? (
                     <PDFExport
@@ -148,13 +77,88 @@ function Objects() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <ObjectsList token={accessToken} />
+                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-8 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-8 grid-gap-6 justify-between font-normal text-black z-1">
+                        <div className="flex flex-row items-center col-span-2">
+                          <button
+                            onClick={sortedKeysSet}
+                            className="flex flex-row items-center"
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Komplektas
+                            </span>
+                            <img
+                              src={require("../../assets/assets/down.png")}
+                              className="h-2 w-4 ml-2"
+                            />
+                          </button>
+                        </div>
+                        <div className="flex flex-row items-center col-span-2">
+                          <button
+                            onClick={sortedKeysCrew}
+                            className="flex flex-row items-center "
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Ekipažas
+                            </span>
+                          </button>
+                        </div>
+                        <span className="flex flex-row items-center col-span-2"></span>
+                        <span className="flex flex-row items-center col-span-2"></span>
+                      </div>
+                      <div className="pl-4 flex-col w-full items-center">
+                        {sortedKeys.map((data) => (
+                          <KeysList
+                            key={data.id}
+                            id={data.id}
+                            set={data.set}
+                            crew={data.crew}
+                          />
+                        ))}
+                      </div>
                     </PDFExport>
                   ) : (
                     <>
-                      <ObjectsList token={accessToken} />
+                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-8 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-8 grid-gap-6 justify-between font-normal text-black z-1">
+                        <div className="flex flex-row items-center col-span-2">
+                          <button
+                            onClick={sortedKeysSet}
+                            className="flex flex-row items-center"
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Komplektas
+                            </span>
+                            <img
+                              src={require("../../assets/assets/down.png")}
+                              className="h-2 w-4 ml-2"
+                            />
+                          </button>
+                        </div>
+                        <div className="flex flex-row items-center col-span-2">
+                          <button
+                            onClick={sortedKeysCrew}
+                            className="flex flex-row items-center "
+                          >
+                            <span className="text-gray-300 text-sm">
+                              Ekipažas
+                            </span>
+                          </button>
+                        </div>
+                        <span className="flex flex-row items-center col-span-2"></span>
+                        <span className="flex flex-row items-center col-span-2"></span>
+                      </div>
+                      <div className="pl-4 flex-col w-full items-center">
+                        {sortedKeys.map((data) => (
+                          <KeysList
+                            key={data.id}
+                            id={data.id}
+                            set={data.set}
+                            crew={data.crew}
+                          />
+                        ))}
+                      </div>
                     </>
                   )}
+                  {/* <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav> */}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>
@@ -293,4 +297,4 @@ function Objects() {
   );
 }
 
-export default Objects;
+export default Keys;

@@ -5,24 +5,24 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { ThreeTabHeader } from "../components/headers/threeTab";
-import { ModemsList } from "../components/lists/modemsList";
+import { ThreeTabHeader } from "../../components/headers/threeTab";
+import { ModemsList } from "../../components/lists/modemsList";
 
-import { FiltersListModems } from "../components/filters/filterModemsList";
-import { OptionsListModems } from "../components/options/optionsModemsList";
+import { FiltersListModems } from "../../components/filters/filterModemsList";
+import { OptionsListModems } from "../../components/options/optionsModemsList";
 const {
   AddFilterListModems,
-} = require("../components/addFilter/addFilterModems");
-import AuthContext from "../context/authContext";
+} = require("../../components/addFilter/addFilterModems");
+import AuthContext from "../../context/authContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import GlobalContext from "../context/globalContext";
+import GlobalContext from "../../context/globalContext";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import { SearchButton } from "../components/buttons/searchButton";
+import MainSidebar from "../../components/sidebars/main";
+import { SearchButton } from "../../components/buttons/searchButton";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -68,12 +68,12 @@ function Modems() {
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
-                    src={require("../assets/assets/hamburger.png")}
+                    src={require("../../assets/assets/hamburger.png")}
                   />
                 </button>
                 <img
                   className="pt-6"
-                  src={require("../assets/assets/Line.png")}
+                  src={require("../../assets/assets/Line.png")}
                 ></img>
                 {filterListModems.map((filter) => {
                   if (filter.savedToMenu === true) {
@@ -121,7 +121,7 @@ function Modems() {
                             <div className="flex flex-col md:flex-row items-center my-6">
                               <img
                                 className="h-8 w-6 mr-2 hidden lg:inline-block"
-                                src={require("../assets/assets/doc.png")}
+                                src={require("../../assets/assets/doc.png")}
                               ></img>
                               <button
                                 onClick={handleExportWithComponent}

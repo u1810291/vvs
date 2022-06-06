@@ -1,23 +1,23 @@
 import React, { useState, useContext, useCallback, useEffect } from "react";
-import { Orders } from "../api/orders";
-import { KeyInternal } from "../components/lists/keyInternal";
-import { KeyHeader } from "../components/headers/key";
-import { KeyList } from "../components/lists/key";
-import { keyObjectList } from "../api/keyObjectList";
+import { Orders } from "../../api/orders";
+import { KeyInternal } from "../../components/lists/keyInternal";
+import { KeyHeader } from "../../components/headers/key";
+import { KeyList } from "../../components/lists/key";
+import { keyObjectList } from "../../api/keyObjectList";
 import { generate } from "shortid";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useParams } from "react-router-dom";
-import { Search } from "../components/input/search";
-import AuthContext from "../context/authContext";
-import GlobalContext from "../context/globalContext";
+import { Search } from "../../components/input/search";
+import AuthContext from "../../context/authContext";
+import GlobalContext from "../../context/globalContext";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { Spinner } from "react-activity";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import useUtils from "../hook/useUtils";
+import MainSidebar from "../../components/sidebars/main";
+import useUtils from "../../hook/useUtils";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -83,17 +83,17 @@ function Key() {
                 <div className="flex flex-row w-full justify-between h-full">
                   <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                     <button onClick={backFunc}>
-                      <img src={require("../assets/assets/left.png")}></img>
+                      <img src={require("../../assets/assets/left.png")}></img>
                     </button>
                     <img
                       className="pt-6"
-                      src={require("../assets/assets/Line.png")}
+                      src={require("../../assets/assets/Line.png")}
                     ></img>
                     <button className="flex flex-col items-center pt-6">
                       <img
                         onClick={handleOnOpen}
                         className="w-4 h-4 mx-16"
-                        src={require("../assets/assets/hamburger.png")}
+                        src={require("../../assets/assets/hamburger.png")}
                       />
                     </button>
                   </div>
@@ -234,7 +234,7 @@ function Key() {
                                           >
                                             <img
                                               className="h-6 w-6"
-                                              src={require("../assets/assets/close.png")}
+                                              src={require("../../assets/assets/close.png")}
                                             ></img>
                                           </button>
                                         </div>

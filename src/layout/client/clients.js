@@ -5,37 +5,36 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { KeysHeader } from "../components/headers/keys";
-import { KeysList } from "../components/lists/keysList";
+import { ClientsHeader } from "../../components/headers/clients";
+import { ClientList } from "../../components/lists/clientsList";
+import { FiltersListClients } from "../../components/filters/filterClientsList";
+import { OptionsListClients } from "../../components/options/optionsClientsList";
+const {
+  AddFilterListClients,
+} = require("../../components/addFilter/addFilterClients");
+import GlobalContext from "../../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import { keys } from "../api/keys";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import { sortToggle } from "../util/utils";
-import useSort from "../hook/useSort";
+import MainSidebar from "../../components/sidebars/main";
+import { SearchButton } from "../../components/buttons/searchButton";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Keys() {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
-  const handleOnOpen = useCallback(() => {
-    setIsOpen(true);
-  }, []);
-
-  usePreventScroll({ isDisabled: !isOpen });
+function ClientsList() {
+  const { expandFilterClients, setExpandFilterClients } =
+    useContext(GlobalContext);
+  const { selectedFilterClients, setSelectedFilterClients } =
+    useContext(GlobalContext);
+  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
-  const handleExportWithComponent = useCallback(async (event) => {
+  const handleExportWithComponent = useCallback(async () => {
     setToPrint(true);
     setTimeout(() => {
       pdfExportComponent.current.save();
@@ -44,11 +43,14 @@ function Keys() {
       setToPrint(false);
     }, 1000);
   }, []);
-
-  const { sortedKeysKeys, sortedKeysOrder, sortedKeysSet, sortedKeysCrew } =
-    useSort();
-
-  const sortedKeys = sortToggle(keys, sortedKeysKeys, sortedKeysOrder);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+  usePreventScroll({ isDisabled: !isOpen });
 
   return (
     <OverlayProvider>
@@ -56,19 +58,83 @@ function Keys() {
         <div className="flex w-screen flex-row justify-center h-screen">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20 text-gray-400">
                 <button className="flex flex-col items-center">
                   <img
                     onClick={handleOnOpen}
-                    className="w-4 h-4 mx-16"
-                    src={require("../assets/assets/hamburger.png")}
+                    className="w-4 h-4 mx-16 hover:fill-white"
+                    src={require("../../assets/assets/hamburger.png")}
                   />
                 </button>
+                <img
+                  className="pt-6"
+                  src={require("../../assets/assets/Line.png")}
+                ></img>
+                {filterListClients.map((filter) => {
+                  if (filter.savedToMenu === true) {
+                    return (
+                      <button
+                        key={filter.id}
+                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+                        onClick={() => setSelectedFilterClients(filter.id)}
+                        className={
+                          selectedFilterClients === filter.id
+                            ? "font-light text-md mt-6 text-white"
+                            : "font-light text-md mt-6 text-gray-400 hover:text-white"
+                        }
+                      >
+                        {filter.filterShortName}
+                      </button>
+                    );
+                  }
+                })}
               </div>
+
               <div className="flex flex-col min-h-full w-full justify-between">
-                <KeysHeader />
+                <ClientsHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
-                  <div className="flex flex-row w-full"></div>
+                  <div className="flex flex-row w-full">
+                    {expandFilterClients ? (
+                      <>
+                        <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">
+                          <AddFilterListClients />
+                        </div>
+                        <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
+                          <OptionsListClients />
+                          <FiltersListClients />
+                          <div
+                            className={
+                              selectedFilterClients
+                                ? "flex flex-col md:flex-row justify-between"
+                                : "hidden"
+                            }
+                          >
+                            <div className="flex flex-col md:flex-row mt-8 md:mt-0 items-center">
+                              <button className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
+                                Išsaugoti filtrą
+                              </button>
+                            </div>
+                            <div className="flex flex-col md:flex-row items-center my-6">
+                              <img
+                                className="h-8 w-6 mr-2 hidden lg:inline-block"
+                                src={require("../../assets/assets/doc.png")}
+                              ></img>
+                              <button
+                                onClick={handleExportWithComponent}
+                                className="flex justify-center md:mr-6 p-1 text-sm font-normal hover:text-gray-500"
+                              >
+                                Eksportuoti
+                              </button>
+                              <SearchButton />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
+                    <div className="flex flex-col w-0 xl:w-1/5">
+                      {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
+                    </div>
+                  </div>
 
                   {toPrint ? (
                     <PDFExport
@@ -77,88 +143,14 @@ function Keys() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-8 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-8 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysSet}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Komplektas
-                            </span>
-                            <img
-                              src={require("../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysCrew}
-                            className="flex flex-row items-center "
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Ekipažas
-                            </span>
-                          </button>
-                        </div>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedKeys.map((data) => (
-                          <KeysList
-                            key={data.id}
-                            id={data.id}
-                            set={data.set}
-                            crew={data.crew}
-                          />
-                        ))}
-                      </div>
+                      <ClientList />
                     </PDFExport>
                   ) : (
                     <>
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-8 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-8 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysSet}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Komplektas
-                            </span>
-                            <img
-                              src={require("../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysCrew}
-                            className="flex flex-row items-center "
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Ekipažas
-                            </span>
-                          </button>
-                        </div>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedKeys.map((data) => (
-                          <KeysList
-                            key={data.id}
-                            id={data.id}
-                            set={data.set}
-                            crew={data.crew}
-                          />
-                        ))}
-                      </div>
+                      <ClientList />
                     </>
                   )}
-                  {/* <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav> */}
+
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>
@@ -232,7 +224,6 @@ function Keys() {
                         </svg>
                         Previous
                       </a>
-
                       <div className="hidden md:-mt-px md:flex">
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
                           1
@@ -265,7 +256,6 @@ function Keys() {
                           999
                         </a>
                       </div>
-
                       <a className="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
                         Next
                         <svg
@@ -297,4 +287,4 @@ function Keys() {
   );
 }
 
-export default Keys;
+export default ClientsList;
