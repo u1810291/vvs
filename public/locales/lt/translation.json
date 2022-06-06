@@ -42,8 +42,11 @@
     "DontToGetAnswer": "Nenorėčiau gauti atsakymo",
     "gotAnswer": "Norėčiau gaut atsakymą",
     "securityContracts": "Apsaugos sutartis ar taisyklės",
-    "createTask": "Sukurti užduoti",
-    "allData": "Visi duomenys"
+    "createTask": "Sukurti užduoti"
+  },
+  "error": {
+    "timeSlotIsTaken": "Pradžios laikas negali būti didesnis negu pabaigos laikas",
+    "startTimeIsBiggerThanEndTime": "Norima laiko zona jau yra užimta, koreguokite nurodytus laiko tarpus"
   },
   "eurocash": {
     "accounts": "Paskyros",
@@ -122,6 +125,52 @@
     "secondPart": "Mūsų interneto svetainės lankytojų duomenis renkame laikydamiesi Lietuvos Respublikos asmens duomenų teisinės apsaugos įstatymo, Lietuvos Respublikos elektroninių ryšių įstatymo, Europos Sąjungos asmens duomenų apsaugos įstatymų, kitų susijusių teisės aktų bei kontroliuojančių institucijų nurodymų.",
     "thirdPart": "Naudodami slapukus renkame duomenis apie svetainės naudojimą. Slapukų tipai ir jų paskirtis yra pateikti lentelėje žemiau.",
     "fourthPart": "Surinktus duomenis apie Eurocash1 svetainės lankytojus atsakingai saugome nuo praradimo, neleistino naudojimo ir pakeitimų. Eurocash1 darbuotojai yra raštiškai įsipareigoję trečiosioms šalims neatskleisti ir neplatinti darbo vietoje gaunamos informacijos apie bendrovės klientus, įskaitant ir Eurocash1 svetainės lankytojus.",
-    "fifthPart": "Jums besilankant Eurocash1 interneto svetainėje, norime pateikti informaciją ir funkcijas, pritaikytas tik Jums. Tam reikalingi slapukai (angl. cookies). Tai nedideli informacijos elementai, išsaugomi Jūsų interneto naršyklėje. Jie padeda mums atpažinti Jus kaip ankstesnį Eurocash1 interneto svetainės lankytoją, išsaugoti Jūsų lankymosi svetainėje istoriją ir pagal tai pritaikyti turinį. Taip pat slapukai padeda užtikrinti sklandų svetainės veikimą, leidžia stebėti lankymosi Eurocash1 interneto svetainėje trukmę, dažnumą bei rinkti statistinę informaciją apie svetainės lankytojų skaičių. Analizuodami šiuos duomenis galime svetainę tobulinti, padaryti ją patogesnę Jums. Apsilankę Eurocash1 interneto svetainėje Jūs galite pasirinkti, ar norite naudoti slapukus. Jei nesutinkate, kad į Jūsų kompiuterį ar kitą įrenginį būtų įrašomi slapukai, bet kada galite atšaukti sutikimą juos naudoti pakeitę nustatymus ir ištrynę įrašytus slapukus."
+    "fifthPart": "Jums besilankant Eurocash1 interneto svetainėje, norime pateikti informaciją ir funkcijas, pritaikytas tik Jums. Tam reikalingi slapukai (angl. cookies). Tai nedideli informacijos elementai, išsaugomi Jūsų interneto naršyklėje. Jie padeda mums atpažinti Jus kaip ankstesnį Eurocash1 interneto svetainės lankytoją, išsaugoti Jūsų lankymosi svetainėje istoriją ir pagal tai pritaikyti turinį. Taip pat slapukai padeda užtikrinti sklandų svetainės veikimą, leidžia stebėti lankymosi Eurocash1 interneto svetainėje trukmę, dažnumą bei rinkti statistinę informaciją apie svetainės lankytojų skaičių. Analizuodami šiuos duomenis galime svetainę tobulinti, padaryti ją patogesnę Jums. Apsilankę Eurocash1 interneto svetainėje Jūs galite pasirinkti, ar norite naudoti slapukus. Jei nesutinkate, kad į Jūsų kompiuterį ar kitą įrenginį būtų įrašomi slapukai, bet kada galite atšaukti sutikimą juos naudoti pakeitę nustatymus ir ištrynę įrašytus slapukus.",
+    "dislocationZoneSchedule": "Dislokacijos zonų tvarkaraštis",
+    "addZone": "Pridėti zoną",
+    "allData": "Visi duomenys",
+    "crew": "Ekipažai",
+    "drivers": "Vairuotojai",
+    "dislocationZones": "Dislokacijos zonos",
+    "createCrew": "Sukurti ekipažą",
+    "name": "Pavadinimas",
+    "abbreviation": "Trumpinys",
+    "dislocationZone": "Dislokacijos zona",
+    "status": "Būsena",
+    "assignAutomatically": "Automatiškai priskirti",
+    "cancel": "Atšaukti",
+    "save": "Išsaugoti",
+    "console": "Pultas",
+    "tasks": "Užduotys",
+    "permissions": "Leidimai",
+    "breach": "Pažeidimai",
+    "violations": "Pažeidimas",
+    "date": "Data",
+    "dateFrom": "Data nuo",
+    "timeOutOfZone": "Laikas už zonos ribų",
+    "received": "Gauta",
+    "coffee": "Kavos",
+    "new": "Naujas",
+    "submit": "Leisti",
+    "requestReceived": "Gautas prašymas",
+    "clear": "Aišku",
+    "undo": "Anuliuoti",
+    "addDislocationArea": "Pridėti dislokacijos zoną",
+    "delete": "Ištrinti",
+    "save": "Išsaugoti",
+    "day": "Diena",
+    "from": "Nuo",
+    "to": "Iki",
+    "hours": "Valandos",
+    "minutes": "Minutės",
+    "weekdays": {
+      "monday": "Pirmadienis",
+      "tuesday": "Antradienis",
+      "wednesday": "Trečiadienis",
+      "thursday": "Ketvirtadienis",
+      "friday": "Penktadienis",
+      "saturday": "Šeštadienis",
+      "sunday": "Sekmadienis"
+    }
   }
 }
