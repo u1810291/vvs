@@ -56,8 +56,9 @@ function Object() {
   const [navId, setNavId] = useState("");
   const [monasId, setMonasId] = useState("");
   const [imagePath, setImagePath] = useState("");
-  const [imageName, setImageName] = useState("");
+  const [imageName, setImageName] = useState([]);
   const [imagesName, setImagesName] = useState("");
+  const [obj, setObj] = useState("");
 
   const deleteVariables = {
       imagepath: photoId
@@ -104,47 +105,59 @@ function Object() {
     fetchData: deleteImageFetch,
   } = useFetch(deleteImageURI, deleteVariables, accessToken);
 
-  console.log('imageResponse ', imageResponse, 'databaseResponse ', databaseResponse, 'deleteImageResponse ', deleteImageResponse);
-  console.log('data ', data);
+  console.log('uploading... ', imageResponse);
+  console.log('rerendering... ', data);
 
   useEffect(() => {
     let hasura;
     let monas;
     let image;
     if (data.status === "success") {
-      monas = data.data.monas_related;
-      hasura = data.data.objects;
+      monas = data.data.objects;
+      hasura = data.data.monas_related;
       image = data.data.monas_images_related;
-      if (image) {
-        const result = image.map((item) => {
-          return item.imagepath
-      })
-      const name = image.map((item) => {
-        return item.imagename
-    })
-      setPictures(result);
-      setImagesName(name);
-    }
-      // console.log('monas ', monas, 'hasura ', hasura, 'image ', image);
-      const mergeDB = monas.map((monas) => ({
-        ...monas,
-        ...hasura.find((hasura) => String(hasura.Id) === String(monas.Id)),
+      const monasHasuraMerge = hasura.map((m) => ({
+        ...m,
+        ...monas.find((hasura) => String(hasura.Id) === String(m.Id)),
       }));
-      const mergeWithImages = mergeDB.map((monas) => ({
-        ...monas,
-        ...image.find((hasura) => String(hasura.Id) === String(monas.Id)),
+      const monasImageMerge = image.map((m) => ({
+        ...m,
+        ...monas.find((hasura) => String(hasura.Id) === String(m.Id)),
       }));
-      const obj = mergeWithImages.find((obj) => {
-        return obj.Id === id;
+
+      const obj = monasHasuraMerge.find((obj) => {
+        return String(obj.Id) === String(id);
       });
-      console.log('obj ', obj)
+
+      const images = monasImageMerge.filter(obj => {
+        return String(obj.Id) === String(id)
+      });
+
+      setObj(obj);
       setModem(obj?.modem);
       setNavId(obj?.navid);
       setMonasId(obj?.monasdid);
       setObjName(obj?.name);
       setObjectAddress(obj?.address);
-      setObjectCity(obj?.city)
-      objectDescriptionFunc(obj?.notes)
+      setObjectCity(obj?.city);
+      objectDescriptionFunc(obj?.notes);
+      if (images.length > 1) {
+      const path = images?.map(e => {
+        return e.imagepath
+      })
+      const name = images?.map(e => {
+        return e.imagename
+      })
+      setPictures(path);
+      setImagesName(name);
+      } else if (images.length < 1){
+        setPictures([]);
+        setImagesName([]);
+      } else {
+        setPictures([images.imagepath]);
+        setImagesName([images.imagename]);
+      }
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.data]);
@@ -242,14 +255,7 @@ function Object() {
       // Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
     }
     fetchData();
-    // setTimeout(() => {
-    // fetchData();
-    // }, 3000);
   }
-
-  console.log('blob image ', blobImage);
-  console.log("pictures ", pictures);
-  console.log("image ", imagesName);
 
   function readAsDataURL(file) {
     return new Promise((resolve, reject) => {
@@ -292,11 +298,14 @@ function Object() {
   };
 
   const removeImage = useCallback(async (url) => {
+    console.log('url ', url);
     setPhotoId(url);
     if (photoId) {
     deleteImageFetch();
     }
   }, [deleteImageFetch, photoId]);
+
+  // console.log('deleteImageResponse ', deleteImageResponse); need to rerender
 
   const handleClick = useCallback(() => {
     hiddenFileInput.current.click();
@@ -726,7 +735,7 @@ function Object() {
                                       Objekto nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.obdindx}
+                                      {obj?.obdindx}
                                     </p>
                                   </div>
                                 </div>
@@ -736,7 +745,7 @@ function Object() {
                                       Sutarties nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.contract}
+                                      {obj?.contract}
                                     </p>
                                   </div>
                                 </div>
@@ -746,7 +755,7 @@ function Object() {
                                       Navision ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.navid}
+                                      {obj?.navid}
                                     </p>
                                   </div>
                                 </div>
@@ -756,7 +765,7 @@ function Object() {
                                       Monas MS ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.monasid}
+                                      {obj?.monasid}
                                     </p>
                                   </div>
                                 </div>
