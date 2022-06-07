@@ -1,15 +1,8 @@
-export const deleteImageURI = `mutation MyMutation ($deleteURI: [monas_images_related_insert_input!]!) {
-  delete_monas_images_related(where: {imagepath: {_eq: $deleteURI}})
+export const deleteImageURI = `mutation MyMutation ($imagepath: String!) {
+  delete_monas_images_related(where: {imagepath: {_eq: $imagepath}}) {
+    affected_rows
+  }
 }`;
-
-// export const deleteImageURI = `mutation MyMutation ($deleteURI: [monas_images_related_insert_input!]!) {
-//   insert_monas_images_related(objects: $deleteURI, on_conflict: { constraint: images_pkey ,update_columns: [Id, imagename, imagepath, id] }) {
-//     returning {
-//       id
-//     }
-//   }
-// }
-// `;
 
 export const uploadImageURI = `mutation MyMutation ($updateURI: [monas_images_related_insert_input!]!) {
   insert_monas_images_related(objects: $updateURI) {

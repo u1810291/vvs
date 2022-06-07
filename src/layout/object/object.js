@@ -61,16 +61,13 @@ function Object() {
   const [imagesName, setImagesName] = useState("");
 
   const deleteVariables = {
-    deleteURI: {
-      // Id: id,
       imagepath: photoId
-    }
   };
 
   const uploadVariables = {
     namespace: 'vvs',
-    path: `object/${blobImage[0]?.name}`,
-    base64: blobImage[0]?.data
+    path: `object/${imageName}`,
+    base64: blobImage
   };
 
   const uploadURIVariables = {
@@ -169,21 +166,6 @@ function Object() {
       setPictures(base64images)
     }
   }, [databaseResponse]);
-  
-  // console.log('pictures', pictures)
-  // useEffect(() => {
-  //     console.log('data ', data);
-  //   // setQueryObject(data);
-  //   setResponsiblePersons(data?.data?.corresppersons);
-  //   setObjectImages(data?.data?.objectimages);
-  //   setObjectPageData(data?.data?.objects);
-  //   console.log(data?.data?.objects)
-  //   // console.log(objectPageData, objectImages, responsiblePersons);
-  //   // console.log(queryObject.data.corresppersons[0]);
-  //   // console.log(queryObject.data.objectimages)
-  //   // console.log(queryObject.data.objects[0])
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [data]);
 
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -249,15 +231,26 @@ function Object() {
           return readAsDataURL(f);
         })
       );
-      setBlobImage(image);
-      setImageName(image[0].name)
-      const fileArray = Array.from(e.target.files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setObjectPageImages((prev) => prev.concat(fileArray));
-      Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
+      setBlobImage(image[0].data);
+      setImageName(image[0].name);
+      // if (blobImage) {
+      //   fetchData();
+      // }
+      // const fileArray = Array.from(e.target.files).map((file) =>
+      //   URL.createObjectURL(file)
+      // );
+      // setObjectPageImages((prev) => prev.concat(fileArray));
+      // Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
     }
+    fetchData();
+    // setTimeout(() => {
+    // fetchData();
+    // }, 3000);
   }
+
+  console.log('blob image ', blobImage);
+  console.log("pictures ", pictures);
+  console.log("image ", imagesName);
 
   function readAsDataURL(file) {
     return new Promise((resolve, reject) => {
@@ -304,7 +297,6 @@ function Object() {
     if (photoId) {
     deleteImageFetch();
     }
-    // setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
   }, [deleteImageFetch, photoId]);
 
   const handleClick = useCallback(() => {
@@ -514,7 +506,7 @@ function Object() {
                                 </div>
                               ) : null}
                               {renderPhotos(pictures, imagesName)}
-                              {renderPhotos(objectPageImages, imagesName)}
+                              {/* {renderPhotos(objectPageImages, imagesName)} */}
                             </div>
 
                             <div className="w-80 mt-4 flex justify-end">
