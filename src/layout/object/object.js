@@ -33,7 +33,6 @@ import { useFetch } from "../../hook/useFetch";
 function Object() {
   const { id } = useParams();
   const { accessToken, user } = useContext(AuthContext);
-  const { objectName, setObjectName } = useContext(GlobalContext);
   const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
   const hiddenFileInput = useRef(null);
   const [objDesc, setObjDesc] = useState("");
@@ -139,13 +138,13 @@ function Object() {
         return obj.Id === id;
       });
       console.log('obj ', obj)
-      setModem(obj.modem);
-      setNavId(obj.navid);
-      setMonasId(obj.monasdid);
-      setObjName(obj.name);
-      setObjectAddress(obj.address);
-      setObjectCity(obj.city)
-      objectDescriptionFunc(obj.notes)
+      setModem(obj?.modem);
+      setNavId(obj?.navid);
+      setMonasId(obj?.monasdid);
+      setObjName(obj?.name);
+      setObjectAddress(obj?.address);
+      setObjectCity(obj?.city)
+      objectDescriptionFunc(obj?.notes)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.data]);
@@ -332,7 +331,7 @@ function Object() {
                     </button>
                   </div>
                   <div className="flex flex-col min-h-full w-full justify-between">
-                    <ObjectHeader fetch={fetchData} />
+                    <ObjectHeader objName={objName} fetch={fetchData} />
                     <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                       <div className="flex pl-4 flex-row justify-between">
                         <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
