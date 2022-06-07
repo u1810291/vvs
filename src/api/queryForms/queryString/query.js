@@ -19,9 +19,10 @@ export const objectPage = `query MyQuery {
     phone
     name
   }
-  objectimages {
+  monas_images_related {
     Id
-    image
+    id
+    imagepath
     imagename
   }
   monas_related {
@@ -48,12 +49,6 @@ export const objectPage = `query MyQuery {
   events {
     receivedtime
     status
-  }
-  images {
-    user
-    imagename
-    imagepath
-    Id
   }
 }`;
 

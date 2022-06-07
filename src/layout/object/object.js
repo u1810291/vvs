@@ -25,22 +25,19 @@ import {
   objectPage,
   imagesUpdate,
 } from "../../api/queryForms/queryString/query";
-import {
-  objectPageImagesAPImutation,
-  objectPageImagesMutation,
-  objectPageQueryCorrespondPersons,
-  imagesUpdateMutation,
-} from "../../api/queryForms/queryString/mutation";
+import { imageUpload, uploadImageURI, deleteImageURI } from "../../api/queryForms/queryString/mutation";
 import { objectPageImagesUpdate } from "../../api/queryForms/queryString/update";
 import useReactQuery from "../../hook/useQuery";
 import { useFetch } from "../../hook/useFetch";
 
 function Object() {
   const { id } = useParams();
-  const hiddenFileInput = useRef(null);
+  const { accessToken, user } = useContext(AuthContext);
   const { objectName, setObjectName } = useContext(GlobalContext);
   const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
-  const { accessToken, user } = useContext(AuthContext);
+  const hiddenFileInput = useRef(null);
+  const [objDesc, setObjDesc] = useState("");
+  const [objName, setObjName] = useState("");
   const [objectAddress, setObjectAddress] = useState("");
   const [objectCity, setObjectCity] = useState("");
   const [objectDescription, setObjectDescription] = useState("");
@@ -59,77 +56,121 @@ function Object() {
   const [photoId, setPhotoId] = useState("");
   const [navId, setNavId] = useState("");
   const [monasId, setMonasId] = useState("");
+  const [imagePath, setImagePath] = useState("");
+  const [imageName, setImageName] = useState("");
+  const [imagesName, setImagesName] = useState("");
 
-  // remember to swap that with user id
-  const imageInsertVariables = {
-    imagepath: blobImage[0]?.data,
-    id: blobImage[0]?.name,
-    user: id,
-    imagename: blobImage[0]?.name,
+  const deleteVariables = {
+    deleteURI: {
+      // Id: id,
+      imagepath: photoId
+    }
   };
 
-  const imageUpdateVariables = {
-    imagepath: photoId,
-    imagename: "test",
+  const uploadVariables = {
+    namespace: 'vvs',
+    path: `object/${blobImage[0]?.name}`,
+    base64: blobImage[0]?.data
+  };
+
+  const uploadURIVariables = {
+    updateURI: {
+      Id: id,
+      imagepath: imagePath,
+      imagename: pictures
+    }
   };
 
   const data = useReactQuery(
-    // fetchImages
     objectPage,
     {},
     accessToken
   );
 
   const {
-    data: dataData,
-    error: dataError,
-    loading: dataLoading,
-    fetchImages: dataFetchImages,
-  } = useFetch(objectPageImagesMutation, imageInsertVariables, accessToken); // imagesUpdate
+    data: imageResponse,
+    error: imageResponseError,
+    loading: imageResponseLoading,
+    fetchData,
+  } = useFetch(imageUpload, uploadVariables, accessToken);
 
-  const { data: imageData } = useReactQuery(
-    objectPageImagesUpdate,
-    imageUpdateVariables,
-    accessToken
-  );
+  const {
+    data: databaseResponse,
+    error: databaseResponseError,
+    loading: databaseResponseLoading,
+    fetchData: databaseFetch,
+  } = useFetch(uploadImageURI, uploadURIVariables, accessToken);
+
+  const {
+    data: deleteImageResponse,
+    error: deleteImageResponseError,
+    loading: deleteImageResponseLoading,
+    fetchData: deleteImageFetch,
+  } = useFetch(deleteImageURI, deleteVariables, accessToken);
+
+  console.log('imageResponse ', imageResponse, 'databaseResponse ', databaseResponse, 'deleteImageResponse ', deleteImageResponse);
+  console.log('data ', data);
 
   useEffect(() => {
     let hasura;
     let monas;
+    let image;
     if (data.status === "success") {
-      hasura = data.data.monas_related;
-      monas = data.data.objects;
+      monas = data.data.monas_related;
+      hasura = data.data.objects;
+      image = data.data.monas_images_related;
+      if (image) {
+        const result = image.map((item) => {
+          return item.imagepath
+      })
+      const name = image.map((item) => {
+        return item.imagename
+    })
+      setPictures(result);
+      setImagesName(name);
+    }
+      // console.log('monas ', monas, 'hasura ', hasura, 'image ', image);
       const mergeDB = monas.map((monas) => ({
         ...monas,
         ...hasura.find((hasura) => String(hasura.Id) === String(monas.Id)),
       }));
-      const object = mergeDB.find((obj) => {
-        return obj.Id === Number(id);
+      const mergeWithImages = mergeDB.map((monas) => ({
+        ...monas,
+        ...image.find((hasura) => String(hasura.Id) === String(monas.Id)),
+      }));
+      const obj = mergeWithImages.find((obj) => {
+        return obj.Id === id;
       });
-      setObjectPageData(object);
+      console.log('obj ', obj)
+      setModem(obj.modem);
+      setNavId(obj.navid);
+      setMonasId(obj.monasdid);
+      setObjName(obj.name);
+      setObjectAddress(obj.address);
+      setObjectCity(obj.city)
+      objectDescriptionFunc(obj.notes)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.data]);
 
-  // correct database pathes for images
   useEffect(() => {
-    if (data.status === "success") {
-      const base64images = data?.data?.images;
-      let arr = base64images.map((b) => {
-        if (b.imagename !== null) {
-          return b.imagepath;
-        }
-      });
-      setPictures(arr);
+    if (imageResponse) {
+      const base64images = imageResponse?.data?.storeFile?.uri;
+      setImagePath(base64images);
+      if (base64images) {
+      databaseFetch();
+      }
     }
-  }, [data.status]);
+  }, [imageResponse]);
 
   useEffect(() => {
-    setModem(objectPageData.modem);
-    setNavId(objectPageData.navid);
-    setMonasId(objectPageData.monasdid);
-  }, [data.data]);
-
+    if (databaseResponse) {
+      const base64images = imageResponse?.image;
+      setPictures(base64images)
+    }
+  }, [databaseResponse]);
+  
+  // console.log('pictures', pictures)
   // useEffect(() => {
   //     console.log('data ', data);
   //   // setQueryObject(data);
@@ -160,9 +201,9 @@ function Object() {
 
   const objectNameFunc = useCallback(
     async (e) => {
-      setObjectName(e.target.value);
+      setObjName(e.target.value);
     },
-    [setObjectName]
+    []
   );
 
   const objectAddressFunc = useCallback(async (e) => {
@@ -209,6 +250,7 @@ function Object() {
         })
       );
       setBlobImage(image);
+      setImageName(image[0].name)
       const fileArray = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
       );
@@ -216,12 +258,6 @@ function Object() {
       Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
     }
   }
-
-  useEffect(() => {
-    if (blobImage) {
-      dataFetchImages();
-    }
-  }, [blobImage]);
 
   function readAsDataURL(file) {
     return new Promise((resolve, reject) => {
@@ -238,7 +274,7 @@ function Object() {
     });
   }
 
-  const renderPhotos = (source) => {
+  const renderPhotos = (source, name) => {
     if (source) {
       return source.map((photo, index) => {
         return (
@@ -254,7 +290,7 @@ function Object() {
             </div>
             <a>
               <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
-                <img className="flex bg-cover w-full h-full" src={photo}></img>
+                <img className="flex bg-cover w-full h-full" src={`http://ecfs.swarm.testavimui.eu${photo}`} ></img>
               </div>
             </a>
           </div>
@@ -263,11 +299,13 @@ function Object() {
     }
   };
 
-  const removeImage = useCallback(async (id) => {
-    setPhotoId(id);
+  const removeImage = useCallback(async (url) => {
+    setPhotoId(url);
+    if (photoId) {
+    deleteImageFetch();
+    }
     // setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
-    // updateFetchImages();
-  }, []);
+  }, [deleteImageFetch, photoId]);
 
   const handleClick = useCallback(() => {
     hiddenFileInput.current.click();
@@ -302,7 +340,7 @@ function Object() {
                     </button>
                   </div>
                   <div className="flex flex-col min-h-full w-full justify-between">
-                    <ObjectHeader fetch={dataFetchImages} />
+                    <ObjectHeader fetch={fetchData} />
                     <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                       <div className="flex pl-4 flex-row justify-between">
                         <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
@@ -324,7 +362,7 @@ function Object() {
                                       name="name"
                                       placeholder=""
                                       required
-                                      value={data?.data?.objects[0].name} // objectName
+                                      value={objName}
                                       onChange={objectNameFunc}
                                       className="flex h-8 w-96 border placeholder-gray-400 text-black pl-2 focus:outline-none sm:text-sm"
                                     />
@@ -346,7 +384,7 @@ function Object() {
                                       placeholder=""
                                       type="address"
                                       required
-                                      value={data?.data?.objects[0].address} // objectAddress
+                                      value={objectAddress}
                                       onChange={objectAddressFunc}
                                       className="flex h-8 w-72 border placeholder-gray-400 text-black pl-2 focus:outline-none sm:text-sm"
                                     />
@@ -362,7 +400,7 @@ function Object() {
                                       id="city"
                                       name="city"
                                       placeholder=""
-                                      value={data?.data?.objects[0].city} // objectCity
+                                      value={objectCity}
                                       onChange={objectCityFunc}
                                       type="city"
                                       className="flex h-8 w-full border focus:outline-none pl-2 sm:text-sm"
@@ -383,7 +421,7 @@ function Object() {
                                   placeholder=""
                                   aria-describedby="answer"
                                   rows={4}
-                                  value={data?.data?.objects[0].notes} // objectDescription
+                                  value={objectDescription}
                                   onChange={objectDescriptionFunc}
                                   className="text-sm h-full w-full border pl-2 focus:outline-none"
                                 />
@@ -475,8 +513,8 @@ function Object() {
                                   </a>
                                 </div>
                               ) : null}
-                              {renderPhotos(pictures)}
-                              {renderPhotos(objectPageImages)}
+                              {renderPhotos(pictures, imagesName)}
+                              {renderPhotos(objectPageImages, imagesName)}
                             </div>
 
                             <div className="w-80 mt-4 flex justify-end">

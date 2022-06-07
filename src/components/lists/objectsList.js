@@ -14,11 +14,12 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
     const [orders, setOrders] = useState("");
 
     const data = useReactQuery(objectPage, {}, token);
+    console.log(data);
     useEffect(() => {
       let hasura;
       let monas;
       if (data.status === "success") {
-      hasura = data.data.monas_related;
+      hasura = data.data?.monas_related;
       monas = data.data.objects;
       const mergeDB = monas.map((monas) => ({
         ...monas, ...hasura.find(hasura => String(hasura.Id) === String(monas.Id))
@@ -60,7 +61,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                       onClick={sortedObjectsNames}
                       className="flex flex-row items-center"
                     >
-                      <span className="text-gray-300 text-sm">
+                      <span className="text-gray-300 text-sm hover:text-gray-400">
                         Vardas Pavardė
                       </span>
                       <img
@@ -75,7 +76,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsCity}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Miestas</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Miestas</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Adresas") ? (
@@ -83,7 +84,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsAddress}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Adresas</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Adresas</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Objekto nr.") ? (
@@ -91,7 +92,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsObject}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Objekto nr.</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Objekto nr.</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Sutarties nr.") ? (
@@ -99,7 +100,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsContract}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Sutarties nr.</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Sutarties nr.</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Siusti ekipaža") ? (
@@ -107,7 +108,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsSentCrew}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">
                       Siusti ekipažą
                     </span>
                   </button>
