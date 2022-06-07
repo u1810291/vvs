@@ -43,6 +43,7 @@ export const objectPage = `query MyQuery {
     isAssignedAutomatically
     id
     phone
+    driver
   }
   events {
     receivedtime

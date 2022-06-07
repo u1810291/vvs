@@ -61,6 +61,8 @@ const CreateCrew = () => {
   };
 
   const [crew, setCrew] = useState("");
+  const [status, setStatus] = useState("");
+  const [driver, setDriver] = useState("");
 
   const data = useReactQuery(objectPage, {}, accessToken);
   useEffect(() => {
@@ -68,7 +70,7 @@ const CreateCrew = () => {
     // let monas;
     if (data.data) {
       hasura = data?.data?.monas_crew_related;
-
+      // make custom logic to assign dispatch dislocations or/and events or merge and match app driver device number
       setCrew({ result: hasura });
     }
   }, [data.data]);
@@ -79,8 +81,9 @@ const CreateCrew = () => {
       const data = obj.find((x) => x.id === id);
       setCrewName(data.name);
       setCrewPhoneNumber(data.phone);
-      // setDriverFullName(data?.fullName);
-      // setDriverName(data?.firstName);
+      setCrewShortHand(data.abbreviation);
+      setStatus(data.status);
+      setDriver(data.driver);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [crew]);
@@ -148,7 +151,7 @@ const CreateCrew = () => {
                 </button>
               </div>
               <div className="flex flex-col min-h-full w-[calc(100%-80px)]">
-                <CreateCrewHeader />
+                <CreateCrewHeader crew={status} />
                 <section className={"ml-6 flex-auto flex"}>
                   <div className={"w-full flex mt-4"}>
                     <div className={"flex flex-col w-4/5"}>
@@ -233,6 +236,7 @@ const CreateCrew = () => {
                         inTask={true}
                         askForBreak={false}
                         connection={"Prarastas rišys"}
+                        driver={driver}
                       />
                       <GoogleMap
                         mapContainerStyle={containerStyle}
