@@ -193,7 +193,7 @@ function Client() {
                       className="pt-6"
                       src={require("../../assets/assets/Line.png")}
                     ></img>
-                    <button className="flex flex-col items-center pt-6">
+                    <button className="flex flex-col py-2 items-center pt-6">
                       <img
                         onClick={handleOnOpen}
                         className="w-4 h-4 mx-16"

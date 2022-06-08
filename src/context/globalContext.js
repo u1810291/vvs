@@ -41,10 +41,11 @@ export const GlobalProvider = ({ children }) => {
   const [expandFilterClients, setExpandFilterClients] = useState(true);
   const [expandFilterModems, setExpandFilterModems] = useState(true);
   const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
-  const [selectedFilter, setSelectedFilter] = useState(null);
   const [apiData, setApiData] = useState(""); // not used
   const [globalToken, setGlobalToken] = useState("empty");
   const [objectPageImages, setObjectPageImages] = useState([]);
+
+  const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -76,6 +77,7 @@ export const GlobalProvider = ({ children }) => {
       ]
     },
   ]);
+
   const [selectedFilterDrivers, setSelectedFilterDrivers] = useState(null);
   const [filterListDrivers, setFilterListDrivers] = useState([
     {

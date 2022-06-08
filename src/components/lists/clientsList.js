@@ -12,10 +12,8 @@ import { getAllUsers } from "../../api/queryForms/variables/users";
 export const ClientList = () => {
   const { accessToken } = useContext(AuthContext);
   const [customers, setCustomers] = useState("");
-  const [crew, setCrew] = useState("");
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } =
-    useContext(GlobalContext);
+  const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
 
   const { data, error, loading } = useReactQuery(
     getUsers,
@@ -23,23 +21,23 @@ export const ClientList = () => {
     accessToken
   );
 
-
   useEffect(() => {
-    if (data) {
+    if (data?.users) {
       const allUsers = data?.users?.users;
+      console.log(allUsers)
       const searchRole = (name, arr) =>
-        arr.filter(({ registrations }) => {
+        arr?.filter(({ registrations }) => {
           if (registrations) {
-          const reg = registrations.find((role) => role.roles[0] === 'customer')
+          const reg = registrations?.find((role) => role.roles[0] === 'customer')
           return reg
           }
         }
         );
       const searchResult = searchRole("customer", allUsers);
       let obj = { users: searchResult };
-      setCrew(obj);
+      setCustomers(obj);
     }
-  }, [data]);
+  }, [data.data]);
 
   useEffect(() => {
     if (error) {
@@ -58,7 +56,7 @@ export const ClientList = () => {
   } = useSort();
 
   const sortedClients = sortToggle(
-    crew?.users,
+    customers?.users,
     sortedClientsKeys,
     sortedClientsOrder
   );
@@ -71,7 +69,7 @@ export const ClientList = () => {
         </div>
       ) : (
         <>
-          {filterListClients.map((filter, index) => {
+          {filterListClients?.map((filter, index) => {
             return (
               <div key={filter.id}>
                 {selectedFilterClients === filter.id ? (
@@ -129,9 +127,9 @@ export const ClientList = () => {
           })}
 
           <div className="pl-4 flex-col w-full items-center">
-            {sortedClients.map((data) => (
+            {sortedClients?.map((data) => (
               <div className="w-full" key={data.id} >
-                {filterListClients.map((filter, index) => {
+                {filterListClients?.map((filter, index) => {
                   return (
                     <div key={filter.id}>
                       {selectedFilterClients === filter.id ? (

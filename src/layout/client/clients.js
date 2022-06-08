@@ -59,7 +59,7 @@ function ClientsList() {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20 text-gray-400">
-                <button className="flex flex-col items-center">
+                <button className="flex flex-col items-center py-2">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16 hover:fill-white"

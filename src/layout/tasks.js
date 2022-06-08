@@ -59,7 +59,7 @@ function Tasks() {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center text-gray-400">
+                <button className="flex flex-col py-2 items-center text-gray-400">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
@@ -149,8 +149,8 @@ function Tasks() {
                         </div>
                       </>
                     ) : null}
-                    <div className="flex flex-col w-0 xl:w-1/5">
-                      {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
+                    <div className="flex flex-col w-0 xl:w-1/5 border-red-600 border-2">
+                      <p>{JSON.stringify(filterList, null, 2)}</p>
                     </div>
                   </div>
                   {toPrint ? (

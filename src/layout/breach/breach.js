@@ -28,7 +28,7 @@ function Breach() {
             <div className="flex flex-row w-full justify-between h-full">
               {/* TODO: from 30 to 38 line move to separate component "Sidebar" */}
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center text-gray-400">
+                <button className="flex flex-col items-center py-2 text-gray-400">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"

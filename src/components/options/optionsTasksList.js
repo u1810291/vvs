@@ -61,7 +61,8 @@ export const OptionsList = (props) => {
                       {startAndEndDate !==
                       "undefined-NaN-undefined - undefined-NaN-undefined" ? (
                         <p className="text-gray-400 self-center truncate text-xs">
-                          {startAndEndDate}
+                          {/* {startAndEndDate} */}
+                          {filter.date}
                         </p>
                       ) : (
                         <p className="text-gray-400 self-center truncate text-xs">-</p>
