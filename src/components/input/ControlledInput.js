@@ -37,13 +37,13 @@ const ControlledInput = ({
   }, [value]);
 
   return (
-    <div className={`mr-4 ${twBody}`}>
-      <p className={`text-gray-800 mb-2 ${twTitle}`}>
+    <div className={`flex flex-col mr-4 ${twBody}`}>
+      <label className={`text-gray-800 mb-2 ${twTitle}`}>
         {title}
         {isRequired && <span className={`text-red-500 ${twRequired}`}> * </span>}
-      </p>
+      </label>
       <input
-        className={`focus:outline-none border border border-gray-300 p-1 rounded-md w-full ${twInput}`}
+        className={`focus:outline-none border border-gray-300 p-1 rounded-sm w-full ${twInput}`}
         value={localValue}
         onChange={onChange}
         placeholder={placeholder}
