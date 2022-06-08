@@ -14,15 +14,15 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
     const [orders, setOrders] = useState("");
 
     const data = useReactQuery(objectPage, {}, token);
-    console.log(data);
+
     useEffect(() => {
       let hasura;
       let monas;
-      if (data.status === "success") {
-      hasura = data.data?.monas_related;
-      monas = data.data.objects;
-      const mergeDB = monas.map((monas) => ({
-        ...monas, ...hasura.find(hasura => String(hasura.Id) === String(monas.Id))
+      if (data === undefined) { const sorry = [] } else {
+      hasura = data?.data?.monas_related;
+      monas = data?.data?.objects;
+      const mergeDB = monas?.map((monas) => ({
+        ...monas, ...hasura?.find(hasura => String(hasura.Id) === String(monas.Id))
       }))
       setOrders({result:mergeDB});
       }
@@ -40,10 +40,8 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
     sortedObjectsContract,
   } = useSort();
 
-  console.log(orders);
-
   const sortedObjects = sortToggle(
-    orders.result,
+    orders?.result,
     sortedObjectsKeys,
     sortedObjectsOrder
   );
@@ -122,7 +120,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
       <div className="pl-4 flex-col w-full items-center">
         {sortedObjects?.map((data) => (
           <div className="w-full" key={data.Id} >
-            {filterListObjects.map((filter, index) => {
+            {filterListObjects?.map((filter, index) => {
               return (
                 <div key={filter.id}>
                   {selectedFilterObjects === filter.id ? (

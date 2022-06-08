@@ -22,9 +22,8 @@ export const ClientList = () => {
   );
 
   useEffect(() => {
-    if (data?.users) {
+    if (data === undefined) { const sorry = [] } else {
       const allUsers = data?.users?.users;
-      console.log(allUsers)
       const searchRole = (name, arr) =>
         arr?.filter(({ registrations }) => {
           if (registrations) {
@@ -37,7 +36,7 @@ export const ClientList = () => {
       let obj = { users: searchResult };
       setCustomers(obj);
     }
-  }, [data.data]);
+  }, [data]);
 
   useEffect(() => {
     if (error) {
@@ -63,7 +62,7 @@ export const ClientList = () => {
 
   return (
     <>
-      {!sortedClients ? (
+      {data === undefined ? (
         <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
           <Spinner color="dark-blue" size={40} />
         </div>

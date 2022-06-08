@@ -66,7 +66,7 @@ function Breaches() {
         <div className="flex w-screen flex-row justify-center min-h-screen sm:h-screen relative overflow-hidden">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+              <div className="flex flex-col bg-slate-600 pt-2 items-center w-20">
                 <button className="flex flex-col items-center py-2 text-gray-400">
                   <img
                     onClick={handleOnOpen}
