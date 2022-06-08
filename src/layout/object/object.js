@@ -564,7 +564,7 @@ function Object() {
                                     pattern="[0-9]*"
                                     value={from}
                                     onChange={fromFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex h-8 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
 
@@ -582,7 +582,7 @@ function Object() {
                                     pattern="[0-9]*"
                                     value={to}
                                     onChange={toFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex h-8 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
 
@@ -600,7 +600,7 @@ function Object() {
                                     pattern="[0-9]*"
                                     value={time}
                                     onChange={timeFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex h-8 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
                               </div>
@@ -609,7 +609,7 @@ function Object() {
                                   id="send-crew"
                                   name="send-crew"
                                   type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                                  className="ml-8 h-8 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                                 />
                                 <p className="ml-4 self-start text-sm truncate my-2">
                                   Skambinti po apžiuros
@@ -620,7 +620,7 @@ function Object() {
                                   id="send-crew"
                                   name="send-crew"
                                   type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                                  className="ml-8 h-8 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                                 />
                                 <p className="ml-4 self-start text-sm truncate my-2">
                                   Bankomatas
@@ -704,7 +704,7 @@ function Object() {
                                     placeholder=""
                                     value={modem}
                                     onChange={modemFunc}
-                                    className="flex w-32 ml-4 border h-6 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex w-32 ml-4 border h-8 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
                                 <div className="flex flex-row items-center mt-6">
@@ -712,7 +712,7 @@ function Object() {
                                     id="control"
                                     name="control"
                                     type="checkbox"
-                                    className="h-6 w-6 ml-4 text-gray-600  focus:ring-gray-500 rounded-sm"
+                                    className="h-8 w-6 ml-4 text-gray-600  focus:ring-gray-500 rounded-sm"
                                   />
                                   <p className="ml-4 self-start text-sm truncate my-2">
                                     Signalizacijos valdymas
