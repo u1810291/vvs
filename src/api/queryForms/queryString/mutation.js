@@ -16,7 +16,7 @@ export const uploadImageURI = `mutation MyMutation ($updateURI: [monas_images_re
 }
 `;
 
-export const imageUpload = `mutation MyMutation ($namespace: String!, $path: String!, $base64: String!) {
+export const imageUpload = `mutation MyMutation ($namespace: String, $path: String!, $base64: String!) {
   storeFile(namespace: $namespace, path: $path, base64: $base64) {
       uri
   }
