@@ -27,7 +27,7 @@ export function CrewHeader() {
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between">
       <div className="xl:flex hidden xl:flex-row ml-4 items-center">
         <Link to="/crew">
-          <h4 className="text-lg ml-2 font-normal">
+          <h4 className="ml-2 text-normal font-normal">
             {t("eurocash.crew")}
           </h4>
         </Link>

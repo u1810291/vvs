@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { ThreeTabHeader } from "../../components/headers/threeTab";
+import { ModemsHeader } from "../../components/headers/modems";
 import { ModemsList } from "../../components/lists/modemsList";
 
 import { FiltersListModems } from "../../components/filters/filterModemsList";
@@ -95,7 +95,7 @@ function Modems() {
                 })}
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
-                <ThreeTabHeader />
+                <ModemsHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                   <div className="flex flex-row w-full">
                     {expandFilterModems ? (

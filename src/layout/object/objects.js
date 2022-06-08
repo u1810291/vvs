@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { ThreeTabHeader } from "../../components/headers/threeTab";
+import { ObjectsHeader } from "../../components/headers/objects";
 import { ObjectsList } from "../../components/lists/objectsList";
 
 import { FiltersListObjects } from "../../components/filters/filterObjectsList";
@@ -96,7 +96,7 @@ function Objects() {
                 })}
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
-                <ThreeTabHeader />
+                <ObjectsHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                   <div className="flex flex-row w-full">
                     {expandFilterObjects ? (

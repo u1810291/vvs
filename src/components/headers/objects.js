@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from "react";
 import GlobalContext from "../../context/globalContext";
 import { Search } from "../input/search";
 
-export function ThreeTabHeader() {
+export function ObjectsHeader() {
   const { expandFilterObjects, setExpandFilterObjects } =
     useContext(GlobalContext);
 

@@ -47,8 +47,6 @@ export const ClientList = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-
-  console.log(crew);
   
   const {
     sortedClientsKeys,

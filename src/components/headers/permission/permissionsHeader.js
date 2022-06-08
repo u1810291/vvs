@@ -21,12 +21,12 @@ export function PermissionsHeader() {
     <div className="flex flex-row border h-16 bg-white border-b-2 justify-between">
       <div className="xl:flex hidden xl:flex-row ml-4 items-center">
         <Link to="/permissions">
-          <h4 className="text-lg ml-2 font-normal">
+          <h4 className="ml-2 text-normal font-normal">
             {t("eurocash.permissions")}
           </h4>
         </Link>
         <p className="pl-2 text-gray-600">/</p>
-        <h4 className="text-lg ml-2 hidden xxl:inline-block font-normal text-gray-500">
+        <h4 className="text-normal ml-2 hidden xxl:inline-block font-normal text-gray-500">
           {t("eurocash.allData")}
         </h4>
         <button onClick={filterFunc}>
