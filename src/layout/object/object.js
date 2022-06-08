@@ -25,7 +25,11 @@ import {
   objectPage,
   imagesUpdate,
 } from "../../api/queryForms/queryString/query";
-import { imageUpload, uploadImageURI, deleteImageURI } from "../../api/queryForms/queryString/mutation";
+import {
+  imageUpload,
+  uploadImageURI,
+  deleteImageURI,
+} from "../../api/queryForms/queryString/mutation";
 import { objectPageImagesUpdate } from "../../api/queryForms/queryString/update";
 import useReactQuery from "../../hook/useQuery";
 import { useFetch } from "../../hook/useFetch";
@@ -61,28 +65,25 @@ function Object() {
   const [obj, setObj] = useState("");
 
   const deleteVariables = {
-      imagepath: photoId
+    imagepath: photoId,
   };
 
+  console.log("path: ", imageName, "base64: ", blobImage);
   const uploadVariables = {
-    namespace: 'vvs',
+    namespace: "vvs",
     path: `object/${imageName}`,
-    base64: blobImage
+    base64: blobImage,
   };
 
   const uploadURIVariables = {
     updateURI: {
       Id: id,
       imagepath: imagePath,
-      imagename: pictures
-    }
+      imagename: pictures,
+    },
   };
 
-  const data = useReactQuery(
-    objectPage,
-    {},
-    accessToken
-  );
+  const data = useReactQuery(objectPage, {}, accessToken);
 
   const {
     data: imageResponse,
@@ -105,8 +106,9 @@ function Object() {
     fetchData: deleteImageFetch,
   } = useFetch(deleteImageURI, deleteVariables, accessToken);
 
-  console.log('uploading... ', imageResponse);
-  console.log('rerendering... ', data);
+  console.log("upload url... ", databaseResponse);
+  console.log("upload image... ", imageResponse);
+  console.log("rerendering... ", data);
 
   useEffect(() => {
     let hasura;
@@ -129,8 +131,8 @@ function Object() {
         return String(obj.Id) === String(id);
       });
 
-      const images = monasImageMerge.filter(obj => {
-        return String(obj.Id) === String(id)
+      const images = monasImageMerge.filter((obj) => {
+        return String(obj.Id) === String(id);
       });
 
       setObj(obj);
@@ -142,22 +144,21 @@ function Object() {
       setObjectCity(obj?.city);
       objectDescriptionFunc(obj?.notes);
       if (images.length > 1) {
-      const path = images?.map(e => {
-        return e.imagepath
-      })
-      const name = images?.map(e => {
-        return e.imagename
-      })
-      setPictures(path);
-      setImagesName(name);
-      } else if (images.length < 1){
+        const path = images?.map((e) => {
+          return e.imagepath;
+        });
+        const name = images?.map((e) => {
+          return e.imagename;
+        });
+        setPictures(path);
+        setImagesName(name);
+      } else if (images.length < 1) {
         setPictures([]);
         setImagesName([]);
       } else {
         setPictures([images.imagepath]);
         setImagesName([images.imagename]);
       }
-
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.data]);
@@ -167,7 +168,7 @@ function Object() {
       const base64images = imageResponse?.data?.storeFile?.uri;
       setImagePath(base64images);
       if (base64images) {
-      databaseFetch();
+        databaseFetch();
       }
     }
   }, [imageResponse]);
@@ -175,7 +176,7 @@ function Object() {
   useEffect(() => {
     if (databaseResponse) {
       const base64images = imageResponse?.image;
-      setPictures(base64images)
+      setPictures(base64images);
     }
   }, [databaseResponse]);
 
@@ -193,12 +194,9 @@ function Object() {
     setObjectDescription(e.target.value);
   }, []);
 
-  const objectNameFunc = useCallback(
-    async (e) => {
-      setObjName(e.target.value);
-    },
-    []
-  );
+  const objectNameFunc = useCallback(async (e) => {
+    setObjName(e.target.value);
+  }, []);
 
   const objectAddressFunc = useCallback(async (e) => {
     setObjectAddress(e.target.value);
@@ -245,16 +243,13 @@ function Object() {
       );
       setBlobImage(image[0].data);
       setImageName(image[0].name);
-      // if (blobImage) {
-      //   fetchData();
-      // }
+      fetchData();
       // const fileArray = Array.from(e.target.files).map((file) =>
       //   URL.createObjectURL(file)
       // );
       // setObjectPageImages((prev) => prev.concat(fileArray));
       // Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
     }
-    fetchData();
   }
 
   function readAsDataURL(file) {
@@ -288,7 +283,10 @@ function Object() {
             </div>
             <a>
               <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
-                <img className="flex bg-cover w-full h-full" src={`http://ecfs.swarm.testavimui.eu${photo}`} ></img>
+                <img
+                  className="flex bg-cover w-full h-full"
+                  src={`http://ecfs.swarm.testavimui.eu${photo}`}
+                ></img>
               </div>
             </a>
           </div>
@@ -297,13 +295,16 @@ function Object() {
     }
   };
 
-  const removeImage = useCallback(async (url) => {
-    console.log('url ', url);
-    setPhotoId(url);
-    if (photoId) {
-    deleteImageFetch();
-    }
-  }, [deleteImageFetch, photoId]);
+  const removeImage = useCallback(
+    async (url) => {
+      console.log("url ", url);
+      setPhotoId(url);
+      if (photoId) {
+        deleteImageFetch();
+      }
+    },
+    [deleteImageFetch, photoId]
+  );
 
   // console.log('deleteImageResponse ', deleteImageResponse); need to rerender
 
@@ -544,9 +545,10 @@ function Object() {
                                   id="send-crew"
                                   name="send-crew"
                                   type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                                  className="ml-8 h-8 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                                 />
-                                <p className="mr-8 ml-4 text-sm text-normal truncate">
+                                {/*  ml-4 self-start text-sm truncate my-2 */}
+                                <p className="mr-8 ml-4 text-sm truncate">
                                   Siusti ekipažą automatiškai
                                 </p>
 
