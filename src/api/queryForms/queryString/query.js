@@ -106,3 +106,28 @@ export const updateRegister = `query updateRegisterQuery($userId: String!, $role
     roles
   }
 }`;
+
+export const getObjectsQuery = `
+  query getObjects {
+    monas_test_objects {
+      address
+      id
+      object_id
+    }
+  }
+`;
+
+export const getCrewsQuery = `
+  query getCrews {
+    monas_crew_related {
+      abbreviation
+      dislocationZone
+      driver
+      id
+      isAssignedAutomatically
+      name
+      phone
+      status
+    }
+  }
+`;
