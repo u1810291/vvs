@@ -134,3 +134,43 @@ export const updateRegister = `query updateRegisterQuery($userId: String!, $role
     roles
   }
 }`;
+
+// %searchvalue%
+export const searchAddress = `query SearchAddress ($id: String!, $address: String!) {
+  objects(where: {Id: {_eq: 1}, _and: {address: {_like: "%A%"}}}) {
+    AcLossDetected
+    DcLossDetected
+    MainSubId
+    NotesText
+    OpenCloseSeekState
+    TS
+    address
+    assignedeventexampleid
+    assignedgroupableeventexampleid
+    city
+    contract
+    contract2
+    freeEvents
+    generatedeventsexample
+    grg_info
+    installed
+    installer
+    installerCompany
+    intlinenr
+    intreceivernr
+    lastPersonToOpenClose
+    lasttesttime
+    latitude
+    longitude
+    name
+    notes
+    obdindx
+    phone
+    region
+    relationId
+    street
+    subdivision
+    transinstdate
+    unifier_id
+  }
+}`;

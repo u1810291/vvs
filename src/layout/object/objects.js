@@ -13,7 +13,7 @@ import { OptionsListObjects } from "../../components/options/optionsObjectsList"
 const {
   AddFilterListObjects,
 } = require("../../components/addFilter/addFilterObjects");
-
+import { useParams } from "react-router-dom";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -27,12 +27,14 @@ import { SearchButton } from "../../components/buttons/searchButton";
 import AuthContext from "../../context/authContext";
 import { useFetch } from "../../hook/useFetch";
 import { addFilters } from "../../api/queryForms/queryString/mutation";
+import { searchAddress } from "../../api/queryForms/queryString/query";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function Objects() {
+  const { id } = useParams();
   const { accessToken, user } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
@@ -48,6 +50,7 @@ function Objects() {
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
+  let { objectPageAddress, setObjectPageAddress } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -72,6 +75,20 @@ function Objects() {
     loading: filtersLoading,
     fetchData: saveFilters,
   } = useFetch(addFilters, updateVariables, accessToken);
+
+  const searchVariables = {
+    id: "1",
+    address: `%${objectPageAddress}%`,
+  };
+
+  const {
+    error: searchErrors,
+    data: searchResponse,
+    loading: searchLoading,
+    fetchData: searchQuery,
+  } = useFetch(searchAddress, searchVariables, accessToken);
+
+  console.log('objectPageAddress', objectPageAddress, 'searchResponse ', searchResponse, "searchErrors", searchErrors);
 
   return (
     <OverlayProvider>
@@ -145,7 +162,7 @@ function Objects() {
                               >
                                 Eksportuoti
                               </button>
-                              <SearchButton onClick={saveFilters} />
+                              <SearchButton fetch={searchQuery} />
                             </div>
                           </div>
                         </div>

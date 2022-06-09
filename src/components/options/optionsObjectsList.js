@@ -12,10 +12,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const OptionsListObjects = (props) => {
+export const OptionsListObjects = ( ...props) => {
   const { english, lithuanian, t } = useLanguage();
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
+  let { objectPageAddress, setObjectPageAddress } = useContext(GlobalContext);
   const { value, onChange } = useContext(GlobalContext);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -270,6 +271,7 @@ export const OptionsListObjects = (props) => {
                     placeholder=""
                     // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                     onChange={(e) => {
+                      objectPageAddress = e.target.value;
                       const objectAddress = e.target.value;
                       setFilterListObjects((currentFilter) =>
                         currentFilter.map((x) =>
