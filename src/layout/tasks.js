@@ -13,6 +13,7 @@ import { OptionsList } from "../components/options/optionsTasksList";
 import { TasksList } from "../components/lists/tasksList";
 const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import GlobalContext from "../context/globalContext";
+import AuthContext from "../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -21,7 +22,12 @@ import SlideOver from "../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../components/sidebars/main";
 import { SearchButton } from "../components/buttons/searchButton";
+// import useReactQuery from "../hook/useQuery";
+// import { useFetch } from "../hook/useFetch";
+// import { addFilters } from "../api/queryForms/queryString/mutation";
+
 function Tasks() {
+  const { accessToken, user } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -44,12 +50,6 @@ function Tasks() {
     setTimeout(() => {
       setToPrint(false);
     }, 1000);
-  }, []);
-
-  const onFilterChange = useCallback((newValue) => {console.warn({newValue})}, []);
-  const onFilterValues = useCallback(values => {
-    console.log('filter values', values)
-    // update DashboardList props
   }, []);
 
   return (

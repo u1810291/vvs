@@ -36,11 +36,12 @@ const CrewList = ({
   const [crew, setCrew] = useState("");
 
   const data = useReactQuery(objectPage, {}, accessToken);
+  
   useEffect(() => {
     let hasura;
-    // let monas;
-    if (data.data) {
-      hasura = data?.data?.monas_crew_related;
+    let monas;
+    if (data) {
+      hasura = data?.data?.crews;
       // monas = data?.data?.objects;
       // const mergeDB = monas?.map((monas) => ({
       //   ...monas,
@@ -65,10 +66,11 @@ const CrewList = ({
     sortedDashboardKeys,
     sortedDashboardOrder
   );
-  
+
+
   return (
     <>
-      {!sortedCrew ? (
+      {data.status !== "success" ? (
         <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
           <Spinner color="dark-blue" size={40} />
         </div>

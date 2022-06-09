@@ -25,12 +25,15 @@ import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
 import { SearchButton } from "../../components/buttons/searchButton";
 import AuthContext from "../../context/authContext";
+import { useFetch } from "../../hook/useFetch";
+import { addFilters } from "../../api/queryForms/queryString/mutation";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function Objects() {
+  const { accessToken, user } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -45,7 +48,6 @@ function Objects() {
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
-  const { accessToken } = useContext(AuthContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async (event) => {
@@ -57,6 +59,19 @@ function Objects() {
       setToPrint(false);
     }, 1000);
   }, []);
+
+  const filterListWithUserId = filterListObjects?.map((e) => ({...e, userId: user.sub}))
+
+  const updateVariables = {
+    updateAddFilter: filterListWithUserId,
+  };
+
+  const {
+    error: filtersErrors,
+    data: filtersResponse,
+    loading: filtersLoading,
+    fetchData: saveFilters,
+  } = useFetch(addFilters, updateVariables, accessToken);
 
   return (
     <OverlayProvider>
@@ -102,7 +117,7 @@ function Objects() {
                     {expandFilterObjects ? (
                       <>
                         <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">
-                          <AddFilterListObjects />
+                          <AddFilterListObjects fetch={saveFilters} />
                         </div>
                         <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
                           <OptionsListObjects />
@@ -115,7 +130,7 @@ function Objects() {
                             }
                           >
                             <div className="flex flex-col md:flex-row mt-8 md:mt-0 items-center">
-                              <button className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
+                              <button onClick={saveFilters} className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
                                 Išsaugoti filtrą
                               </button>
                             </div>
@@ -130,7 +145,7 @@ function Objects() {
                               >
                                 Eksportuoti
                               </button>
-                              <SearchButton />
+                              <SearchButton onClick={saveFilters} />
                             </div>
                           </div>
                         </div>

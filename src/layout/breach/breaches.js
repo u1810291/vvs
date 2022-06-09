@@ -19,10 +19,10 @@ import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import useSort from '../../hook/useSort';
 import {sortToggle} from '../../util/utils';
-import {AddFilterListBreaches} from '../../components/lists/addFilterBreaches';
+import {AddFilterListBreaches} from '../../components/addFilter/addFilterBreaches';
 import {SearchButton} from '../../components/buttons/searchButton';
-import {OptionsListBreaches} from '../../components/lists/optionsBreaches';
-import {FiltersListBreaches} from '../../components/lists/filterBreachesList';
+import {OptionsListBreaches} from '../../components/options/optionsBreaches';
+import {FiltersListBreaches} from '../../components/filters/filterBreachesList';
 
 function Breaches() {
   const { english, lithuanian, t } = useLanguage();

@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import { Orders } from "../../api/orders";
+import { Spinner } from "react-activity";
 import useSort from "../../hook/useSort";
 import { objectPage } from "../../api/queryForms/queryString/query";
 import useReactQuery from "../../hook/useQuery";
@@ -12,13 +13,24 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
     const [orders, setOrders] = useState("");
+    const { objectPageFetchData, setObjectPageFetchData } = useContext(GlobalContext);
 
     const data = useReactQuery(objectPage, {}, token);
 
     useEffect(() => {
       let hasura;
       let monas;
-      if (data === undefined) { const sorry = [] } else {
+      if (data.status === "success"){
+        setObjectPageFetchData(true);
+        if(data.data.filters) {
+      let filters = data?.data?.filters;
+      const result = filters?.map(a => {
+        return a;
+      })
+      if (filters) {
+      setFilterListObjects(result);
+      }
+     }
       hasura = data?.data?.monas_related;
       monas = data?.data?.objects;
       const mergeDB = monas?.map((monas) => ({
@@ -48,6 +60,12 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
 
   return (
     <>
+          {data.status !== "success" ? (
+        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
+          <Spinner color="dark-blue" size={40} />
+        </div>
+      ) : (
+        <>
       {filterListObjects.map((filter, index) => {
         return (
           <div key={filter.id}>
@@ -200,5 +218,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
         ))}
       </div>
     </>
+          )}
+          </>
   );
 };

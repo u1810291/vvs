@@ -36,3 +36,31 @@ export const updateCalendar = `mutation MyMutation ($updateCalendar: [monas_cale
   }
 }
 `;
+
+// , on_conflict: { constraint: filters_pkey ,update_columns: [Id, id, userId, filterName, filterShortName, savedToFavorite, savedToMenu, date, objectAddress, operator, object, type, group, status, reason, crew, driver, inTime, dashboardList] }
+export const addFilters = `mutation MyMutation ($updateAddFilter: [filters_insert_input!]!) {
+  insert_filters(objects: $updateAddFilter, on_conflict: { constraint: filters_pkey ,update_columns: [Id, id, userId, filterName, filterShortName, savedToFavorite, savedToMenu, date, objectAddress, operator, object, type, group, status, reason, crew, driver, inTime, dashboardList] }) {
+    returning {
+      Id
+      id
+      userId
+      filterName
+      filterShortName
+      savedToFavorite
+      savedToMenu
+      date
+      objectAddress
+      operator
+      object
+      type
+      group
+      status
+      reason
+      crew
+      driver
+      inTime
+      dashboardList
+    }
+  }
+}
+`;

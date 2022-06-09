@@ -105,10 +105,10 @@ function Object() {
     fetchData: deleteImageFetch,
   } = useFetch(deleteImageURI, deleteVariables, accessToken);
 
-  console.log("upload url... ", databaseResponse);
   console.log("upload image... ", imageResponse);
-  console.log("rerendering... ", data);
-  console.log('blob image...', blobImage);
+  // console.log("upload url... ", databaseResponse);
+  // console.log("rerendering... ", data);
+  // console.log('blob image...', blobImage);
 
   useEffect(() => {
     let hasura;

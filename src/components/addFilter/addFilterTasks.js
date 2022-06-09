@@ -41,6 +41,7 @@ export const AddFilterList = (props) => {
         ],
       },
     ]);
+
     filterList.map((value, index, array) => {
       if (filterList.length - 1 === index) {
         const id = value.id;
@@ -70,6 +71,10 @@ export const AddFilterList = (props) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 1. fetch filters.
+  // 2. set filterList object ready for api call and if something fetched don't render init object 
+  // 3. create database fields and handle not null and all other exceptions
 
   return (
     <>

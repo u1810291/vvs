@@ -35,20 +35,42 @@ export const objectPage = `query MyQuery {
     monasid
     navid
   }
-  monas_crew_related {
+  crews {
     Id
     name
     abbreviation
     dislocationZone
     status
-    isAssignedAutomatically
+    is_assigned_automatically
     id
-    phone
-    driver
+    phone_number
+    driver_name
   }
   events {
-    receivedtime
+    id
+    monas_id
+    updated_at
+  }
+  filters {
+    Id
+    id
+    userId
+    filterName
+    filterShortName
+    savedToFavorite
+    savedToMenu
+    date
+    objectAddress
+    operator
+    object
+    type
+    group
     status
+    reason
+    crew
+    driver
+    inTime
+    dashboardList
   }
 }`;
 
