@@ -41,7 +41,7 @@ const MainSidebar = () => {
             Leidimai
           </Link>
           <Link
-            to="/breach"
+            to="/breaches"
             className="font-light text-normal text-gray-200 hover:text-gray-400"
           >
             Pažeidimai

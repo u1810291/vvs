@@ -10,7 +10,7 @@ export const uploadImageURI = `mutation MyMutation ($updateURI: [monas_images_re
       id
       imagename
       imagepath
-      user
+      Id
     }
   }
 }
