@@ -29,6 +29,7 @@ import Permission from './layout/permission/permissions';
 import Breach from './layout/breach/breach';
 import Breaches from './layout/breach/breaches';
 import PermissionConfirmation from './layout/permission/permissionConfirmation';
+import NewTaskLayout from "./feature/task/layout/newTaskLayout";
 
 import NotFound from "./layout/notFound";
 
@@ -70,6 +71,7 @@ function App() {
                 <Route path="Dashboard" element={<Dashboard />} />
                 <Route path="Keys" element={<Keys />} />
                 <Route path="Tasks" element={<Tasks />} />
+                <Route path="NewTask" element={<NewTaskLayout />} />
                 <Route path="Drivers" element={<Drivers />} />
                 <Route path="Clients" element={<Clients />} />
                 <Route path="Objects" element={<Objects />} />
