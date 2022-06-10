@@ -8,6 +8,10 @@ const detection_settings = {
     caches: ['localStorage']
 };
 
+export const t = (key, config) => {
+    return i18n.t(key, config);
+};
+
 i18n.use(Backend).use(LanguageDetector).use(initReactI18next).init({
     fallbackLng: 'lt',
     debug: true,

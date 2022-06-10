@@ -46,7 +46,25 @@
   },
   "error": {
     "timeSlotIsTaken": "Time Slot is already taken",
-    "startTimeIsBiggerThanEndTime": "Start time is bigger than the end time"
+    "startTimeIsBiggerThanEndTime": "Start time is bigger than the end time",
+    "newEvent": {
+      "eventServiceOffline": "Event system not available",
+      "dataIsInvalid": "Data is invalid",
+      "networkError": "Network error",
+      "unexpectedResponse": "Unexpected response",
+      "unhandledState": "Unexpected error"
+    }
+  },
+  "validation": {
+    "error": {
+      "token": "Authorization token missing, please check your permissions",
+      "secret": "x-hasura-admin-secret is missing",
+      "taskName": "Please enter a task name. The name must be at least 5 characters long",
+      "taskDescription": "Please enter a task description. The description must be at least 5 characters long",
+      "taskStatus": "Make sure you have selected a task status",
+      "crewID": "There is no unique crew identifier. Make sure you have selected a crew",
+      "objectID": "There is no unique object identifier. Make sure you have selected an object"
+    }
   },
   "eurocash": {
     "accounts": "Accounts",
@@ -129,6 +147,7 @@
     "addZone": "Add zone",
     "allData": "All data",
     "crew": "Crew",
+    "crews": "Crews",
     "drivers": "Drivers",
     "dislocationZones": "Dislocation Zones",
     "createCrew": "Create crew",
@@ -141,10 +160,15 @@
     "save": "Save",
     "console": "Console",
     "tasks": "Tasks",
+    "newTask": "New task",
+    "createNewTask": "Create new task",
     "permissions": "Permissions",
     "breach": "Breach",
     "violations": "Pažeidimas",
     "date": "Date",
+    "type": "Type",
+    "description": "Description",
+    "objectsAndAddresses": "Objects / Adresses",
     "dateFrom": "Date from",
     "timeOutOfZone": "Time out of zone",
     "received": "Received at",
