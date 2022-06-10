@@ -29,7 +29,7 @@ import Permission from './layout/permission/permissions';
 import Breach from './layout/breach/breach';
 import Breaches from './layout/breach/breaches';
 import PermissionConfirmation from './layout/permission/permissionConfirmation';
-import NewTaskLayout from "./layout/task/newTask";
+import NewTaskLayout from "./feature/task/layout/newTaskLayout";
 
 import NotFound from "./layout/notFound";
 
