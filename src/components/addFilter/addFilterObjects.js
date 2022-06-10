@@ -30,7 +30,7 @@ export const AddFilterListObjects = ({ fetch, data, ...props}) => {
         driver: "0",
         inTime: "0",
         dashboardList: [
-          "Vardas Pavardė",
+          "Pavadinimas",
           "Miestas",
           "Adresas",
           "Objekto nr.",

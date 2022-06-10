@@ -83,14 +83,14 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
           <div key={filter.id}>
             {selectedFilterObjects === filter.id ? (
               <div className="flex pl-4 w-full border-t py-2 bg-gray-100 justify-between font-normal text-black z-1">
-                {filter.dashboardList.includes("Vardas Pavardė") ? (
+                {filter.dashboardList.includes("Pavadinimas") ? (
                   <div className="flex flex-row items-center w-40">
                     <button
                       onClick={sortedObjectsNames}
                       className="flex flex-row items-center"
                     >
                       <span className="text-gray-300 text-sm hover:text-gray-400">
-                        Vardas Pavardė
+                        Pavadinimas
                       </span>
                       <img
                         src={require("../../assets/assets/down.png")}
@@ -155,7 +155,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                 <div key={filter.id}>
                   {selectedFilterObjects === filter.id ? (
                     <div className="flex w-full border-t py-2 bg-white justify-between font-normal text-black z-1">
-                      {filter.dashboardList.includes("Vardas Pavardė") ? (
+                      {filter.dashboardList.includes("Pavadinimas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
