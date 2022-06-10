@@ -46,7 +46,25 @@
   },
   "error": {
     "timeSlotIsTaken": "Pradžios laikas negali būti didesnis negu pabaigos laikas",
-    "startTimeIsBiggerThanEndTime": "Norima laiko zona jau yra užimta, koreguokite nurodytus laiko tarpus"
+    "startTimeIsBiggerThanEndTime": "Norima laiko zona jau yra užimta, koreguokite nurodytus laiko tarpus",
+    "newEvent": {
+      "eventServiceOffline": "Renginių sistema nepasiekiama",
+      "dataIsInvalid": "Duomenys neteisingi",
+      "networkError": "tinklo klaida",
+      "unexpectedResponse": "Netikėtas atsakymas",
+      "unhandledState": "Netikėta klaida"
+    }
+  },
+  "validation": {
+    "error": {
+      "token": "Trūksta prieigos rakto, patikrinkite savo leidimus",
+      "secret": "Trūksta x-hasura-admin-secret",
+      "taskName": "Įveskite užduoties pavadinimą. Pavadinimas turi būti bent 5 simbolių ilgio",
+      "taskDescription": "Įveskite užduoties aprašymą. Aprašymas turi būti bent 5 simbolių ilgio",
+      "taskStatus": "Įsitikinkite, kad pasirinkote užduoties būseną",
+      "crewID": "Nėra jokio unikalaus įgulos identifikatoriaus. Įsitikinkite, kad pasirinkote komandą",
+      "objectID": "Nėra unikalaus objekto identifikatoriaus. Įsitikinkite, kad pasirinkote objektą"
+    }
   },
   "eurocash": {
     "accounts": "Paskyros",
