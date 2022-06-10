@@ -4,20 +4,21 @@ import {useNavigate} from "react-router-dom";
 import {GoogleMap, useLoadScript} from "@react-google-maps/api";
 
 import {OverlayProvider} from "react-aria";
-import SidebarLayout from "../sidebarLayout";
-import MainSidebar from "../../components/sidebars/main";
-import Selectbox from "../../components/input/Selectbox";
-import SlideOver from "../../components/sidebars/slideOver";
-import MainHeader from "../../components/headers/MainHeader";
-import Breadcrumbs from "../../components/headers/Breadcrumbs";
-import ControlledInput from "../../components/input/ControlledInput";
-import HeaderButtonGroup from "../../components/headers/HeaderButtonGroup";
+import SidebarLayout from "../../../layout/sidebarLayout";
+import Textarea from '../../../components/input/Textarea';
+import MainSidebar from "../../../components/sidebars/main";
+import Selectbox from "../../../components/input/Selectbox";
+import SlideOver from "../../../components/sidebars/slideOver";
+import MainHeader from "../../../components/headers/MainHeader";
+import NewTaskForm from '../form/newTaskForm';
+import Breadcrumbs from "../../../components/headers/Breadcrumbs";
+import ControlledInput from "../../../components/input/ControlledInput";
+import HeaderButtonGroup from "../../../components/headers/HeaderButtonGroup";
 
 import {generate} from "shortid";
 
-import useLanguage from "../../hook/useLanguage";
-import Textarea from '../../components/input/Textarea';
-import NewTaskForm from '../../feature/task/form/newTaskForm';
+import {useFetch} from '../../../hook/useFetch';
+import useLanguage from "../../../hook/useLanguage";
 
 const NewTaskLayout = () => {
   const {t} = useLanguage();
@@ -26,7 +27,7 @@ const NewTaskLayout = () => {
     navigate("/tasks")
   }, []);
   const onSaveButton = useCallback(() => {
-    navigate("/tasks")
+
   }, []);
 
   return (
