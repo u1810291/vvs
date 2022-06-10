@@ -135,9 +135,9 @@ export const updateRegister = `query updateRegisterQuery($userId: String!, $role
   }
 }`;
 
-// %searchvalue%
-export const searchAddress = `query SearchAddress ($id: String!, $address: String!) {
-  objects(where: {Id: {_eq: 1}, _and: {address: {_like: "%A%"}}}) {
+// %searchvalue% {Id: {_eq: $id}, _and: }
+export const searchAddress = `query SearchAddress ($address: String!) {
+  objects(where: {address: {_like: $address}}) {
     AcLossDetected
     DcLossDetected
     MainSubId

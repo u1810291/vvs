@@ -44,6 +44,7 @@ export const GlobalProvider = ({ children }) => {
   const [apiData, setApiData] = useState(""); // not used
   const [globalToken, setGlobalToken] = useState("empty");
   const [objectPageImages, setObjectPageImages] = useState([]);
+  const [objectPageAddress, setObjectPageAddress] = useState("");
   const [objectPageFetchData, setObjectPageFetchData] = useState(false);
 
   const [filterEditing, setFilterEditing] = useState(null);
@@ -279,6 +280,8 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    objectPageAddress,
+    setObjectPageAddress,
     objectPageFetchData,
     setObjectPageFetchData,
     objectPageImages,

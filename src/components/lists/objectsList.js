@@ -8,12 +8,13 @@ import useReactQuery from "../../hook/useQuery";
 import { sortToggle } from "../../util/utils";
 import GlobalContext from "../../context/globalContext";
 
-export const ObjectsList = ({ token, ...props}) => {
+export const ObjectsList = ({ searchResponse, token, ...props}) => {
 const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
     const [orders, setOrders] = useState("");
     const { objectPageFetchData, setObjectPageFetchData } = useContext(GlobalContext);
+    const [searchData, setSearchData] = useState(null);
 
     const data = useReactQuery(objectPage, {}, token);
 
@@ -40,6 +41,17 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data.data]);
+
+    useEffect(() => {
+      if (searchResponse) {
+      let hasura = data?.data?.monas_related;
+      let monas = searchResponse?.data?.objects;
+      const mergeDB = monas?.map((monas) => ({
+        ...monas, ...hasura?.find(hasura => String(hasura.Id) === String(monas.Id))
+      }))
+      setOrders({result:mergeDB});
+      }
+    }, [searchResponse]);
 
   const {
     sortedObjectsKeys,

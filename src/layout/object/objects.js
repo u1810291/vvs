@@ -77,7 +77,6 @@ function Objects() {
   } = useFetch(addFilters, updateVariables, accessToken);
 
   const searchVariables = {
-    id: "1",
     address: `%${objectPageAddress}%`,
   };
 
@@ -87,8 +86,6 @@ function Objects() {
     loading: searchLoading,
     fetchData: searchQuery,
   } = useFetch(searchAddress, searchVariables, accessToken);
-
-  console.log('objectPageAddress', objectPageAddress, 'searchResponse ', searchResponse, "searchErrors", searchErrors);
 
   return (
     <OverlayProvider>
@@ -184,7 +181,7 @@ function Objects() {
                     </PDFExport>
                   ) : (
                     <>
-                      <ObjectsList token={accessToken} />
+                      <ObjectsList searchResponse={searchResponse} token={accessToken} />
                     </>
                   )}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
