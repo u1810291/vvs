@@ -12,9 +12,11 @@ const Textarea = ({
   twBody,
   twRequired,
 }) => {
-  const onChange = useCallback((event) => {
+
+  const onChange = useCallback(event => {
     setValue(event.currentTarget.value)
-  }, [value, setValue]);
+  }, [setValue]);
+
   return (
     <div className={`flex flex-col ${twBody}`}>
       <label className={`mb-2 text-gray-800 ${twTitle}`}>
@@ -28,7 +30,7 @@ const Textarea = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`block w-full sm:text-sm border border-gray-300 text-gray-400 rounded-sm focus:outline-none ${twTextarea}`}
+        className={`block w-full sm:text-sm border border-gray-300 text-gray-800 rounded-sm focus:outline-none ${twTextarea}`}
       />
     </div>
   );

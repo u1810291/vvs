@@ -43,7 +43,7 @@ const ControlledInput = ({
         {isRequired && <span className={`text-red-500 ${twRequired}`}> * </span>}
       </label>
       <input
-        className={`focus:outline-none border border-gray-300 p-1 rounded-sm w-full ${twInput}`}
+        className={`focus:outline-none text-gray-800 border border-gray-300 p-1 rounded-sm w-full ${twInput}`}
         value={localValue}
         onChange={onChange}
         placeholder={placeholder}

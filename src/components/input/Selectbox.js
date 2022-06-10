@@ -1,32 +1,35 @@
 import React, {useState, useCallback, useEffect} from "react";
 
+import {isEmpty} from "crocks";
 import {generate} from "shortid";
+
 import {ChevronDownIcon} from "@heroicons/react/outline";
 
-const Selectbox = ({value, setValue, selectedValue, title, isRequired, twSelect, twRequired}) => {
-  const onValueChangeHandler = useCallback((event) => {
-    setValue(event.currentTarget.value);
-  }, [selectedValue]);
+const Selectbox = ({label, isRequired, items, value, setValue, twBody, twSelect, twRequired}) => {
 
   useEffect(() => {
-    setValue(selectedValue ? selectedValue : String(value[0].value))
-  }, []);
+    setValue(isEmpty(value) ? items[0].key : value)
+  }, [items, value, setValue]);
+
+  const onValueChangeHandler = useCallback(event => {
+    setValue(event.currentTarget.value);
+  }, [setValue]);
 
   return (
-    <div className={`flex flex-col ${twSelect}`}>
-      <label className={"text-gray-800 mb-2"}>
-        {title}
+    <div className={`flex flex-col ${twBody}`}>
+      <label className={" mb-2 text-gray-800"}>
+        {label}
         {isRequired && <span className={`text-red-500 ${twRequired}`}> * </span>}
       </label>
       <div className={`relative`}>
         <ChevronDownIcon className={"absolute z-10 right-2 top-2 text-gray-300"} height={20} width={20} />
         <select
-          className={`p-1 border border-gray-300 rounded-sm w-full appearance-none relative focus:outline-none text-gray-600`}
+          className={`relative p-1 border border-gray-300 rounded-sm w-full appearance-none focus:outline-none text-gray-800 ${twSelect}`}
           onChange={onValueChangeHandler}
-          value={selectedValue}
+          value={value}
         >
-          {value.map(({key, value}) => (
-            <option key={generate()} value={value}> {key} </option>
+          {items.map(({key, value}) => (
+            <option key={generate()} value={key}> {value} </option>
           ))}
         </select>
       </div>
