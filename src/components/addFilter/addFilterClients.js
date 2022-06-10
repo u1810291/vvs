@@ -20,7 +20,7 @@ export const AddFilterListClients = (props) => {
         savedToFavorite: true,
         savedToMenu: true,
         objectAddress: "",
-        date: new Date().toISOString().split("T")[0],
+        date: "",
         operator: "0",
         object: "0",
         type: "0",

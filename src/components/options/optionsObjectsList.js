@@ -1,5 +1,12 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
-import React, { useState, useCallback, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  createRef,
+} from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -22,6 +29,7 @@ export const OptionsListObjects = (...props) => {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [startAndEndDate, setStartAndEndDate] = useState();
+  const ref = useRef(null);
 
   useEffect(() => {
     const startYear = value[0]?.getFullYear();
@@ -38,12 +46,11 @@ export const OptionsListObjects = (...props) => {
     setStartAndEndDate(newStartAndEndDate);
   }, [value]);
 
-  // const dateFunction = (filter) => {
-  //   const date = startAndEndDate;
-  //   setFilterListObjects((currentFilter) =>
-  //     currentFilter.map((x) => (x.id === filter.id ? { ...x, date } : x))
-  //   );
-  // };
+  useEffect(() => {
+    if (startAndEndDate) {
+      ref.current.click();
+    }
+  }, [startAndEndDate]);
 
   return (
     <div {...props}>
@@ -61,15 +68,27 @@ export const OptionsListObjects = (...props) => {
                     <p className="self-start text-sm text-gray-500 truncate">
                       Data nuo - iki
                     </p>
+                    <button
+                      ref={ref}
+                      onClick={() => {
+                        const date = startAndEndDate;
+                        setFilterListObjects((currentFilter) =>
+                          currentFilter.map((x) =>
+                            x.id === filter.id ? { ...x, date } : x
+                          )
+                        );
+                      }}
+                      className="hidden"
+                    >
+                    </button>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
                       {startAndEndDate !==
                       "undefined-NaN-undefined - undefined-NaN-undefined" ? (
                         <p className="text-gray-400 self-center truncate text-xs">
-                          {startAndEndDate}
+                          {filter.date}
                         </p>
                       ) : (
                         <p className="text-gray-400 self-center truncate text-xs">
-                          -
                         </p>
                       )}
                       <div>

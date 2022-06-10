@@ -166,7 +166,7 @@ function Objects() {
                       </>
                     ) : null}
                     <div className="flex flex-col w-0 xl:w-1/5">
-                      {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
+                      {/* <p>{JSON.stringify(filterListObjects, null, 2)}</p> */}
                     </div>
                   </div>
 

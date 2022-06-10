@@ -150,7 +150,7 @@ function Tasks() {
                       </>
                     ) : null}
                     <div className="flex flex-col w-0 xl:w-1/5 border-red-600 border-2">
-                      <p>{JSON.stringify(filterList, null, 2)}</p>
+                      {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
                     </div>
                   </div>
                   {toPrint ? (
