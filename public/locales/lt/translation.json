@@ -123,5 +123,10 @@
     "thirdPart": "Naudodami slapukus renkame duomenis apie svetainės naudojimą. Slapukų tipai ir jų paskirtis yra pateikti lentelėje žemiau.",
     "fourthPart": "Surinktus duomenis apie Eurocash1 svetainės lankytojus atsakingai saugome nuo praradimo, neleistino naudojimo ir pakeitimų. Eurocash1 darbuotojai yra raštiškai įsipareigoję trečiosioms šalims neatskleisti ir neplatinti darbo vietoje gaunamos informacijos apie bendrovės klientus, įskaitant ir Eurocash1 svetainės lankytojus.",
     "fifthPart": "Jums besilankant Eurocash1 interneto svetainėje, norime pateikti informaciją ir funkcijas, pritaikytas tik Jums. Tam reikalingi slapukai (angl. cookies). Tai nedideli informacijos elementai, išsaugomi Jūsų interneto naršyklėje. Jie padeda mums atpažinti Jus kaip ankstesnį Eurocash1 interneto svetainės lankytoją, išsaugoti Jūsų lankymosi svetainėje istoriją ir pagal tai pritaikyti turinį. Taip pat slapukai padeda užtikrinti sklandų svetainės veikimą, leidžia stebėti lankymosi Eurocash1 interneto svetainėje trukmę, dažnumą bei rinkti statistinę informaciją apie svetainės lankytojų skaičių. Analizuodami šiuos duomenis galime svetainę tobulinti, padaryti ją patogesnę Jums. Apsilankę Eurocash1 interneto svetainėje Jūs galite pasirinkti, ar norite naudoti slapukus. Jei nesutinkate, kad į Jūsų kompiuterį ar kitą įrenginį būtų įrašomi slapukai, bet kada galite atšaukti sutikimą juos naudoti pakeitę nustatymus ir ištrynę įrašytus slapukus."
+  },
+  "Filter": {
+    "Button": {
+      "addColumn": "Pridėti stulpelį"
+    }
   }
 }
