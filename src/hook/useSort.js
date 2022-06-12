@@ -434,6 +434,82 @@ function useSort() {
     }
   }
 
+  // new
+  function sortedDashboardTimeOutOfZone() {
+    if (sortedDashboardOrder === "") {
+      setSortedDashboardKeys("timeOutOfZone");
+      setSortedDashboardOrder("asc");
+    }
+    if (sortedDashboardOrder === "asc") {
+      setSortedDashboardKeys("timeOutOfZone");
+      setSortedDashboardOrder("desc");
+    }
+    if (sortedDashboardOrder === "desc") {
+      setSortedDashboardKeys("timeOutOfZone");
+      setSortedDashboardOrder("");
+    }
+  }
+
+  function sortedDashboardDrivers() {
+    if (sortedDriversOrder === "") {
+      setSortedDriversKeys("drivers");
+      setSortedDriversOrder("asc");
+    }
+    if (sortedDriversOrder === "asc") {
+      setSortedDriversKeys("drivers");
+      setSortedDriversOrder("desc");
+    }
+    if (sortedDriversOrder === "desc") {
+      setSortedDriversKeys("drivers");
+      setSortedDriversOrder("");
+    }
+  }
+
+  function sortedDashboardAbbreviation() {
+    if (sortedDriversOrder === "") {
+      setSortedDriversKeys("abbreviation");
+      setSortedDriversOrder("asc");
+    }
+    if (sortedDriversOrder === "asc") {
+      setSortedDriversKeys("abbreviation");
+      setSortedDriversOrder("desc");
+    }
+    if (sortedDriversOrder === "desc") {
+      setSortedDriversKeys("abbreviation");
+      setSortedDriversOrder("");
+    }
+  }
+
+  function sortedDashboardDislocationZone() {
+    if (sortedDriversOrder === "") {
+      setSortedDriversKeys("dislocationZone");
+      setSortedDriversOrder("asc");
+    }
+    if (sortedDriversOrder === "asc") {
+      setSortedDriversKeys("dislocationZone");
+      setSortedDriversOrder("desc");
+    }
+    if (sortedDriversOrder === "desc") {
+      setSortedDriversKeys("dislocationZone");
+      setSortedDriversOrder("");
+    }
+  }
+
+  function sortedDashboardIsAssignedAutomatically() {
+    if (sortedDriversOrder === "") {
+      setSortedDriversKeys("isAssignedAutomatically");
+      setSortedDriversOrder("asc");
+    }
+    if (sortedDriversOrder === "asc") {
+      setSortedDriversKeys("isAssignedAutomatically");
+      setSortedDriversOrder("desc");
+    }
+    if (sortedDriversOrder === "desc") {
+      setSortedDriversKeys("isAssignedAutomatically");
+      setSortedDriversOrder("");
+    }
+  }
+
   return {
     sortedClientsKeys,
     sortedClientsOrder,
@@ -473,6 +549,11 @@ function useSort() {
     sortedDashboardTimeInObject,
     sortedDashboardStatus,
     sortedDashboardReason,
+    sortedDashboardTimeOutOfZone,
+    sortedDashboardDrivers,
+    sortedDashboardAbbreviation,
+    sortedDashboardDislocationZone,
+    sortedDashboardIsAssignedAutomatically,
     sortedKeysSet,
     sortedKeysCrew
   };

@@ -1,15 +1,15 @@
 import React, { useContext, useCallback } from "react";
 import { ConnectedTop } from "../buttons/connectedModem";
 
-export function ModemHeader() {
+export function ModemHeader({ modemnr, ...props}) {
 
   return (
     <div className="flex flex-row h-16 border-b bg-white justify-between w-full">
       <div className="md:flex hidden md:flex-row ml-4 items-center">
-        <h4 className="text-lg ml-2 font-normal">Modemas</h4>
+        <h4 className="ml-2 text-normal font-normal">Modemas</h4>
         <p className="pl-2 text-gray-600">:</p>
         <h4 className="text-lg ml-2  font-normal">
-          56416516516
+          {modemnr}
         </h4>
         <ConnectedTop />
         <div className="flex flex-col justify-center items-end"></div>

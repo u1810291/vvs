@@ -35,13 +35,13 @@ const MainSidebar = () => {
             Užduotys
           </Link>
           <Link
-            to="/task"
+            to="/permissions"
             className="font-light text-normal text-gray-200 hover:text-gray-400"
           >
             Leidimai
           </Link>
           <Link
-            to="/violations"
+            to="/breaches"
             className="font-light text-normal text-gray-200 hover:text-gray-400"
           >
             Pažeidimai
@@ -89,7 +89,7 @@ const MainSidebar = () => {
             Objektai
           </Link>
           <Link
-            to="/objects"
+            to="/modems"
             className="font-light text-normal text-gray-200 hover:text-gray-400"
           >
             Modemai

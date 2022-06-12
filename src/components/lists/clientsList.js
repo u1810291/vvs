@@ -5,7 +5,7 @@ import { Spinner } from "react-activity";
 import { Link } from "react-router-dom";
 import { sortToggle } from "../../util/utils";
 import useSort from "../../hook/useSort";
-import { useFetch } from "../../hook/useFetch";
+import useReactQuery from "../../hook/useQuery";
 import { getUsers } from "../../api/queryForms/queryString/users";
 import { getAllUsers } from "../../api/queryForms/variables/users";
 
@@ -13,26 +13,24 @@ export const ClientList = () => {
   const { accessToken } = useContext(AuthContext);
   const [customers, setCustomers] = useState("");
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } =
-    useContext(GlobalContext);
+  const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
 
-  const { data, error, loading, fetchData } = useFetch(
+  const { data, error, loading } = useReactQuery(
     getUsers,
     getAllUsers,
     accessToken
   );
 
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (data) {
-      const allUsers = data.data.users.users;
+    if (data === undefined) { const sorry = [] } else {
+      const allUsers = data?.users?.users;
       const searchRole = (name, arr) =>
-        arr.filter(({ registrations }) =>
-          registrations.find((role) => role.roles[0] === "customer")
+        arr?.filter(({ registrations }) => {
+          if (registrations) {
+          const reg = registrations?.find((role) => role.roles[0] === 'customer')
+          return reg
+          }
+        }
         );
       const searchResult = searchRole("customer", allUsers);
       let obj = { users: searchResult };
@@ -46,7 +44,7 @@ export const ClientList = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-
+  
   const {
     sortedClientsKeys,
     sortedClientsOrder,
@@ -64,13 +62,13 @@ export const ClientList = () => {
 
   return (
     <>
-      {!sortedClients ? (
+      {data === undefined ? (
         <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
           <Spinner color="dark-blue" size={40} />
         </div>
       ) : (
         <>
-          {filterListClients.map((filter, index) => {
+          {filterListClients?.map((filter, index) => {
             return (
               <div key={filter.id}>
                 {selectedFilterClients === filter.id ? (
@@ -128,9 +126,9 @@ export const ClientList = () => {
           })}
 
           <div className="pl-4 flex-col w-full items-center">
-            {sortedClients.map((data) => (
+            {sortedClients?.map((data) => (
               <div className="w-full" key={data.id} >
-                {filterListClients.map((filter, index) => {
+                {filterListClients?.map((filter, index) => {
                   return (
                     <div key={filter.id}>
                       {selectedFilterClients === filter.id ? (

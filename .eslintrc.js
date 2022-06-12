@@ -3,12 +3,7 @@ module.exports = {
         "browser": true,
         "es2021": true
     },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:react/recommended",
-    "plugin:react-perf/recommended"
-    ],
+    "extends": ["eslint:recommended","plugin:react-hooks/recommended","plugin:react/recommended","plugin:react-perf/recommended"],
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true

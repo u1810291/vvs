@@ -16,7 +16,7 @@ const DashboardSideLeft = () => {
   return (
     <>
       <div className="flex flex-row items-center border-b bg-white justify-between">
-        <h4 className="ml-2 self-center py-4 text-md font-normal">Užduotys</h4>
+        <h4 className="ml-2 self-center py-4 text-md font-normal">Pultas</h4>
         <Link
           to="/create"
           className="w-36 h-10 flex mr-2 justify-center items-center rounded-sm px-4 border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 hover:bg-slate-500 focus:outline-none"

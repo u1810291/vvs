@@ -13,32 +13,66 @@ export const objectPage = `query MyQuery {
     obdindx
     receivernr
     Id
+    name
   }
   corresppersons {
     phone
     name
   }
-  objectimages {
+  monas_images_related {
     Id
-    image
+    id
+    imagepath
     imagename
   }
   monas_related {
-    id
+    Id
     atm
     contact
     assign_car
+    modem
+    area_no
+    monasid
+    navid
+  }
+  crews {
+    Id
+    name
+    abbreviation
+    dislocationZone
+    status
+    is_assigned_automatically
+    id
+    phone_number
+    driver_name
   }
   events {
-    receivedtime
-    status
-  }
-  images {
     id
-    imagename
-    imagepath
+    monas_id
+    updated_at
   }
-}`
+  filters {
+    Id
+    id
+    userId
+    filterName
+    filterShortName
+    savedToFavorite
+    savedToMenu
+    date
+    objectAddress
+    operator
+    object
+    type
+    group
+    status
+    reason
+    crew
+    driver
+    inTime
+    dashboardList
+  }
+}`;
 
 export const imagesUpdate = `query uploadImage($image: String!, $id: String!, $authToken: String!) {
   uploadImages(image: $image, id: $id, authToken: $authToken) {
@@ -48,6 +82,35 @@ export const imagesUpdate = `query uploadImage($image: String!, $id: String!, $a
   }
 }`;
 
+export const modemsPage = `query MyQuery {
+  objects {
+    name
+    address
+    phone
+    city
+    street
+    contract
+    notes
+    objectstate
+    objectstatus
+    objectid
+    obdindx
+    receivernr
+    Id
+  }
+  corresppersons {
+    phone
+    name
+  }
+  monas_related {
+    id
+    atm
+    contact
+    assign_car
+    modem
+    area_no
+  }
+}`;
 // export const imagesUpdate = `query uploadImage($imageName: String!, $imagePath: String!, $id: String!, $deleted: String!, $authToken: String!) {
 //   uploadImages(imageName: $imageName, imagePath: $imagePath, id: $id, deleted: $deleted, authToken: $authToken) {
 //     imageName
@@ -64,3 +127,50 @@ export const getUsers = `query users($queryString: String!) {
   }
   }
 `;
+
+export const updateRegister = `query updateRegisterQuery($userId: String!, $roles: String!) {
+  updateRegister(userId: $userId, roles: $roles) {
+    userId
+    roles
+  }
+}`;
+
+// %searchvalue% {Id: {_eq: $id}, _and: }
+export const searchAddress = `query SearchAddress ($address: String!) {
+  objects(where: {address: {_like: $address}}) {
+    AcLossDetected
+    DcLossDetected
+    MainSubId
+    NotesText
+    OpenCloseSeekState
+    TS
+    address
+    assignedeventexampleid
+    assignedgroupableeventexampleid
+    city
+    contract
+    contract2
+    freeEvents
+    generatedeventsexample
+    grg_info
+    installed
+    installer
+    installerCompany
+    intlinenr
+    intreceivernr
+    lastPersonToOpenClose
+    lasttesttime
+    latitude
+    longitude
+    name
+    notes
+    obdindx
+    phone
+    region
+    relationId
+    street
+    subdivision
+    transinstdate
+    unifier_id
+  }
+}`;

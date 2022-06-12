@@ -13,3 +13,16 @@
         affected_rows
     }
   }`;
+
+
+// example of mutation
+  export const objectPageImagesMutation = `mutation MyMutation($image: String!, $imagename: String!) {
+    insert_monas_related(objects: {image: $image, imagename: $imagename }) {
+      returning {
+        id
+        imagename
+        imagepath
+        user
+      }
+    }
+  }`;

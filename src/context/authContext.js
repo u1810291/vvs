@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
-  const [registerBirthday, setRegisterBirthday] = useState(""); // birthday not included for vvs so its fixed value
+  const [registerBirthday, setRegisterBirthday] = useState("2000-01-01"); // birthday not included for vvs so its fixed value
   const [email, setEmail] = useState("audrius@s-e.lt");
   const [password, setPassword] = useState("EuroCash2022");
   const [recoverPassword, setRecoverPassword] = useState("");
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState(false);
   const [accessToken, setAccessToken] = useState("");
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState("customer");
+  const [role, setRole] = useState("regular");
   const [emailValidationError, setEmailValidationError] = useState(false);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
   const [spinner, setSpinner] = useState(false);
