@@ -26,7 +26,7 @@ const Map = ({isMapTools, mapToolsLibraries}) => {
   }, []);
 
   const {isLoaded : isMapLoaded} = useLoadScript({
-    googleMapsApiKey: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries: mapToolsLibraries
   });
 
