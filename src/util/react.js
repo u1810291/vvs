@@ -76,11 +76,11 @@ export const withMergedClassName = curry((staticClassName, Component, props) => 
  *
  * // usage
  * render(
- *   <Menu>
- *     <Menu.Item>One</Menu.Item>
- *     <Menu.Item>Two</Menu.Item>
- *     <Menu.Item>Three</Menu.Item>
- *   </Menu>
+ *   <Dropdown>
+ *     <Dropdown.Item>One</Dropdown.Item>
+ *     <Dropdown.Item>Two</Dropdown.Item>
+ *     <Dropdown.Item>Three</Dropdown.Item>
+ *   </Dropdown>
  * )
  */
 export const withComponentFactory = (Component, {mapSetupInComponent = identity, ...setup}) => {
