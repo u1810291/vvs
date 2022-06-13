@@ -6,14 +6,9 @@ import {generate} from "shortid";
 import {ChevronDownIcon} from "@heroicons/react/outline";
 
 const Selectbox = ({label, isRequired, items, value, setValue, twBody, twSelect, twRequired}) => {
-
-  useEffect(() => {
-    setValue(isEmpty(value) ? items[0].key : value)
-  }, [items, value, setValue]);
-
   const onValueChangeHandler = useCallback(event => {
-    setValue(event.currentTarget.value);
-  }, [setValue]);
+    setValue(items[+event.currentTarget.value]);
+  }, [items, setValue]);
 
   return (
     <div className={`flex flex-col ${twBody}`}>
@@ -26,11 +21,12 @@ const Selectbox = ({label, isRequired, items, value, setValue, twBody, twSelect,
         <select
           className={`relative p-1 border border-gray-300 rounded-sm w-full appearance-none focus:outline-none text-gray-800 ${twSelect}`}
           onChange={onValueChangeHandler}
-          value={value}
+          value={items && value ? items.findIndex(item => value.key === item.key) : 0}
         >
-          {items.map(({key, value}) => (
-            <option key={generate()} value={key}> {value} </option>
-          ))}
+          {items.map((item, index) => {
+            const {value: name} = item;
+            return <option key={generate()} value={index}> {name} </option>
+          })}
         </select>
       </div>
     </div>
