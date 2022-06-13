@@ -13,7 +13,7 @@ const mapCenter = {
   lng: 23.33,
 };
 
-const BreachMap = ({mapTools}) => {
+const DislocationMap = ({mapTools}) => {
   const mapRef = useRef(null);
   const {english, lithuanian, t} = useLanguage();
   
@@ -45,4 +45,4 @@ const BreachMap = ({mapTools}) => {
   ) : <></>
 };
 
-export default BreachMap;
+export default DislocationMap;

@@ -11,14 +11,11 @@ import GlobalContext from "../../context/globalContext";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import {BreachesHeader} from '../../components/headers/breach/breachesHeader';
 import {BreachesList} from '../../components/lists/breachesList';
-import {BreachesTestApi} from '../../api/breachesTest';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
 import SlideOver from '../../components/sidebars/slideOver';
 import MainSidebar from '../../components/sidebars/main';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
-import useSort from '../../hook/useSort';
-import {sortToggle} from '../../util/utils';
 import {AddFilterListBreaches} from '../../components/addFilter/addFilterBreaches';
 import {SearchButton} from '../../components/buttons/searchButton';
 import {OptionsListBreaches} from '../../components/options/optionsBreaches';
@@ -44,21 +41,6 @@ function Breaches() {
       setToPrint(false);
     }, 1000);
   }, []);
-
-  const {
-    sortedDashboardKeys,
-    sortedDashboardOrder,
-    sortedDashboardDate,
-    sortedDashboardCrew,
-    sortedDashboardDrivers,
-    sortedDashboardTimeOutOfZone
-  } = useSort();
-
-  const sortedBreachesTestApi = sortToggle(
-    BreachesTestApi,
-    sortedDashboardKeys,
-    sortedDashboardOrder
-  );
 
   return (
     <OverlayProvider>
@@ -145,109 +127,30 @@ function Breaches() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex col-span-3 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDate}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.dateFrom")}</span>
-                            <img
-                              src={require("../../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex col-span-6 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardTimeOutOfZone}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.timeOutOfZone")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-1 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardCrew}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.crew")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDrivers}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.drivers")}</span>
-                          </button>
-                        </div>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto">
-                        {sortedBreachesTestApi.map((data) => (
+
                           <BreachesList
-                            key={data.id}
-                            id={data.id}
-                            date={data.date}
-                            timeOutOfZone={data.timeOutOfZone}
-                            crew={data.crew}
-                            drivers={data.drivers}
+                            // key={data.id}
+                            // id={data.id}
+                            // date={data.date}
+                            // timeOutOfZone={data.timeOutOfZone}
+                            // crew={data.crew}
+                            // drivers={data.drivers}
                           />
-                        ))}
-                      </div>
+
+                  
                     </PDFExport>
                   ) : (
-                    <>
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex col-span-3 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDate}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.dateFrom")}</span>
-                            <img
-                              src={require("../../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex col-span-6 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDate}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.timeOutOfZone")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-1 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDate}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.crew")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDate}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.drivers")}</span>
-                          </button>
-                        </div>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto">
-                        {sortedBreachesTestApi.map((data) => (
+
                           <BreachesList
-                            key={data.id}
-                            id={data.id}
-                            date={data.date}
-                            timeOutOfZone={data.timeOutOfZone}
-                            crew={data.crew}
-                            drivers={data.drivers}
+                            // key={data.id}
+                            // id={data.id}
+                            // date={data.date}
+                            // timeOutOfZone={data.timeOutOfZone}
+                            // crew={data.crew}
+                            // drivers={data.drivers}
                           />
-                        ))}
-                      </div>
+                          )}
+
                       <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                         <div className="flex flex-col items-start">
                           <div>
@@ -375,8 +278,6 @@ function Breaches() {
                           </a>
                         </div>
                       </nav>
-                    </>
-                  )}
                 </div>
               </div>
             </div>

@@ -24,6 +24,8 @@ export const GlobalProvider = ({ children }) => {
   const [filterEditingClients, setFilterEditingClients] = useState(null);
   const [filterEditingObjects, setFilterEditingObjects] = useState(null);
   const [filterEditingModems, setFilterEditingModems] = useState(null);
+  const [filterEditingDislocations, setFilterEditingDislocations] =
+    useState(null);
   const [currentFilter, setCurrentFilter] = useState(null);
   const [search, setSearch] = useState("");
   const [sortedDashboardTestApiKeys, setSortedDashboardTestApiKeys] =
@@ -40,6 +42,8 @@ export const GlobalProvider = ({ children }) => {
   const [expandFilterObjects, setExpandFilterObjects] = useState(true);
   const [expandFilterClients, setExpandFilterClients] = useState(true);
   const [expandFilterModems, setExpandFilterModems] = useState(true);
+  const [expandFilterDislocations, setExpandFilterDislocations] =
+    useState(true);
   const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
   const [apiData, setApiData] = useState(""); // not used
   const [globalToken, setGlobalToken] = useState("empty");
@@ -129,6 +133,30 @@ export const GlobalProvider = ({ children }) => {
         "Ekipažai",
         "Vairuotojai",
       ],
+    },
+  ]);
+
+  const [selectedFilterDislocations, setSelectedFilterDislocations] =
+    useState(null);
+  const [filterListDislocations, setFilterListDislocations] = useState([
+    {
+      id: generate(),
+      filterName: generate(),
+      filterShortName: Math.random().toString(36).slice(-4),
+      savedToFavorite: true,
+      savedToMenu: true,
+      date: "",
+      objectAddress: "",
+      operator: "0",
+      object: "0",
+      type: "0",
+      group: "0",
+      status: "0",
+      reason: "0",
+      crew: "0",
+      driver: "0",
+      inTime: "0",
+      dashboardList: ["Name"],
     },
   ]);
 
@@ -280,6 +308,14 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    selectedFilterDislocations,
+    setSelectedFilterDislocations,
+    filterListDislocations,
+    setFilterListDislocations,
+    filterEditingDislocations,
+    setFilterEditingDislocations,
+    expandFilterDislocations,
+    setExpandFilterDislocations,
     objectPageAddress,
     setObjectPageAddress,
     objectPageFetchData,

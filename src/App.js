@@ -28,6 +28,8 @@ import CreateCrew from './layout/crew/createCrew';
 import Permission from './layout/permission/permissions';
 import Breach from './layout/breach/breach';
 import Breaches from './layout/breach/breaches';
+import Dislocation from './layout/dislocation/dislocation';
+// import Dislocations from './layout/dislocation/dislocations';
 import PermissionConfirmation from './layout/permission/permissionConfirmation';
 import NewTaskLayout from "./feature/task/layout/newTaskLayout";
 
@@ -83,11 +85,13 @@ function App() {
                 <Route path="Modem/:id" element={<Modem />} />
                 <Route path="Key/:id" element={<Key />} />
                 <Route path="Object/:id" element={<Object />} />
+                <Route path="Dislocation/:id" element={<Dislocation />} />
                 <Route path="CreateCrew/:id" element={<CreateCrew />} />
                 <Route path="Crews" element={<Crews />} />
                 <Route path="Permissions" element={<Permission />} />
                 <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
                 <Route path="Breaches" element={<Breaches />} />
+                <Route path="Dislocation" element={<Dislocation />} />
                 <Route path="Breach" element={<Breach />} />
                 <Route path="*" element={<NotFound />} />
               </Route>

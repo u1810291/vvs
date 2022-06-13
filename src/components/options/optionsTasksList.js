@@ -12,6 +12,7 @@ function classNames(...classes) {
 }
 
 export const OptionsList = (props) => {
+  const ref = useRef();
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const { value, onChange } = useContext(GlobalContext);
