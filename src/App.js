@@ -28,8 +28,8 @@ import CreateCrew from './layout/crew/createCrew';
 import Permission from './layout/permission/permissions';
 import Breach from './layout/breach/breach';
 import Breaches from './layout/breach/breaches';
+import Dislocations from './layout/dislocation/dislocations';
 import Dislocation from './layout/dislocation/dislocation';
-// import Dislocations from './layout/dislocation/dislocations';
 import PermissionConfirmation from './layout/permission/permissionConfirmation';
 import NewTaskLayout from "./feature/task/layout/newTaskLayout";
 
@@ -91,7 +91,7 @@ function App() {
                 <Route path="Permissions" element={<Permission />} />
                 <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
                 <Route path="Breaches" element={<Breaches />} />
-                <Route path="Dislocation" element={<Dislocation />} />
+                <Route path="Dislocations" element={<Dislocations />} />
                 <Route path="Breach" element={<Breach />} />
                 <Route path="*" element={<NotFound />} />
               </Route>

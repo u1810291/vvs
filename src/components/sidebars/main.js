@@ -68,7 +68,7 @@ const MainSidebar = () => {
             Vairuotojai
           </Link>
           <Link
-            to="/dislocation"
+            to="/dislocations"
             className="font-light text-normal text-gray-200 hover:text-gray-400"
           >
             Dislokacijos zonos

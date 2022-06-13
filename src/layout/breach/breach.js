@@ -38,7 +38,7 @@ function Breach() {
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
                 <BreachHeader />
-                <div className="flex flex-row min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
+                <div className="flex flex-row min-h-screen sm:min-h-0 sm:h-full"> {/*  overflow-scroll */}
                   <BreachMap />
                   <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-1/5 bg-gray-100">
                     <BreachSideRight />

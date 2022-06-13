@@ -42,8 +42,6 @@ export const GlobalProvider = ({ children }) => {
   const [expandFilterObjects, setExpandFilterObjects] = useState(true);
   const [expandFilterClients, setExpandFilterClients] = useState(true);
   const [expandFilterModems, setExpandFilterModems] = useState(true);
-  const [expandFilterDislocations, setExpandFilterDislocations] =
-    useState(true);
   const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
   const [apiData, setApiData] = useState(""); // not used
   const [globalToken, setGlobalToken] = useState("empty");
@@ -314,8 +312,6 @@ export const GlobalProvider = ({ children }) => {
     setFilterListDislocations,
     filterEditingDislocations,
     setFilterEditingDislocations,
-    expandFilterDislocations,
-    setExpandFilterDislocations,
     objectPageAddress,
     setObjectPageAddress,
     objectPageFetchData,

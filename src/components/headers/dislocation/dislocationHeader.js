@@ -1,5 +1,5 @@
 import React from "react";
-import useLanguage from "../../hook/useLanguage";
+import useLanguage from "../../../hook/useLanguage";
 import { Link } from "react-router-dom";
 
 export function DislocationHeader() {

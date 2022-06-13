@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import useLanguage from "../../hook/useLanguage";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import { DislocationHeader } from "../../components/headers/dislocationHeader";
+import { DislocationsHeader } from "../../components/headers/dislocation/dislocations";
 import DislocationMap from "../../components/map/dislocationMap";
 import DislocationSide from "../../components/sides/dislocationSide";
 import GlobalContext from "../../context/globalContext";
@@ -70,7 +70,7 @@ function Dislocation() {
                 })}
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
-                <DislocationHeader />
+                <DislocationsHeader />
                 <div className="flex flex-row min-h-screen sm:min-h-0 sm:h-full"> {/* overflow-scroll */}
                   <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-2/6">
                     <DislocationSide />
