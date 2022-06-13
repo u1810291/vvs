@@ -54,7 +54,7 @@ const { filterListDislocations, setFilterListDislocations } = useContext(GlobalC
         <div className="flex w-screen flex-row justify-center h-screen">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-            <div className="flex flex-col bg-slate-600 pt-2 items-center w-20">
+            <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button className="flex flex-col py-2 items-center">
                   <img
                     onClick={handleOnOpen}
@@ -63,7 +63,7 @@ const { filterListDislocations, setFilterListDislocations } = useContext(GlobalC
                   />
                 </button>
                 <img
-                  className="pt-6"
+                  className="pt-2"
                   src={require("../../assets/assets/Line.png")}
                 ></img>
                 {filterListDislocations.map((filter) => {
