@@ -10,6 +10,7 @@ import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import { DislocationsHeader } from "../../components/headers/dislocation/dislocations";
 import DislocationMap from "../../components/map/dislocationMap";
 import DislocationSide from "../../components/sides/dislocationSide";
+import DislocationSideToArchive from "../../components/sides/dislocationSideToArchive";
 import GlobalContext from "../../context/globalContext";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import SlideOver from "../../components/sidebars/slideOver";
@@ -73,7 +74,8 @@ function Dislocation() {
                 <DislocationsHeader />
                 <div className="flex flex-row min-h-screen sm:min-h-0 sm:h-full"> {/* overflow-scroll */}
                   <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-2/6">
-                    <DislocationSide />
+                    {/* <DislocationSide /> */}
+                    <DislocationSideToArchive />
                   </div>
                   <DislocationMap />
                 </div>
