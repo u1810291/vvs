@@ -4,7 +4,7 @@ import env from "../../../env";
 import AuthContext from "../../../context/authContext";
 
 import {identity, ifElse, or} from "crocks";
-import {GoogleMap} from "@react-google-maps/api";
+import Geocode from "react-geocode";
 import resultToAsync from "crocks/Async/resultToAsync";
 import {lengthGt, hasntLength} from "../../../util/pred";
 
@@ -14,17 +14,23 @@ import Selectbox from "../../../components/input/Selectbox";
 import ControlledInput from "../../../components/input/ControlledInput";
 
 import useAsync from "../../../hook/useAsync";
+import useGeocode from "../../../hook/useGeocode";
 import useLanguage from "../../../hook/useLanguage";
 import useResultForm from "../../../hook/useResultForm";
 
 import {asyncGetObjects, asyncGetCrews, asyncCreateEvent} from "../api/newTaskApi";
+import {generate} from "shortid";
 
 const NewTaskForm = () => {
   const {t} = useLanguage();
+  const {getCoordsByAddress} = useGeocode();
   const {accessToken} = useContext(AuthContext);
   const [crews, setCrews] = useState([{}]);
   const [taskName, setTaskName] = useState("");
-  const [objects, setObjects] = useState([{}]);
+  const [objects, setObjects] = useState([
+    {address: "Gilužio g. 5, Vilnius 06229, Lithuania"},
+    {address: "Įsruties g. 3, Vilnius 06218, Lithuania"}
+  ]);
   const [taskDescription, setTaskDescription] = useState("");
   const [taskStatus, setTaskStatus] = useState([{key: "Naujas", value: "Naujas"}]);
 
@@ -93,10 +99,10 @@ const NewTaskForm = () => {
     identity,
   );
 
-  const [objectsResponse, forkObjects] = useAsync(
-    asyncGetObjects("secret", accessToken),
-    identity,
-  );
+  // const [objectsResponse, forkObjects] = useAsync(
+  //   asyncGetObjects("secret", accessToken),
+  //   identity,
+  // );
 
   const [eventResponse, forkEvent] = useAsync(
     resultToAsync(eventResult).chain(asyncCreateEvent),
@@ -105,7 +111,7 @@ const NewTaskForm = () => {
 
   useEffect(() => {
     forkCrews();
-    forkObjects();
+    // forkObjects();
   }, []);
 
   useEffect(() => {
@@ -115,13 +121,30 @@ const NewTaskForm = () => {
         value: crew.abbreviation
       })));
     }
-    if (objectsResponse.data) {
-      setObjects(objectsResponse.data.data.objects.map(object => ({
-        key: object.Id,
-        value: object.address
+    // if (objectsResponse.data) {
+    //   setObjects(objectsResponse.data.data.objects.map(object => ({
+    //     key: object.Id,
+    //     value: object.address
+    //   })));
+    // }
+  }, [crewsResponse]);
+
+  useEffect(async () => {
+    if (objects) {
+      const asyncMapObjects = await Promise.all(objects.map(async object => ({
+        key: generate(),
+        value: object.address,
+        coords: await getCoordsByAddress(object.address)
       })));
+
+      setObjects(await asyncMapObjects);
     }
-  }, [crewsResponse, objectsResponse]);
+  }, []);
+
+  useEffect(() => {
+    console.log(selectedObject)
+  }, [selectedObject]);
+
 
   useEffect(() => {
     directSet("name", taskName);
@@ -131,13 +154,8 @@ const NewTaskForm = () => {
     directSet("objectID", selectedObject);
   }, [taskName, taskDescription, selectedCrew, selectedObject, selectedTaskStatus]);
 
-  console.log(isEventFullyComplete);
-
   return (
     <section className={"flex flex-col w-1/4 p-5"}>
-      <button onClick={forkEvent}>
-        asdasdasasd
-      </button>
       <div className={"flex mb-6"}>
         <Selectbox
           label={t("eurocash.type")}
@@ -172,7 +190,7 @@ const NewTaskForm = () => {
         setValue={setSelectedObject}
       />
       <div className="relative h-80 mb-6">
-        <Map/>
+        <Map marker={selectedObject}/>
       </div>
       <Selectbox
         label={t("eurocash.crews")}

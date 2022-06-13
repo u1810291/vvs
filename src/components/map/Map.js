@@ -1,5 +1,5 @@
 import React, {useCallback, useRef} from "react";
-import {GoogleMap, useLoadScript} from "@react-google-maps/api";
+import {GoogleMap, Marker, useLoadScript} from "@react-google-maps/api";
 import useLanguage from "../../hook/useLanguage";
 import GoogleMapTools from "./googleMapTools";
 
@@ -13,7 +13,7 @@ const mapCenter = {
   lng: 23.33,
 };
 
-const Map = ({isMapTools, mapToolsLibraries}) => {
+const Map = ({isMapTools, mapToolsLibraries, marker}) => {
   const {t} = useLanguage();
   const mapRef = useRef(null);
 
@@ -30,15 +30,20 @@ const Map = ({isMapTools, mapToolsLibraries}) => {
     libraries: mapToolsLibraries
   });
 
+  if (marker && marker.coords) {
+    console.log(marker.coords)
+  }
+
   return isMapLoaded ? (
     <div className="w-full h-full relative">
       <GoogleMap
         zoom={14}
-        center={mapCenter}
+        center={marker?.coords || mapCenter}
         onLoad={onMapLoad}
         onUnmount={onMapUnmount}
         mapContainerStyle={mapContainerStyle}
       >
+        {marker && marker.coords && <Marker onLoad={onMapLoad} position={marker.coords}/>}
         {isMapTools && <GoogleMapTools onMapLoad={onMapLoad}/>}
       </GoogleMap>
     </div>
