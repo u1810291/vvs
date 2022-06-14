@@ -1,14 +1,16 @@
-import React, { useContext, useCallback } from "react";
+import React, { useContext, useCallback, useState } from "react";
 import useLanguage from "../../hook/useLanguage";
 import { Search } from "../../components/input/search";
 import GlobalContext from "../../context/globalContext";
 import generate from "shortid";
 const { ActiveCard } = require("../cards/active");
 import { crewZonesQuery } from "../../api/queryForms/queryString/query";
+import { crewZonesSubscription } from "../../api/queryForms/queryString/subscriptions";
 import { crewZonesMutation } from "../../api/queryForms/queryString/mutation";
 import AuthContext from "../../context/authContext";
 import useReactQuery from "../../hook/useQuery";
 import { useFetch } from "../../hook/useFetch";
+import { useQuery, useSubscription, useMutation } from "graphql-hooks";
 
 function AddressListItem({name, nodes, crewid, ...props}) {
   const {removeZone, setRemoveZone} = useContext(GlobalContext);
@@ -29,32 +31,44 @@ function AddressListItem({name, nodes, crewid, ...props}) {
 const DislocationSide = (props) => {
   const { accessToken } = useContext(AuthContext);
   const { english, lithuanian, t } = useLanguage();
-  // const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
+  const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
+  const [data, setData] = useState("")
+  const [error, setError] = useState("")
 
-  const data  = useReactQuery(
-    crewZonesQuery,
-    {},
-    accessToken
-  );
-
-  // const crewZonesVariables = {
-  //   updateCrewZones: {
-  //   name: generate().toString(),
-  //   nodes: polygonsCoordinates,
-  //   }
-  // };
-
-  // const { error: errorResponse, data: mutateResponse, loading: loadingResponse, fetchData } = useFetch(
-  //   crewZonesMutation,
-  //   crewZonesVariables,
+  // const data  = useReactQuery(
+  //   crewZonesQuery,
+  //   {},
   //   accessToken
   // );
 
-  const createNewPolygon = useCallback(() => {
-    // fetchData();
-  }, []);
+   useSubscription({ query: crewZonesSubscription}, ({ data, errors }) => {
+    if (errors && errors.length > 0) {
+      setError(errors[0]);
+      return;
+    }
 
-  // console.log('mutateResponse ', mutateResponse);
+    console.log(data);
+    setData(data);
+  });
+
+  const crewZonesVariables = {
+    updateCrewZones: {
+    name: generate().toString(),
+    nodes: polygonsCoordinates,
+    }
+  };
+
+  const { error: errorResponse, data: mutateResponse, loading: loadingResponse, fetchData } = useFetch(
+    crewZonesMutation,
+    crewZonesVariables,
+    accessToken
+  );
+
+  const createNewPolygon = useCallback(() => {
+    fetchData();
+  }, [fetchData]);
+
+  console.log('mutateResponse ', mutateResponse);
 
   return (
     <>
@@ -63,7 +77,7 @@ const DislocationSide = (props) => {
           <div className="flex justify-center mt-4">
             <Search />
           </div>
-          {data?.data?.crew_zone?.map((data) => (
+          {data?.crew_zone?.map((data) => (
           <AddressListItem name={data.name} nodes={data.nodes} crewid={data.crew_id} key={data.id}  />
           ))}
           <div className="flex justify-center mt-4">

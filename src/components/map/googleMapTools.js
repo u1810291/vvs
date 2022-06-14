@@ -51,8 +51,7 @@ const GoogleMapTools = ({ onMapLoad }) => {
   useEffect(() => {
     setPolygonsCoordinates(coordinates);
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [coordinates]);
+  , []);
 
   const clearAllPolygons = useCallback(() => {
     if (polygons.length) {

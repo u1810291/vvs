@@ -78,14 +78,14 @@ function Dislocation() {
                   {" "}
                   {/* overflow-scroll */}
                   <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-2/6">
-                    {!removeZone ? <DislocationSide /> : null} {/* removeZone */}
+                    {!removeZone ? <DislocationSide /> : null}
                     {removeZone ? (
                       <DislocationSideToArchive
                         openRemove={(create) => setRemoveZone(create)}
                       />
                     ) : null}
                   </div>
-                  <DislocationMap /> {/* removeZone */}
+                  <DislocationMap />
                 </div>
               </div>
             </div>

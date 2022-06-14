@@ -29,7 +29,7 @@ const DislocationMap = ({ mapTools }) => {
 
   const { isLoaded: isMapLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-    libraries: ["drawing"],
+    libraries: lib,
   });
 
   return isMapLoaded ? (
