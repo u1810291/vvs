@@ -61,7 +61,7 @@ export const OptionsList = (props) => {
                       ref={ref}
                       onClick={() => {
                         const date = startAndEndDate;
-                        setFilterListObjects((currentFilter) =>
+                        setFilterList((currentFilter) =>
                           currentFilter.map((x) =>
                             x.id === filter.id ? { ...x, date } : x
                           )

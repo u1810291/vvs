@@ -63,7 +63,7 @@ export const OptionsListPermissions = (props) => {
                       ref={ref}
                       onClick={() => {
                         const date = startAndEndDate;
-                        setFilterListObjects((currentFilter) =>
+                        setFilterListPermissions((currentFilter) =>
                           currentFilter.map((x) =>
                             x.id === filter.id ? { ...x, date } : x
                           )

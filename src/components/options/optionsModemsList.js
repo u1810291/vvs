@@ -63,7 +63,7 @@ export const OptionsListModems = (props) => {
                       ref={ref}
                       onClick={() => {
                         const date = startAndEndDate;
-                        setFilterListObjects((currentFilter) =>
+                        setFilterListModems((currentFilter) =>
                           currentFilter.map((x) =>
                             x.id === filter.id ? { ...x, date } : x
                           )
