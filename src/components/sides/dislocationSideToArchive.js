@@ -1,10 +1,17 @@
-import React, { useCallback, useState } from "react";
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
+import React, { useCallback, useState, useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
+import GlobalContext from "../../context/globalContext";
 const { ActiveCard } = require("../cards/active");
 
-const DislocationSideToArchive = () => {
+const DislocationSideToArchive = (props) => {
   const { english, lithuanian, t } = useLanguage();
   const [addressCrew, setAddressCrew] = useState("");
+  const {removeZone, setRemoveZone} = useContext(GlobalContext);
+
+  const archiveFunc = useCallback(() => {
+    setRemoveZone(false);
+  }, [setRemoveZone]);
 
   const addressCrewFunc = useCallback(async (e) => {
     setAddressCrew(e.target.value);
@@ -33,8 +40,7 @@ const DislocationSideToArchive = () => {
             </div>
           </div>
         </div>
-        <button
-          type="submit"
+        <button  onClick={archiveFunc}
           className="hidden sm:w-40 sm:h-10 rounded sm:flex mx-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
         >
           Archyvuoti

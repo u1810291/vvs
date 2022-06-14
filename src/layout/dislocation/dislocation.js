@@ -1,3 +1,4 @@
+/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -23,6 +24,7 @@ function Dislocation() {
     useContext(GlobalContext);
   const { filterListDislocations, setFilterListDislocations } =
     useContext(GlobalContext);
+  const { removeZone, setRemoveZone } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
   const { english, lithuanian, t } = useLanguage();
   const preventScroll = usePreventScroll({ isDisabled: !isOpen });
@@ -72,12 +74,18 @@ function Dislocation() {
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
                 <DislocationsHeader />
-                <div className="flex flex-row min-h-screen sm:min-h-0 sm:h-full"> {/* overflow-scroll */}
+                <div className="flex flex-row min-h-screen sm:min-h-0 sm:h-full">
+                  {" "}
+                  {/* overflow-scroll */}
                   <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-2/6">
-                    {/* <DislocationSide /> */}
-                    <DislocationSideToArchive />
+                    {!removeZone ? <DislocationSide /> : null} {/* removeZone */}
+                    {removeZone ? (
+                      <DislocationSideToArchive
+                        openRemove={(create) => setRemoveZone(create)}
+                      />
+                    ) : null}
                   </div>
-                  <DislocationMap />
+                  <DislocationMap /> {/* removeZone */}
                 </div>
               </div>
             </div>

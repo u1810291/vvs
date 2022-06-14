@@ -1,3 +1,14 @@
+export const crewZonesMutation = `mutation MyMutation ($updateCrewZones: [crew_zone_insert_input!]!) {
+  insert_crew_zone(objects: $updateCrewZones, on_conflict: { constraint: crew_zones_pkey ,update_columns: [crew_id, name, nodes] }) {
+    returning {
+    crew_id
+    name
+    nodes
+    }
+  }
+}
+`;
+
 export const deleteImageURI = `mutation MyMutation ($imagepath: String!) {
   delete_monas_images_related(where: {imagepath: {_eq: $imagepath}}) {
     affected_rows

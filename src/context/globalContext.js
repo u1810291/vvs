@@ -48,6 +48,8 @@ export const GlobalProvider = ({ children }) => {
   const [objectPageImages, setObjectPageImages] = useState([]);
   const [objectPageAddress, setObjectPageAddress] = useState("");
   const [objectPageFetchData, setObjectPageFetchData] = useState(false);
+  const [removeZone, setRemoveZone] = useState(false);
+  const [polygonsCoordinates, setPolygonsCoordinates] = useState([]);
 
   const [filterEditing, setFilterEditing] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -306,6 +308,10 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    polygonsCoordinates,
+    setPolygonsCoordinates,
+    removeZone,
+    setRemoveZone,
     selectedFilterDislocations,
     setSelectedFilterDislocations,
     filterListDislocations,

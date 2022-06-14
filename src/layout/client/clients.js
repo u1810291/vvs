@@ -92,7 +92,9 @@ function ClientsList() {
 
               <div className="flex flex-col min-h-full w-full justify-between">
                 <ClientsHeader />
-                <div className="flex flex-col min-h-screen sm:min-h-0 sm:h-full"> {/* overflow-scroll */}
+                <div className="flex flex-col min-h-screen sm:min-h-0 sm:h-full">
+                  {" "}
+                  {/* overflow-scroll */}
                   <div className="flex flex-row w-full">
                     {expandFilterClients ? (
                       <>
@@ -135,7 +137,6 @@ function ClientsList() {
                       {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
                     </div>
                   </div>
-
                   {toPrint ? (
                     <PDFExport
                       ref={pdfExportComponent}
@@ -150,7 +151,6 @@ function ClientsList() {
                       <ClientList />
                     </>
                   )}
-
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>

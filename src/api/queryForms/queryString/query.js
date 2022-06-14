@@ -189,6 +189,14 @@ export const objectPage = `query MyQuery {
 //     updated_at
 //   }
 // }`;
+export const crewZonesQuery = `query My_query {
+  crew_zone {
+    id
+    name
+    nodes
+    crew_id
+  }
+}`;
 
 export const imagesUpdate = `query uploadImage($image: String!, $id: String!, $authToken: String!) {
   uploadImages(image: $image, id: $id, authToken: $authToken) {

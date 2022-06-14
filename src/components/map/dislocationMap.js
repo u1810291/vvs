@@ -1,5 +1,5 @@
-import React, {useCallback, useRef} from "react";
-import {GoogleMap, useLoadScript} from "@react-google-maps/api";
+import React, { useCallback, useRef, useState } from "react";
+import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import useLanguage from "../../hook/useLanguage";
 import GoogleMapTools from "./googleMapTools";
 
@@ -13,10 +13,12 @@ const mapCenter = {
   lng: 23.33,
 };
 
-const DislocationMap = ({mapTools}) => {
+const lib = ["drawing"];
+
+const DislocationMap = ({ mapTools }) => {
   const mapRef = useRef(null);
-  const {english, lithuanian, t} = useLanguage();
-  
+  const { english, lithuanian, t } = useLanguage();
+
   const onMapLoad = useCallback(function callback(map) {
     mapRef.current = map;
   }, []);
@@ -25,9 +27,9 @@ const DislocationMap = ({mapTools}) => {
     mapRef.current = null;
   }, []);
 
-  const {isLoaded : isMapLoaded} = useLoadScript({
-    googleMapsApiKey: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs",
-    libraries: ["drawing"]
+  const { isLoaded: isMapLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    libraries: ["drawing"],
   });
 
   return isMapLoaded ? (
@@ -39,10 +41,12 @@ const DislocationMap = ({mapTools}) => {
         onUnmount={onMapUnmount}
         mapContainerStyle={mapContainerStyle}
       >
-         {/* <GoogleMapTools onMapLoad={onMapLoad}/> */}
+        <GoogleMapTools onMapLoad={onMapLoad} />
       </GoogleMap>
     </div>
-  ) : <></>
+  ) : (
+    <></>
+  );
 };
 
-export default DislocationMap;
+export default React.memo(DislocationMap);

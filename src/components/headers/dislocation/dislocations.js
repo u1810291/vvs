@@ -8,7 +8,6 @@ export function DislocationsHeader() {
     <div className="flex flex-row border-b h-16 bg-white justify-between">
       <div className="xl:flex hidden xl:flex-row ml-4 items-center">
         <h4 className="ml-2 mr-4 text-normal font-normal">Dislokacijos Zonos</h4>
-        <Search />
       </div>
       <div className="flex flex-row items-center">
         <Link to="/driver">
