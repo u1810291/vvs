@@ -26,7 +26,7 @@ const DashboardSideLeft = () => {
       </div>
       <div className="text-slate-400">
         <h4 className="ml-6 py-2 text-slate-400 text-sm">Nepriskirtos</h4>
-        {DDAPI.map((data) => (
+        {DDAPI?.map((data) => (
           <AssignCard
             id={generate()}
             key={data.id}
@@ -46,7 +46,7 @@ const DashboardSideLeft = () => {
           />
         ))}
         <h4 className="ml-6 py-2 text-slate-400 text-sm">Prašymai</h4>
-        {DDAPI.map((data) => (
+        {DDAPI?.map((data) => (
           <PermissionCard
             id={generate()}
             key={data.id}
@@ -66,7 +66,7 @@ const DashboardSideLeft = () => {
         <h4 className="ml-6 py-2 text-slate-400 text-sm">
           Laukiama patvirtinimo
         </h4>
-        {DDAPI.map((data) => (
+        {DDAPI?.map((data) => (
           <WaitingForConfirmationCard
             id={generate()}
             key={data.id}
@@ -85,7 +85,7 @@ const DashboardSideLeft = () => {
           />
         ))}
         <h4 className="ml-6 py-2 text-slate-400 text-sm">Važiuoja į objektą</h4>
-        {DDAPI.map((data) => (
+        {DDAPI?.map((data) => (
           <DrivingToObjectCard
             id={generate()}
             key={data.id}
@@ -103,7 +103,7 @@ const DashboardSideLeft = () => {
           />
         ))}
         <h4 className="ml-6 py-2 text-slate-400 text-sm">Apžiūri objektą</h4>
-        {DDAPI.map((data) => (
+        {DDAPI?.map((data) => (
           <InspectObjectCard
             id={generate()}
             key={data.id}
@@ -124,7 +124,7 @@ const DashboardSideLeft = () => {
         <h4 className="ml-6 py-2 text-slate-400 text-sm">
           Laukiama leidimo grįžti
         </h4>
-        {DDAPI.map((data) => (
+        {DDAPI?.map((data) => (
           <WaitingToReturnCard
             id={generate()}
             key={data.id}
@@ -144,7 +144,7 @@ const DashboardSideLeft = () => {
         <h4 className="ml-6 py-2 text-slate-400 text-sm">
           Atšauktos atsakingo
         </h4>
-        {DDAPI.map((data) => (
+        {DDAPI?.map((data) => (
           <CanceledCard
             id={generate()}
             key={data.id}

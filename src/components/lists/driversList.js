@@ -33,11 +33,11 @@ export const DriverList = () => {
 
   useEffect(() => {
     if (data) {
-      const allUsers = data.data.users.users;
+      const allUsers = data?.data?.users?.users;
       const searchRole = (name, arr) =>
-        arr.filter(({ registrations }) => {
+        arr?.filter(({ registrations }) => {
         if (registrations) {
-          const reg = registrations.find((role) => role.roles[0] === "crew")
+          const reg = registrations?.find((role) => role.roles[0] === "crew")
           return reg
       }});
       const searchResult = searchRole("crew", allUsers);
@@ -62,12 +62,12 @@ export const DriverList = () => {
   return (
     <>
       {!sortedDrivers ? (
-        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
+        <div className="flex h-screen w-full bg-gray-100 justify-center items-center">
           <Spinner color="dark-blue" size={40} />
         </div>
       ) : (
         <>
-          {filterListDrivers.map((filter, index) => {
+          {filterListDrivers?.map((filter, index) => {
             return (
               <div key={filter.id}>
                 {selectedFilterDrivers === filter.id ? (
@@ -103,10 +103,10 @@ export const DriverList = () => {
               </div>
             );
           })}
-          {sortedDrivers.map((data) => (
+          {sortedDrivers?.map((data) => (
             <div key={generate()} className="pl-4 flex-col w-full items-center">
               <div className="w-full">
-                {filterListDrivers.map((filter, index) => {
+                {filterListDrivers?.map((filter, index) => {
                   return (
                     <div key={filter.id}>
                       {selectedFilterDrivers === filter.id ? (
