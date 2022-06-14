@@ -29,11 +29,11 @@ export const FiltersListBreaches = ({
   return (
     <div
       {...props}
-      className={selectedFilterBreaches ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"}
+
     >
       {filterListBreaches.map((filter) => {
         return (
-          <>
+          <div className={selectedFilterBreaches ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"} key={generate()}>
             {/* gets one additional div around ( visible : hidden div ) and collapse filters if do here key={generate()}*/}
             {selectedFilterBreaches === filter.id ? (
               <>
@@ -63,7 +63,7 @@ export const FiltersListBreaches = ({
               </>
             ) : null}
             {/* </> */}
-          </>
+          </div>
         );
       })}
 
