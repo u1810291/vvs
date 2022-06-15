@@ -30,7 +30,6 @@ import Breaches from "./layout/breach/breaches";
 import Dislocations from "./layout/dislocation/dislocations";
 import Dislocation from "./layout/dislocation/dislocation";
 import PermissionConfirmation from "./layout/permission/permissionConfirmation";
-import TableComponent from "./components/table/index";
 
 import NewTaskLayout from "./feature/task/layout/NewTaskLayout";
 import DashboardLayout from './feature/dashboard/layout/DashboardLayout';
@@ -106,6 +105,23 @@ function App() {
       </QueryClientProvider>
     </Router>
   );
+
+  // return (
+  //   <Router>
+  //     <TableComponent>
+  //       <TableComponent.Head>
+  //         <tr>
+  //           <TableComponent.Header>Hello</TableComponent.Header>
+  //         </tr>
+  //       </TableComponent.Head>
+  //       <TableComponent.Body>
+  //         <TableComponent.Row>
+  //           <TableComponent.Data>Hello as well</TableComponent.Data>
+  //         </TableComponent.Row>
+  //       </TableComponent.Body>
+  //     </TableComponent>
+  //   </Router>
+  // );
 }
 
 export default App;
