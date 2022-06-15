@@ -308,7 +308,6 @@ export const GlobalProvider = ({ children }) => {
     },
   ]);
 
-  // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
     addressCrew,
     setAddressCrew,

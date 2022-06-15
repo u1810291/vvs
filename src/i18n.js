@@ -14,7 +14,7 @@ export const t = (key, config) => {
 
 i18n.use(Backend).use(LanguageDetector).use(initReactI18next).init({
     fallbackLng: 'lt',
-    debug: true,
+    debug: false,
     detection: detection_settings,
     interpolation: {
         escapeValue: false

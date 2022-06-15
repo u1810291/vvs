@@ -3,7 +3,6 @@ import useLanguage from "../../hook/useLanguage";
 import { Search } from "../../components/input/search";
 import GlobalContext from "../../context/globalContext";
 import generate from "shortid";
-const { ActiveCard } = require("../cards/active");
 import { crewZonesQuery } from "../../api/queryForms/queryString/query";
 import { crewZonesSubscription } from "../../api/queryForms/queryString/subscriptions";
 import { crewZonesMutation } from "../../api/queryForms/queryString/mutation";
@@ -12,12 +11,19 @@ import useReactQuery from "../../hook/useQuery";
 import { useFetch } from "../../hook/useFetch";
 import { useQuery, useSubscription, useMutation } from "graphql-hooks";
 
-function AddressListItem({ name, nodes, crewid, ...props }) {
-  const { removeZone, setRemoveZone } = useContext(GlobalContext);
+
+const { ActiveCard } = require("../cards/active");
+
+function AddressListItem({name, nodes, crewid, ...props}) {
+  const {removeZone, setRemoveZone} = useContext(GlobalContext);
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
   const { addressCrew, setAddressCrew } = useContext(GlobalContext);
   const { polygonsCoordinates, setPolygonsCoordinates } =
   useContext(GlobalContext);
+  const closeFunc = useCallback(() => {
+    setRemoveZone(true);
+  }, [setRemoveZone]);
+
 
   return (
     <div className="flex flex-row items-center justify-between border-b h-12">

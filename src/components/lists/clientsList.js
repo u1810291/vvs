@@ -40,7 +40,7 @@ export const ClientList = () => {
 
   useEffect(() => {
     if (error) {
-      backFunc();
+      //backFunc();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
@@ -136,7 +136,6 @@ export const ClientList = () => {
                           {filter.dashboardList.includes("Vardas Pavardė") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
                                 className="bg-white text-gray-500 hover:text-gray-600 truncate text-sm"
                               >
@@ -147,7 +146,6 @@ export const ClientList = () => {
                           {filter.dashboardList.includes("Sutarties nr.") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
                                 className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                               >
@@ -158,7 +156,6 @@ export const ClientList = () => {
                           {filter.dashboardList.includes("Telefonas") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
                                 className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                               >
@@ -169,7 +166,6 @@ export const ClientList = () => {
                           {filter.dashboardList.includes("El. paštas") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/client/${data.id}` }}
                                 className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                               >

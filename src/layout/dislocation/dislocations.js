@@ -10,13 +10,13 @@ import { DislocationsList } from "../../components/lists/dislocationsList";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
 import GlobalContext from "../../context/globalContext";
 
+const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -71,7 +71,6 @@ const { filterListDislocations, setFilterListDislocations } = useContext(GlobalC
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterDislocations(filter.id)}
                         className={
                           selectedFilterDislocations === filter.id
@@ -138,7 +137,6 @@ const { filterListDislocations, setFilterListDislocations } = useContext(GlobalC
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={loop}
                                       className={classNames(
                                         active

@@ -21,6 +21,8 @@ import { SearchButton } from "../../components/buttons/searchButton";
 import { OptionsListBreaches } from "../../components/options/optionsBreaches";
 import { FiltersListBreaches } from "../../components/filters/filterBreachesList";
 
+const classNames = a => a;
+
 function Breaches() {
   const { english, lithuanian, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -68,7 +70,6 @@ function Breaches() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterBreaches(filter.id)}
                         className={
                           selectedFilterBreaches === filter.id
@@ -176,7 +177,6 @@ function Breaches() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={loop}
                                       className={classNames(
                                         active

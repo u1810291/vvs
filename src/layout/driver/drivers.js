@@ -9,9 +9,6 @@ import { DriversHeader } from "../../components/headers/drivers";
 import { DriverList } from "../../components/lists/driversList";
 import { FiltersListDrivers } from "../../components/filters/filterDriversList";
 import { OptionsListDrivers } from "../../components/options/optionsDriversList";
-const {
-  AddFilterListDrivers,
-} = require("../../components/addFilter/addFilterDrivers");
 import GlobalContext from "../../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -22,6 +19,10 @@ import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
 import { SearchButton } from "../../components/buttons/searchButton";
 import useUtils from "../../hook/useUtils";
+
+const {
+  AddFilterListDrivers,
+} = require("../../components/addFilter/addFilterDrivers");
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -78,7 +79,6 @@ function DriversList() {
                       return (
                         <button
                           key={filter.id}
-                          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                           onClick={() => setSelectedFilterDrivers(filter.id)}
                           className={
                             selectedFilterDrivers === filter.id
@@ -187,7 +187,6 @@ function DriversList() {
                                   <Menu.Item>
                                     {({ active }) => (
                                       <button
-                                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                         // onClick={loop}
                                         className={classNames(
                                           active

@@ -23,6 +23,8 @@ import {ChevronDownIcon} from '@heroicons/react/solid';
 import SlideOver from '../../components/sidebars/slideOver';
 import MainSidebar from '../../components/sidebars/main';
 
+const classNames = a => a
+
 function Crew() {
   const {english, lithuanian, t} = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +65,6 @@ function Crew() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterCrew(filter.id)}
                         className={
                           selectedFilterCrew === filter.id
@@ -172,7 +173,6 @@ function Crew() {
                                     <Menu.Item>
                                       {({ active }) => (
                                         <button
-                                          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                           // onClick={loop}
                                           className={classNames(
                                             active

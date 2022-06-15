@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -83,9 +82,9 @@ function Create() {
       const pattern = /^.{1,}$/;
       const result = pattern.test(textArea);
       if (result === true) {
-        setTextValid(true);
+        //setTextValid(true);
       } else {
-        setTextValid(false);
+        //setTextValid(false);
       }
     },
     [textArea]

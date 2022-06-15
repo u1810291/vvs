@@ -117,7 +117,6 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes("Numeris") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/modem/${data.Id}` }}
                             className="bg-white text-gray-500 truncate text-sm hover:text-gray-400"
                           >
@@ -128,7 +127,6 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes("Objekto Pavadinimas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/modem/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
@@ -139,7 +137,6 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes("Objekto nr.") ? (
                         <div className="flex flex-row items-center h-12 w-20">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/modem/${data.Id}` }}
                             className="bg-white text-gray-500 truncate text-sm hover:text-gray-400"
                           >
@@ -150,7 +147,6 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes("Sutarties nr.") ? (
                         <div className="flex flex-row items-center h-12 w-20">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/modem/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
@@ -161,7 +157,6 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes("Būsena") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/modem/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >

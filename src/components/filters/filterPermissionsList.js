@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useCallback, useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
 import { Fragment } from "react";

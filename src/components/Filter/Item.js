@@ -1,7 +1,11 @@
+import {identity} from "crocks";
 import React from "react";
 
+/**
+ * @property {string} propPath - The property path of an object nested via dots
+ */
 export const FilterItem = ({
-  propPath = [],
+  propPath = '',
   children,
   onDelete = identity,
   ...props

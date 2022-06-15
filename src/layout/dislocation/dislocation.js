@@ -84,7 +84,6 @@ function Dislocation() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterDislocations(filter.id)}
                         className={
                           selectedFilterDislocations === filter.id

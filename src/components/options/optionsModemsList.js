@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useCallback, useContext, useEffect, useRef } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -146,7 +145,6 @@ export const OptionsListModems = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                               onClick={() => {
                                 const operator = "1";
                                 setFilterListModems((currentFilter) =>
@@ -170,7 +168,6 @@ export const OptionsListModems = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                               onClick={() => {
                                 const operator = 2;
                                 setFilterListModems((currentFilter) =>
@@ -282,7 +279,6 @@ export const OptionsListModems = (props) => {
                     id="search"
                     name="search"
                     placeholder=""
-                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                     onChange={(e) => {
                       const objectAddress = e.target.value;
                       setFilterListModems((currentFilter) =>
