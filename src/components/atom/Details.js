@@ -1,29 +1,34 @@
 import React from "react";
 
-import useBoolean from '../../hook/useBoolean';
+import useBoolean from "../../hook/useBoolean";
+import {withMergedClassName} from "../../util/react";
+import {ChevronDownIcon, ChevronUpIcon} from "@heroicons/react/outline";
 
-import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
-
-const Details = ({title, children}) => {
-  const [isShown, setShown] = useBoolean(false);
-  return (
-    <div className="flex flex-col text-slate-400">
-      <div className="flex flex-row items-center justify-between border-t ml-6 py-2">
-        <button onClick={setShown} className="text-sm">{title}</button>
-        <button onClick={setShown} className="flex items-center h-2 w-4 mr-10">
-          {isShown
-            ? <ChevronDownIcon/>
-            : <ChevronUpIcon/>
-          }
-        </button>
-      </div>
-      {isShown ? (
-        <div className="flex flex-col max-h-64 overflow-y-auto scrollbar-gone">
-          {children}
+const Details = withMergedClassName(
+  "flex flex-shrink-1",
+  ({Tag =  "div", title, children}) => {
+    const [isShown, setShown] = useBoolean(false);
+    return (
+      <Tag>
+        <div className={`w-full overflow-y-auto scrollbar-gone text-slate-400 ${isShown ? "h-64" : "h-auto"}`}>
+          <div className="flex w-full sticky top-0 flex-row items-center justify-between border-t py-2 px-6 bg-gray-100">
+            <button onClick={setShown} className="text-sm">{title}</button>
+            <button onClick={setShown} className="flex items-center h-2 w-4">
+              {isShown
+                ? <ChevronDownIcon/>
+                : <ChevronUpIcon/>
+              }
+            </button>
+          </div>
+          {isShown ? (
+            <div>
+              {children}
+            </div>
+          ) : <></>}
         </div>
-      ) : <></>}
-    </div>
-  );
-};
+      </Tag>
+    )
+  }
+);
 
 export default Details;
