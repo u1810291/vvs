@@ -3,7 +3,6 @@ import {ensureOptionalProp, ensureProp} from "../util/result";
 import {
   getPathOr,
   Result,
-  getProp,
   getPropOr,
   hasProp,
   not,
@@ -74,12 +73,6 @@ const useResultForm = obj => {
     [setState],
   );
 
-  const directSet = useCallback((key, value) => {
-    setState(objOf(key, value))
-    },[setState]
-  );
-
-
   const isValid = useCallback(
     key => result.either(not(hasProp(key)), () => true),
     [result],
@@ -122,7 +115,6 @@ const useResultForm = obj => {
     result,
     isComplete,
     isFullyComplete,
-    directSet,
   };
 };
 

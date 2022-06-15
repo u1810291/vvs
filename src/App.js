@@ -35,6 +35,7 @@ import NewTaskLayout from "./feature/task/layout/newTaskLayout";
 import TableComponent from "./components/table/index";
 
 import NotFound from "./layout/notFound";
+import {GoogleContextProvider} from './context/googleApiContext';
 
 const queryClient = new QueryClient();
 
@@ -68,35 +69,37 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ClientContext.Provider value={globalToken ? client : null}>
-            <Routes>
-              <Route element={<ProtectedRoute />}>
-                <Route path="/" exec element={<Login />} />
-                <Route path="Dashboard" element={<Dashboard />} />
-                <Route path="Keys" element={<Keys />} />
-                <Route path="Tasks" element={<Tasks />} />
-                <Route path="NewTask" element={<NewTaskLayout />} />
-                <Route path="Drivers" element={<Drivers />} />
-                <Route path="Clients" element={<Clients />} />
-                <Route path="Objects" element={<Objects />} />
-                <Route path="Modems" element={<Modems />} />
-                <Route path="Create" element={<Create />} />
-                <Route path="New" element={<New />} />
-                <Route path="Driver/:id" element={<Driver />} />
-                <Route path="Client/:id" element={<Client />} />
-                <Route path="Modem/:id" element={<Modem />} />
-                <Route path="Key/:id" element={<Key />} />
-                <Route path="Object/:id" element={<Object />} />
-                <Route path="Dislocation/:id" element={<Dislocation />} />
-                <Route path="CreateCrew/:id" element={<CreateCrew />} />
-                <Route path="Crews" element={<Crews />} />
-                <Route path="Permissions" element={<Permission />} />
-                <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
-                <Route path="Breaches" element={<Breaches />} />
-                <Route path="Dislocations" element={<Dislocations />} />
-                <Route path="Breach" element={<Breach />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
+            <GoogleContextProvider>
+              <Routes>
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/" exec element={<Login />} />
+                  <Route path="Dashboard" element={<Dashboard />} />
+                  <Route path="Keys" element={<Keys />} />
+                  <Route path="Tasks" element={<Tasks />} />
+                  <Route path="NewTask" element={<NewTaskLayout />} />
+                  <Route path="Drivers" element={<Drivers />} />
+                  <Route path="Clients" element={<Clients />} />
+                  <Route path="Objects" element={<Objects />} />
+                  <Route path="Modems" element={<Modems />} />
+                  <Route path="Create" element={<Create />} />
+                  <Route path="New" element={<New />} />
+                  <Route path="Driver/:id" element={<Driver />} />
+                  <Route path="Client/:id" element={<Client />} />
+                  <Route path="Modem/:id" element={<Modem />} />
+                  <Route path="Key/:id" element={<Key />} />
+                  <Route path="Object/:id" element={<Object />} />
+                  <Route path="Dislocation/:id" element={<Dislocation />} />
+                  <Route path="CreateCrew/:id" element={<CreateCrew />} />
+                  <Route path="Crews" element={<Crews />} />
+                  <Route path="Permissions" element={<Permission />} />
+                  <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
+                  <Route path="Breaches" element={<Breaches />} />
+                  <Route path="Dislocations" element={<Dislocations />} />
+                  <Route path="Breach" element={<Breach />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </GoogleContextProvider>
           </ClientContext.Provider>
         </AuthProvider>
       </QueryClientProvider>
