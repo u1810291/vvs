@@ -45,7 +45,7 @@ const DislocationMap = ({ mapTools }) => {
   const [error, setError] = useState("");
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
   // console.log('polygonsData', polygonsData.crew_zone[1].nodes[0]);
-  // console.log('polygonsData', polygonsData.crew_zone[0]);
+  // console.log('polygonsData', polygonsData.crew_zone);
 
   useSubscription({ query: crewZonesSubscription }, ({ data, errors }) => {
     if (errors && errors.length > 0) {
@@ -71,9 +71,17 @@ const DislocationMap = ({ mapTools }) => {
   });
 
   // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-  const onLoad = (polygon) => {
+const onLoad = (polygon) => {
     console.log("polygon: ", polygon);
   };
+
+  const test = (map) => {
+    console.log("polygon: ", map);
+  };
+
+  const asd = test(polygonsData);
+  console.log('asd', asd);
+
 
   return isMapLoaded ? (
     <div className="w-full h-full relative">

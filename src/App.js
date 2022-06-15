@@ -24,14 +24,15 @@ import Key from "./layout/key/key";
 import Modem from "./layout/modem/modem";
 import New from "./layout/new";
 import Crews from "./layout/crew/crews";
-import CreateCrew from './layout/crew/createCrew';
-import Permission from './layout/permission/permissions';
-import Breach from './layout/breach/breach';
-import Breaches from './layout/breach/breaches';
-import Dislocations from './layout/dislocation/dislocations';
-import Dislocation from './layout/dislocation/dislocation';
-import PermissionConfirmation from './layout/permission/permissionConfirmation';
+import CreateCrew from "./layout/crew/createCrew";
+import Permission from "./layout/permission/permissions";
+import Breach from "./layout/breach/breach";
+import Breaches from "./layout/breach/breaches";
+import Dislocations from "./layout/dislocation/dislocations";
+import Dislocation from "./layout/dislocation/dislocation";
+import PermissionConfirmation from "./layout/permission/permissionConfirmation";
 import NewTaskLayout from "./feature/task/layout/newTaskLayout";
+import TableComponent from "./components/table/index";
 
 import NotFound from "./layout/notFound";
 
@@ -62,43 +63,60 @@ function App() {
     ),
   });
 
+  // return (
+  //   <Router>
+  //     <QueryClientProvider client={queryClient}>
+  //       <AuthProvider>
+  //         <ClientContext.Provider value={globalToken ? client : null}>
+  //           <Routes>
+  //             <Route element={<ProtectedRoute />}>
+  //               <Route path="/" exec element={<Login />} />
+  //               <Route path="Dashboard" element={<Dashboard />} />
+  //               <Route path="Keys" element={<Keys />} />
+  //               <Route path="Tasks" element={<Tasks />} />
+  //               <Route path="NewTask" element={<NewTaskLayout />} />
+  //               <Route path="Drivers" element={<Drivers />} />
+  //               <Route path="Clients" element={<Clients />} />
+  //               <Route path="Objects" element={<Objects />} />
+  //               <Route path="Modems" element={<Modems />} />
+  //               <Route path="Create" element={<Create />} />
+  //               <Route path="New" element={<New />} />
+  //               <Route path="Driver/:id" element={<Driver />} />
+  //               <Route path="Client/:id" element={<Client />} />
+  //               <Route path="Modem/:id" element={<Modem />} />
+  //               <Route path="Key/:id" element={<Key />} />
+  //               <Route path="Object/:id" element={<Object />} />
+  //               <Route path="Dislocation/:id" element={<Dislocation />} />
+  //               <Route path="CreateCrew/:id" element={<CreateCrew />} />
+  //               <Route path="Crews" element={<Crews />} />
+  //               <Route path="Permissions" element={<Permission />} />
+  //               <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
+  //               <Route path="Breaches" element={<Breaches />} />
+  //               <Route path="Dislocations" element={<Dislocations />} />
+  //               <Route path="Breach" element={<Breach />} />
+  //               <Route path="*" element={<NotFound />} />
+  //             </Route>
+  //           </Routes>
+  //         </ClientContext.Provider>
+  //       </AuthProvider>
+  //     </QueryClientProvider>
+  //   </Router>
+  // );
+
   return (
     <Router>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <ClientContext.Provider value={globalToken ? client : null}>
-            <Routes>
-              <Route element={<ProtectedRoute />}>
-                <Route path="/" exec element={<Login />} />
-                <Route path="Dashboard" element={<Dashboard />} />
-                <Route path="Keys" element={<Keys />} />
-                <Route path="Tasks" element={<Tasks />} />
-                <Route path="NewTask" element={<NewTaskLayout />} />
-                <Route path="Drivers" element={<Drivers />} />
-                <Route path="Clients" element={<Clients />} />
-                <Route path="Objects" element={<Objects />} />
-                <Route path="Modems" element={<Modems />} />
-                <Route path="Create" element={<Create />} />
-                <Route path="New" element={<New />} />
-                <Route path="Driver/:id" element={<Driver />} />
-                <Route path="Client/:id" element={<Client />} />
-                <Route path="Modem/:id" element={<Modem />} />
-                <Route path="Key/:id" element={<Key />} />
-                <Route path="Object/:id" element={<Object />} />
-                <Route path="Dislocation/:id" element={<Dislocation />} />
-                <Route path="CreateCrew/:id" element={<CreateCrew />} />
-                <Route path="Crews" element={<Crews />} />
-                <Route path="Permissions" element={<Permission />} />
-                <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
-                <Route path="Breaches" element={<Breaches />} />
-                <Route path="Dislocations" element={<Dislocations />} />
-                <Route path="Breach" element={<Breach />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </ClientContext.Provider>
-        </AuthProvider>
-      </QueryClientProvider>
+      <TableComponent>
+        <TableComponent.Head>
+          <tr>
+            <TableComponent.Header>Hello</TableComponent.Header>
+          </tr>
+        </TableComponent.Head>
+        <TableComponent.Body>
+          <TableComponent.Row>
+            <TableComponent.Data>Hello as well</TableComponent.Data>
+          </TableComponent.Row>
+        </TableComponent.Body>
+      </TableComponent>
     </Router>
   );
 }
