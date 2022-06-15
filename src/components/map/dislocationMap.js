@@ -93,14 +93,14 @@ const onLoad = (polygon) => {
         mapContainerStyle={mapContainerStyle}
       >
         <GoogleMapTools onMapLoad={onMapLoad} />
-        {/* {polygonsData.crew_zone?.map((polygon, index) => ( */}
+        {polygonsData.crew_zone?.map((polygon, index) => ( 
           <Polygon
             onLoad={onLoad}
-            paths={paths}
+            paths={polygon.nodes}
             options={options}
             key={generate()}
           />
-        {/* ))} */}
+        ))}
       </GoogleMap>
     </div>
   ) : (

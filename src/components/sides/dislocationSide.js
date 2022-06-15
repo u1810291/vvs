@@ -34,7 +34,6 @@ const DislocationSide = (props) => {
   const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
 
-console.log('polygons ', polygonsCoordinates);
   const crewZonesVariables = {
     updateCrewZones: {
     name: generate().toString(),
