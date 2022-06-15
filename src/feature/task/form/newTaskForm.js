@@ -112,12 +112,15 @@ const NewTaskForm = () => {
   // }, [crewsResponse, objectsResponse]);
 
   useEffect(() => {
+    // eslint-disable-next-line no-unused-expressions
     !isEmpty(crews)
       ? setCrews(crews.map(crew => ({key: crew.id, value: crew.abbreviation})))
       : []
+    // eslint-disable-next-line no-unused-expressions
     !isEmpty(objects)
       ? setObjects(objects.map(object => ({key: object.id, value: object.address})))
       : []
+    // eslint-disable-next-line no-unused-expressions
     !isEmpty(taskStatus)
       ? setTaskStatus(taskStatus.map(status => ({key: status.id, value: status.name})))
       : []
