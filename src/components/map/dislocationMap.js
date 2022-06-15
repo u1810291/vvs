@@ -71,7 +71,7 @@ const DislocationMap = ({ mapTools }) => {
   });
 
   console.log('polygonsData', polygonsData);
-
+  
   const onLoad = (polygon) => {
     console.log("onload");
   };

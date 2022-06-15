@@ -16,6 +16,8 @@ function AddressListItem({ name, nodes, crewid, ...props }) {
   const { removeZone, setRemoveZone } = useContext(GlobalContext);
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
   const { addressCrew, setAddressCrew } = useContext(GlobalContext);
+  const { polygonsCoordinates, setPolygonsCoordinates } =
+  useContext(GlobalContext);
 
   return (
     <div className="flex flex-row items-center justify-between border-b h-12">
@@ -27,7 +29,8 @@ function AddressListItem({ name, nodes, crewid, ...props }) {
             setRemoveZone(true);
             const result = polygonsData?.find((x) => x.name === name);
             setAddressCrew(result.name);
-            setPolygonsData([result]);
+            setPolygonsData(result.nodes);
+            // setPolygonsCoordinates(result.nodes);
           }}
           className="text-gray-300 text-xs hover:text-gray-400"
         >
