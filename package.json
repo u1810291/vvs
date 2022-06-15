@@ -32,6 +32,7 @@
     "react-aria": "^3.15.0",
     "react-calendar": "^3.7.0",
     "react-dom": "^17.0.2",
+    "react-geocode": "^0.2.3",
     "react-i18n": "^1.0.1",
     "react-i18next": "^11.15.6",
     "react-query": "^3.34.19",
