@@ -12,17 +12,27 @@ import useReactQuery from "../../hook/useQuery";
 import { useFetch } from "../../hook/useFetch";
 import { useQuery, useSubscription, useMutation } from "graphql-hooks";
 
-function AddressListItem({name, nodes, crewid, ...props}) {
-  const {removeZone, setRemoveZone} = useContext(GlobalContext);
-  const closeFunc = useCallback(() => {
-    setRemoveZone(true);
-  }, [setRemoveZone]);
+function AddressListItem({ name, nodes, crewid, ...props }) {
+  const { removeZone, setRemoveZone } = useContext(GlobalContext);
+  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
+  const { addressCrew, setAddressCrew } = useContext(GlobalContext);
 
   return (
     <div className="flex flex-row items-center justify-between border-b h-12">
       <div className="bg-white w-full flex flex-row justify-between mx-4 text-gray-500 truncate text-sm ">
         <p className="text-gray-500">{name}</p>
-        <button onClick={closeFunc} className="text-gray-300 text-xs hover:text-gray-400">Redaguoti</button>
+        <button
+          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+          onClick={() => {
+            setRemoveZone(true);
+            const result = polygonsData?.find((x) => x.name === name);
+            setAddressCrew(result.name);
+            setPolygonsData([result]);
+          }}
+          className="text-gray-300 text-xs hover:text-gray-400"
+        >
+          Redaguoti
+        </button>
       </div>
     </div>
   );
@@ -31,9 +41,10 @@ function AddressListItem({name, nodes, crewid, ...props}) {
 const DislocationSide = (props) => {
   const { accessToken } = useContext(AuthContext);
   const { english, lithuanian, t } = useLanguage();
-  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
-  const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
+  const { polygonsCoordinates, setPolygonsCoordinates } =
+    useContext(GlobalContext);
   const { removeZone, setRemoveZone } = useContext(GlobalContext);
+  const [polygonsMapData, setPolygonsMapData] = useState([]);
 
   const openFunc = useCallback(() => {
     setRemoveZone(true);
@@ -45,7 +56,7 @@ const DislocationSide = (props) => {
       return;
     }
 
-    setPolygonsData(data);
+    setPolygonsMapData(data);
   });
 
   return (
@@ -55,8 +66,13 @@ const DislocationSide = (props) => {
           <div className="flex justify-center mt-4">
             <Search />
           </div>
-          {polygonsData?.crew_zone?.map((data) => (
-          <AddressListItem name={data.name} nodes={data.nodes} crewid={data.crew_id} key={data.id}  />
+          {polygonsMapData?.crew_zone?.map((data) => (
+            <AddressListItem
+              name={data.name}
+              nodes={data.nodes}
+              crewid={data.crew_id}
+              key={data.id}
+            />
           ))}
           <div className="flex justify-center mt-4">
             <div className="flex flex-row justify-center items-center pb-2">
@@ -64,9 +80,10 @@ const DislocationSide = (props) => {
                 src={require("../../assets/assets/cross.png")}
                 className="h-4 w-4 m-2"
               />
-              <button 
-              onClick={openFunc}
-              className="text-gray-400 text-sm hover:text-gray-500">
+              <button
+                onClick={openFunc}
+                className="text-gray-400 text-sm hover:text-gray-500"
+              >
                 Sukurti zoną
               </button>
             </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useContext } from "react";
+import React, { useCallback, useRef, useState, useContext, useEffect } from "react";
 import { GoogleMap, useLoadScript, Polygon } from "@react-google-maps/api";
 import useLanguage from "../../hook/useLanguage";
 import GoogleMapTools from "./googleMapTools";
@@ -47,8 +47,15 @@ const DislocationMap = ({ mapTools }) => {
   const { english, lithuanian, t } = useLanguage();
   const [error, setError] = useState("");
   const { removeZone, setRemoveZone } = useContext(GlobalContext);
+  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
 
   const data = useReactQuery(crewZonesQuery, {}, accessToken);
+
+  useEffect(() => {
+    if (data.data) {
+      setPolygonsData(data?.data?.crew_zone);
+    }
+  },[data.data])
 
   const onMapLoad = useCallback(function callback(map) {
     mapRef.current = map;
@@ -63,8 +70,10 @@ const DislocationMap = ({ mapTools }) => {
     libraries: lib,
   });
 
+  console.log('polygonsData', polygonsData);
+
   const onLoad = (polygon) => {
-    console.log("polygon: ", polygon);
+    console.log("onload");
   };
 
   return isMapLoaded ? (
@@ -77,7 +86,7 @@ const DislocationMap = ({ mapTools }) => {
         mapContainerStyle={mapContainerStyle}
       >
         <GoogleMapTools onMapLoad={onMapLoad} />
-        {!removeZone && data?.data?.crew_zone?.map((polygon, index) => (
+        {polygonsData?.map((polygon, index) => (
           <Polygon
             onLoad={onLoad}
             paths={polygon.nodes}
