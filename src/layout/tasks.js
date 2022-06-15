@@ -11,7 +11,6 @@ import { TasksHeader } from "../components/headers/tasks";
 import { TasksFilter } from "../components/filters/filterTasksList";
 import { OptionsList } from "../components/options/optionsTasksList";
 import { TasksList } from "../components/lists/tasksList";
-const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 import GlobalContext from "../context/globalContext";
 import AuthContext from "../context/globalContext";
 import { Fragment } from "react";
@@ -25,6 +24,10 @@ import { SearchButton } from "../components/buttons/searchButton";
 // import useReactQuery from "../hook/useQuery";
 // import { useFetch } from "../hook/useFetch";
 // import { addFilters } from "../api/queryForms/queryString/mutation";
+//
+//
+const classNames = a => a;
+const { AddFilterList } = require("../components/addFilter/addFilterTasks");
 
 function Tasks() {
   const { accessToken, user } = useContext(AuthContext);
@@ -71,7 +74,6 @@ function Tasks() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilter(filter.id)}
                         className={
                           selectedFilter === filter.id
@@ -205,7 +207,6 @@ function Tasks() {
                                     <Menu.Item>
                                       {({ active }) => (
                                         <button
-                                          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                           // onClick={loop}
                                           className={classNames(
                                             active

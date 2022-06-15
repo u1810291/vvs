@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, {
   useState,
   useContext,
@@ -232,30 +231,6 @@ function Modem() {
                                                   </button>
                                                 )}
                                               </Menu.Item>
-
-                                              {/* <Menu.Item>
-                                                {({ active }) => (
-                                                  <button
-                                                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-                                                    // onClick={() => {
-                                                    //   const operator = 2;
-                                                    //   setFilterListModems((currentFilter) =>
-                                                    //     currentFilter.map((x) =>
-                                                    //       x.id === filter.id ? { ...x, operator } : x
-                                                    //     )
-                                                    //   );
-                                                    // }}
-                                                    className={classNames(
-                                                      active
-                                                        ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                                        : "text-center truncate w-full text-gray-700",
-                                                      "block w-full text-left px-4 py-2 text-sm"
-                                                    )}
-                                                  >
-                                                    2
-                                                  </button>
-                                                )}
-                                              </Menu.Item> */}
                                             </div>
                                           </Menu.Items>
                                         </Transition>
@@ -271,11 +246,6 @@ function Modem() {
                                           </p>
                                           <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal focus:outline-none">
                                             <p className="text-gray-600 self-center truncate text-xs">
-                                              {/* {filter.operator === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.operator === "1"
-                          ? "1"
-                          : "2"} */}
                                               Sekolink
                                             </p>
                                             <ChevronDownIcon
@@ -299,15 +269,6 @@ function Modem() {
                                               <Menu.Item>
                                                 {({ active }) => (
                                                   <button
-                                                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-                                                    // onClick={() => {
-                                                    //   const operator = "1";
-                                                    //   setFilterListModems((currentFilter) =>
-                                                    //     currentFilter.map((x) =>
-                                                    //       x.id === filter.id ? { ...x, operator } : x
-                                                    //     )
-                                                    //   );
-                                                    // }}
                                                     className={classNames(
                                                       active
                                                         ? "bg-gray-100 text-gray-900 w-full truncate text-center"

@@ -25,6 +25,8 @@ import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import { ThreeTabHeader } from "../../components/headers/objects";
 
+const classNames = a => a
+
 function Permissions() {
   const {english, lithuanian, t} = useLanguage();
   const {expandFilterPermissions, setExpandFilterPermissions} = useContext(GlobalContext);
@@ -80,7 +82,6 @@ function Permissions() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterPermissions(filter.id)}
                         className={
                           selectedFilterPermissions === filter.id
@@ -306,7 +307,6 @@ function Permissions() {
                                     <Menu.Item>
                                       {({ active }) => (
                                         <button
-                                          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                           // onClick={loop}
                                           className={classNames(
                                             active

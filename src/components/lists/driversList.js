@@ -1,18 +1,18 @@
-import React, { useContext, useRef, useEffect, useState } from "react";
-import GlobalContext from "../../context/globalContext";
 import AuthContext from "../../context/authContext";
-import { Link } from "react-router-dom";
-const { Connected } = require("../buttons/connected");
-const { Disconnected } = require("../buttons/disconnected");
-const { Deactivated } = require("../buttons/deactivated");
-import { Spinner } from "react-activity";
+import GlobalContext from "../../context/globalContext";
+import React, { useContext, useRef, useEffect, useState } from "react";
 import useSort from "../../hook/useSort";
-import { useFetch } from "../../hook/useFetch";
-import { getUsers } from "../../api/queryForms/queryString/users";
-import { getAllUsers } from "../../api/queryForms/variables/users";
-import { sortToggle } from "../../util/utils";
+import { Link } from "react-router-dom";
+import { Spinner } from "react-activity";
 import { generate } from "shortid";
+import { getAllUsers } from "../../api/queryForms/variables/users";
+import { getUsers } from "../../api/queryForms/queryString/users";
+import { sortToggle } from "../../util/utils";
+import { useFetch } from "../../hook/useFetch";
 
+const { Connected } = require("../buttons/connected");
+const { Deactivated } = require("../buttons/deactivated");
+const { Disconnected } = require("../buttons/disconnected");
 export const DriverList = () => {
   const { accessToken } = useContext(AuthContext);
   const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
@@ -114,7 +114,6 @@ export const DriverList = () => {
                           <div className="flex flex-row items-center justify-start h-12 w-40">
                             {filter.dashboardList.includes("Vardas Pavardė") ? (
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/driver/${data.id}` }}
                                 className="bg-white text-gray-500 hover:text-gray-300 truncate text-sm"
                               >

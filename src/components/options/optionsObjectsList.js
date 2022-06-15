@@ -1,5 +1,11 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
-import React, { useState, useCallback, useContext, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  createRef,
+} from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -146,7 +152,6 @@ export const OptionsListObjects = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                               onClick={() => {
                                 const operator = "1";
                                 setFilterListObjects((currentFilter) =>
@@ -170,7 +175,6 @@ export const OptionsListObjects = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                               onClick={() => {
                                 const operator = 2;
                                 setFilterListObjects((currentFilter) =>
@@ -282,7 +286,6 @@ export const OptionsListObjects = (props) => {
                     id="search"
                     name="search"
                     placeholder=""
-                    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                     onChange={(e) => {
                       const objectAddress = e.target.value;
                       setFilterListObjects((currentFilter) =>

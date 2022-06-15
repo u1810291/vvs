@@ -70,7 +70,6 @@ const DislocationMap = ({ mapTools }) => {
     libraries: lib,
   });
 
-  // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
 const onLoad = (polygon) => {
     console.log("polygon: ", polygon);
   };

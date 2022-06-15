@@ -5,7 +5,6 @@ import { sortToggle } from "../../util/utils";
 import useSort from "../../hook/useSort";
 
 export const KeysList = ({ id, set, crew, ...props }) => {
-  // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const path = { pathname: `/key/${id}` };
 
   const { sortedKeysKeys, sortedKeysOrder, sortedKeysSet, sortedKeysCrew } =

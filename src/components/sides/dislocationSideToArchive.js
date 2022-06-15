@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useCallback, useState, useContext } from "react";
 import useLanguage from "../../hook/useLanguage";
 import GlobalContext from "../../context/globalContext";

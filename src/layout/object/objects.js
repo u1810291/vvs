@@ -10,15 +10,11 @@ import { ObjectsList } from "../../components/lists/objectsList";
 
 import { FiltersListObjects } from "../../components/filters/filterObjectsList";
 import { OptionsListObjects } from "../../components/options/optionsObjectsList";
-const {
-  AddFilterListObjects,
-} = require("../../components/addFilter/addFilterObjects");
 import { useParams } from "react-router-dom";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import GlobalContext from "../../context/globalContext";
-const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
@@ -28,6 +24,11 @@ import AuthContext from "../../context/authContext";
 import { useFetch } from "../../hook/useFetch";
 import { addFilters } from "../../api/queryForms/queryString/mutation";
 import { searchAddress } from "../../api/queryForms/queryString/query";
+
+const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
+const {
+  AddFilterListObjects,
+} = require("../../components/addFilter/addFilterObjects");
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -113,7 +114,6 @@ function Objects() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterObjects(filter.id)}
                         className={
                           selectedFilterObjects === filter.id
@@ -229,7 +229,6 @@ function Objects() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={loop}
                                       className={classNames(
                                         active

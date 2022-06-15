@@ -1,15 +1,15 @@
+import AuthContext from "../../context/authContext";
+import GlobalContext from "../../context/globalContext";
 import React, { useContext, useEffect, useState } from "react";
 import useLanguage from "../../hook/useLanguage";
-import GlobalContext from "../../context/globalContext";
-import { Spinner } from "react-activity";
-import { Link } from "react-router-dom";
-const { RedWatching } = require("../buttons/redWatching");
 import useReactQuery from "../../hook/useQuery";
-import { sortToggle } from "../../util/utils";
-import AuthContext from "../../context/authContext";
 import useSort from "../../hook/useSort";
+import { Link } from "react-router-dom";
+import { Spinner } from "react-activity";
 import { objectPage } from "../../api/queryForms/queryString/query";
+import { sortToggle } from "../../util/utils";
 
+const { RedWatching } = require("../buttons/redWatching");
 const { RedDriving } = require("../buttons/redDriving");
 const { BlueStatus } = require("../buttons/blueStatus");
 const { CancelStatus } = require("../buttons/darkBlueStatus");
@@ -159,7 +159,6 @@ const CrewList = ({
                           {filter.crewList.includes("Pavadinimas") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/createCrew/${data.id}` }}
                                 className="bg-white text-gray-500 hover:text-gray-600 truncate text-sm"
                               >
@@ -170,7 +169,6 @@ const CrewList = ({
                           {filter.crewList.includes("Trumpinys") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/createCrew/${data.id}` }}
                                 className="bg-white text-gray-500 hover:text-gray-600 truncate text-sm"
                               >
@@ -181,7 +179,6 @@ const CrewList = ({
                           {filter.crewList.includes("Dislokacijos zona") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/createCrew/${data.id}` }}
                                 className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                               >
@@ -192,7 +189,6 @@ const CrewList = ({
                           {filter.crewList.includes("Būsena") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/createCrew/${data.id}` }}
                                 className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                               >
@@ -205,7 +201,6 @@ const CrewList = ({
                           {filter.crewList.includes("Automatiškai priskirti") ? (
                             <div className="flex flex-row items-center h-12 w-40">
                               <Link
-                                // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                                 to={{ pathname: `/createCrew/${data.id}` }}
                                 className="bg-white text-gray-400 hover:text-gray-600 truncate text-sm"
                               >

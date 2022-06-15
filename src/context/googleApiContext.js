@@ -15,7 +15,6 @@ const GoogleContextProvider = ({children}) => {
   const onMapUnmount = useCallback(() => mapRef.current = null, []);
   return (
     <GoogleApiContext.Provider
-      /* eslint-disable-next-line react-perf/jsx-no-new-object-as-prop */
       value={{...state, setValue, isLoaded, loadError, mapRef, onMapLoad, onMapUnmount}}
     >
       {children}

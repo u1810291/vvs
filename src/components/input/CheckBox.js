@@ -20,7 +20,7 @@ const CheckBox = ({
   const onChange = useCallback(event => {
     setLocalValue(!localValue);
     setValue(!localValue);
-    if (isFetchable) affectDebounce(localValue, sideEffect, debounceDelay);
+    //if (isFetchable) affectDebounce(localValue, sideEffect, debounceDelay);
   }, [localValue]);
 
   useEffect(() => {

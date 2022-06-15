@@ -1,11 +1,7 @@
 import {
   curry,
   map,
-  isEmpty,
-  tap,
   pipe,
-  setProp,
-  getPropOr,
   identity,
   ifElse,
   isString,
@@ -14,7 +10,6 @@ import {
 } from 'crocks';
 import {mapProps} from 'crocks/helpers';
 import React from 'react';
-import {mergeProps} from 'react-aria';
 
 const strToArray = ifElse(isString, str => str.split(' '), identity)
 

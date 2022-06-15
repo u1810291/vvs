@@ -71,17 +71,17 @@ export const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!accessToken) {
-      () => navigate("/");
+      navigate("/");
     }
-  }, [accessToken, navigate]);
+  }, [accessToken, navigate]);*/
 
   const Logout = useCallback(async () => {
     setUser(null);
     setAccessToken(null);
     removeRefreshTokenSession();
-    () => navigate("/");
+    navigate("/");
   }, [navigate]);
 
   const LoginUser = useCallback(
@@ -359,7 +359,6 @@ export const AuthProvider = ({ children }) => {
     [forgotEmail, navigate]
   );
 
-  // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
     LoginUser: LoginUser,
     RegisterUser: RegisterUser,

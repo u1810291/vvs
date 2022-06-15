@@ -1,16 +1,16 @@
-import React, { useState, useCallback, useContext, useEffect } from "react";
+import AuthContext from "../context/authContext";
+import DashboardMap from "../components/map/dashboard";
 import DashboardSideLeft from "../components/sides/dashboardLeft";
 import DashboardSideRight from "../components/sides/dashboardRight";
-import DashboardMap from "../components/map/dashboard";
-import SlideOver from "../components/sidebars/slideOver";
-import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import AuthContext from "../context/authContext";
 import GlobalContext from "../context/globalContext";
-const { OffCard } = require("../components/cards/off");
+import MainSidebar from "../components/sidebars/main";
+import React, { useState, useCallback, useContext, useEffect } from "react";
+import SlideOver from "../components/sidebars/slideOver";
 import { DDAPI } from "../api/dashboardDispatchApi";
+import { OverlayProvider, usePreventScroll } from "react-aria";
 import { useQuery, useSubscription, useMutation } from "graphql-hooks";
 
+const { OffCard } = require("../components/cards/off");
 const test2 = `subscription ($invoices: String!, $objects: String!) {
   test (invoices: $invoices, objects: $objects) {
     id
