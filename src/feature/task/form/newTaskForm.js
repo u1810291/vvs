@@ -1,14 +1,8 @@
-import React, {useCallback, useState, useEffect, useContext} from "react";
-
-import env from "../../../env";
+import React, {useState, useEffect, useContext} from "react";
 import AuthContext from "../../../context/authContext";
 
-import {identity, ifElse, or} from "crocks";
-import Geocode from "react-geocode";
-import resultToAsync from "crocks/Async/resultToAsync";
-import {lengthGt, hasntLength} from "../../../util/pred";
-
-import Map from "../../../components/map/Map";
+import Map from "../../map/component/Map";
+import Nullable from "../../../components/atom/Nullable";
 import Textarea from "../../../components/input/Textarea";
 import Selectbox from "../../../components/input/Selectbox";
 import ControlledInput from "../../../components/input/ControlledInput";
@@ -17,50 +11,54 @@ import useAsync from "../../../hook/useAsync";
 import useGeocode from "../../../hook/useGeocode";
 import useLanguage from "../../../hook/useLanguage";
 import useResultForm from "../../../hook/useResultForm";
+import {useGoogleApiContext} from '../../../context/googleApiContext';
 
 import {asyncGetObjects, asyncGetCrews, asyncCreateEvent} from "../api/newTaskApi";
+
 import {generate} from "shortid";
+import {identity, or, isEmpty} from "crocks";
+import resultToAsync from "crocks/Async/resultToAsync";
+import {lengthGt, hasntLength} from "../../../util/pred";
+import {Marker} from "@react-google-maps/api";
 
 const NewTaskForm = () => {
   const {t} = useLanguage();
+  const {onMapLoad} = useGoogleApiContext();
   const {getCoordsByAddress} = useGeocode();
   const {accessToken} = useContext(AuthContext);
-  const [crews, setCrews] = useState([{}]);
-  const [taskName, setTaskName] = useState("");
-  const [objects, setObjects] = useState([
-    {address: "Gilužio g. 5, Vilnius 06229, Lithuania"},
-    {address: "Įsruties g. 3, Vilnius 06218, Lithuania"}
-  ]);
-  const [taskDescription, setTaskDescription] = useState("");
-  const [taskStatus, setTaskStatus] = useState([{key: "Naujas", value: "Naujas"}]);
 
-  const [selectedCrew, setSelectedCrew] = useState();
-  const [selectedObject, setSelectedObject] = useState();
-  const [selectedTaskStatus, setSelectedTaskStatus] = useState();
+  const [taskStatus, setTaskStatus] = useState([
+    {id: "123", key: null, name: "Naujas"}
+  ]);
+  const [crews, setCrews] = useState([
+    {id: "321", key: null, abbreviation: "9GR"},
+    {id: "12113", key: null, abbreviation: "8GB"}
+  ]);
+  const [objects, setObjects] = useState([
+    {id: "313", key: null, address: "Gilužio g. 5, Vilnius 06229, Lithuania", coords: null},
+    {id: "1313", key: null, address: "Įsruties g. 3, Vilnius 06218, Lithuania", coords: null}
+  ]);
+
+  const [selectedCrew, setSelectedCrew] = useState([]);
+  const [selectedObject, setSelectedObject] = useState({});
+  const [selectedTaskStatus, setSelectedTaskStatus] = useState([]);
 
   const inputGroupValidationProps = {
-    isInvalid: ({isValid}) => !isValid,
-    help: ({message}) => message,
+    value: ({value}) => value,
+    setValue: ({set}) => set
   };
 
   const {
     isFullyComplete: isEventFullyComplete,
     ctrl: ctrlEvent,
     result: eventResult,
-    directSet,
-    form,
+    setForm: setEventForm,
   } = useResultForm({
-    secret: {
-      initial: env.API_SECRET,
-      validator: or(hasntLength, lengthGt(5)),
-      message: t("validation.error.secret"),
-      props: inputGroupValidationProps
-    },
     token: {
       initial: `Bearer ${accessToken}`,
       validator: or(hasntLength, lengthGt(5)),
       message: t("validation.error.token"),
-      props: inputGroupValidationProps
+      props: () => {}
     },
     name: {
       initial: "",
@@ -68,7 +66,7 @@ const NewTaskForm = () => {
       message: t("validation.error.taskName"),
       props: inputGroupValidationProps,
     },
-    desctiption: {
+    description: {
       initial: "",
       validator: or(hasntLength, lengthGt(5)),
       message: t("validation.error.taskDescription"),
@@ -78,81 +76,73 @@ const NewTaskForm = () => {
       initial: "",
       validator: or(hasntLength, lengthGt(5)),
       message: t("validation.error.taskStatus"),
-      props: inputGroupValidationProps,
+      props: () => {},
     },
     crewID: {
       initial: "",
       validator: or(hasntLength, lengthGt(5)),
       message: t("validation.error.crewID"),
-      props: inputGroupValidationProps,
+      props: () => {},
     },
     objectID: {
       initial: "",
       validator: or(hasntLength, lengthGt(5)),
       message: t("validation.error.objectID"),
-      props: inputGroupValidationProps,
+      props: () => {},
     },
   });
 
-  const [crewsResponse, forkCrews] = useAsync(
-    asyncGetCrews("secret", accessToken),
-    identity,
-  );
+  const [crewsResponse, forkCrews] = useAsync(asyncGetCrews(accessToken), identity);
+  const [objectsResponse, forkObjects] = useAsync(asyncGetObjects(accessToken), identity);
+  const [eventResponse, forkEvent] = useAsync(resultToAsync(eventResult).chain(asyncCreateEvent), identity);
 
-  // const [objectsResponse, forkObjects] = useAsync(
-  //   asyncGetObjects("secret", accessToken),
-  //   identity,
-  // );
+  // useEffect(() => {
+  //   forkCrews();
+  //   forkObjects();
+  // }, []);
 
-  const [eventResponse, forkEvent] = useAsync(
-    resultToAsync(eventResult).chain(asyncCreateEvent),
-    identity,
-  );
+  // useEffect(() => {
+  //   const path = responseName => responseName.data?.data
+  //   !isEmpty(path(crewsResponse))
+  //     ? setCrews(path(crewsResponse).crew.map(crew => ({key: crew.id, value: crew.abbreviation})))
+  //     : []
+  //   !isEmpty(path(objectsResponse))
+  //     ? setObjects(path(objectsResponse).object.map(object => ({key: object.id, value: object.address})))
+  //     : []
+  // }, [crewsResponse, objectsResponse]);
 
   useEffect(() => {
-    forkCrews();
-    // forkObjects();
+    !isEmpty(crews)
+      ? setCrews(crews.map(crew => ({key: crew.id, value: crew.abbreviation})))
+      : []
+    !isEmpty(objects)
+      ? setObjects(objects.map(object => ({key: object.id, value: object.address})))
+      : []
+    !isEmpty(taskStatus)
+      ? setTaskStatus(taskStatus.map(status => ({key: status.id, value: status.name})))
+      : []
   }, []);
 
   useEffect(() => {
-    if (crewsResponse.data) {
-      setCrews(crewsResponse.data.data.crews.map(crew => ({
-        key: crew.Id,
-        value: crew.abbreviation
-      })));
-    }
-    // if (objectsResponse.data) {
-    //   setObjects(objectsResponse.data.data.objects.map(object => ({
-    //     key: object.Id,
-    //     value: object.address
-    //   })));
-    // }
-  }, [crewsResponse]);
-
-  useEffect(async () => {
-    if (objects) {
-      const asyncMapObjects = await Promise.all(objects.map(async object => ({
-        key: generate(),
-        value: object.address,
-        coords: await getCoordsByAddress(object.address)
-      })));
-
-      setObjects(await asyncMapObjects);
-    }
+    (async () => setObjects(
+      !isEmpty(objects)
+        ? await Promise.all(objects.map(async object => ({
+          key: generate(),
+          value: object.address,
+          coords: await getCoordsByAddress(object.address)})))
+        : []
+    ))();
   }, []);
 
-  useEffect(() => {
-    console.log(selectedObject)
-  }, [selectedObject]);
-
-
-  useEffect(() => {
-    directSet("name", taskName);
-    directSet("desctiption", taskDescription);
-    directSet("status", selectedTaskStatus);
-    directSet("crewID", selectedCrew);
-    directSet("objectID", selectedObject);
-  }, [taskName, taskDescription, selectedCrew, selectedObject, selectedTaskStatus]);
+  // useEffect(() => {
+  //   setEventForm({
+  //     name: "",
+  //     description:"",
+  //     status: "",
+  //     crewID: "",
+  //     objectID: "",
+  //   });
+  // }, [setEventForm]);
 
   return (
     <section className={"flex flex-col w-1/4 p-5"}>
@@ -169,9 +159,7 @@ const NewTaskForm = () => {
           title={t("eurocash.name")}
           twBody={"mr-0 w-1/2"}
           isRequired={true}
-          value={taskName}
-          setValue={setTaskName}
-          ctrlValue={ctrlEvent("name")}
+          {...ctrlEvent("name")}
         />
       </div>
       <Textarea
@@ -179,8 +167,7 @@ const NewTaskForm = () => {
         twBody={"mb-6"}
         rows={4}
         isRequired={true}
-        value={taskDescription}
-        setValue={setTaskDescription}
+        {...ctrlEvent("description")}
       />
       <Selectbox
         label={t("eurocash.objectsAndAddresses")}
@@ -190,7 +177,11 @@ const NewTaskForm = () => {
         setValue={setSelectedObject}
       />
       <div className="relative h-80 mb-6">
-        <Map marker={selectedObject}/>
+        <Map singleMarkerCoords={selectedObject.coords}>
+          <Nullable on={selectedObject.coords}>
+            <Marker onLoad={onMapLoad} position={selectedObject.coords}/>
+          </Nullable>
+        </Map>
       </div>
       <Selectbox
         label={t("eurocash.crews")}
