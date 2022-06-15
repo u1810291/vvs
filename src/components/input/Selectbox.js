@@ -1,6 +1,5 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React, {useCallback} from "react";
 
-import {isEmpty} from "crocks";
 import {generate} from "shortid";
 
 import {ChevronDownIcon} from "@heroicons/react/outline";
