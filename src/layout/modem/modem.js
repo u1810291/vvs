@@ -39,8 +39,6 @@ function Modem() {
 
   const data = useReactQuery(objectPage, {}, accessToken);
 
-  console.log(data);
-
   useEffect(() => {
     let hasura;
     let monas;

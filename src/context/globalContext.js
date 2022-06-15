@@ -51,6 +51,7 @@ export const GlobalProvider = ({ children }) => {
   const [removeZone, setRemoveZone] = useState(false);
   const [polygonsCoordinates, setPolygonsCoordinates] = useState([]);
   const [polygonsData, setPolygonsData] = useState([]);
+  const [addressCrew, setAddressCrew] = useState("");
 
   const [filterEditing, setFilterEditing] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -309,6 +310,8 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    addressCrew,
+    setAddressCrew,
     polygonsData,
     setPolygonsData,
     polygonsCoordinates,

@@ -31,25 +31,22 @@ function AddressListItem({name, nodes, crewid, ...props}) {
 const DislocationSide = (props) => {
   const { accessToken } = useContext(AuthContext);
   const { english, lithuanian, t } = useLanguage();
-  const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
+  const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
+  const { removeZone, setRemoveZone } = useContext(GlobalContext);
 
-  const crewZonesVariables = {
-    updateCrewZones: {
-    name: generate().toString(),
-    nodes: polygonsCoordinates,
+  const openFunc = useCallback(() => {
+    setRemoveZone(true);
+  }, [setRemoveZone]);
+
+  useSubscription({ query: crewZonesSubscription }, ({ data, errors }) => {
+    if (errors && errors.length > 0) {
+      setError(errors[0]);
+      return;
     }
-  };
 
-  const { error: errorResponse, data: mutateResponse, loading: loadingResponse, fetchData } = useFetch(
-    crewZonesMutation,
-    crewZonesVariables,
-    accessToken
-  );
-
-  const createNewPolygon = useCallback(() => {
-    fetchData();
-  }, [fetchData]);
+    setPolygonsData(data);
+  });
 
   return (
     <>
@@ -67,7 +64,9 @@ const DislocationSide = (props) => {
                 src={require("../../assets/assets/cross.png")}
                 className="h-4 w-4 m-2"
               />
-              <button onClick={createNewPolygon} className="text-gray-400 text-sm hover:text-gray-500">
+              <button 
+              onClick={openFunc}
+              className="text-gray-400 text-sm hover:text-gray-500">
                 Sukurti zoną
               </button>
             </div>
