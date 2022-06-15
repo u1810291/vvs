@@ -21,7 +21,9 @@ const SidebarLayout = ({children}) => {
               />
             </button>
           </div>
+          <div className="w-full">
           {children}
+          </div>
         </div>
         <SlideOver isOpen={isOpen} onClose={handleOnClose}>
           <MainSidebar />
