@@ -32,7 +32,6 @@ import Dislocations from "./layout/dislocation/dislocations";
 import Dislocation from "./layout/dislocation/dislocation";
 import PermissionConfirmation from "./layout/permission/permissionConfirmation";
 import NewTaskLayout from "./feature/task/layout/newTaskLayout";
-import TableComponent from "./components/table/index";
 
 import NotFound from "./layout/notFound";
 import {GoogleContextProvider} from './context/googleApiContext';

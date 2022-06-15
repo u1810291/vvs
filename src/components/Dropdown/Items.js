@@ -35,7 +35,7 @@ const Items = forwardRef((props, ref) => {
   }, [ref]);
 
   return (
-    <Menu.Items ref={ref} className={`origin-top-right absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none ${onLeft ? 'left-0' : 'right-0'}`} {...props}>
+    <Menu.Items ref={ref} className={`z-20 origin-top-right absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none ${onLeft ? 'left-0' : 'right-0'}`} {...props}>
       <div className="py-1">
         {props?.children}
       </div>

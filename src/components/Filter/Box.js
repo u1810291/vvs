@@ -1,18 +1,24 @@
 import React, {useState, useEffect} from "react";
 import {
-  pipe,
-  isTruthy,
-  ifElse,
-  getPath,
-  tap,
-  identity,
-  isArray,
-  pathSatisfies,
-  isTrue,
-  map,
-  getPropOr,
+  and,
+  chain,
   defaultProps,
+  getPath,
   getPathOr,
+  getProp,
+  getPropOr,
+  hasProps,
+  identity,
+  ifElse,
+  isArray,
+  isTrue,
+  isTruthy,
+  map,
+  option,
+  pathSatisfies,
+  pipe,
+  safe,
+  tap,
 } from 'crocks';
 
 const putIntoArray = ifElse(isArray, identity, (value) => [value]);
@@ -41,7 +47,22 @@ const Box = ({Dropdown, Item, children, onChange = identity, onValues = identity
     )(children)
   );
 
-  useEffect(() => onValues(active), [active]);
+  useEffect(() => {onValues({
+    things: pipe(
+      putIntoArray,
+      map(pipe(
+        getProp('props'),
+        chain(safe(hasProps(['propPath', 'children']))),
+        map(({propPath, children}) => [propPath, children]),
+        option(null)
+      )),
+      a => a.filter(and(identity, a => active.includes(a[1]))),
+      Object.fromEntries,
+    )(children)
+    //.filter(children)
+    //.map(c => c.props.propPath),
+    ,active
+  })}, [active]);
 
   return (
     <div className="flex-wrap flex rounded-md w-full border p-1 bg-white sm:grid-cols-6 font-normal text-black" {...props}>
