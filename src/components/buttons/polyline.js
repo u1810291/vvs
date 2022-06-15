@@ -1,13 +1,14 @@
-import React from "react";
+import {Polyline} from "@react-google-maps/api";
 
-export function RoutesPolyline({path, ...props}) {
-  return new google.maps.Polyline({
-    path: path,
+const RoutesPolyline = props => (
+   <Polyline {...{
+    ...props,
     geodesic: true,
-    // map: map,
     strokeColor: "#ff2343",
     strokeOpacity: 0.8,
     strokeWeight: 5,
     clickable: true,
-  });
-}
+  }}/>
+);
+
+export default RoutesPolyline;
