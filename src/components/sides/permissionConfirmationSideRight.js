@@ -1,8 +1,9 @@
 import React from "react";
 import useLanguage from "../../hook/useLanguage";
-const { ActiveCard } = require("../../components/cards/active");
 import PermissionConfirmationTimeCard from '../cards/permissionConfirmationTimeCard';
 import {BlueStatus} from '../buttons/blueStatus';
+
+const { ActiveCard } = require("../../components/cards/active");
 
 const PermissionConfirmationSideRight = () => {
   const { english, lithuanian, t } = useLanguage();

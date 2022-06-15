@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import { CreateHeader } from "../../components/headers/create";
 import SlideOver from "../../components/sidebars/slideOver";
@@ -116,7 +115,7 @@ function Driver() {
 
   const confirmArchiveFetch = useCallback(() => {
     let text = "Ar tikrai norite archyvuoti?";
-    if (confirm(text) === true) {
+    if (window.confirm(text) === true) {
       archiveFetch();
       backFunc();
     }

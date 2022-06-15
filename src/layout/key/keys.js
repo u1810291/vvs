@@ -10,12 +10,12 @@ import { KeysList } from "../../components/lists/keysList";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
 
+const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -110,7 +110,6 @@ function Keys() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={loop}
                                       className={classNames(
                                         active

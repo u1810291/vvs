@@ -1,7 +1,7 @@
 import React from "react";
 import useLanguage from "../../hook/useLanguage";
-const { ActiveCard } = require("../../components/cards/active");
 import BreachTimeCard from '../cards/breachTimeCard';
+const { ActiveCard } = require("../../components/cards/active");
 
 const BreachSideRight = () => {
   const { english, lithuanian, t } = useLanguage();

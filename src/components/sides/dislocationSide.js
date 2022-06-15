@@ -3,12 +3,13 @@ import useLanguage from "../../hook/useLanguage";
 import { Search } from "../../components/input/search";
 import GlobalContext from "../../context/globalContext";
 import generate from "shortid";
-const { ActiveCard } = require("../cards/active");
 import { crewZonesQuery } from "../../api/queryForms/queryString/query";
 import { crewZonesMutation } from "../../api/queryForms/queryString/mutation";
 import AuthContext from "../../context/authContext";
 import useReactQuery from "../../hook/useQuery";
 import { useFetch } from "../../hook/useFetch";
+
+const { ActiveCard } = require("../cards/active");
 
 function AddressListItem({name, nodes, crewid, ...props}) {
   const {removeZone, setRemoveZone} = useContext(GlobalContext);

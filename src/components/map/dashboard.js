@@ -73,12 +73,12 @@ const getCrewIcons = (icons) => {
   try {
     switch (icons) {
       case 1:
-        icons.crew === "T3";
+        icons.crew = "T3";
         return require("../../assets/assets/origin.png");
         // eslint-disable-next-line no-unreachable
         break;
       case 2:
-        icons.crew === "T3";
+        icons.crew = "T3";
         return require("../../assets/assets/origin.png");
         // eslint-disable-next-line no-unreachable
         break;
@@ -94,12 +94,12 @@ const getDestinationIcons = (icons) => {
   try {
     switch (icons) {
       case 1:
-        icons.destination === "alert";
+        icons.destination = "alert";
         return require("../../assets/assets/destination.png");
         // eslint-disable-next-line no-unreachable
         break;
       case 2:
-        icons.destination === "alert";
+        icons.destination = "alert";
         return require("../../assets/assets/destination.png");
         // eslint-disable-next-line no-unreachable
         break;
@@ -257,20 +257,6 @@ export default function DashboardMap(props) {
           <Marker icon={markerIcon} position={clickedPos} />
         ) : null}
         <></>
-        {/*
-          // show all routes from all directions
-          directions
-          .reduce((c, i) => [...c, ...i.routes.map(r => r.overview_path)], [])
-          .map((data, index) => (
-            <Polyline
-              key={index}
-              // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-              path={data}
-              geodesic={true}
-              options={routesOptions}
-            />
-          ))
-        */}
         { // show first route from all directions
           directions.map((d, index) => (
             <Polyline
@@ -312,14 +298,12 @@ export default function DashboardMap(props) {
         <OverlayView
           position={overLayView1}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
           getPixelPositionOffset={(width, height) => ({
             x: -(width / 2),
             y: -(height / 2),
           })}
         >
           <div
-            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
             className="flex text-light font-normal rounded-sm h-6 "
           >
             <div className="flex flex-row rounded-md bg-red-600 truncate items-center px-2">
@@ -330,14 +314,12 @@ export default function DashboardMap(props) {
         <OverlayView
           position={overLayView3}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
           getPixelPositionOffset={(width, height) => ({
             x: -(width / 2),
             y: -(height / 2),
           })}
         >
           <div
-            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
             className="flex text-light font-normal rounded-md text-light h-6 bg-white"
           >
             <div className="flex flex-row rounded-md bg-yellow-600 truncate items-center px-2">
@@ -348,14 +330,12 @@ export default function DashboardMap(props) {
         <OverlayView
           position={overLayView2}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
           getPixelPositionOffset={(width, height) => ({
             x: -(width / 2),
             y: -(height / 2),
           })}
         >
           <div
-            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
             className="flex text-normal font-normal rounded-md w-52 h-6 bg-white"
           >
             <div className="flex flex-row rounded-md bg-red-600 truncate items-center px-2">

@@ -10,9 +10,6 @@ import { ModemsList } from "../../components/lists/modemsList";
 
 import { FiltersListModems } from "../../components/filters/filterModemsList";
 import { OptionsListModems } from "../../components/options/optionsModemsList";
-const {
-  AddFilterListModems,
-} = require("../../components/addFilter/addFilterModems");
 import AuthContext from "../../context/authContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -23,6 +20,10 @@ import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
 import { SearchButton } from "../../components/buttons/searchButton";
+
+const {
+  AddFilterListModems,
+} = require("../../components/addFilter/addFilterModems");
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -80,7 +81,6 @@ function Modems() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterModems(filter.id)}
                         className={
                           selectedFilterModems === filter.id
@@ -190,7 +190,6 @@ function Modems() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={loop}
                                       className={classNames(
                                         active

@@ -158,7 +158,6 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                       {filter.dashboardList.includes("Pavadinimas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-500 truncate text-sm hover:text-gray-400"
                           >
@@ -169,7 +168,6 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                       {filter.dashboardList.includes("Miestas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
@@ -180,7 +178,6 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                       {filter.dashboardList.includes("Adresas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-500 truncate text-sm hover:text-gray-400"
                           >
@@ -191,7 +188,6 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                       {filter.dashboardList.includes("Objekto nr.") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
@@ -202,7 +198,6 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                       {filter.dashboardList.includes("Sutarties nr.") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >
@@ -213,7 +208,6 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                       {filter.dashboardList.includes("Siusti ekipaža") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
-                            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
                             to={{ pathname: `/object/${data.Id}` }}
                             className="bg-white text-gray-400 truncate text-sm hover:text-gray-500"
                           >

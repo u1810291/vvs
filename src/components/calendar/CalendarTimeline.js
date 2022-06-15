@@ -23,7 +23,6 @@ const CalendarTimeline = ({
 }) => {
   const {t} = useLanguage();
   const [isOpen, setOpen] = useBoolean();
-  // eslint-disable-next-line react-perf/jsx-no-new-array-as-prop
   const cellsRefs = new Array;
 
   const setRef = useCallback((id) => (ref) => {
@@ -35,7 +34,6 @@ const CalendarTimeline = ({
     return ref.getBoundingClientRect();
   }, [cellsRefs]);
 
-  // eslint-disable-next-line react-perf/jsx-no-new-array-as-prop
   const rowsTitles = [
     t("eurocash.weekdays.monday"),
     t("eurocash.weekdays.tuesday"),
@@ -48,7 +46,6 @@ const CalendarTimeline = ({
 
   return (
     <div
-      // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
       style={{width: 1246}}
       className={`flex-col`}>
       <CalendarModal

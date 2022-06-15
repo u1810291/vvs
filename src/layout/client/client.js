@@ -153,7 +153,7 @@ function Client() {
 
   const confirmArchiveFetch = useCallback(() => {
     let text = "Ar tikrai norite archyvuoti?";
-    if (confirm(text) === true) {
+    if (window.confirm(text) === true) {
       archiveFetch();
       backFunc()
     }

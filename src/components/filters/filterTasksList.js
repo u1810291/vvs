@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useContext } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";

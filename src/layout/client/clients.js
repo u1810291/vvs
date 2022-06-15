@@ -9,9 +9,6 @@ import { ClientsHeader } from "../../components/headers/clients";
 import { ClientList } from "../../components/lists/clientsList";
 import { FiltersListClients } from "../../components/filters/filterClientsList";
 import { OptionsListClients } from "../../components/options/optionsClientsList";
-const {
-  AddFilterListClients,
-} = require("../../components/addFilter/addFilterClients");
 import GlobalContext from "../../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -21,6 +18,10 @@ import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
 import { SearchButton } from "../../components/buttons/searchButton";
+
+const {
+  AddFilterListClients,
+} = require("../../components/addFilter/addFilterClients");
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -75,7 +76,6 @@ function ClientsList() {
                     return (
                       <button
                         key={filter.id}
-                        // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                         onClick={() => setSelectedFilterClients(filter.id)}
                         className={
                           selectedFilterClients === filter.id
@@ -187,7 +187,6 @@ function ClientsList() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <button
-                                      // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                                       // onClick={loop}
                                       className={classNames(
                                         active

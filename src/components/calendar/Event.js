@@ -9,7 +9,6 @@ import {format, parseISO} from "date-fns";
 
 const Event = ({events, title, startTime, endTime, position, weekDay, id, twEvent, twTitle, twTime, setEvents, getRef}) => {
   const [isOpen, setOpen] = useBoolean();
-  // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const eventData = {
     crew: title,
     startTime,
@@ -20,7 +19,6 @@ const Event = ({events, title, startTime, endTime, position, weekDay, id, twEven
   return (
     <>
       <div
-        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
         style={{height: 51, left: position.left, top: position.top, width: (position.width + 3.25)}}
         className={`px-1 my-1 flex flex-col fixed justify-center rounded-md text-sm bg-slate-300 opacity-70 select-none`}
         onClick={setOpen}

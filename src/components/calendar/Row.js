@@ -28,7 +28,6 @@ const Row = ({rowsTitles, value, setRef, setValue, getRef}) => {
         {rowsTitles.map(title => (
           <div
             key={generate()}
-            // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
             style={{width: 310, height: 60}}
             className={"shadow-[0_-1px_0_0_rgba(64,75,95,0.1)] font-normal text-gray-800 py-4 px-4 pr-4"}>
             {title}
@@ -37,7 +36,6 @@ const Row = ({rowsTitles, value, setRef, setValue, getRef}) => {
       </div>
       <div className={"flex flex-col w-full"}>
         <div
-          // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
           style={{width: 936}}
           className={"flex flex-row w-full flex-wrap"}>
           {value && value.map(({crew, startTime, endTime, position, weekDay, id}) => (
@@ -57,7 +55,6 @@ const Row = ({rowsTitles, value, setRef, setValue, getRef}) => {
           {chunkedTimeSlots.map((chunkedSlot) => (
             <div
               key={generate()}
-              // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
               style={{height: 60, width: 156}}
               className={`h-full w-full flex flex-row shadow-[0_-1px_0_0_rgba(64,75,95,0.1)]`}
             >
