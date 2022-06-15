@@ -16,6 +16,9 @@ import ControlledInput from "../../components/input/ControlledInput";
 import CalendarTimeline from "../../components/calendar/CalendarTimeline";
 import CreateCrewHeader from "../../components/headers/crew/createCrewHeader";
 import AuthContext from "../../context/authContext";
+import { useParams } from "react-router-dom";
+import { objectPage } from "../../api/queryForms/queryString/query";
+import useReactQuery from "../../hook/useQuery";
 
 import useBoolean from "../../hook/useBoolean";
 import useLanguage from "../../hook/useLanguage";
@@ -23,6 +26,7 @@ import useLanguage from "../../hook/useLanguage";
 import {generate} from "shortid";
 
 const CreateCrew = () => {
+  const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
   const {t, english, lithuanian} = useLanguage();
   const [events, setEvents] = useState([]);
@@ -56,6 +60,34 @@ const CreateCrew = () => {
     updateCalendar: events,
   };
 
+  const [crew, setCrew] = useState("");
+  const [status, setStatus] = useState("");
+  const [driver, setDriver] = useState("");
+
+  const data = useReactQuery(objectPage, {}, accessToken);
+  useEffect(() => {
+    let hasura;
+    // let monas;
+    if (data.data) {
+      hasura = data?.data?.monas_crew_related;
+      // make custom logic to assign dispatch dislocations or/and events or merge and match app driver device number
+      setCrew({ result: hasura });
+    }
+  }, [data.data]);
+
+  useEffect(() => {
+    if (crew) {
+      const obj = crew.result;
+      const data = obj.find((x) => x.id === id);
+      setCrewName(data.name);
+      setCrewPhoneNumber(data.phone);
+      setCrewShortHand(data.abbreviation);
+      setStatus(data.status);
+      setDriver(data.driver);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [crew]);
+
   const {
     error: calendarErrors,
     data: calendarResponse,
@@ -86,7 +118,7 @@ const CreateCrew = () => {
   const crewAvailableToCallFrom = useRef("");
   const setCrewAvailableToCallFrom = useCallback(event => {
     crewAvailableToCallFrom.current = event
-    // take this value in order to set delay for the call
+    // present value of database event 
   }, []);
 
   const crewAutomaticallyAssign = useRef(false);
@@ -110,7 +142,7 @@ const CreateCrew = () => {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center text-gray-400">
+                <button className="flex flex-col py-2 items-center text-gray-400">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
@@ -119,7 +151,7 @@ const CreateCrew = () => {
                 </button>
               </div>
               <div className="flex flex-col min-h-full w-[calc(100%-80px)]">
-                <CreateCrewHeader />
+                <CreateCrewHeader crew={status} />
                 <section className={"ml-6 flex-auto flex"}>
                   <div className={"w-full flex mt-4"}>
                     <div className={"flex flex-col w-4/5"}>
@@ -169,7 +201,7 @@ const CreateCrew = () => {
                             value={crewAvailableToCallFrom.current}
                             setValue={setCrewAvailableToCallFrom}
                             twBody={"w-1/5"}
-                            placeholder={"įveskite numerį"}
+                            placeholder={"10"}
                           />
                         </div>
                         <div className={"mt-4"}>
@@ -204,6 +236,7 @@ const CreateCrew = () => {
                         inTask={true}
                         askForBreak={false}
                         connection={"Prarastas rišys"}
+                        driver={driver}
                       />
                       <GoogleMap
                         mapContainerStyle={containerStyle}

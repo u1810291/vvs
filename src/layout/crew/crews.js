@@ -14,9 +14,9 @@ import {PDFExport} from "@progress/kendo-react-pdf";
 import useSort from '../../hook/useSort';
 import {sortToggle} from '../../util/utils';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import {AddFilterListCrew} from '../../components/lists/addFilterCrew';
-import {OptionsListCrew} from '../../components/lists/optionsCrewList';
-import {FiltersListCrew} from '../../components/lists/filterCrewList';
+import {AddFilterListCrew} from '../../components/addFilter/addFilterCrew';
+import {OptionsListCrew} from '../../components/options/optionsCrewList';
+import {FiltersListCrew} from '../../components/filters/filterCrewList';
 import {SearchButton} from '../../components/buttons/searchButton';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
@@ -44,22 +44,6 @@ function Crew() {
     }, 1000);
   }, []);
 
-  const {
-    sortedDashboardKeys,
-    sortedDashboardOrder,
-    sortedDashboardName,
-    sortedDashboardAbbreviation,
-    sortedDashboardDislocationZone,
-    sortedDashboardStatus,
-    sortedDashboardIsAssignedAutomatically,
-  } = useSort();
-
-  const sortedCrewTestApi = sortToggle(
-    CrewTestApi,
-    sortedDashboardKeys,
-    sortedDashboardOrder
-  );
-
   return (
     <OverlayProvider>
       <div className="container max-w-screen-xl">
@@ -67,7 +51,7 @@ function Crew() {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center text-gray-400">
+                <button className="flex flex-col py-2 items-center text-gray-400">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
@@ -145,128 +129,11 @@ function Crew() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex col-span-2 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardName}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.name")}</span>
-                            <img
-                              src={require("../../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex col-span-1 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardAbbreviation}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.abbreviation")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-6 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDislocationZone}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.dislocationZone")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-1 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardStatus}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.status")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardIsAssignedAutomatically}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.assignAutomatically")}</span>
-                          </button>
-                        </div>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto">
-                        {sortedCrewTestApi.map((data) => (
-                          <CrewList
-                            key={data.id}
-                            id={data.id}
-                            name={data.name}
-                            abbreviation={data.abbreviation}
-                            dislocationZone={data.dislocationZone}
-                            status={data.status}
-                            isAssignedAutomatically={data.isAssignedAutomatically}
-                          />
-                        ))}
-                      </div>
+                      <CrewList />
                     </PDFExport>
                   ) : (
                     <>
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-1 bg-gray-100 grid-rows-1 grid-flow-row table-auto sm:grid-cols-12 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex col-span-2 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardName}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.name")}</span>
-                            <img
-                              src={require("../../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex col-span-1 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardAbbreviation}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.abbreviation")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-6 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardDislocationZone}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.dislocationZone")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-1 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardStatus}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.status")}</span>
-                          </button>
-                        </div>
-                        <div className="flex col-span-2 flex-row items-center">
-                          <button
-                            onClick={sortedDashboardIsAssignedAutomatically}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300">{t("eurocash.assignAutomatically")}</span>
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="pl-4 flex-col w-full items-center scrollbar-gone overflow-y-auto">
-                        {sortedCrewTestApi.map((data) => (
-                          <CrewList
-                            key={data.id}
-                            id={data.id}
-                            name={data.name}
-                            abbreviation={data.abbreviation}
-                            dislocationZone={data.dislocationZone}
-                            status={data.status}
-                            isAssignedAutomatically={data.isAssignedAutomatically}
-                          />
-                        ))}
-                      </div>
+                        <CrewList />
                       <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                         <div className="flex flex-col items-start">
                           <div>

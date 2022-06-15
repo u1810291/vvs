@@ -41,7 +41,7 @@ function New() {
                   className="pt-6"
                   src={require("../assets/assets/Line.png")}
                 ></img>
-                <button className="flex flex-col items-center pt-6">
+                <button className="flex flex-col items-center pt-2">
                   <img
                     onClick={() => setIsOpen(true)}
                     className="w-4 h-4 mx-16"

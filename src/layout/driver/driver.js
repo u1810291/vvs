@@ -1,20 +1,20 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 import React, { useState, useContext, useCallback, useEffect } from "react";
-import { CreateHeader } from "../components/headers/create";
-import SlideOver from "../components/sidebars/slideOver";
-import GlobalContext from "../context/globalContext";
-import AuthContext from "../context/authContext";
+import { CreateHeader } from "../../components/headers/create";
+import SlideOver from "../../components/sidebars/slideOver";
+import GlobalContext from "../../context/globalContext";
+import AuthContext from "../../context/authContext";
 import { Spinner } from "react-activity";
 import { Link } from "react-router-dom";
-import { archive } from "../api/queryForms/queryString/users";
-import { getUsers } from "../api/queryForms/queryString/users";
-import { getAllUsers } from "../api/queryForms/variables/users";
-import { useFetch } from "../hook/useFetch";
-import { useDeleteFetch } from "../hook/useDeleteFetch";
+import { archive } from "../../api/queryForms/queryString/users";
+import { getUsers } from "../../api/queryForms/queryString/users";
+import { getAllUsers } from "../../api/queryForms/variables/users";
+import { useFetch } from "../../hook/useFetch";
+import { useDeleteFetch } from "../../hook/useDeleteFetch";
 import { useParams } from "react-router-dom";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import useUtils from "../hook/useUtils";
+import MainSidebar from "../../components/sidebars/main";
+import useUtils from "../../hook/useUtils";
 
 function Driver() {
   const { id } = useParams();
@@ -134,19 +134,19 @@ function Driver() {
             <div className="flex w-screen flex-row justify-center h-screen">
               <div className="flex flex-col h-full items-center w-full">
                 <div className="flex flex-row w-full justify-between h-full">
-                  <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
+                  <div className="flex flex-col bg-slate-600 pt-4 items-center w-20">
                     <button onClick={backFunc}>
-                      <img src={require("../assets/assets/left.png")}></img>
+                      <img src={require("../../assets/assets/left.png")}></img>
                     </button>
                     <img
                       className="pt-6"
-                      src={require("../assets/assets/Line.png")}
+                      src={require("../../assets/assets/Line.png")}
                     ></img>
-                    <button className="flex flex-col items-center pt-6">
+                    <button className="flex flex-col items-center py-2 pt-2">
                       <img
                         onClick={() => setIsOpen(true)}
                         className="w-4 h-4 mx-16"
-                        src={require("../assets/assets/hamburger.png")}
+                        src={require("../../assets/assets/hamburger.png")}
                       />
                     </button>
                   </div>

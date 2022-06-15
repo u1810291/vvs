@@ -19,10 +19,10 @@ import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import useSort from '../../hook/useSort';
 import {sortToggle} from '../../util/utils';
-import {AddFilterListBreaches} from '../../components/lists/addFilterBreaches';
+import {AddFilterListBreaches} from '../../components/addFilter/addFilterBreaches';
 import {SearchButton} from '../../components/buttons/searchButton';
-import {OptionsListBreaches} from '../../components/lists/optionsBreaches';
-import {FiltersListBreaches} from '../../components/lists/filterBreachesList';
+import {OptionsListBreaches} from '../../components/options/optionsBreaches';
+import {FiltersListBreaches} from '../../components/filters/filterBreachesList';
 
 function Breaches() {
   const { english, lithuanian, t } = useLanguage();
@@ -66,8 +66,8 @@ function Breaches() {
         <div className="flex w-screen flex-row justify-center min-h-screen sm:h-screen relative overflow-hidden">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center text-gray-400">
+              <div className="flex flex-col bg-slate-600 pt-2 items-center w-20">
+                <button className="flex flex-col items-center py-2 text-gray-400">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"

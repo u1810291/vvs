@@ -16,11 +16,11 @@ export const GlobalProvider = ({ children }) => {
   const [savedToFavorite, setSavedToFavorite] = useState(false);
   const [longName, setLongName] = useState("");
   const [shortName, setShortName] = useState("");
-  const [filterEditing, setFilterEditing] = useState(null);
   const [filterEditingDrivers, setFilterEditingDrivers] = useState(null);
   const [filterEditingBreaches, setFilterEditingBreaches] = useState(null);
   const [filterEditingCrew, setFilterEditingCrew] = useState(null);
-  const [filterEditingPermissions, setFilterEditingPermissions] = useState(null);
+  const [filterEditingPermissions, setFilterEditingPermissions] =
+    useState(null);
   const [filterEditingClients, setFilterEditingClients] = useState(null);
   const [filterEditingObjects, setFilterEditingObjects] = useState(null);
   const [filterEditingModems, setFilterEditingModems] = useState(null);
@@ -41,10 +41,14 @@ export const GlobalProvider = ({ children }) => {
   const [expandFilterClients, setExpandFilterClients] = useState(true);
   const [expandFilterModems, setExpandFilterModems] = useState(true);
   const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
-  const [selectedFilter, setSelectedFilter] = useState(null);
   const [apiData, setApiData] = useState(""); // not used
   const [globalToken, setGlobalToken] = useState("empty");
   const [objectPageImages, setObjectPageImages] = useState([]);
+  const [objectPageAddress, setObjectPageAddress] = useState("");
+  const [objectPageFetchData, setObjectPageFetchData] = useState(false);
+
+  const [filterEditing, setFilterEditing] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterList, setFilterList] = useState([
     {
       id: generate(),
@@ -52,7 +56,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -73,9 +77,10 @@ export const GlobalProvider = ({ children }) => {
         "Laikas objekte",
         "Būsena",
         "Suveikimo priežastis",
-      ]
+      ],
     },
   ]);
+
   const [selectedFilterDrivers, setSelectedFilterDrivers] = useState(null);
   const [filterListDrivers, setFilterListDrivers] = useState([
     {
@@ -84,7 +89,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -107,7 +112,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -122,8 +127,8 @@ export const GlobalProvider = ({ children }) => {
         "Data nuo",
         "Laikas už zonos ribų",
         "Ekipažai",
-        "Vairuotojai"
-      ]
+        "Vairuotojai",
+      ],
     },
   ]);
 
@@ -135,7 +140,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -151,12 +156,13 @@ export const GlobalProvider = ({ children }) => {
         "Trumpinys",
         "Dislokacijos zona",
         "Būsena",
-        "Automatiškai priskirti"
+        "Automatiškai priskirti",
       ],
     },
   ]);
 
-  const [selectedFilterPermissions, setSelectedFilterPermissions] = useState(null);
+  const [selectedFilterPermissions, setSelectedFilterPermissions] =
+    useState(null);
   const [filterListPermissions, setFilterListPermissions] = useState([
     {
       id: generate(),
@@ -164,7 +170,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -180,8 +186,8 @@ export const GlobalProvider = ({ children }) => {
         "Pavadinimas",
         "Būsena",
         "Ekipažai",
-        "Vairuotojai"
-      ]
+        "Vairuotojai",
+      ],
     },
   ]);
 
@@ -193,7 +199,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -221,7 +227,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -233,7 +239,7 @@ export const GlobalProvider = ({ children }) => {
       driver: "0",
       inTime: "0",
       dashboardList: [
-        "Vardas Pavardė",
+        "Pavadinimas",
         "Miestas",
         "Adresas",
         "Objekto nr.",
@@ -251,7 +257,7 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: new Date().toISOString().split("T")[0],
+      date: "",
       objectAddress: "",
       operator: "0",
       object: "0",
@@ -274,6 +280,10 @@ export const GlobalProvider = ({ children }) => {
 
   // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
   const contextData = {
+    objectPageAddress,
+    setObjectPageAddress,
+    objectPageFetchData,
+    setObjectPageFetchData,
     objectPageImages,
     setObjectPageImages,
     globalToken,

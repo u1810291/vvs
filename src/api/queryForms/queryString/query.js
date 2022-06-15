@@ -19,9 +19,10 @@ export const objectPage = `query MyQuery {
     phone
     name
   }
-  objectimages {
+  monas_images_related {
     Id
-    image
+    id
+    imagepath
     imagename
   }
   monas_related {
@@ -34,15 +35,42 @@ export const objectPage = `query MyQuery {
     monasid
     navid
   }
-  events {
-    receivedtime
-    status
-  }
-  images {
-    user
-    imagename
-    imagepath
+  crews {
     Id
+    name
+    abbreviation
+    dislocationZone
+    status
+    is_assigned_automatically
+    id
+    phone_number
+    driver_name
+  }
+  events {
+    id
+    monas_id
+    updated_at
+  }
+  filters {
+    Id
+    id
+    userId
+    filterName
+    filterShortName
+    savedToFavorite
+    savedToMenu
+    date
+    objectAddress
+    operator
+    object
+    type
+    group
+    status
+    reason
+    crew
+    driver
+    inTime
+    dashboardList
   }
 }`;
 
@@ -104,5 +132,45 @@ export const updateRegister = `query updateRegisterQuery($userId: String!, $role
   updateRegister(userId: $userId, roles: $roles) {
     userId
     roles
+  }
+}`;
+
+// %searchvalue% {Id: {_eq: $id}, _and: }
+export const searchAddress = `query SearchAddress ($address: String!) {
+  objects(where: {address: {_like: $address}}) {
+    AcLossDetected
+    DcLossDetected
+    MainSubId
+    NotesText
+    OpenCloseSeekState
+    TS
+    address
+    assignedeventexampleid
+    assignedgroupableeventexampleid
+    city
+    contract
+    contract2
+    freeEvents
+    generatedeventsexample
+    grg_info
+    installed
+    installer
+    installerCompany
+    intlinenr
+    intreceivernr
+    lastPersonToOpenClose
+    lasttesttime
+    latitude
+    longitude
+    name
+    notes
+    obdindx
+    phone
+    region
+    relationId
+    street
+    subdivision
+    transinstdate
+    unifier_id
   }
 }`;

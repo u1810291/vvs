@@ -5,46 +5,33 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { ThreeTabHeader } from "../components/headers/threeTab";
-import { ModemsList } from "../components/lists/modemsList";
-
-import { FiltersListModems } from "../components/filters/filterModemsList";
-import { OptionsListModems } from "../components/options/optionsModemsList";
+import { ClientsHeader } from "../../components/headers/clients";
+import { ClientList } from "../../components/lists/clientsList";
+import { FiltersListClients } from "../../components/filters/filterClientsList";
+import { OptionsListClients } from "../../components/options/optionsClientsList";
 const {
-  AddFilterListModems,
-} = require("../components/addFilter/addFilterModems");
-import AuthContext from "../context/authContext";
+  AddFilterListClients,
+} = require("../../components/addFilter/addFilterClients");
+import GlobalContext from "../../context/globalContext";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import GlobalContext from "../context/globalContext";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import { SearchButton } from "../components/buttons/searchButton";
+import MainSidebar from "../../components/sidebars/main";
+import { SearchButton } from "../../components/buttons/searchButton";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Modems() {
-  const { accessToken } = useContext(AuthContext) 
-  const [isOpen, setIsOpen] = useState(false);
-  const handleOnClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
-  const handleOnOpen = useCallback(() => {
-    setIsOpen(true);
-  }, []);
-  
-
-  usePreventScroll({ isDisabled: !isOpen });
-  const { expandFilterModems, setExpandFilterModems } =
+function ClientsList() {
+  const { expandFilterClients, setExpandFilterClients } =
     useContext(GlobalContext);
-  const { selectedFilterModems, setSelectedFilterModems } =
+  const { selectedFilterClients, setSelectedFilterClients } =
     useContext(GlobalContext);
-  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
+  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async () => {
@@ -56,6 +43,14 @@ function Modems() {
       setToPrint(false);
     }, 1000);
   }, []);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+  usePreventScroll({ isDisabled: !isOpen });
 
   return (
     <OverlayProvider>
@@ -63,27 +58,27 @@ function Modems() {
         <div className="flex w-screen flex-row justify-center h-screen">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center">
+              <div className="flex flex-col bg-slate-600 pt-2 items-center w-20 text-gray-400">
+                <button className="flex flex-col items-center py-2">
                   <img
                     onClick={handleOnOpen}
-                    className="w-4 h-4 mx-16"
-                    src={require("../assets/assets/hamburger.png")}
+                    className="w-4 h-4 mx-16 hover:fill-white"
+                    src={require("../../assets/assets/hamburger.png")}
                   />
                 </button>
                 <img
                   className="pt-6"
-                  src={require("../assets/assets/Line.png")}
+                  src={require("../../assets/assets/Line.png")}
                 ></img>
-                {filterListModems.map((filter) => {
+                {filterListClients.map((filter) => {
                   if (filter.savedToMenu === true) {
                     return (
                       <button
                         key={filter.id}
                         // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
-                        onClick={() => setSelectedFilterModems(filter.id)}
+                        onClick={() => setSelectedFilterClients(filter.id)}
                         className={
-                          selectedFilterModems === filter.id
+                          selectedFilterClients === filter.id
                             ? "font-light text-md mt-6 text-white"
                             : "font-light text-md mt-6 text-gray-400 hover:text-white"
                         }
@@ -94,21 +89,22 @@ function Modems() {
                   }
                 })}
               </div>
+
               <div className="flex flex-col min-h-full w-full justify-between">
-                <ThreeTabHeader />
+                <ClientsHeader />
                 <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                   <div className="flex flex-row w-full">
-                    {expandFilterModems ? (
+                    {expandFilterClients ? (
                       <>
                         <div className="flex flex-col h-full sm:h-96 overflow-y-auto items-center scrollbar-gone border-r w-3/6 xl:w-1/5">
-                          <AddFilterListModems />
+                          <AddFilterListClients />
                         </div>
                         <div className="flex flex-col ml-2 w-3/6 lg:w-3/5">
-                          <OptionsListModems />
-                          <FiltersListModems />
+                          <OptionsListClients />
+                          <FiltersListClients />
                           <div
                             className={
-                              selectedFilterModems
+                              selectedFilterClients
                                 ? "flex flex-col md:flex-row justify-between"
                                 : "hidden"
                             }
@@ -121,7 +117,7 @@ function Modems() {
                             <div className="flex flex-col md:flex-row items-center my-6">
                               <img
                                 className="h-8 w-6 mr-2 hidden lg:inline-block"
-                                src={require("../assets/assets/doc.png")}
+                                src={require("../../assets/assets/doc.png")}
                               ></img>
                               <button
                                 onClick={handleExportWithComponent}
@@ -147,13 +143,14 @@ function Modems() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <ModemsList token={accessToken}/>
+                      <ClientList />
                     </PDFExport>
                   ) : (
                     <>
-                      <ModemsList token={accessToken} />
+                      <ClientList />
                     </>
                   )}
+
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>
@@ -227,7 +224,6 @@ function Modems() {
                         </svg>
                         Previous
                       </a>
-
                       <div className="hidden md:-mt-px md:flex">
                         <a className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
                           1
@@ -260,7 +256,6 @@ function Modems() {
                           999
                         </a>
                       </div>
-
                       <a className="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
                         Next
                         <svg
@@ -292,4 +287,4 @@ function Modems() {
   );
 }
 
-export default Modems;
+export default ClientsList;

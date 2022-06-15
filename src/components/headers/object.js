@@ -1,16 +1,15 @@
 import React, { useContext } from "react";
 import GlobalContext from "../../context/globalContext";
 
-export function ObjectHeader({ fetch, ...props}) {
-  const {objectName, setObjectName} = useContext(GlobalContext);
+export function ObjectHeader({ fetch, objName, ...props}) {
 
   return (
     <div className="flex flex-row border h-16 bg-white justify-between">
       <div className="md:flex hidden md:flex-row ml-4 items-center">
-        <h4 className="ml-2 text-normal font-normal">Klientai</h4>
+        <h4 className="ml-2 text-normal font-normal">Objektai</h4>
         <p className="pl-2 text-gray-600">/</p>
         <h4 className="ml-2  text-normal font-normal">
-          {objectName}
+          {objName}
         </h4>
       </div>
       <div className="flex flex-row items-center">

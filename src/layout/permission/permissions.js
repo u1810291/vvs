@@ -11,19 +11,19 @@ import GlobalContext from "../../context/globalContext";
 import {PDFExport, savePDF} from "@progress/kendo-react-pdf";
 import {PermissionsTestApi} from '../../api/permissionsTest';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import {AddFilterListPermissions} from '../../components/lists/addFilterPermissions';
+import {AddFilterListPermissions} from '../../components/addFilter/addFilterPermissions';
 import {PermissionsList} from '../../components/lists/permissionsList';
 import {PermissionsHeader} from '../../components/headers/permission/permissionsHeader';
 import SlideOver from '../../components/sidebars/slideOver';
 import MainSidebar from '../../components/sidebars/main';
 import useSort from '../../hook/useSort';
 import {sortToggle} from '../../util/utils';
-import {OptionsListPermissions} from '../../components/lists/optionsPermissionsList';
-import {FiltersListPermissions} from '../../components/lists/filterPermissionsList';
+import {OptionsListPermissions} from '../../components/options/optionsPermissionsList';
+import {FiltersListPermissions} from '../../components/filters/filterPermissionsList';
 import {SearchButton} from '../../components/buttons/searchButton';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
-import { ThreeTabHeader } from "../../components/headers/threeTab";
+import { ThreeTabHeader } from "../../components/headers/objects";
 
 function Permissions() {
   const {english, lithuanian, t} = useLanguage();
@@ -68,7 +68,7 @@ function Permissions() {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col items-center text-gray-400">
+                <button className="flex flex-col py-2 items-center text-gray-400">
                   <img
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"

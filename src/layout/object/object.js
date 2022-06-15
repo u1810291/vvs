@@ -6,41 +6,41 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { ObjectHeader } from "../components/headers/object";
-import { Events } from "../components/lists/events";
-import { PhonesList } from "../api/phones";
+import { ObjectHeader } from "../../components/headers/object";
+import { Events } from "../../components/lists/events";
+import { PhonesList } from "../../api/phones";
 import { useParams } from "react-router-dom";
-import GlobalContext from "../context/globalContext";
-import AuthContext from "../context/authContext";
+import GlobalContext from "../../context/globalContext";
+import AuthContext from "../../context/authContext";
 import { Spinner } from "react-activity";
-import { EventsList } from "../api/events";
+import { EventsList } from "../../api/events";
 import { generate } from "shortid";
-import SlideOver from "../components/sidebars/slideOver";
+import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../components/sidebars/main";
-import useUtils from "../hook/useUtils";
+import MainSidebar from "../../components/sidebars/main";
+import useUtils from "../../hook/useUtils";
 import {
   objectPageImagesQuery,
   objectPageQuery,
   objectPage,
   imagesUpdate,
-} from "../api/queryForms/queryString/query";
+} from "../../api/queryForms/queryString/query";
 import {
-  objectPageImagesAPImutation,
-  objectPageImagesMutation,
-  objectPageQueryCorrespondPersons,
-  imagesUpdateMutation,
-} from "../api/queryForms/queryString/mutation";
-import { objectPageImagesUpdate } from "../api/queryForms/queryString/update";
-import useReactQuery from "../hook/useQuery";
-import { useFetch } from "../hook/useFetch";
+  imageUpload,
+  uploadImageURI,
+  deleteImageURI,
+} from "../../api/queryForms/queryString/mutation";
+import { objectPageImagesUpdate } from "../../api/queryForms/queryString/update";
+import useReactQuery from "../../hook/useQuery";
+import { useFetch } from "../../hook/useFetch";
 
 function Object() {
   const { id } = useParams();
-  const hiddenFileInput = useRef(null);
-  const { objectName, setObjectName } = useContext(GlobalContext);
-  const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
   const { accessToken, user } = useContext(AuthContext);
+  const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
+  const hiddenFileInput = useRef(null);
+  const [objDesc, setObjDesc] = useState(""); // possible undefined
+  const [objName, setObjName] = useState("");
   const [objectAddress, setObjectAddress] = useState("");
   const [objectCity, setObjectCity] = useState("");
   const [objectDescription, setObjectDescription] = useState("");
@@ -59,90 +59,104 @@ function Object() {
   const [photoId, setPhotoId] = useState("");
   const [navId, setNavId] = useState("");
   const [monasId, setMonasId] = useState("");
+  const [imagePath, setImagePath] = useState(null);
+  const [imageName, setImageName] = useState([]);
+  const [imagesName, setImagesName] = useState("");
+  const [obj, setObj] = useState("");
 
-  // remember to swap that with user id
-  const imageInsertVariables = {
-    imagepath: blobImage[0]?.data,
-    id: blobImage[0]?.name,
-    user: id,
-    imagename: blobImage[0]?.name,
-  };
-
-  const imageUpdateVariables = {
+  const deleteVariables = {
     imagepath: photoId,
-    imagename: "test",
   };
 
-  const data = useReactQuery(
-    // fetchImages
-    objectPage,
-    {},
-    accessToken
-  );
+  const uploadVariables = {
+    namespace: "vvs",
+    path: `object/${imageName}`,
+    base64: blobImage,
+  };
+
+  const uploadURIVariables = {
+    updateURI: {
+      Id: id,
+      imagepath: imagePath,
+      imagename: imageName,
+    },
+  };
+
+  const data = useReactQuery(objectPage, {}, accessToken);
 
   const {
-    data: dataData,
-    error: dataError,
-    loading: dataLoading,
-    fetchImages: dataFetchImages,
-  } = useFetch(objectPageImagesMutation, imageInsertVariables, accessToken); // imagesUpdate
+    data: imageResponse,
+    error: imageResponseError,
+    loading: imageResponseLoading,
+    fetchData,
+  } = useFetch(imageUpload, uploadVariables, accessToken);
 
-  const { data: imageData } = useReactQuery(
-    objectPageImagesUpdate,
-    imageUpdateVariables,
-    accessToken
-  );
+  const {
+    data: databaseResponse,
+    error: databaseResponseError,
+    loading: databaseResponseLoading,
+    fetchData: databaseFetch,
+  } = useFetch(uploadImageURI, uploadURIVariables, accessToken);
+
+  const {
+    data: deleteImageResponse,
+    error: deleteImageResponseError,
+    loading: deleteImageResponseLoading,
+    fetchData: deleteImageFetch,
+  } = useFetch(deleteImageURI, deleteVariables, accessToken);
 
   useEffect(() => {
     let hasura;
     let monas;
+    let image;
     if (data.status === "success") {
-      hasura = data.data.monas_related;
       monas = data.data.objects;
-      const mergeDB = monas.map((monas) => ({
-        ...monas,
-        ...hasura.find((hasura) => String(hasura.Id) === String(monas.Id)),
+      hasura = data.data.monas_related;
+      image = data.data.monas_images_related;
+      const monasHasuraMerge = hasura.map((m) => ({
+        ...m,
+        ...monas.find((hasura) => String(hasura.Id) === String(m.Id)),
       }));
-      const object = mergeDB.find((obj) => {
-        return obj.Id === Number(id);
+      const monasImageMerge = image.map((m) => ({
+        ...m,
+        ...monas.find((hasura) => String(hasura.Id) === String(m.Id)),
+      }));
+
+      const obj = monasHasuraMerge.find((obj) => {
+        return String(obj.Id) === String(id);
       });
-      setObjectPageData(object);
+
+      const images = monasImageMerge.filter((obj) => {
+        return String(obj.Id) === String(id);
+      });
+
+      setObj(obj);
+      setModem(obj?.modem);
+      setNavId(obj?.navid);
+      setMonasId(obj?.monasid);
+      setObjName(obj?.name);
+      setObjectAddress(obj?.address);
+      setObjectCity(obj?.city);
+      objectDescriptionFunc(obj?.notes);
+      if (images.length > 1) {
+        const path = images?.map((e) => {
+          return e.imagepath;
+        });
+        const name = images?.map((e) => {
+          return e.imagename;
+        });
+        setPictures(path);
+        setImagesName(name);
+      } else if (images.length < 1) {
+        setPictures([]);
+        setImagesName([]);
+      } else {
+        setPictures([images.imagepath]);
+        setImagesName([images.imagename]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.data]);
-
-  // correct database pathes for images
-  useEffect(() => {
-    if (data.status === "success") {
-      const base64images = data?.data?.images;
-      let arr = base64images.map((b) => {
-        if (b.imagename !== null) {
-          return b.imagepath;
-        }
-      });
-      setPictures(arr);
-    }
-  }, [data.status]);
-
-  useEffect(() => {
-    setModem(objectPageData.modem);
-    setNavId(objectPageData.navid);
-    setMonasId(objectPageData.monasdid);
-  }, [data.data]);
-
-  // useEffect(() => {
-  //     console.log('data ', data);
-  //   // setQueryObject(data);
-  //   setResponsiblePersons(data?.data?.corresppersons);
-  //   setObjectImages(data?.data?.objectimages);
-  //   setObjectPageData(data?.data?.objects);
-  //   console.log(data?.data?.objects)
-  //   // console.log(objectPageData, objectImages, responsiblePersons);
-  //   // console.log(queryObject.data.corresppersons[0]);
-  //   // console.log(queryObject.data.objectimages)
-  //   // console.log(queryObject.data.objects[0])
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [data]);
 
   const handleOnClose = useCallback(() => {
     setIsOpen(false);
@@ -158,12 +172,9 @@ function Object() {
     setObjectDescription(e.target.value);
   }, []);
 
-  const objectNameFunc = useCallback(
-    async (e) => {
-      setObjectName(e.target.value);
-    },
-    [setObjectName]
-  );
+  const objectNameFunc = useCallback(async (e) => {
+    setObjName(e.target.value);
+  }, []);
 
   const objectAddressFunc = useCallback(async (e) => {
     setObjectAddress(e.target.value);
@@ -208,20 +219,33 @@ function Object() {
           return readAsDataURL(f);
         })
       );
-      setBlobImage(image);
-      const fileArray = Array.from(e.target.files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setObjectPageImages((prev) => prev.concat(fileArray));
-      Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
+      setImageName(image[0].name);
+      setBlobImage(image[0].data);
+      // const fileArray = Array.from(e.target.files).map((file) =>
+      //   URL.createObjectURL(file)
+      // );
+      // setObjectPageImages((prev) => prev.concat(fileArray));
+      // Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
     }
   }
 
   useEffect(() => {
-    if (blobImage) {
-      dataFetchImages();
-    }
+    fetchData();
   }, [blobImage]);
+
+    // if image upload response, then take url and set variable
+    useEffect(() => {
+      if (imageResponse) {
+        const base64images = imageResponse?.data?.storeFile?.uri;
+        setImagePath(base64images);
+        if (base64images) {
+        setPictures([base64images]);
+        }
+        if (pictures) {
+          databaseFetch();
+        }
+      }
+    }, [imageResponse]);
 
   function readAsDataURL(file) {
     return new Promise((resolve, reject) => {
@@ -238,7 +262,7 @@ function Object() {
     });
   }
 
-  const renderPhotos = (source) => {
+  const renderPhotos = (source, name) => {
     if (source) {
       return source.map((photo, index) => {
         return (
@@ -254,7 +278,16 @@ function Object() {
             </div>
             <a>
               <div className="flex bg-white items-center justify-center rounded-lg shadow hover:shadow-none drop-shadow h-32 overflow-hidden">
-                <img className="flex bg-cover w-full h-full" src={photo}></img>
+                {imageResponseLoading ? (
+                  <div className="flex bg-cover w-full h-full">
+                    <Spinner color="dark-blue" size={20} />
+                  </div>
+                ) : (
+                  <img
+                    className="flex bg-cover w-full h-full"
+                    src={`http://ecfs.swarm.testavimui.eu${photo}`}
+                  ></img>
+                )}
               </div>
             </a>
           </div>
@@ -263,15 +296,26 @@ function Object() {
     }
   };
 
-  const removeImage = useCallback(async (id) => {
-    setPhotoId(id);
-    // setObjectPageImages((oldState) => oldState.filter((item) => item !== id));
-    // updateFetchImages();
-  }, []);
+  const removeImage = useCallback(
+    async (url) => {
+      setPhotoId(url);
+      if (photoId) {
+        deleteImageFetch();
+      }
+    },
+    [deleteImageFetch, photoId]
+  );
 
   const handleClick = useCallback(() => {
     hiddenFileInput.current.click();
   }, []);
+
+  // console.log('databaseResponse', databaseResponse);
+  // console.log('imagepath ',imagePath, 'image name', imageName, 'pictures ', pictures);
+  // console.log('image upload response ', imageResponse);
+  // console.log('url upload response ', databaseResponse);
+  // console.log('pictures variable to display images ', pictures, 'image name variable to display image names', imageName);
+  // console.log('data that rerenders ...', data);
 
   return (
     <>
@@ -287,22 +331,22 @@ function Object() {
                 <div className="flex flex-row w-full justify-between h-full">
                   <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                     <button onClick={backFunc}>
-                      <img src={require("../assets/assets/left.png")}></img>
+                      <img src={require("../../assets/assets/left.png")}></img>
                     </button>
                     <img
                       className="pt-6"
-                      src={require("../assets/assets/Line.png")}
+                      src={require("../../assets/assets/Line.png")}
                     ></img>
-                    <button className="flex flex-col items-center pt-6">
+                    <button className="flex flex-col py-2 items-center pt-2">
                       <img
                         onClick={handleOnOpen}
                         className="w-4 h-4 mx-16"
-                        src={require("../assets/assets/hamburger.png")}
+                        src={require("../../assets/assets/hamburger.png")}
                       />
                     </button>
                   </div>
                   <div className="flex flex-col min-h-full w-full justify-between">
-                    <ObjectHeader fetch={dataFetchImages} />
+                    <ObjectHeader objName={objName} fetch={fetchData} />
                     <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
                       <div className="flex pl-4 flex-row justify-between">
                         <div className="flex h-full flex-col w-full pr-4 md:pr-0 md:w-3/6 lg:w-3/6">
@@ -324,7 +368,7 @@ function Object() {
                                       name="name"
                                       placeholder=""
                                       required
-                                      value={data?.data?.objects[0].name} // objectName
+                                      value={objName}
                                       onChange={objectNameFunc}
                                       className="flex h-8 w-96 border placeholder-gray-400 text-black pl-2 focus:outline-none sm:text-sm"
                                     />
@@ -346,7 +390,7 @@ function Object() {
                                       placeholder=""
                                       type="address"
                                       required
-                                      value={data?.data?.objects[0].address} // objectAddress
+                                      value={objectAddress}
                                       onChange={objectAddressFunc}
                                       className="flex h-8 w-72 border placeholder-gray-400 text-black pl-2 focus:outline-none sm:text-sm"
                                     />
@@ -362,7 +406,7 @@ function Object() {
                                       id="city"
                                       name="city"
                                       placeholder=""
-                                      value={data?.data?.objects[0].city} // objectCity
+                                      value={objectCity}
                                       onChange={objectCityFunc}
                                       type="city"
                                       className="flex h-8 w-full border focus:outline-none pl-2 sm:text-sm"
@@ -383,7 +427,7 @@ function Object() {
                                   placeholder=""
                                   aria-describedby="answer"
                                   rows={4}
-                                  value={data?.data?.objects[0].notes} // objectDescription
+                                  value={objectDescription}
                                   onChange={objectDescriptionFunc}
                                   className="text-sm h-full w-full border pl-2 focus:outline-none"
                                 />
@@ -445,7 +489,7 @@ function Object() {
                                       <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
                                         <img
                                           className="flex bg-cover w-2/4 h-2/4"
-                                          src={require("../assets/assets/apple.png")}
+                                          src={require("../../assets/assets/apple.png")}
                                         ></img>
                                       </div>
                                     </a>
@@ -456,7 +500,7 @@ function Object() {
                                       <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
                                         <img
                                           className="flex bg-cover w-2/4 h-2/4"
-                                          src={require("../assets/assets/apple.png")}
+                                          src={require("../../assets/assets/apple.png")}
                                         ></img>
                                       </div>
                                     </a>
@@ -469,14 +513,14 @@ function Object() {
                                     <div className="flex bg-white items-center justify-center rounded-lg shadow hover:drop-shadow-none drop-shadow h-32 overflow-hidden">
                                       <img
                                         className="flex bg-cover w-2/4 h-2/4"
-                                        src={require("../assets/assets/apple.png")}
+                                        src={require("../../assets/assets/apple.png")}
                                       ></img>
                                     </div>
                                   </a>
                                 </div>
                               ) : null}
                               {renderPhotos(pictures)}
-                              {renderPhotos(objectPageImages)}
+                              {/* {renderPhotos(objectPageImages, imagesName)} */}
                             </div>
 
                             <div className="w-80 mt-4 flex justify-end">
@@ -506,9 +550,10 @@ function Object() {
                                   id="send-crew"
                                   name="send-crew"
                                   type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                                  className="ml-8 h-8 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                                 />
-                                <p className="mr-8 ml-4 text-sm text-normal truncate">
+                                {/*  ml-4 self-start text-sm truncate my-2 */}
+                                <p className="mr-8 ml-4 text-sm truncate">
                                   Siusti ekipažą automatiškai
                                 </p>
 
@@ -526,7 +571,7 @@ function Object() {
                                     pattern="[0-9]*"
                                     value={from}
                                     onChange={fromFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex h-8 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
 
@@ -544,7 +589,7 @@ function Object() {
                                     pattern="[0-9]*"
                                     value={to}
                                     onChange={toFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex h-8 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
 
@@ -562,7 +607,7 @@ function Object() {
                                     pattern="[0-9]*"
                                     value={time}
                                     onChange={timeFunc}
-                                    className="flex h-6 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex h-8 w-20 border text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
                               </div>
@@ -571,7 +616,7 @@ function Object() {
                                   id="send-crew"
                                   name="send-crew"
                                   type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                                  className="ml-8 h-8 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                                 />
                                 <p className="ml-4 self-start text-sm truncate my-2">
                                   Skambinti po apžiuros
@@ -582,7 +627,7 @@ function Object() {
                                   id="send-crew"
                                   name="send-crew"
                                   type="checkbox"
-                                  className="ml-8 h-6 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                                  className="ml-8 h-8 w-6 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
                                 />
                                 <p className="ml-4 self-start text-sm truncate my-2">
                                   Bankomatas
@@ -666,7 +711,7 @@ function Object() {
                                     placeholder=""
                                     value={modem}
                                     onChange={modemFunc}
-                                    className="flex w-32 ml-4 border h-6 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
+                                    className="flex w-32 ml-4 border h-8 border-gray-300 rounded-sm text-black focus:outline-none pl-1 sm:text-sm"
                                   />
                                 </div>
                                 <div className="flex flex-row items-center mt-6">
@@ -674,7 +719,7 @@ function Object() {
                                     id="control"
                                     name="control"
                                     type="checkbox"
-                                    className="h-6 w-6 ml-4 text-gray-600  focus:ring-gray-500 rounded-sm"
+                                    className="h-8 w-6 ml-4 text-gray-600  focus:ring-gray-500 rounded-sm"
                                   />
                                   <p className="ml-4 self-start text-sm truncate my-2">
                                     Signalizacijos valdymas
@@ -697,7 +742,7 @@ function Object() {
                                       Objekto nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.obdindx}
+                                      {obj?.obdindx}
                                     </p>
                                   </div>
                                 </div>
@@ -707,7 +752,7 @@ function Object() {
                                       Sutarties nr.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.contract}
+                                      {obj?.contract}
                                     </p>
                                   </div>
                                 </div>
@@ -717,7 +762,7 @@ function Object() {
                                       Navision ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.navid}
+                                      {obj?.navid}
                                     </p>
                                   </div>
                                 </div>
@@ -727,7 +772,7 @@ function Object() {
                                       Monas MS ID.
                                     </p>
                                     <p className="text-sm font-normal truncate my-2 mr-36">
-                                      {objectPageData?.monasid}
+                                      {obj?.monasid}
                                     </p>
                                   </div>
                                 </div>

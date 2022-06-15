@@ -1,32 +1,57 @@
 import React, { useContext, useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import { Orders } from "../../api/orders";
+import { Spinner } from "react-activity";
 import useSort from "../../hook/useSort";
 import { objectPage } from "../../api/queryForms/queryString/query";
 import useReactQuery from "../../hook/useQuery";
 import { sortToggle } from "../../util/utils";
 import GlobalContext from "../../context/globalContext";
 
-export const ObjectsList = ({ token, ...props}) => {
+export const ObjectsList = ({ searchResponse, token, ...props}) => {
 const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
     const [orders, setOrders] = useState("");
+    const { objectPageFetchData, setObjectPageFetchData } = useContext(GlobalContext);
+    const [searchData, setSearchData] = useState(null);
 
     const data = useReactQuery(objectPage, {}, token);
+
     useEffect(() => {
       let hasura;
       let monas;
-      if (data.status === "success") {
-      hasura = data.data.monas_related;
-      monas = data.data.objects;
-      const mergeDB = monas.map((monas) => ({
-        ...monas, ...hasura.find(hasura => String(hasura.Id) === String(monas.Id))
+      if (data.status === "success"){
+        setObjectPageFetchData(true);
+        if(data.data.filters) {
+      let filters = data?.data?.filters;
+      const result = filters?.map(a => {
+        return a;
+      })
+      if (filters) {
+      setFilterListObjects(result);
+      }
+     }
+      hasura = data?.data?.monas_related;
+      monas = data?.data?.objects;
+      const mergeDB = monas?.map((monas) => ({
+        ...monas, ...hasura?.find(hasura => String(hasura.Id) === String(monas.Id))
       }))
       setOrders({result:mergeDB});
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data.data]);
+
+    useEffect(() => {
+      if (searchResponse) {
+      let hasura = data?.data?.monas_related;
+      let monas = searchResponse?.data?.objects;
+      const mergeDB = monas?.map((monas) => ({
+        ...monas, ...hasura?.find(hasura => String(hasura.Id) === String(monas.Id))
+      }))
+      setOrders({result:mergeDB});
+      }
+    }, [searchResponse]);
 
   const {
     sortedObjectsKeys,
@@ -39,29 +64,33 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
     sortedObjectsContract,
   } = useSort();
 
-  console.log(orders);
-
   const sortedObjects = sortToggle(
-    orders.result,
+    orders?.result,
     sortedObjectsKeys,
     sortedObjectsOrder
   );
 
   return (
     <>
+          {data.status !== "success" ? (
+        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
+          <Spinner color="dark-blue" size={40} />
+        </div>
+      ) : (
+        <>
       {filterListObjects.map((filter, index) => {
         return (
           <div key={filter.id}>
             {selectedFilterObjects === filter.id ? (
               <div className="flex pl-4 w-full border-t py-2 bg-gray-100 justify-between font-normal text-black z-1">
-                {filter.dashboardList.includes("Vardas Pavardė") ? (
+                {filter.dashboardList.includes("Pavadinimas") ? (
                   <div className="flex flex-row items-center w-40">
                     <button
                       onClick={sortedObjectsNames}
                       className="flex flex-row items-center"
                     >
-                      <span className="text-gray-300 text-sm">
-                        Vardas Pavardė
+                      <span className="text-gray-300 text-sm hover:text-gray-400">
+                        Pavadinimas
                       </span>
                       <img
                         src={require("../../assets/assets/down.png")}
@@ -75,7 +104,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsCity}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Miestas</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Miestas</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Adresas") ? (
@@ -83,7 +112,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsAddress}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Adresas</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Adresas</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Objekto nr.") ? (
@@ -91,7 +120,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsObject}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Objekto nr.</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Objekto nr.</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Sutarties nr.") ? (
@@ -99,7 +128,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsContract}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">Sutarties nr.</span>
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">Sutarties nr.</span>
                   </button>
                 ) : null}
                 {filter.dashboardList.includes("Siusti ekipaža") ? (
@@ -107,7 +136,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
                     onClick={sortedObjectsSentCrew}
                     className="flex flex-row items-center w-40"
                   >
-                    <span className="text-gray-300 text-sm">
+                    <span className="text-gray-300 hover:text-gray-400 text-sm">
                       Siusti ekipažą
                     </span>
                   </button>
@@ -121,12 +150,12 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
       <div className="pl-4 flex-col w-full items-center">
         {sortedObjects?.map((data) => (
           <div className="w-full" key={data.Id} >
-            {filterListObjects.map((filter, index) => {
+            {filterListObjects?.map((filter, index) => {
               return (
                 <div key={filter.id}>
                   {selectedFilterObjects === filter.id ? (
                     <div className="flex w-full border-t py-2 bg-white justify-between font-normal text-black z-1">
-                      {filter.dashboardList.includes("Vardas Pavardė") ? (
+                      {filter.dashboardList.includes("Pavadinimas") ? (
                         <div className="flex flex-row items-center h-12 w-40">
                           <Link
                             // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
@@ -201,5 +230,7 @@ const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
         ))}
       </div>
     </>
+          )}
+          </>
   );
 };

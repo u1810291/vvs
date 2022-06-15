@@ -10,20 +10,20 @@ import { SubscriptionClient } from "subscriptions-transport-ws";
 
 import Login from "./layout/login";
 import Dashboard from "./layout/dashboard";
-import Object from "./layout/object";
-import Keys from "./layout/keys";
+import Object from "./layout/object/object";
+import Keys from "./layout/key/keys";
 import Tasks from "./layout/tasks";
-import Drivers from "./layout/drivers";
-import Clients from "./layout/clients";
-import Objects from "./layout/objects";
-import Modems from "./layout/modems";
+import Drivers from "./layout/driver/drivers";
+import Clients from "./layout/client/clients";
+import Objects from "./layout/object/objects";
+import Modems from "./layout/modem/modems";
 import Create from "./layout/create";
-import Driver from "./layout/driver";
-import Client from "./layout/client";
-import Key from "./layout/key";
-import Modem from "./layout/modem";
+import Driver from "./layout/driver/driver";
+import Client from "./layout/client/client";
+import Key from "./layout/key/key";
+import Modem from "./layout/modem/modem";
 import New from "./layout/new";
-import Crew from "./layout/crew/crew";
+import Crews from "./layout/crew/crews";
 import CreateCrew from './layout/crew/createCrew';
 import Permission from './layout/permission/permissions';
 import Breach from './layout/breach/breach';
@@ -85,8 +85,8 @@ function App() {
                   <Route path="Modem/:id" element={<Modem />} />
                   <Route path="Key/:id" element={<Key />} />
                   <Route path="Object/:id" element={<Object />} />
-                  <Route path="Crews" element={<Crew />} />
-                  <Route path="CreateCrew" element={<CreateCrew />} />
+                  <Route path="CreateCrew/:id" element={<CreateCrew />} />
+                  <Route path="Crews" element={<Crews />} />
                   <Route path="Permissions" element={<Permission />} />
                   <Route path="PermissionConfirmation" element={<PermissionConfirmation />} />
                   <Route path="Breaches" element={<Breaches />} />

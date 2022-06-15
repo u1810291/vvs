@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
 
 export const AddFilterListClients = (props) => {
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
@@ -21,7 +20,7 @@ export const AddFilterListClients = (props) => {
         savedToFavorite: true,
         savedToMenu: true,
         objectAddress: "",
-        date: new Date().toISOString().split("T")[0],
+        date: "",
         operator: "0",
         object: "0",
         type: "0",
@@ -60,7 +59,6 @@ export const AddFilterListClients = (props) => {
     // handle api call
   }, []);
 
-  // I guess this for on page load
   useEffect(() => {
     if (filterListClients?.length > 0) {
       const topId = filterListClients[0].id;

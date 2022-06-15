@@ -3,10 +3,11 @@ import React, { useState, useCallback, useContext, useEffect } from "react";
 import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
 
-export const AddFilterListObjects = (props) => {
+export const AddFilterListObjects = ({ fetch, data, ...props}) => {
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { filterEditingObjects, setFilterEditingObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
+  const { objectPageFetchData, setObjectPageFetchData } = useContext(GlobalContext);
 
   const addFilterFunc = () => {
     setFilterListObjects((currentFilter) => [
@@ -18,7 +19,7 @@ export const AddFilterListObjects = (props) => {
         savedToFavorite: true,
         savedToMenu: true,
         objectAddress: "",
-        date: new Date().toISOString().split("T")[0],
+        date: "",
         operator: "0",
         object: "0",
         type: "0",
@@ -29,7 +30,7 @@ export const AddFilterListObjects = (props) => {
         driver: "0",
         inTime: "0",
         dashboardList: [
-          "Vardas Pavardė",
+          "Pavadinimas",
           "Miestas",
           "Adresas",
           "Objekto nr.",
@@ -55,18 +56,19 @@ export const AddFilterListObjects = (props) => {
     }
   },[filterListObjects, setSelectedFilterObjects])
 
-  const saveFilters = useCallback(async () => {
-    // handle api call
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //   setTriggerInit(true);
+  //   }, 100);
+  // },[])
 
-  // I guess this for on page load
   useEffect(() => {
     if (filterListObjects?.length > 0) {
       const topId = filterListObjects[0].id;
       setSelectedFilterObjects(topId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [objectPageFetchData]);
 
   return (
     <>
@@ -215,7 +217,7 @@ export const AddFilterListObjects = (props) => {
                       Atšaukti
                     </button>
                     <button className="flex py-2 px-4 mr-4 rounded-sm text-xs mx-2 font-normal items-center text-white hover:bg-slate-500 bg-slate-600">
-                      <p onClick={saveFilters}>Išsaugoti</p>
+                      <p onClick={fetch}>Išsaugoti</p>
                     </button>
                   </div>
                 </div>

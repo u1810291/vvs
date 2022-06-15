@@ -4,14 +4,14 @@ import { generate } from "shortid";
 import GlobalContext from "../../context/globalContext";
 import useLanguage from "../../hook/useLanguage";
 
-export const AddFilterListBreaches = (props) => {
+export const AddFilterListPermissions = (props) => {
   const {english, lithuanian, t} = useLanguage();
-  const {filterListBreaches, setFilterListBreaches} = useContext(GlobalContext);
-  const {filterEditingBreaches, setFilterEditingBreaches} = useContext(GlobalContext);
-  const {selectedFilterBreaches, setSelectedFilterBreaches} = useContext(GlobalContext);
+  const {filterListPermissions, setFilterListPermissions} = useContext(GlobalContext);
+  const {filterEditingPermissions, setFilterEditingPermissions} = useContext(GlobalContext);
+  const {selectedFilterPermissions, setSelectedFilterPermissions} = useContext(GlobalContext);
 
   const addFilterFunc = () => {
-    setFilterListBreaches((currentFilter) => [
+    setFilterListPermissions((currentFilter) => [
       ...currentFilter,
       {
         id: generate(),
@@ -20,7 +20,7 @@ export const AddFilterListBreaches = (props) => {
         savedToFavorite: true,
         savedToMenu: true,
         objectAddress: "",
-        date: new Date().toISOString().split("T")[0],
+        date: "",
         operator: "0",
         object: "0",
         type: "0",
@@ -30,30 +30,31 @@ export const AddFilterListBreaches = (props) => {
         crew: "0",
         driver: "0",
         inTime: "0",
-        breachesList: [
-          "Data nuo",
-          "Laikas už zonos ribų",
+        permissionsList: [
+          "Date",
+          "Pavadinimas",
+          "Būsena",
           "Ekipažai",
           "Vairuotojai"
         ]
       },
     ]);
-    filterListBreaches.map((value, index, array) => {
-      if (filterListBreaches.length - 1 === index) {
+    filterListPermissions.map((value, index, array) => {
+      if (filterListPermissions.length - 1 === index) {
         const id = value.id;
-        setSelectedFilterBreaches(id);
+        setSelectedFilterPermissions(id);
       }
     });
   };
 
   const checkFilters = useCallback(async() => {
-    if (filterListBreaches.length === 1) {
-      setSelectedFilterBreaches(null)
+    if (filterListPermissions.length === 1) {
+      setSelectedFilterPermissions(null)
     } else {
-      const topID = filterListBreaches[0].id;
-      setSelectedFilterBreaches(topID);
+      const topID = filterListPermissions[0].id;
+      setSelectedFilterPermissions(topID);
     }
-  },[filterListBreaches, setSelectedFilterBreaches])
+  },[filterListPermissions, setSelectedFilterPermissions])
 
   const saveFilters = useCallback(async () => {
     // handle api call
@@ -61,9 +62,9 @@ export const AddFilterListBreaches = (props) => {
 
   // I guess this for on page load
   useEffect(() => {
-    if (filterListBreaches?.length > 0) {
-      const topId = filterListBreaches[0].id;
-      setSelectedFilterBreaches(topId);
+    if (filterListPermissions?.length > 0) {
+      const topId = filterListPermissions[0].id;
+      setSelectedFilterPermissions(topId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -76,18 +77,18 @@ export const AddFilterListBreaches = (props) => {
             Visi duomenys
           </p>
         </div>
-        {filterListBreaches.map((filter, index) => {
+        {filterListPermissions.map((filter, index) => {
           return (
             <div className="w-full" key={filter.id}>
-              {filterEditingBreaches !== filter.id ? (
+              {filterEditingPermissions !== filter.id ? (
                 <button
-                  onClick={() => setSelectedFilterBreaches(filter.id)}
-                  className={filterEditingBreaches ? "hidden" : "w-full"}
+                  onClick={() => setSelectedFilterPermissions(filter.id)}
+                  className={filterEditingPermissions ? "hidden" : "w-full"}
                   key={filter.id}
                 >
                   <div
                     className={
-                      filterEditingBreaches === filter.id ? "shadow" : "w-full"
+                      filterEditingPermissions === filter.id ? "shadow" : "w-full"
                     }
                   >
                     <div className="flex flex-col sm:flex-row w-full border-l mb-4 border-b items-center justify-between">
@@ -109,7 +110,7 @@ export const AddFilterListBreaches = (props) => {
                     <div className="flex flex-col sm:flex-row w-full border-l border-b justify-between items-center">
                       <p className="text-gray-400 p-2 text-sm">{filter.filterName}</p>
                       <a className="flex p-1 rounded-sm text-xs sm:mx-2 px-2 mb-2 font-normal items-center text-gray-400 hover:text-gray-500 bg-gray-200">
-                        <p onClick={() => setFilterEditingBreaches(filter.id)}>
+                        <p onClick={() => setFilterEditingPermissions(filter.id)}>
                           redaguoti filtrą
                         </p>
                       </a>
@@ -126,7 +127,7 @@ export const AddFilterListBreaches = (props) => {
                         name="name"
                         onChange={(e) => {
                           const filterName = e.target.value;
-                          setFilterListBreaches((currentFilter) =>
+                          setFilterListPermissions((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterName } : x
                             )
@@ -145,7 +146,7 @@ export const AddFilterListBreaches = (props) => {
                         maxLength={4}
                         onChange={(e) => {
                           const filterShortName = e.target.value;
-                          setFilterListBreaches((currentFilter) =>
+                          setFilterListPermissions((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, filterShortName } : x
                             )
@@ -164,7 +165,7 @@ export const AddFilterListBreaches = (props) => {
                         name="save"
                         onChange={(e) => {
                           const savedToMenu = e.target.checked;
-                          setFilterListBreaches((currentFilter) =>
+                          setFilterListPermissions((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToMenu } : x
                             )
@@ -182,7 +183,7 @@ export const AddFilterListBreaches = (props) => {
                         name="default-filter"
                         onChange={(e) => {
                           const savedToFavorite = e.target.checked;
-                          setFilterListBreaches((currentFilter) =>
+                          setFilterListPermissions((currentFilter) =>
                             currentFilter.map((x) =>
                               x.id === filter.id ? { ...x, savedToFavorite } : x
                             )
@@ -198,10 +199,10 @@ export const AddFilterListBreaches = (props) => {
                   <div className=" flex flex-col sm:flex-row justify-around items-center w-20 sm:w-full mt-8">
                     <button
                       onClick={() => {
-                        setFilterListBreaches((currentFilter) =>
+                        setFilterListPermissions((currentFilter) =>
                           currentFilter.filter((x) => x.id !== filter.id)
                         );
-                        setFilterEditingBreaches(null);
+                        setFilterEditingPermissions(null);
                         checkFilters();
                       }}
                       className="text-gray-400 text-sm hover:text-gray-500"
@@ -209,7 +210,7 @@ export const AddFilterListBreaches = (props) => {
                       Ištrinti
                     </button>
                     <button
-                      onClick={() => setFilterEditingBreaches(null)}
+                      onClick={() => setFilterEditingPermissions(null)}
                       className="text-gray-400 text-sm hover:text-gray-500"
                     >
                       Atšaukti
@@ -226,7 +227,7 @@ export const AddFilterListBreaches = (props) => {
       </div>
       <button
         className={
-          filterEditingBreaches
+          filterEditingPermissions
             ? "hidden"
             : "flex flex-row justify-center items-center pb-2"
         }
