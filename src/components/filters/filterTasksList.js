@@ -27,12 +27,10 @@ export const TasksFilter = ({
   return (
     <div
       {...props}
-      className={selectedFilter ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"}
     >
       {filterList.map((filter) => {
         return (
-          <>
-          {/* gets one additional div around ( visible : hidden div ) and collapse filters if do here key={generate()}*/}
+          <div className={selectedFilter ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"} key={generate()}>
             {selectedFilter === filter.id ? (
               <>
                 {filter.dashboardList.map((element) => {
@@ -61,7 +59,7 @@ export const TasksFilter = ({
               </>
             ) : null}
             {/* </> */}
-          </>
+          </div>
         );
       })}
 

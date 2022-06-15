@@ -12,6 +12,7 @@ function classNames(...classes) {
 }
 
 export const OptionsList = (props) => {
+  const ref = useRef();
   const { filterList, setFilterList } = useContext(GlobalContext);
   const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
   const { value, onChange } = useContext(GlobalContext);
@@ -60,7 +61,7 @@ export const OptionsList = (props) => {
                       ref={ref}
                       onClick={() => {
                         const date = startAndEndDate;
-                        setFilterListObjects((currentFilter) =>
+                        setFilterList((currentFilter) =>
                           currentFilter.map((x) =>
                             x.id === filter.id ? { ...x, date } : x
                           )

@@ -63,7 +63,7 @@ export const ClientList = () => {
   return (
     <>
       {data === undefined ? (
-        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
+        <div className="flex h-screen w-full bg-gray-100 justify-center items-center">
           <Spinner color="dark-blue" size={40} />
         </div>
       ) : (

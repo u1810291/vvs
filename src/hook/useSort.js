@@ -13,6 +13,8 @@ function useSort() {
   const [sortedDashboardOrder, setSortedDashboardOrder] = useState("");
   const [sortedKeysKeys, setSortedKeysKeys] = useState("");
   const [sortedKeysOrder, setSortedKeysOrder] = useState("");
+  const [sortedDislocationsKeys, setSortedDislocationsKeys] = useState("");
+  const [sortedDislocationsOrder, setSortedDislocationsOrder] = useState("");
 
   function sortedClientsNames() {
     if (sortedClientsOrder === "") {
@@ -435,6 +437,21 @@ function useSort() {
   }
 
   // new
+  function sortedDislocationsName() {
+    if (sortedDislocationsOrder === "") {
+      setSortedDislocationsKeys("name");
+      setSortedDislocationsOrder("asc");
+    }
+    if (sortedDislocationsOrder === "asc") {
+      setSortedDislocationsKeys("name");
+      setSortedDislocationsOrder("desc");
+    }
+    if (sortedDislocationsOrder === "desc") {
+      setSortedDislocationsKeys("name");
+      setSortedDislocationsOrder("");
+    }
+  }
+
   function sortedDashboardTimeOutOfZone() {
     if (sortedDashboardOrder === "") {
       setSortedDashboardKeys("timeOutOfZone");
@@ -523,6 +540,11 @@ function useSort() {
     sortedDashboardOrder,
     sortedKeysKeys,
     sortedKeysOrder,
+    sortedDislocationsKeys,
+    sortedDislocationsOrder,
+    setSortedDislocationsKeys,
+    setSortedDislocationsOrder,
+    sortedDislocationsName,
     sortedDriversNames,
     sortedDriversStatus,
     sortedClientsNames,
@@ -555,7 +577,7 @@ function useSort() {
     sortedDashboardDislocationZone,
     sortedDashboardIsAssignedAutomatically,
     sortedKeysSet,
-    sortedKeysCrew
+    sortedKeysCrew,
   };
 }
 

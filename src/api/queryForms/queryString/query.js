@@ -1,41 +1,101 @@
 export const objectPage = `query MyQuery {
-  objects {
-    name
-    address
-    phone
-    city
-    street
-    contract
-    notes
-    objectstate
-    objectstatus
-    objectid
-    obdindx
-    receivernr
-    Id
-    name
-  }
-  corresppersons {
-    phone
-    name
-  }
-  monas_images_related {
-    Id
+  object {
     id
-    imagepath
-    imagename
+    address
+    latitude
+    longitude
+    name
+    phone
+    provider_object {
+      AcLossDetected
+      DcLossDetected
+      Id
+      Locked
+      MainSubDisabled
+      MainSubDriverReactionTimes
+      MainSubGenerated
+      MainSubEvents
+      MainSubId
+      MainSubInfo
+      MainSubMoreNotes
+      groupid
+      grg_info
+      generatedeventsexample
+      fridayopenmin
+      fridayopenhour
+      fridayclosemin
+      fridayclosehour
+      freeEvents
+      firsttest
+      dynamic
+      destination
+      contract2
+      contract
+      closemindefault
+      closehourdefault
+      closedeviationneg
+      closedeviation
+      city
+      celebrationsopenmin
+      celebrationsopenhour
+      celebrationsclosemin
+      celebrationsclosehour
+      assignedgroupableeventexampleid
+      assignedeventexampleid
+      address
+      TS
+      OpenCloseSeekState
+      NotesText
+      MainSubTest
+      MainSubSchemes
+      MainSubPersons
+      MainSubZones
+      MainSubOpenClose
+      wednesdayopenmin
+      wednesdayopenhour
+      wednesdayclosemin
+      wednesdayclosehour
+      usegroupableeventsexample
+      useeventexample
+      uniqueID
+      unifier_id
+      tuesdayopenmin
+      tuesdayopenhour
+      tuesdayclosemin
+      tuesdayclosehour
+      transinstdate
+      tolerance
+      timestamp
+      timesperday
+      timebetweentesttime
+      timebetweentestdays
+      thursdayopenmin
+      thursdayopenhour
+      thursdayclosemin
+      thursdayclosehour
+      testtype
+      synchronize
+      sundayopenmin
+      sundayopenhour
+      sundayclosemin
+      sundayclosehour
+      subgroup
+      subdivision
+      street
+      specialwednesday
+      specialtuesday
+      specialthursday
+      specialsunday
+      specialsaturday
+      specialmonday
+      specialfriday
+      specialcelebrations
+      seekwednesdayopen
+    }
+    provider_id
+    provider_name
   }
-  monas_related {
-    Id
-    atm
-    contact
-    assign_car
-    modem
-    area_no
-    monasid
-    navid
-  }
-  crews {
+    crews {
     Id
     name
     abbreviation
@@ -46,12 +106,17 @@ export const objectPage = `query MyQuery {
     phone_number
     driver_name
   }
-  events {
-    id
-    monas_id
-    updated_at
+    corresppersons {
+    phone
+    name
   }
-  filters {
+  images {
+    imagepath
+    imagename
+    id
+    Id
+  }
+    filters {
     Id
     id
     userId
@@ -71,6 +136,65 @@ export const objectPage = `query MyQuery {
     driver
     inTime
     dashboardList
+  }
+}`;
+
+// export const objectPage = `query MyQuery {
+//   objects {
+//     name
+//     address
+//     phone
+//     city
+//     street
+//     contract
+//     notes
+//     objectstate
+//     objectstatus
+//     objectid
+//     obdindx
+//     receivernr
+//     Id
+//     name
+//   }
+//   monas_images_related {
+//     Id
+//     id
+//     imagepath
+//     imagename
+//   }
+//   monas_related {
+//     Id
+//     atm
+//     contact
+//     assign_car
+//     modem
+//     area_no
+//     monasid
+//     navid
+//   }
+//   crews {
+//     Id
+//     name
+//     abbreviation
+//     dislocationZone
+//     status
+//     is_assigned_automatically
+//     id
+//     phone_number
+//     driver_name
+//   }
+//   events {
+//     id
+//     monas_id
+//     updated_at
+//   }
+// }`;
+export const crewZonesQuery = `query My_query {
+  crew_zone {
+    id
+    name
+    nodes
+    crew_id
   }
 }`;
 

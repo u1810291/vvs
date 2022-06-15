@@ -36,7 +36,7 @@ const CrewList = ({
   const [crew, setCrew] = useState("");
 
   const data = useReactQuery(objectPage, {}, accessToken);
-  
+ console.log('data', data); 
   useEffect(() => {
     let hasura;
     let monas;
@@ -66,7 +66,6 @@ const CrewList = ({
     sortedDashboardKeys,
     sortedDashboardOrder
   );
-
 
   return (
     <>

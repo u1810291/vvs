@@ -63,7 +63,10 @@ function Objects() {
     }, 1000);
   }, []);
 
-  const filterListWithUserId = filterListObjects?.map((e) => ({...e, userId: user.sub}))
+  const filterListWithUserId = filterListObjects?.map((e) => ({
+    ...e,
+    userId: user.sub,
+  }));
 
   const updateVariables = {
     updateAddFilter: filterListWithUserId,
@@ -144,7 +147,10 @@ function Objects() {
                             }
                           >
                             <div className="flex flex-col md:flex-row mt-8 md:mt-0 items-center">
-                              <button onClick={saveFilters} className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none">
+                              <button
+                                onClick={saveFilters}
+                                className="flex text-gray-400 w-32 justify-center ml-2 rounded-sm p-1 text-xs hover:text-gray-500 font-normal hover:shadow-none bg-gray-200 focus:outline-none"
+                              >
                                 Išsaugoti filtrą
                               </button>
                             </div>
@@ -181,7 +187,10 @@ function Objects() {
                     </PDFExport>
                   ) : (
                     <>
-                      <ObjectsList searchResponse={searchResponse} token={accessToken} />
+                      <ObjectsList
+                        searchResponse={searchResponse}
+                        token={accessToken}
+                      />
                     </>
                   )}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">

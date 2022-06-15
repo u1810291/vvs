@@ -13,6 +13,8 @@ const mapCenter = {
   lng: 23.33,
 };
 
+const lib = ["drawing"];
+
 const BreachMap = ({mapTools}) => {
   const mapRef = useRef(null);
   const {english, lithuanian, t} = useLanguage();
@@ -25,9 +27,9 @@ const BreachMap = ({mapTools}) => {
     mapRef.current = null;
   }, []);
 
-  const {isLoaded : isMapLoaded} = useLoadScript({
-    googleMapsApiKey: "AIzaSyAva7V7oY8Hnv6bz1g8_PaWjFUWCmfHkbs",
-    libraries: ["drawing"]
+  const { isLoaded: isMapLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    libraries: lib,
   });
 
   return isMapLoaded ? (
@@ -39,10 +41,10 @@ const BreachMap = ({mapTools}) => {
         onUnmount={onMapUnmount}
         mapContainerStyle={mapContainerStyle}
       >
-        <GoogleMapTools onMapLoad={onMapLoad}/>
+         {/* <GoogleMapTools onMapLoad={onMapLoad}/> */}
       </GoogleMap>
     </div>
   ) : <></>
 };
 
-export default BreachMap;
+export default React.memo(BreachMap);

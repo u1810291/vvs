@@ -272,7 +272,7 @@ export default function DashboardMap(props) {
           ))
         */}
         { // show first route from all directions
-          directions.map((d, index) => (
+          directions?.map((d, index) => (
             <Polyline
               key={index}
               path={getPathOr(null, ['routes',0, 'overview_path'], d)}

@@ -29,12 +29,10 @@ export const FiltersListPermissions = ({
   return (
     <div
       {...props}
-      className={selectedFilterPermissions ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"}
     >
       {filterListPermissions.map((filter) => {
         return (
-          <>
-            {/* gets one additional div around ( visible : hidden div ) and collapse filters if do here key={generate()}*/}
+          <div className={selectedFilterPermissions ? "rounded-md w-full border sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-6 justify-between font-normal text-black gap-2 z-1" : "hidden"} key={generate()}>
             {selectedFilterPermissions === filter.id ? (
               <>
                 {filter.permissionsList.map((element) => {
@@ -63,7 +61,7 @@ export const FiltersListPermissions = ({
               </>
             ) : null}
             {/* </> */}
-          </>
+          </div>
         );
       })}
 

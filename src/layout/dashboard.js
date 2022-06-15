@@ -109,7 +109,7 @@ function Dashboard() {
               <div className="flex min-h-full overflow-y-auto scrollbar-gone flex-col w-2/4 bg-gray-100">
                 <DashboardSideLeft />
               </div>
-              <DashboardMap />
+              {/* <DashboardMap /> */}
               <div className="flex flex-col h-screen justify-between w-2/4 bg-gray-100">
                 <div className="flex flex-row py-4 bg-white items-center justify-between border-b">
                   <h4 className="ml-4 self-center text-md font-normal">
@@ -133,7 +133,7 @@ function Dashboard() {
                   </div>
                   {offlineList ? (
                     <div className="flex flex-col max-h-64 overflow-y-auto scrollbar-gone">
-                      {DDAPI.map((data) => (
+                      {DDAPI?.map((data) => (
                         <OffCard
                           id={data.id}
                           key={data.id}

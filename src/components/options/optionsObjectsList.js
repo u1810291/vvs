@@ -1,12 +1,5 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
-import React, {
-  useState,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  createRef,
-} from "react";
+import React, { useState, useCallback, useContext, useEffect, useRef } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -19,12 +12,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const OptionsListObjects = (...props) => {
+export const OptionsListObjects = (props) => {
   const { english, lithuanian, t } = useLanguage();
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
-  const { selectedFilterObjects, setSelectedFilterObjects } =
-    useContext(GlobalContext);
-  const { objectPageAddress, setObjectPageAddress } = useContext(GlobalContext);
+  const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
   const { value, onChange } = useContext(GlobalContext);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -82,7 +73,7 @@ export const OptionsListObjects = (...props) => {
                     >
                     </button>
                     <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      {startAndEndDate !==
+                    {startAndEndDate !==
                       "undefined-NaN-undefined - undefined-NaN-undefined" ? (
                         <p className="text-gray-400 self-center truncate text-xs">
                           {filter.date}
@@ -260,14 +251,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const object = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, object } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const object = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, object } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -293,7 +284,6 @@ export const OptionsListObjects = (...props) => {
                     placeholder=""
                     // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
                     onChange={(e) => {
-                      setObjectPageAddress(e.target.value);
                       const objectAddress = e.target.value;
                       setFilterListObjects((currentFilter) =>
                         currentFilter.map((x) =>
@@ -339,14 +329,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const type = "1";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, type } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const type = "1";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, type } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -362,14 +352,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const type = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, type } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const type = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, type } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -419,14 +409,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const group = "1";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, group } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const group = "1";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, group } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -442,14 +432,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const group = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, group } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const group = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, group } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -499,14 +489,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const status = "1";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, status } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const status = "1";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, status } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -522,14 +512,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const status = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, status } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const status = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, status } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -579,14 +569,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const reason = "1";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, reason } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const reason = "1";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, reason } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -602,14 +592,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const reason = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, reason } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const reason = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, reason } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -659,14 +649,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const crew = "1";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, crew } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const crew = "1";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, crew } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -682,14 +672,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const crew = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, crew } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const crew = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, crew } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -739,14 +729,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const driver = "1";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, driver } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const driver = "1";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, driver } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -762,14 +752,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const driver = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, driver } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const driver = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, driver } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -819,14 +809,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const inTime = "1";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, inTime } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const inTime = "1";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, inTime } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"
@@ -842,14 +832,14 @@ export const OptionsListObjects = (...props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => {
-                                const inTime = "2";
-                                setFilterListObjects((currentFilter) =>
-                                  currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, inTime } : x
-                                  )
-                                );
-                              }}
+                            onClick={() => {
+                              const inTime = "2";
+                              setFilterListObjects((currentFilter) =>
+                                currentFilter.map((x) =>
+                                  x.id === filter.id ? { ...x, inTime } : x
+                                )
+                              );
+                            }}
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900 w-full truncate text-center"

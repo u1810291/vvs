@@ -58,7 +58,7 @@ function ClientsList() {
         <div className="flex w-screen flex-row justify-center h-screen">
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
-              <div className="flex flex-col bg-slate-600 pt-2 items-center w-20 text-gray-400">
+              <div className="flex flex-col bg-slate-600 pt-6 items-center w-20 text-gray-400">
                 <button className="flex flex-col items-center py-2">
                   <img
                     onClick={handleOnOpen}
@@ -67,7 +67,7 @@ function ClientsList() {
                   />
                 </button>
                 <img
-                  className="pt-6"
+                  className="pt-2"
                   src={require("../../assets/assets/Line.png")}
                 ></img>
                 {filterListClients.map((filter) => {
@@ -92,7 +92,9 @@ function ClientsList() {
 
               <div className="flex flex-col min-h-full w-full justify-between">
                 <ClientsHeader />
-                <div className="flex flex-col min-h-screen sm:min-h-0 overflow-scroll sm:h-full">
+                <div className="flex flex-col min-h-screen sm:min-h-0 sm:h-full">
+                  {" "}
+                  {/* overflow-scroll */}
                   <div className="flex flex-row w-full">
                     {expandFilterClients ? (
                       <>
@@ -135,7 +137,6 @@ function ClientsList() {
                       {/* <p>{JSON.stringify(filterList, null, 2)}</p> */}
                     </div>
                   </div>
-
                   {toPrint ? (
                     <PDFExport
                       ref={pdfExportComponent}
@@ -150,7 +151,6 @@ function ClientsList() {
                       <ClientList />
                     </>
                   )}
-
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>

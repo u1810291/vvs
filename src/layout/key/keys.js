@@ -12,12 +12,9 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 const { AddFilterList } = require("../../components/addFilter/addFilterTasks");
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
-import { keys } from "../../api/keys";
 import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
-import { sortToggle } from "../../util/utils";
-import useSort from "../../hook/useSort";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -44,11 +41,6 @@ function Keys() {
       setToPrint(false);
     }, 1000);
   }, []);
-
-  const { sortedKeysKeys, sortedKeysOrder, sortedKeysSet, sortedKeysCrew } =
-    useSort();
-
-  const sortedKeys = sortToggle(keys, sortedKeysKeys, sortedKeysOrder);
 
   return (
     <OverlayProvider>
@@ -77,88 +69,11 @@ function Keys() {
                       paperSize="A4"
                       margin="1cm"
                     >
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-8 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-8 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysSet}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Komplektas
-                            </span>
-                            <img
-                              src={require("../../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysCrew}
-                            className="flex flex-row items-center "
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Ekipažas
-                            </span>
-                          </button>
-                        </div>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedKeys.map((data) => (
-                          <KeysList
-                            key={data.id}
-                            id={data.id}
-                            set={data.set}
-                            crew={data.crew}
-                          />
-                        ))}
-                      </div>
+                      <KeysList />
                     </PDFExport>
                   ) : (
-                    <>
-                      <div className="hidden pl-4 w-full border-t py-2 md:grid grid-cols-8 bg-gray-100 grid-rows-1 grid-flow-row table-auto md:grid-cols-8 grid-gap-6 justify-between font-normal text-black z-1">
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysSet}
-                            className="flex flex-row items-center"
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Komplektas
-                            </span>
-                            <img
-                              src={require("../../assets/assets/down.png")}
-                              className="h-2 w-4 ml-2"
-                            />
-                          </button>
-                        </div>
-                        <div className="flex flex-row items-center col-span-2">
-                          <button
-                            onClick={sortedKeysCrew}
-                            className="flex flex-row items-center "
-                          >
-                            <span className="text-gray-300 text-sm">
-                              Ekipažas
-                            </span>
-                          </button>
-                        </div>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                        <span className="flex flex-row items-center col-span-2"></span>
-                      </div>
-                      <div className="pl-4 flex-col w-full items-center">
-                        {sortedKeys.map((data) => (
-                          <KeysList
-                            key={data.id}
-                            id={data.id}
-                            set={data.set}
-                            crew={data.crew}
-                          />
-                        ))}
-                      </div>
-                    </>
+                    <KeysList />
                   )}
-                  {/* <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white"></nav> */}
                   <nav className="border-gray-200 flex items-center justify-between mt-4 sm:px-4 w-full bg-white">
                     <div className="flex flex-col items-start">
                       <div>
