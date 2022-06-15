@@ -32,25 +32,9 @@ const DislocationSide = (props) => {
   const { accessToken } = useContext(AuthContext);
   const { english, lithuanian, t } = useLanguage();
   const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
-  const [data, setData] = useState("")
-  const [error, setError] = useState("")
+  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
 
-  // const data  = useReactQuery(
-  //   crewZonesQuery,
-  //   {},
-  //   accessToken
-  // );
-
-   useSubscription({ query: crewZonesSubscription}, ({ data, errors }) => {
-    if (errors && errors.length > 0) {
-      setError(errors[0]);
-      return;
-    }
-
-    console.log(data);
-    setData(data);
-  });
-
+console.log('polygons ', polygonsCoordinates);
   const crewZonesVariables = {
     updateCrewZones: {
     name: generate().toString(),
@@ -68,8 +52,6 @@ const DislocationSide = (props) => {
     fetchData();
   }, [fetchData]);
 
-  console.log('mutateResponse ', mutateResponse);
-
   return (
     <>
       <div className="flex flex-col">
@@ -77,7 +59,7 @@ const DislocationSide = (props) => {
           <div className="flex justify-center mt-4">
             <Search />
           </div>
-          {data?.crew_zone?.map((data) => (
+          {polygonsData?.crew_zone?.map((data) => (
           <AddressListItem name={data.name} nodes={data.nodes} crewid={data.crew_id} key={data.id}  />
           ))}
           <div className="flex justify-center mt-4">
