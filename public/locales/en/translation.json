@@ -94,6 +94,10 @@
     "zone": "Zone",
     "alarmedZone": "Alarmed"
   },
+  "breach": {
+    "breach": "Breach",
+    "breaches": "Breaches"
+  },
   "eurocash": {
     "accounts": "Accounts",
     "confirm": "Confirm",

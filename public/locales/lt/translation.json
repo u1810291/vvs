@@ -95,6 +95,10 @@
     "zone": "Zona",
     "alarmedZone": "Aliarmas"
   },
+  "breach": {
+    "breach": "Pažeidimas",
+    "breaches": "Pažeidimai"
+  },
   "eurocash": {
     "accounts": "Paskyros",
     "confirm": "Patvirtinti",
