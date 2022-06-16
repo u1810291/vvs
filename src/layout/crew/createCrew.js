@@ -18,23 +18,27 @@ import CalendarTimeline from '../../components/calendar/CalendarTimeline';
 import CreateCrewHeader from '../../components/headers/crew/createCrewHeader';
 import AuthContext from '../../context/authContext';
 import {useParams} from 'react-router-dom';
-import {objectPage} from '../../api/queryForms/queryString/query';
+import { crewsQuery } from '../../api/queryForms/queryString/query';
 import useReactQuery from '../../hook/useQuery';
 import SidebarLayout from '../sidebarLayout';
 
 import useBoolean from '../../hook/useBoolean';
 import useLanguage from '../../hook/useLanguage';
 
-import {generate} from 'shortid';
+import { generate } from 'shortid';
 
 const CreateCrew = () => {
-  const {id} = useParams();
-  const {accessToken} = useContext(AuthContext);
-  const {t, english, lithuanian} = useLanguage();
+  const { id } = useParams();
+  const { accessToken } = useContext(AuthContext);
+  const { t, english, lithuanian } = useLanguage();
   const [events, setEvents] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnOpen = useCallback(() => {setIsOpen(true)},[]);
-  const handleOnClose = useCallback(() => {setIsOpen(false)},[]);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
   const [polygon, setPolygon] = useState([
     { lat: 55.95, lng: 23.3 },
     { lat: 55.9, lng: 23.35 },
@@ -47,7 +51,7 @@ const CreateCrew = () => {
     fillOpacity: 0.4,
     fillColor: '#C32A2F',
     clickable: true,
-    draggable: true
+    draggable: true,
   });
   const [containerStyle, setContainerStyle] = useState({
     width: '100%',
@@ -66,15 +70,23 @@ const CreateCrew = () => {
   const [status, setStatus] = useState('');
   const [driver, setDriver] = useState('');
 
-  const data = useReactQuery(objectPage, {}, accessToken);
+  const data = useReactQuery(crewsQuery, {}, accessToken);
+
   useEffect(() => {
     let hasura;
     if (data.data) {
       hasura = data?.data?.monas_crew_related;
       // make custom logic to assign dispatch dislocations or/and events or merge and match app driver device number
       setCrew({ result: hasura });
-    }
-  }, [data.data]);
+      if (crew) {
+        const obj = crew?.result;
+        const data = obj?.find((x) => x.id === id);
+        setCrewName(data.name);
+        setCrewPhoneNumber(data.phone);
+        setCrewShortHand(data.abbreviation);
+        setStatus(data.status);
+        setDriver(data.driver);
+    }}}, [data.data]);
 
   useEffect(() => {
     if (crew) {
@@ -94,6 +106,7 @@ const CreateCrew = () => {
     loading,
     fetchData: saveCalendarRecords,
   } = useFetch(updateCalendar, updateVariables, accessToken);
+
 
   const crewName = useRef('9 GRE');
   const setCrewName = useCallback(event => {
@@ -122,18 +135,20 @@ const CreateCrew = () => {
   }, []);
 
   const crewAutomaticallyAssign = useRef(false);
-  const setCrewAutomaticallyAssign = useCallback(event => {
-    crewAutomaticallyAssign.current = event
+  const setCrewAutomaticallyAssign = useCallback((event) => {
+    crewAutomaticallyAssign.current = event;
   }, []);
 
   const crewAssignUntilBreaks = useRef(false);
-  const setCrewAssignUntilBreaks = useCallback(event => {
-    crewAssignUntilBreaks.current = event
+  const setCrewAssignUntilBreaks = useCallback((event) => {
+    crewAssignUntilBreaks.current = event;
   }, []);
-  
+
   useEffect(() => {
     saveCalendarRecords();
-  },[events])
+  }, [events]);
+
+  // window.google = window.google ? window.google : {}
 
   return (
     <SidebarLayout>

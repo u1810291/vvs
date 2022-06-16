@@ -4,17 +4,25 @@ import GlobalContext from "../../context/globalContext";
 const { ActiveCard } = require("../cards/active");
 
 const DislocationSideToArchive = (props) => {
+  const { accessToken } = useContext(GlobalContext);
   const { english, lithuanian, t } = useLanguage();
-  const [addressCrew, setAddressCrew] = useState("");
-  const {removeZone, setRemoveZone} = useContext(GlobalContext);
+  const { addressCrew, setAddressCrew } = useContext(GlobalContext);
+  const { polygonsCoordinates, setPolygonsCoordinates } =
+    useContext(GlobalContext);
+  const { removeZone, setRemoveZone } = useContext(GlobalContext);
+  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
 
   const archiveFunc = useCallback(() => {
     setRemoveZone(false);
+    setPolygonsVisible(true);
   }, [setRemoveZone]);
 
-  const addressCrewFunc = useCallback(async (e) => {
-    setAddressCrew(e.target.value);
-  }, []);
+  const addressCrewFunc = useCallback(
+    async (e) => {
+      setAddressCrew(e.target.value);
+    },
+    [setAddressCrew]
+  );
 
   return (
     <>
@@ -39,7 +47,8 @@ const DislocationSideToArchive = (props) => {
             </div>
           </div>
         </div>
-        <button  onClick={archiveFunc}
+        <button
+          onClick={archiveFunc}
           className="hidden sm:w-40 sm:h-10 rounded sm:flex mx-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
         >
           Archyvuoti

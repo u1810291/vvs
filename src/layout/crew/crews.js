@@ -55,6 +55,7 @@ function Crew() {
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button className="flex flex-col py-2 items-center text-gray-400">
                   <img
+                    alt="Logo"
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../../assets/assets/hamburger.png")}
@@ -104,6 +105,7 @@ function Crew() {
                             </div>
                             <div className="flex flex-col md:flex-row items-center my-6">
                               <img
+                                alt="doc"
                                 className="h-8 w-6 mr-2 hidden lg:inline-block"
                                 src={require("../../assets/assets/doc.png")}
                               ></img>

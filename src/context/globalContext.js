@@ -51,6 +51,10 @@ export const GlobalProvider = ({ children }) => {
   const [removeZone, setRemoveZone] = useState(false);
   const [polygonsCoordinates, setPolygonsCoordinates] = useState([]);
   const [polygonsData, setPolygonsData] = useState([]);
+  const [individualPolygonsData, setIndividualPolygonsData] = useState([]);
+  const [polygonsVisible, setPolygonsVisible] = useState(true);
+
+  const [addressCrew, setAddressCrew] = useState("");
 
   const [filterEditing, setFilterEditing] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -308,6 +312,12 @@ export const GlobalProvider = ({ children }) => {
   ]);
 
   const contextData = {
+    individualPolygonsData,
+    setIndividualPolygonsData,
+    polygonsVisible,
+    setPolygonsVisible,
+    addressCrew,
+    setAddressCrew,
     polygonsData,
     setPolygonsData,
     polygonsCoordinates,

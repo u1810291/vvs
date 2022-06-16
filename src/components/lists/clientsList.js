@@ -15,15 +15,11 @@ export const ClientList = () => {
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
 
-  const { data, error, loading } = useReactQuery(
-    getUsers,
-    getAllUsers,
-    accessToken
-  );
+  const data = useReactQuery(getUsers, getAllUsers, accessToken);
 
   useEffect(() => {
-    if (data === undefined) { const sorry = [] } else {
-      const allUsers = data?.users?.users;
+    if (data.status === "success") {
+      const allUsers = data?.data?.users?.users;
       const searchRole = (name, arr) =>
         arr?.filter(({ registrations }) => {
           if (registrations) {
@@ -36,15 +32,8 @@ export const ClientList = () => {
       let obj = { users: searchResult };
       setCustomers(obj);
     }
-  }, [data]);
+  }, [data.data]);
 
-  useEffect(() => {
-    if (error) {
-      //backFunc();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
-  
   const {
     sortedClientsKeys,
     sortedClientsOrder,
