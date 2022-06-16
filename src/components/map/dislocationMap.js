@@ -41,6 +41,9 @@ const DislocationMap = ({ mapTools }) => {
   const [error, setError] = useState("");
   const { removeZone, setRemoveZone } = useContext(GlobalContext);
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
+  const { individualPolygonsData, setIndividualPolygonsData } = useContext(GlobalContext);
+  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
+  const polygonDataRef = useRef([]);
 
   const data = useReactQuery(crewZonesQuery, {}, accessToken);
 
@@ -49,6 +52,10 @@ const DislocationMap = ({ mapTools }) => {
       setPolygonsData(data?.data?.crew_zone);
     }
   },[data.data])
+
+  useEffect(() => {
+    polygonDataRef.current = individualPolygonsData
+  },[individualPolygonsData])
 
   const onMapLoad = useCallback(function callback(map) {
     mapRef.current = map;
@@ -63,11 +70,13 @@ const DislocationMap = ({ mapTools }) => {
     libraries: lib,
   });
 
-  console.log('polygonsData', polygonsData);
-  
-  const onLoad = (polygon) => {
-    console.log("onload");
-  };
+    // Bind refs to current Polygon and listeners
+    const onLoad = useCallback(
+      polygon => {
+        polygonDataRef.current = polygon;
+      },
+      []
+    );
 
   return isMapLoaded ? (
     <div className="w-full h-full relative">
@@ -79,7 +88,7 @@ const DislocationMap = ({ mapTools }) => {
         mapContainerStyle={mapContainerStyle}
       >
         <GoogleMapTools onMapLoad={onMapLoad} />
-        {polygonsData?.map((polygon, index) => (
+        {polygonsData.map((polygon, index) => (
           <Polygon
             onLoad={onLoad}
             paths={polygon.nodes}

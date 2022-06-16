@@ -10,9 +10,11 @@ const DislocationSideToArchive = (props) => {
   const { polygonsCoordinates, setPolygonsCoordinates } =
     useContext(GlobalContext);
   const { removeZone, setRemoveZone } = useContext(GlobalContext);
+  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
 
   const archiveFunc = useCallback(() => {
     setRemoveZone(false);
+    setPolygonsVisible(true);
   }, [setRemoveZone]);
 
   const addressCrewFunc = useCallback(

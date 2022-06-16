@@ -70,12 +70,14 @@ function Dislocation() {
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
                 <button className="flex flex-col items-center py-2 text-gray-400">
                   <img
+                    alt="hamburger"
                     onClick={handleOnOpen}
                     className="w-4 h-4 mx-16"
                     src={require("../../assets/assets/hamburger.png")}
                   />
                 </button>
                 <img
+                  alt="line"
                   className="pt-1"
                   src={require("../../assets/assets/Line.png")}
                 ></img>
@@ -99,7 +101,9 @@ function Dislocation() {
               </div>
               <div className="flex flex-col min-h-full w-full justify-between">
                 {!removeZone ? <DislocationsHeader /> : null}
-                {removeZone ? <DislocationHeader fetch={createNewPolygon} /> : null}
+                {removeZone ? (
+                  <DislocationHeader fetch={createNewPolygon} />
+                ) : null}
                 <div className="flex flex-row min-h-screen sm:min-h-0 sm:h-full">
                   <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-2/6">
                     {!removeZone ? <DislocationSide /> : null}

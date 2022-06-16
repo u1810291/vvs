@@ -20,6 +20,10 @@ function AddressListItem({name, nodes, crewid, ...props}) {
   const { addressCrew, setAddressCrew } = useContext(GlobalContext);
   const { polygonsCoordinates, setPolygonsCoordinates } =
   useContext(GlobalContext);
+  const {polygonVisible, setPolygonVisible} = useContext(GlobalContext);
+  const { individualPolygonsData, setIndividualPolygonsData } = useContext(GlobalContext);
+  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
+
   const closeFunc = useCallback(() => {
     setRemoveZone(true);
   }, [setRemoveZone]);
@@ -30,12 +34,13 @@ function AddressListItem({name, nodes, crewid, ...props}) {
       <div className="bg-white w-full flex flex-row justify-between mx-4 text-gray-500 truncate text-sm ">
         <p className="text-gray-500">{name}</p>
         <button
-          // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
           onClick={() => {
             setRemoveZone(true);
             const result = polygonsData?.find((x) => x.name === name);
             setAddressCrew(result.name);
-            setPolygonsData(result.nodes);
+            console.log('individualPolygonsData', individualPolygonsData);
+            setIndividualPolygonsData(result.nodes);
+            setPolygonsVisible(false);
             // setPolygonsCoordinates(result.nodes);
           }}
           className="text-gray-300 text-xs hover:text-gray-400"
@@ -48,12 +53,14 @@ function AddressListItem({name, nodes, crewid, ...props}) {
 }
 
 const DislocationSide = (props) => {
-  const { accessToken } = useContext(AuthContext);
-  const { english, lithuanian, t } = useLanguage();
-  const { polygonsCoordinates, setPolygonsCoordinates } =
-    useContext(GlobalContext);
-  const { removeZone, setRemoveZone } = useContext(GlobalContext);
+  // const { accessToken } = useContext(AuthContext);
+  // const { english, lithuanian, t } = useLanguage();
+  // const { polygonsCoordinates, setPolygonsCoordinates } =
+  //   useContext(GlobalContext);
+  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
+  const { setRemoveZone } = useContext(GlobalContext);
   const [polygonsMapData, setPolygonsMapData] = useState([]);
+  const [ setError] = useState(null);
 
   const openFunc = useCallback(() => {
     setRemoveZone(true);
@@ -86,6 +93,7 @@ const DislocationSide = (props) => {
           <div className="flex justify-center mt-4">
             <div className="flex flex-row justify-center items-center pb-2">
               <img
+                alt="plus"
                 src={require("../../assets/assets/cross.png")}
                 className="h-4 w-4 m-2"
               />
