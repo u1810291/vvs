@@ -71,6 +71,29 @@
       "offline": "Offline"
     }
   },
+  "button": {
+    "delete": "Delete"
+  },
+  "input": {
+    "label": {
+      "shortName": "Short name",
+      "deviceId": "Device Id"
+    },
+    "placeholder": {
+      "enterText": "Enter the text"
+    }
+  },
+  "icon": {
+    "marker": {
+      "tag": {
+        "endpoint": "Endpoint"
+      }
+    }
+  },
+  "object": {
+    "zone": "Zone",
+    "alarmedZone": "Alarmed"
+  },
   "eurocash": {
     "accounts": "Accounts",
     "confirm": "Confirm",

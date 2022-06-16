@@ -67,9 +67,33 @@
     }
   },
   "crew": {
+    "name": "Pavadinimas",
     "status": {
       "offline": "Neprisijungę"
     }
+  },
+  "button": {
+    "delete": "Archyvuoti"
+  },
+  "input": {
+    "label": {
+      "shortName": "Trumpas pav.",
+      "deviceId": "Įrenginio Id"
+    },
+    "placeholder": {
+      "enterText": "Įveskite tekstą"
+    }
+  },
+  "icon": {
+    "marker": {
+      "tag": {
+        "endpoint": "Grįžta"
+      }
+    }
+  },
+  "object": {
+    "zone": "Zona",
+    "alarmedZone": "Aliarmas"
   },
   "eurocash": {
     "accounts": "Paskyros",
