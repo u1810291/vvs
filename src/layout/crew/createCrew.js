@@ -1,7 +1,6 @@
 import React, {useCallback, useState, useRef, useEffect, useContext } from 'react';
 
 import {Polygon} from '@react-google-maps/api';
-import {GoogleMap} from '@react-google-maps/api';
 import {ActiveCard} from '../../components/cards/active';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
 import {useFetch} from '../../hook/useFetch';

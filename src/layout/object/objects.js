@@ -9,10 +9,10 @@ const Objects = props => {
     <SidebarLayout>
 
       <TitleBar>
-        <div className="md:flex md:space-x-4 md:space-y-0 space-y-4">
+        <div className='md:flex md:space-x-4 md:space-y-0 space-y-4'>
 
           <Breadcrumbs>
-            <Breadcrumbs.Item><span className="font-semibold">Objektai</span></Breadcrumbs.Item>
+            <Breadcrumbs.Item><span className='font-semibold'>Objektai</span></Breadcrumbs.Item>
             <Breadcrumbs.Item>Visi duomenys</Breadcrumbs.Item>
           </Breadcrumbs>
 
@@ -22,8 +22,8 @@ const Objects = props => {
       </TitleBar>
 
       <Filter onValues={console.log}>
-        <Filter.Item propPath="vienas.veins">vienas</Filter.Item>
-        <Filter.Item propPath="du.duu">du</Filter.Item>
+        <Filter.Item propPath='vienas.veins'>vienas</Filter.Item>
+        <Filter.Item propPath='du.duu'>du</Filter.Item>
       </Filter>
 
       <Table>
@@ -46,7 +46,7 @@ const Objects = props => {
 }
 
 const TitleBar = props => (
-  <header className="flex w-full justify-between p-6">
+  <header className='flex w-full justify-between p-6'>
     {props?.children}
   </header>
 );

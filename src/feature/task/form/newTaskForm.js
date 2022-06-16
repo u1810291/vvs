@@ -1,25 +1,25 @@
-import React, {useState, useEffect, useContext} from "react";
-import AuthContext from "../../../context/authContext";
+import React, {useState, useEffect, useContext} from 'react';
+import AuthContext from '../../../context/authContext';
 
-import Map from "../../map/component/Map";
-import Nullable from "../../../components/atom/Nullable";
-import Textarea from "../../../components/input/Textarea";
-import Selectbox from "../../../components/input/Selectbox";
-import ControlledInput from "../../../components/input/ControlledInput";
+import Map from '../../map/component/Map';
+import Nullable from '../../../components/atom/Nullable';
+import Textarea from '../../../components/input/Textarea';
+import Selectbox from '../../../components/input/Selectbox';
+import ControlledInput from '../../../components/input/ControlledInput';
 
-import useAsync from "../../../hook/useAsync";
-import useGeocode from "../../../hook/useGeocode";
-import useLanguage from "../../../hook/useLanguage";
-import useResultForm from "../../../hook/useResultForm";
+import useAsync from '../../../hook/useAsync';
+import useGeocode from '../../../hook/useGeocode';
+import useLanguage from '../../../hook/useLanguage';
+import useResultForm from '../../../hook/useResultForm';
 import {useGoogleApiContext} from '../../../context/googleApiContext';
 
-import {asyncGetObjects, asyncGetCrews, asyncCreateEvent} from "../api/newTaskApi";
+import {asyncGetObjects, asyncGetCrews, asyncCreateEvent} from '../api/newTaskApi';
 
-import {generate} from "shortid";
-import {identity, or, isEmpty} from "crocks";
-import resultToAsync from "crocks/Async/resultToAsync";
-import {lengthGt, hasntLength} from "../../../util/pred";
-import {Marker} from "@react-google-maps/api";
+import {generate} from 'shortid';
+import {identity, or, isEmpty} from 'crocks';
+import resultToAsync from 'crocks/Async/resultToAsync';
+import {lengthGt, hasntLength} from '../../../util/pred';
+import {Marker} from '@react-google-maps/api';
 
 const NewTaskForm = () => {
   const {t} = useLanguage();
@@ -28,15 +28,15 @@ const NewTaskForm = () => {
   const {accessToken} = useContext(AuthContext);
 
   const [taskStatus, setTaskStatus] = useState([
-    {id: "123", key: null, name: "Naujas"}
+    {id: '123', key: null, name: 'Naujas'}
   ]);
   const [crews, setCrews] = useState([
-    {id: "321", key: null, abbreviation: "9GR"},
-    {id: "12113", key: null, abbreviation: "8GB"}
+    {id: '321', key: null, abbreviation: '9GR'},
+    {id: '12113', key: null, abbreviation: '8GB'}
   ]);
   const [objects, setObjects] = useState([
-    {id: "313", key: null, address: "Gilužio g. 5, Vilnius 06229, Lithuania", coords: null},
-    {id: "1313", key: null, address: "Įsruties g. 3, Vilnius 06218, Lithuania", coords: null}
+    {id: '313', key: null, address: 'Gilužio g. 5, Vilnius 06229, Lithuania', coords: null},
+    {id: '1313', key: null, address: 'Įsruties g. 3, Vilnius 06218, Lithuania', coords: null}
   ]);
 
   const [selectedCrew, setSelectedCrew] = useState([]);
@@ -57,37 +57,37 @@ const NewTaskForm = () => {
     token: {
       initial: `Bearer ${accessToken}`,
       validator: or(hasntLength, lengthGt(5)),
-      message: t("validation.error.token"),
+      message: t('validation.error.token'),
       props: () => {}
     },
     name: {
-      initial: "",
+      initial: '',
       validator: or(hasntLength, lengthGt(5)),
-      message: t("validation.error.taskName"),
+      message: t('validation.error.taskName'),
       props: inputGroupValidationProps,
     },
     description: {
-      initial: "",
+      initial: '',
       validator: or(hasntLength, lengthGt(5)),
-      message: t("validation.error.taskDescription"),
+      message: t('validation.error.taskDescription'),
       props: inputGroupValidationProps,
     },
     status: {
-      initial: "",
+      initial: '',
       validator: or(hasntLength, lengthGt(5)),
-      message: t("validation.error.taskStatus"),
+      message: t('validation.error.taskStatus'),
       props: () => {},
     },
     crewID: {
-      initial: "",
+      initial: '',
       validator: or(hasntLength, lengthGt(5)),
-      message: t("validation.error.crewID"),
+      message: t('validation.error.crewID'),
       props: () => {},
     },
     objectID: {
-      initial: "",
+      initial: '',
       validator: or(hasntLength, lengthGt(5)),
-      message: t("validation.error.objectID"),
+      message: t('validation.error.objectID'),
       props: () => {},
     },
   });
@@ -139,47 +139,47 @@ const NewTaskForm = () => {
 
   // useEffect(() => {
   //   setEventForm({
-  //     name: "",
-  //     description:"",
-  //     status: "",
-  //     crewID: "",
-  //     objectID: "",
+  //     name: '',
+  //     description:'',
+  //     status: '',
+  //     crewID: '',
+  //     objectID: '',
   //   });
   // }, [setEventForm]);
 
   return (
-    <section className={"flex flex-col w-1/4 p-5"}>
-      <div className={"flex mb-6"}>
+    <section className={'flex flex-col w-1/4 p-5'}>
+      <div className={'flex mb-6'}>
         <Selectbox
-          label={t("eurocash.type")}
-          twBody={"w-1/2 mr-4"}
+          label={t('eurocash.type')}
+          twBody={'w-1/2 mr-4'}
           isRequired={true}
           items={taskStatus}
           value={selectedTaskStatus}
           setValue={setSelectedTaskStatus}
         />
         <ControlledInput
-          title={t("eurocash.name")}
-          twBody={"mr-0 w-1/2"}
+          title={t('eurocash.name')}
+          twBody={'mr-0 w-1/2'}
           isRequired={true}
-          {...ctrlEvent("name")}
+          {...ctrlEvent('name')}
         />
       </div>
       <Textarea
-        title={t("eurocash.description")}
-        twBody={"mb-6"}
+        title={t('eurocash.description')}
+        twBody={'mb-6'}
         rows={4}
         isRequired={true}
-        {...ctrlEvent("description")}
+        {...ctrlEvent('description')}
       />
       <Selectbox
-        label={t("eurocash.objectsAndAddresses")}
-        twBody={"mb-6"}
+        label={t('eurocash.objectsAndAddresses')}
+        twBody={'mb-6'}
         items={objects}
         value={selectedObject}
         setValue={setSelectedObject}
       />
-      <div className="relative h-80 mb-6">
+      <div className='relative h-80 mb-6'>
         <Map singleMarkerCoords={selectedObject.coords}>
           <Nullable on={selectedObject.coords}>
             <Marker onLoad={onMapLoad} position={selectedObject.coords}/>
@@ -187,8 +187,8 @@ const NewTaskForm = () => {
         </Map>
       </div>
       <Selectbox
-        label={t("eurocash.crews")}
-        twBody={"mb-6"}
+        label={t('eurocash.crews')}
+        twBody={'mb-6'}
         items={crews}
         value={selectedCrew}
         setValue={setSelectedCrew}

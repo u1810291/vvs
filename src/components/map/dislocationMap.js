@@ -1,17 +1,17 @@
-import React, { useCallback, useRef, useState, useContext, useEffect } from "react";
-import { GoogleMap, useLoadScript, Polygon } from "@react-google-maps/api";
-import useLanguage from "../../hook/useLanguage";
-import GoogleMapTools from "./googleMapTools";
-import GlobalContext from "../../context/globalContext";
-import { crewZonesQuery } from "../../api/queryForms/queryString/query";
-import { useQuery, useSubscription, useMutation } from "graphql-hooks";
-import useReactQuery from "../../hook/useQuery";
-import { crewZonesSubscription } from "../../api/queryForms/queryString/subscriptions";
-import { generate } from "shortid";
+import React, { useCallback, useRef, useState, useContext, useEffect } from 'react';
+import { GoogleMap, useLoadScript, Polygon } from '@react-google-maps/api';
+import useLanguage from '../../hook/useLanguage';
+import GoogleMapTools from '../../feature/map/component/GoogleMapTools';
+import GlobalContext from '../../context/globalContext';
+import { crewZonesQuery } from '../../api/queryForms/queryString/query';
+import { useQuery, useSubscription, useMutation } from 'graphql-hooks';
+import useReactQuery from '../../hook/useQuery';
+import { crewZonesSubscription } from '../../api/queryForms/queryString/subscriptions';
+import { generate } from 'shortid';
 
 const mapContainerStyle = {
-  width: "100%",
-  height: "100%",
+  width: '100%',
+  height: '100%',
 };
 
 const mapCenter = {
@@ -20,9 +20,9 @@ const mapCenter = {
 };
 
 const options = {
-  fillColor: "lightblue",
+  fillColor: 'lightblue',
   fillOpacity: 1,
-  strokeColor: "red",
+  strokeColor: 'red',
   strokeOpacity: 1,
   strokeWeight: 2,
   clickable: false,
@@ -32,13 +32,13 @@ const options = {
   zIndex: 1,
 };
 
-const lib = ["drawing"];
+const lib = ['drawing'];
 
 const DislocationMap = ({ mapTools }) => {
   const { accessToken } = useContext(GlobalContext);
   const mapRef = useRef(null);
   const { english, lithuanian, t } = useLanguage();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const { removeZone, setRemoveZone } = useContext(GlobalContext);
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
   const { individualPolygonsData, setIndividualPolygonsData } = useContext(GlobalContext);
@@ -79,7 +79,7 @@ const DislocationMap = ({ mapTools }) => {
     );
 
   return isMapLoaded ? (
-    <div className="w-full h-full relative">
+    <div className='w-full h-full relative'>
       <GoogleMap
         zoom={14}
         center={mapCenter}
