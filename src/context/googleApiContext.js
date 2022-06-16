@@ -1,14 +1,15 @@
-import React, {createContext, useContext, useCallback, useRef} from "react";
-import env from "../env";
-import {useLoadScript} from "@react-google-maps/api";
-import useMergeReducer from "../hook/useMergeReducer";
+import React, {createContext, useContext, useCallback, useRef} from 'react';
+import env from '../env';
+import {useLoadScript} from '@react-google-maps/api';
+import useMergeReducer from '../hook/useMergeReducer';
 
 const GoogleApiContext = createContext(null);
 
 const GoogleContextProvider = ({children}) => {
   const [state, setValue] = useMergeReducer({
-    libraries: null,
+    libraries: ['drawing'],
   });
+
   const {isLoaded, loadError} = useLoadScript({googleMapsApiKey: env.GOOGLE_MAPS_API_KEY, libraries: state.libraries});
   const mapRef = useRef(null);
   const onMapLoad = useCallback(map => mapRef.current = map, []);
@@ -25,7 +26,7 @@ const GoogleContextProvider = ({children}) => {
 export const useGoogleApiContext = () => {
   const context = useContext(GoogleApiContext);
   if (context === undefined) {
-    throw new Error("useGoogleApiContext must be used within a GoogleContextProvider");
+    throw new Error('useGoogleApiContext must be used within a GoogleContextProvider');
   }
   return context;
 };
