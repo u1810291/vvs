@@ -66,6 +66,11 @@
       "objectID": "There is no unique object identifier. Make sure you have selected an object"
     }
   },
+  "crew": {
+    "status": {
+      "offline": "Offline"
+    }
+  },
   "eurocash": {
     "accounts": "Accounts",
     "confirm": "Confirm",

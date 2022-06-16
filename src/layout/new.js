@@ -8,7 +8,6 @@ import React, {
 import { FinishedHeader } from "../components/headers/finished";
 import NewSideLeft from "../components/sides/newSideLeft";
 import InProcessRightSide from "../components/sides/inProcessRight";
-import DashboardMap from "../components/map/dashboard";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import GlobalContext from "../context/globalContext";
 import SlideOver from "../components/sidebars/slideOver";
@@ -66,7 +65,6 @@ function New() {
                             <div className="flex flex-row w-full justify-between h-full">
                               <div className="flex flex-col h-full w-full">
                                 <div className="flex flex-row w-full justify-between h-full">
-                                  <DashboardMap />
                                   <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-2/4 bg-gray-100">
                                     <InProcessRightSide />
                                   </div>
@@ -82,7 +80,6 @@ function New() {
                       <div className="flex min-h-full overflow-y-auto scrollbar-gone flex-col w-2/4 bg-gray-100">
                         <NewSideLeft />
                       </div>
-                      <DashboardMap />
                       <div className="flex flex-col h-full justify-between overflow-y-auto scrollbar-gone w-2/4 bg-gray-100">
                         <InProcessRightSide />
                         {/* <NewSideRight/> */}

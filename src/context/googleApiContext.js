@@ -22,7 +22,7 @@ const GoogleContextProvider = ({children}) => {
   );
 };
 
-const useGoogleApiContext = () => {
+export const useGoogleApiContext = () => {
   const context = useContext(GoogleApiContext);
   if (context === undefined) {
     throw new Error("useGoogleApiContext must be used within a GoogleContextProvider");
@@ -30,4 +30,4 @@ const useGoogleApiContext = () => {
   return context;
 };
 
-export {GoogleContextProvider, useGoogleApiContext};
+export default GoogleContextProvider;

@@ -33,7 +33,7 @@ function SlideOverContent(props) {
           exit={opacity_0}
         ></motion.div>
         <motion.section
-          className="absolute inset-y-0 left-20 pr-10 max-w-full flex"
+          className="absolute inset-y-0 left-[4rem] pr-10 max-w-full flex"
           aria-labelledby="slide-over-heading"
           ref={ref}
           {...overlayProps}

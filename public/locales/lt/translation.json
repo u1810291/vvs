@@ -66,6 +66,11 @@
       "objectID": "Nėra unikalaus objekto identifikatoriaus. Įsitikinkite, kad pasirinkote objektą"
     }
   },
+  "crew": {
+    "status": {
+      "offline": "Neprisijungę"
+    }
+  },
   "eurocash": {
     "accounts": "Paskyros",
     "confirm": "Patvirtinti",

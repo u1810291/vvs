@@ -9,7 +9,6 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 
 import Login from "./layout/login";
-import Dashboard from "./layout/dashboard";
 import Object from "./layout/object/object";
 import Keys from "./layout/key/keys";
 import Tasks from "./layout/tasks";
@@ -31,10 +30,12 @@ import Breaches from "./layout/breach/breaches";
 import Dislocations from "./layout/dislocation/dislocations";
 import Dislocation from "./layout/dislocation/dislocation";
 import PermissionConfirmation from "./layout/permission/permissionConfirmation";
-import NewTaskLayout from "./feature/task/layout/newTaskLayout";
+
+import NewTaskLayout from "./feature/task/layout/NewTaskLayout";
+import DashboardLayout from './feature/dashboard/layout/DashboardLayout';
 
 import NotFound from "./layout/notFound";
-import {GoogleContextProvider} from './context/googleApiContext';
+import GoogleContextProvider from './context/googleApiContext';
 
 const queryClient = new QueryClient();
 
@@ -72,7 +73,7 @@ function App() {
               <Routes>
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" exec element={<Login />} />
-                  <Route path="Dashboard" element={<Dashboard />} />
+                  <Route path="Dashboard" element={<DashboardLayout />} />
                   <Route path="Keys" element={<Keys />} />
                   <Route path="Tasks" element={<Tasks />} />
                   <Route path="NewTask" element={<NewTaskLayout />} />
