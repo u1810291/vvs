@@ -4,24 +4,24 @@ import React, {
   useEffect,
   useRef,
   useContext,
-} from "react";
-import { DrawingManager } from "@react-google-maps/api";
-import useLanguage from "../../hook/useLanguage";
-import AuthContext from "../../context/authContext";
-import GlobalContext from "../../context/globalContext";
+} from 'react';
+import {DrawingManager} from '@react-google-maps/api';
+import useLanguage from '../../../hook/useLanguage';
+import AuthContext from '../../../context/authContext';
+import GlobalContext from '../../../context/globalContext';
 
 const drawingManagerOptions = {
   drawingControl: true,
   drawingControlOptions: {
-    drawingModes: ["polygon"],
+    drawingModes: ['polygon'],
     position: 3.0,
   },
   polygonOptions: {
     strokeOpacity: 1,
     strokeWeight: 0.8,
-    strokeColor: "#C32A2F",
+    strokeColor: '#C32A2F',
     fillOpacity: 0.4,
-    fillColor: "#C32A2F",
+    fillColor: '#C32A2F',
     clickable: true,
     draggable: true,
   },
@@ -102,7 +102,7 @@ const GoogleMapTools = ({ onMapLoad }) => {
     (polygon) => {
       setPolygons([...polygons, polygon]);
       polygon.setEditable(true);
-      polygon.addListener("rightclick", (event) => {
+      polygon.addListener('rightclick', (event) => {
         deleteVertex(polygon, event.vertex);
       });
     },
@@ -112,16 +112,16 @@ const GoogleMapTools = ({ onMapLoad }) => {
   return (
     <>
       <button
-        className="absolute z-1 top-24 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white"
+        className='absolute z-1 top-24 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white'
         onClick={clearAllPolygons}
       >
-        {t("eurocash.clear")}
+        {t('eurocash.clear')}
       </button>
       <button
-        className="absolute z-1 top-36 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white"
+        className='absolute z-1 top-36 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white'
         onClick={undoPreviousPolygon}
       >
-        {t("eurocash.undo")}
+        {t('eurocash.undo')}
       </button>
       <DrawingManager
         onLoad={onMapLoad}
