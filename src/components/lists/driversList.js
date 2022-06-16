@@ -8,7 +8,7 @@ import { generate } from "shortid";
 import { getAllUsers } from "../../api/queryForms/variables/users";
 import { getUsers } from "../../api/queryForms/queryString/users";
 import { sortToggle } from "../../util/utils";
-import { useFetch } from "../../hook/useFetch";
+import useReactQuery from "../../hook/useQuery";
 
 const { Connected } = require("../buttons/connected");
 const { Deactivated } = require("../buttons/deactivated");
@@ -20,19 +20,10 @@ export const DriverList = () => {
     useContext(GlobalContext);
   const [crew, setCrew] = useState("");
 
-  const { data, error, loading, fetchData } = useFetch(
-    getUsers,
-    getAllUsers,
-    accessToken
-  );
+  const data = useReactQuery(getUsers, getAllUsers, accessToken);
 
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (data) {
+    if (data.data) {
       const allUsers = data?.data?.users?.users;
       const searchRole = (name, arr) =>
         arr?.filter(({ registrations }) => {
@@ -44,7 +35,7 @@ export const DriverList = () => {
       let obj = { users: searchResult };
       setCrew(obj);
     }
-  }, [data]);
+  }, [data.data]);
 
   const {
     sortedDriversKeys,

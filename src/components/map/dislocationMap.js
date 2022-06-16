@@ -1,9 +1,11 @@
-import React, { useCallback, useRef, useState, useContext } from "react";
+import React, { useCallback, useRef, useState, useContext, useEffect } from "react";
 import { GoogleMap, useLoadScript, Polygon } from "@react-google-maps/api";
 import useLanguage from "../../hook/useLanguage";
 import GoogleMapTools from "./googleMapTools";
 import GlobalContext from "../../context/globalContext";
+import { crewZonesQuery } from "../../api/queryForms/queryString/query";
 import { useQuery, useSubscription, useMutation } from "graphql-hooks";
+import useReactQuery from "../../hook/useQuery";
 import { crewZonesSubscription } from "../../api/queryForms/queryString/subscriptions";
 import { generate } from "shortid";
 
@@ -16,13 +18,6 @@ const mapCenter = {
   lat: 55.95,
   lng: 23.33,
 };
-
-const paths = [
-  { lat: 25.774, lng: -80.19 },
-  { lat: 18.466, lng: -66.118 },
-  { lat: 32.321, lng: -64.757 },
-  { lat: 25.774, lng: -80.19 }
-]
 
 const options = {
   fillColor: "lightblue",
@@ -40,22 +35,27 @@ const options = {
 const lib = ["drawing"];
 
 const DislocationMap = ({ mapTools }) => {
+  const { accessToken } = useContext(GlobalContext);
   const mapRef = useRef(null);
   const { english, lithuanian, t } = useLanguage();
   const [error, setError] = useState("");
+  const { removeZone, setRemoveZone } = useContext(GlobalContext);
   const { polygonsData, setPolygonsData } = useContext(GlobalContext);
-  // console.log('polygonsData', polygonsData.crew_zone[1].nodes[0]);
-  // console.log('polygonsData', polygonsData.crew_zone);
+  const { individualPolygonsData, setIndividualPolygonsData } = useContext(GlobalContext);
+  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
+  const polygonDataRef = useRef([]);
 
-  useSubscription({ query: crewZonesSubscription }, ({ data, errors }) => {
-    if (errors && errors.length > 0) {
-      setError(errors[0]);
-      return;
+  const data = useReactQuery(crewZonesQuery, {}, accessToken);
+
+  useEffect(() => {
+    if (data.data) {
+      setPolygonsData(data?.data?.crew_zone);
     }
+  },[data.data])
 
-    console.log("sbs ", data);
-    setPolygonsData(data);
-  });
+  useEffect(() => {
+    polygonDataRef.current = individualPolygonsData
+  },[individualPolygonsData])
 
   const onMapLoad = useCallback(function callback(map) {
     mapRef.current = map;
@@ -70,17 +70,13 @@ const DislocationMap = ({ mapTools }) => {
     libraries: lib,
   });
 
-const onLoad = (polygon) => {
-    console.log("polygon: ", polygon);
-  };
-
-  const test = (map) => {
-    console.log("polygon: ", map);
-  };
-
-  const asd = test(polygonsData);
-  console.log('asd', asd);
-
+    // Bind refs to current Polygon and listeners
+    const onLoad = useCallback(
+      polygon => {
+        polygonDataRef.current = polygon;
+      },
+      []
+    );
 
   return isMapLoaded ? (
     <div className="w-full h-full relative">
@@ -92,7 +88,7 @@ const onLoad = (polygon) => {
         mapContainerStyle={mapContainerStyle}
       >
         <GoogleMapTools onMapLoad={onMapLoad} />
-        {polygonsData.crew_zone?.map((polygon, index) => ( 
+        {polygonsData.map((polygon, index) => (
           <Polygon
             onLoad={onLoad}
             paths={polygon.nodes}

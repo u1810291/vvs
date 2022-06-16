@@ -1,10 +1,10 @@
-import React from "react";
-import {GoogleMap} from "@react-google-maps/api";
+import React from 'react';
+import {GoogleMap} from '@react-google-maps/api';
 import {useGoogleApiContext} from '../../../context/googleApiContext';
 
 const mapContainerStyle = {
-  width: "100%",
-  height: "100%",
+  width: '100%',
+  height: '100%',
 };
 
 const mapCenter = {
@@ -15,7 +15,7 @@ const mapCenter = {
 const Map = ({singleMarkerCoords, children}) => {
   const {onMapLoad, onMapUnmount} = useGoogleApiContext();
   return (
-    <div className="w-full h-full relative">
+    <div className='w-full h-full relative'>
       <GoogleMap
         zoom={14}
         center={singleMarkerCoords || mapCenter}
