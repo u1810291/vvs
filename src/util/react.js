@@ -87,3 +87,5 @@ export const withComponentFactory = (Component, {mapSetupInComponent = identity,
 
   return A;
 };
+
+export const renderWithProps = curry((Component, props) => <Component {...props} />);

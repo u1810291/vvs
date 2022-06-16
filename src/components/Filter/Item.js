@@ -1,16 +1,13 @@
 import {identity} from "crocks";
 import React from "react";
 
-/**
- * @property {string} propPath - The property path of an object nested via dots
- */
 export const FilterItem = ({
-  propPath = '',
+  uid,
   children,
   onDelete = identity,
   ...props
 }) => (
-  <div className="flex-grow min-w-[6rem] max-w-[12rem] m-1 p-1 rounded-sm text-xs font-normal text-gray-500 bg-gray-200 inline-flex items-center justify-between">
+  <div data-uid={uid} className="flex-grow min-w-[6rem] max-w-[12rem] m-1 p-1 rounded-sm text-xs font-normal text-gray-500 bg-gray-200 inline-flex items-center justify-between">
     <span className="whitespace-nowrap leading-none align-baseline">{children}</span>
     <button onClick={onDelete(children)} className="focus:outline-none">
       <svg
