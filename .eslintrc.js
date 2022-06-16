@@ -15,6 +15,7 @@ module.exports = {
         'react'
     ],
     'rules': {
+        'react/prop-types': 0,
         'quotes': ['error', 'single'],
         'jsx-quotes': ['error', 'prefer-single']
     }
