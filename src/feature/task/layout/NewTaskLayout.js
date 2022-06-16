@@ -1,16 +1,19 @@
-import React, {useCallback} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useCallback} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 
-import SidebarLayout from "../../../layout/sidebarLayout";
-import MainHeader from "../../../components/headers/MainHeader";
 import NewTaskForm from '../form/newTaskForm';
-import Breadcrumbs from "../../../components/headers/Breadcrumbs";
-import HeaderButtonGroup from "../../../components/headers/HeaderButtonGroup";
+import Header from '../../../components/atom/Header';
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import SidebarLayout from '../../../layout/sidebarLayout';
+import HeaderButtonGroup from '../../../components/headers/HeaderButtonGroup';
+
+import useLanguage from '../../../hook/useLanguage';
 
 const NewTaskLayout = () => {
+  const {t} = useLanguage();
   const navigate = useNavigate();
   const onCancelButton = useCallback(() => {
-    navigate("/tasks")
+    navigate('/tasks')
   }, []);
   const onSaveButton = useCallback(() => {
 
@@ -18,22 +21,21 @@ const NewTaskLayout = () => {
 
   return (
     <SidebarLayout>
-      <div className="flex flex-col min-h-full w-[calc(100%-80px)]">
-        <MainHeader>
-          <Breadcrumbs
-            titleText={"eurocash.tasks"}
-            subtitleText={"eurocash.newTask"}
-            titlePath={"/tasks"}
-            subtitlePath={"/newTask"}/>
+      <div className='flex flex-col min-h-full'>
+        <Header>
+          <Breadcrumbs>
+            <Breadcrumbs.Item><Link to={'/tasks'}>{t('eurocash.tasks')}</Link></Breadcrumbs.Item>
+            <Breadcrumbs.Item><Link to={'/newTask'}>{t('eurocash.newTask')}</Link></Breadcrumbs.Item>
+          </Breadcrumbs>
           <HeaderButtonGroup
-            saveButtonText={"eurocash.createNewTask"}
-            cancelButtonText={"eurocash.cancel"}
+            saveButtonText={'eurocash.createNewTask'}
+            cancelButtonText={'eurocash.cancel'}
             onSaveButton={onSaveButton}
             onCancelButton={onCancelButton}
-            twSaveButton={"text-white bg-slate-600"}
-            twCancelButton={"mr-4 bg-gray-200 text-gray-500"}
+            twSaveButton={'text-white bg-slate-600'}
+            twCancelButton={'mr-4 bg-gray-200 text-gray-500'}
           />
-        </MainHeader>
+        </Header>
         <NewTaskForm />
       </div>
     </SidebarLayout>
