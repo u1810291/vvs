@@ -14,7 +14,6 @@ import Keys from './layout/key/keys';
 import Tasks from './layout/tasks';
 import Drivers from './layout/driver/drivers';
 import Clients from './layout/client/clients';
-import Objects from './layout/object/objects';
 import Modems from './layout/modem/modems';
 import Create from './layout/create';
 import Driver from './layout/driver/driver';
@@ -36,6 +35,7 @@ import DashboardLayout from './feature/dashboard/layout/DashboardLayout';
 
 import NotFound from './layout/notFound';
 import GoogleContextProvider from './context/googleApiContext';
+import ObjectList from './layout/object/list';
 
 const queryClient = new QueryClient();
 
@@ -79,7 +79,7 @@ function App() {
                   <Route path='NewTask' element={<NewTaskLayout />} />
                   <Route path='Drivers' element={<Drivers />} />
                   <Route path='Clients' element={<Clients />} />
-                  <Route path='Objects' element={<Objects />} />
+                  <Route path='object' element={<ObjectList />} />
                   <Route path='Modems' element={<Modems />} />
                   <Route path='Create' element={<Create />} />
                   <Route path='New' element={<New />} />

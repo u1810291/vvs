@@ -20,9 +20,10 @@ import {
   safe,
   tap,
 } from 'crocks';
+import {filter} from "crocks/pointfree";
 
 const putIntoArray = ifElse(isArray, identity, (value) => [value]);
-const mapToNames = map(getPathOr("", ["props", "children"]));
+const mapToName = getPathOr("", ["props", "children"])
 
 const Box = ({Dropdown, Item, children, onChange = identity, onValues = identity, ...props}) => {
   children = pipe(
@@ -43,26 +44,19 @@ const Box = ({Dropdown, Item, children, onChange = identity, onValues = identity
     pipe(
       putIntoArray,
       (a) => a.filter(pathSatisfies(["props", "active"], isTrue)),
-      mapToNames
+      map(mapToName)
     )(children)
   );
 
-  useEffect(() => {onValues({
-    things: pipe(
-      putIntoArray,
-      map(pipe(
-        getProp('props'),
-        chain(safe(hasProps(['propPath', 'children']))),
-        map(({propPath, children}) => [propPath, children]),
-        option(null)
-      )),
-      a => a.filter(and(identity, a => active.includes(a[1]))),
-      Object.fromEntries,
-    )(children)
-    //.filter(children)
-    //.map(c => c.props.propPath),
-    ,active
-  })}, [active]);
+  useEffect(() => {pipe(
+    putIntoArray,
+    filter(pipe(
+      mapToName,
+      name => active.includes(name),
+    )),
+    map(a => a?.props?.uid),
+    onValues,
+  )(children)}, [active]);
 
   return (
     <div className="flex-wrap flex rounded-md w-full border p-1 bg-white sm:grid-cols-6 font-normal text-black" {...props}>
@@ -72,7 +66,7 @@ const Box = ({Dropdown, Item, children, onChange = identity, onValues = identity
           pipe(
             putIntoArray,
             (a) => a.filter((b) => !active.includes(b.props.children)),
-            mapToNames,
+            map(mapToName),
             map(content => (
               <Dropdown.Item
                 Tag='button'
