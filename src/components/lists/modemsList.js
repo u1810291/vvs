@@ -18,20 +18,21 @@ export const ModemsList = ({ token, ...props }) => {
 
 
   const data = useReactQuery(objectPage, {}, token);
-  useEffect(() => {
-    let hasura;
-    let monas;
-    if (data.data) {
-    hasura = data?.data?.monas_related;
-    monas = data?.data?.objects;
-    const mergeDB = monas.map((monas) => ({
-      ...monas, ...hasura.find(hasura => String(hasura.Id) === String(monas.Id))
-    }))
-    setModem({result:mergeDB});
-    setInitData(data.data);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.data]);
+
+  // useEffect(() => {
+  //   let hasura;
+  //   let monas;
+  //   if (data.data) {
+  //   hasura = data?.data?.monas_related;
+  //   monas = data?.data?.objects;
+  //   const mergeDB = monas.map((monas) => ({
+  //     ...monas, ...hasura.find(hasura => String(hasura.Id) === String(monas.Id))
+  //   }))
+  //   setModem({result:mergeDB});
+  //   setInitData(data.data);
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [data.data]);
 
   const {
     sortedModemsKeys,

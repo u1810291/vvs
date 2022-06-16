@@ -1,13 +1,19 @@
-import React, {useCallback, useState, useRef, useEffect, useContext } from "react";
+import React, {
+  useCallback,
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+} from "react";
 
-import {Polygon} from "@react-google-maps/api";
-import {GoogleMap} from "@react-google-maps/api";
-import {ActiveCard} from "../../components/cards/active";
-import {OverlayProvider, usePreventScroll} from "react-aria";
+import { Polygon } from "@react-google-maps/api";
+import { GoogleMap } from "@react-google-maps/api";
+import { ActiveCard } from "../../components/cards/active";
+import { OverlayProvider, usePreventScroll } from "react-aria";
 import { useFetch } from "../../hook/useFetch";
 import { updateCalendar } from "../../api/queryForms/queryString/mutation";
 
-import CheckBox from '../../components/input/CheckBox';
+import CheckBox from "../../components/input/CheckBox";
 import CrewList from "../../components/lists/crewList";
 import MainSidebar from "../../components/sidebars/main";
 import RegularSidebar from "../../components/sidebars/main";
@@ -17,22 +23,26 @@ import CalendarTimeline from "../../components/calendar/CalendarTimeline";
 import CreateCrewHeader from "../../components/headers/crew/createCrewHeader";
 import AuthContext from "../../context/authContext";
 import { useParams } from "react-router-dom";
-import { objectPage } from "../../api/queryForms/queryString/query";
+import { crewsQuery } from "../../api/queryForms/queryString/query";
 import useReactQuery from "../../hook/useQuery";
 
 import useBoolean from "../../hook/useBoolean";
 import useLanguage from "../../hook/useLanguage";
 
-import {generate} from "shortid";
+import { generate } from "shortid";
 
 const CreateCrew = () => {
   const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
-  const {t, english, lithuanian} = useLanguage();
+  const { t, english, lithuanian } = useLanguage();
   const [events, setEvents] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const handleOnOpen = useCallback(() => {setIsOpen(true)},[]);
-  const handleOnClose = useCallback(() => {setIsOpen(false)},[]);
+  const handleOnOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+  const handleOnClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
   const [polygon, setPolygon] = useState([
     { lat: 55.95, lng: 23.3 },
     { lat: 55.9, lng: 23.35 },
@@ -45,7 +55,7 @@ const CreateCrew = () => {
     fillOpacity: 0.4,
     fillColor: "#C32A2F",
     clickable: true,
-    draggable: true
+    draggable: true,
   });
   const [containerStyle, setContainerStyle] = useState({
     width: "100%",
@@ -64,7 +74,8 @@ const CreateCrew = () => {
   const [status, setStatus] = useState("");
   const [driver, setDriver] = useState("");
 
-  const data = useReactQuery(objectPage, {}, accessToken);
+  const data = useReactQuery(crewsQuery, {}, accessToken);
+
   useEffect(() => {
     let hasura;
     // let monas;
@@ -72,21 +83,28 @@ const CreateCrew = () => {
       hasura = data?.data?.monas_crew_related;
       // make custom logic to assign dispatch dislocations or/and events or merge and match app driver device number
       setCrew({ result: hasura });
-    }
-  }, [data.data]);
+      if (crew) {
+        const obj = crew?.result;
+        const data = obj?.find((x) => x.id === id);
+        setCrewName(data.name);
+        setCrewPhoneNumber(data.phone);
+        setCrewShortHand(data.abbreviation);
+        setStatus(data.status);
+        setDriver(data.driver);
+    }}}, [data.data]);
 
-  useEffect(() => {
-    if (crew) {
-      const obj = crew.result;
-      const data = obj.find((x) => x.id === id);
-      setCrewName(data.name);
-      setCrewPhoneNumber(data.phone);
-      setCrewShortHand(data.abbreviation);
-      setStatus(data.status);
-      setDriver(data.driver);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [crew]);
+  // useEffect(() => {
+  //   if (crew) {
+  //     const obj = crew.result;
+  //     const data = obj?.find((x) => x.id === id);
+  //     setCrewName(data.name);
+  //     setCrewPhoneNumber(data.phone);
+  //     setCrewShortHand(data.abbreviation);
+  //     setStatus(data.status);
+  //     setDriver(data.driver);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [crew]);
 
   const {
     error: calendarErrors,
@@ -96,44 +114,46 @@ const CreateCrew = () => {
   } = useFetch(updateCalendar, updateVariables, accessToken);
 
   const crewName = useRef("9 GRE");
-  const setCrewName = useCallback(event => {
-    crewName.current = event
+  const setCrewName = useCallback((event) => {
+    crewName.current = event;
   }, []);
 
   const crewShortHand = useRef("9");
-  const setCrewShortHand = useCallback(event => {
-    crewShortHand.current = event
+  const setCrewShortHand = useCallback((event) => {
+    crewShortHand.current = event;
   }, []);
 
   const crewID = useRef("54:21:9D:08:38:8C");
-  const setCrewID = useCallback(event => {
-    crewID.current = event
+  const setCrewID = useCallback((event) => {
+    crewID.current = event;
   }, []);
 
   const crewPhoneNumber = useRef("+37065612345");
-  const setCrewPhoneNumber = useCallback(event => {
-    crewPhoneNumber.current = event
+  const setCrewPhoneNumber = useCallback((event) => {
+    crewPhoneNumber.current = event;
   }, []);
 
   const crewAvailableToCallFrom = useRef("");
-  const setCrewAvailableToCallFrom = useCallback(event => {
-    crewAvailableToCallFrom.current = event
-    // present value of database event 
+  const setCrewAvailableToCallFrom = useCallback((event) => {
+    crewAvailableToCallFrom.current = event;
+    // present value of database event
   }, []);
 
   const crewAutomaticallyAssign = useRef(false);
-  const setCrewAutomaticallyAssign = useCallback(event => {
-    crewAutomaticallyAssign.current = event
+  const setCrewAutomaticallyAssign = useCallback((event) => {
+    crewAutomaticallyAssign.current = event;
   }, []);
 
   const crewAssignUntilBreaks = useRef(false);
-  const setCrewAssignUntilBreaks = useCallback(event => {
-    crewAssignUntilBreaks.current = event
+  const setCrewAssignUntilBreaks = useCallback((event) => {
+    crewAssignUntilBreaks.current = event;
   }, []);
-  
+
   useEffect(() => {
     saveCalendarRecords();
-  },[events])
+  }, [events]);
+
+  // window.google = window.google ? window.google : {}
 
   return (
     <OverlayProvider>
@@ -142,9 +162,12 @@ const CreateCrew = () => {
           <div className="flex flex-col h-full items-center w-full">
             <div className="flex flex-row w-full justify-between h-full">
               <div className="flex flex-col bg-slate-600 pt-6 items-center w-20">
-                <button className="flex flex-col py-2 items-center text-gray-400">
+                <button
+                  onClick={handleOnOpen}
+                  className="flex flex-col py-2 items-center text-gray-400"
+                >
                   <img
-                    onClick={handleOnOpen}
+                    alt="menu"
                     className="w-4 h-4 mx-16"
                     src={require("../../assets/assets/hamburger.png")}
                   />
@@ -181,7 +204,9 @@ const CreateCrew = () => {
                         />
                       </div>
                       <div className={"flex flex-col w-1/2"}>
-                        <h2 className={"font-bold mb-2"}>Automatinis priskyrimas</h2>
+                        <h2 className={"font-bold mb-2"}>
+                          Automatinis priskyrimas
+                        </h2>
                         <div className={"flex w-full justify-end"}>
                           <CheckBox
                             title={"Automatiškai priskirti"}
@@ -221,7 +246,11 @@ const CreateCrew = () => {
                         setEvents={setEvents}
                       />
 
-                      <button className={"bg-red-700 py-4 px-20 text-white mt-auto mb-6 w-max rounded-sm"}>
+                      <button
+                        className={
+                          "bg-red-700 py-4 px-20 text-white mt-auto mb-6 w-max rounded-sm"
+                        }
+                      >
                         Archyvuoti
                       </button>
                     </div>

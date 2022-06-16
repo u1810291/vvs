@@ -6,7 +6,7 @@ import useReactQuery from "../../hook/useQuery";
 import useSort from "../../hook/useSort";
 import { Link } from "react-router-dom";
 import { Spinner } from "react-activity";
-import { objectPage } from "../../api/queryForms/queryString/query";
+import { crewsQuery } from "../../api/queryForms/queryString/query";
 import { sortToggle } from "../../util/utils";
 
 const { RedWatching } = require("../buttons/redWatching");
@@ -35,13 +35,12 @@ const CrewList = ({
     useContext(GlobalContext);
   const [crew, setCrew] = useState("");
 
-  const data = useReactQuery(objectPage, {}, accessToken);
- console.log('data', data); 
+  const data = useReactQuery(crewsQuery, {}, accessToken);
+
   useEffect(() => {
     let hasura;
-    let monas;
     if (data) {
-      hasura = data?.data?.crews;
+      hasura = data?.data?.crew;
       // monas = data?.data?.objects;
       // const mergeDB = monas?.map((monas) => ({
       //   ...monas,
