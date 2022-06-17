@@ -1,8 +1,6 @@
-import AuthContext from '../../context/authContext';
 import GlobalContext from '../../context/globalContext';
 import React, { useContext, useEffect, useState } from 'react';
 import useLanguage from '../../hook/useLanguage';
-import useReactQuery from '../../hook/useQuery';
 import useSort from '../../hook/useSort';
 import { Link } from 'react-router-dom';
 import { Spinner } from 'react-activity';
@@ -27,7 +25,6 @@ const CrewList = ({
   isAssignedAutomatically,
   ...props
 }) => {
-  const { accessToken } = useContext(AuthContext);
   const { english, lithuanian, t } = useLanguage();
   const { filterListCrew, setFilterListCrew } = useContext(GlobalContext);
   const { filterEditingCrew, setFilterEditingCrew } = useContext(GlobalContext);
@@ -35,7 +32,7 @@ const CrewList = ({
     useContext(GlobalContext);
   const [crew, setCrew] = useState('');
 
-  const data = useReactQuery(crewsQuery, {}, accessToken);
+  const data = []
 
   useEffect(() => {
     let hasura;

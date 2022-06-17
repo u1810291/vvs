@@ -6,11 +6,6 @@ import generate from 'shortid';
 import { crewZonesQuery } from '../../mocks/queryForms/queryString/query';
 import { crewZonesSubscription } from '../../mocks/queryForms/queryString/subscriptions';
 import { crewZonesMutation } from '../../mocks/queryForms/queryString/mutation';
-import AuthContext from '../../context/authContext';
-import useReactQuery from '../../hook/useQuery';
-import { useFetch } from '../../hook/useFetch';
-import { useQuery, useSubscription, useMutation } from 'graphql-hooks';
-
 
 const { ActiveCard } = require('../cards/active');
 

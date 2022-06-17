@@ -13,7 +13,8 @@ const mapCenter = {
 };
 
 const Map = ({singleMarkerCoords, children}) => {
-  const {onMapLoad, onMapUnmount} = useGoogleApiContext();
+  const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
+  if (!isLoaded) return null;
   return (
     <div className='w-full h-full relative'>
       <GoogleMap

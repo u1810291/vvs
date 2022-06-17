@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {DrawingManager} from '@react-google-maps/api';
 import useLanguage from '../../../hook/useLanguage';
-import AuthContext from '../../../context/authContext';
 import GlobalContext from '../../../context/globalContext';
 
 const drawingManagerOptions = {
@@ -28,7 +27,6 @@ const drawingManagerOptions = {
 };
 
 const GoogleMapTools = ({ onMapLoad }) => {
-  const { accessToken } = useContext(AuthContext);
   const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
   const { english, lithuanian, t } = useLanguage();
   const [polygons, setPolygons] = useState([]);

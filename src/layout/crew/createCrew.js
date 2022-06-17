@@ -1,11 +1,8 @@
 import React, {useCallback, useState, useRef, useEffect, useContext } from 'react';
-
 import {Polygon} from '@react-google-maps/api';
 import {ActiveCard} from '../../components/cards/active';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import {useFetch} from '../../hook/useFetch';
 import {updateCalendar} from '../../mocks/queryForms/queryString/mutation';
-
 import Map from '../../feature/map/component/Map';
 import CheckBox from '../../components/input/CheckBox';
 import CrewList from '../../components/lists/crewList';
@@ -15,10 +12,8 @@ import SlideOver from '../../components/sidebars/slideOver';
 import ControlledInput from '../../components/input/ControlledInput';
 import CalendarTimeline from '../../components/calendar/CalendarTimeline';
 import CreateCrewHeader from '../../components/headers/crew/createCrewHeader';
-import AuthContext from '../../context/authContext';
 import {useParams} from 'react-router-dom';
 import { crewsQuery } from '../../mocks/queryForms/queryString/query';
-import useReactQuery from '../../hook/useQuery';
 import SidebarLayout from '../sidebarLayout';
 
 import useBoolean from '../../hook/useBoolean';
@@ -104,7 +99,7 @@ const CreateCrew = () => {
     data: calendarResponse,
     loading,
     fetchData: saveCalendarRecords,
-  } = useFetch(updateCalendar, updateVariables, accessToken);
+  } = {}
 
 
   const crewName = useRef('9 GRE');

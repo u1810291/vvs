@@ -10,7 +10,6 @@ import { Events } from '../../components/lists/events';
 import { PhonesList } from '../../mocks/phones';
 import { useParams } from 'react-router-dom';
 import GlobalContext from '../../context/globalContext';
-import AuthContext from '../../context/authContext';
 import { Spinner } from 'react-activity';
 import { EventsList } from '../../mocks/events';
 import { generate } from 'shortid';
@@ -30,12 +29,9 @@ import {
   deleteImageURI,
 } from '../../mocks/queryForms/queryString/mutation';
 import { objectPageImagesUpdate } from '../../mocks/queryForms/queryString/update';
-import useReactQuery from '../../hook/useQuery';
-import { useFetch } from '../../hook/useFetch';
 
 function Object() {
   const { id } = useParams();
-  const { accessToken, user } = useContext(AuthContext);
   const { objectPageImages, setObjectPageImages } = useContext(GlobalContext);
   const hiddenFileInput = useRef(null);
   const [objDesc, setObjDesc] = useState(''); // possible undefined

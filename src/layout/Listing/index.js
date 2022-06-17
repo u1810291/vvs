@@ -1,11 +1,13 @@
+import Async from 'crocks/Async';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import Filter from '../../components/Filter';
+import Maybe from 'crocks/Maybe';
 import SearchInputGroup from '../../components/InputGroup/SearchInputGroup';
 import SidebarLayout from '../../layout/sidebarLayout';
 import Table from '../../components/Table';
-import { every } from '../../util/array';
 import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {componentToString} from '@s-e/frontend/react';
+import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
 import {renderWithProps} from '../../util/react';
@@ -26,8 +28,6 @@ import {
   constant,
   objOf,
 } from 'crocks';
-import Async from 'crocks/Async';
-import Maybe from 'crocks/Maybe';
 
 /**
  * @type TableColumnComponent

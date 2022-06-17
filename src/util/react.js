@@ -9,7 +9,8 @@ import {
   merge
 } from 'crocks';
 import {mapProps} from 'crocks/helpers';
-import React from 'react';
+import React, {Suspense} from 'react';
+import {Route} from 'react-router-dom';
 
 const strToArray = ifElse(isString, str => str.split(' '), identity)
 
@@ -89,3 +90,18 @@ export const withComponentFactory = (Component, {mapSetupInComponent = identity,
 };
 
 export const renderWithProps = curry((Component, props) => <Component {...props} />);
+
+export const getRoute = curry((
+  translationKey,
+  path,
+  Component,
+  children,
+) => (
+  <Route
+    translationKey={translationKey}
+    path={path}
+    element={<Suspense><Component/></Suspense>}
+  >
+    {children}
+  </Route>
+));

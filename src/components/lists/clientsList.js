@@ -1,11 +1,9 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import GlobalContext from '../../context/globalContext';
-import AuthContext from '../../context/authContext';
 import { Spinner } from 'react-activity';
 import { Link } from 'react-router-dom';
 import { sortToggle } from '../../util/utils';
 import useSort from '../../hook/useSort';
-import useReactQuery from '../../hook/useQuery';
 import { getUsers } from '../../mocks/queryForms/queryString/users';
 import { getAllUsers } from '../../mocks/queryForms/variables/users';
 
@@ -15,7 +13,7 @@ export const ClientList = () => {
   const { filterListClients, setFilterListClients } = useContext(GlobalContext);
   const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
 
-  const data = useReactQuery(getUsers, getAllUsers, accessToken);
+  const data = [];
 
   useEffect(() => {
     if (data.status === 'success') {
