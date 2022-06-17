@@ -1,8 +1,8 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {putIntoArray} from '../../util/array';
+import {putIntoArray} from '../../../../util/array';
 import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {Combobox} from '@headlessui/react';
-import Nullable from '../Nullable';
+import Nullable from '../../../Nullable';
 import {componentToString} from '@s-e/frontend/react';
 import {
   chain,
@@ -29,8 +29,8 @@ const Box = ({
   children,
   optionClassNameFn = ({active}) => `relative cursor-default select-none py-2 pl-3 pr-9 ${active ? 'bg-indigo-600 text-white' : 'text-gray-900'}`,
 }) => {
-  const [query, setQuery] = useState('')
-  const [selectedPerson, setSelectedPerson] = useState()
+  const [query, setQuery] = useState('');
+  const [selectedChildren, setSelectedChildren] = useState('');
 
   const filteredChildren = useMemo(() => pipe(
     putIntoArray,
@@ -53,7 +53,7 @@ const Box = ({
   )(person), []);
 
   return (
-    <Combobox as='div' value={selectedPerson} onChange={setSelectedPerson}>
+    <Combobox as='div' value={selectedChildren} onChange={setSelectedChildren}>
       <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
       <InputContainer>
         <Input

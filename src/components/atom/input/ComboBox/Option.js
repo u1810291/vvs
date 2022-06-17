@@ -1,13 +1,13 @@
 import React from 'react';
 import {Combobox} from '@headlessui/react';
 import {CheckIcon} from '@heroicons/react/solid';
-import {withMergedClassName} from '../../util/react';
+import {withMergedClassName} from '../../../../util/react';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const Option = (props) => (
+const Option = ({...props}) => (
   <Combobox.Option
     {...props}
   >
