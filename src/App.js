@@ -1,9 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import GlobalContext from './context/globalContext';
 import ProtectedRoute from './feature/protected';
 import Login from './layout/login';
-import OObjects from './layout/object/object';
 import Keys from './layout/key/keys';
 import Tasks from './layout/tasks';
 import Drivers from './layout/driver/drivers';
@@ -27,13 +25,11 @@ import NewTaskLayout from './feature/task/layout/NewTaskLayout';
 import DashboardLayout from './feature/dashboard/layout/DashboardLayout';
 import NotFound from './layout/notFound';
 import GoogleContextProvider from './context/googleApiContext';
-import ObjectList from './layout/object/list';
+import ObjectList from './feature/object/layout/list';
 import ComboBoxLayout from './feature/examples/layout/ComboBoxLayout';
 import CheckBoxLayout from './feature/examples/layout/CheckBoxLayout';
 
 function App() {
-  const { globalToken, setGlobalToken } = useContext(GlobalContext);
-
   return (
     <GoogleContextProvider>
       <Router>
@@ -54,7 +50,6 @@ function App() {
             <Route path='client/:id' element={<Client />} />
             <Route path='modem/:id' element={<Modem />} />
             <Route path='key/:id' element={<Key />} />
-            <Route path='object/:id' element={<OObjects />} />
             <Route path='dislocation/:id' element={<Dislocation />} />
             <Route path='permissions' element={<Permission />} />
             <Route path='permission-confirmation' element={<PermissionConfirmation />} />

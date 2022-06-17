@@ -1,26 +1,19 @@
-import Listing from '../Listing';
-import {renderWithProps} from '../../util/react';
+import Listing from 'layout/Listing';
+import {apiAdminQuery} from 'api';
+import {renderWithProps} from 'util/react';
 import {titleCase} from '@s-e/frontend/transformer/string';
-import {apiAdminQuery} from '../../api';
 import {
-  Async,
   and,
-  bichain,
   chain,
-  curry,
   defaultProps,
   getProp,
   getPropOr,
-  hasProp,
-  ifElse,
   isEmpty,
   map,
   not,
   objOf,
-  option,
   pipe,
   safe,
-  identity,
 } from 'crocks';
 
 const Span = props => <span {...props}/>;
