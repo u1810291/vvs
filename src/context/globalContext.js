@@ -1,5 +1,5 @@
-import { createContext, useState, useRef, useContext, useEffect } from "react";
-import { generate } from "shortid";
+import { createContext, useState, useRef, useContext, useEffect } from 'react';
+import { generate } from 'shortid';
 
 const GlobalContext = createContext();
 
@@ -8,14 +8,14 @@ export default GlobalContext;
 export const GlobalProvider = ({ children }) => {
   const pdfExportComponentNew = useRef(null);
   const pdfExportComponentKey = useRef(null);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   const [value, onChange] = useState(new Date());
-  const [objectAddress, setObjectAddress] = useState("");
+  const [objectAddress, setObjectAddress] = useState('');
   const [edit, setEdit] = useState(false);
   const [savedToMenu, setSavedToMenu] = useState(false);
   const [savedToFavorite, setSavedToFavorite] = useState(false);
-  const [longName, setLongName] = useState("");
-  const [shortName, setShortName] = useState("");
+  const [longName, setLongName] = useState('');
+  const [shortName, setShortName] = useState('');
   const [filterEditingDrivers, setFilterEditingDrivers] = useState(null);
   const [filterEditingBreaches, setFilterEditingBreaches] = useState(null);
   const [filterEditingCrew, setFilterEditingCrew] = useState(null);
@@ -27,11 +27,11 @@ export const GlobalProvider = ({ children }) => {
   const [filterEditingDislocations, setFilterEditingDislocations] =
     useState(null);
   const [currentFilter, setCurrentFilter] = useState(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [sortedDashboardTestApiKeys, setSortedDashboardTestApiKeys] =
-    useState("");
+    useState('');
   const [sortedDashboardTestApiOrder, setSortedDashboardTestApiOrder] =
-    useState("");
+    useState('');
   const [toPrintNew, setToPrintNew] = useState(null);
   const [toPrintKey, setToPrintKey] = useState(null);
   const [expandFilter, setExpandFilter] = useState(true);
@@ -42,11 +42,11 @@ export const GlobalProvider = ({ children }) => {
   const [expandFilterObjects, setExpandFilterObjects] = useState(true);
   const [expandFilterClients, setExpandFilterClients] = useState(true);
   const [expandFilterModems, setExpandFilterModems] = useState(true);
-  const [objectName, setObjectName] = useState("UAB 'Tigro šuolis' Pagalbai");
-  const [apiData, setApiData] = useState(""); // not used
-  const [globalToken, setGlobalToken] = useState("empty");
+  const [objectName, setObjectName] = useState('UAB Tigro šuolis Pagalbai');
+  const [apiData, setApiData] = useState('');
+  const [globalToken, setGlobalToken] = useState('empty');
   const [objectPageImages, setObjectPageImages] = useState([]);
-  const [objectPageAddress, setObjectPageAddress] = useState("");
+  const [objectPageAddress, setObjectPageAddress] = useState('');
   const [objectPageFetchData, setObjectPageFetchData] = useState(false);
   const [removeZone, setRemoveZone] = useState(false);
   const [polygonsCoordinates, setPolygonsCoordinates] = useState([]);
@@ -54,7 +54,7 @@ export const GlobalProvider = ({ children }) => {
   const [individualPolygonsData, setIndividualPolygonsData] = useState([]);
   const [polygonsVisible, setPolygonsVisible] = useState(true);
 
-  const [addressCrew, setAddressCrew] = useState("");
+  const [addressCrew, setAddressCrew] = useState('');
 
   const [filterEditing, setFilterEditing] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -65,27 +65,27 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
       dashboardList: [
-        "Gauta",
-        "Objektas",
-        "Pavadinimas",
-        "Ekipažas",
-        "Spėjo laiku",
-        "Reagavimo laikas",
-        "Laikas objekte",
-        "Būsena",
-        "Suveikimo priežastis",
+        'Gauta',
+        'Objektas',
+        'Pavadinimas',
+        'Ekipažas',
+        'Spėjo laiku',
+        'Reagavimo laikas',
+        'Laikas objekte',
+        'Būsena',
+        'Suveikimo priežastis',
       ],
     },
   ]);
@@ -98,18 +98,18 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
-      dashboardList: ["Vardas Pavardė", "Būsena"],
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
+      dashboardList: ['Vardas Pavardė', 'Būsena'],
     },
   ]);
 
@@ -121,22 +121,22 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
       breachesList: [
-        "Data nuo",
-        "Laikas už zonos ribų",
-        "Ekipažai",
-        "Vairuotojai",
+        'Data nuo',
+        'Laikas už zonos ribų',
+        'Ekipažai',
+        'Vairuotojai',
       ],
     },
   ]);
@@ -150,18 +150,18 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
-      dashboardList: ["Name"],
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
+      dashboardList: ['Name'],
     },
   ]);
 
@@ -173,23 +173,23 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
       crewList: [
-        "Pavadinimas",
-        "Trumpinys",
-        "Dislokacijos zona",
-        "Būsena",
-        "Automatiškai priskirti",
+        'Pavadinimas',
+        'Trumpinys',
+        'Dislokacijos zona',
+        'Būsena',
+        'Automatiškai priskirti',
       ],
     },
   ]);
@@ -203,23 +203,23 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
       permissionsList: [
-        "Date",
-        "Pavadinimas",
-        "Būsena",
-        "Ekipažai",
-        "Vairuotojai",
+        'Date',
+        'Pavadinimas',
+        'Būsena',
+        'Ekipažai',
+        'Vairuotojai',
       ],
     },
   ]);
@@ -232,22 +232,22 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
       dashboardList: [
-        "Vardas Pavardė",
-        "Sutarties nr.",
-        "Telefonas",
-        "El. paštas",
+        'Vardas Pavardė',
+        'Sutarties nr.',
+        'Telefonas',
+        'El. paštas',
       ],
     },
   ]);
@@ -260,24 +260,24 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
       dashboardList: [
-        "Pavadinimas",
-        "Miestas",
-        "Adresas",
-        "Objekto nr.",
-        "Sutarties nr.",
-        "Siusti ekipaža",
+        'Pavadinimas',
+        'Miestas',
+        'Adresas',
+        'Objekto nr.',
+        'Sutarties nr.',
+        'Siusti ekipaža',
       ],
     },
   ]);
@@ -290,23 +290,23 @@ export const GlobalProvider = ({ children }) => {
       filterShortName: Math.random().toString(36).slice(-4),
       savedToFavorite: true,
       savedToMenu: true,
-      date: "",
-      objectAddress: "",
-      operator: "0",
-      object: "0",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0",
+      date: '',
+      objectAddress: '',
+      operator: '0',
+      object: '0',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0',
       dashboardList: [
-        "Numeris",
-        "Objekto Pavadinimas",
-        "Objekto nr.",
-        "Sutarties nr.",
-        "Būsena",
+        'Numeris',
+        'Objekto Pavadinimas',
+        'Objekto nr.',
+        'Sutarties nr.',
+        'Būsena',
       ],
     },
   ]);

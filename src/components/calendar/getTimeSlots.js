@@ -1,4 +1,4 @@
-import {add, parseISO} from "date-fns";
+import {add, parseISO} from 'date-fns';
 
 const getTimeslots = (start, end, minuteSpan) => {
   const timeSlots = [];

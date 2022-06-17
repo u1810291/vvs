@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect, useCallback} from 'react';
 
 import useDebounce from '../../hook/useDebounce';
 
@@ -16,8 +16,7 @@ const ControlledInput = ({
   twInput,
   twRequired,
 }) => {
-  const [localValue, setLocalValue] = useState("");
-  //eslint-disable-next-line react-hooks/rules-of-hooks
+  const [localValue, setLocalValue] = useState('');
   const affectDebounce = (dep, fn, ms) => useDebounce(dep, fn, ms);
   /*
    debounce in case to fetch something,

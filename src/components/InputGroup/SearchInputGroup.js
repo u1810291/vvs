@@ -1,7 +1,7 @@
-import {SearchIcon} from "@heroicons/react/solid";
-import {defaultProps} from "crocks";
-import InputGroup from ".";
-import useLanguage from "../../hook/useLanguage";
+import {SearchIcon} from '@heroicons/react/solid';
+import {defaultProps} from 'crocks';
+import InputGroup from '.';
+import useLanguage from '../../hook/useLanguage';
 
 const SearchInputGroup = props => {
   const {t} = useLanguage();
@@ -11,7 +11,7 @@ const SearchInputGroup = props => {
     Addon: SearchIcon
   }, props);
 
-  return <InputGroup inputClassName="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full" {...p} />;
+  return <InputGroup inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full' {...p} />;
 };
 
 export default SearchInputGroup;

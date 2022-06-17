@@ -7,27 +7,27 @@ export const filterTemplates = [
     savedToMenu: false,
     date: new Date().toISOString(),
     optionsList : {
-      operator: "0",
-      object: "0",
-      objectAddress: "",
-      type: "0",
-      group: "0",
-      status: "0",
-      reason: "0",
-      crew: "0",
-      driver: "0",
-      inTime: "0"
+      operator: '0',
+      object: '0',
+      objectAddress: '',
+      type: '0',
+      group: '0',
+      status: '0',
+      reason: '0',
+      crew: '0',
+      driver: '0',
+      inTime: '0'
     },
     dashboardList: {
-      showDate: "Gauta",
-      showObject: "Objektas",
-      showName: "Pavadinimas",
-      showCrew: "Ekipažas",
-      showInTime: "spėjo laiku",
-      showReactionTime: "Reagavimo laikas",
-      showTimeInObject: "Laikas objekte",
-      showStatus: "Būsena",
-      showReason: "Suveikimo priežastis"
+      showDate: 'Gauta',
+      showObject: 'Objektas',
+      showName: 'Pavadinimas',
+      showCrew: 'Ekipažas',
+      showInTime: 'spėjo laiku',
+      showReactionTime: 'Reagavimo laikas',
+      showTimeInObject: 'Laikas objekte',
+      showStatus: 'Būsena',
+      showReason: 'Suveikimo priežastis'
     }
   },
 ];

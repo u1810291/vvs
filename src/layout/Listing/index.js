@@ -49,10 +49,10 @@ const Listing = ({
     <SidebarLayout>
 
       <TitleBar>
-        <div className="md:flex md:space-x-4 md:space-y-0 space-y-4">
+        <div className='md:flex md:space-x-4 md:space-y-0 space-y-4'>
 
           <Breadcrumbs>
-            <Breadcrumbs.Item><span className="font-semibold">Objektai</span></Breadcrumbs.Item>
+            <Breadcrumbs.Item><span className='font-semibold'>Objektai</span></Breadcrumbs.Item>
             <Breadcrumbs.Item>Visi duomenys</Breadcrumbs.Item>
           </Breadcrumbs>
 
@@ -138,7 +138,7 @@ const Listing = ({
 }
 
 const TitleBar = props => (
-  <header className="flex w-full justify-between p-6">
+  <header className='flex w-full justify-between p-6'>
     {props?.children}
   </header>
 );

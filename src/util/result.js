@@ -4,7 +4,7 @@ import {
   ifElse,
   unsetProp,
   hasProp,
-} from "crocks";
+} from 'crocks';
 
 const {Err, Ok} = Result;
 

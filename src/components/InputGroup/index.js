@@ -27,7 +27,7 @@ const InputGroup = ({
       <Input {...{...props, className: inputClassName}} />
       {Addon && (
       <div className={addonWrapperClassName}>
-        <Addon className={addonClassName} aria-hidden="true" />
+        <Addon className={addonClassName} aria-hidden='true' />
       </div>)}
     </div>
   </div>

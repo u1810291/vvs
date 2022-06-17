@@ -1,5 +1,5 @@
-import React, {useState, useCallback} from "react";
-import {isTruthy} from "crocks/predicates";
+import React, {useState, useCallback} from 'react';
+import {isTruthy} from 'crocks/predicates';
 
 const useBoolean = initial => {
   const [state, setState] = useState(isTruthy(initial));

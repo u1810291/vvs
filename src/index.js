@@ -1,9 +1,9 @@
-import React, { Suspense } from "react";
-import { GlobalProvider } from "./context/globalContext";
-import ReactDOM from "react-dom";
-import "./assets/tailwind.css";
-import App from "./App";
-import "./i18n";
+import React, { Suspense } from 'react';
+import { GlobalProvider } from './context/globalContext';
+import ReactDOM from 'react-dom';
+import './assets/tailwind.css';
+import App from './App';
+import './i18n';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -13,5 +13,5 @@ ReactDOM.render(
       </GlobalProvider>
     </Suspense>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );

@@ -1,7 +1,7 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useState} from 'react';
 
-import {OverlayProvider} from "react-aria";
-import MainSidebar from "../components/sidebars/main";
+import {OverlayProvider} from 'react-aria';
+import MainSidebar from '../components/sidebars/main';
 import SlideOver from '../components/sidebars/slideOver';
 
 const SidebarLayout = ({children}) => {
@@ -10,24 +10,24 @@ const SidebarLayout = ({children}) => {
   const handleOnClose = useCallback(() => {setIsOpen(false)},[]);
   return (
     <OverlayProvider>
-      <div className="w-full h-screen">
-        <div className="flex flex-row w-full justify-between h-full">
-          <div className="flex flex-col bg-slate-600 items-center w-20">
-            <button className="focus:outline-none p-6 flex flex-col items-center text-gray-400 hover:text-white transition" onClick={handleOnOpen}>
-              <svg className="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="2" cy="2" rx="2" ry="2"/>
-                <ellipse cx="8" cy="2" rx="2" ry="2"/>
-                <ellipse cx="14" cy="2" rx="2" ry="2"/>
-                <ellipse cx="2" cy="8" rx="2" ry="2"/>
-                <ellipse cx="8" cy="8" rx="2" ry="2"/>
-                <ellipse cx="14" cy="8" rx="2" ry="2"/>
-                <ellipse cx="2" cy="14" rx="2" ry="2"/>
-                <ellipse cx="8" cy="14" rx="2" ry="2"/>
-                <ellipse cx="14" cy="14" rx="2" ry="2"/>
+      <div className='w-full h-screen'>
+        <div className='flex flex-row w-full justify-between h-full'>
+          <div className='flex flex-col bg-slate-600 items-center w-20'>
+            <button className='focus:outline-none p-6 flex flex-col items-center text-gray-400 hover:text-white transition' onClick={handleOnOpen}>
+              <svg className='fill-current' width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <ellipse cx='2' cy='2' rx='2' ry='2'/>
+                <ellipse cx='8' cy='2' rx='2' ry='2'/>
+                <ellipse cx='14' cy='2' rx='2' ry='2'/>
+                <ellipse cx='2' cy='8' rx='2' ry='2'/>
+                <ellipse cx='8' cy='8' rx='2' ry='2'/>
+                <ellipse cx='14' cy='8' rx='2' ry='2'/>
+                <ellipse cx='2' cy='14' rx='2' ry='2'/>
+                <ellipse cx='8' cy='14' rx='2' ry='2'/>
+                <ellipse cx='14' cy='14' rx='2' ry='2'/>
               </svg>
             </button>
           </div>
-          <div className="w-full">
+          <div className='w-full'>
           {children}
           </div>
         </div>

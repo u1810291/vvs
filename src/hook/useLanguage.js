@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 function useLanguage() {
 
@@ -20,11 +20,11 @@ const getLanguage = useCallback(
 );
 
 const english = useCallback(
-  async () => changeLanguage("en"),
+  async () => changeLanguage('en'),
   [changeLanguage]
 );
 const lithuanian = useCallback(
-  async () => changeLanguage("lt"),
+  async () => changeLanguage('lt'),
   [changeLanguage]
 );
 

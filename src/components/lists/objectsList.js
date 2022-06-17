@@ -1,18 +1,18 @@
-import React, { useContext, useRef, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-// import { Orders } from "../../api/orders";
-import { Spinner } from "react-activity";
-import useSort from "../../hook/useSort";
-import { objectsQuery } from "../../api/queryForms/queryString/query";
-import useReactQuery from "../../hook/useQuery";
-import { sortToggle } from "../../util/utils";
-import GlobalContext from "../../context/globalContext";
+import React, { useContext, useRef, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+// import { Orders } from '../../api/orders';
+import { Spinner } from 'react-activity';
+import useSort from '../../hook/useSort';
+import { objectsQuery } from '../../api/queryForms/queryString/query';
+import useReactQuery from '../../hook/useQuery';
+import { sortToggle } from '../../util/utils';
+import GlobalContext from '../../context/globalContext';
 
 export const ObjectsList = ({ searchResponse, token, ...props }) => {
   const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
   const { selectedFilterObjects, setSelectedFilterObjects } =
     useContext(GlobalContext);
-  const [orders, setOrders] = useState("");
+  const [orders, setOrders] = useState('');
   const { objectPageFetchData, setObjectPageFetchData } =
     useContext(GlobalContext);
   const [searchData, setSearchData] = useState(null);

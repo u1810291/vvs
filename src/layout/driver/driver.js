@@ -1,29 +1,29 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
-import { CreateHeader } from "../../components/headers/create";
-import SlideOver from "../../components/sidebars/slideOver";
-import GlobalContext from "../../context/globalContext";
-import AuthContext from "../../context/authContext";
-import { Spinner } from "react-activity";
-import { Link } from "react-router-dom";
-import { archive } from "../../api/queryForms/queryString/users";
-import { getUsers } from "../../api/queryForms/queryString/users";
-import { getAllUsers } from "../../api/queryForms/variables/users";
-import { useFetch } from "../../hook/useFetch";
-import { useDeleteFetch } from "../../hook/useDeleteFetch";
-import { useParams } from "react-router-dom";
-import { OverlayProvider, usePreventScroll } from "react-aria";
-import MainSidebar from "../../components/sidebars/main";
-import useUtils from "../../hook/useUtils";
+import React, { useState, useContext, useCallback, useEffect } from 'react';
+import { CreateHeader } from '../../components/headers/create';
+import SlideOver from '../../components/sidebars/slideOver';
+import GlobalContext from '../../context/globalContext';
+import AuthContext from '../../context/authContext';
+import { Spinner } from 'react-activity';
+import { Link } from 'react-router-dom';
+import { archive } from '../../api/queryForms/queryString/users';
+import { getUsers } from '../../api/queryForms/queryString/users';
+import { getAllUsers } from '../../api/queryForms/variables/users';
+import { useFetch } from '../../hook/useFetch';
+import { useDeleteFetch } from '../../hook/useDeleteFetch';
+import { useParams } from 'react-router-dom';
+import { OverlayProvider, usePreventScroll } from 'react-aria';
+import MainSidebar from '../../components/sidebars/main';
+import useUtils from '../../hook/useUtils';
 
 function Driver() {
   const { id } = useParams();
   const { accessToken } = useContext(AuthContext);
-  const [crew, setCrew] = useState("");
-  const [driverFullName, setDriverFullName] = useState("");
-  const [driverName, setDriverName] = useState("");
-  const [driverSurname, setDriverSurname] = useState("");
-  const [driverUser, setDriverUser] = useState("");
-  const [driverPassword, setDriverPassword] = useState("");
+  const [crew, setCrew] = useState('');
+  const [driverFullName, setDriverFullName] = useState('');
+  const [driverName, setDriverName] = useState('');
+  const [driverSurname, setDriverSurname] = useState('');
+  const [driverUser, setDriverUser] = useState('');
+  const [driverPassword, setDriverPassword] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
   const { backFunc } = useUtils();
@@ -48,7 +48,6 @@ function Driver() {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -57,9 +56,9 @@ function Driver() {
       const searchRole = (name, arr) =>
         arr.filter(({ registrations }) =>
         // handle find function error if no users
-          registrations.find((role) => role.roles[0] === "crew")
+          registrations.find((role) => role.roles[0] === 'crew')
         );
-      const searchResult = searchRole("crew", allUsers);
+      const searchResult = searchRole('crew', allUsers);
       let obj = { users: searchResult };
       setCrew(obj);
     }
@@ -75,7 +74,6 @@ function Driver() {
       setDriverSurname(data?.lastName);
       setDriverUser(data?.uniqueUsername);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [crew]);
 
   const driverNameFunc = useCallback(
@@ -110,11 +108,10 @@ function Driver() {
     if (error) {
       backFunc();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   const confirmArchiveFetch = useCallback(() => {
-    let text = "Ar tikrai norite archyvuoti?";
+    let text = 'Ar tikrai norite archyvuoti?';
     if (window.confirm(text) === true) {
       archiveFetch();
       backFunc();
@@ -124,135 +121,135 @@ function Driver() {
   return (
     <>
       {!crew ? (
-        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
-          <Spinner color="dark-blue" size={40} />
+        <div className='flex h-screen w-screen bg-gray-100 justify-center items-center'>
+          <Spinner color='dark-blue' size={40} />
         </div>
       ) : (
         <OverlayProvider>
-          <div className="container max-w-screen-xl">
-            <div className="flex w-screen flex-row justify-center h-screen">
-              <div className="flex flex-col h-full items-center w-full">
-                <div className="flex flex-row w-full justify-between h-full">
-                  <div className="flex flex-col bg-slate-600 pt-4 items-center w-20">
+          <div className='container max-w-screen-xl'>
+            <div className='flex w-screen flex-row justify-center h-screen'>
+              <div className='flex flex-col h-full items-center w-full'>
+                <div className='flex flex-row w-full justify-between h-full'>
+                  <div className='flex flex-col bg-slate-600 pt-4 items-center w-20'>
                     <button onClick={backFunc}>
-                      <img src={require("../../assets/assets/left.png")}></img>
+                      <img src={require('../../assets/assets/left.png')}></img>
                     </button>
                     <img
-                      className="pt-6"
-                      src={require("../../assets/assets/Line.png")}
+                      className='pt-6'
+                      src={require('../../assets/assets/Line.png')}
                     ></img>
-                    <button className="flex flex-col items-center py-2 pt-2">
+                    <button className='flex flex-col items-center py-2 pt-2'>
                       <img
                         onClick={() => setIsOpen(true)}
-                        className="w-4 h-4 mx-16"
-                        src={require("../../assets/assets/hamburger.png")}
+                        className='w-4 h-4 mx-16'
+                        src={require('../../assets/assets/hamburger.png')}
                       />
                     </button>
                   </div>
-                  <div className="flex flex-col h-screen w-full justify-between">
+                  <div className='flex flex-col h-screen w-full justify-between'>
                     <CreateHeader fullName={driverFullName} />
-                    <div className="flex flex-row h-screen">
-                      <div className="flex pl-4 flex-row w-full h-full justify-between">
-                        <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-3/5 lg:w-2/6">
-                          <div className="flex flex-col">
-                            <div className="flex flex-row w-full">
-                              <div className="flex mr-2 flex-col w-full mb-4 ">
-                                <div className="flex flex-row">
-                                  <p className="self-start text-sm text-gray-500 truncate my-2">
+                    <div className='flex flex-row h-screen'>
+                      <div className='flex pl-4 flex-row w-full h-full justify-between'>
+                        <div className='flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-3/5 lg:w-2/6'>
+                          <div className='flex flex-col'>
+                            <div className='flex flex-row w-full'>
+                              <div className='flex mr-2 flex-col w-full mb-4 '>
+                                <div className='flex flex-row'>
+                                  <p className='self-start text-sm text-gray-500 truncate my-2'>
                                     Vardas
                                   </p>
-                                  <p className="self-start ml-1 text-red-600 text-sm truncate my-2">
+                                  <p className='self-start ml-1 text-red-600 text-sm truncate my-2'>
                                     *
                                   </p>
                                 </div>
                                 <input
-                                  id="name"
-                                  name="name"
-                                  placeholder=""
+                                  id='name'
+                                  name='name'
+                                  placeholder=''
                                   value={driverName}
                                   onChange={driverNameFunc}
-                                  className="flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                                  className='flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm'
                                 />
                               </div>
 
-                              <div className="flex ml-2 flex-col w-full mb-4 ">
-                                <div className="flex flex-row">
-                                  <p className="self-start text-sm text-gray-500 truncate my-2">
+                              <div className='flex ml-2 flex-col w-full mb-4 '>
+                                <div className='flex flex-row'>
+                                  <p className='self-start text-sm text-gray-500 truncate my-2'>
                                     Pavardė
                                   </p>
-                                  <p className="self-start ml-1 text-red-600 text-sm truncate my-2">
+                                  <p className='self-start ml-1 text-red-600 text-sm truncate my-2'>
                                     *
                                   </p>
                                 </div>
                                 <input
-                                  id="surname"
-                                  name="search"
-                                  placeholder=""
+                                  id='surname'
+                                  name='search'
+                                  placeholder=''
                                   value={driverSurname}
                                   onChange={driverSurnameFunc}
-                                  className="flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                                  className='flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm'
                                 />
                               </div>
                             </div>
 
-                            <div className="flex flex-row w-full">
-                              <div className="flex mr-2 flex-col w-full mb-4 ">
-                                <div className="flex flex-row">
-                                  <p className="self-start text-sm text-gray-500 truncate my-2">
+                            <div className='flex flex-row w-full'>
+                              <div className='flex mr-2 flex-col w-full mb-4 '>
+                                <div className='flex flex-row'>
+                                  <p className='self-start text-sm text-gray-500 truncate my-2'>
                                     Prisijungimas
                                   </p>
-                                  <p className="self-start ml-1 text-red-600 text-sm truncate my-2">
+                                  <p className='self-start ml-1 text-red-600 text-sm truncate my-2'>
                                     *
                                   </p>
                                 </div>
                                 <input
-                                  id="connect"
-                                  name="search"
-                                  placeholder="User"
+                                  id='connect'
+                                  name='search'
+                                  placeholder='User'
                                   value={driverUser}
                                   onChange={driverUserFunc}
-                                  className="flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm"
+                                  className='flex w-full h-8 border placeholder-gray-400 text-black focus:outline-none sm:text-sm'
                                 />
                               </div>
 
-                              <div className="flex ml-2 flex-col w-full mb-4 ">
-                                <div className="flex flex-row">
-                                  <p className="self-start text-sm text-gray-500 truncate my-2">
+                              <div className='flex ml-2 flex-col w-full mb-4 '>
+                                <div className='flex flex-row'>
+                                  <p className='self-start text-sm text-gray-500 truncate my-2'>
                                     Slaptažodis
                                   </p>
                                 </div>
                                 <input
-                                  id="search"
-                                  name="password"
-                                  placeholder=""
+                                  id='search'
+                                  name='password'
+                                  placeholder=''
                                   value={driverPassword}
                                   onChange={driverPasswordFunc}
-                                  type="password"
-                                  className="flex w-full h-8 border focus:outline-none sm:text-sm"
+                                  type='password'
+                                  className='flex w-full h-8 border focus:outline-none sm:text-sm'
                                 />
                               </div>
                             </div>
                           </div>
                           <button
                             onClick={confirmArchiveFetch}
-                            className="hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none"
+                            className='hidden sm:w-40 sm:h-10 rounded sm:flex mr-2 mt-2 mb-1 justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-red-700 hover:bg-red-600 focus:outline-none'
                           >
                             Archyvuoti
                           </button>
                         </div>
 
-                        <div className="flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-1/4 lg:w-1/4 border-b border-l">
-                          <div className="flex flex-col">
-                            <div className="flex flex-row w-full">
-                              <div className="flex flex-row w-full border-b h-12 items-center justify-between">
-                                <div className="flex ml-4 flex-row w-full">
-                                  <p className="text-sm text-gray-400 truncate my-2">
+                        <div className='flex h-full flex-col justify-between w-full pr-4 md:pr-0 md:w-1/4 lg:w-1/4 border-b border-l'>
+                          <div className='flex flex-col'>
+                            <div className='flex flex-row w-full'>
+                              <div className='flex flex-row w-full border-b h-12 items-center justify-between'>
+                                <div className='flex ml-4 flex-row w-full'>
+                                  <p className='text-sm text-gray-400 truncate my-2'>
                                     Ekipažas
                                   </p>
                                 </div>
 
-                                <div className="flex ml-4 flex-row w-full">
-                                  <p className="text-sm truncate my-2">9GRE</p>
+                                <div className='flex ml-4 flex-row w-full'>
+                                  <p className='text-sm truncate my-2'>9GRE</p>
                                 </div>
                               </div>
                             </div>

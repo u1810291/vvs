@@ -1,5 +1,5 @@
-import {useReducer} from "react";
-import {ifElse, isDefined, hasProp} from "crocks";
+import {useReducer} from 'react';
+import {ifElse, isDefined, hasProp} from 'crocks';
 
 const useMergeReducer = defaults => {
   return useReducer(

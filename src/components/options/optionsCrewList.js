@@ -1,14 +1,14 @@
-import React, { useState, useCallback, useContext, useEffect, useRef } from "react";
-import { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import GlobalContext from "../../context/globalContext";
-import useLanguage from "../../hook/useLanguage";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import React, { useState, useCallback, useContext, useEffect, useRef } from 'react';
+import { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/solid';
+import GlobalContext from '../../context/globalContext';
+import useLanguage from '../../hook/useLanguage';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 export const OptionsListCrew = (props) => {
@@ -48,14 +48,14 @@ export const OptionsListCrew = (props) => {
         return (
           <div key={filter.id}>
             {selectedFilterCrew === filter.id ? (
-              <div className="w-full sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-4 justify-between font-normal text-black gap-2 z-1">
+              <div className='w-full sm:pb-2 p-2 mt-2 grid grid-cols-1 bg-white sm:grid-cols-4 justify-between font-normal text-black gap-2 z-1'>
                 <Menu
                   key={filter.id}
-                  as="div"
-                  className="relative inline-block text-left"
+                  as='div'
+                  className='relative inline-block text-left'
                 >
-                  <div className="flex flex-col w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                  <div className='flex flex-col w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Data nuo - iki
                     </p>
                     <button
@@ -68,22 +68,22 @@ export const OptionsListCrew = (props) => {
                           )
                         );
                       }}
-                      className="hidden"
+                      className='hidden'
                     >
                     </button>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
                     {startAndEndDate !==
-                      "undefined-NaN-undefined - undefined-NaN-undefined" ? (
-                        <p className="text-gray-400 self-center truncate text-xs">
+                      'undefined-NaN-undefined - undefined-NaN-undefined' ? (
+                        <p className='text-gray-400 self-center truncate text-xs'>
                           {filter.date}
                         </p>
                       ) : (
-                        <p className="text-gray-400 self-center truncate text-xs">
+                        <p className='text-gray-400 self-center truncate text-xs'>
                         </p>
                       )}
                       <div>
                         <img
-                          src={require("../../assets/assets/calendar.png")}
+                          src={require('../../assets/assets/calendar.png')}
                         ></img>
                       </div>
                     </Menu.Button>
@@ -91,15 +91,15 @@ export const OptionsListCrew = (props) => {
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <div>
                           <Calendar
                             selectRange={true}
@@ -111,42 +111,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Operatorius
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.operator === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.operator === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.operator === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.operator === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const operator = "1";
+                                const operator = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, operator } : x
@@ -155,9 +155,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -178,9 +178,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -191,42 +191,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Objektas
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.object === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.object === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.object === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.object === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const object = "1";
+                                const object = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, object } : x
@@ -235,9 +235,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -249,7 +249,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const object = "2";
+                                const object = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, object } : x
@@ -258,9 +258,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -272,13 +272,13 @@ export const OptionsListCrew = (props) => {
                   </Transition>
                 </Menu>
                 <div>
-                  <p className="self-start text-sm text-gray-500 truncate">
+                  <p className='self-start text-sm text-gray-500 truncate'>
                     Objekto adresas
                   </p>
                   <input
-                    id="search"
-                    name="search"
-                    placeholder=""
+                    id='search'
+                    name='search'
+                    placeholder=''
                     onChange={(e) => {
                       const objectAddress = e.target.value;
                       setFilterListCrew((currentFilter) =>
@@ -288,45 +288,45 @@ export const OptionsListCrew = (props) => {
                       );
                     }}
                     value={filter.objectAddress}
-                    className="flex w-full h-8 border placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm"
+                    className='flex w-full h-8 border placeholder-gray-400 text-gray-400 focus:outline-none sm:text-sm'
                   />
                 </div>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Tipas
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.type === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.type === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.type === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.type === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const type = "1";
+                                const type = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, type } : x
@@ -335,9 +335,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -349,7 +349,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const type = "2";
+                                const type = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, type } : x
@@ -358,9 +358,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -371,42 +371,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Grupė (?)
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.group === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.group === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.group === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.group === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const group = "1";
+                                const group = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, group } : x
@@ -415,9 +415,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -429,7 +429,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const group = "2";
+                                const group = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, group } : x
@@ -438,9 +438,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -451,42 +451,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Statusas
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.status === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.status === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.status === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.status === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const status = "1";
+                                const status = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, status } : x
@@ -495,9 +495,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -509,7 +509,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const status = "2";
+                                const status = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, status } : x
@@ -518,9 +518,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -531,42 +531,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Suveikimo priežastis
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.reason === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.reason === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.reason === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.reason === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const reason = "1";
+                                const reason = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, reason } : x
@@ -575,9 +575,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -589,7 +589,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const reason = "2";
+                                const reason = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, reason } : x
@@ -598,9 +598,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -611,42 +611,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Ekipažas
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.crew === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.crew === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.crew === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.crew === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const crew = "1";
+                                const crew = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, crew } : x
@@ -655,9 +655,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -669,7 +669,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const crew = "2";
+                                const crew = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, crew } : x
@@ -678,9 +678,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -691,42 +691,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Vairuotojas
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.driver === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.driver === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.driver === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.driver === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const driver = "1";
+                                const driver = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, driver } : x
@@ -735,9 +735,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -749,7 +749,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const driver = "2";
+                                const driver = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, driver } : x
@@ -758,9 +758,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2
@@ -771,42 +771,42 @@ export const OptionsListCrew = (props) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div className="flex flex-col  w-full">
-                    <p className="self-start text-sm text-gray-500 truncate">
+                <Menu as='div' className='relative inline-block text-left'>
+                  <div className='flex flex-col  w-full'>
+                    <p className='self-start text-sm text-gray-500 truncate'>
                       Spėjo laiku (T/F)?
                     </p>
-                    <Menu.Button className="inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none">
-                      <p className="text-gray-400 self-center truncate text-xs">
-                        {filter.inTime === "0"
-                          ? "Any [Multiple choices]"
-                          : filter.inTime === "1"
-                            ? "1"
-                            : "2"}
+                    <Menu.Button className='inline-flex justify-between border w-full h-8 shadow-sm px-4 py-2 text-sm font-normal text-gray-500 focus:outline-none'>
+                      <p className='text-gray-400 self-center truncate text-xs'>
+                        {filter.inTime === '0'
+                          ? 'Any [Multiple choices]'
+                          : filter.inTime === '1'
+                            ? '1'
+                            : '2'}
                       </p>
                       <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5"
-                        aria-hidden="true"
+                        className='-mr-1 ml-2 h-5 w-5'
+                        aria-hidden='true'
                       />
                     </Menu.Button>
                   </div>
 
                   <Transition
                     as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className="origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
+                    <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <div className='py-1'>
                         <Menu.Item>
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const inTime = "1";
+                                const inTime = '1';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, inTime } : x
@@ -815,9 +815,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block px-4 py-2 text-sm'
                               )}
                             >
                               1
@@ -829,7 +829,7 @@ export const OptionsListCrew = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => {
-                                const inTime = "2";
+                                const inTime = '2';
                                 setFilterListCrew((currentFilter) =>
                                   currentFilter.map((x) =>
                                     x.id === filter.id ? { ...x, inTime } : x
@@ -838,9 +838,9 @@ export const OptionsListCrew = (props) => {
                               }}
                               className={classNames(
                                 active
-                                  ? "bg-gray-100 text-gray-900 w-full truncate text-center"
-                                  : "text-center truncate w-full text-gray-700",
-                                "block w-full text-left px-4 py-2 text-sm"
+                                  ? 'bg-gray-100 text-gray-900 w-full truncate text-center'
+                                  : 'text-center truncate w-full text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               2

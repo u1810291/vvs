@@ -1,5 +1,5 @@
-import React, {useCallback} from "react";
-import {lt, enUS} from "date-fns/locale";
+import React, {useCallback} from 'react';
+import {lt, enUS} from 'date-fns/locale';
 import useLanguage from './useLanguage';
 import {
   eachDayOfInterval,
@@ -16,7 +16,7 @@ const useWeekDays = () => {
 
   const getTimeLocals = useCallback(() => {
     const currentLanguage = getLanguage();
-    const lang = currentLanguage === "lt" ? lt : enUS;
+    const lang = currentLanguage === 'lt' ? lt : enUS;
     return lang;
   });
 
@@ -28,7 +28,7 @@ const useWeekDays = () => {
     eachDayOfInterval({start, end}).forEach(day => {
       weekDays.push(
         {
-          key: capitalize(format(day, "EEEE", {locale: locale || getTimeLocals()})),
+          key: capitalize(format(day, 'EEEE', {locale: locale || getTimeLocals()})),
           value: day
         }
       );

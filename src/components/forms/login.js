@@ -1,9 +1,9 @@
-import React, { useCallback, useState, useEffect, useContext } from "react";
-import useLanguage from "../../hook/useLanguage";
-import AuthContext from "../../context/authContext";
-const { GrayDot } = require("../../components/icons/grayDot");
-const { RedDot } = require("../../components/icons/redDot");
-const { GreenDot } = require("../../components/icons/greenDot");
+import React, { useCallback, useState, useEffect, useContext } from 'react';
+import useLanguage from '../../hook/useLanguage';
+import AuthContext from '../../context/authContext';
+const { GrayDot } = require('../../components/icons/grayDot');
+const { RedDot } = require('../../components/icons/redDot');
+const { GreenDot } = require('../../components/icons/greenDot');
 
 const LoginForm = () => {
   const { email, setEmail } = useContext(AuthContext);
@@ -23,7 +23,7 @@ const LoginForm = () => {
         setLoginError(false);
       }, 3000);
     }
-    if (invalidUserLogin === "Sorry, you don't have right permissions to login") {
+    if (invalidUserLogin === 'Sorry, you do not have right permissions to login') {
       setTimeout(() => {
         setInvalidUserLogin(null);
       }, 3000);
@@ -36,7 +36,7 @@ const LoginForm = () => {
       // Minimum eight characters, at least one upper case letter, one symbol and one number
       const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
       const result = pattern.test(password);
-      if (result === true || password === "") {
+      if (result === true || password === '') {
         setPasswordValid(true);
       } else {
         setPasswordValid(false);
@@ -53,7 +53,7 @@ const LoginForm = () => {
         // eslint-disable-next-line no-useless-escape
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const result = pattern.test(email);
-      if (result === true || email === "") {
+      if (result === true || email === '') {
         setEmailValid(true);
       } else {
         setEmailValid(false);
@@ -63,7 +63,7 @@ const LoginForm = () => {
   );
 
   useEffect(() => {
-    if (email === "") {
+    if (email === '') {
       setEmailEmpty(true);
     } else {
       setEmailEmpty(false);
@@ -71,7 +71,7 @@ const LoginForm = () => {
   }, [email]);
 
   useEffect(() => {
-    if (password === "") {
+    if (password === '') {
       setPasswordEmpty(true);
     } else {
       setPasswordEmpty(false);
@@ -80,10 +80,10 @@ const LoginForm = () => {
 
   return (
     <>
-      <form onSubmit={LoginUser} className="space-y-6">
+      <form onSubmit={LoginUser} className='space-y-6'>
         <div>
-          <div className="mt-12">
-            <div className="flex w-full flex-row">
+          <div className='mt-12'>
+            <div className='flex w-full flex-row'>
               {emailEmpty ? (
                 <GrayDot />
               ) : !emailValid ? (
@@ -92,21 +92,21 @@ const LoginForm = () => {
                 <GreenDot />
               )}
               <input
-                id="email"
-                name="email"
-                type="email"
+                id='email'
+                name='email'
+                type='email'
                 value={email}
                 onChange={emailFunc}
                 required
-                placeholder={t("loginSystem.email")}
-                className="appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                placeholder={t('loginSystem.email')}
+                className='appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm'
               />
             </div>
           </div>
         </div>
-        <div className="space-y-1">
-          <div className="mt-1">
-            <div className="flex flex-row">
+        <div className='space-y-1'>
+          <div className='mt-1'>
+            <div className='flex flex-row'>
               {passwordEmpty ? (
                 <GrayDot />
               ) : !passwordValid ? (
@@ -115,35 +115,35 @@ const LoginForm = () => {
                 <GreenDot />
               )}
               <input
-                id="password"
-                name="password"
-                type="password"
+                id='password'
+                name='password'
+                type='password'
                 required
                 value={password}
                 onChange={passwordFunc}
-                placeholder={t("loginSystem.password")}
-                className="appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                placeholder={t('loginSystem.password')}
+                className='appearance-none block w-full px-3 py-2 border-b shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm'
               />
             </div>
             {loginError ? (
-              <a className="text-red-800 text-sm font-montserrat">
-                {t("loginSystem.wrongEmailOrPassword")}
+              <a className='text-red-800 text-sm font-montserrat'>
+                {t('loginSystem.wrongEmailOrPassword')}
               </a>
             ) : null}
                       {invalidUserLogin ? (
-              <a className="text-red-800 text-sm font-montserrat">
+              <a className='text-red-800 text-sm font-montserrat'>
                 {invalidUserLogin}
               </a>
             ) : null}
           </div>
         </div>
-        <div className="flex flex-row justify-end my-12">
+        <div className='flex flex-row justify-end my-12'>
           <div>
             <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-normal text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none"
+              type='submit'
+              className='w-full flex justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-normal text-white font-montserrat hover:shadow-none bg-slate-600 focus:outline-none'
             >
-              {t("loginSystem.login")}
+              {t('loginSystem.login')}
             </button>
           </div>
         </div>

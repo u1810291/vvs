@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from 'react';
 
-import useLanguage from "./useLanguage";
-import useWeekDays from "./useWeekDays";
+import useLanguage from './useLanguage';
+import useWeekDays from './useWeekDays';
 
-import {areIntervalsOverlapping, getISODay} from "date-fns";
+import {areIntervalsOverlapping, getISODay} from 'date-fns';
 
 function useValidation() {
   const {t} = useLanguage();
@@ -11,7 +11,7 @@ function useValidation() {
   const validateOnEventCreate = (events, newEvent, endTime, startTime, setEvents, setErrorMessage, setOpen) => {
     const createEvent = () => {
       setEvents([...events, newEvent]);
-      setErrorMessage("");
+      setErrorMessage('');
       setOpen(false);
     }
     const isSameWeekDay = (eventDate, newEventDate) => getISODay(eventDate) === getISODay(newEventDate);
@@ -31,11 +31,11 @@ function useValidation() {
       });
 
     if (isStartTimeIsBiggerThanEndTime) {
-      return setErrorMessage(t("error.startTimeIsBiggerThanEndTime"));
+      return setErrorMessage(t('error.startTimeIsBiggerThanEndTime'));
     }
     if (isEventsExist) {
       if (getSameWeekDayOverlappedEvent) {
-        setErrorMessage(t("error.timeSlotIsTaken"));
+        setErrorMessage(t('error.timeSlotIsTaken'));
       } else {
         createEvent();
       }

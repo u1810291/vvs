@@ -1,5 +1,5 @@
-import { useState, useContext, useRef } from "react";
-import AuthContext from "../context/authContext";
+import { useState, useContext, useRef } from 'react';
+import AuthContext from '../context/authContext';
 
 export function useFetch(queryString, variables, authToken) {
   const { Logout, RefreshTokenUpdate } = useContext(AuthContext);
@@ -17,24 +17,24 @@ export function useFetch(queryString, variables, authToken) {
     }
     try {
       setLoading(true);
-      const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
+      const res = await fetch('https://ec.swarm.testavimui.eu/v1/graphql', {
         // signal: abortController.current.signal,
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
-          Authorization: "Bearer" + String(authToken),
+          Authorization: 'Bearer' + String(authToken),
           query: queryString,
           variables: variables,
         }),
         headers: {
-          "content-type": "application/json",
-          "x-hasura-admin-secret": "secret",
+          'content-type': 'application/json',
+          'x-hasura-admin-secret': 'secret',
         },
       });
       const data = await res.json();
       if (res.status === 200) {
         prevValue[n] = data;
         setData(data);
-      } else if (res.statusText === "Unauthorized") {
+      } else if (res.statusText === 'Unauthorized') {
         RefreshTokenUpdate();
       } else {
         Logout();

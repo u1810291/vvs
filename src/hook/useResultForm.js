@@ -1,5 +1,5 @@
-import {useMemo, useCallback} from "react";
-import {ensureOptionalProp, ensureProp} from "../util/result";
+import {useMemo, useCallback} from 'react';
+import {ensureOptionalProp, ensureProp} from '../util/result';
 import {
   getPathOr,
   Result,
@@ -13,8 +13,8 @@ import {
   setProp,
   identity,
   bimap
-} from "crocks";
-import useMergeReducer from "./useMergeReducer";
+} from 'crocks';
+import useMergeReducer from './useMergeReducer';
 
 const useResultForm = obj => {
   const [state, setState] = useMergeReducer(
@@ -22,7 +22,7 @@ const useResultForm = obj => {
       Object.entries,
       reduce(
         (carry, [key, opts]) =>
-          setProp(key, getPropOr("", "initial", opts), carry),
+          setProp(key, getPropOr('', 'initial', opts), carry),
         {},
       ),
     )(obj),
@@ -33,15 +33,15 @@ const useResultForm = obj => {
       pipe(
         Result.Ok,
         ...Object.entries(obj).reduce((carry, [key, opts]) => {
-          const ensure = propEq("opt", true, opts)
+          const ensure = propEq('opt', true, opts)
             ? ensureOptionalProp
             : ensureProp;
           return [
             ...carry,
             ensure(
               key,
-              getPropOr(() => false, "validator", opts),
-              getPropOr(`Validation failed for field ${key}.`, "message", opts),
+              getPropOr(() => false, 'validator', opts),
+              getPropOr(`Validation failed for field ${key}.`, 'message', opts),
             ),
           ];
         }, []),
@@ -62,7 +62,7 @@ const useResultForm = obj => {
       result.either(
         () => false,
         () =>
-          Object.values(state).filter(a => a !== "").length ===
+          Object.values(state).filter(a => a !== '').length ===
           Object.values(state).length,
       ),
     [result, state],
@@ -86,7 +86,7 @@ const useResultForm = obj => {
       value: getPropOr(undefined, key, state),
       onChange: set(key),
       ...pipe(
-        getPathOr({}, [key, "props"]),
+        getPathOr({}, [key, 'props']),
         Object.entries,
         reduce(
           (carry, [prop, value]) =>

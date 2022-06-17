@@ -1,4 +1,4 @@
-import {defaultProps} from "crocks";
+import {defaultProps} from 'crocks';
 
 const Input = props => (
   <input

@@ -1,3 +1,3 @@
 export const getAllUsers = {
-    queryString: "*",
+    queryString: '*',
 }

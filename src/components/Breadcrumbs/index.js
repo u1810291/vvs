@@ -19,6 +19,7 @@ const Breadcrumbs = ({Item, ...props}) => (
           getProp('children'),
           map(putIntoArray),
           map(array  => array.map((itemComponent, index, all) => (
+            // eslint-disable-next-line react/jsx-key
             <Item {...{
               ...getPropOr({}, 'props', itemComponent),
               key: index,

@@ -1,376 +1,376 @@
-import React from "react";
+import React from 'react';
 
 export const StandardMap = [
   {
-    elementType: "geometry",
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#f5f5f5",
+        color: '#f5f5f5',
       },
     ],
   },
   {
-    elementType: "labels.icon",
+    elementType: 'labels.icon',
     stylers: [
       {
-        visibility: "off",
+        visibility: 'off',
       },
     ],
   },
   {
-    elementType: "labels.text.fill",
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#616161",
+        color: '#616161',
       },
     ],
   },
   {
-    elementType: "labels.text.stroke",
+    elementType: 'labels.text.stroke',
     stylers: [
       {
-        color: "#f5f5f5",
+        color: '#f5f5f5',
       },
     ],
   },
   {
-    featureType: "administrative.land_parcel",
-    elementType: "labels.text.fill",
+    featureType: 'administrative.land_parcel',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#bdbdbd",
+        color: '#bdbdbd',
       },
     ],
   },
   {
-    featureType: "poi",
-    elementType: "geometry",
+    featureType: 'poi',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#eeeeee",
+        color: '#eeeeee',
       },
     ],
   },
   {
-    featureType: "poi",
-    elementType: "labels.text.fill",
+    featureType: 'poi',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#757575",
+        color: '#757575',
       },
     ],
   },
   {
-    featureType: "poi.park",
-    elementType: "geometry",
+    featureType: 'poi.park',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#e5e5e5",
+        color: '#e5e5e5',
       },
     ],
   },
   {
-    featureType: "poi.park",
-    elementType: "labels.text.fill",
+    featureType: 'poi.park',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#9e9e9e",
+        color: '#9e9e9e',
       },
     ],
   },
   {
-    featureType: "road",
-    elementType: "geometry",
+    featureType: 'road',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#ffffff",
+        color: '#ffffff',
       },
     ],
   },
   {
-    featureType: "road.arterial",
-    elementType: "labels.text.fill",
+    featureType: 'road.arterial',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#757575",
+        color: '#757575',
       },
     ],
   },
   {
-    featureType: "road.highway",
-    elementType: "geometry",
+    featureType: 'road.highway',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#dadada",
+        color: '#dadada',
       },
     ],
   },
   {
-    featureType: "road.highway",
-    elementType: "labels.text.fill",
+    featureType: 'road.highway',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#616161",
+        color: '#616161',
       },
     ],
   },
   {
-    featureType: "road.local",
-    elementType: "labels.text.fill",
+    featureType: 'road.local',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#9e9e9e",
+        color: '#9e9e9e',
       },
     ],
   },
   {
-    featureType: "transit.line",
-    elementType: "geometry",
+    featureType: 'transit.line',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#e5e5e5",
+        color: '#e5e5e5',
       },
     ],
   },
   {
-    featureType: "transit.station",
-    elementType: "geometry",
+    featureType: 'transit.station',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#eeeeee",
+        color: '#eeeeee',
       },
     ],
   },
   {
-    featureType: "water",
-    elementType: "geometry",
+    featureType: 'water',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#c9c9c9",
+        color: '#c9c9c9',
       },
     ],
   },
   {
-    featureType: "water",
-    elementType: "labels.text.fill",
+    featureType: 'water',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#9e9e9e",
+        color: '#9e9e9e',
       },
     ],
   },
 ];
 export const retro = [
   {
-    elementType: "geometry",
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#ebe3cd",
+        color: '#ebe3cd',
       },
     ],
   },
   {
-    elementType: "labels.text.fill",
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#523735",
+        color: '#523735',
       },
     ],
   },
   {
-    elementType: "labels.text.stroke",
+    elementType: 'labels.text.stroke',
     stylers: [
       {
-        color: "#f5f1e6",
+        color: '#f5f1e6',
       },
     ],
   },
   {
-    featureType: "administrative",
-    elementType: "geometry.stroke",
+    featureType: 'administrative',
+    elementType: 'geometry.stroke',
     stylers: [
       {
-        color: "#c9b2a6",
+        color: '#c9b2a6',
       },
     ],
   },
   {
-    featureType: "administrative.land_parcel",
-    elementType: "geometry.stroke",
+    featureType: 'administrative.land_parcel',
+    elementType: 'geometry.stroke',
     stylers: [
       {
-        color: "#dcd2be",
+        color: '#dcd2be',
       },
     ],
   },
   {
-    featureType: "administrative.land_parcel",
-    elementType: "labels.text.fill",
+    featureType: 'administrative.land_parcel',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#ae9e90",
+        color: '#ae9e90',
       },
     ],
   },
   {
-    featureType: "landscape.natural",
-    elementType: "geometry",
+    featureType: 'landscape.natural',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#dfd2ae",
+        color: '#dfd2ae',
       },
     ],
   },
   {
-    featureType: "poi",
-    elementType: "geometry",
+    featureType: 'poi',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#dfd2ae",
+        color: '#dfd2ae',
       },
     ],
   },
   {
-    featureType: "poi",
-    elementType: "labels.text.fill",
+    featureType: 'poi',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#93817c",
+        color: '#93817c',
       },
     ],
   },
   {
-    featureType: "poi.park",
-    elementType: "geometry.fill",
+    featureType: 'poi.park',
+    elementType: 'geometry.fill',
     stylers: [
       {
-        color: "#a5b076",
+        color: '#a5b076',
       },
     ],
   },
   {
-    featureType: "poi.park",
-    elementType: "labels.text.fill",
+    featureType: 'poi.park',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#447530",
+        color: '#447530',
       },
     ],
   },
   {
-    featureType: "road",
-    elementType: "geometry",
+    featureType: 'road',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#f5f1e6",
+        color: '#f5f1e6',
       },
     ],
   },
   {
-    featureType: "road.arterial",
-    elementType: "geometry",
+    featureType: 'road.arterial',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#fdfcf8",
+        color: '#fdfcf8',
       },
     ],
   },
   {
-    featureType: "road.highway",
-    elementType: "geometry",
+    featureType: 'road.highway',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#f8c967",
+        color: '#f8c967',
       },
     ],
   },
   {
-    featureType: "road.highway",
-    elementType: "geometry.stroke",
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
     stylers: [
       {
-        color: "#e9bc62",
+        color: '#e9bc62',
       },
     ],
   },
   {
-    featureType: "road.highway.controlled_access",
-    elementType: "geometry",
+    featureType: 'road.highway.controlled_access',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#e98d58",
+        color: '#e98d58',
       },
     ],
   },
   {
-    featureType: "road.highway.controlled_access",
-    elementType: "geometry.stroke",
+    featureType: 'road.highway.controlled_access',
+    elementType: 'geometry.stroke',
     stylers: [
       {
-        color: "#db8555",
+        color: '#db8555',
       },
     ],
   },
   {
-    featureType: "road.local",
-    elementType: "labels.text.fill",
+    featureType: 'road.local',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#806b63",
+        color: '#806b63',
       },
     ],
   },
   {
-    featureType: "transit.line",
-    elementType: "geometry",
+    featureType: 'transit.line',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#dfd2ae",
+        color: '#dfd2ae',
       },
     ],
   },
   {
-    featureType: "transit.line",
-    elementType: "labels.text.fill",
+    featureType: 'transit.line',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#8f7d77",
+        color: '#8f7d77',
       },
     ],
   },
   {
-    featureType: "transit.line",
-    elementType: "labels.text.stroke",
+    featureType: 'transit.line',
+    elementType: 'labels.text.stroke',
     stylers: [
       {
-        color: "#ebe3cd",
+        color: '#ebe3cd',
       },
     ],
   },
   {
-    featureType: "transit.station",
-    elementType: "geometry",
+    featureType: 'transit.station',
+    elementType: 'geometry',
     stylers: [
       {
-        color: "#dfd2ae",
+        color: '#dfd2ae',
       },
     ],
   },
   {
-    featureType: "water",
-    elementType: "geometry.fill",
+    featureType: 'water',
+    elementType: 'geometry.fill',
     stylers: [
       {
-        color: "#b9d3c2",
+        color: '#b9d3c2',
       },
     ],
   },
   {
-    featureType: "water",
-    elementType: "labels.text.fill",
+    featureType: 'water',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: "#92998d",
+        color: '#92998d',
       },
     ],
   },

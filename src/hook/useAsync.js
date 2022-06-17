@@ -1,7 +1,7 @@
-import {useCallback} from "react";
-import useMergeReducer from "./useMergeReducer";
-import {caseMap} from "@s-e/frontend/flow-control";
-import {tap, pipe, identity, isFunction} from "crocks";
+import {useCallback} from 'react';
+import useMergeReducer from './useMergeReducer';
+import {caseMap} from '@s-e/frontend/flow-control';
+import {tap, pipe, identity, isFunction} from 'crocks';
 
 const useAsync = (
   asyncCrock,

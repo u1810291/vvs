@@ -1,10 +1,10 @@
-import env from "../../../env";
-import Async from "crocks/Async";
-import {fetchGql} from "@s-e/frontend/fetch";
-import {caseMap} from "@s-e/frontend/flow-control";
-import {lengthGt} from "../../../util/pred";
-import {getProp, tap, pipe, chain, safe, option, map, isString, getPath} from "crocks";
-import {t} from "../../../i18n";
+import env from '../../../env';
+import Async from 'crocks/Async';
+import {fetchGql} from '@s-e/frontend/fetch';
+import {caseMap} from '@s-e/frontend/flow-control';
+import {lengthGt} from '../../../util/pred';
+import {getProp, tap, pipe, chain, safe, option, map, isString, getPath} from 'crocks';
+import {t} from '../../../i18n';
 
 const {Rejected} = Async;
 
@@ -37,15 +37,15 @@ const getCrewsQuery = `
 `;
 
 export const ERROR = {
-  UNHANDLED: t("error.newEvent.eventServiceOffline"),
-  SERVICE_DOWN: t("error.newEvent.dataIsInvalid"),
-  NETWORK_FAILED: t("error.newEvent.unhandledState"),
+  UNHANDLED: t('error.newEvent.eventServiceOffline'),
+  SERVICE_DOWN: t('error.newEvent.dataIsInvalid'),
+  NETWORK_FAILED: t('error.newEvent.unhandledState'),
 };
 
 const responseHandling = {
   serviceDown: {
     check: pipe(
-      getPath(["errors", 0, "message"]),
+      getPath(['errors', 0, 'message']),
       chain(safe(isString)),
       chain(safe(m => m.match(/http.*exception.*webhook/im))),
       map(lengthGt(0)),
@@ -55,7 +55,7 @@ const responseHandling = {
   },
   networkError: {
     check: pipe(
-      getProp("message"),
+      getProp('message'),
       chain(safe(isString)),
       chain(safe(m => m.match(/network.*failed/im))),
       map(() => true),
@@ -69,7 +69,7 @@ const responseHandling = {
 export const asyncGetCrews = token => {
   return fetchGql(
     env.API_ENDPOINT,
-    {"x-hasura-admin-secret": env.API_SECRET, "authorization": token},
+    {'x-hasura-admin-secret': env.API_SECRET, 'authorization': token},
     getCrewsQuery,
     null
   );
@@ -78,7 +78,7 @@ export const asyncGetCrews = token => {
 export const asyncGetObjects = token => {
   return fetchGql(
     env.API_ENDPOINT,
-    {"x-hasura-admin-secret": env.API_SECRET, "authorization": token},
+    {'x-hasura-admin-secret': env.API_SECRET, 'authorization': token},
     getObjectsQuery,
     null
   );
@@ -87,7 +87,7 @@ export const asyncGetObjects = token => {
 export const asyncCreateEvent = ({token, name, description, status, crewID, objectID}) => {
   return fetchGql(
     env.API_ENDPOINT,
-    {"x-hasura-admin-secret": env.API_SECRET, "authorization": token},
+    {'x-hasura-admin-secret': env.API_SECRET, 'authorization': token},
     createEventQuery,
     {name, description, status, crewID, objectID}
   ).bichain(

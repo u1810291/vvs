@@ -1,22 +1,22 @@
-const assert = require("assert");
-const { Given, When, Then } = require("@cucumber/cucumber");
+const assert = require('assert');
+const { Given, When, Then } = require('@cucumber/cucumber');
 
 function isItFriday(today) {
-  if (today === "Friday") {
-    return "TGIF";
+  if (today === 'Friday') {
+    return 'TGIF';
   } else {
-    return "Nope";
+    return 'Nope';
   }
 }
 
-Given("today is {string}", function (givenDay) {
+Given('today is {string}', function (givenDay) {
   this.today = givenDay;
 });
 
-When("I ask whether it's Friday yet", function () {
+When('I ask whether it is Friday yet', function () {
   this.actualAnswer = isItFriday(this.today);
 });
 
-Then("I should be told {string}", function (expectedAnswer) {
+Then('I should be told {string}', function (expectedAnswer) {
   assert.strictEqual(this.actualAnswer, expectedAnswer);
 });

@@ -1,23 +1,23 @@
-import { useContext } from "react";
-import { useQuery } from "react-query";
-import AuthContext from "../context/authContext";
+import { useContext } from 'react';
+import { useQuery } from 'react-query';
+import AuthContext from '../context/authContext';
 
 export default function useReactQuery(queryString, variables, authToken) {
   const { Logout, RefreshTokenUpdate } = useContext(AuthContext);
 
   return useQuery(
-    "universal",
+    'universal',
     async () => {
-      const fetchFunction = fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
-        method: "POST",
+      const fetchFunction = fetch('https://ec.swarm.testavimui.eu/v1/graphql', {
+        method: 'POST',
         body: JSON.stringify({
-          Authorization: "Bearer" + String(authToken),
+          Authorization: 'Bearer' + String(authToken),
           query: queryString,
           variables: variables,
         }),
         headers: {
-          "Content-Type": "application/json",
-          "x-hasura-admin-secret": "secret",
+          'Content-Type': 'application/json',
+          'x-hasura-admin-secret': 'secret',
         },
       })
         .then((res) => res.json())
@@ -30,7 +30,7 @@ export default function useReactQuery(queryString, variables, authToken) {
       refetchOnWindowFocus: false,
       enabled: true,
       onError: (error) => {
-        if (error.statusText === "Unauthorized") {
+        if (error.statusText === 'Unauthorized') {
           RefreshTokenUpdate();
         } else {
           Logout();

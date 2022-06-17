@@ -1,6 +1,6 @@
-import Listing from "../Listing";
+import Listing from '../Listing';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
-import {renderWithProps} from "../../util/react";
+import {renderWithProps} from '../../util/react';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {
   Async,
@@ -46,7 +46,7 @@ const asyncHasuraResponse = pipe(
       Resolved,
     )
   ),
-  chain(maybeToAsync('"object" property is expected', getProp('object'))),
+  chain(maybeToAsync('object property is expected', getProp('object'))),
 );
 
 /**
@@ -61,7 +61,7 @@ const asyncHasuraResponse = pipe(
 const fqgl = curry((headers, query, variables) => fromPromise(() => fetch(
     'https://ec.swarm.testavimui.eu/v1/graphql',
     {
-      method: "POST",
+      method: 'POST',
       headers: {
         'content-type': 'application/json',
         'x-hasura-admin-secret': 'secret',

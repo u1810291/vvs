@@ -8,22 +8,22 @@ import {componentToString} from '@s-e/frontend/react';
 const Box = ({
   Label,
   InputContainer,
-  labelText = "",
+  labelText = '',
   Input,
   Button,
   Options,
   Option,
   children,
-  optionClassNameFn = ({active}) => `relative cursor-default select-none py-2 pl-3 pr-9 ${active ? "bg-indigo-600 text-white" : "text-gray-900"}`,
+  optionClassNameFn = ({active}) => `relative cursor-default select-none py-2 pl-3 pr-9 ${active ? 'bg-indigo-600 text-white' : 'text-gray-900'}`,
 }) => {
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState('')
   const [selectedPerson, setSelectedPerson] = useState()
 
   const filteredChildren = useMemo(()=> {
-    return query === ""
+    return query === ''
       ? putIntoArray(children)
       : putIntoArray(children).filter((component) => {
-        return String(componentToString(component)).match(new RegExp(asciifyLT(query.replace(/\W+/gm, "")), 'gi'))
+        return String(componentToString(component)).match(new RegExp(asciifyLT(query.replace(/\W+/gm, '')), 'gi'))
       })
   }, [children, query])
 
@@ -31,7 +31,7 @@ const Box = ({
   const displayName = useCallback(person => person.name, []);
 
   return (
-    <Combobox as="div" value={selectedPerson} onChange={setSelectedPerson}>
+    <Combobox as='div' value={selectedPerson} onChange={setSelectedPerson}>
       <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
       <InputContainer>
         <Input

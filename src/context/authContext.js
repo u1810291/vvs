@@ -6,9 +6,9 @@ import {
   useCallback,
   useContext,
   useRef,
-} from "react";
-import jwt_decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+} from 'react';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import {
   getRefreshTokenSession,
   setRefreshTokenSession,
@@ -16,10 +16,10 @@ import {
   setEmailRecoverySession, //
   getEmailRecoverySession, //
   removeEmailRecoverySession, //
-} from "../feature/sessions";
-import { compareAsc, format, differenceInMinutes } from "date-fns";
-import { Spinner } from "react-activity";
-import "react-activity/dist/library.css";
+} from '../feature/sessions';
+import { compareAsc, format, differenceInMinutes } from 'date-fns';
+import { Spinner } from 'react-activity';
+import 'react-activity/dist/library.css';
 
 const AuthContext = createContext();
 
@@ -27,28 +27,28 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [registerName, setRegisterName] = useState("");
-  const [registerSurname, setRegisterSurname] = useState("");
-  const [registerPhone, setRegisterPhone] = useState("");
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-  const [registerRepeatPassword, setRegisterRepeatPassword] = useState("");
-  const [registerBirthday, setRegisterBirthday] = useState("2000-01-01"); // birthday not included for vvs so its fixed value
-  const [email, setEmail] = useState("audrius@s-e.lt");
-  const [password, setPassword] = useState("EuroCash2022");
-  const [recoverPassword, setRecoverPassword] = useState("");
-  const [repeatRecoverPassword, setRepeatRecoverPassword] = useState("");
-  const [forgotEmail, setForgotEmail] = useState("");
+  const [registerName, setRegisterName] = useState('');
+  const [registerSurname, setRegisterSurname] = useState('');
+  const [registerPhone, setRegisterPhone] = useState('');
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [registerRepeatPassword, setRegisterRepeatPassword] = useState('');
+  const [registerBirthday, setRegisterBirthday] = useState('2000-01-01'); // birthday not included for vvs so its fixed value
+  const [email, setEmail] = useState('audrius@s-e.lt');
+  const [password, setPassword] = useState('EuroCash2022');
+  const [recoverPassword, setRecoverPassword] = useState('');
+  const [repeatRecoverPassword, setRepeatRecoverPassword] = useState('');
+  const [forgotEmail, setForgotEmail] = useState('');
   const [initPage, setInitPage] = useState(true);
   const [loginError, setLoginError] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
+  const [accessToken, setAccessToken] = useState('');
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState("regular");
+  const [role, setRole] = useState('regular');
   const [emailValidationError, setEmailValidationError] = useState(false);
   const [phoneValidationError, setPhoneValidationError] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const [sent, setSent] = useState(null);
-  const [clientEmail, setClientEmail] = useState("");
+  const [clientEmail, setClientEmail] = useState('');
   const [invalidUserLogin, setInvalidUserLogin] = useState(null)
   // const abortController = useRef(null);
   // const cancelRequest = () => abortController.current && abortController.current.abort();
@@ -68,20 +68,13 @@ export const AuthProvider = ({ children }) => {
         RefreshTokenUpdate();
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  /*useEffect(() => {
-    if (!accessToken) {
-      navigate("/");
-    }
-  }, [accessToken, navigate]);*/
 
   const Logout = useCallback(async () => {
     setUser(null);
     setAccessToken(null);
     removeRefreshTokenSession();
-    navigate("/");
+    navigate('/');
   }, [navigate]);
 
   const LoginUser = useCallback(
@@ -89,9 +82,9 @@ export const AuthProvider = ({ children }) => {
       try {
         // abortController.current = newAbortController();
         e.preventDefault();
-        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
+        const res = await fetch('https://ec.swarm.testavimui.eu/v1/graphql', {
           // signal: abortController.current.signal,
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify({
             query: `query loginUser($username: String!, $password: String!) {
                 login(password: $password, username: $username) {
@@ -106,22 +99,22 @@ export const AuthProvider = ({ children }) => {
             },
           }),
           headers: {
-            "content-type": "application/json",
-            "x-hasura-admin-secret": "secret",
+            'content-type': 'application/json',
+            'x-hasura-admin-secret': 'secret',
           },
         });
         const data = await res.json();
         if (data) {
           const token = data?.data?.login?.token;
           const encode = jwt_decode(token);
-          if(encode.roles[0] === "crew") { // this logic doesn't work for user with many roles
-            setInvalidUserLogin("Sorry, you don't have right permissions to login");
+          if(encode.roles[0] === 'crew') { // this logic doesn't work for user with many roles
+            setInvalidUserLogin('Sorry, you do not have right permissions to login');
           } else {
           setUser(jwt_decode(token));
           const refresh = data?.data?.login?.refreshToken;
           setAccessToken(token);
           setRefreshTokenSession(refresh);
-          navigate("/dashboard");
+          navigate('/dashboard');
         }}
       } catch (err) {
         setLoginError(true);
@@ -135,8 +128,8 @@ export const AuthProvider = ({ children }) => {
     async (e) => {
       try {
         e.preventDefault();
-        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
-          method: "POST",
+        const res = await fetch('https://ec.swarm.testavimui.eu/v1/graphql', {
+          method: 'POST',
           body: JSON.stringify({
             query: `query registerUser($firstName: String!, $lastName: String!, $mobilePhone: String!, $email: String!, $birthDate: String!, $password: String!, $role: String!) {
                 register(firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, email: $email, password: $password, birthDate: $birthDate, role: $role) {
@@ -156,8 +149,8 @@ export const AuthProvider = ({ children }) => {
             },
           }),
           headers: {
-            "content-type": "application/json",
-            "x-hasura-admin-secret": "secret",
+            'content-type': 'application/json',
+            'x-hasura-admin-secret': 'secret',
           },
         });
         const data = await res.json();
@@ -167,7 +160,7 @@ export const AuthProvider = ({ children }) => {
           if (data.errors) {
             const emailError =
               data?.errors[0]?.extensions.internal.response.body.fieldErrors[
-                "user.email"
+                'user.email'
               ][0].code;
             setEmailValidationError(true);
             const phoneError =
@@ -176,7 +169,7 @@ export const AuthProvider = ({ children }) => {
           setUser(jwt_decode(token));
           setAccessToken(token);
           setRefreshTokenSession(refresh);
-          navigate("/dashboard");
+          navigate('/dashboard');
         }
       } catch (err) {
         // console.log(err);
@@ -197,8 +190,8 @@ export const AuthProvider = ({ children }) => {
   const RefreshTokenUpdate = useCallback(async () => {
     try {
       const currentRefreshToken = getRefreshTokenSession();
-      const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql/", {
-        method: "POST",
+      const res = await fetch('https://ec.swarm.testavimui.eu/v1/graphql/', {
+        method: 'POST',
         body: JSON.stringify({
           query: `query refreshSession($refreshToken: String!) {
                 refresh(refreshToken: $refreshToken) {
@@ -212,8 +205,8 @@ export const AuthProvider = ({ children }) => {
           },
         }),
         headers: {
-          "content-type": "application/json",
-          "x-hasura-admin-secret": "secret",
+          'content-type': 'application/json',
+          'x-hasura-admin-secret': 'secret',
         },
       });
       const data = await res.json();
@@ -238,8 +231,8 @@ export const AuthProvider = ({ children }) => {
       const getEmailRecoveryId = getEmailRecoverySession();
       try {
         e.preventDefault();
-        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
-          method: "POST",
+        const res = await fetch('https://ec.swarm.testavimui.eu/v1/graphql', {
+          method: 'POST',
           body: JSON.stringify({
             query: `query recoverPassword($changePasswordId: String!, $password: String!) {
                 remind(password: $password, changePasswordId: $changePasswordId) {
@@ -254,16 +247,16 @@ export const AuthProvider = ({ children }) => {
             },
           }),
           headers: {
-            "content-type": "application/json",
-            "x-hasura-admin-secret": "secret",
+            'content-type': 'application/json',
+            'x-hasura-admin-secret': 'secret',
           },
         });
         const data = await res.json();
         if (data) {
           removeEmailRecoverySession();
-          navigate("/");
+          navigate('/');
         } else {
-          console.log("errors ", data);
+          console.log('errors ', data);
           // handle errors appropriately
         }
       } catch (err) {
@@ -277,8 +270,8 @@ export const AuthProvider = ({ children }) => {
     async (e) => {
       try {
         e.preventDefault();
-        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
-          method: "POST",
+        const res = await fetch('https://ec.swarm.testavimui.eu/v1/graphql', {
+          method: 'POST',
           body: JSON.stringify({
             query: `query forgotPassword($loginId: String! $sendForgotPasswordEmail: Boolean!) {
               forgot(loginId: $loginId, sendForgotPasswordEmail: $sendForgotPasswordEmail ) {
@@ -292,23 +285,23 @@ export const AuthProvider = ({ children }) => {
             },
           }),
           headers: {
-            "content-type": "application/json",
-            "x-hasura-admin-secret": "secret",
+            'content-type': 'application/json',
+            'x-hasura-admin-secret': 'secret',
           },
         });
         const data = await res.json();
         if (data) {
           const expiringID = data?.data?.forgot?.changePasswordId;
           // console.log(expiringID);
-          setSent("true");
+          setSent('true');
           // must handle email template url
           
           // setPasswordRecoveryToken(expiringID);
           // setEmailRecoverySession(expiringID);
-          // navigate("/forgotSuccess");
+          // navigate('/forgotSuccess');
         } else {
-          console.log("errors ", res);
-          setSent("false");
+          console.log('errors ', res);
+          setSent('false');
           // handle errors appropriately
         }
       } catch (err) {
@@ -322,8 +315,8 @@ export const AuthProvider = ({ children }) => {
     async (e) => {
       try {
         e.preventDefault();
-        const res = await fetch("https://ec.swarm.testavimui.eu/v1/graphql", {
-          method: "POST",
+        const res = await fetch('https://ec.swarm.testavimui.eu/v1/graphql', {
+          method: 'POST',
           body: JSON.stringify({
             query: `query forgotPassword($loginId: String! $sendForgotPasswordEmail: Boolean!) {
               forgot(loginId: $loginId, sendForgotPasswordEmail: $sendForgotPasswordEmail ) {
@@ -337,8 +330,8 @@ export const AuthProvider = ({ children }) => {
             },
           }),
           headers: {
-            "content-type": "application/json",
-            "x-hasura-admin-secret": "secret",
+            'content-type': 'application/json',
+            'x-hasura-admin-secret': 'secret',
           },
         });
         const data = await res.json();
@@ -347,9 +340,9 @@ export const AuthProvider = ({ children }) => {
           console.log(expiringID);
           // setPasswordRecoveryToken(expiringID);
           setEmailRecoverySession(expiringID);
-          navigate("/forgotSuccess");
+          navigate('/forgotSuccess');
         } else {
-          console.log("errors ", res);
+          console.log('errors ', res);
           // handle errors appropriately
         }
       } catch (err) {
@@ -413,8 +406,8 @@ export const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react/react-in-jsx-scope
     <AuthContext.Provider value={contextData}>
       {spinner ? (
-        <div className="flex h-screen w-screen bg-gray-100 justify-center items-center">
-          <Spinner color="dark-blue" size={40} />
+        <div className='flex h-screen w-screen bg-gray-100 justify-center items-center'>
+          <Spinner color='dark-blue' size={40} />
         </div>
       ) : (
         children

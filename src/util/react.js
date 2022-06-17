@@ -34,8 +34,8 @@ export const mergeStyles = curry((staticStyle, extendStyle) => pipe(
  * @example
  * const ExtendableButton = withMergedClassName('block p-2 shadow', SimpleButton);
  *
- * // The "block p-2 shadow bg-blue-500 hover:bg-blue-100" are in the className!
- * <ExtendableButton classNames="bg-blue-500 hover:bg-blue-100"/>
+ * // The 'block p-2 shadow bg-blue-500 hover:bg-blue-100' are in the className!
+ * <ExtendableButton classNames='bg-blue-500 hover:bg-blue-100'/>
  */
 export const withMergedClassName = curry((staticClassName, Component, props) => (
   <Component {...{

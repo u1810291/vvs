@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import useLanguage from '../../hook/useLanguage';
 
@@ -12,7 +12,7 @@ const HeaderButtonGroup = ({
 }) => {
   const {t} = useLanguage();
   return (
-    <section className={"flex"}>
+    <section className={'flex'}>
       <button
         onClick={onCancelButton}
         className={`w-40 h-10 rounded flex justify-center py-2 px-4 border border-transparent drop-shadow shadow text-sm font-light font-montserrat hover:shadow-none focus:outline-none ${twCancelButton}`}

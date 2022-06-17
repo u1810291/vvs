@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import useLanguage from "../../hook/useLanguage";
-import getTimeslots from "./getTimeSlots";
+import useLanguage from '../../hook/useLanguage';
+import getTimeslots from './getTimeSlots';
 
-import {generate} from "shortid";
-import {endOfDay, format, formatISO, startOfDay} from "date-fns";
+import {generate} from 'shortid';
+import {endOfDay, format, formatISO, startOfDay} from 'date-fns';
 
 const Column = ({interval}) => {
   const {t} = useLanguage();
@@ -18,20 +18,20 @@ const Column = ({interval}) => {
   });
   return (
     <div
-      className={"flex bg-gray-100 w-full text-sm"}>
+      className={'flex bg-gray-100 w-full text-sm'}>
       <div
         style={{width: 310, height: 40}}
-        className={"py-2 px-4 pr-8 font-normal text-gray-800"}>
-        {t("eurocash.date")}
+        className={'py-2 px-4 pr-8 font-normal text-gray-800'}>
+        {t('eurocash.date')}
       </div>
       {customInterval.map((slot, index) => {
         return (
           <div
             style={{width: 156, height: 40}}
             key={generate()}
-            className={"py-2 px-1 font-normal text-gray-500 flex justify-between shadow-[-1px_0_0_0_rgba(64,75,95,0.1)]"}
+            className={'py-2 px-1 font-normal text-gray-500 flex justify-between shadow-[-1px_0_0_0_rgba(64,75,95,0.1)]'}
           >
-            {format(slot, "HH:mm")}
+            {format(slot, 'HH:mm')}
             {index === customInterval.length - 1 && (
               <p>
                 24:00
