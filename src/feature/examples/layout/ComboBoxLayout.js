@@ -1,5 +1,5 @@
 import React from 'react';
-import ComboBox from '../../../components/NewComboBox';
+import ComboBox from '../../../components/atom/input/ComboBox';
 
 const ComboBoxLayout = () => {
   return (
