@@ -1,5 +1,5 @@
 import React from "react";
-import { DDAPI } from "../../api/dashboardDispatchApi";
+import { DDAPI } from "../../mocks/dashboardDispatchApi";
 import { generate } from "shortid";
 
 const { ActiveCard } = require("../../components/cards/active");

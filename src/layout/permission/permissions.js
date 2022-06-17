@@ -9,7 +9,7 @@ import React, {
 import useLanguage from '../../hook/useLanguage';
 import GlobalContext from '../../context/globalContext';
 import {PDFExport, savePDF} from '@progress/kendo-react-pdf';
-import {PermissionsTestApi} from '../../api/permissionsTest';
+import {PermissionsTestApi} from '../../mocks/permissionsTest';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
 import {AddFilterListPermissions} from '../../components/addFilter/addFilterPermissions';
 import {PermissionsList} from '../../components/lists/permissionsList';

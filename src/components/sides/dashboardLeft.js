@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { DDAPI } from "../../api/dashboardDispatchApi";
+import { DDAPI } from "../../mocks/dashboardDispatchApi";
 import { generate } from "shortid";
 const { AlarmCard } = require("../../components/cards/alarm");
 const { DrivingToObjectCard } = require("../../components/cards/drivingToObject");

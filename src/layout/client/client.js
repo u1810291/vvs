@@ -1,12 +1,12 @@
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import { CreateHeader } from "../../components/headers/create";
 import { Object } from "../../components/lists/object";
-import { clientList } from "../../api/client";
+import { clientList } from "../../mocks/client";
 import { generate } from "shortid";
 import { useParams } from "react-router-dom";
-import { getUsers } from "../../api/queryForms/queryString/users";
-import { getAllUsers } from "../../api/queryForms/variables/users";
-import { archive } from "../../api/queryForms/queryString/users";
+import { getUsers } from "../../mocks/queryForms/queryString/users";
+import { getAllUsers } from "../../mocks/queryForms/variables/users";
+import { archive } from "../../mocks/queryForms/queryString/users";
 import AuthContext from "../../context/authContext";
 import GlobalContext from "../../context/globalContext";
 import { useFetch } from "../../hook/useFetch";
@@ -16,7 +16,7 @@ import SlideOver from "../../components/sidebars/slideOver";
 import { OverlayProvider, usePreventScroll } from "react-aria";
 import MainSidebar from "../../components/sidebars/main";
 import useUtils from "../../hook/useUtils";
-import { updateRegister } from "../../api/queryForms/queryString/query";
+import { updateRegister } from "../../mocks/queryForms/queryString/query";
 
 function Client() {
   const { id } = useParams();

@@ -4,7 +4,7 @@ import Map from '../../map/component/Map';
 import List from '../../../components/atom/List';
 import BreachTimeCard from '../../../components/cards/breachTimeCard';
 
-import {DDAPI} from '../../../api/dashboardDispatchApi';
+import {DDAPI} from '../../../mocks/dashboardDispatchApi';
 import {ActiveCard} from '../../../components/cards/active';
 
 import {generate} from 'shortid';

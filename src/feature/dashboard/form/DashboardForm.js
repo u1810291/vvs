@@ -9,7 +9,7 @@ import DashboardSideLeft from '../../../components/sides/dashboardLeft';
 import DashboardSideRight from '../../../components/sides/dashboardRight';
 
 import {OffCard} from '../../../components/cards/off';
-import {DDAPI} from '../../../api/dashboardDispatchApi';
+import {DDAPI} from '../../../mocks/dashboardDispatchApi';
 
 import useLanguage from '../../../hook/useLanguage';
 import {Marker, OverlayView, Polygon, Polyline} from '@react-google-maps/api';
