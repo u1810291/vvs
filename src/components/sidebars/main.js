@@ -1,7 +1,25 @@
-import React, { useContext, useCallback } from 'react';
+import {Routsies} from 'App';
+import {isArray} from 'crocks';
+import React, { useContext, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+const componentToTreeItem = c => ({
+  ...c.props,
+  children: c.props?.children ? parseRoutes(c.props?.children) : null
+})
+
+const parseRoutes = component => {
+  if (isArray(component)) return component.map(componentToTreeItem);
+  return {
+    props: componentToTreeItem(component)
+  }
+};
+
 const MainSidebar = () => {
+  useEffect(() => {
+    console.log(parseRoutes(Routsies));
+  }, [])
+
   const selfService = useCallback(() => {
     console.log('selfService');
   }, []);

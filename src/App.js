@@ -25,9 +25,41 @@ import NewTaskLayout from './feature/task/layout/NewTaskLayout';
 import DashboardLayout from './feature/dashboard/layout/DashboardLayout';
 import NotFound from './layout/notFound';
 import GoogleContextProvider from './context/googleApiContext';
-import ObjectList from './feature/object/layout/list';
+import ObjectRoute from './feature/object/routes';
 import ComboBoxLayout from './feature/examples/layout/ComboBoxLayout';
 import CheckBoxLayout from './feature/examples/layout/CheckBoxLayout';
+
+export const Routsies = (
+  <>
+    <Route path='/' exec element={<Login />} />
+    <Route path='dashboard' element={<DashboardLayout />} />
+    <Route path='keys' element={<Keys />} />
+    <Route path='tasks' element={<Tasks />} />
+    <Route path='new-task' element={<NewTaskLayout />} />
+    <Route path='drivers' element={<Drivers />} />
+    <Route path='clients' element={<Clients />} />
+    {ObjectRoute}
+    <Route path='modems' element={<Modems />} />
+    <Route path='create' element={<Create />} />
+    <Route path='new' element={<New />} />
+    <Route path='driver/:id' element={<Driver />} />
+    <Route path='client/:id' element={<Client />} />
+    <Route path='modem/:id' element={<Modem />} />
+    <Route path='key/:id' element={<Key />} />
+    <Route path='dislocation/:id' element={<Dislocation />} />
+    <Route path='permissions' element={<Permission />} />
+    <Route path='permission-confirmation' element={<PermissionConfirmation />} />
+    <Route path='dislocations' element={<Dislocations />} />
+    <Route path='breach' element={<Breach />} />
+    <Route path='breaches' element={<Breaches />} />
+    <Route path='crews' element={<Crews />} />
+    <Route path='crew/edit/:id' element={<CreateCrew />} />
+    <Route path='crew/new' element={<CreateCrew />} />
+    <Route path='storybook/combobox' element={<ComboBoxLayout />} />
+    <Route path='storybook/checkbox' element={<CheckBoxLayout />} />
+    <Route path='*' element={<NotFound />} />
+  </>
+);
 
 function App() {
   return (
@@ -35,33 +67,7 @@ function App() {
       <Router>
         <Routes>
           <Route element={<ProtectedRoute />}>
-            <Route path='/' exec element={<Login />} />
-            <Route path='dashboard' element={<DashboardLayout />} />
-            <Route path='keys' element={<Keys />} />
-            <Route path='tasks' element={<Tasks />} />
-            <Route path='new-task' element={<NewTaskLayout />} />
-            <Route path='drivers' element={<Drivers />} />
-            <Route path='clients' element={<Clients />} />
-            <Route path='object' element={<ObjectList />} />
-            <Route path='modems' element={<Modems />} />
-            <Route path='create' element={<Create />} />
-            <Route path='new' element={<New />} />
-            <Route path='driver/:id' element={<Driver />} />
-            <Route path='client/:id' element={<Client />} />
-            <Route path='modem/:id' element={<Modem />} />
-            <Route path='key/:id' element={<Key />} />
-            <Route path='dislocation/:id' element={<Dislocation />} />
-            <Route path='permissions' element={<Permission />} />
-            <Route path='permission-confirmation' element={<PermissionConfirmation />} />
-            <Route path='dislocations' element={<Dislocations />} />
-            <Route path='breach' element={<Breach />} />
-            <Route path='breaches' element={<Breaches />} />
-            <Route path='crews' element={<Crews />} />
-            <Route path='crew/edit/:id' element={<CreateCrew />} />
-            <Route path='crew/new' element={<CreateCrew />} />
-            <Route path='storybook/combobox' element={<ComboBoxLayout />} />
-            <Route path='storybook/checkbox' element={<CheckBoxLayout />} />
-            <Route path='*' element={<NotFound />} />
+            {Routsies}
           </Route>
         </Routes>
       </Router>
