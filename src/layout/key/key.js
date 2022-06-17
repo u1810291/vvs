@@ -1,9 +1,9 @@
 import React, { useState, useContext, useCallback, useEffect } from 'react';
-import { Orders } from '../../api/orders';
+import { Orders } from '../../mocks/orders';
 import { KeyInternal } from '../../components/lists/keyInternal';
 import { KeyHeader } from '../../components/headers/key';
 import { KeyList } from '../../components/lists/key';
-import { keyObjectList } from '../../api/keyObjectList';
+import { keyObjectList } from '../../mocks/keyObjectList';
 import { generate } from 'shortid';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';

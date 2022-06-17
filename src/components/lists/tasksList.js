@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import GlobalContext from '../../context/globalContext';
-import { DashboardTestApi } from '../../api/dashboardTest';
+import { DashboardTestApi } from '../../mocks/dashboardTest';
 import useSort from '../../hook/useSort';
 import { sortToggle } from '../../util/utils';
 const { RedWatching } = require('../buttons/redWatching');

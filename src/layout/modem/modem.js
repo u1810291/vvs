@@ -17,10 +17,10 @@ import useUtils from '../../hook/useUtils';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import { zones } from '../../api/zones';
+import { zones } from '../../mocks/zones';
 import { useParams } from 'react-router-dom';
 import useReactQuery from '../../hook/useQuery';
-import { objectPage } from '../../api/queryForms/queryString/query';
+import { objectPage } from '../../mocks/queryForms/queryString/query';
 
 function Modem() {
   const { id } = useParams();

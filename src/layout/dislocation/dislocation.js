@@ -16,7 +16,7 @@ import GlobalContext from '../../context/globalContext';
 import { OverlayProvider, usePreventScroll } from 'react-aria';
 import SlideOver from '../../components/sidebars/slideOver';
 import MainSidebar from '../../components/sidebars/main';
-import { crewZonesMutation } from '../../api/queryForms/queryString/mutation';
+import { crewZonesMutation } from '../../mocks/queryForms/queryString/mutation';
 import { useFetch } from '../../hook/useFetch';
 import AuthContext from '../../context/authContext';
 import Map from '../../feature/map/component/Map';

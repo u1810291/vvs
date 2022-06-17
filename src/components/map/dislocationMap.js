@@ -3,10 +3,10 @@ import { GoogleMap, useLoadScript, Polygon } from '@react-google-maps/api';
 import useLanguage from '../../hook/useLanguage';
 import GoogleMapTools from '../../feature/map/component/GoogleMapTools';
 import GlobalContext from '../../context/globalContext';
-import { crewZonesQuery } from '../../api/queryForms/queryString/query';
+import { crewZonesQuery } from '../../mocks/queryForms/queryString/query';
 import { useQuery, useSubscription, useMutation } from 'graphql-hooks';
 import useReactQuery from '../../hook/useQuery';
-import { crewZonesSubscription } from '../../api/queryForms/queryString/subscriptions';
+import { crewZonesSubscription } from '../../mocks/queryForms/queryString/subscriptions';
 import { generate } from 'shortid';
 
 const mapContainerStyle = {

@@ -7,12 +7,12 @@ import React, {
 } from 'react';
 import { ObjectHeader } from '../../components/headers/object';
 import { Events } from '../../components/lists/events';
-import { PhonesList } from '../../api/phones';
+import { PhonesList } from '../../mocks/phones';
 import { useParams } from 'react-router-dom';
 import GlobalContext from '../../context/globalContext';
 import AuthContext from '../../context/authContext';
 import { Spinner } from 'react-activity';
-import { EventsList } from '../../api/events';
+import { EventsList } from '../../mocks/events';
 import { generate } from 'shortid';
 import SlideOver from '../../components/sidebars/slideOver';
 import { OverlayProvider, usePreventScroll } from 'react-aria';
@@ -23,13 +23,13 @@ import {
   objectPageQuery,
   objectPage,
   imagesUpdate,
-} from '../../api/queryForms/queryString/query';
+} from '../../mocks/queryForms/queryString/query';
 import {
   imageUpload,
   uploadImageURI,
   deleteImageURI,
-} from '../../api/queryForms/queryString/mutation';
-import { objectPageImagesUpdate } from '../../api/queryForms/queryString/update';
+} from '../../mocks/queryForms/queryString/mutation';
+import { objectPageImagesUpdate } from '../../mocks/queryForms/queryString/update';
 import useReactQuery from '../../hook/useQuery';
 import { useFetch } from '../../hook/useFetch';
 

@@ -4,7 +4,7 @@ import {Polygon} from '@react-google-maps/api';
 import {ActiveCard} from '../../components/cards/active';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
 import {useFetch} from '../../hook/useFetch';
-import {updateCalendar} from '../../api/queryForms/queryString/mutation';
+import {updateCalendar} from '../../mocks/queryForms/queryString/mutation';
 
 import Map from '../../feature/map/component/Map';
 import CheckBox from '../../components/input/CheckBox';
@@ -17,7 +17,7 @@ import CalendarTimeline from '../../components/calendar/CalendarTimeline';
 import CreateCrewHeader from '../../components/headers/crew/createCrewHeader';
 import AuthContext from '../../context/authContext';
 import {useParams} from 'react-router-dom';
-import { crewsQuery } from '../../api/queryForms/queryString/query';
+import { crewsQuery } from '../../mocks/queryForms/queryString/query';
 import useReactQuery from '../../hook/useQuery';
 import SidebarLayout from '../sidebarLayout';
 

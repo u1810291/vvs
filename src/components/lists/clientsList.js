@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import { sortToggle } from '../../util/utils';
 import useSort from '../../hook/useSort';
 import useReactQuery from '../../hook/useQuery';
-import { getUsers } from '../../api/queryForms/queryString/users';
-import { getAllUsers } from '../../api/queryForms/variables/users';
+import { getUsers } from '../../mocks/queryForms/queryString/users';
+import { getAllUsers } from '../../mocks/queryForms/variables/users';
 
 export const ClientList = () => {
   const { accessToken } = useContext(AuthContext);

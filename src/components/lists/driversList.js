@@ -5,8 +5,8 @@ import useSort from '../../hook/useSort';
 import { Link } from 'react-router-dom';
 import { Spinner } from 'react-activity';
 import { generate } from 'shortid';
-import { getAllUsers } from '../../api/queryForms/variables/users';
-import { getUsers } from '../../api/queryForms/queryString/users';
+import { getAllUsers } from '../../mocks/queryForms/variables/users';
+import { getUsers } from '../../mocks/queryForms/queryString/users';
 import { sortToggle } from '../../util/utils';
 import useReactQuery from '../../hook/useQuery';
 

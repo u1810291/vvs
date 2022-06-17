@@ -5,7 +5,7 @@ import { sortToggle } from '../../util/utils';
 import { Disconnected } from '../../components/buttons/disconnected';
 import { Connected } from '../../components/buttons/connected';
 import useReactQuery from '../../hook/useQuery';
-import { objectPage } from '../../api/queryForms/queryString/query';
+import { objectPage } from '../../mocks/queryForms/queryString/query';
 import GlobalContext from '../../context/globalContext';
 import { generate } from 'shortid';
 

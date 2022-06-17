@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // import { Orders } from '../../api/orders';
 import { Spinner } from 'react-activity';
 import useSort from '../../hook/useSort';
-import { objectsQuery } from '../../api/queryForms/queryString/query';
+import { objectsQuery } from '../../mocks/queryForms/queryString/query';
 import useReactQuery from '../../hook/useQuery';
 import { sortToggle } from '../../util/utils';
 import GlobalContext from '../../context/globalContext';

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { dislocations } from '../../api/dislocations';
+import { dislocations } from '../../mocks/dislocations';
 import { sortToggle } from '../../util/utils';
 import useSort from '../../hook/useSort';
 

@@ -6,7 +6,7 @@ import useReactQuery from '../../hook/useQuery';
 import useSort from '../../hook/useSort';
 import { Link } from 'react-router-dom';
 import { Spinner } from 'react-activity';
-import { crewsQuery } from '../../api/queryForms/queryString/query';
+import { crewsQuery } from '../../mocks/queryForms/queryString/query';
 import { sortToggle } from '../../util/utils';
 
 const { RedWatching } = require('../buttons/redWatching');
