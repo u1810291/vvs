@@ -20,6 +20,7 @@ import {
   option,
   pipe,
   safe,
+  identity,
 } from 'crocks';
 
 const {Rejected, Resolved, fromPromise} = Async;
@@ -71,6 +72,8 @@ const fqgl = curry((headers, query, variables) => fromPromise(() => fetch(
     }
 ))());
 
+const Span = props => <span {...props}/>;
+
 const ObjectList = pipe(
   defaultProps({
     /**
@@ -106,154 +109,138 @@ const ObjectList = pipe(
 
     rowKeyLens: getPropOr(0, 'id'),
 
-    /**
-     * TODO: Optimize itemPropMapper & Component
-     */
-    tableColums: [
+    tableColumns: [
       {
         key: 'id',
         headerText: 'ID',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('id'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'address',
         headerText: 'Adresas',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('address'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children'),
+          map(objOf('children')),
         ),
-        Component: props => <span {...props}/>,
+        Component: Span,
       },
       {
         key: 'city',
         headerText: 'Miestas',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('city'),
           chain(safe(not(isEmpty))),
           map(titleCase),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'contract_no',
         headerText: 'Nr.',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('contract_no'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'contract_object_no',
         headerText: 'Sutarties Nr.',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('contract_object_no'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'is_atm',
         headerText: 'ATM',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('is_atm'),
           map(t => t ? 'Taip' : 'Ne'),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'longitude',
         headerText: 'Ilguma',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('longitude'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'latitude',
         headerText: 'Platuma',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('latitude'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'name',
         headerText: 'Pavadinimas',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('name'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'provider_name',
         headerText: 'Tiekėjas',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('provider_name'),
           chain(safe(not(isEmpty))),
           map(titleCase),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'provider_id',
         headerText: 'Tiekėjo ID',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('provider_id'),
           chain(safe(isFinite)),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'phone',
         headerText: 'Telefonas',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('phone'),
           chain(safe(not(isEmpty))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
       {
         key: 'navision_id',
         headerText: 'Navision ID',
-        itemPropMapper: pipe(
+        itemToProps: pipe(
           getProp('navision_id'),
           chain(safe(and(not(isEmpty), isFinite))),
-          option('-'),
-          objOf('children')
+          map(objOf('children')),
         ),
-        Component: props => <span {...props} />,
+        Component: Span,
       },
     ]
   }),

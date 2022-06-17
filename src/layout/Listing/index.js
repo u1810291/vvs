@@ -1,138 +1,138 @@
-import SidebarLayout from '../../layout/sidebarLayout';
-import SearchInputGroup from '../../components/InputGroup/SearchInputGroup';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import Table from '../../components/Table';
 import Filter from '../../components/Filter';
+import SearchInputGroup from '../../components/InputGroup/SearchInputGroup';
+import SidebarLayout from '../../layout/sidebarLayout';
+import Table from '../../components/Table';
+import { every } from '../../util/array';
+import {asciifyLT} from '@s-e/frontend/transformer/string';
+import {componentToString} from '@s-e/frontend/react';
+import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
+import {reduce} from 'crocks/pointfree';
+import {renderWithProps} from '../../util/react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
-  Async,
   and,
-  bichain,
-  chain,
-  curry,
   filter,
-  getProp,
-  getPropOr,
-  hasProp,
+  not,
+  tap,
   hasProps,
   ifElse,
   isArray,
   isEmpty,
   map,
-  not,
-  objOf,
   option,
   pipe,
   safe,
-  tap,
+  constant,
+  objOf,
 } from 'crocks';
-import { every } from '../../util/array';
+import Async from 'crocks/Async';
+import Maybe from 'crocks/Maybe';
 
-import {useEffect, useState} from 'react';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-import {titleCase} from '@s-e/frontend/transformer/string';
-import {renderWithProps} from '../../util/react';
+/**
+ * @type TableColumnComponent
+ * @param {Object} props
+ * @param {(item: Object) => Maybe<ComponentProps>} props.itemToProps
+ * @param {import("react").ComponentType} props.Component
+ * @param {string} props.headerText
+ * @param {string} props.key
+ */
 
+/**
+ * @param {Object} props
+ * @param {Async} props.asyncGetter
+ * @param {(item: object) => string} props.rowKeyLens
+ * @param {TableColumnComponent[]} props.tableColumns
+ */
 const Listing = ({
   asyncGetter,
   rowKeyLens,
-  tableColums,
+  tableColumns,
 }) => {
   const [list, setList] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [query, setQuery] = useState('');
 
-  useEffect(() => {
-    asyncGetter
-      .fork(console.error, setList)
-  }, []);
+  const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
+
+  const filterItems = useMemo(() => pipe(
+    safe(isArray),
+    map(map(pipe(
+      safe(hasProps(['headerText', 'key'])),
+      map(a => ({
+        uid: a.key,
+        key: a.key,
+        children: a.headerText,
+      })),
+      map(renderWithProps(Filter.Item)),
+      option(null),
+    ))),
+    option(null)
+  )(tableColumns), [tableColumns]);
+
+  const headerColumns = useMemo(() => pipe(
+    safe(and(isArray, every(hasProps(['key', 'headerText'])))),
+    map(pipe(
+      filter(activeTableColumnPred),
+      map(pipe(
+        a => ({ key: a.key, children: a.headerText }),
+        renderWithProps(Table.Th)
+      ))
+    )),
+    option([]),
+  )(tableColumns), [tableColumns, activeTableColumnPred]);
+
+  const rows = useMemo(() => reduce((rs, r) => ifElse(
+    r => tableColumns
+    .map(c => componentToString(c.Component(c.itemToProps(r).option(''))))
+    .some(c => pipe(
+      safe(not(isEmpty)),
+      map(String),
+      map(c => c.match(new RegExp(asciifyLT(query.replace(/\W+/gm, "")), 'gi'))),
+      map(Boolean),
+      option(false),
+    )(c)),
+    item => (
+      <Table.Tr key={rowKeyLens(item)}>
+      {
+        reduce((cs, c) => ifElse(
+          and(hasProps(['key', 'itemToProps', 'Component']), activeTableColumnPred),
+          ({key, itemToProps, Component}) => [...cs, (
+            <Table.Td key={key}>
+              <Component {...itemToProps(item).option({className: 'opacity-20 inline-block w-full text-center', children: '—'})} />
+            </Table.Td>
+          )],
+          constant(cs),
+          c,
+        ), [], tableColumns)
+      }
+      </Table.Tr>
+    ),
+    constant(rs),
+    r,
+  ), [], list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
+
+  useEffect(() => {asyncGetter.fork(console.error, setList)}, [asyncGetter]);
 
   return (
     <SidebarLayout>
-
       <TitleBar>
         <div className="md:flex md:space-x-4 md:space-y-0 space-y-4">
-
           <Breadcrumbs>
             <Breadcrumbs.Item><span className="font-semibold">Objektai</span></Breadcrumbs.Item>
             <Breadcrumbs.Item>Visi duomenys</Breadcrumbs.Item>
           </Breadcrumbs>
-
-          <SearchInputGroup />
-
+          <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
         </div>
       </TitleBar>
-
-      <Filter onValues={setColumns}>
-        {
-          pipe(
-            safe(isArray),
-            map(map(pipe(
-              safe(hasProps(['headerText', 'key'])),
-              map(a => ({
-                uid: a.key,
-                key: a.key,
-                children: a.headerText,
-              })),
-              map(renderWithProps(Filter.Item)),
-              option(null),
-            ))),
-            option(null)
-          )(tableColums)
-        }
-      </Filter>
-
+      <Filter onValues={setColumns}>{filterItems}</Filter>
       <Table>
         <Table.Head>
-          <Table.Tr>
-            {
-              pipe(
-                safe(and(isArray, every(hasProps(['key', 'headerText'])))),
-                map(pipe(
-                  tap(console.warn),
-                  filter(a => isEmpty(columns) || columns.includes(a.key)),
-                  map(pipe(
-                    a => ({ key: a.key, children: a.headerText }),
-                    renderWithProps(Table.Th)
-                  ))
-                )),
-                option([]),
-              )(tableColums)
-            }
+          <Table.Tr>{headerColumns}
           </Table.Tr>
         </Table.Head>
-        <Table.Body>
-          {
-            pipe(
-              map(pipe(
-                item => (
-                  <Table.Tr key={rowKeyLens(item)}>
-                  {
-                    pipe(
-                      safe(isArray),
-                      map(filter(a => isEmpty(columns) || columns.includes(a.key))),
-                      map(
-                        map(
-                          pipe(
-                            safe(hasProps(['key', 'itemPropMapper', 'Component'])),
-                            map(({key, itemPropMapper, Component}) => (
-                              <Table.Td key={key}>
-                                <Component {...itemPropMapper(item)} />
-                              </Table.Td>
-                            )),
-                            option(null),
-                          ),
-                        ),
-                      ),
-                      option(null),
-                    )(tableColums)
-                  }
-                  </Table.Tr>
-                )
-              )),
-            )(list)
-          }
-        </Table.Body>
+        <Table.Body>{rows}</Table.Body>
       </Table>
-
     </SidebarLayout>
   );
 }
@@ -142,6 +142,5 @@ const TitleBar = props => (
     {props?.children}
   </header>
 );
-
 
 export default Listing;
