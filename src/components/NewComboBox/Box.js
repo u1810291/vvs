@@ -4,6 +4,19 @@ import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {Combobox} from '@headlessui/react';
 import Nullable from '../Nullable';
 import {componentToString} from '@s-e/frontend/react';
+import {
+  chain,
+  filter,
+  getProp,
+  identity,
+  ifElse,
+  isEmpty,
+  isTruthy,
+  not,
+  option,
+  pipe,
+  safe,
+} from 'crocks';
 
 const Box = ({
   Label,
@@ -19,16 +32,25 @@ const Box = ({
   const [query, setQuery] = useState("")
   const [selectedPerson, setSelectedPerson] = useState()
 
-  const filteredChildren = useMemo(()=> {
-    return query === ""
-      ? putIntoArray(children)
-      : putIntoArray(children).filter((component) => {
-        return String(componentToString(component)).match(new RegExp(asciifyLT(query.replace(/\W+/gm, "")), 'gi'))
-      })
-  }, [children, query])
+  const filteredChildren = useMemo(() => pipe(
+    putIntoArray,
+    filter(isTruthy),
+    ifElse(
+      () => isEmpty(query),
+      identity,
+      filter(
+        (component) => String(componentToString(component))
+        .match(new RegExp(asciifyLT(query.replace(/\W+/gm, "")), 'gi'))
+      )
+    )
+  )(children), [children, query]);
 
   const onChange = useCallback(event => setQuery(event.target.value), []);
-  const displayName = useCallback(person => person.name, []);
+  const displayName = useCallback(person => pipe(
+    safe(not(isEmpty)),
+    chain(getProp('children')),
+    option(''),
+  )(person), []);
 
   return (
     <Combobox as="div" value={selectedPerson} onChange={setSelectedPerson}>
@@ -43,11 +65,7 @@ const Box = ({
       <Nullable on={filteredChildren.length}>
         <Options>
           {filteredChildren.map((component) => (
-            <Option
-              {...component.props}
-              key={component.props.children}
-              className={optionClassNameFn}
-            />
+            <Option {...component.props} key={component.props.children} className={optionClassNameFn} />
           ))}
         </Options>
       </Nullable>
