@@ -1,17 +1,20 @@
-import React, { Suspense } from 'react';
-import { GlobalProvider } from './context/globalContext';
-import ReactDOM from 'react-dom';
-import './assets/tailwind.css';
-import App from './App';
-import './i18n';
+import React, {Suspense} from 'react';
+import {createRoot} from 'react-dom/client';
+import {GlobalProvider} from './context/globalContext';
 
-ReactDOM.render(
+import App from './App';
+
+import './i18n';
+import './assets/tailwind.css';
+
+const Root = createRoot(document.getElementById('root'));
+
+Root.render(
   <React.StrictMode>
     <Suspense fallback={<div></div>}>
       <GlobalProvider>
         <App />
       </GlobalProvider>
     </Suspense>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
