@@ -10,7 +10,6 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { useParams } from 'react-router-dom';
 import { Search } from '../../components/input/search';
-import AuthContext from '../../context/authContext';
 import GlobalContext from '../../context/globalContext';
 import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
 import SlideOver from '../../components/sidebars/slideOver';
@@ -25,7 +24,6 @@ function classNames(...classes) {
 
 function Key() {
   const { id } = useParams();
-  const { accessToken } = useContext(AuthContext);
   const { pdfExportComponentKey } = useContext(GlobalContext);
   const { toPrintKey, setToPrintKey } = useContext(GlobalContext);
   const [keySet, setKeySet] = useState('');

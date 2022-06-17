@@ -1,9 +1,7 @@
 import React, { useContext, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import AuthContext from '../../context/authContext';
 
 const MainSidebar = () => {
-  const { Logout } = useContext(AuthContext);
   const selfService = useCallback(() => {
     console.log('selfService');
   }, []);
@@ -184,7 +182,7 @@ const MainSidebar = () => {
             Mano paskyra
           </Link>
           <button
-            onClick={Logout}
+            onClick={() => {}}
             className='font-light text-normal text-gray-200 hover:text-gray-400'
           >
             Atsijungti

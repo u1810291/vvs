@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState, useCallback, useRef} from 'react';
 
-import AuthContext from '../../../context/authContext';
 import GlobalContext from '../../../context/globalContext';
 
 import Map from '../../map/component/Map';
@@ -12,11 +11,12 @@ import {OffCard} from '../../../components/cards/off';
 import {DDAPI} from '../../../mocks/dashboardDispatchApi';
 
 import useLanguage from '../../../hook/useLanguage';
-import {Marker, OverlayView, Polygon, Polyline} from '@react-google-maps/api';
+import {DirectionsService, Marker, OverlayView, Polygon, Polyline} from '@react-google-maps/api';
 
 import {generate} from 'shortid';
 import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
 import MarkerTag from '../../../components/atom/icon/MarkerTag';
+import {useGoogleApiContext} from '../../../context/googleApiContext';
 
 const overLayView1 = {
   lat: 55.92,
@@ -104,12 +104,8 @@ const routesOptions = {
 
 const DashboardForm = () => {
   const {t} = useLanguage();
-  const {accessToken} = useContext(AuthContext);
   const {setGlobalToken} = useContext(GlobalContext);
-
-  useEffect(() => {
-    if (accessToken) setGlobalToken(accessToken)
-  }, [accessToken]);
+  const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
 
   const [directions, setDirections] = useState([]);
   const mapRef = useRef(null);
@@ -170,6 +166,7 @@ const DashboardForm = () => {
 
   useEffect(() => {
     let results;
+    if (!isLoaded) return;
     const directionService = new google.maps.DirectionsService();
     pipe(
       safe(and(isArray, a => a.length > 0)),
@@ -228,85 +225,87 @@ const DashboardForm = () => {
         <DashboardSideLeft />
       </div>
       <div className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
-        <Map>
-          {clickedPos.lat ? (
-            <Marker icon={markerIcon} position={clickedPos} />
-          ) : null}
-          {
-            directions?.map((d, index) => (
-              <Polyline
+      {!isLoaded ? null : (
+          <Map>
+            {clickedPos.lat ? (
+              <Marker icon={markerIcon} position={clickedPos} />
+            ) : null}
+            {
+              directions?.map((d, index) => (
+                <Polyline
+                  key={generate()}
+                  path={getPathOr(null, ['routes',0, 'overview_path'], d)}
+                  geodesic={true}
+                  options={routesOptions}
+                />
+              ))
+            }
+            {originAndDestination?.map((marker) => (
+              <Marker
                 key={generate()}
-                path={getPathOr(null, ['routes',0, 'overview_path'], d)}
-                geodesic={true}
-                options={routesOptions}
+                icon={getCrewIcons(marker.crew)}
+                position={
+                  new window.google.maps.LatLng(
+                    marker.originLat,
+                    marker.originLon
+                  )
+                }
               />
-            ))
-          }
-          {originAndDestination?.map((marker) => (
-            <Marker
-              key={generate()}
-              icon={getCrewIcons(marker.crew)}
-              position={
-                new window.google.maps.LatLng(
-                  marker.originLat,
-                  marker.originLon
-                )
-              }
+            ))}
+            <OverlayView
+              position={overLayView1}
+              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+              getPixelPositionOffset={(width, height) => ({
+                x: -(width / 2),
+                y: -(height / 2),
+              })}
+            >
+              <MarkerTag
+                label={`${t('object.alarmedZone')} 256 ${t('object.zone')}`}
+                labelBodyTw={'bg-red-600'}
+              />
+            </OverlayView>
+            <OverlayView
+              position={overLayView3}
+              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+              getPixelPositionOffset={(width, height) => ({
+                x: -(width / 2),
+                y: -(height / 2),
+              })}
+            >
+              <MarkerTag
+                label={t('icon.marker.tag.endpoint')}
+                labelBodyTw={'bg-yellow-600'}
+              />
+            </OverlayView>
+            <OverlayView
+              position={overLayView2}
+              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+              getPixelPositionOffset={(width, height) => ({
+                x: -(width / 2),
+                y: -(height / 2),
+              })}
+            >
+              <MarkerTag
+                label={'Ekipažas'}
+                description={'Įvykis + Objektas + Klientas'}
+                labelBodyTw={'bg-red-600'}
+                descriptionTw={'text-red-600'}
+              />
+            </OverlayView>
+            <Polygon
+              editable
+              draggable
+              options={polygonBlack}
+              path={path}
+              onMouseUp={onEditPolygon}
+              onDragEnd={onEditPolygon}
+              onLoad={onLoadPolygon}
+              onUnmount={onUnmountPolygon}
             />
-          ))}
-          <OverlayView
-            position={overLayView1}
-            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-            getPixelPositionOffset={(width, height) => ({
-              x: -(width / 2),
-              y: -(height / 2),
-            })}
-          >
-            <MarkerTag
-              label={`${t('object.alarmedZone')} 256 ${t('object.zone')}`}
-              labelBodyTw={'bg-red-600'}
-            />
-          </OverlayView>
-          <OverlayView
-            position={overLayView3}
-            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-            getPixelPositionOffset={(width, height) => ({
-              x: -(width / 2),
-              y: -(height / 2),
-            })}
-          >
-            <MarkerTag
-              label={t('icon.marker.tag.endpoint')}
-              labelBodyTw={'bg-yellow-600'}
-            />
-          </OverlayView>
-          <OverlayView
-            position={overLayView2}
-            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-            getPixelPositionOffset={(width, height) => ({
-              x: -(width / 2),
-              y: -(height / 2),
-            })}
-          >
-            <MarkerTag
-              label={'Ekipažas'}
-              description={'Įvykis + Objektas + Klientas'}
-              labelBodyTw={'bg-red-600'}
-              descriptionTw={'text-red-600'}
-            />
-          </OverlayView>
-          <Polygon
-            editable
-            draggable
-            options={polygonBlack}
-            path={path}
-            onMouseUp={onEditPolygon}
-            onDragEnd={onEditPolygon}
-            onLoad={onLoadPolygon}
-            onUnmount={onUnmountPolygon}
-          />
-          <Polygon path={polygon} options={polygonSetup} />
-        </Map>
+            <Polygon path={polygon} options={polygonSetup} />
+          </Map>
+      )}
       </div>
       <div className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <DashboardSideRight title={t('eurocash.crew')} />

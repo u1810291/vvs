@@ -2,13 +2,11 @@ import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { CreateHeader } from '../../components/headers/create';
 import SlideOver from '../../components/sidebars/slideOver';
 import GlobalContext from '../../context/globalContext';
-import AuthContext from '../../context/authContext';
 import { Spinner } from 'react-activity';
 import { Link } from 'react-router-dom';
 import { archive } from '../../mocks/queryForms/queryString/users';
 import { getUsers } from '../../mocks/queryForms/queryString/users';
 import { getAllUsers } from '../../mocks/queryForms/variables/users';
-import { useFetch } from '../../hook/useFetch';
 import { useDeleteFetch } from '../../hook/useDeleteFetch';
 import { useParams } from 'react-router-dom';
 import { OverlayProvider, usePreventScroll } from 'react-aria';
@@ -38,13 +36,9 @@ function Driver() {
     error: archiveError,
     loading: archiveLoading,
     fetchData: archiveFetch,
-  } = useFetch(archive, getDriver, accessToken);
-  
-  const { data, error, loading, fetchData } = useFetch(
-    getUsers,
-    getAllUsers,
-    accessToken
-  );
+  } = {}
+
+  const { data, error, loading, fetchData } = {};
 
   useEffect(() => {
     fetchData();

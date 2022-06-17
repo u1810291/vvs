@@ -1,13 +1,12 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import useSort from '../../hook/useSort';
-import { sortToggle } from '../../util/utils';
-import { Disconnected } from '../../components/buttons/disconnected';
-import { Connected } from '../../components/buttons/connected';
-import useReactQuery from '../../hook/useQuery';
-import { objectPage } from '../../mocks/queryForms/queryString/query';
 import GlobalContext from '../../context/globalContext';
+import React, { useContext, useRef, useState, useEffect } from 'react';
+import useSort from '../../hook/useSort';
+import { Connected } from '../../components/buttons/connected';
+import { Disconnected } from '../../components/buttons/disconnected';
+import { Link } from 'react-router-dom';
 import { generate } from 'shortid';
+import { objectPage } from '../../mocks/queryForms/queryString/query';
+import { sortToggle } from '../../util/utils';
 
 export const ModemsList = ({ token, ...props }) => {
   const { filterListModems, setFilterListModems } = useContext(GlobalContext);

@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { ModemHeader } from '../../components/headers/modem';
 import GlobalContext from '../../context/globalContext';
-import AuthContext from '../../context/authContext';
 import { Spinner } from 'react-activity';
 import { generate } from 'shortid';
 import SlideOver from '../../components/sidebars/slideOver';
@@ -19,7 +18,6 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { zones } from '../../mocks/zones';
 import { useParams } from 'react-router-dom';
-import useReactQuery from '../../hook/useQuery';
 import { objectPage } from '../../mocks/queryForms/queryString/query';
 
 function Modem() {

@@ -1,17 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import BPM from '../components/logos/bpm';
 import LoginForm from '../components/forms/login';
-import AuthContext from '../context/authContext';
-
 function Login() {
-  const { accessToken } = useContext(AuthContext);
-
-  useEffect(() => {
-    if (accessToken) {
-      window.location.href = '/dashboard';
-    }
-  }, [accessToken]);
-
   return (
     <>
       <div className='container inset-0 sm:mx-auto max-w-screen-xl'>

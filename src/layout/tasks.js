@@ -21,11 +21,7 @@ import SlideOver from '../components/sidebars/slideOver';
 import { OverlayProvider, usePreventScroll } from 'react-aria';
 import MainSidebar from '../components/sidebars/main';
 import { SearchButton } from '../components/buttons/searchButton';
-// import useReactQuery from '../hook/useQuery';
-// import { useFetch } from '../hook/useFetch';
-// import { addFilters } from '../api/queryForms/queryString/mutation';
-//
-//
+
 const classNames = a => a;
 const { AddFilterList } = require('../components/addFilter/addFilterTasks');
 

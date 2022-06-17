@@ -17,8 +17,6 @@ import { OverlayProvider, usePreventScroll } from 'react-aria';
 import SlideOver from '../../components/sidebars/slideOver';
 import MainSidebar from '../../components/sidebars/main';
 import { crewZonesMutation } from '../../mocks/queryForms/queryString/mutation';
-import { useFetch } from '../../hook/useFetch';
-import AuthContext from '../../context/authContext';
 import Map from '../../feature/map/component/Map';
 import GoogleMapTools from '../../feature/map/component/GoogleMapTools';
 import {Polygon} from '@react-google-maps/api';
@@ -75,7 +73,7 @@ function Dislocation() {
     data: mutateResponse,
     loading: loadingResponse,
     fetchData,
-  } = useFetch(crewZonesMutation, crewZonesVariables, accessToken);
+  } = {error: null, data: null, loading: false, fetchData: () => {}}
 
   const createNewPolygon = useCallback(() => {
     fetchData();

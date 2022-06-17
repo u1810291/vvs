@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useContext} from 'react';
-import AuthContext from '../../../context/authContext';
 
 import Map from '../../map/component/Map';
 import Nullable from '../../../components/atom/Nullable';
@@ -25,7 +24,6 @@ const NewTaskForm = () => {
   const {t} = useLanguage();
   const {onMapLoad} = useGoogleApiContext();
   const {getCoordsByAddress} = useGeocode();
-  const {accessToken} = useContext(AuthContext);
 
   const [taskStatus, setTaskStatus] = useState([
     {id: '123', key: null, name: 'Naujas'}

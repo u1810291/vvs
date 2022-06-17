@@ -10,7 +10,6 @@ import { ModemsList } from '../../components/lists/modemsList';
 
 import { FiltersListModems } from '../../components/filters/filterModemsList';
 import { OptionsListModems } from '../../components/options/optionsModemsList';
-import AuthContext from '../../context/authContext';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
@@ -30,7 +29,6 @@ function classNames(...classes) {
 }
 
 function Modems() {
-  const { accessToken } = useContext(AuthContext) 
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
     setIsOpen(false);

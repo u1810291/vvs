@@ -4,8 +4,6 @@ import useLanguage from '../../hook/useLanguage';
 import GoogleMapTools from '../../feature/map/component/GoogleMapTools';
 import GlobalContext from '../../context/globalContext';
 import { crewZonesQuery } from '../../mocks/queryForms/queryString/query';
-import { useQuery, useSubscription, useMutation } from 'graphql-hooks';
-import useReactQuery from '../../hook/useQuery';
 import { crewZonesSubscription } from '../../mocks/queryForms/queryString/subscriptions';
 import { generate } from 'shortid';
 

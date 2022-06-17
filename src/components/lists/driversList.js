@@ -1,4 +1,3 @@
-import AuthContext from '../../context/authContext';
 import GlobalContext from '../../context/globalContext';
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import useSort from '../../hook/useSort';
@@ -8,7 +7,6 @@ import { generate } from 'shortid';
 import { getAllUsers } from '../../mocks/queryForms/variables/users';
 import { getUsers } from '../../mocks/queryForms/queryString/users';
 import { sortToggle } from '../../util/utils';
-import useReactQuery from '../../hook/useQuery';
 
 const { Connected } = require('../buttons/connected');
 const { Deactivated } = require('../buttons/deactivated');

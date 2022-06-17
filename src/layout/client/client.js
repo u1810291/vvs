@@ -1,27 +1,23 @@
+import GlobalContext from '../../context/globalContext';
+import MainSidebar from '../../components/sidebars/main';
 import React, { useState, useContext, useCallback, useEffect } from 'react';
+import SlideOver from '../../components/sidebars/slideOver';
+import useUtils from '../../hook/useUtils';
 import { CreateHeader } from '../../components/headers/create';
+import { Link } from 'react-router-dom';
 import { Object } from '../../components/lists/object';
+import { OverlayProvider, usePreventScroll } from 'react-aria';
+import { Spinner } from 'react-activity';
+import { archive } from '../../mocks/queryForms/queryString/users';
 import { clientList } from '../../mocks/client';
 import { generate } from 'shortid';
-import { useParams } from 'react-router-dom';
-import { getUsers } from '../../mocks/queryForms/queryString/users';
 import { getAllUsers } from '../../mocks/queryForms/variables/users';
-import { archive } from '../../mocks/queryForms/queryString/users';
-import AuthContext from '../../context/authContext';
-import GlobalContext from '../../context/globalContext';
-import { useFetch } from '../../hook/useFetch';
-import { Spinner } from 'react-activity';
-import { Link } from 'react-router-dom';
-import SlideOver from '../../components/sidebars/slideOver';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
-import MainSidebar from '../../components/sidebars/main';
-import useUtils from '../../hook/useUtils';
+import { getUsers } from '../../mocks/queryForms/queryString/users';
 import { updateRegister } from '../../mocks/queryForms/queryString/query';
+import { useParams } from 'react-router-dom';
 
 function Client() {
   const { id } = useParams();
-  const { accessToken } = useContext(AuthContext);
-  const { clientEmail, setClientEmail } = useContext(AuthContext);
   const [customers, setCustomers] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
@@ -38,8 +34,6 @@ function Client() {
   const [fullName, setFullName] = useState('');
   const [administrator, setAdministrator] = useState('');
   const [administratorHandle, setAdministratorHandle] = useState('');
-  const { sent, setSent, user, ForgotPasswordFromAdmin } =
-    useContext(AuthContext);
   const { backFunc } = useUtils();
 
   const getClient = {
@@ -51,7 +45,7 @@ function Client() {
     error: archiveError,
     loading: archiveLoading,
     fetchData: archiveFetch,
-  } = useFetch(archive, getClient, accessToken);
+  } = {}
 
   const updateRegisterVariables = {
       userId: id,
@@ -63,13 +57,9 @@ function Client() {
     data: updateRegisterData,
     loading: updateRegisterLoading,
     fetchData: updateRegisterFetchData,
-  } = useFetch(updateRegister, updateRegisterVariables, accessToken);
+  } = {}
 
-  const { data, error, loading, fetchData } = useFetch(
-    getUsers,
-    getAllUsers,
-    accessToken
-  );
+  const { data, error, loading, fetchData } = {};
 
   useEffect(() => {
     fetchData();
