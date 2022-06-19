@@ -101,6 +101,7 @@ export const getRoute = curry((
     translationKey={translationKey}
     path={path}
     element={<Suspense><Component/></Suspense>}
+    exact
   >
     {children}
   </Route>

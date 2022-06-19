@@ -28,6 +28,9 @@ export const parseHasuraOutput = pipe(
   chain(maybeToAsync('object property is expected', getProp('object'))),
 );
 
+/**
+ * @type {(headers: Headers} => (variables: object) => (query: string) => Async}
+ */
 export const api = curry((headers, variables, query) => (
   fetchGql(
     ENV.API_ENDPOINT,

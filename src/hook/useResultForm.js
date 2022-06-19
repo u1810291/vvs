@@ -16,6 +16,24 @@ import {
 } from 'crocks';
 import useMergeReducer from './useMergeReducer';
 
+/**
+ * @type FormInputProps
+ * @param {(value: string) => void} onChange
+ * @param {string} value
+ */
+
+/**
+ * @type FormInput
+ * @param {(value: string) => boolean} validator
+ * @param {string} initial
+ * @param {boolean} opt
+ * @param {string} message
+ * @param {FormInputProps[]} props
+ */
+
+/**
+ * @param {Object.<string, FormInput>} obj
+ */
 const useResultForm = obj => {
   const [state, setState] = useMergeReducer(
     pipe(

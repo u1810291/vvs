@@ -1,4 +1,5 @@
 import {omit} from 'crocks';
+import {putIntoArray} from 'util/array';
 import {withComponentFactory} from '../../util/react';
 import Nullable from '../Nullable';
 import Input from './Base/Input';
@@ -14,19 +15,19 @@ const InputGroup = ({
   inputClassName,
   inputWrapperWhenLabel = 'mt-1',
   inputwrapperClassName = 'relative rounded-md shadow-sm',
-  labelText,
+  label,
   ...props
 }) => (
   <div className={className}>
-    <Nullable on={labelText}>
+    <Nullable on={label}>
       <Label htmlFor={props?.id}>
-        {labelText}
+        {label}
       </Label>
     </Nullable>
-    <div className={`${labelText ? inputWrapperWhenLabel : ''} ${inputwrapperClassName}`}>
-      <Input {...{...props, className: inputClassName}} />
+    <div className={`${label ? inputWrapperWhenLabel : ''} ${inputwrapperClassName}`}>
+      <Input {...{...props, className: [...putIntoArray(inputClassName), Addon ? 'pr-10' : ''].join(' ')}} />
       {Addon && (
-      <div className={addonWrapperClassName}>
+      <div className={`${addonWrapperClassName}`}>
         <Addon className={addonClassName} aria-hidden='true' />
       </div>)}
     </div>

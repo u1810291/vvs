@@ -1,4 +1,4 @@
-import {Routsies} from 'App';
+import Routes from 'Routes';
 import {isArray} from 'crocks';
 import React, { useContext, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -17,7 +17,7 @@ const parseRoutes = component => {
 
 const MainSidebar = () => {
   useEffect(() => {
-    console.log(parseRoutes(Routsies));
+    console.log(parseRoutes(Routes));
   }, [])
 
   const selfService = useCallback(() => {
