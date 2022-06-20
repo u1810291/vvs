@@ -1,13 +1,13 @@
 import Listing from 'layout/Listing';
-import {apiAdminQuery} from 'api';
-import {renderWithProps} from 'util/react';
+import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {
   and,
   chain,
-  defaultProps,
+  curry,
   getProp,
   getPropOr,
+  identity,
   isEmpty,
   map,
   not,
@@ -15,33 +15,42 @@ import {
   pipe,
   safe,
 } from 'crocks';
+import {withAuthorizedHook} from 'hoc/withAuthorizedHook';
 
 const Span = props => <span {...props}/>;
 
-const ObjectList = pipe(
-  defaultProps({
-    asyncGetter: apiAdminQuery`
-      query {
-        object  {
-          address
-          city
-          contract_no
-          contract_object_no
-          id
-          is_atm
-          longitude
-          latitude
-          name
-          provider_name
-          provider_id
-          phone
-          navision_id
-        }
-      }
-    `,
+const QUERY = `
+  query {
+    object {
+      address
+      city
+      contract_no
+      contract_object_no
+      id
+      is_atm
+      longitude
+      latitude
+      name
+      provider_name
+      provider_id
+      phone
+      navision_id
+    }
+  }
+`;
 
+const extractObject = maybeToAsync(
+  '"object" prop is expected in the response',
+  getProp('object')
+);
+
+const ObjectList = () => withAuthorizedHook(
+  Listing,
+  ({apiQuery}) => ({
+    asyncGetter: apiQuery(QUERY).chain(extractObject)
+  }),
+  {
     rowKeyLens: getPropOr(0, 'id'),
-
     tableColumns: [
       {
         key: 'id',
@@ -175,9 +184,8 @@ const ObjectList = pipe(
         ),
         Component: Span,
       },
-    ]
-  }),
-  renderWithProps(Listing),
+    ],
+  }
 );
 
 export default ObjectList;
