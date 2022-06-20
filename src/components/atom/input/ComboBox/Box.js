@@ -5,17 +5,14 @@ import {Combobox} from '@headlessui/react';
 import Nullable from '../../../Nullable';
 import {componentToString} from '@s-e/frontend/react';
 import {
-  chain,
   filter,
-  getProp,
+  getPath,
   identity,
   ifElse,
   isEmpty,
   isTruthy,
-  not,
   option,
   pipe,
-  safe,
 } from 'crocks';
 
 const Box = ({
@@ -46,11 +43,10 @@ const Box = ({
   )(children), [children, query]);
 
   const onChange = useCallback(event => setQuery(event.target.value), []);
-  const displayName = useCallback(person => pipe(
-    safe(not(isEmpty)),
-    chain(getProp('children')),
+  const displayName = useCallback(event => pipe(
+    getPath(['props', 'children']),
     option(''),
-  )(person), []);
+  )(event), []);
 
   return (
     <Combobox as='div' value={selectedChildren} onChange={setSelectedChildren}>
@@ -65,7 +61,7 @@ const Box = ({
       <Nullable on={filteredChildren.length}>
         <Options>
           {filteredChildren.map((component) => (
-            <Option {...component.props} key={component.props.children} className={optionClassNameFn} />
+            <Option {...component.props} key={component.props.children} className={optionClassNameFn} value={component}/>
           ))}
         </Options>
       </Nullable>
