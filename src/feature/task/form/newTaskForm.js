@@ -52,12 +52,12 @@ const NewTaskForm = () => {
     result: eventResult,
     setForm: setEventForm,
   } = useResultForm({
-    token: {
-      initial: `Bearer ${accessToken}`,
-      validator: or(hasntLength, lengthGt(5)),
-      message: t('validation.error.token'),
-      props: () => {}
-    },
+    // token: {
+    //   initial: `Bearer ${accessToken}`,
+    //   validator: or(hasntLength, lengthGt(5)),
+    //   message: t('validation.error.token'),
+    //   props: () => {}
+    // },
     name: {
       initial: '',
       validator: or(hasntLength, lengthGt(5)),
@@ -90,8 +90,8 @@ const NewTaskForm = () => {
     },
   });
 
-  const [crewsResponse, forkCrews] = useAsync(asyncGetCrews(accessToken), identity);
-  const [objectsResponse, forkObjects] = useAsync(asyncGetObjects(accessToken), identity);
+  // const [crewsResponse, forkCrews] = useAsync(asyncGetCrews(accessToken), identity);
+  // const [objectsResponse, forkObjects] = useAsync(asyncGetObjects(accessToken), identity);
   const [eventResponse, forkEvent] = useAsync(resultToAsync(eventResult).chain(asyncCreateEvent), identity);
 
   // useEffect(() => {

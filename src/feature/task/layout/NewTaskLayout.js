@@ -4,7 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import NewTaskForm from '../form/newTaskForm';
 import Header from '../../../components/atom/Header';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import SidebarLayout from '../../../layout/sidebarLayout';
+import SideBarLayout from '../../../layout/SideBarLayout';
 import HeaderButtonGroup from '../../../components/headers/HeaderButtonGroup';
 
 import useLanguage from '../../../hook/useLanguage';
@@ -16,11 +16,10 @@ const NewTaskLayout = () => {
     navigate('/tasks')
   }, []);
   const onSaveButton = useCallback(() => {
-
   }, []);
 
   return (
-    <SidebarLayout>
+    <SideBarLayout>
       <div className='flex flex-col min-h-full'>
         <Header>
           <Breadcrumbs>
@@ -38,7 +37,7 @@ const NewTaskLayout = () => {
         </Header>
         <NewTaskForm />
       </div>
-    </SidebarLayout>
+    </SideBarLayout>
   );
 };
 
