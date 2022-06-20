@@ -9,13 +9,9 @@ import useAsync from 'hook/useAsync';
 import useResultForm from 'hook/useResultForm';
 import {useEffect, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
+import {always} from 'util/func';
 import {lengthGt} from 'util/pred';
 import login from '../api/login';
-
-const always = pipe(
-  constant,
-  once
-);
 
 const MainLoginForm = () => {
   const {t} = useTranslation('login', {keyPrefix: 'mainForm'});
