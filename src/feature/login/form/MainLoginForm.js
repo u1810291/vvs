@@ -3,24 +3,22 @@ import Card from 'components/atom/Card';
 import CheckBox from 'components/atom/input/CheckBox';
 import Button from 'components/Button';
 import InputGroup from 'components/InputGroup';
-import {constant, once, or, pipe} from 'crocks';
+import {pipe, tap} from 'crocks';
 import resultToAsync from 'crocks/Async/resultToAsync';
-import {empty} from 'crocks/pointfree';
 import useAsync from 'hook/useAsync';
 import useResultForm from 'hook/useResultForm';
 import {useEffect, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
+import {always} from 'util/func';
 import {lengthGt} from 'util/pred';
+import login from '../api/login';
 
-const always = pipe(
-  constant,
-  once
-);
+import A from 'components/atom/input/CheckBox';
 
 const MainLoginForm = () => {
   const {t} = useTranslation('login', {keyPrefix: 'mainForm'});
   const {result, ctrl} = useResultForm({
-    email: {
+    username: {
       initial: 'lukas.l@s-e.lt',
       validator: isEmail,
       props: {
@@ -49,23 +47,31 @@ const MainLoginForm = () => {
     }
   });
 
-  /**
-   * @todo
-   * TODO: resultToAsync(result) -> api -> useAsync -> fork
-   */
-  const [state, fork] = useAsync(resultToAsync(result), console.error, console.warn);
+  const [state, fork] = useAsync(
+    resultToAsync(result).chain(login),
+    console.error,
+    pipe(
+      tap(console.warn),
+      tap((a) => {
+
+      }),
+    ),
+  );
+
+  const submit = useCallback((event) => { event.preventDefault(); fork() }, [fork]);
 
   useEffect(() => {console.log(state)}, [state]);
 
-  const submit = useCallback((event) => {
-    event.preventDefault();
-    fork()
-  }, [fork]);
-
   return (
     <Card>
+    <A
+      label='lorem shitsum'
+      description={<A.MultilineDesc>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</A.MultilineDesc>}
+    >
+    </A>
+
       <form className='space-y-6'>
-        <InputGroup {...ctrl('email')} />
+        <InputGroup {...ctrl('username')} />
         <InputGroup {...ctrl('password')} />
         <CheckBox {...ctrl('rememberMe')}/>
         <Button.Sm type='submit' className='w-full' onClick={submit}>

@@ -5,17 +5,19 @@ import Box from './Box';
 import Input from './Input';
 import Label from './Label';
 import CheckboxContainer from './CheckboxContainer';
-import OneLineDescription from './OneLineDescription';
-import MultiLineDescription from './MultiLineDescription';
-import DescriptionContainer from './DescriptionContainer';
+import InlineDesc from './OneLineDescription';
+import MultilineDesc from './MultiLineDescription';
+import DetailsContainer from './DetailsContainer';
+import {omit} from 'crocks';
 
 const CheckBox = withComponentFactory(Box, {
+  mapSetupInComponent: omit(['InlineDesc', 'MultilineDesc']),
   Input,
   Label,
   CheckboxContainer,
-  DescriptionContainer,
-  OneLineDescription,
-  MultiLineDescription,
+  DetailsContainer,
+  InlineDesc,
+  MultilineDesc,
 });
 
 export default CheckBox;

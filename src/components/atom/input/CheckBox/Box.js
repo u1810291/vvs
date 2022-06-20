@@ -1,20 +1,17 @@
+import {identity} from 'crocks';
 import React, {useCallback, useState} from 'react';
 
 const Box = ({
   Input,
   Label,
   CheckboxContainer,
-  DescriptionContainer,
-  OneLineDescription,
-  MultiLineDescription,
-  type,
+  DetailsContainer,
   name,
   label,
   description,
-  setCheck,
   isChecked,
+  onChange = identity,
 }) => {
-  const onChange = useCallback(() => setCheck(), []);
   return (
     <CheckboxContainer>
       <Input
@@ -24,14 +21,12 @@ const Box = ({
         checked={isChecked}
         aria-describedby={`${name}-description`}
       />
-      <DescriptionContainer>
+      <DetailsContainer>
         <Label htmlFor={name}>
           {label}
         </Label>
-        <MultiLineDescription id={`${name}-description`}>
-          {description}
-        </MultiLineDescription>
-      </DescriptionContainer>
+        {description}
+      </DetailsContainer>
     </CheckboxContainer>
   );
 };
