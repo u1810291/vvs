@@ -12,26 +12,23 @@ const ComboBoxLayout = () => {
       <CheckBox
         label={'Comments'}
         name={'comments'}
-        type={'oneline'}
+        onChange={setCheckExample1}
         isChecked={isCheckedExample1}
-        setCheck={setCheckExample1}
-        description={'Get notified when someones posts a comment on a posting.'}
+        description={<CheckBox.InlineDesc>Get notified when someones posts a comment on a posting.</CheckBox.InlineDesc>}
       />
       <CheckBox
         label={'Candidates'}
         name={'candidates'}
-        type={'multiline'}
+        onChange={setCheckExample2}
         isChecked={isCheckedExample2}
-        setCheck={setCheckExample2}
-        description={'Get notified when a candidate applies for a job.'}
+        description={<CheckBox.MultilineDesc>Get notified when a candidate applies for a job.</CheckBox.MultilineDesc>}
       />
       <CheckBox
         label={'Offers'}
         name={'offers'}
-        type={'multiline'}
+        onChange={setCheckExample3}
         isChecked={isCheckedExample3}
-        setCheck={setCheckExample3}
-        description={'Get notified when a candidate accepts or rejects an offer.'}
+        description={<CheckBox.MultilineDesc>Get notified when a candidate accepts or rejects an offer.</CheckBox.MultilineDesc>}
       />
     </section>
   );
