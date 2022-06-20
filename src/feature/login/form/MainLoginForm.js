@@ -58,9 +58,8 @@ const MainLoginForm = () => {
   const submit = useCallback((event) => { event.preventDefault(); fork() }, [fork]);
 
   useEffect(() => {
-    if (isAuthorized) nav('/dashboard');
-  }, [isAuthorized])
-
+    if (isAuthorized === true) nav('/dashboard');
+  }, [isAuthorized]);
 
   return (
     <Card>
