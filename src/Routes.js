@@ -27,6 +27,7 @@ import ObjectFeature from './feature/object/routes';
 import ComboBoxLayout from './feature/examples/layout/ComboBoxLayout';
 import CheckBoxLayout from './feature/examples/layout/CheckBoxLayout';
 import LoginFeature from 'feature/login/routes';
+import SelectBoxLayout from './feature/examples/layout/SelectBoxLayout';
 
 const Routes = (
   <>
@@ -56,6 +57,7 @@ const Routes = (
     <Route path='crew/new' element={<CreateCrew />} />
     <Route path='storybook/combobox' element={<ComboBoxLayout />} />
     <Route path='storybook/checkbox' element={<CheckBoxLayout />} />
+    <Route path='storybook/selectbox' element={<SelectBoxLayout />} />
     <Route path='*' element={<NotFound />} />
   </>
 );
