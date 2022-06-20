@@ -4,24 +4,23 @@ import {BrowserRouter, Routes, Route, useNavigate, Outlet} from 'react-router-do
 import {useEvent} from '@react-aria/utils';
 import {useEffect} from 'react';
 import {useAuth} from 'context/auth';
-import {LOGIN_PAGE} from 'feature/login/routes';
+import LoginRoute, {LOGIN_PAGE} from 'feature/login/routes';
 
-const Lol = () => {
+const AuthorizedOutlet = () => {
   const {isAuthorized} = useAuth();
-  const a = useNavigate();
+  const nav = useNavigate();
 
   useEffect(() => {
-    if (!isAuthorized) a(LOGIN_PAGE);
+    if (!isAuthorized) nav(LOGIN_PAGE);
   }, []);
   return <Outlet/>
 };
-
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Lol/>}>
+        <Route element={<AuthorizedOutlet/>}>
           {MainRoutes}
         </Route>
       </Routes>

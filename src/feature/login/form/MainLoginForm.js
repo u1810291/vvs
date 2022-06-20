@@ -1,6 +1,5 @@
 import {isEmail} from '@s-e/frontend/pred';
 import Card from 'components/atom/Card';
-import CheckBox from 'components/atom/input/CheckBox';
 import Button from 'components/Button';
 import InputGroup from 'components/atom/input/InputGroup';
 import {pipe, tap} from 'crocks';
@@ -12,10 +11,13 @@ import {useTranslation} from 'react-i18next';
 import {always} from 'util/func';
 import {lengthGt} from 'util/pred';
 import login from '../api/login';
-
-import A from 'components/atom/input/CheckBox';
+import Checkbox from 'components/atom/input/CheckBox';
+import {useAuth} from 'context/auth';
+import {useNavigate} from 'react-router-dom';
 
 const MainLoginForm = () => {
+  const nav = useNavigate()
+  const {isAuthorized, update} = useAuth();
   const {t} = useTranslation('login', {keyPrefix: 'mainForm'});
   const {result, ctrl} = useResultForm({
     username: {
@@ -50,30 +52,22 @@ const MainLoginForm = () => {
   const [state, fork] = useAsync(
     resultToAsync(result).chain(login),
     console.error,
-    pipe(
-      tap(console.warn),
-      tap((a) => {
-
-      }),
-    ),
+    update
   );
 
   const submit = useCallback((event) => { event.preventDefault(); fork() }, [fork]);
 
-  useEffect(() => {console.log(state)}, [state]);
+  useEffect(() => {
+    if (isAuthorized) nav('/dashboard');
+  }, [isAuthorized])
+
 
   return (
     <Card>
-    <A
-      label='lorem shitsum'
-      description={<A.MultilineDesc>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</A.MultilineDesc>}
-    >
-    </A>
-
       <form className='space-y-6'>
         <InputGroup {...ctrl('username')} />
         <InputGroup {...ctrl('password')} />
-        <CheckBox {...ctrl('rememberMe')}/>
+        <Checkbox {...ctrl('rememberMe')}/>
         <Button.Sm type='submit' className='w-full' onClick={submit}>
           {t`button.submit`}
         </Button.Sm>

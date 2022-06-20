@@ -1,12 +1,9 @@
 import ENV from '../env';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {fetchGql} from '@s-e/frontend/fetch';
 import {
   Async,
   bichain,
-  chain,
   curry,
-  getProp,
   getPropOr,
   hasProp,
   identity,
@@ -14,8 +11,6 @@ import {
   isArray,
   pipe,
 } from 'crocks';
-import {head} from 'crocks/pointfree';
-import Maybe from 'crocks/Maybe';
 
 const {Rejected, Resolved} = Async;
 
