@@ -31,6 +31,7 @@ import LoginFeature from 'feature/login/routes';
 const Routes = (
   <>
     {LoginFeature}
+    <Route path='/' element={<DashboardLayout />} />
     <Route path='dashboard' element={<DashboardLayout />} />
     <Route path='keys' element={<Keys />} />
     <Route path='tasks' element={<Tasks />} />

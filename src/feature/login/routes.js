@@ -11,8 +11,7 @@ const LoginRoute = getRoute(
   'feature.login.main',
   LOGIN_PAGE,
   lazy(() => import('./layout/MainLoginLayout')),
-  null,
-  true
+  null
 );
 
 export default LoginRoute;
