@@ -1,8 +1,10 @@
-import React, {useMemo} from 'react';
-import {api, apiQuery} from 'api';
+import React, {useEffect, useMemo, useState} from 'react';
+import refresh from 'feature/login/api/refresh';
 import useMergeReducer from 'hook/useMergeReducer';
+import {api, apiQuery} from 'api';
 import {createContext, useContext} from 'react';
 import {
+  Async,
   and,
   chain,
   getProp,
@@ -13,15 +15,15 @@ import {
   objOf,
   option,
   pipe,
-  propSatisfies,
   safe,
+  tap,
 } from 'crocks';
 
 const AuthContext = createContext();
-
 const isValid = and(isString, not(isEmpty));
 
 const AuthContextProvider = ({children}) => {
+  const [isAuthorized, setAuthorized] = useState(null);
   const [state, setState] = useMergeReducer({
     token: null,
     refreshToken: null
@@ -38,10 +40,30 @@ const AuthContextProvider = ({children}) => {
     option(apiQuery)
   )(state), [state]);
 
-  const isAuthorized = useMemo(() => pipe(
-    safe(and(propSatisfies('token', isValid), propSatisfies('refreshToken', isValid))),
-    option(false),
-  )(state), [state])
+  useEffect(() => {
+    const refreshtoken = (
+      getProp('refreshToken', state)
+      .chain(safe(isValid))
+      .map(tap(value => localStorage.setItem('refreshToken', value)))
+      .alt(safe(isValid, localStorage.getItem('refreshToken')))
+      .either(
+        () => setAuthorized(false),
+        refreshToken => {
+          if (state.token) {
+            setAuthorized(true);
+            return;
+          }
+
+          refresh(refreshToken)
+            .map(tap(setState))
+            .fork(
+              () => setAuthorized(false),
+              () => setAuthorized(true),
+            )
+        }
+      )
+    );
+  }, [state]);
 
   return (
     <AuthContext.Provider value={{
