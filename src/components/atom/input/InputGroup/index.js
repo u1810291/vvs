@@ -1,7 +1,7 @@
 import {omit} from 'crocks';
 import {putIntoArray} from 'util/array';
-import {withComponentFactory} from '../../util/react';
-import Nullable from '../Nullable';
+import {withComponentFactory} from '../../../../util/react';
+import Nullable from '../../../Nullable';
 import Input from './Base/Input';
 import Label from './Base/Label';
 

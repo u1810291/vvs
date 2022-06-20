@@ -2,7 +2,7 @@ import Async from 'crocks/Async';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import Filter from '../../components/Filter';
 import Maybe from 'crocks/Maybe';
-import SearchInputGroup from '../../components/InputGroup/SearchInputGroup';
+import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
 import SidebarLayout from '../../layout/sidebarLayout';
 import Table from '../../components/Table';
 import {asciifyLT} from '@s-e/frontend/transformer/string';
