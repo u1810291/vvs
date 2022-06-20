@@ -2,7 +2,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {putIntoArray} from '../../../../util/array';
 import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {Combobox} from '@headlessui/react';
-import Nullable from '../../../Nullable';
+import Nullable from '../../Nullable'
 import {componentToString} from '@s-e/frontend/react';
 import {
   filter,
