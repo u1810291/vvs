@@ -25,7 +25,6 @@ export const parseHasuraOutput = pipe(
     pipe(getPropOr(Rejected('unknown error'), 'errors'), Rejected),
     pipe(getPropOr(Resolved(null), 'data'), Resolved)
   ),
-  chain(maybeToAsync('object property is expected', getProp('object'))),
 );
 
 /**

@@ -3,14 +3,14 @@ import Card from 'components/atom/Card';
 import CheckBox from 'components/atom/input/CheckBox';
 import Button from 'components/Button';
 import InputGroup from 'components/InputGroup';
-import {constant, once, or, pipe} from 'crocks';
+import {empty, map, chain, constant, once, or, pipe} from 'crocks';
 import resultToAsync from 'crocks/Async/resultToAsync';
-import {empty} from 'crocks/pointfree';
 import useAsync from 'hook/useAsync';
 import useResultForm from 'hook/useResultForm';
 import {useEffect, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {lengthGt} from 'util/pred';
+import login from '../api/login';
 
 const always = pipe(
   constant,
@@ -20,7 +20,7 @@ const always = pipe(
 const MainLoginForm = () => {
   const {t} = useTranslation('login', {keyPrefix: 'mainForm'});
   const {result, ctrl} = useResultForm({
-    email: {
+    username: {
       initial: 'lukas.l@s-e.lt',
       validator: isEmail,
       props: {
@@ -49,11 +49,11 @@ const MainLoginForm = () => {
     }
   });
 
-  /**
-   * @todo
-   * TODO: resultToAsync(result) -> api -> useAsync -> fork
-   */
-  const [state, fork] = useAsync(resultToAsync(result), console.error, console.warn);
+  const [state, fork] = useAsync(
+    resultToAsync(result).chain(login),
+    console.error,
+    console.warn
+  );
 
   useEffect(() => {console.log(state)}, [state]);
 
@@ -65,7 +65,7 @@ const MainLoginForm = () => {
   return (
     <Card>
       <form className='space-y-6'>
-        <InputGroup {...ctrl('email')} />
+        <InputGroup {...ctrl('username')} />
         <InputGroup {...ctrl('password')} />
         <CheckBox {...ctrl('rememberMe')}/>
         <Button.Sm type='submit' className='w-full' onClick={submit}>
