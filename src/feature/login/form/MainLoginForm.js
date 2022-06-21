@@ -58,7 +58,7 @@ const MainLoginForm = () => {
   const submit = useCallback((event) => { event.preventDefault(); fork() }, [fork]);
 
   useEffect(() => {
-    if (isAuthorized === true) nav('/dashboard');
+    if (isAuthorized === true) nav('/');
   }, [isAuthorized]);
 
   return (
