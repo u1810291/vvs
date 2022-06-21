@@ -14,7 +14,7 @@ import CalendarTimeline from '../../components/calendar/CalendarTimeline';
 import CreateCrewHeader from '../../components/headers/crew/createCrewHeader';
 import {useParams} from 'react-router-dom';
 import { crewsQuery } from '../../mocks/queryForms/queryString/query';
-import SidebarLayout from '../sidebarLayout';
+import SidebarLayout from '../SideBarLayout';
 
 import useBoolean from '../../hook/useBoolean';
 import useLanguage from '../../hook/useLanguage';

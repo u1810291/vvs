@@ -4,7 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import NewTaskForm from '../form/newTaskForm';
 import Header from '../../../components/atom/Header';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import SideBarLayout from '../../../layout/SideBarLayout';
+import Index from '../../../layout/SideBarLayout';
 import HeaderButtonGroup from '../../../components/headers/HeaderButtonGroup';
 
 import useLanguage from '../../../hook/useLanguage';
@@ -19,7 +19,7 @@ const NewTaskLayout = () => {
   }, []);
 
   return (
-    <SideBarLayout>
+    <Index>
       <div className='flex flex-col min-h-full'>
         <Header>
           <Breadcrumbs>
@@ -37,7 +37,7 @@ const NewTaskLayout = () => {
         </Header>
         <NewTaskForm />
       </div>
-    </SideBarLayout>
+    </Index>
   );
 };
 

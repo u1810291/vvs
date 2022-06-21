@@ -1,15 +1,15 @@
 import React from 'react';
 
 import DashboardForm from '../form/DashboardForm';
-import SidebarLayout from '../../../layout/sidebarLayout';
+import Index from '../../../layout/SideBarLayout';
 
 const DashboardLayout = () => {
   return (
-    <SidebarLayout>
+    <Index>
       <div className='flex flex-row w-full justify-between h-full'>
         <DashboardForm/>
       </div>
-    </SidebarLayout>
+    </Index>
   );
 }
 
