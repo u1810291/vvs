@@ -6,8 +6,9 @@ import EN from './i18n/en.json';
 i18next.addResourceBundle('en', 'object', EN)
 
 const ObjectRoute = getRoute(
-  'feature.object.list',
   'object',
+  'menu.list',
+  '/object',
   lazy(() => import('./layout/list')),
   null
 );

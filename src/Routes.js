@@ -11,13 +11,12 @@ import {Route} from 'react-router-dom';
 const Routes = (
   <>
     {LoginFeature}
-    <Route path='/' element={<DashboardLayout />} />
-    <Route path='dashboard' element={<DashboardLayout />} />
     {ObjectFeature}
-    <Route path='storybook/combobox' element={<ComboBoxLayout />} />
-    <Route path='storybook/checkbox' element={<CheckBoxLayout />} />
-    <Route path='storybook/selectbox' element={<SelectBoxLayout />} />
-    <Route path='*' element={<NotFound />} />
+    <Route translationKey='Home' translationNs='translations' path='/' element={<DashboardLayout />} />
+    <Route isHidden path='/storybook/combobox' element={<ComboBoxLayout />} />
+    <Route isHidden path='/storybook/checkbox' element={<CheckBoxLayout />} />
+    <Route isHidden path='/storybook/selectbox' element={<SelectBoxLayout />} />
+    <Route isHidden path='*' element={<NotFound />} />
   {
     /**
      * TODO: redo like LoginFeature, like ObjectFeature

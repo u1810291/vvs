@@ -8,7 +8,8 @@ export const LOGIN_PAGE = 'login';
 i18next.addResourceBundle('en', 'login', EN)
 
 const LoginRoute = getRoute(
-  'feature.login.main',
+  'login',
+  'menu.main',
   LOGIN_PAGE,
   lazy(() => import('./layout/MainLoginLayout')),
   null

@@ -1,4 +1,7 @@
 {
+	"menu": {
+		"list": "Objects"
+	},
 	"breadcrumbs": {
 		"objects": "Objects",
 		"allData": "All Data"

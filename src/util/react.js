@@ -92,6 +92,7 @@ export const withComponentFactory = (Component, {mapSetupInComponent = identity,
 export const renderWithProps = curry((Component, props) => <Component {...props} />);
 
 export const getRoute = curry((
+  translationNs,
   translationKey,
   path,
   Component,
@@ -99,6 +100,7 @@ export const getRoute = curry((
 ) => (
   <Route
     translationKey={translationKey}
+    translationNs={translationNs}
     path={path}
     element={<Suspense><Component/></Suspense>}
     exact

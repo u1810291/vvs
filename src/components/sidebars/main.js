@@ -16,10 +16,6 @@ const parseRoutes = component => {
 };
 
 const MainSidebar = () => {
-  useEffect(() => {
-    console.log(parseRoutes(Routes));
-  }, [])
-
   const selfService = useCallback(() => {
     console.log('selfService');
   }, []);

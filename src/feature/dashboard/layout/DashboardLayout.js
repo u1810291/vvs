@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DashboardForm from '../form/DashboardForm';
-import SidebarLayout from '../../../layout/sidebarLayout';
+import SidebarLayout from 'layout/SideBarLayout';
 
 const DashboardLayout = () => {
   return (

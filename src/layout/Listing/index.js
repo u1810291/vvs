@@ -3,7 +3,7 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import Filter from '../../components/Filter';
 import Maybe from 'crocks/Maybe';
 import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
-import SidebarLayout from '../../layout/sidebarLayout';
+import SidebarLayout from 'layout/SideBarLayout';
 import Table from '../../components/Table';
 import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {componentToString} from '@s-e/frontend/react';
