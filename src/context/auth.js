@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import refresh from 'feature/login/api/refresh';
 import useMergeReducer from 'hook/useMergeReducer';
 import {api, apiQuery} from 'api';
@@ -40,27 +40,30 @@ const AuthContextProvider = ({children}) => {
     option(apiQuery)
   )(state), [state]);
 
+  const fail = useCallback(() => {
+    setAuthorized(false);
+    setState({ token: null, refreshToken: null });
+  }, [setAuthorized, setState]);
+
+  const success = useCallback(() => {
+    setAuthorized(true);
+  }, [setAuthorized])
+
   useEffect(() => {
     const refreshtoken = (
       getProp('refreshToken', state)
       .chain(safe(isValid))
       .map(tap(value => localStorage.setItem('refreshToken', value)))
       .alt(safe(isValid, localStorage.getItem('refreshToken')))
-      .either(
-        () => setAuthorized(false),
-        refreshToken => {
-          if (state.token) return setAuthorized(true);
+      .either(fail, refreshToken => {
+        if (state.token) return success();
 
-          refresh(refreshToken)
-            .map(tap(setState))
-            .fork(
-              () => setAuthorized(false),
-              () => setAuthorized(true),
-            )
-        }
-      )
+        refresh(refreshToken)
+          .map(tap(setState))
+          .fork(fail, success)
+      })
     );
-  }, [state]);
+  }, [state, fail, success]);
 
   return (
     <AuthContext.Provider value={{
