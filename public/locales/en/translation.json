@@ -1,11 +1,16 @@
 {
+  "Sidebar": {
+    "menu": "Menu",
+    "myAccount": "My Account",
+    "signOut": "Sign Out"
+  },
   "Filter": {
     "Button": {
       "addColumn": "Add column"
     }
   },
   "SearchInput": {
-	  "placeholder": "Search..."
+    "placeholder": "Search..."
   },
   "loginSystem": {
     "register": "Registration",

@@ -1,0 +1,12 @@
+{
+  "mainForm": {
+    "label": {
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember Me"
+    },
+    "button": {
+      "submit": "Sign in"
+    }
+  }
+}
