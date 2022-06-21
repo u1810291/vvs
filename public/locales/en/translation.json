@@ -1,4 +1,12 @@
 {
+  "Filter": {
+    "Button": {
+      "addColumn": "Add column"
+    }
+  },
+  "SearchInput": {
+	  "placeholder": "Search..."
+  },
   "loginSystem": {
     "register": "Registration",
     "login": "Login",

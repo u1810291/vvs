@@ -10,7 +10,7 @@ import {tap, pipe, identity, isFunction} from 'crocks';
  * @returns {[
  *   {forked: boolean, loading: boolean, data: any, error: any},
  *   ((error: any) => any, (value: any) => any) => any
- * }}
+ * ]}
  */
 const useAsync = (
   asyncCrock,

@@ -1,0 +1,23 @@
+{
+	"breadcrumbs": {
+		"objects": "Objects",
+		"allData": "All Data"
+	},
+	"list": {
+		"column": {
+			"address": "Address",
+			"city": "City",
+			"contract_no": "Contract No.",
+			"contract_object_no": "Object No.",
+			"id": "ID",
+			"is_atm": "ATM",
+			"latitude": "Latitude",
+			"longitude": "Longitude",
+			"name": "Name",
+			"navision_id": "NavID",
+			"phone": "Phone",
+			"provider_id": "Provider ID",
+			"provider_name": "Provider"
+		}
+	}
+}

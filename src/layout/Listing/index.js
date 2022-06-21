@@ -40,16 +40,16 @@ import {
 
 /**
  * @param {Object} props
- * @param {Async} props.asyncGetter
+ * @param {Array} props.list
  * @param {(item: object) => string} props.rowKeyLens
  * @param {TableColumnComponent[]} props.tableColumns
  */
 const Listing = ({
-  asyncGetter,
+  list = [],
   rowKeyLens,
   tableColumns,
+  breadcrumbs,
 }) => {
-  const [list, setList] = useState([]);
   const [columns, setColumns] = useState([]);
   const [query, setQuery] = useState('');
 
@@ -112,16 +112,11 @@ const Listing = ({
     r,
   ), [], list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
 
-  useEffect(() => {asyncGetter.fork(console.error, setList)}, [asyncGetter]);
-
   return (
     <SidebarLayout>
       <TitleBar>
         <div className='md:flex md:space-x-4 md:space-y-0 space-y-4'>
-          <Breadcrumbs>
-            <Breadcrumbs.Item><span className='font-semibold'>Objektai</span></Breadcrumbs.Item>
-            <Breadcrumbs.Item>Visi duomenys</Breadcrumbs.Item>
-          </Breadcrumbs>
+          {breadcrumbs}
           <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
         </div>
       </TitleBar>

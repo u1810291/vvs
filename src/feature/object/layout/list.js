@@ -1,6 +1,12 @@
 import Listing from 'layout/Listing';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
+import useAsync from 'hook/useAsync';
 import {titleCase} from '@s-e/frontend/transformer/string';
+import {useAuth} from 'context/auth';
+import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {withAuthorizedHook} from 'hoc/withAuthorizedHook';
+import withPreparedProps from 'hoc/withPreparedProps';
 import {
   and,
   chain,
@@ -8,6 +14,7 @@ import {
   getProp,
   getPropOr,
   identity,
+  isArray,
   isEmpty,
   map,
   not,
@@ -15,177 +22,84 @@ import {
   pipe,
   safe,
 } from 'crocks';
-import {withAuthorizedHook} from 'hoc/withAuthorizedHook';
+import Breadcrumbs from 'components/Breadcrumbs';
 
+const getColumn = curry((t, Component, key, pred, mapper) => ({
+  Component,
+  headerText: t(key),
+  key,
+  itemToProps: pipe(
+    getProp(key),
+    chain(safe(pred)),
+    map(mapper),
+    map(objOf('children')),
+  ),
+}));
+
+const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
-const QUERY = `
-  query {
-    object {
-      address
-      city
-      contract_no
-      contract_object_no
-      id
-      is_atm
-      longitude
-      latitude
-      name
-      provider_name
-      provider_id
-      phone
-      navision_id
-    }
-  }
-`;
+const ObjectList = withPreparedProps(Listing, (props) => {
+  const {apiQuery} = useAuth();
+  const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
+  const {t} = useTranslation('object', {keyPrefix: 'list.column'});
+  const [state, fork] = useAsync(
+    apiQuery(
+      `
+        query {
+          object {
+            address
+            city
+            contract_no
+            contract_object_no
+            id
+            is_atm
+            longitude
+            latitude
+            name
+            provider_name
+            provider_id
+            phone
+            navision_id
+          }
+        }
+      `
+    )
+    .chain(maybeToAsync(
+      '"object" prop is expected in the response',
+      getProp('object')
+    ))
+  );
 
-const extractObject = maybeToAsync(
-  '"object" prop is expected in the response',
-  getProp('object')
-);
+  useEffect(() => { fork() }, [fork]);
 
-const ObjectList = () => withAuthorizedHook(
-  Listing,
-  ({apiQuery}) => ({
-    asyncGetter: apiQuery(QUERY).chain(extractObject)
-  }),
-  {
+  const c = getColumn(t, Span);
+
+  return {
+    list: safe(isArray, state.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
+    breadcrumbs: (
+      <Breadcrumbs>
+        <Breadcrumbs.Item><span className='font-semibold'>{tb`objects`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
+      </Breadcrumbs>
+    ),
     tableColumns: [
-      {
-        key: 'id',
-        headerText: 'ID',
-        itemToProps: pipe(
-          getProp('id'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'address',
-        headerText: 'Adresas',
-        itemToProps: pipe(
-          getProp('address'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'city',
-        headerText: 'Miestas',
-        itemToProps: pipe(
-          getProp('city'),
-          chain(safe(not(isEmpty))),
-          map(titleCase),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'contract_no',
-        headerText: 'Nr.',
-        itemToProps: pipe(
-          getProp('contract_no'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'contract_object_no',
-        headerText: 'Sutarties Nr.',
-        itemToProps: pipe(
-          getProp('contract_object_no'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'is_atm',
-        headerText: 'ATM',
-        itemToProps: pipe(
-          getProp('is_atm'),
-          map(t => t ? 'Taip' : 'Ne'),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'longitude',
-        headerText: 'Ilguma',
-        itemToProps: pipe(
-          getProp('longitude'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'latitude',
-        headerText: 'Platuma',
-        itemToProps: pipe(
-          getProp('latitude'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'name',
-        headerText: 'Pavadinimas',
-        itemToProps: pipe(
-          getProp('name'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'provider_name',
-        headerText: 'Tiekėjas',
-        itemToProps: pipe(
-          getProp('provider_name'),
-          chain(safe(not(isEmpty))),
-          map(titleCase),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'provider_id',
-        headerText: 'Tiekėjo ID',
-        itemToProps: pipe(
-          getProp('provider_id'),
-          chain(safe(isFinite)),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'phone',
-        headerText: 'Telefonas',
-        itemToProps: pipe(
-          getProp('phone'),
-          chain(safe(not(isEmpty))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
-      {
-        key: 'navision_id',
-        headerText: 'Navision ID',
-        itemToProps: pipe(
-          getProp('navision_id'),
-          chain(safe(and(not(isEmpty), isFinite))),
-          map(objOf('children')),
-        ),
-        Component: Span,
-      },
+      c('id', ne, identity),
+      c('address', ne, identity),
+      c('city', ne, titleCase),
+      c('contract_no', ne, identity),
+      c('contract_object_no', ne, identity),
+      c('is_atm', ne, bool => bool ? t('bool.yes') : t('bool.yes')),
+      c('longitude', ne, identity),
+      c('latitude', ne, identity),
+      c('name', ne, identity),
+      c('provider_name', ne, titleCase),
+      c('provider_id', isFinite, identity),
+      c('phone', ne, identity),
+      c('navision_id',and(not(isEmpty), isFinite) , identity),
     ],
   }
-);
+});
 
 export default ObjectList;
