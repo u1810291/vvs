@@ -221,7 +221,7 @@ const DashboardForm = () => {
   const google = window.google;
   return (
     <>
-      <div className='flex min-h-full overflow-y-auto scrollbar-gone flex-col w-1/4 bg-gray-100'>
+      <div className='flex flex-col h-screen justify-between scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>
         <DashboardSideLeft />
       </div>
       <div className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
