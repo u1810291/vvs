@@ -1,22 +1,17 @@
-import CheckBoxLayout from './feature/examples/layout/CheckBoxLayout';
-import ComboBoxLayout from './feature/examples/layout/ComboBoxLayout';
-import DashboardLayout from './feature/dashboard/layout/DashboardLayout';
-import LoginFeature from 'feature/login/routes';
-import NotFound from './layout/notFound';
-import ObjectFeature from './feature/object/routes';
 import React from 'react';
-import SelectBoxLayout from './feature/examples/layout/SelectBoxLayout';
 import {Route} from 'react-router-dom';
+
+import LoginFeature from 'feature/login/routes';
+import ObjectFeature from './feature/object/routes';
+import DashboardFeature from './feature/dashboard/routes';
+
+import NotFound from './layout/notFound';
 
 const Routes = (
   <>
     {LoginFeature}
-    <Route path='/' element={<DashboardLayout />} />
-    <Route path='dashboard' element={<DashboardLayout />} />
     {ObjectFeature}
-    <Route path='storybook/combobox' element={<ComboBoxLayout />} />
-    <Route path='storybook/checkbox' element={<CheckBoxLayout />} />
-    <Route path='storybook/selectbox' element={<SelectBoxLayout />} />
+    {DashboardFeature}
     <Route path='*' element={<NotFound />} />
   {
     /**
