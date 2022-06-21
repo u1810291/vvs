@@ -49,10 +49,7 @@ const AuthContextProvider = ({children}) => {
       .either(
         () => setAuthorized(false),
         refreshToken => {
-          if (state.token) {
-            setAuthorized(true);
-            return;
-          }
+          if (state.token) return setAuthorized(true);
 
           refresh(refreshToken)
             .map(tap(setState))
