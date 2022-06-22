@@ -8,6 +8,7 @@ export const ROOT_PAGE = '/';
 i18next.addResourceBundle('en', 'dashboard', EN);
 
 const ObjectRoute = getRoute(
+  'dashboard',
   'feature.dashboard',
   ROOT_PAGE,
   lazy(() => import('./layout/DashboardLayout')),
