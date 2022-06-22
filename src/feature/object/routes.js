@@ -7,7 +7,7 @@ import EN from './i18n/en.json';
 i18next.addResourceBundle('en', 'object', EN)
 
 export const ObjectEditRoute = getExactHiddenRoute('object', 'menu.edit', '/object/:id', lazy(() => import('./layout/edit')), null);
-const ObjectListRoute = getExactRoute('object', 'menu.list', '/object', lazy(() => import('./layout/list')), null);
+export const ObjectListRoute = getExactRoute('object', 'menu.list', '/object', lazy(() => import('./layout/list')), null);
 
 const ObjectRoute = (
   <>

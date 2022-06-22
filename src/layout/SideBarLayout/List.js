@@ -6,7 +6,7 @@ import {isEmpty, isTrue, not} from 'crocks';
 import {renderChildren} from '@s-e/frontend/react';
 import {useTranslation} from 'react-i18next';
 
-const parseRoutes = (t, component) => renderChildren(c => {
+const parseRoutes = (t, component) => renderChildren((c, index) => {
   const isHidden = isTrue(c?.props?.isHidden);
   const hasChildren = not(isEmpty, c?.props?.children);
   const isRoute = c?.props?.path && c?.props?.element;
@@ -14,11 +14,11 @@ const parseRoutes = (t, component) => renderChildren(c => {
   if (isHidden && !hasChildren) return null;
 
   return (
-    <Fragment key={c?.props.path}>
+    <Fragment key={String(`${c?.props?.path}-${index}-${c?.props?.children?.length}`)}>
       {isRoute && (
         <NavLink
-        className={({isActive}) => `group flex items-center px-2 py-2 text-sm font-medium rounded-md ${isActive ? 'bg-gray-900 bg-opacity-10 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
-        to={c.props.path}
+          className={({isActive}) => `group flex items-center px-2 py-2 text-sm font-medium rounded-md ${isActive ? 'bg-gray-900 bg-opacity-10 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+          to={c.props.path}
         >
         {t(c?.props?.translationKey, {ns: c?.props?.translationNs}) || c?.props?.path}
         </NavLink>
