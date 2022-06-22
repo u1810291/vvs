@@ -104,6 +104,8 @@ export const getRoute = curry((
   children,
 ) => (
   <Route
+    exact={exact}
+    isHidden={isHidden}
     translationKey={translationKey}
     translationNs={translationNs}
     path={path}

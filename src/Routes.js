@@ -10,8 +10,8 @@ import NotFound from './layout/notFound';
 const Routes = (
   <>
     {LoginFeature}
-    {ObjectFeature}
     {DashboardFeature}
+    {ObjectFeature}
     <Route isHidden path='*' element={<NotFound />} />
   {
     /**
