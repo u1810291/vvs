@@ -12,7 +12,7 @@ const Routes = (
     {LoginFeature}
     {ObjectFeature}
     {DashboardFeature}
-    <Route path='*' element={<NotFound />} />
+    <Route isHidden path='*' element={<NotFound />} />
   {
     /**
      * TODO: redo like LoginFeature, like ObjectFeature

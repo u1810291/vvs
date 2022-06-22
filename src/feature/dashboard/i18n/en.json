@@ -1,4 +1,7 @@
 {
+  "menu": {
+    "main": "Dashboard"
+  },
   "mainForm": {
     "label": {
       "email": "Email",
