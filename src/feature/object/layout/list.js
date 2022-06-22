@@ -86,7 +86,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
 
   useEffect(() => { fork() }, []);
 
-
   return {
     list: safe(isArray, state.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),

@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import useMergeReducer from './useMergeReducer';
 import {caseMap} from '@s-e/frontend/flow-control';
 import {tap, pipe, identity, isFunction} from 'crocks';
@@ -62,5 +62,23 @@ const useAsync = (
 
   return [state, fork];
 };
+
+export const useAsyncEffect = (
+  asyncCrock,
+  onRejected = identity,
+  onResolved = identity,
+  deps = [],
+) => {
+  const oldDeps = useRef(null);
+  const [state, fork] = useAsync(asyncCrock, onRejected, onResolved);
+
+  useEffect(() => {
+    if (JSON.stringify(oldDeps.current) === JSON.stringify(deps)) return;
+    oldDeps.current = deps;
+    fork();
+  }, [deps]);
+
+  return {...state};
+}
 
 export default useAsync;
