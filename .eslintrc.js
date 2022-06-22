@@ -19,5 +19,6 @@ module.exports = {
         'quotes': ['error', 'single'],
         'react/react-in-jsx-scope': 'off',
         'jsx-quotes': ['error', 'prefer-single'],
+        'object-curly-spacing': ['error', 'never']
     }
 }
