@@ -1,4 +1,9 @@
 {
+  "Sidebar": {
+    "menu": "Meniu",
+    "myAccount": "Mano paskyra",
+    "signOut": "Atsijungti"
+  },
   "loginSystem": {
     "register": "Registracija",
     "login": "Prisijungti",

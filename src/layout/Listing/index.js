@@ -3,7 +3,7 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import Filter from '../../components/Filter';
 import Maybe from 'crocks/Maybe';
 import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
-import SidebarLayout from 'layout/SideBarLayout';
+import Index from '../SideBarLayout';
 import Table from '../../components/Table';
 import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {componentToString} from '@s-e/frontend/react';
@@ -113,7 +113,7 @@ const Listing = ({
   ), [], list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
 
   return (
-    <SidebarLayout>
+    <Index>
       <TitleBar>
         <div className='md:flex md:space-x-4 md:space-y-0 space-y-4'>
           {breadcrumbs}
@@ -128,7 +128,7 @@ const Listing = ({
         </Table.Head>
         <Table.Body>{rows}</Table.Body>
       </Table>
-    </SidebarLayout>
+    </Index>
   );
 }
 

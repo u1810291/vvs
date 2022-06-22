@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 import BreachForm from '../form/BreachFrom';
 import Header from '../../../components/atom/Header';
-import SidebarLayout from '../../../layout/sidebarLayout';
+import SidebarLayout from '../../../layout/SideBarLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 
 import useLanguage from '../../../hook/useLanguage';
