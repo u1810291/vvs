@@ -8,7 +8,7 @@ const Aside = forwardRef(({setSidebarOpen}, ref) => (
       {/*  <ChevronLeftIcon height={20} color={'#D7DEE6'}/>*/}
       {/*</button>*/}
       {/*<span className='w-1/2 h-px bg-[#818BA2] my-6'/>*/}
-      <button className='flex justify-center items-center hover:opacity-50 h-8 w-full' onClick={setSidebarOpen}>
+      <button className='focus:outline-none flex justify-center items-center hover:opacity-50 h-8 w-full' onClick={setSidebarOpen}>
         <MenuIcon/>
       </button>
     </div>
