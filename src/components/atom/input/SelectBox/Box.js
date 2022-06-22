@@ -1,6 +1,7 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, Fragment, useEffect} from 'react';
 import {Listbox, Transition} from '@headlessui/react';
 import Nullable from '../../Nullable';
+import {putIntoArray} from 'util/array';
 
 const Box = ({
   Label,
@@ -11,8 +12,18 @@ const Box = ({
   Option,
   optionClassNameFn,
   children,
+  value = '',
 }) => {
   const [selectedChildren, setSelectedChildren] = useState();
+
+  useEffect(() => {
+    setSelectedChildren(
+      putIntoArray(children).find(
+        c => c?.props?.value === value
+      )
+    )
+  }, [value, children]);
+
   return (
     <Listbox value={selectedChildren} onChange={setSelectedChildren}>
       {({ open }) => (
