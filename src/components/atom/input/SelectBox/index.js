@@ -9,6 +9,10 @@ import ContentContainer from './ContentContainer';
 
 import {withComponentFactory} from '../../../../util/react';
 
+/**
+ * @TODO: when <Options> has no <Option> components,
+ * it crashes when we want to show the list.
+ */
 const SelectBox = withComponentFactory(Box, {
   Label,
   Button,
