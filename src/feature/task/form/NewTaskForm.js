@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Map from '../../map/component/Map';
 import Nullable from '../../../components/atom/Nullable';
@@ -12,7 +12,7 @@ import useLanguage from '../../../hook/useLanguage';
 import useResultForm from '../../../hook/useResultForm';
 import {useGoogleApiContext} from '../../../context/googleApiContext';
 
-import {asyncGetObjects, asyncGetCrews, asyncCreateEvent} from '../api/newTaskApi';
+import {asyncCreateEvent} from '../api/newTaskApi';
 
 import {generate} from 'shortid';
 import {identity, or, isEmpty} from 'crocks';
