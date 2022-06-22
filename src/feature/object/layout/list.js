@@ -3,7 +3,7 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 import useAsync from 'hook/useAsync';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useAuth} from 'context/auth';
-import {useEffect} from 'react';
+import {useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {withAuthorizedHook} from 'hoc/withAuthorizedHook';
 import withPreparedProps from 'hoc/withPreparedProps';
@@ -17,23 +17,30 @@ import {
   isArray,
   isEmpty,
   map,
+  Maybe,
   not,
   objOf,
   pipe,
   safe,
+  setProp,
 } from 'crocks';
 import Breadcrumbs from 'components/Breadcrumbs';
+import {generatePath, Link} from 'react-router-dom';
+import ObjectRoute, {ObjectEditRoute} from '../routes';
+import {alt} from 'crocks/pointfree';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
   headerText: t(key),
   key,
-  itemToProps: pipe(
+  itemToProps: item => pipe(
     getProp(key),
     chain(safe(pred)),
     map(mapper),
     map(objOf('children')),
-  ),
+    map(a => ({...item, ...a})),
+    alt(Maybe.Just(item)),
+  )(item),
 }));
 
 const ne = not(isEmpty);
@@ -71,9 +78,14 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     ))
   );
 
-  useEffect(() => { fork() }, [fork]);
+  const c = useMemo(() => getColumn(t, props => (
+    <Link to={generatePath(ObjectEditRoute.props.path, {id: props?.id})}>
+      {props?.children}
+    </Link>
+  )), [t]);
 
-  const c = getColumn(t, Span);
+  useEffect(() => { fork() }, []);
+
 
   return {
     list: safe(isArray, state.data).option([]),

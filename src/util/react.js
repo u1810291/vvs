@@ -91,7 +91,12 @@ export const withComponentFactory = (Component, {mapSetupInComponent = identity,
 
 export const renderWithProps = curry((Component, props) => <Component {...props} />);
 
+/**
+ * @type {(exact: bool, isHidden: bool, translationNs: string, translationKey: string, path: string, Component: import('react').ComponentType, children: import('react').ComponentType) => Route}
+ */
 export const getRoute = curry((
+  exact,
+  isHidden,
   translationNs,
   translationKey,
   path,
@@ -103,8 +108,11 @@ export const getRoute = curry((
     translationNs={translationNs}
     path={path}
     element={<Suspense><Component/></Suspense>}
-    exact
   >
     {children}
   </Route>
 ));
+
+export const getExactHiddenRoute = getRoute(true, true);
+export const getHiddenRoute = getRoute(false, true);
+export const getExactRoute = getRoute(true, false);
