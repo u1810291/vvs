@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 import Map from '../../map/component/Map';
 import Nullable from '../../../components/atom/Nullable';
