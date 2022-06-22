@@ -4,7 +4,6 @@ import useMergeReducer from 'hook/useMergeReducer';
 import {api, apiQuery} from 'api';
 import {createContext, useContext} from 'react';
 import {
-  Async,
   and,
   chain,
   getProp,
@@ -42,7 +41,7 @@ const AuthContextProvider = ({children}) => {
 
   const fail = useCallback(() => {
     setAuthorized(false);
-    setState({ token: null, refreshToken: null });
+    setState({token: null, refreshToken: null});
   }, [setAuthorized, setState]);
 
   const success = useCallback(() => {

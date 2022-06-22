@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -92,7 +92,7 @@ export const FiltersListPermissions = ({
                     <div className='py-1'>
                       {filter.permissionsList.includes('Date') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const showDate = 'Date';
@@ -113,7 +113,7 @@ export const FiltersListPermissions = ({
 
                       {filter.permissionsList.includes('Pavadinimas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Pavadinimas';
@@ -134,7 +134,7 @@ export const FiltersListPermissions = ({
 
                       {filter.permissionsList.includes('Būsena') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Būsena';
@@ -155,7 +155,7 @@ export const FiltersListPermissions = ({
 
                       {filter.permissionsList.includes('Ekipažai') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Ekipažai';
@@ -176,7 +176,7 @@ export const FiltersListPermissions = ({
 
                       {filter.permissionsList.includes('Vairuotojai') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Vairuotojai';

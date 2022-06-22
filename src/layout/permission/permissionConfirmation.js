@@ -1,13 +1,13 @@
 import React, {useCallback, useState} from 'react';
 import useLanguage from '../../hook/useLanguage';
-import {OverlayProvider, usePreventScroll} from 'react-aria';
+import {OverlayProvider} from 'react-aria';
 import PermissionConfirmationHeader from '../../components/headers/permission/permissionConfirmationHeader';
 import PermissionConfirmationSideRight from '../../components/sides/permissionConfirmationSideRight';
 import SlideOver from '../../components/sidebars/slideOver';
 import MainSidebar from '../../components/sidebars/main';
 
 const PermissionConfirmation = () => {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
   const handleOnClose = useCallback(() => { setIsOpen(false)},[]);

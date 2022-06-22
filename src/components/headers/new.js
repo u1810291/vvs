@@ -1,5 +1,5 @@
 import React from 'react';
-const { BlueStatusTop } = require('../buttons/blueStatusTop');
+const {BlueStatusTop} = require('../buttons/blueStatusTop');
 
 export function NewHeader() {
 

@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useContext, useEffect, useRef } from 'react';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
+import React, {useState, useContext, useEffect, useRef} from 'react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
+import {ChevronDownIcon} from '@heroicons/react/solid';
 import GlobalContext from '../../context/globalContext';
 import useLanguage from '../../hook/useLanguage';
 import Calendar from 'react-calendar';
@@ -12,10 +12,10 @@ function classNames(...classes) {
 }
 
 export const OptionsListModems = (props) => {
-  const { english, lithuanian, t } = useLanguage();
-  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
-  const { selectedFilterModems, setSelectedFilterModems } = useContext(GlobalContext);
-  const { value, onChange } = useContext(GlobalContext);
+  const {english, lithuanian, t} = useLanguage();
+  const {filterListModems, setFilterListModems} = useContext(GlobalContext);
+  const {selectedFilterModems, setSelectedFilterModems} = useContext(GlobalContext);
+  const {value, onChange} = useContext(GlobalContext);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [startAndEndDate, setStartAndEndDate] = useState();
@@ -64,7 +64,7 @@ export const OptionsListModems = (props) => {
                         const date = startAndEndDate;
                         setFilterListModems((currentFilter) =>
                           currentFilter.map((x) =>
-                            x.id === filter.id ? { ...x, date } : x
+                            x.id === filter.id ? {...x, date} : x
                           )
                         );
                       }}
@@ -143,13 +143,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const operator = '1';
                                 setFilterListModems((currentFilter) =>
                                   currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, operator } : x
+                                    x.id === filter.id ? {...x, operator} : x
                                   )
                                 );
                               }}
@@ -166,13 +166,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const operator = 2;
                                 setFilterListModems((currentFilter) =>
                                   currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, operator } : x
+                                    x.id === filter.id ? {...x, operator} : x
                                   )
                                 );
                               }}
@@ -223,13 +223,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = '1';
                                 setFilterListModems((currentFilter) =>
                                   currentFilter.map((x) =>
-                                    x.id === filter.id ? { ...x, object } : x
+                                    x.id === filter.id ? {...x, object} : x
                                   )
                                 );
                               }}
@@ -246,13 +246,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const object = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, object } : x
+                                  x.id === filter.id ? {...x, object} : x
                                 )
                               );
                             }}
@@ -283,7 +283,7 @@ export const OptionsListModems = (props) => {
                       const objectAddress = e.target.value;
                       setFilterListModems((currentFilter) =>
                         currentFilter.map((x) =>
-                          x.id === filter.id ? { ...x, objectAddress } : x
+                          x.id === filter.id ? {...x, objectAddress} : x
                         )
                       );
                     }}
@@ -323,13 +323,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const type = '1';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, type } : x
+                                  x.id === filter.id ? {...x, type} : x
                                 )
                               );
                             }}
@@ -346,13 +346,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const type = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, type } : x
+                                  x.id === filter.id ? {...x, type} : x
                                 )
                               );
                             }}
@@ -403,13 +403,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const group = '1';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, group } : x
+                                  x.id === filter.id ? {...x, group} : x
                                 )
                               );
                             }}
@@ -426,13 +426,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const group = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, group } : x
+                                  x.id === filter.id ? {...x, group} : x
                                 )
                               );
                             }}
@@ -483,13 +483,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const status = '1';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, status } : x
+                                  x.id === filter.id ? {...x, status} : x
                                 )
                               );
                             }}
@@ -506,13 +506,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const status = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, status } : x
+                                  x.id === filter.id ? {...x, status} : x
                                 )
                               );
                             }}
@@ -563,13 +563,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const reason = '1';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, reason } : x
+                                  x.id === filter.id ? {...x, reason} : x
                                 )
                               );
                             }}
@@ -586,13 +586,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const reason = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, reason } : x
+                                  x.id === filter.id ? {...x, reason} : x
                                 )
                               );
                             }}
@@ -643,13 +643,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const crew = '1';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, crew } : x
+                                  x.id === filter.id ? {...x, crew} : x
                                 )
                               );
                             }}
@@ -666,13 +666,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const crew = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, crew } : x
+                                  x.id === filter.id ? {...x, crew} : x
                                 )
                               );
                             }}
@@ -723,13 +723,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const driver = '1';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, driver } : x
+                                  x.id === filter.id ? {...x, driver} : x
                                 )
                               );
                             }}
@@ -746,13 +746,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const driver = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, driver } : x
+                                  x.id === filter.id ? {...x, driver} : x
                                 )
                               );
                             }}
@@ -803,13 +803,13 @@ export const OptionsListModems = (props) => {
                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <div className='py-1'>
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const inTime = '1';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, inTime } : x
+                                  x.id === filter.id ? {...x, inTime} : x
                                 )
                               );
                             }}
@@ -826,13 +826,13 @@ export const OptionsListModems = (props) => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const inTime = '2';
                               setFilterListModems((currentFilter) =>
                                 currentFilter.map((x) =>
-                                  x.id === filter.id ? { ...x, inTime } : x
+                                  x.id === filter.id ? {...x, inTime} : x
                                 )
                               );
                             }}

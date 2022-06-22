@@ -1,11 +1,10 @@
-import React, { useCallback, useRef, useState, useContext, useEffect } from 'react';
-import { GoogleMap, useLoadScript, Polygon } from '@react-google-maps/api';
+import React, {useCallback, useRef, useState, useContext, useEffect} from 'react';
+import {GoogleMap, useLoadScript, Polygon} from '@react-google-maps/api';
 import useLanguage from '../../hook/useLanguage';
 import GoogleMapTools from '../../feature/map/component/GoogleMapTools';
 import GlobalContext from '../../context/globalContext';
-import { crewZonesQuery } from '../../mocks/queryForms/queryString/query';
-import { crewZonesSubscription } from '../../mocks/queryForms/queryString/subscriptions';
-import { generate } from 'shortid';
+import {crewZonesQuery} from '../../mocks/queryForms/queryString/query';
+import {generate} from 'shortid';
 
 const mapContainerStyle = {
   width: '100%',
@@ -32,15 +31,15 @@ const options = {
 
 const lib = ['drawing'];
 
-const DislocationMap = ({ mapTools }) => {
-  const { accessToken } = useContext(GlobalContext);
+const DislocationMap = ({mapTools}) => {
+  const {accessToken} = useContext(GlobalContext);
   const mapRef = useRef(null);
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
   const [error, setError] = useState('');
-  const { removeZone, setRemoveZone } = useContext(GlobalContext);
-  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
-  const { individualPolygonsData, setIndividualPolygonsData } = useContext(GlobalContext);
-  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
+  const {removeZone, setRemoveZone} = useContext(GlobalContext);
+  const {polygonsData, setPolygonsData} = useContext(GlobalContext);
+  const {individualPolygonsData, setIndividualPolygonsData} = useContext(GlobalContext);
+  const {polygonsVisible, setPolygonsVisible} = useContext(GlobalContext);
   const polygonDataRef = useRef([]);
 
   const data = useReactQuery(crewZonesQuery, {}, accessToken);
@@ -63,7 +62,7 @@ const DislocationMap = ({ mapTools }) => {
     mapRef.current = null;
   }, []);
 
-  const { isLoaded: isMapLoaded } = useLoadScript({
+  const {isLoaded: isMapLoaded} = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries: lib,
   });

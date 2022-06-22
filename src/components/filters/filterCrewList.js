@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -92,7 +92,7 @@ export const FiltersListCrew = ({
                     <div className='py-1'>
                       {filter.crewList.includes('Pavadinimas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const showDate = 'Pavadinimas';
@@ -113,7 +113,7 @@ export const FiltersListCrew = ({
 
                       {filter.crewList.includes('Trumpinys') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Trumpinys';
@@ -134,7 +134,7 @@ export const FiltersListCrew = ({
 
                       {filter.crewList.includes('Dislokacijos zona') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Dislokacijos zona';
@@ -155,7 +155,7 @@ export const FiltersListCrew = ({
 
                       {filter.crewList.includes('Būsena') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Būsena';
@@ -176,7 +176,7 @@ export const FiltersListCrew = ({
 
                       {filter.crewList.includes('Automatiškai priskirti') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Automatiškai priskirti';

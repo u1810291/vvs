@@ -3,7 +3,7 @@ import React, {useState, useCallback, useEffect} from 'react';
 import useLanguage from '../../hook/useLanguage';
 
 import {generate} from 'shortid';
-import {formatISO, format, getHours, getMinutes} from 'date-fns';
+import {formatISO, format} from 'date-fns';
 
 const TimePickerOptions = ({
   setHour,

@@ -1,7 +1,7 @@
-import React, { useContext, useCallback } from 'react';
-import { ConnectedTop } from '../buttons/connectedModem';
+import React from 'react';
+import {ConnectedTop} from '../buttons/connectedModem';
 
-export function ModemHeader({ modemnr, ...props}) {
+export function ModemHeader({modemnr, ...props}) {
 
   return (
     <div className='flex flex-row h-16 border-b bg-white justify-between w-full'>

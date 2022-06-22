@@ -26,9 +26,9 @@ const drawingManagerOptions = {
   },
 };
 
-const GoogleMapTools = ({ onMapLoad }) => {
-  const { polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
-  const { english, lithuanian, t } = useLanguage();
+const GoogleMapTools = ({onMapLoad}) => {
+  const {polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
+  const {english, lithuanian, t} = useLanguage();
   const [polygons, setPolygons] = useState([]);
   const drawingManager = useRef();
 

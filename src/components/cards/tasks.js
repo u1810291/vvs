@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 

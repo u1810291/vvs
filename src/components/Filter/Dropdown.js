@@ -1,8 +1,8 @@
 import React from 'react';
 import {Menu as HeadlessMenu} from '@headlessui/react';
-import {Menu, Button, Item, Items, Transition} from '../Dropdown';
+import {Menu, Item, Items, Transition} from '../Dropdown';
 import {withComponentFactory} from '../../util/react';
-import { omit } from 'crocks';
+import {omit} from 'crocks';
 import useLanguage from '../../hook/useLanguage';
 
 const Dropdown = withComponentFactory(Menu, {

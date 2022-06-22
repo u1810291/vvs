@@ -1,39 +1,38 @@
 import React, {
   useState,
   useContext,
-  useEffect,
   useCallback,
   useRef,
   Fragment,
 } from 'react';
 import useLanguage from '../../../hook/useLanguage';
 import GlobalContext from '../../../context/globalContext';
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
-import { BreachesHeader } from '../../../components/headers/breach/breachesHeader';
-import { BreachesList } from '../../../components/lists/breachesList';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {PDFExport} from '@progress/kendo-react-pdf';
+import {BreachesHeader} from '../../../components/headers/breach/breachesHeader';
+import {BreachesList} from '../../../components/lists/breachesList';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import SlideOver from '../../../components/sidebars/slideOver';
 import MainSidebar from '../../../components/sidebars/main';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
-import { AddFilterListBreaches } from '../../../components/addFilter/addFilterBreaches';
-import { SearchButton } from '../../../components/buttons/searchButton';
-import { OptionsListBreaches } from '../../../components/options/optionsBreaches';
-import { FiltersListBreaches } from '../../../components/filters/filterBreachesList';
+import {Menu, Transition} from '@headlessui/react';
+import {ChevronDownIcon} from '@heroicons/react/solid';
+import {AddFilterListBreaches} from '../../../components/addFilter/addFilterBreaches';
+import {SearchButton} from '../../../components/buttons/searchButton';
+import {OptionsListBreaches} from '../../../components/options/optionsBreaches';
+import {FiltersListBreaches} from '../../../components/filters/filterBreachesList';
 
 const classNames = a => a;
 
 function Breaches() {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const { expandFilterBreaches, setExpandFilterBreaches } =
+  const {expandFilterBreaches, setExpandFilterBreaches} =
     useContext(GlobalContext);
-  const { selectedFilterBreaches, setSelectedFilterBreaches } =
+  const {selectedFilterBreaches, setSelectedFilterBreaches} =
     useContext(GlobalContext);
-  const { filterListBreaches, setFilterListBreaches } =
+  const {filterListBreaches, setFilterListBreaches} =
     useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
-  const preventScroll = usePreventScroll({ isDisabled: !isOpen });
+  const preventScroll = usePreventScroll({isDisabled: !isOpen});
   const handleOnOpen = useCallback(() => {
     setIsOpen(true);
   }, []);
@@ -175,7 +174,7 @@ function Breaches() {
                             <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-10 sm:w-10 ml-6 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                               <div className='py-1'>
                                 <Menu.Item>
-                                  {({ active }) => (
+                                  {({active}) => (
                                     <button
                                       // onClick={loop}
                                       className={classNames(

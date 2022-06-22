@@ -1,6 +1,4 @@
 import React from 'react';
-import useLanguage from '../../hook/useLanguage';
-import BreachTimeCard from '../cards/breachTimeCard';
 const {ActiveCard} = require('../../components/cards/active');
 
 const List = ({children}) => {

@@ -12,7 +12,7 @@ export const KeyInternal = ({
   add,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
 
   return (
     <div className='w-full' {...props}>

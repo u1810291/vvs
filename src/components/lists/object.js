@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import useLanguage from '../../hook/useLanguage';
-import GlobalContext from '../../context/globalContext';
 
 export const Object = ({
   id,
@@ -11,7 +10,7 @@ export const Object = ({
   remove,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
 
   return (
     <div className='w-full' {...props}>

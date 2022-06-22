@@ -1,30 +1,23 @@
-import React, {useCallback, useState, useRef, useEffect, useContext } from 'react';
+import React, {useCallback, useState, useRef, useEffect, useContext} from 'react';
 import {Polygon} from '@react-google-maps/api';
 import {ActiveCard} from '../../components/cards/active';
-import {OverlayProvider, usePreventScroll} from 'react-aria';
-import {updateCalendar} from '../../mocks/queryForms/queryString/mutation';
 import Map from '../../feature/map/component/Map';
 import CheckBox from '../../components/input/CheckBox';
-import CrewList from '../../components/lists/crewList';
-import MainSidebar from '../../components/sidebars/main';
-import RegularSidebar from '../../components/sidebars/main';
-import SlideOver from '../../components/sidebars/slideOver';
 import ControlledInput from '../../components/input/ControlledInput';
 import CalendarTimeline from '../../components/calendar/CalendarTimeline';
 import CreateCrewHeader from '../../components/headers/crew/createCrewHeader';
 import {useParams} from 'react-router-dom';
-import { crewsQuery } from '../../mocks/queryForms/queryString/query';
+import {crewsQuery} from '../../mocks/queryForms/queryString/query';
 import SidebarLayout from '../SideBarLayout';
 
-import useBoolean from '../../hook/useBoolean';
 import useLanguage from '../../hook/useLanguage';
 
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 const CreateCrew = () => {
-  const { id } = useParams();
-  const { accessToken } = useContext(AuthContext);
-  const { t, english, lithuanian } = useLanguage();
+  const {id} = useParams();
+  const {accessToken} = useContext(AuthContext);
+  const {t, english, lithuanian} = useLanguage();
   const [events, setEvents] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnOpen = useCallback(() => {
@@ -34,9 +27,9 @@ const CreateCrew = () => {
     setIsOpen(false);
   }, []);
   const [polygon, setPolygon] = useState([
-    { lat: 55.95, lng: 23.3 },
-    { lat: 55.9, lng: 23.35 },
-    { lat: 55.85, lng: 23.3 },
+    {lat: 55.95, lng: 23.3},
+    {lat: 55.9, lng: 23.35},
+    {lat: 55.85, lng: 23.3},
   ]);
   const [polygonSetup, setPolygonSetup] = useState({
     strokeOpacity: 1,
@@ -71,7 +64,7 @@ const CreateCrew = () => {
     if (data.data) {
       hasura = data?.data?.monas_crew_related;
       // make custom logic to assign dispatch dislocations or/and events or merge and match app driver device number
-      setCrew({ result: hasura });
+      setCrew({result: hasura});
       if (crew) {
         const obj = crew?.result;
         const data = obj?.find((x) => x.id === id);

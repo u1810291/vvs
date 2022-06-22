@@ -1,13 +1,10 @@
-import { HomeIcon } from '@heroicons/react/solid'
 import {
   pipe,
   getProp,
   map,
   option,
   getPropOr,
-  getPathOr,
 } from 'crocks';
-import {caseMap} from '@s-e/frontend/flow-control';
 import {putIntoArray} from '../../util/array';
 import {withComponentFactory} from '../../util/react';
 

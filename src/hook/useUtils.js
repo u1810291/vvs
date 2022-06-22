@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useCallback} from 'react';
+import {useNavigate} from 'react-router-dom';
 
 function useUtils() {
   const navigate = useNavigate();
@@ -7,7 +7,7 @@ function useUtils() {
     navigate(-1);
   }, [navigate]);
 
-  return { backFunc };
+  return {backFunc};
 }
 
 export default useUtils;

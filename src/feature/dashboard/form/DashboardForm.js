@@ -11,7 +11,7 @@ import {OffCard} from '../../../components/cards/off';
 import {DDAPI} from '../../../mocks/dashboardDispatchApi';
 
 import useLanguage from '../../../hook/useLanguage';
-import {DirectionsService, Marker, OverlayView, Polygon, Polyline} from '@react-google-maps/api';
+import {Marker, OverlayView, Polygon, Polyline} from '@react-google-maps/api';
 
 import {generate} from 'shortid';
 import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
@@ -116,14 +116,14 @@ const DashboardForm = () => {
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [path, setPath] = useState([
-    { lat: 55.95, lng: 23.333 },
-    { lat: 56.0, lng: 23.433 },
-    { lat: 55.95, lng: 23.533 },
+    {lat: 55.95, lng: 23.333},
+    {lat: 56.0, lng: 23.433},
+    {lat: 55.95, lng: 23.533},
   ]);
   const [polygon, setPolygon] = useState([
-    { lat: 55.95, lng: 23.3 },
-    { lat: 55.9, lng: 23.35 },
-    { lat: 55.85, lng: 23.3 },
+    {lat: 55.95, lng: 23.3},
+    {lat: 55.9, lng: 23.35},
+    {lat: 55.85, lng: 23.3},
   ]);
   const [originAndDestination, setOriginAndDestination] = useState([
     {
@@ -194,7 +194,7 @@ const DashboardForm = () => {
         .getPath()
         .getArray()
         .map((latLng) => {
-          return { lat: latLng.lat(), lng: latLng.lng() };
+          return {lat: latLng.lat(), lng: latLng.lng()};
         });
       setPath(nextPath);
     }

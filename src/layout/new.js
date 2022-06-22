@@ -1,28 +1,25 @@
 import React, {
   useState,
   useContext,
-  useEffect,
-  useCallback,
-  useRef,
 } from 'react';
-import { FinishedHeader } from '../components/headers/finished';
+import {FinishedHeader} from '../components/headers/finished';
 import NewSideLeft from '../components/sides/newSideLeft';
 import InProcessRightSide from '../components/sides/inProcessRight';
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import {PDFExport} from '@progress/kendo-react-pdf';
 import GlobalContext from '../context/globalContext';
 import SlideOver from '../components/sidebars/slideOver';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import MainSidebar from '../components/sidebars/main';
 import useUtils from '../hook/useUtils';
 
 function New() {
-  const { pdfExportComponentNew } = useContext(GlobalContext);
-  const { toPrintNew, setToPrintNew } = useContext(GlobalContext);
+  const {pdfExportComponentNew} = useContext(GlobalContext);
+  const {toPrintNew, setToPrintNew} = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
 
-  usePreventScroll({ isDisabled: !isOpen });
-  const { backFunc } = useUtils();
+  usePreventScroll({isDisabled: !isOpen});
+  const {backFunc} = useUtils();
 
   return (
       <OverlayProvider>

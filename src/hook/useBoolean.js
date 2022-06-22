@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import {useState, useCallback} from 'react';
 import {isTruthy} from 'crocks/predicates';
 
 const useBoolean = initial => {

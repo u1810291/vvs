@@ -1,23 +1,19 @@
-import React, { useContext, useCallback, useState } from 'react';
-import useLanguage from '../../hook/useLanguage';
-import { Search } from '../../components/input/search';
+import React, {useContext, useCallback, useState} from 'react';
+import {Search} from '../../components/input/search';
 import GlobalContext from '../../context/globalContext';
-import generate from 'shortid';
-import { crewZonesQuery } from '../../mocks/queryForms/queryString/query';
-import { crewZonesSubscription } from '../../mocks/queryForms/queryString/subscriptions';
-import { crewZonesMutation } from '../../mocks/queryForms/queryString/mutation';
+import {crewZonesSubscription} from '../../mocks/queryForms/queryString/subscriptions';
 
-const { ActiveCard } = require('../cards/active');
+const {ActiveCard} = require('../cards/active');
 
 function AddressListItem({name, nodes, crewid, ...props}) {
   const {removeZone, setRemoveZone} = useContext(GlobalContext);
-  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
-  const { addressCrew, setAddressCrew } = useContext(GlobalContext);
-  const { polygonsCoordinates, setPolygonsCoordinates } =
+  const {polygonsData, setPolygonsData} = useContext(GlobalContext);
+  const {addressCrew, setAddressCrew} = useContext(GlobalContext);
+  const {polygonsCoordinates, setPolygonsCoordinates} =
   useContext(GlobalContext);
   const {polygonVisible, setPolygonVisible} = useContext(GlobalContext);
-  const { individualPolygonsData, setIndividualPolygonsData } = useContext(GlobalContext);
-  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
+  const {individualPolygonsData, setIndividualPolygonsData} = useContext(GlobalContext);
+  const {polygonsVisible, setPolygonsVisible} = useContext(GlobalContext);
 
   const closeFunc = useCallback(() => {
     setRemoveZone(true);
@@ -52,8 +48,8 @@ const DislocationSide = (props) => {
   // const { english, lithuanian, t } = useLanguage();
   // const { polygonsCoordinates, setPolygonsCoordinates } =
   //   useContext(GlobalContext);
-  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
-  const { setRemoveZone } = useContext(GlobalContext);
+  const {polygonsData, setPolygonsData} = useContext(GlobalContext);
+  const {setRemoveZone} = useContext(GlobalContext);
   const [polygonsMapData, setPolygonsMapData] = useState([]);
   const [ setError] = useState(null);
 
@@ -61,7 +57,7 @@ const DislocationSide = (props) => {
     setRemoveZone(true);
   }, [setRemoveZone]);
 
-  useSubscription({ query: crewZonesSubscription }, ({ data, errors }) => {
+  useSubscription({query: crewZonesSubscription}, ({data, errors}) => {
     if (errors && errors.length > 0) {
       setError(errors[0]);
       return;

@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
 import GlobalContext from '../../context/globalContext';
 import useSort from '../../hook/useSort';
-import { sortToggle } from '../../util/utils';
-import { BreachesTestApi } from '../../mocks/breachesTest';
-const { RedWatching } = require('../buttons/redWatching');
-const { RedDriving } = require('../buttons/redDriving');
-const { BlueStatus } = require('../buttons/blueStatus');
-const { CancelStatus } = require('../buttons/darkBlueStatus');
-const { GreenStatus } = require('../buttons/greenStatus');
-const { GrayStatus } = require('../buttons/grayStatus');
-const { YellowWaitingStatus } = require('../buttons/yellowWaiting');
-const { InspectedStatus } = require('../buttons/yellowInspected');
+import {sortToggle} from '../../util/utils';
+import {BreachesTestApi} from '../../mocks/breachesTest';
+const {RedWatching} = require('../buttons/redWatching');
+const {RedDriving} = require('../buttons/redDriving');
+const {BlueStatus} = require('../buttons/blueStatus');
+const {CancelStatus} = require('../buttons/darkBlueStatus');
+const {GreenStatus} = require('../buttons/greenStatus');
+const {GrayStatus} = require('../buttons/grayStatus');
+const {YellowWaitingStatus} = require('../buttons/yellowWaiting');
+const {InspectedStatus} = require('../buttons/yellowInspected');
 
 export const BreachesList = ({
   id,
@@ -21,12 +21,12 @@ export const BreachesList = ({
   drivers,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
-  const { filterListBreaches, setFilterListBreaches } =
+  const {english, lithuanian, t} = useLanguage();
+  const {filterListBreaches, setFilterListBreaches} =
     useContext(GlobalContext);
-  const { filterEditingBreaches, setFilterEditingBreaches } =
+  const {filterEditingBreaches, setFilterEditingBreaches} =
     useContext(GlobalContext);
-  const { selectedFilterBreaches, setSelectedFilterBreaches } =
+  const {selectedFilterBreaches, setSelectedFilterBreaches} =
     useContext(GlobalContext);
 
   const {

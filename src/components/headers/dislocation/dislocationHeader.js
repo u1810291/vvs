@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../../hook/useLanguage';
 import GlobalContext from '../../../context/globalContext';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
-export function DislocationHeader({ name, fetch, ...props }) {
-  const { english, lithuanian, t } = useLanguage();
-  const { addressCrew, setAddressCrew } = useContext(GlobalContext);
+export function DislocationHeader({name, fetch, ...props}) {
+  const {english, lithuanian, t} = useLanguage();
+  const {addressCrew, setAddressCrew} = useContext(GlobalContext);
 
   return (
     <div className='flex flex-row border-b h-16 bg-white justify-between'>

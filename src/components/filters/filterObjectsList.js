@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -21,9 +21,9 @@ export const FiltersListObjects = ({
   reason,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
-  const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
-  const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
+  const {english, lithuanian, t} = useLanguage();
+  const {filterListObjects, setFilterListObjects} = useContext(GlobalContext);
+  const {selectedFilterObjects, setSelectedFilterObjects} = useContext(GlobalContext);
 
   return (
     <div
@@ -92,7 +92,7 @@ export const FiltersListObjects = ({
                     <div className='py-1'>
                       {filter.dashboardList.includes('Vardas Pavardė') ? null : ( // when no menu items left you can see parent div 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const showDate = 'Vardas Pavardė';
@@ -113,7 +113,7 @@ export const FiltersListObjects = ({
 
                       {filter.dashboardList.includes('Miestas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const object = 'Miestas';
@@ -134,7 +134,7 @@ export const FiltersListObjects = ({
 
                       {filter.dashboardList.includes('Adresas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const name = 'Adresas';
@@ -155,7 +155,7 @@ export const FiltersListObjects = ({
 
                       {filter.dashboardList.includes('Objekto nr.') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const crew = 'Objekto nr.';
@@ -176,7 +176,7 @@ export const FiltersListObjects = ({
 
                       {filter.dashboardList.includes('Sutarties nr.') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const inTime = 'Sutarties nr.';
@@ -199,7 +199,7 @@ export const FiltersListObjects = ({
                         'Siusti ekipaža'
                       ) ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const reactionTime = 'Siusti ekipaža';

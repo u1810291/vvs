@@ -1,11 +1,10 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 
 import CalendarModal from './CalendarModal';
 
 import useBoolean from '../../hook/useBoolean';
 
-import {generate} from 'shortid';
-import {format, parseISO} from 'date-fns';
+import {format} from 'date-fns';
 
 const Event = ({events, title, startTime, endTime, position, weekDay, id, twEvent, twTitle, twTime, setEvents, getRef}) => {
   const [isOpen, setOpen] = useBoolean();

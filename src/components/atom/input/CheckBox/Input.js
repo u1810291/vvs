@@ -1,5 +1,4 @@
 import React from 'react';
-import {Combobox} from '@headlessui/react';
 
 const Input = ({...props}) => (
   <div className='flex items-center h-5'>

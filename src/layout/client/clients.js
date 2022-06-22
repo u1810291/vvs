@@ -1,23 +1,22 @@
 import React, {
   useState,
   useContext,
-  useEffect,
   useCallback,
   useRef,
 } from 'react';
-import { ClientsHeader } from '../../components/headers/clients';
-import { ClientList } from '../../components/lists/clientsList';
-import { FiltersListClients } from '../../components/filters/filterClientsList';
-import { OptionsListClients } from '../../components/options/optionsClientsList';
+import {ClientsHeader} from '../../components/headers/clients';
+import {ClientList} from '../../components/lists/clientsList';
+import {FiltersListClients} from '../../components/filters/filterClientsList';
+import {OptionsListClients} from '../../components/options/optionsClientsList';
 import GlobalContext from '../../context/globalContext';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
+import {ChevronDownIcon} from '@heroicons/react/solid';
+import {PDFExport} from '@progress/kendo-react-pdf';
 import SlideOver from '../../components/sidebars/slideOver';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import MainSidebar from '../../components/sidebars/main';
-import { SearchButton } from '../../components/buttons/searchButton';
+import {SearchButton} from '../../components/buttons/searchButton';
 
 const {
   AddFilterListClients,
@@ -28,11 +27,11 @@ function classNames(...classes) {
 }
 
 function ClientsList() {
-  const { expandFilterClients, setExpandFilterClients } =
+  const {expandFilterClients, setExpandFilterClients} =
     useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } =
+  const {selectedFilterClients, setSelectedFilterClients} =
     useContext(GlobalContext);
-  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
+  const {filterListClients, setFilterListClients} = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async () => {
@@ -51,7 +50,7 @@ function ClientsList() {
   const handleOnOpen = useCallback(() => {
     setIsOpen(true);
   }, []);
-  usePreventScroll({ isDisabled: !isOpen });
+  usePreventScroll({isDisabled: !isOpen});
 
   return (
     <OverlayProvider>
@@ -185,7 +184,7 @@ function ClientsList() {
                             <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-10 sm:w-10 ml-6 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                               <div className='py-1'>
                                 <Menu.Item>
-                                  {({ active }) => (
+                                  {({active}) => (
                                     <button
                                       // onClick={loop}
                                       className={classNames(

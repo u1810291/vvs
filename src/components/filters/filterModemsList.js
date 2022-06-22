@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -21,9 +21,9 @@ export const FiltersListModems = ({
   reason,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
-  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
-  const { selectedFilterModems, setSelectedFilterModems } = useContext(GlobalContext);
+  const {english, lithuanian, t} = useLanguage();
+  const {filterListModems, setFilterListModems} = useContext(GlobalContext);
+  const {selectedFilterModems, setSelectedFilterModems} = useContext(GlobalContext);
 
   return (
     <div
@@ -92,7 +92,7 @@ export const FiltersListModems = ({
                     <div className='py-1'>
                       {filter.dashboardList.includes('Numeris') ? null : ( // when no menu items left you can see parent div 
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const showNumber = 'Numeris';
@@ -113,7 +113,7 @@ export const FiltersListModems = ({
 
                       {filter.dashboardList.includes('Objekto Pavadinimas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const object = 'Objekto Pavadinimas';
@@ -134,7 +134,7 @@ export const FiltersListModems = ({
 
                       {filter.dashboardList.includes('Objekto nr.') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const name = 'Objekto nr.';
@@ -155,7 +155,7 @@ export const FiltersListModems = ({
 
                       {filter.dashboardList.includes('Sutarties nr.') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const crew = 'Sutarties nr.';
@@ -176,7 +176,7 @@ export const FiltersListModems = ({
 
                       {filter.dashboardList.includes('Būsena') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const inTime = 'Būsena';

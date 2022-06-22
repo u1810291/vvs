@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { generate } from 'shortid';
+import React, {useCallback, useContext, useEffect} from 'react';
+import {generate} from 'shortid';
 import GlobalContext from '../../context/globalContext';
 
 export const AddFilterListClients = (props) => {
-  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const { filterEditingClients, setFilterEditingClients } =
+  const {filterListClients, setFilterListClients} = useContext(GlobalContext);
+  const {filterEditingClients, setFilterEditingClients} =
     useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } =
+  const {selectedFilterClients, setSelectedFilterClients} =
     useContext(GlobalContext);
 
   const addFilterFunc = () => {
@@ -127,7 +127,7 @@ export const AddFilterListClients = (props) => {
                           const filterName = e.target.value;
                           setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterName } : x
+                              x.id === filter.id ? {...x, filterName} : x
                             )
                           );
                         }}
@@ -146,7 +146,7 @@ export const AddFilterListClients = (props) => {
                           const filterShortName = e.target.value;
                           setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterShortName } : x
+                              x.id === filter.id ? {...x, filterShortName} : x
                             )
                           );
                         }}
@@ -165,7 +165,7 @@ export const AddFilterListClients = (props) => {
                           const savedToMenu = e.target.checked;
                           setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToMenu } : x
+                              x.id === filter.id ? {...x, savedToMenu} : x
                             )
                           );
                         }}
@@ -185,7 +185,7 @@ export const AddFilterListClients = (props) => {
                           const savedToFavorite = e.target.checked;
                           setFilterListClients((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToFavorite } : x
+                              x.id === filter.id ? {...x, savedToFavorite} : x
                             )
                           );
                         }}

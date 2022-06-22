@@ -1,10 +1,8 @@
-import React, { useCallback, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import GlobalContext from '../../../context/globalContext';
+import React from 'react';
 import useLanguage from '../../../hook/useLanguage';
 
 export function BreachHeader() {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
 
   return (
     <div className='flex flex-row border h-16 bg-white border-b-2 justify-between'>

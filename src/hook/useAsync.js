@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import useMergeReducer from './useMergeReducer';
 import {caseMap} from '@s-e/frontend/flow-control';
 import {tap, pipe, identity, isFunction} from 'crocks';

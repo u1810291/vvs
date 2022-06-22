@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { dislocations } from '../../mocks/dislocations';
-import { sortToggle } from '../../util/utils';
+import React from 'react';
+import {Link} from 'react-router-dom';
+import {dislocations} from '../../mocks/dislocations';
+import {sortToggle} from '../../util/utils';
 import useSort from '../../hook/useSort';
 
-export const DislocationsList = ({ id, set, crew, ...props }) => {
-  const path = { pathname: `/dislocation/${id}` };
+export const DislocationsList = ({id, set, crew, ...props}) => {
+  const path = {pathname: `/dislocation/${id}`};
 
-  const { sortedDislocationsKeys, sortedDislocationsOrder, sortedDislocationsName } =
+  const {sortedDislocationsKeys, sortedDislocationsOrder, sortedDislocationsName} =
     useSort();
 
   const sortedDislocations = sortToggle(dislocations, sortedDislocationsKeys, sortedDislocationsOrder);

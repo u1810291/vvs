@@ -1,20 +1,20 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
-import { Orders } from '../../mocks/orders';
-import { KeyInternal } from '../../components/lists/keyInternal';
-import { KeyHeader } from '../../components/headers/key';
-import { KeyList } from '../../components/lists/key';
-import { keyObjectList } from '../../mocks/keyObjectList';
-import { generate } from 'shortid';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
-import { useParams } from 'react-router-dom';
-import { Search } from '../../components/input/search';
+import React, {useState, useContext, useCallback} from 'react';
+import {Orders} from '../../mocks/orders';
+import {KeyInternal} from '../../components/lists/keyInternal';
+import {KeyHeader} from '../../components/headers/key';
+import {KeyList} from '../../components/lists/key';
+import {keyObjectList} from '../../mocks/keyObjectList';
+import {generate} from 'shortid';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
+import {ChevronDownIcon} from '@heroicons/react/solid';
+import {useParams} from 'react-router-dom';
+import {Search} from '../../components/input/search';
 import GlobalContext from '../../context/globalContext';
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import {PDFExport} from '@progress/kendo-react-pdf';
 import SlideOver from '../../components/sidebars/slideOver';
-import { Spinner } from 'react-activity';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {Spinner} from 'react-activity';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import MainSidebar from '../../components/sidebars/main';
 import useUtils from '../../hook/useUtils';
 
@@ -23,9 +23,9 @@ function classNames(...classes) {
 }
 
 function Key() {
-  const { id } = useParams();
-  const { pdfExportComponentKey } = useContext(GlobalContext);
-  const { toPrintKey, setToPrintKey } = useContext(GlobalContext);
+  const {id} = useParams();
+  const {pdfExportComponentKey} = useContext(GlobalContext);
+  const {toPrintKey, setToPrintKey} = useContext(GlobalContext);
   const [keySet, setKeySet] = useState('');
   const [openModal, setOpenModal] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +35,8 @@ function Key() {
   const handleOnOpen = useCallback(() => {
     setIsOpen(true);
   }, []);
-  usePreventScroll({ isDisabled: !isOpen });
-  const { backFunc } = useUtils();
+  usePreventScroll({isDisabled: !isOpen});
+  const {backFunc} = useUtils();
 
   const keySetFunc = useCallback(
     async (e) => {
@@ -159,7 +159,7 @@ function Key() {
                                     <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                                       <div className='py-1'>
                                         <Menu.Item>
-                                          {({ active }) => (
+                                          {({active}) => (
                                             <button
                                               // onClick={loop}
                                               className={classNames(

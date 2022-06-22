@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { generate } from 'shortid';
+import React, {useCallback, useContext, useEffect} from 'react';
+import {generate} from 'shortid';
 import GlobalContext from '../../context/globalContext';
 
 export const AddFilterListDrivers = (props) => {
-  const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
-  const { filterEditingDrivers, setFilterEditingDrivers } = useContext(GlobalContext);
-  const { selectedFilterDrivers, setSelectedFilterDrivers } = useContext(GlobalContext);
+  const {filterListDrivers, setFilterListDrivers} = useContext(GlobalContext);
+  const {filterEditingDrivers, setFilterEditingDrivers} = useContext(GlobalContext);
+  const {selectedFilterDrivers, setSelectedFilterDrivers} = useContext(GlobalContext);
 
   const addFilterFunc = () => {
     setFilterListDrivers((currentFilter) => [
@@ -122,7 +122,7 @@ export const AddFilterListDrivers = (props) => {
                           const filterName = e.target.value;
                           setFilterListDrivers((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterName } : x
+                              x.id === filter.id ? {...x, filterName} : x
                             )
                           );
                         }}
@@ -141,7 +141,7 @@ export const AddFilterListDrivers = (props) => {
                           const filterShortName = e.target.value;
                           setFilterListDrivers((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterShortName } : x
+                              x.id === filter.id ? {...x, filterShortName} : x
                             )
                           );
                         }}
@@ -160,7 +160,7 @@ export const AddFilterListDrivers = (props) => {
                           const savedToMenu = e.target.checked;
                           setFilterListDrivers((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToMenu } : x
+                              x.id === filter.id ? {...x, savedToMenu} : x
                             )
                           );
                         }}
@@ -178,7 +178,7 @@ export const AddFilterListDrivers = (props) => {
                           const savedToFavorite = e.target.checked;
                           setFilterListDrivers((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToFavorite } : x
+                              x.id === filter.id ? {...x, savedToFavorite} : x
                             )
                           );
                         }}

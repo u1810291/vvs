@@ -1,7 +1,6 @@
 import i18next from 'i18next';
-import {lazy, Suspense} from 'react';
-import {Route} from 'react-router-dom';
-import {getExactHiddenRoute, getExactRoute, getHiddenRoute} from 'util/react';
+import {lazy} from 'react';
+import {getExactHiddenRoute, getExactRoute} from 'util/react';
 import EN from './i18n/en.json';
 
 i18next.addResourceBundle('en', 'object', EN)

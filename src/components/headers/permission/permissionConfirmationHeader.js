@@ -1,5 +1,4 @@
 import React, {useState, useCallback} from 'react';
-import GlobalContext from '../../../context/globalContext';
 import useLanguage from '../../../hook/useLanguage';
 import {BlueStatus} from '../../buttons/blueStatus';
 

@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useCallback, useContext} from 'react';
 import GlobalContext from '../../context/globalContext';
-import { Search } from '../../components/input/search';
+import {Search} from '../../components/input/search';
 
 export function ClientsHeader() {
-  const { expandFilterClients, setExpandFilterClients } =
+  const {expandFilterClients, setExpandFilterClients} =
     useContext(GlobalContext);
 
   const filterFunc = useCallback(async () => {

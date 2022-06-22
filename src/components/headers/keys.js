@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { Search } from '../../components/input/search';
+import React, {useCallback} from 'react';
+import {Search} from '../../components/input/search';
 
 export function KeysHeader() {
 

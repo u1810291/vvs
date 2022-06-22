@@ -1,17 +1,15 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import GlobalContext from '../../context/globalContext';
-import { Spinner } from 'react-activity';
-import { Link } from 'react-router-dom';
-import { sortToggle } from '../../util/utils';
+import {Spinner} from 'react-activity';
+import {Link} from 'react-router-dom';
+import {sortToggle} from '../../util/utils';
 import useSort from '../../hook/useSort';
-import { getUsers } from '../../mocks/queryForms/queryString/users';
-import { getAllUsers } from '../../mocks/queryForms/variables/users';
 
 export const ClientList = () => {
-  const { accessToken } = useContext(AuthContext);
+  const {accessToken} = useContext(AuthContext);
   const [customers, setCustomers] = useState('');
-  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } = useContext(GlobalContext);
+  const {filterListClients, setFilterListClients} = useContext(GlobalContext);
+  const {selectedFilterClients, setSelectedFilterClients} = useContext(GlobalContext);
 
   const data = [];
 
@@ -19,7 +17,7 @@ export const ClientList = () => {
     if (data.status === 'success') {
       const allUsers = data?.data?.users?.users;
       const searchRole = (name, arr) =>
-        arr?.filter(({ registrations }) => {
+        arr?.filter(({registrations}) => {
           if (registrations) {
           const reg = registrations?.find((role) => role.roles[0] === 'customer')
           return reg
@@ -27,7 +25,7 @@ export const ClientList = () => {
         }
         );
       const searchResult = searchRole('customer', allUsers);
-      let obj = { users: searchResult };
+      let obj = {users: searchResult};
       setCustomers(obj);
     }
   }, [data.data]);
@@ -123,7 +121,7 @@ export const ClientList = () => {
                           {filter.dashboardList.includes('Vardas Pavardė') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/client/${data.id}` }}
+                                to={{pathname: `/client/${data.id}`}}
                                 className='bg-white text-gray-500 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.fullName}
@@ -133,7 +131,7 @@ export const ClientList = () => {
                           {filter.dashboardList.includes('Sutarties nr.') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/client/${data.id}` }}
+                                to={{pathname: `/client/${data.id}`}}
                                 className='bg-white text-gray-400 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.contract}
@@ -143,7 +141,7 @@ export const ClientList = () => {
                           {filter.dashboardList.includes('Telefonas') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/client/${data.id}` }}
+                                to={{pathname: `/client/${data.id}`}}
                                 className='bg-white text-gray-400 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.mobilePhone}
@@ -153,7 +151,7 @@ export const ClientList = () => {
                           {filter.dashboardList.includes('El. paštas') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/client/${data.id}` }}
+                                to={{pathname: `/client/${data.id}`}}
                                 className='bg-white text-gray-400 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.email}

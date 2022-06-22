@@ -1,5 +1,5 @@
 import {identity} from 'crocks';
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 
 const Box = ({
   Input,

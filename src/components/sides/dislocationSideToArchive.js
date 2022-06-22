@@ -1,16 +1,16 @@
-import React, { useCallback, useState, useContext } from 'react';
+import React, {useCallback, useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
 import GlobalContext from '../../context/globalContext';
-const { ActiveCard } = require('../cards/active');
+const {ActiveCard} = require('../cards/active');
 
 const DislocationSideToArchive = (props) => {
-  const { accessToken } = useContext(GlobalContext);
-  const { english, lithuanian, t } = useLanguage();
-  const { addressCrew, setAddressCrew } = useContext(GlobalContext);
-  const { polygonsCoordinates, setPolygonsCoordinates } =
+  const {accessToken} = useContext(GlobalContext);
+  const {english, lithuanian, t} = useLanguage();
+  const {addressCrew, setAddressCrew} = useContext(GlobalContext);
+  const {polygonsCoordinates, setPolygonsCoordinates} =
     useContext(GlobalContext);
-  const { removeZone, setRemoveZone } = useContext(GlobalContext);
-  const { polygonsVisible, setPolygonsVisible } = useContext(GlobalContext);
+  const {removeZone, setRemoveZone} = useContext(GlobalContext);
+  const {polygonsVisible, setPolygonsVisible} = useContext(GlobalContext);
 
   const archiveFunc = useCallback(() => {
     setRemoveZone(false);

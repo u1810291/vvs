@@ -9,10 +9,7 @@ import useLanguage from '../../hook/useLanguage';
 import {CrewHeader} from '../../components/headers/crew/crewHeader';
 import CrewList from '../../components/lists/crewList';
 import GlobalContext from '../../context/globalContext';
-import {CrewTestApi} from '../../mocks/crewTest';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import useSort from '../../hook/useSort';
-import {sortToggle} from '../../util/utils';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
 import {AddFilterListCrew} from '../../components/addFilter/addFilterCrew';
 import {OptionsListCrew} from '../../components/options/optionsCrewList';
@@ -32,7 +29,7 @@ function Crew() {
   const {selectedFilterCrew, setSelectedFilterCrew} = useContext(GlobalContext);
   const {filterListCrew, setFilterListCrew} = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
-  const preventScroll = usePreventScroll({ isDisabled: !isOpen });
+  const preventScroll = usePreventScroll({isDisabled: !isOpen});
   const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
   const handleOnClose = useCallback(() => { setIsOpen(false)},[]);
   const pdfExportComponent = useRef(null);
@@ -173,7 +170,7 @@ function Crew() {
                                 <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-10 sm:w-10 ml-6 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                                   <div className='py-1'>
                                     <Menu.Item>
-                                      {({ active }) => (
+                                      {({active}) => (
                                         <button
                                           // onClick={loop}
                                           className={classNames(

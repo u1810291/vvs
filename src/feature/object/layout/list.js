@@ -5,7 +5,6 @@ import {titleCase} from '@s-e/frontend/transformer/string';
 import {useAuth} from 'context/auth';
 import {useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {withAuthorizedHook} from 'hoc/withAuthorizedHook';
 import withPreparedProps from 'hoc/withPreparedProps';
 import {
   and,
@@ -22,11 +21,10 @@ import {
   objOf,
   pipe,
   safe,
-  setProp,
 } from 'crocks';
 import Breadcrumbs from 'components/Breadcrumbs';
 import {generatePath, Link} from 'react-router-dom';
-import ObjectRoute, {ObjectEditRoute} from '../routes';
+import {ObjectEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({

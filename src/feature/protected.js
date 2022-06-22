@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import React, {useEffect} from 'react';
 import {matchPath, Outlet} from 'react-router-dom';
 import {AuthContextProvider, useAuth} from 'context/auth';
-import {useEvent} from '@react-aria/utils';
-import {LOGIN_PAGE} from './login/routes';
 
 const AuthConsumer = props => {
   const {isAuthorized} = useAuth();

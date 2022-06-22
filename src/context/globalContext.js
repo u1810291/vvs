@@ -1,11 +1,11 @@
-import { createContext, useState, useRef, useContext, useEffect } from 'react';
-import { generate } from 'shortid';
+import {createContext, useState, useRef} from 'react';
+import {generate} from 'shortid';
 
 const GlobalContext = createContext();
 
 export default GlobalContext;
 
-export const GlobalProvider = ({ children }) => {
+export const GlobalProvider = ({children}) => {
   const pdfExportComponentNew = useRef(null);
   const pdfExportComponentKey = useRef(null);
   const [filter, setFilter] = useState('');

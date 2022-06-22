@@ -1,8 +1,8 @@
-import React, { useCallback, useContext } from 'react';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import React, {useContext} from 'react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -20,8 +20,8 @@ export const FiltersListClients = ({
   reason,
   ...props
 }) => {
-  const { filterListClients, setFilterListClients } = useContext(GlobalContext);
-  const { selectedFilterClients, setSelectedFilterClients } =
+  const {filterListClients, setFilterListClients} = useContext(GlobalContext);
+  const {selectedFilterClients, setSelectedFilterClients} =
     useContext(GlobalContext);
 
   return (
@@ -108,7 +108,7 @@ export const FiltersListClients = ({
                         'Vardas Pavardė'
                       ) ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const name = 'Vardas Pavardė';
@@ -139,7 +139,7 @@ export const FiltersListClients = ({
 
                       {filter.dashboardList.includes('Sutarties nr.') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const contract = 'Sutarties nr.';
@@ -170,7 +170,7 @@ export const FiltersListClients = ({
 
                       {filter.dashboardList.includes('Telefonas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const phone = 'Telefonas';
@@ -201,7 +201,7 @@ export const FiltersListClients = ({
 
                       {filter.dashboardList.includes('El. paštas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const email = 'El. paštas';

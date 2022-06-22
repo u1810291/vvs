@@ -1,7 +1,6 @@
-import Routes from 'Routes';
 import {isArray} from 'crocks';
-import React, { useContext, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useCallback} from 'react';
+import {Link} from 'react-router-dom';
 
 const componentToTreeItem = c => ({
   ...c.props,

@@ -1,10 +1,10 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useCallback, useContext} from 'react';
 import GlobalContext from '../../context/globalContext';
-import { Search } from '../../components/input/search';
-import { Link } from 'react-router-dom';
+import {Search} from '../../components/input/search';
+import {Link} from 'react-router-dom';
 
 export function TasksHeader() {
-  const { expandFilter, setExpandFilter } = useContext(GlobalContext);
+  const {expandFilter, setExpandFilter} = useContext(GlobalContext);
 
   const filterFunc = useCallback(async () => {
     if (expandFilter) {

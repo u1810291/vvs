@@ -1,9 +1,9 @@
-import React, { useContext, useCallback } from 'react';
+import React, {useContext, useCallback} from 'react';
 import GlobalContext from '../../context/globalContext';
 
-export function KeyHeader({ fullName }) {
-  const { pdfExportComponentKey } = useContext(GlobalContext);
-  const { toPrintKey, setToPrintKey } = useContext(GlobalContext);
+export function KeyHeader({fullName}) {
+  const {pdfExportComponentKey} = useContext(GlobalContext);
+  const {toPrintKey, setToPrintKey} = useContext(GlobalContext);
 
   const handleExportWithComponent = useCallback(async (event) => {
     setToPrintKey(true);

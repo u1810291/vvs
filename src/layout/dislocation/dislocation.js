@@ -1,46 +1,40 @@
 import React, {
   useState,
   useContext,
-  useEffect,
   useCallback,
-  useRef,
 } from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
-import { DislocationHeader } from '../../components/headers/dislocation/dislocationHeader';
-import { DislocationsHeader } from '../../components/headers/dislocation/dislocations';
-import DislocationMap from '../../components/map/dislocationMap';
+import {DislocationHeader} from '../../components/headers/dislocation/dislocationHeader';
+import {DislocationsHeader} from '../../components/headers/dislocation/dislocations';
 import DislocationSide from '../../components/sides/dislocationSide';
 import DislocationSideToArchive from '../../components/sides/dislocationSideToArchive';
 import GlobalContext from '../../context/globalContext';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import SlideOver from '../../components/sidebars/slideOver';
 import MainSidebar from '../../components/sidebars/main';
-import { crewZonesMutation } from '../../mocks/queryForms/queryString/mutation';
 import Map from '../../feature/map/component/Map';
 import GoogleMapTools from '../../feature/map/component/GoogleMapTools';
 import {Polygon} from '@react-google-maps/api';
 import {generate} from 'shortid';
 import {useGoogleApiContext} from '../../context/googleApiContext';
-import {not, isEmpty} from 'crocks';
 
 function Dislocation() {
-  const { accessToken } = useContext(AuthContext);
+  const {accessToken} = useContext(AuthContext);
   const {onMapLoad, setValue, libraries, isLoaded} = useGoogleApiContext();
-  const { expandFilterDislocations, setExpandFilterDislocations } =
+  const {expandFilterDislocations, setExpandFilterDislocations} =
     useContext(GlobalContext);
-  const { selectedFilterDislocations, setSelectedFilterDislocations } =
+  const {selectedFilterDislocations, setSelectedFilterDislocations} =
     useContext(GlobalContext);
-  const { filterListDislocations, setFilterListDislocations } =
+  const {filterListDislocations, setFilterListDislocations} =
     useContext(GlobalContext);
-  const { polygonsData, setPolygonsData } = useContext(GlobalContext);
-  const { removeZone, setRemoveZone } = useContext(GlobalContext);
-  const { addressCrew, setAddressCrew } = useContext(GlobalContext);
-  const { polygonsCoordinates, setPolygonsCoordinates } =
+  const {polygonsData, setPolygonsData} = useContext(GlobalContext);
+  const {removeZone, setRemoveZone} = useContext(GlobalContext);
+  const {addressCrew, setAddressCrew} = useContext(GlobalContext);
+  const {polygonsCoordinates, setPolygonsCoordinates} =
     useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
-  const { english, lithuanian, t } = useLanguage();
-  const preventScroll = usePreventScroll({ isDisabled: !isOpen });
+  const {english, lithuanian, t} = useLanguage();
+  const preventScroll = usePreventScroll({isDisabled: !isOpen});
   const handleOnOpen = useCallback(() => {
     setIsOpen(true);
   }, []);

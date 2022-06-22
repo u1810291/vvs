@@ -1,18 +1,13 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useCallback} from 'react';
 
 import Row from './Row';
 import Column from './Column';
 import CalendarModal from './CalendarModal';
 
-import {generate} from 'shortid';
-import {endOfDay, formatISO, startOfDay} from 'date-fns';
 
-import useChunk from '../../hook/useChunk';
 import useBoolean from '../../hook/useBoolean';
 import useLanguage from '../../hook/useLanguage';
-import useWeekDays from '../../hook/useWeekDays';
 
-import getTimeslots from './getTimeSlots';
 
 const CalendarTimeline = ({
   title,

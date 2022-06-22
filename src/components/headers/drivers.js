@@ -1,10 +1,10 @@
-import React, { useCallback, useContext } from 'react';
-import { Search } from '../../components/input/search';
+import React, {useCallback, useContext} from 'react';
+import {Search} from '../../components/input/search';
 import GlobalContext from '../../context/globalContext';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 export function DriversHeader() {
-  const { expandFilterDrivers, setExpandFilterDrivers } =
+  const {expandFilterDrivers, setExpandFilterDrivers} =
     useContext(GlobalContext);
 
   const filterFunc = useCallback(async () => {

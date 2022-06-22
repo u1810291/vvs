@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 export function useDeleteFetch(authToken, userId) {
   const [data, setData] = useState(null);
@@ -35,5 +35,5 @@ export function useDeleteFetch(authToken, userId) {
     }
     setLoading(false);
   };
-  return { fetchData, data, error, loading };
+  return {fetchData, data, error, loading};
 }

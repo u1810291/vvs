@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu as HeadlessMenu } from '@headlessui/react'
+import {Menu as HeadlessMenu} from '@headlessui/react'
 
 const Menu = ({Button, Transition, Items, as = 'div', buttonText, ...props}) => {
   return (

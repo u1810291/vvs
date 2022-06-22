@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
 import GlobalContext from '../../context/globalContext';
-const { RedWatching } = require('../buttons/redWatching');
-const { RedDriving } = require('../buttons/redDriving');
-const { BlueStatus } = require('../buttons/blueStatus');
-const { CancelStatus } = require('../buttons/darkBlueStatus');
-const { GreenStatus } = require('../buttons/greenStatus');
-const { GrayStatus } = require('../buttons/grayStatus');
-const { YellowWaitingStatus } = require('../buttons/yellowWaiting');
-const { InspectedStatus } = require('../buttons/yellowInspected');
+const {RedWatching} = require('../buttons/redWatching');
+const {RedDriving} = require('../buttons/redDriving');
+const {BlueStatus} = require('../buttons/blueStatus');
+const {CancelStatus} = require('../buttons/darkBlueStatus');
+const {GreenStatus} = require('../buttons/greenStatus');
+const {GrayStatus} = require('../buttons/grayStatus');
+const {YellowWaitingStatus} = require('../buttons/yellowWaiting');
+const {InspectedStatus} = require('../buttons/yellowInspected');
 
 export const PermissionsList = ({
   id,

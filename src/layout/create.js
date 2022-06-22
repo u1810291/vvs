@@ -1,24 +1,19 @@
 import React, {
   useState,
-  useContext,
-  useEffect,
   useCallback,
   useRef,
 } from 'react';
-import { CreateHeader } from '../components/headers/create';
-import { StandardMap } from '../feature/mapStandard';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
-import { Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {CreateHeader} from '../components/headers/create';
+import {StandardMap} from '../feature/mapStandard';
+import {Menu, Transition} from '@headlessui/react';
+import {ChevronDownIcon} from '@heroicons/react/solid';
+import {Fragment} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
-  GoogleMap,
   Marker,
-  InfoWindow,
-  useJsApiLoader,
 } from '@react-google-maps/api';
 import SlideOver from '../components/sidebars/slideOver';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import MainSidebar from '../components/sidebars/main';
 import useUtils from '../hook/useUtils';
 import Map from '../feature/map/component/Map';
@@ -57,13 +52,13 @@ function Create() {
   const [textArea, setTextArea] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
-  const { backFunc } = useUtils();
+  const {backFunc} = useUtils();
 
-  usePreventScroll({ isDisabled: !isOpen });
+  usePreventScroll({isDisabled: !isOpen});
 
   const onMapClick = useCallback((e) => {
     // console.log(e);
-    setClickedPos({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+    setClickedPos({lat: e.latLng.lat(), lng: e.latLng.lng()});
   }, []);
 
   const onLoad = useCallback(function callback(map) {
@@ -161,7 +156,7 @@ function Create() {
                               <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                                 <div className='py-1'>
                                   <Menu.Item>
-                                    {({ active }) => (
+                                    {({active}) => (
                                       <button
 
                                         // onClick={}
@@ -178,7 +173,7 @@ function Create() {
                                   </Menu.Item>
 
                                   <Menu.Item>
-                                    {({ active }) => (
+                                    {({active}) => (
                                       <button
 
                                         // onClick={}
@@ -283,7 +278,7 @@ function Create() {
                             <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                               <div className='py-1'>
                                 <Menu.Item>
-                                  {({ active }) => (
+                                  {({active}) => (
                                     <button
                                       // onClick={}
                                       className={classNames(
@@ -299,7 +294,7 @@ function Create() {
                                 </Menu.Item>
 
                                 <Menu.Item>
-                                  {({ active }) => (
+                                  {({active}) => (
                                     <button
                                       // onClick={}
                                       className={classNames(
@@ -368,7 +363,7 @@ function Create() {
                             <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                               <div className='py-1'>
                                 <Menu.Item>
-                                  {({ active }) => (
+                                  {({active}) => (
                                     <button
                                       // onClick={}
                                       className={classNames(
@@ -384,7 +379,7 @@ function Create() {
                                 </Menu.Item>
 
                                 <Menu.Item>
-                                  {({ active }) => (
+                                  {({active}) => (
                                     <button
                                       // onClick={}
                                       className={classNames(

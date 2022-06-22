@@ -1,23 +1,17 @@
-import GlobalContext from '../../context/globalContext';
 import MainSidebar from '../../components/sidebars/main';
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import SlideOver from '../../components/sidebars/slideOver';
 import useUtils from '../../hook/useUtils';
-import { CreateHeader } from '../../components/headers/create';
-import { Link } from 'react-router-dom';
-import { Object } from '../../components/lists/object';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
-import { Spinner } from 'react-activity';
-import { archive } from '../../mocks/queryForms/queryString/users';
-import { clientList } from '../../mocks/client';
-import { generate } from 'shortid';
-import { getAllUsers } from '../../mocks/queryForms/variables/users';
-import { getUsers } from '../../mocks/queryForms/queryString/users';
-import { updateRegister } from '../../mocks/queryForms/queryString/query';
-import { useParams } from 'react-router-dom';
+import {CreateHeader} from '../../components/headers/create';
+import {Object} from '../../components/lists/object';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
+import {Spinner} from 'react-activity';
+import {clientList} from '../../mocks/client';
+import {generate} from 'shortid';
+import {useParams} from 'react-router-dom';
 
 function Client() {
-  const { id } = useParams();
+  const {id} = useParams();
   const [customers, setCustomers] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = useCallback(() => {
@@ -26,7 +20,7 @@ function Client() {
   const handleOnOpen = useCallback(() => {
     setIsOpen(true);
   }, []);
-  usePreventScroll({ isDisabled: !isOpen });
+  usePreventScroll({isDisabled: !isOpen});
   const [clientName, setClientName] = useState('');
   const [clientSurname, setClientSurname] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -34,7 +28,7 @@ function Client() {
   const [fullName, setFullName] = useState('');
   const [administrator, setAdministrator] = useState('');
   const [administratorHandle, setAdministratorHandle] = useState('');
-  const { backFunc } = useUtils();
+  const {backFunc} = useUtils();
 
   const getClient = {
     userId: id
@@ -59,7 +53,7 @@ function Client() {
     fetchData: updateRegisterFetchData,
   } = {}
 
-  const { data, error, loading, fetchData } = {};
+  const {data, error, loading, fetchData} = {};
 
   useEffect(() => {
     fetchData();
@@ -69,12 +63,12 @@ function Client() {
     if (data) {
       const allUsers = data.data.users.users;
       const searchRole = (name, arr) =>
-        arr.filter(({ registrations }) =>
+        arr.filter(({registrations}) =>
         // handle find function error if no users
           registrations.find((role) => role.roles[0] === 'customer')
         );
       const searchResult = searchRole('customer', allUsers);
-      let obj = { users: searchResult };
+      let obj = {users: searchResult};
       setCustomers(obj);
     }
   }, [data]);
@@ -148,7 +142,7 @@ function Client() {
 
   const handleAdministratorCheckBox = useCallback(
     async (e) => {
-      const { value, checked } = e.target;
+      const {value, checked} = e.target;
       setAdministratorHandle(initialState => !initialState);
       if (checked) {
         setAdministrator('corporate-regular');

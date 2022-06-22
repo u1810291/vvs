@@ -3,10 +3,10 @@ import useLanguage from '../../hook/useLanguage';
 import PermissionConfirmationTimeCard from '../cards/permissionConfirmationTimeCard';
 import {BlueStatus} from '../buttons/blueStatus';
 
-const { ActiveCard } = require('../../components/cards/active');
+const {ActiveCard} = require('../../components/cards/active');
 
 const PermissionConfirmationSideRight = () => {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
   return (
     <>
       <div className='flex flex-col'>

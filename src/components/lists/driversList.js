@@ -1,20 +1,20 @@
 import GlobalContext from '../../context/globalContext';
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import useSort from '../../hook/useSort';
-import { Link } from 'react-router-dom';
-import { Spinner } from 'react-activity';
-import { generate } from 'shortid';
-import { getAllUsers } from '../../mocks/queryForms/variables/users';
-import { getUsers } from '../../mocks/queryForms/queryString/users';
-import { sortToggle } from '../../util/utils';
+import {Link} from 'react-router-dom';
+import {Spinner} from 'react-activity';
+import {generate} from 'shortid';
+import {getAllUsers} from '../../mocks/queryForms/variables/users';
+import {getUsers} from '../../mocks/queryForms/queryString/users';
+import {sortToggle} from '../../util/utils';
 
-const { Connected } = require('../buttons/connected');
-const { Deactivated } = require('../buttons/deactivated');
-const { Disconnected } = require('../buttons/disconnected');
+const {Connected} = require('../buttons/connected');
+const {Deactivated} = require('../buttons/deactivated');
+const {Disconnected} = require('../buttons/disconnected');
 export const DriverList = () => {
-  const { accessToken } = useContext(AuthContext);
-  const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
-  const { selectedFilterDrivers, setSelectedFilterDrivers } =
+  const {accessToken} = useContext(AuthContext);
+  const {filterListDrivers, setFilterListDrivers} = useContext(GlobalContext);
+  const {selectedFilterDrivers, setSelectedFilterDrivers} =
     useContext(GlobalContext);
   const [crew, setCrew] = useState('');
 
@@ -24,13 +24,13 @@ export const DriverList = () => {
     if (data.data) {
       const allUsers = data?.data?.users?.users;
       const searchRole = (name, arr) =>
-        arr?.filter(({ registrations }) => {
+        arr?.filter(({registrations}) => {
         if (registrations) {
           const reg = registrations?.find((role) => role.roles[0] === 'crew')
           return reg
       }});
       const searchResult = searchRole('crew', allUsers);
-      let obj = { users: searchResult };
+      let obj = {users: searchResult};
       setCrew(obj);
     }
   }, [data.data]);
@@ -103,7 +103,7 @@ export const DriverList = () => {
                           <div className='flex flex-row items-center justify-start h-12 w-40'>
                             {filter.dashboardList.includes('Vardas Pavardė') ? (
                               <Link
-                                to={{ pathname: `/driver/${data.id}` }}
+                                to={{pathname: `/driver/${data.id}`}}
                                 className='bg-white text-gray-500 hover:text-gray-300 truncate text-sm'
                               >
                                 {data.firstName}

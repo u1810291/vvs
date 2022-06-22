@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import useUtils from '../../hook/useUtils';
 
-export function CreateHeader({ fullName }) {
-  const { backFunc } = useUtils();
+export function CreateHeader({fullName}) {
+  const {backFunc} = useUtils();
 
   const sendQuery = useCallback(() => {
     console.log('query sent');

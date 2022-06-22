@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 
 export default function useArray(props) {
@@ -28,5 +28,5 @@ export default function useArray(props) {
         setArray([]);
     }
 
-    return { array, set: setArray, push, filter, update, remove, clear };
+    return {array, set: setArray, push, filter, update, remove, clear};
 }

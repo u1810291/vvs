@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { generate } from 'shortid';
+import React, {useCallback, useContext, useEffect} from 'react';
+import {generate} from 'shortid';
 import GlobalContext from '../../context/globalContext';
 
-export const AddFilterListObjects = ({ fetch, data, ...props}) => {
-  const { filterListObjects, setFilterListObjects } = useContext(GlobalContext);
-  const { filterEditingObjects, setFilterEditingObjects } = useContext(GlobalContext);
-  const { selectedFilterObjects, setSelectedFilterObjects } = useContext(GlobalContext);
-  const { objectPageFetchData, setObjectPageFetchData } = useContext(GlobalContext);
+export const AddFilterListObjects = ({fetch, data, ...props}) => {
+  const {filterListObjects, setFilterListObjects} = useContext(GlobalContext);
+  const {filterEditingObjects, setFilterEditingObjects} = useContext(GlobalContext);
+  const {selectedFilterObjects, setSelectedFilterObjects} = useContext(GlobalContext);
+  const {objectPageFetchData, setObjectPageFetchData} = useContext(GlobalContext);
 
   const addFilterFunc = () => {
     setFilterListObjects((currentFilter) => [
@@ -128,7 +128,7 @@ export const AddFilterListObjects = ({ fetch, data, ...props}) => {
                           const filterName = e.target.value;
                           setFilterListObjects((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterName } : x
+                              x.id === filter.id ? {...x, filterName} : x
                             )
                           );
                         }}
@@ -147,7 +147,7 @@ export const AddFilterListObjects = ({ fetch, data, ...props}) => {
                           const filterShortName = e.target.value;
                           setFilterListObjects((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterShortName } : x
+                              x.id === filter.id ? {...x, filterShortName} : x
                             )
                           );
                         }}
@@ -166,7 +166,7 @@ export const AddFilterListObjects = ({ fetch, data, ...props}) => {
                           const savedToMenu = e.target.checked;
                           setFilterListObjects((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToMenu } : x
+                              x.id === filter.id ? {...x, savedToMenu} : x
                             )
                           );
                         }}
@@ -184,7 +184,7 @@ export const AddFilterListObjects = ({ fetch, data, ...props}) => {
                           const savedToFavorite = e.target.checked;
                           setFilterListObjects((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToFavorite } : x
+                              x.id === filter.id ? {...x, savedToFavorite} : x
                             )
                           );
                         }}

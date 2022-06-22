@@ -26,7 +26,7 @@ const Box = ({
 
   return (
     <Listbox value={selectedChildren} onChange={setSelectedChildren}>
-      {({ open }) => (
+      {({open}) => (
         <>
           <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
           <ContentContainer>

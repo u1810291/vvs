@@ -1,16 +1,15 @@
 import React, {
   useState,
   useContext,
-  useEffect,
   useCallback,
   useRef,
   Fragment
 } from 'react';
 import useLanguage from '../../hook/useLanguage';
 import GlobalContext from '../../context/globalContext';
-import {PDFExport, savePDF} from '@progress/kendo-react-pdf';
+import {PDFExport} from '@progress/kendo-react-pdf';
 import {PermissionsTestApi} from '../../mocks/permissionsTest';
-import {OverlayProvider, usePreventScroll} from 'react-aria';
+import {OverlayProvider} from 'react-aria';
 import {AddFilterListPermissions} from '../../components/addFilter/addFilterPermissions';
 import {PermissionsList} from '../../components/lists/permissionsList';
 import {PermissionsHeader} from '../../components/headers/permission/permissionsHeader';
@@ -23,7 +22,6 @@ import {FiltersListPermissions} from '../../components/filters/filterPermissions
 import {SearchButton} from '../../components/buttons/searchButton';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
-import { ThreeTabHeader } from '../../components/headers/objects';
 
 const classNames = a => a
 
@@ -305,7 +303,7 @@ function Permissions() {
                                 <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-10 sm:w-10 ml-6 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                                   <div className='py-1'>
                                     <Menu.Item>
-                                      {({ active }) => (
+                                      {({active}) => (
                                         <button
                                           // onClick={loop}
                                           className={classNames(

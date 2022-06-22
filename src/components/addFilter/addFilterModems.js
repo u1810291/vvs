@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { generate } from 'shortid';
+import React, {useCallback, useContext, useEffect} from 'react';
+import {generate} from 'shortid';
 import GlobalContext from '../../context/globalContext';
 
 export const AddFilterListModems = (props) => {
-  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
-  const { filterEditingModems, setFilterEditingModems } = useContext(GlobalContext);
-  const { selectedFilterModems, setSelectedFilterModems } = useContext(GlobalContext);
+  const {filterListModems, setFilterListModems} = useContext(GlobalContext);
+  const {filterEditingModems, setFilterEditingModems} = useContext(GlobalContext);
+  const {selectedFilterModems, setSelectedFilterModems} = useContext(GlobalContext);
 
   const addFilterFunc = () => {
     setFilterListModems((currentFilter) => [
@@ -125,7 +125,7 @@ export const AddFilterListModems = (props) => {
                           const filterName = e.target.value;
                           setFilterListModems((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterName } : x
+                              x.id === filter.id ? {...x, filterName} : x
                             )
                           );
                         }}
@@ -144,7 +144,7 @@ export const AddFilterListModems = (props) => {
                           const filterShortName = e.target.value;
                           setFilterListModems((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, filterShortName } : x
+                              x.id === filter.id ? {...x, filterShortName} : x
                             )
                           );
                         }}
@@ -163,7 +163,7 @@ export const AddFilterListModems = (props) => {
                           const savedToMenu = e.target.checked;
                           setFilterListModems((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToMenu } : x
+                              x.id === filter.id ? {...x, savedToMenu} : x
                             )
                           );
                         }}
@@ -181,7 +181,7 @@ export const AddFilterListModems = (props) => {
                           const savedToFavorite = e.target.checked;
                           setFilterListModems((currentFilter) =>
                             currentFilter.map((x) =>
-                              x.id === filter.id ? { ...x, savedToFavorite } : x
+                              x.id === filter.id ? {...x, savedToFavorite} : x
                             )
                           );
                         }}

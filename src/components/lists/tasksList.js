@@ -1,27 +1,23 @@
 import React, {
   useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
 } from 'react';
 import GlobalContext from '../../context/globalContext';
-import { DashboardTestApi } from '../../mocks/dashboardTest';
+import {DashboardTestApi} from '../../mocks/dashboardTest';
 import useSort from '../../hook/useSort';
-import { sortToggle } from '../../util/utils';
-const { RedWatching } = require('../buttons/redWatching');
-const { RedDriving } = require('../buttons/redDriving');
-const { BlueStatus } = require('../buttons/blueStatus');
-const { CancelStatus } = require('../buttons/darkBlueStatus');
-const { GreenStatus } = require('../buttons/greenStatus');
-const { GrayStatus } = require('../buttons/grayStatus');
-const { YellowWaitingStatus } = require('../buttons/yellowWaiting');
-const { InspectedStatus } = require('../buttons/yellowInspected');
+import {sortToggle} from '../../util/utils';
+const {RedWatching} = require('../buttons/redWatching');
+const {RedDriving} = require('../buttons/redDriving');
+const {BlueStatus} = require('../buttons/blueStatus');
+const {CancelStatus} = require('../buttons/darkBlueStatus');
+const {GreenStatus} = require('../buttons/greenStatus');
+const {GrayStatus} = require('../buttons/grayStatus');
+const {YellowWaitingStatus} = require('../buttons/yellowWaiting');
+const {InspectedStatus} = require('../buttons/yellowInspected');
 
 export const TasksList = () => {
-const { filterList, setFilterList } = useContext(GlobalContext);
-  const { filterEditing, setFilterEditing } = useContext(GlobalContext);
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+const {filterList, setFilterList} = useContext(GlobalContext);
+  const {filterEditing, setFilterEditing} = useContext(GlobalContext);
+  const {selectedFilter, setSelectedFilter} = useContext(GlobalContext);
 
   const {
     sortedDashboardKeys,

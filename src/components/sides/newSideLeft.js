@@ -1,10 +1,10 @@
 import React from 'react';
 import useLanguage from '../../hook/useLanguage';
 
-const { PhoneCard } = require('../../components/cards/phone');
+const {PhoneCard} = require('../../components/cards/phone');
 
 const NewSideLeft = () => {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
   return (
     <>
       <div className='flex flex-row items-end border bg-white justify-between'>

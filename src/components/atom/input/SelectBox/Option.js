@@ -8,7 +8,7 @@ function classNames(...classes) {
 
 const Option = ({selected, ...props}) => (
   <Listbox.Option {...props}>
-    {({ selected, active }) => (
+    {({selected, active}) => (
       <>
         <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>{props.children}</span>
         {selected ? (

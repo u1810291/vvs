@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
-import { Combobox } from '@headlessui/react'
+import {CheckIcon, SelectorIcon} from '@heroicons/react/solid'
+import {Combobox} from '@headlessui/react'
 import {identity} from 'crocks/combinators'
 
 function classNames(...classes) {
@@ -20,7 +20,7 @@ const ComboBox = ({values = [], label = null, onChange = identity}) => {
         })
 
 
-  const filteredValuesClassName = useCallback(({ active }) => classNames(
+  const filteredValuesClassName = useCallback(({active}) => classNames(
     'relative cursor-default select-none py-2 pl-3 pr-9',
     active ? 'bg-indigo-600 text-white' : 'text-gray-900'
   ), []);
@@ -48,7 +48,7 @@ const ComboBox = ({values = [], label = null, onChange = identity}) => {
                 value={value}
                 className={filteredValuesClassName}
               >
-                {({ active, selected }) => (
+                {({active, selected}) => (
                   <>
                     <span className={classNames('block truncate', selected && 'font-semibold')}>{value}</span>
 

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import {useCallback} from 'react';
 import {lt, enUS} from 'date-fns/locale';
 import useLanguage from './useLanguage';
 import {

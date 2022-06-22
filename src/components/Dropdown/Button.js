@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu } from '@headlessui/react'
+import {Menu} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/solid';
 
 const Button = ({children = 'Options', ...props}) => (

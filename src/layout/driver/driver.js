@@ -1,21 +1,15 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
-import { CreateHeader } from '../../components/headers/create';
+import React, {useState, useContext, useCallback, useEffect} from 'react';
+import {CreateHeader} from '../../components/headers/create';
 import SlideOver from '../../components/sidebars/slideOver';
-import GlobalContext from '../../context/globalContext';
-import { Spinner } from 'react-activity';
-import { Link } from 'react-router-dom';
-import { archive } from '../../mocks/queryForms/queryString/users';
-import { getUsers } from '../../mocks/queryForms/queryString/users';
-import { getAllUsers } from '../../mocks/queryForms/variables/users';
-import { useDeleteFetch } from '../../hook/useDeleteFetch';
-import { useParams } from 'react-router-dom';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {Spinner} from 'react-activity';
+import {useParams} from 'react-router-dom';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import MainSidebar from '../../components/sidebars/main';
 import useUtils from '../../hook/useUtils';
 
 function Driver() {
-  const { id } = useParams();
-  const { accessToken } = useContext(AuthContext);
+  const {id} = useParams();
+  const {accessToken} = useContext(AuthContext);
   const [crew, setCrew] = useState('');
   const [driverFullName, setDriverFullName] = useState('');
   const [driverName, setDriverName] = useState('');
@@ -24,8 +18,8 @@ function Driver() {
   const [driverPassword, setDriverPassword] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const handleOnClose = () => setIsOpen(false);
-  const { backFunc } = useUtils();
-  usePreventScroll({ isDisabled: !isOpen });
+  const {backFunc} = useUtils();
+  usePreventScroll({isDisabled: !isOpen});
 
   const getDriver = {
     userId: id,
@@ -38,7 +32,7 @@ function Driver() {
     fetchData: archiveFetch,
   } = {}
 
-  const { data, error, loading, fetchData } = {};
+  const {data, error, loading, fetchData} = {};
 
   useEffect(() => {
     fetchData();
@@ -48,12 +42,12 @@ function Driver() {
     if (data) {
       const allUsers = data.data.users.users;
       const searchRole = (name, arr) =>
-        arr.filter(({ registrations }) =>
+        arr.filter(({registrations}) =>
         // handle find function error if no users
           registrations.find((role) => role.roles[0] === 'crew')
         );
       const searchResult = searchRole('crew', allUsers);
-      let obj = { users: searchResult };
+      let obj = {users: searchResult};
       setCrew(obj);
     }
   }, [data]);

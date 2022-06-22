@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
-import GlobalContext from '../../context/globalContext';
+import React from 'react';
 
-export function ObjectHeader({ fetch, objName, ...props}) {
+export function ObjectHeader({fetch, objName, ...props}) {
 
   return (
     <div className='flex flex-row border h-16 bg-white justify-between'>

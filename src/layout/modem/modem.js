@@ -3,26 +3,23 @@ import React, {
   useContext,
   useCallback,
   useEffect,
-  useRef,
 } from 'react';
-import { ModemHeader } from '../../components/headers/modem';
-import GlobalContext from '../../context/globalContext';
-import { Spinner } from 'react-activity';
-import { generate } from 'shortid';
+import {ModemHeader} from '../../components/headers/modem';
+import {Spinner} from 'react-activity';
 import SlideOver from '../../components/sidebars/slideOver';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import MainSidebar from '../../components/sidebars/main';
 import useUtils from '../../hook/useUtils';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
-import { zones } from '../../mocks/zones';
-import { useParams } from 'react-router-dom';
-import { objectPage } from '../../mocks/queryForms/queryString/query';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
+import {ChevronDownIcon} from '@heroicons/react/solid';
+import {zones} from '../../mocks/zones';
+import {useParams} from 'react-router-dom';
+import {objectPage} from '../../mocks/queryForms/queryString/query';
 
 function Modem() {
-  const { id } = useParams();
-  const { accessToken } = useContext(AuthContext);
+  const {id} = useParams();
+  const {accessToken} = useContext(AuthContext);
   const [pin, setPin] = useState('');
   const [team, setTeam] = useState('');
   const [modemNo, setModemNo] = useState('');
@@ -67,8 +64,8 @@ function Modem() {
     setIsOpen(true);
   }, []);
 
-  usePreventScroll({ isDisabled: !isOpen });
-  const { backFunc } = useUtils();
+  usePreventScroll({isDisabled: !isOpen});
+  const {backFunc} = useUtils();
 
   const pinFunc = useCallback(async (e) => {
     setPin(e.target.value);
@@ -198,7 +195,7 @@ function Modem() {
                                           <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                                             <div className='py-1'>
                                               <Menu.Item>
-                                                {({ active }) => (
+                                                {({active}) => (
                                                   <button
                                                     // onClick={() => {
                                                     //   const operator = '1';
@@ -262,7 +259,7 @@ function Modem() {
                                           <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-32 sm:w-56 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                                             <div className='py-1'>
                                               <Menu.Item>
-                                                {({ active }) => (
+                                                {({active}) => (
                                                   <button
                                                     className={classNames(
                                                       active

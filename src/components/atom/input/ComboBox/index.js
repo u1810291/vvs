@@ -1,7 +1,4 @@
-import React, {useState, useCallback, useMemo} from 'react';
 
-import {Combobox} from '@headlessui/react';
-import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
 
 import Box from './Box';
 import Label from './Label';
@@ -14,7 +11,6 @@ import InputContainer from './InputContainer';
 import {withMergedClassName} from '../../../../util/react'
 import {withComponentFactory} from '../../../../util/react';
 
-import {omit} from 'crocks';
 
 const ComboBox = withComponentFactory(Box, {
   // mapSetupInComponent: omit(['Option']),

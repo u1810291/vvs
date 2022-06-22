@@ -1,6 +1,4 @@
-import React, {useCallback} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {withMergedClassName} from '../../util/react';
+import React from 'react';
 
 import useLanguage from '../../hook/useLanguage';
 

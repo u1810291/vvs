@@ -1,8 +1,8 @@
-import React, { useCallback, useContext } from 'react';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import React, {useContext} from 'react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -20,8 +20,8 @@ export const FiltersListDrivers = ({
   reason,
   ...props
 }) => {
-  const { filterListDrivers, setFilterListDrivers } = useContext(GlobalContext);
-  const { selectedFilterDrivers, setSelectedFilterDrivers } = useContext(GlobalContext);
+  const {filterListDrivers, setFilterListDrivers} = useContext(GlobalContext);
+  const {selectedFilterDrivers, setSelectedFilterDrivers} = useContext(GlobalContext);
 
   return (
     <div
@@ -90,7 +90,7 @@ export const FiltersListDrivers = ({
                     <div className='py-1'>
                       {filter.dashboardList.includes('Vardas Pavardė') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const showDate = 'Vardas Pavardė';
@@ -111,7 +111,7 @@ export const FiltersListDrivers = ({
 
                       {filter.dashboardList.includes('Būsena') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const object = 'Būsena';

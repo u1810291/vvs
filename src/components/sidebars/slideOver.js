@@ -6,21 +6,21 @@ import {
   useModal,
   useDialog,
 } from 'react-aria';
-import { motion, AnimatePresence } from 'framer-motion';
+import {motion, AnimatePresence} from 'framer-motion';
 
-const opacity_0 = { opacity: 0 };
-const opacity_1 = { opacity: 1 };
-const initial_100 = { x: '-100%' };
-const animate_0 = { x: 0 };
-const transitionEase = { ease: 'easeInOut', duration: 0.5 };
+const opacity_0 = {opacity: 0};
+const opacity_1 = {opacity: 1};
+const initial_100 = {x: '-100%'};
+const animate_0 = {x: 0};
+const transitionEase = {ease: 'easeInOut', duration: 0.5};
 
 function SlideOverContent(props) {
-  const { onClose, children, title } = props;
+  const {onClose, children, title} = props;
 
   const ref = React.useRef();
-  const { overlayProps } = useOverlay(props, ref);
-  const { modalProps } = useModal(props, ref);
-  const { dialogProps, titleProps } = useDialog(props, ref);
+  const {overlayProps} = useOverlay(props, ref);
+  const {modalProps} = useModal(props, ref);
+  const {dialogProps, titleProps} = useDialog(props, ref);
 
   return (
     <div className='fixed inset-0 overflow-hidden'>
@@ -70,7 +70,7 @@ function SlideOverContent(props) {
   );
 }
 
-function SlideOver({ isOpen, onClose, title, children }) {
+function SlideOver({isOpen, onClose, title, children}) {
   return (
     <OverlayContainer>
       <AnimatePresence>

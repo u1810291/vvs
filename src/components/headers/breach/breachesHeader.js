@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useCallback, useContext} from 'react';
 import GlobalContext from '../../../context/globalContext';
 import useLanguage from '../../../hook/useLanguage';
 import {Link} from 'react-router-dom';

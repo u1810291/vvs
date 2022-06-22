@@ -1,4 +1,4 @@
-const styles = { borderSpacing: 0 };
+const styles = {borderSpacing: 0};
 
 const Table = props => (
   <div className='overflow-x-auto'>

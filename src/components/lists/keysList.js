@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { keys } from '../../mocks/keys';
-import { sortToggle } from '../../util/utils';
+import React from 'react';
+import {Link} from 'react-router-dom';
+import {keys} from '../../mocks/keys';
+import {sortToggle} from '../../util/utils';
 import useSort from '../../hook/useSort';
 
-export const KeysList = ({ id, set, crew, ...props }) => {
-  const path = { pathname: `/key/${id}` };
+export const KeysList = ({id, set, crew, ...props}) => {
+  const path = {pathname: `/key/${id}`};
 
-  const { sortedKeysKeys, sortedKeysOrder, sortedKeysSet, sortedKeysCrew } =
+  const {sortedKeysKeys, sortedKeysOrder, sortedKeysSet, sortedKeysCrew} =
     useSort();
 
   const sortedKeys = sortToggle(keys, sortedKeysKeys, sortedKeysOrder);

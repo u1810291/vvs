@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import useLanguage from '../../hook/useLanguage';
 
-export const Events = ({ id, date, test, signal, ...props }) => {
-  const { english, lithuanian, t } = useLanguage();
+export const Events = ({id, date, test, signal, ...props}) => {
+  const {english, lithuanian, t} = useLanguage();
 
   return (
     <div className='w-full' {...props}>

@@ -1,15 +1,15 @@
 import React from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { NewStatusCard } from '../cards/newStatus';
-import { NewCallingCard } from '../cards/newCalling';
-import { NewEventCard } from '../cards/newEvent';
-import { NewConfirmCard } from '../cards/newConfirm';
-const { ActiveCard } = require('../../components/cards/active');
-const { RequestCard } = require('../../components/cards/request');
-const { TaskCard } = require('../../components/cards/tasks');
+import {NewStatusCard} from '../cards/newStatus';
+import {NewCallingCard} from '../cards/newCalling';
+import {NewEventCard} from '../cards/newEvent';
+import {NewConfirmCard} from '../cards/newConfirm';
+const {ActiveCard} = require('../../components/cards/active');
+const {RequestCard} = require('../../components/cards/request');
+const {TaskCard} = require('../../components/cards/tasks');
 
 const InProcessRightSide = () => {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
   return (
     <>
       <div className='flex flex-col'>

@@ -1,10 +1,10 @@
-import React, { useContext, useCallback } from 'react';
-import { GreenStatusTop } from '../buttons/greenStatusTop';
+import React, {useContext, useCallback} from 'react';
+import {GreenStatusTop} from '../buttons/greenStatusTop';
 import GlobalContext from '../../context/globalContext';
 
 export function FinishedHeader() {
-  const { pdfExportComponentNew } = useContext(GlobalContext);
-  const { toPrintNew, setToPrintNew } = useContext(GlobalContext);
+  const {pdfExportComponentNew} = useContext(GlobalContext);
+  const {toPrintNew, setToPrintNew} = useContext(GlobalContext);
 
   const handleExportWithComponent = useCallback(async (event) => {
     setToPrintNew(true);

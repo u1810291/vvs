@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
 
 function useLanguage() {
 
-const { t, i18n } = useTranslation();
+const {t, i18n} = useTranslation();
 
 const changeLanguage = useCallback(
   async (language) => {

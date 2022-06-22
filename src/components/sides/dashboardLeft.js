@@ -1,16 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { DDAPI } from '../../mocks/dashboardDispatchApi';
-import { generate } from 'shortid';
-const { AlarmCard } = require('../../components/cards/alarm');
-const { DrivingToObjectCard } = require('../../components/cards/drivingToObject');
-const { InspectObjectCard } = require('../../components/cards/inspectObject');
-const { AssignCard } = require('../../components/cards/assign');
-const { WaitingToReturnCard } = require('../cards/waitingToReturn');
-const { CanceledCard } = require('../../components/cards/canceled');
-const { EmptyCard } = require('../../components/cards/empty');
-const { PermissionCard } = require('../../components/cards/permission');
-const { WaitingForConfirmationCard } = require('../../components/cards/waitingForConfirmation');
+import {Link} from 'react-router-dom';
+import {DDAPI} from '../../mocks/dashboardDispatchApi';
+import {generate} from 'shortid';
+const {AlarmCard} = require('../../components/cards/alarm');
+const {DrivingToObjectCard} = require('../../components/cards/drivingToObject');
+const {InspectObjectCard} = require('../../components/cards/inspectObject');
+const {AssignCard} = require('../../components/cards/assign');
+const {WaitingToReturnCard} = require('../cards/waitingToReturn');
+const {CanceledCard} = require('../../components/cards/canceled');
+const {EmptyCard} = require('../../components/cards/empty');
+const {PermissionCard} = require('../../components/cards/permission');
+const {WaitingForConfirmationCard} = require('../../components/cards/waitingForConfirmation');
 
 const DashboardSideLeft = () => {
   return (

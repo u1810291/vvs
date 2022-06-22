@@ -1,20 +1,19 @@
 import GlobalContext from '../../context/globalContext';
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import useLanguage from '../../hook/useLanguage';
 import useSort from '../../hook/useSort';
-import { Link } from 'react-router-dom';
-import { Spinner } from 'react-activity';
-import { crewsQuery } from '../../mocks/queryForms/queryString/query';
-import { sortToggle } from '../../util/utils';
+import {Link} from 'react-router-dom';
+import {Spinner} from 'react-activity';
+import {sortToggle} from '../../util/utils';
 
-const { RedWatching } = require('../buttons/redWatching');
-const { RedDriving } = require('../buttons/redDriving');
-const { BlueStatus } = require('../buttons/blueStatus');
-const { CancelStatus } = require('../buttons/darkBlueStatus');
-const { GreenStatus } = require('../buttons/greenStatus');
-const { GrayStatus } = require('../buttons/grayStatus');
-const { YellowWaitingStatus } = require('../buttons/yellowWaiting');
-const { InspectedStatus } = require('../buttons/yellowInspected');
+const {RedWatching} = require('../buttons/redWatching');
+const {RedDriving} = require('../buttons/redDriving');
+const {BlueStatus} = require('../buttons/blueStatus');
+const {CancelStatus} = require('../buttons/darkBlueStatus');
+const {GreenStatus} = require('../buttons/greenStatus');
+const {GrayStatus} = require('../buttons/grayStatus');
+const {YellowWaitingStatus} = require('../buttons/yellowWaiting');
+const {InspectedStatus} = require('../buttons/yellowInspected');
 
 const CrewList = ({
   id,
@@ -25,10 +24,10 @@ const CrewList = ({
   isAssignedAutomatically,
   ...props
 }) => {
-  const { english, lithuanian, t } = useLanguage();
-  const { filterListCrew, setFilterListCrew } = useContext(GlobalContext);
-  const { filterEditingCrew, setFilterEditingCrew } = useContext(GlobalContext);
-  const { selectedFilterCrew, setSelectedFilterCrew } =
+  const {english, lithuanian, t} = useLanguage();
+  const {filterListCrew, setFilterListCrew} = useContext(GlobalContext);
+  const {filterEditingCrew, setFilterEditingCrew} = useContext(GlobalContext);
+  const {selectedFilterCrew, setSelectedFilterCrew} =
     useContext(GlobalContext);
   const [crew, setCrew] = useState('');
 
@@ -43,7 +42,7 @@ const CrewList = ({
       //   ...monas,
       //   ...hasura.find((hasura) => String(hasura.Id) === String(monas.Id)),
       // }));
-      setCrew({ result: hasura });
+      setCrew({result: hasura});
     }
   }, [data.data]);
 
@@ -155,7 +154,7 @@ const CrewList = ({
                           {filter.crewList.includes('Pavadinimas') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/createCrew/${data.id}` }}
+                                to={{pathname: `/createCrew/${data.id}`}}
                                 className='bg-white text-gray-500 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.name}
@@ -165,7 +164,7 @@ const CrewList = ({
                           {filter.crewList.includes('Trumpinys') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/createCrew/${data.id}` }}
+                                to={{pathname: `/createCrew/${data.id}`}}
                                 className='bg-white text-gray-500 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.abbreviation}
@@ -175,7 +174,7 @@ const CrewList = ({
                           {filter.crewList.includes('Dislokacijos zona') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/createCrew/${data.id}` }}
+                                to={{pathname: `/createCrew/${data.id}`}}
                                 className='bg-white text-gray-400 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.dislocationZone}
@@ -185,7 +184,7 @@ const CrewList = ({
                           {filter.crewList.includes('Būsena') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/createCrew/${data.id}` }}
+                                to={{pathname: `/createCrew/${data.id}`}}
                                 className='bg-white text-gray-400 hover:text-gray-600 truncate text-sm'
                               >
                                     {data.status === 'online' ? (
@@ -197,7 +196,7 @@ const CrewList = ({
                           {filter.crewList.includes('Automatiškai priskirti') ? (
                             <div className='flex flex-row items-center h-12 w-40'>
                               <Link
-                                to={{ pathname: `/createCrew/${data.id}` }}
+                                to={{pathname: `/createCrew/${data.id}`}}
                                 className='bg-white text-gray-400 hover:text-gray-600 truncate text-sm'
                               >
                                 {data.isAssignedAutomatically}

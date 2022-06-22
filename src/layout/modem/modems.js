@@ -1,24 +1,23 @@
 import React, {
   useState,
   useContext,
-  useEffect,
   useCallback,
   useRef,
 } from 'react';
-import { ModemsHeader } from '../../components/headers/modems';
-import { ModemsList } from '../../components/lists/modemsList';
+import {ModemsHeader} from '../../components/headers/modems';
+import {ModemsList} from '../../components/lists/modemsList';
 
-import { FiltersListModems } from '../../components/filters/filterModemsList';
-import { OptionsListModems } from '../../components/options/optionsModemsList';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
+import {FiltersListModems} from '../../components/filters/filterModemsList';
+import {OptionsListModems} from '../../components/options/optionsModemsList';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
+import {ChevronDownIcon} from '@heroicons/react/solid';
 import GlobalContext from '../../context/globalContext';
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import {PDFExport} from '@progress/kendo-react-pdf';
 import SlideOver from '../../components/sidebars/slideOver';
-import { OverlayProvider, usePreventScroll } from 'react-aria';
+import {OverlayProvider, usePreventScroll} from 'react-aria';
 import MainSidebar from '../../components/sidebars/main';
-import { SearchButton } from '../../components/buttons/searchButton';
+import {SearchButton} from '../../components/buttons/searchButton';
 
 const {
   AddFilterListModems,
@@ -38,12 +37,12 @@ function Modems() {
   }, []);
   
 
-  usePreventScroll({ isDisabled: !isOpen });
-  const { expandFilterModems, setExpandFilterModems } =
+  usePreventScroll({isDisabled: !isOpen});
+  const {expandFilterModems, setExpandFilterModems} =
     useContext(GlobalContext);
-  const { selectedFilterModems, setSelectedFilterModems } =
+  const {selectedFilterModems, setSelectedFilterModems} =
     useContext(GlobalContext);
-  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
+  const {filterListModems, setFilterListModems} = useContext(GlobalContext);
   const [toPrint, setToPrint] = useState(false);
   const pdfExportComponent = useRef(null);
   const handleExportWithComponent = useCallback(async () => {
@@ -186,7 +185,7 @@ function Modems() {
                             <Menu.Items className='origin-top-right z-10 absolute left-0 mt-2 w-10 sm:w-10 ml-6 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                               <div className='py-1'>
                                 <Menu.Item>
-                                  {({ active }) => (
+                                  {({active}) => (
                                     <button
                                       // onClick={loop}
                                       className={classNames(

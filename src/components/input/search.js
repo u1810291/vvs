@@ -1,8 +1,8 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useCallback, useContext} from 'react';
 import GlobalContext from '../../context/globalContext';
 
 export function Search() {
-  const { search, setSearch } = useContext(GlobalContext);
+  const {search, setSearch} = useContext(GlobalContext);
 
   const searchFunc = useCallback(
     async (e) => {

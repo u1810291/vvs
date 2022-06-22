@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import React, {useContext} from 'react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -20,8 +20,8 @@ export const TasksFilter = ({
   reason,
   ...props
 }) => {
-  const { filterList, setFilterList } = useContext(GlobalContext);
-  const { selectedFilter, setSelectedFilter } = useContext(GlobalContext);
+  const {filterList, setFilterList} = useContext(GlobalContext);
+  const {selectedFilter, setSelectedFilter} = useContext(GlobalContext);
 
   return (
     <div
@@ -90,7 +90,7 @@ export const TasksFilter = ({
                     <div className='py-1'>
                       {filter.dashboardList.includes('Gauta') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const showDate = 'Gauta';
@@ -111,7 +111,7 @@ export const TasksFilter = ({
 
                       {filter.dashboardList.includes('Objektas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const object = 'Objektas';
@@ -132,7 +132,7 @@ export const TasksFilter = ({
 
                       {filter.dashboardList.includes('Pavadinimas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const name = 'Pavadinimas';
@@ -153,7 +153,7 @@ export const TasksFilter = ({
 
                       {filter.dashboardList.includes('Ekipažas') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const crew = 'Ekipažas';
@@ -174,7 +174,7 @@ export const TasksFilter = ({
 
                       {filter.dashboardList.includes('Spėjo laiku') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const inTime = 'Spėjo laiku';
@@ -197,7 +197,7 @@ export const TasksFilter = ({
                         'Reagavimo laikas'
                       ) ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const reactionTime = 'Reagavimo laikas';
@@ -220,7 +220,7 @@ export const TasksFilter = ({
                         'Laikas objekte'
                       ) ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const timeInObject = 'Laikas objekte';
@@ -241,7 +241,7 @@ export const TasksFilter = ({
 
                       {filter.dashboardList.includes('Būsena') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const status = 'Būsena';
@@ -264,7 +264,7 @@ export const TasksFilter = ({
                         'Suveikimo priežastis'
                       ) ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                             onClick={() => {
                               const reason = 'Suveikimo priežastis';

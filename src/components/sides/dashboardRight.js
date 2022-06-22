@@ -1,10 +1,10 @@
 import React from 'react';
-import { DDAPI } from '../../mocks/dashboardDispatchApi';
-import { generate } from 'shortid';
+import {DDAPI} from '../../mocks/dashboardDispatchApi';
+import {generate} from 'shortid';
 
-const { ActiveCard } = require('../../components/cards/active');
-const { RequestCard } = require('../../components/cards/request');
-const { TaskCard } = require('../../components/cards/tasks');
+const {ActiveCard} = require('../../components/cards/active');
+const {RequestCard} = require('../../components/cards/request');
+const {TaskCard} = require('../../components/cards/tasks');
 
 const DashboardSideRight = ({title}) => {
   return (

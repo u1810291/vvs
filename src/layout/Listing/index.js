@@ -1,7 +1,4 @@
-import Async from 'crocks/Async';
-import Breadcrumbs from '../../components/Breadcrumbs';
 import Filter from '../../components/Filter';
-import Maybe from 'crocks/Maybe';
 import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
 import Index from '../SideBarLayout';
 import Table from '../../components/Table';
@@ -11,12 +8,11 @@ import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
 import {renderWithProps} from '../../util/react';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {
   and,
   filter,
   not,
-  tap,
   hasProps,
   ifElse,
   isArray,
@@ -26,7 +22,6 @@ import {
   pipe,
   safe,
   constant,
-  objOf,
 } from 'crocks';
 
 /**
@@ -75,7 +70,7 @@ const Listing = ({
     map(pipe(
       filter(activeTableColumnPred),
       map(pipe(
-        a => ({ key: a.key, children: a.headerText }),
+        a => ({key: a.key, children: a.headerText}),
         renderWithProps(Table.Th)
       ))
     )),

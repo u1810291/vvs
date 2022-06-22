@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useContext} from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import {Fragment} from 'react';
+import {Menu, Transition} from '@headlessui/react';
 import GlobalContext from '../../context/globalContext';
-import { generate } from 'shortid';
+import {generate} from 'shortid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -94,7 +94,7 @@ export const FiltersListBreaches = ({
                     <div className='py-1'>
                       {filter.breachesList.includes('Data nuo') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const showDate = 'Data nuo';
@@ -115,7 +115,7 @@ export const FiltersListBreaches = ({
 
                       {filter.breachesList.includes('Laikas už zonos ribų') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Laikas už zonos ribų';
@@ -136,7 +136,7 @@ export const FiltersListBreaches = ({
 
                       {filter.breachesList.includes('Ekipažai') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Ekipažai';
@@ -157,7 +157,7 @@ export const FiltersListBreaches = ({
 
                       {filter.breachesList.includes('Vairuotojai') ? null : (
                         <Menu.Item>
-                          {({ active }) => (
+                          {({active}) => (
                             <button
                               onClick={() => {
                                 const object = 'Vairuotojai';

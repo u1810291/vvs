@@ -1,16 +1,16 @@
 import GlobalContext from '../../context/globalContext';
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, {useContext, useState} from 'react';
 import useSort from '../../hook/useSort';
-import { Connected } from '../../components/buttons/connected';
-import { Disconnected } from '../../components/buttons/disconnected';
-import { Link } from 'react-router-dom';
-import { generate } from 'shortid';
-import { objectPage } from '../../mocks/queryForms/queryString/query';
-import { sortToggle } from '../../util/utils';
+import {Connected} from '../../components/buttons/connected';
+import {Disconnected} from '../../components/buttons/disconnected';
+import {Link} from 'react-router-dom';
+import {generate} from 'shortid';
+import {objectPage} from '../../mocks/queryForms/queryString/query';
+import {sortToggle} from '../../util/utils';
 
-export const ModemsList = ({ token, ...props }) => {
-  const { filterListModems, setFilterListModems } = useContext(GlobalContext);
-  const { selectedFilterModems, setSelectedFilterModems } =
+export const ModemsList = ({token, ...props}) => {
+  const {filterListModems, setFilterListModems} = useContext(GlobalContext);
+  const {selectedFilterModems, setSelectedFilterModems} =
     useContext(GlobalContext);
   const [initData, setInitData] = useState('');
   const [ modem, setModem ] = useState('');
@@ -117,7 +117,7 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes('Numeris') ? (
                         <div className='flex flex-row items-center h-12 w-40'>
                           <Link
-                            to={{ pathname: `/modem/${data.Id}` }}
+                            to={{pathname: `/modem/${data.Id}`}}
                             className='bg-white text-gray-500 truncate text-sm hover:text-gray-400'
                           >
                             {data.modem}
@@ -127,7 +127,7 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes('Objekto Pavadinimas') ? (
                         <div className='flex flex-row items-center h-12 w-40'>
                           <Link
-                            to={{ pathname: `/modem/${data.Id}` }}
+                            to={{pathname: `/modem/${data.Id}`}}
                             className='bg-white text-gray-400 truncate text-sm hover:text-gray-500'
                           >
                             {data.name}
@@ -137,7 +137,7 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes('Objekto nr.') ? (
                         <div className='flex flex-row items-center h-12 w-20'>
                           <Link
-                            to={{ pathname: `/modem/${data.Id}` }}
+                            to={{pathname: `/modem/${data.Id}`}}
                             className='bg-white text-gray-500 truncate text-sm hover:text-gray-400'
                           >
                             {data.objectid}
@@ -147,7 +147,7 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes('Sutarties nr.') ? (
                         <div className='flex flex-row items-center h-12 w-20'>
                           <Link
-                            to={{ pathname: `/modem/${data.Id}` }}
+                            to={{pathname: `/modem/${data.Id}`}}
                             className='bg-white text-gray-400 truncate text-sm hover:text-gray-500'
                           >
                             {data.contract}
@@ -157,7 +157,7 @@ export const ModemsList = ({ token, ...props }) => {
                       {filter.dashboardList.includes('Būsena') ? (
                         <div className='flex flex-row items-center h-12 w-40'>
                           <Link
-                            to={{ pathname: `/modem/${data.Id}` }}
+                            to={{pathname: `/modem/${data.Id}`}}
                             className='bg-white text-gray-400 truncate text-sm hover:text-gray-500'
                           >
                             {data.objectstatus === 2 ? (

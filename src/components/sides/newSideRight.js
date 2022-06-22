@@ -1,10 +1,10 @@
 import React from 'react';
 import useLanguage from '../../hook/useLanguage';
-import { Assign2timesCard } from '../cards/assign2times';
-import { AssignNewCard } from '../cards/assignNew';
+import {Assign2timesCard} from '../cards/assign2times';
+import {AssignNewCard} from '../cards/assignNew';
 
 const NewSideRight = () => {
-  const { english, lithuanian, t } = useLanguage();
+  const {english, lithuanian, t} = useLanguage();
   return (
     <>
       <div className='flex flex-col'>

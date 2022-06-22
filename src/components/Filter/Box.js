@@ -1,23 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {
-  and,
-  chain,
   defaultProps,
   getPath,
   getPathOr,
-  getProp,
   getPropOr,
-  hasProps,
   identity,
   ifElse,
   isArray,
   isTrue,
   isTruthy,
   map,
-  option,
   pathSatisfies,
   pipe,
-  safe,
   tap,
 } from 'crocks';
 import {filter} from 'crocks/pointfree';

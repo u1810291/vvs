@@ -1,6 +1,5 @@
 import React from 'react';
-import { Search } from '../../../components/input/search';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 export function DislocationsHeader() {
 

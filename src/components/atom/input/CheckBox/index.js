@@ -1,4 +1,3 @@
-import React from 'react';
 import {withComponentFactory} from '../../../../util/react';
 
 import Box from './Box';
