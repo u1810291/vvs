@@ -23,7 +23,7 @@ const Menu = ({sidebarOpen, setSidebarOpen}) => {
             leaveFrom='translate-x-0'
             leaveTo='-translate-x-full'
           >
-            <Dialog.Panel className='relative flex flex-col w-full bg-[#404B5F]'>
+            <Dialog.Panel className='relative flex flex-col w-full bg-oxford'>
               <Aside setSidebarOpen={setSidebarOpen}/>
               <div className='pl-16 h-full'>
                 <Header setSidebarOpen={setSidebarOpen} title={t('Sidebar.menu')} />
