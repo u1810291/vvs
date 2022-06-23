@@ -12,7 +12,7 @@ import useLanguage from '../../../hook/useLanguage';
 import useResultForm from '../../../hook/useResultForm';
 import {useGoogleApiContext} from '../../../context/google';
 
-import {asyncCreateEvent} from '../api/newTaskApi';
+import {asyncCreateEvent} from '../api/taskEditApi';
 
 import {generate} from 'shortid';
 import {identity, or, isEmpty} from 'crocks';
@@ -20,7 +20,7 @@ import resultToAsync from 'crocks/Async/resultToAsync';
 import {lengthGt, hasntLength} from '../../../util/pred';
 import {Marker} from '@react-google-maps/api';
 
-const NewTaskForm = () => {
+const TaskEditForm = () => {
   const {t} = useLanguage();
   const {onMapLoad} = useGoogleApiContext();
   const {getCoordsByAddress} = useGeocode();
@@ -195,4 +195,4 @@ const NewTaskForm = () => {
   );
 };
 
-export default NewTaskForm;
+export default TaskEditForm;

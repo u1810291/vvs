@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
-import NewTaskForm from '../form/newTaskForm';
+import TaskEditForm from '../form/TaskEditForm';
 import Header from '../../../components/atom/Header';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import Index from '../../../layout/SideBarLayout';
@@ -9,7 +9,7 @@ import HeaderButtonGroup from '../../../components/headers/HeaderButtonGroup';
 
 import useLanguage from '../../../hook/useLanguage';
 
-const NewTaskLayout = () => {
+const TaskEditLayout = () => {
   const {t} = useLanguage();
   const navigate = useNavigate();
   const onCancelButton = useCallback(() => {
@@ -35,10 +35,10 @@ const NewTaskLayout = () => {
             twCancelButton={'mr-4 bg-gray-200 text-gray-500'}
           />
         </Header>
-        <NewTaskForm />
+        <TaskEditForm />
       </div>
     </Index>
   );
 };
 
-export default NewTaskLayout;
+export default TaskEditLayout;

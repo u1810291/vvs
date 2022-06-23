@@ -1,0 +1,23 @@
+{
+  "menu": {
+    "list": "Tasks"
+  },
+  "breadcrumbs": {
+    "tasks": "Tasks",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "name": "Name",
+      "status": "Status",
+      "received": "Received",
+      "object_name": "Object",
+      "crew_name": "Crew",
+      "approximate_time": "The approximate time",
+      "response_time": "Response time",
+      "time_at_object": "Time at object",
+      "reason": "Reason"
+    }
+  }
+}

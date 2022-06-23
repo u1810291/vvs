@@ -1,0 +1,23 @@
+{
+  "menu": {
+    "list": "Užduotys"
+  },
+  "breadcrumbs": {
+    "tasks": "Užduotys",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "name": "Pavadinimas",
+      "status": "Status",
+      "received": "Gauta",
+      "object_name": "Objektas",
+      "crew_name": "Ekipažas",
+      "approximate_time": "Spėjo laiku",
+      "response_time": "Reagavimo laikas",
+      "time_at_object": "Laikas objekte",
+      "reason": "Suveikimo priežastis"
+    }
+  }
+}
