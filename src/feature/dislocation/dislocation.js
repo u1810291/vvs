@@ -16,7 +16,7 @@ import Map from '../map/component/Map';
 import GoogleMapTools from '../map/component/GoogleMapTools';
 import {Polygon} from '@react-google-maps/api';
 import {generate} from 'shortid';
-import {useGoogleApiContext} from '../../context/googleApiContext';
+import {useGoogleApiContext} from '../../context/google';
 
 function Dislocation() {
   const {accessToken} = useContext(AuthContext);

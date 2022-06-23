@@ -14,7 +14,7 @@ import {Marker, OverlayView, Polygon, Polyline} from '@react-google-maps/api';
 import {generate} from 'shortid';
 import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
 import MarkerTag from '../../../components/atom/icon/MarkerTag';
-import {useGoogleApiContext} from '../../../context/googleApiContext';
+import {useGoogleApiContext} from '../../../context/google';
 
 const overLayView1 = {
   lat: 55.92,

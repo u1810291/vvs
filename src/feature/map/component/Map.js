@@ -1,6 +1,6 @@
 import React from 'react';
 import {GoogleMap} from '@react-google-maps/api';
-import {useGoogleApiContext} from '../../../context/googleApiContext';
+import {useGoogleApiContext} from '../../../context/google';
 
 const mapContainerStyle = {
   width: '100%',

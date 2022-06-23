@@ -10,7 +10,7 @@ import useAsync from '../../../hook/useAsync';
 import useGeocode from '../../../hook/useGeocode';
 import useLanguage from '../../../hook/useLanguage';
 import useResultForm from '../../../hook/useResultForm';
-import {useGoogleApiContext} from '../../../context/googleApiContext';
+import {useGoogleApiContext} from '../../../context/google';
 
 import {asyncCreateEvent} from '../api/newTaskApi';
 

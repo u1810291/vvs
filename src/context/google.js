@@ -3,7 +3,7 @@ import env from '../env';
 import {useLoadScript} from '@react-google-maps/api';
 import useMergeReducer from '../hook/useMergeReducer';
 
-const GoogleApiContext = createContext(null);
+const Google = createContext(null);
 
 const GoogleContextProvider = ({children}) => {
   const [state, setValue] = useMergeReducer({
@@ -15,16 +15,16 @@ const GoogleContextProvider = ({children}) => {
   const onMapLoad = useCallback(map => mapRef.current = map, []);
   const onMapUnmount = useCallback(() => mapRef.current = null, []);
   return (
-    <GoogleApiContext.Provider
+    <Google.Provider
       value={{...state, setValue, isLoaded, loadError, mapRef, onMapLoad, onMapUnmount}}
     >
       {children}
-    </GoogleApiContext.Provider>
+    </Google.Provider>
   );
 };
 
 export const useGoogleApiContext = () => {
-  const context = useContext(GoogleApiContext);
+  const context = useContext(Google);
   if (context === undefined) {
     throw new Error('useGoogleApiContext must be used within a GoogleContextProvider');
   }
