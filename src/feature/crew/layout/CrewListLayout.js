@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {generatePath, Link} from 'react-router-dom';
 
-import Listing from '../../../layout/Listing';
+import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import withPreparedProps from '../../../hoc/withPreparedProps';
 
