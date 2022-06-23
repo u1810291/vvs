@@ -1,0 +1,19 @@
+{
+  "menu": {
+    "list": "Užduotys"
+  },
+  "breadcrumbs": {
+    "permissions": "Leidimai",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "date": "Data",
+      "name": "Pavadinimas",
+      "status": "Būsena",
+      "crew_name": "Ekipažas",
+      "driver_name": "Vairuotojas"
+    }
+  }
+}

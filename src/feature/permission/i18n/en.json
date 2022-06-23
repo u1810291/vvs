@@ -1,0 +1,19 @@
+{
+  "menu": {
+    "list": "Permissions"
+  },
+  "breadcrumbs": {
+    "permissions": "Permissions",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "date": "Date",
+      "name": "Name",
+      "status": "Status",
+      "crew_name": "Crew",
+      "driver_name": "Driver"
+    }
+  }
+}

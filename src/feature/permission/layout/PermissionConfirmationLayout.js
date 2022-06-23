@@ -1,12 +1,12 @@
 import React, {useCallback, useState} from 'react';
-import useLanguage from '../../hook/useLanguage';
+import useLanguage from '../../../hook/useLanguage';
 import {OverlayProvider} from 'react-aria';
-import PermissionConfirmationHeader from '../../components/headers/permission/permissionConfirmationHeader';
-import PermissionConfirmationSideRight from '../../components/obsolete/sides/permissionConfirmationSideRight';
-import SlideOver from '../../components/obsolete/sidebars/slideOver';
-import MainSidebar from '../../components/obsolete/sidebars/main';
+import PermissionConfirmationHeader from '../../../components/headers/permission/permissionConfirmationHeader';
+import PermissionConfirmationSideRight from '../../../components/obsolete/sides/permissionConfirmationSideRight';
+import SlideOver from '../../../components/obsolete/sidebars/slideOver';
+import MainSidebar from '../../../components/obsolete/sidebars/main';
 
-const PermissionConfirmation = () => {
+const PermissionConfirmationLayout = () => {
   const {english, lithuanian, t} = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
@@ -22,7 +22,7 @@ const PermissionConfirmation = () => {
                   <img
                     onClick={handleOnOpen}
                     className='w-4 h-4 mx-16'
-                    src={require('../../assets/assets/hamburger.png')}
+                    src={require('../../../assets/assets/hamburger.png')}
                   />
                 </button>
               </div>
@@ -46,4 +46,4 @@ const PermissionConfirmation = () => {
   );
 };
 
-export default PermissionConfirmation;
+export default PermissionConfirmationLayout;
