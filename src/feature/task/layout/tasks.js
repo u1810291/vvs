@@ -6,23 +6,23 @@ import React, {
 } from 'react';
 // import Filter from '../components/Filter';
 // import { FilterItem } from '../components/Filter';
-import {TasksHeader} from '../components/headers/tasks';
-import {TasksFilter} from '../components/filters/filterTasksList';
-import {OptionsList} from '../components/options/optionsTasksList';
-import {TasksList} from '../components/lists/tasksList';
-import GlobalContext from '../context/globalContext';
-import AuthContext from '../context/globalContext';
+import {TasksHeader} from '../../../components/headers/tasks';
+import {TasksFilter} from '../../../components/filters/filterTasksList';
+import {OptionsList} from '../../../components/options/optionsTasksList';
+import {TasksList} from '../../../components/lists/tasksList';
+import GlobalContext from '../../../context/globalContext';
+import AuthContext from '../../../context/globalContext';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import SlideOver from '../components/sidebars/slideOver';
+import SlideOver from '../../../components/sidebars/slideOver';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import MainSidebar from '../components/sidebars/main';
-import {SearchButton} from '../components/buttons/searchButton';
+import MainSidebar from '../../../components/sidebars/main';
+import {SearchButton} from '../../../components/buttons/searchButton';
 
 const classNames = a => a;
-const {AddFilterList} = require('../components/addFilter/addFilterTasks');
+const {AddFilterList} = require('../../../components/addFilter/addFilterTasks');
 
 function Tasks() {
   const {accessToken, user} = useContext(AuthContext);
@@ -61,7 +61,7 @@ function Tasks() {
                   <img
                     onClick={handleOnOpen}
                     className='w-4 h-4 mx-16'
-                    src={require('../assets/assets/hamburger.png')}
+                    src={require('../../../assets/assets/hamburger.png')}
                   />
                 </button>
                 {filterList.map((filter) => {
@@ -132,7 +132,7 @@ function Tasks() {
                             <div className='flex flex-col md:flex-row items-center my-6'>
                               <img
                                 className='h-8 w-6 mr-2 hidden lg:inline-block'
-                                src={require('../assets/assets/doc.png')}
+                                src={require('../../../assets/assets/doc.png')}
                               ></img>
                               <button
                                 onClick={handleExportWithComponent}
