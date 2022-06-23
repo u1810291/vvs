@@ -2,10 +2,10 @@ import React from 'react';
 
 import Map from '../../map/component/Map';
 import List from '../../../components/atom/List';
-import BreachTimeCard from '../../../components/cards/breachTimeCard';
+import BreachTimeCard from '../../../components/obsolete/cards/breachTimeCard';
 
 import {DDAPI} from '../../../mocks/dashboardDispatchApi';
-import {ActiveCard} from '../../../components/cards/active';
+import {ActiveCard} from '../../../components/obsolete/cards/active';
 
 import {generate} from 'shortid';
 

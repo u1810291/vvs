@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useLanguage from '../../../hook/useLanguage';
 import {Link} from 'react-router-dom';
-import {Search} from '../../../components/input/search';
+import {Search} from '../../obsolete/input/search';
 
 export function CrewHeader() {
   const {english, lithuanian, t} = useLanguage();

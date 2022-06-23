@@ -9,16 +9,16 @@ import useLanguage from '../../../hook/useLanguage';
 import GlobalContext from '../../../context/globalContext';
 import {PDFExport} from '@progress/kendo-react-pdf';
 import {BreachesHeader} from '../../../components/headers/breach/breachesHeader';
-import {BreachesList} from '../../../components/lists/breachesList';
+import {BreachesList} from '../../../components/obsolete/lists/breachesList';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import SlideOver from '../../../components/sidebars/slideOver';
-import MainSidebar from '../../../components/sidebars/main';
+import SlideOver from '../../../components/obsolete/sidebars/slideOver';
+import MainSidebar from '../../../components/obsolete/sidebars/main';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
-import {AddFilterListBreaches} from '../../../components/addFilter/addFilterBreaches';
-import {SearchButton} from '../../../components/buttons/searchButton';
-import {OptionsListBreaches} from '../../../components/options/optionsBreaches';
-import {FiltersListBreaches} from '../../../components/filters/filterBreachesList';
+import {AddFilterListBreaches} from '../../../components/obsolete/addFilter/addFilterBreaches';
+import {SearchButton} from '../../../components/obsolete/buttons/searchButton';
+import {OptionsListBreaches} from '../../../components/obsolete/options/optionsBreaches';
+import {FiltersListBreaches} from '../../../components/obsolete/filters/filterBreachesList';
 
 const classNames = a => a;
 

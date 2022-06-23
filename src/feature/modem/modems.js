@@ -5,23 +5,23 @@ import React, {
   useRef,
 } from 'react';
 import {ModemsHeader} from '../../components/headers/modems';
-import {ModemsList} from '../../components/lists/modemsList';
+import {ModemsList} from '../../components/obsolete/lists/modemsList';
 
-import {FiltersListModems} from '../../components/filters/filterModemsList';
-import {OptionsListModems} from '../../components/options/optionsModemsList';
+import {FiltersListModems} from '../../components/obsolete/filters/filterModemsList';
+import {OptionsListModems} from '../../components/obsolete/options/optionsModemsList';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import GlobalContext from '../../context/globalContext';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import SlideOver from '../../components/sidebars/slideOver';
+import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import MainSidebar from '../../components/sidebars/main';
-import {SearchButton} from '../../components/buttons/searchButton';
+import MainSidebar from '../../components/obsolete/sidebars/main';
+import {SearchButton} from '../../components/obsolete/buttons/searchButton';
 
 const {
   AddFilterListModems,
-} = require('../../components/addFilter/addFilterModems');
+} = require('../../components/obsolete/addFilter/addFilterModems');
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');

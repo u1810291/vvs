@@ -5,22 +5,22 @@ import React, {
   useRef,
 } from 'react';
 import {ClientsHeader} from '../../components/headers/clients';
-import {ClientList} from '../../components/lists/clientsList';
-import {FiltersListClients} from '../../components/filters/filterClientsList';
-import {OptionsListClients} from '../../components/options/optionsClientsList';
+import {ClientList} from '../../components/obsolete/lists/clientsList';
+import {FiltersListClients} from '../../components/obsolete/filters/filterClientsList';
+import {OptionsListClients} from '../../components/obsolete/options/optionsClientsList';
 import GlobalContext from '../../context/globalContext';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import SlideOver from '../../components/sidebars/slideOver';
+import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import MainSidebar from '../../components/sidebars/main';
-import {SearchButton} from '../../components/buttons/searchButton';
+import MainSidebar from '../../components/obsolete/sidebars/main';
+import {SearchButton} from '../../components/obsolete/buttons/searchButton';
 
 const {
   AddFilterListClients,
-} = require('../../components/addFilter/addFilterClients');
+} = require('../../components/obsolete/addFilter/addFilterClients');
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');

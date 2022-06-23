@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {Search} from '../../components/input/search';
+import {Search} from '../obsolete/input/search';
 
 export function KeysHeader() {
 

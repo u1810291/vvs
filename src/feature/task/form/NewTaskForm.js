@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 
 import Map from '../../map/component/Map';
 import Nullable from '../../../components/atom/Nullable';
-import Textarea from '../../../components/input/Textarea';
-import Selectbox from '../../../components/input/Selectbox';
-import ControlledInput from '../../../components/input/ControlledInput';
+import Textarea from '../../../components/obsolete/input/Textarea';
+import Selectbox from '../../../components/obsolete/input/Selectbox';
+import ControlledInput from '../../../components/obsolete/input/ControlledInput';
 
 import useAsync from '../../../hook/useAsync';
 import useGeocode from '../../../hook/useGeocode';

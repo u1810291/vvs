@@ -1,5 +1,5 @@
 import React, {useCallback, useContext} from 'react';
-import {Search} from '../../components/input/search';
+import {Search} from '../obsolete/input/search';
 import GlobalContext from '../../context/globalContext';
 import {Link} from 'react-router-dom';
 

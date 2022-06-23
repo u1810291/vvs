@@ -1,21 +1,21 @@
 import React, {useState, useContext, useCallback} from 'react';
 import {Orders} from '../../mocks/orders';
-import {KeyInternal} from '../../components/lists/keyInternal';
+import {KeyInternal} from '../../components/obsolete/lists/keyInternal';
 import {KeyHeader} from '../../components/headers/key';
-import {KeyList} from '../../components/lists/key';
+import {KeyList} from '../../components/obsolete/lists/key';
 import {keyObjectList} from '../../mocks/keyObjectList';
 import {generate} from 'shortid';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import {useParams} from 'react-router-dom';
-import {Search} from '../../components/input/search';
+import {Search} from '../../components/obsolete/input/search';
 import GlobalContext from '../../context/globalContext';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import SlideOver from '../../components/sidebars/slideOver';
+import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import {Spinner} from 'react-activity';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import MainSidebar from '../../components/sidebars/main';
+import MainSidebar from '../../components/obsolete/sidebars/main';
 import useUtils from '../../hook/useUtils';
 
 function classNames(...classes) {

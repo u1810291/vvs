@@ -1,5 +1,5 @@
 import React from 'react';
-const {ActiveCard} = require('../../components/cards/active');
+const {ActiveCard} = require('../obsolete/cards/active');
 
 const List = ({children}) => {
   return (

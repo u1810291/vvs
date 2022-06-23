@@ -5,23 +5,23 @@ import React, {
   useRef,
 } from 'react';
 import {DriversHeader} from '../../components/headers/drivers';
-import {DriverList} from '../../components/lists/driversList';
-import {FiltersListDrivers} from '../../components/filters/filterDriversList';
-import {OptionsListDrivers} from '../../components/options/optionsDriversList';
+import {DriverList} from '../../components/obsolete/lists/driversList';
+import {FiltersListDrivers} from '../../components/obsolete/filters/filterDriversList';
+import {OptionsListDrivers} from '../../components/obsolete/options/optionsDriversList';
 import GlobalContext from '../../context/globalContext';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import SlideOver from '../../components/sidebars/slideOver';
+import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import MainSidebar from '../../components/sidebars/main';
-import {SearchButton} from '../../components/buttons/searchButton';
+import MainSidebar from '../../components/obsolete/sidebars/main';
+import {SearchButton} from '../../components/obsolete/buttons/searchButton';
 import useUtils from '../../hook/useUtils';
 
 const {
   AddFilterListDrivers,
-} = require('../../components/addFilter/addFilterDrivers');
+} = require('../../components/obsolete/addFilter/addFilterDrivers');
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');

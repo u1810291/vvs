@@ -1,5 +1,5 @@
 import React, {useContext, useCallback} from 'react';
-import {GreenStatusTop} from '../buttons/greenStatusTop';
+import {GreenStatusTop} from '../obsolete/buttons/greenStatusTop';
 import GlobalContext from '../../context/globalContext';
 
 export function FinishedHeader() {

@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Disconnected} from '../../buttons/disconnected';
+import {Disconnected} from '../../obsolete/buttons/disconnected';
 import useLanguage from '../../../hook/useLanguage';
 
 const CreateCrewHeader = ({crew, ...props}) => {

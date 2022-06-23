@@ -2,7 +2,7 @@ import React, {useCallback, useContext} from 'react';
 import {Link} from 'react-router-dom';
 import GlobalContext from '../../../context/globalContext';
 import useLanguage from '../../../hook/useLanguage';
-import {Search} from '../../input/search';
+import {Search} from '../../obsolete/input/search';
 
 export function PermissionsHeader() {
   const {english, lithuanian, t} = useLanguage();

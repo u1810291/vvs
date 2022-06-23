@@ -1,10 +1,10 @@
 import React, {useCallback, useState, useRef, useEffect, useContext} from 'react';
 import {Polygon} from '@react-google-maps/api';
-import {ActiveCard} from '../../../components/cards/active';
+import {ActiveCard} from '../../../components/obsolete/cards/active';
 import Map from '../../map/component/Map';
-import CheckBox from '../../../components/input/CheckBox';
-import ControlledInput from '../../../components/input/ControlledInput';
-import CalendarTimeline from '../../../components/calendar/CalendarTimeline';
+import CheckBox from '../../../components/obsolete/input/CheckBox';
+import ControlledInput from '../../../components/obsolete/input/ControlledInput';
+import CalendarTimeline from '../../../components/CalendarTimeline/CalendarTimeline';
 import CreateCrewHeader from '../../../components/headers/crew/createCrewHeader';
 import {useParams} from 'react-router-dom';
 import {crewsQuery} from '../../../mocks/queryForms/queryString/query';

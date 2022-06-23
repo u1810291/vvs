@@ -1,6 +1,6 @@
 import React, {useCallback, useContext} from 'react';
 import GlobalContext from '../../context/globalContext';
-import {Search} from '../input/search';
+import {Search} from '../obsolete/input/search';
 
 export function ObjectsHeader() {
   const {expandFilterObjects, setExpandFilterObjects} =

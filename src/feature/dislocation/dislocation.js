@@ -6,12 +6,12 @@ import React, {
 import useLanguage from '../../hook/useLanguage';
 import {DislocationHeader} from '../../components/headers/dislocation/dislocationHeader';
 import {DislocationsHeader} from '../../components/headers/dislocation/dislocations';
-import DislocationSide from '../../components/sides/dislocationSide';
-import DislocationSideToArchive from '../../components/sides/dislocationSideToArchive';
+import DislocationSide from '../../components/obsolete/sides/dislocationSide';
+import DislocationSideToArchive from '../../components/obsolete/sides/dislocationSideToArchive';
 import GlobalContext from '../../context/globalContext';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import SlideOver from '../../components/sidebars/slideOver';
-import MainSidebar from '../../components/sidebars/main';
+import SlideOver from '../../components/obsolete/sidebars/slideOver';
+import MainSidebar from '../../components/obsolete/sidebars/main';
 import Map from '../map/component/Map';
 import GoogleMapTools from '../map/component/GoogleMapTools';
 import {Polygon} from '@react-google-maps/api';

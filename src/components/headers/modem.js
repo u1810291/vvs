@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedTop} from '../buttons/connectedModem';
+import {ConnectedTop} from '../obsolete/buttons/connectedModem';
 
 export function ModemHeader({modemnr, ...props}) {
 

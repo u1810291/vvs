@@ -4,16 +4,16 @@ import React, {
   useRef,
 } from 'react';
 import {KeysHeader} from '../../components/headers/keys';
-import {KeysList} from '../../components/lists/keysList';
+import {KeysList} from '../../components/obsolete/lists/keysList';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {ChevronDownIcon} from '@heroicons/react/solid';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import SlideOver from '../../components/sidebars/slideOver';
+import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import MainSidebar from '../../components/sidebars/main';
+import MainSidebar from '../../components/obsolete/sidebars/main';
 
-const {AddFilterList} = require('../../components/addFilter/addFilterTasks');
+const {AddFilterList} = require('../../components/obsolete/addFilter/addFilterTasks');
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }

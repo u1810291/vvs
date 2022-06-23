@@ -6,9 +6,9 @@ import React, {
 } from 'react';
 import {ModemHeader} from '../../components/headers/modem';
 import {Spinner} from 'react-activity';
-import SlideOver from '../../components/sidebars/slideOver';
+import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
-import MainSidebar from '../../components/sidebars/main';
+import MainSidebar from '../../components/obsolete/sidebars/main';
 import useUtils from '../../hook/useUtils';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
