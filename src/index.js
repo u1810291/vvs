@@ -1,11 +1,11 @@
-import './assets/tailwind.css';
 import './i18n';
+import './assets/tailwind.css';
+
 import App from './App';
-import GoogleContextProvider from 'context/googleApiContext';
 import {StrictMode} from 'react';
-import {GlobalProvider} from './context/globalContext';
 import {createRoot} from 'react-dom/client';
 import {AuthContextProvider} from 'context/auth';
+import GoogleContextProvider from 'context/googleApiContext';
 
 const Root = createRoot(document.getElementById('root'));
 
@@ -13,9 +13,7 @@ Root.render(
   <StrictMode>
     <AuthContextProvider>
       <GoogleContextProvider>
-        <GlobalProvider>
-          <App />
-        </GlobalProvider>
+        <App />
       </GoogleContextProvider>
     </AuthContextProvider>
   </StrictMode>
