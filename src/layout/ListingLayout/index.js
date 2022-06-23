@@ -77,6 +77,7 @@ const Listing = ({
     option([]),
   )(tableColumns), [tableColumns, activeTableColumnPred]);
 
+  // FIXME: rows only returns one component, but should return a count depending on the list
   const rows = useMemo(() => reduce((rs, r) => ifElse(
     r => tableColumns
     .map(c => componentToString(c.Component(c.itemToProps(r).option(''))))
