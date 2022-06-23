@@ -1,20 +1,20 @@
 import React, {useCallback, useState, useRef, useEffect, useContext} from 'react';
 import {Polygon} from '@react-google-maps/api';
-import {ActiveCard} from '../../components/cards/active';
-import Map from '../../feature/map/component/Map';
-import CheckBox from '../../components/input/CheckBox';
-import ControlledInput from '../../components/input/ControlledInput';
-import CalendarTimeline from '../../components/calendar/CalendarTimeline';
-import CreateCrewHeader from '../../components/headers/crew/createCrewHeader';
+import {ActiveCard} from '../../../components/cards/active';
+import Map from '../../map/component/Map';
+import CheckBox from '../../../components/input/CheckBox';
+import ControlledInput from '../../../components/input/ControlledInput';
+import CalendarTimeline from '../../../components/calendar/CalendarTimeline';
+import CreateCrewHeader from '../../../components/headers/crew/createCrewHeader';
 import {useParams} from 'react-router-dom';
-import {crewsQuery} from '../../mocks/queryForms/queryString/query';
-import SidebarLayout from '../SideBarLayout';
+import {crewsQuery} from '../../../mocks/queryForms/queryString/query';
+import SidebarLayout from '../../../layout/SideBarLayout';
 
-import useLanguage from '../../hook/useLanguage';
+import useLanguage from '../../../hook/useLanguage';
 
 import {generate} from 'shortid';
 
-const CreateCrew = () => {
+const CrewEditLayout = () => {
   const {id} = useParams();
   const {accessToken} = useContext(AuthContext);
   const {t, english, lithuanian} = useLanguage();
@@ -236,4 +236,4 @@ const CreateCrew = () => {
   );
 };
 
-export default CreateCrew;
+export default CrewEditLayout;

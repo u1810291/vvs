@@ -1,6 +1,7 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
 
+import CrewRoute from './feature/crew/routes';
 import LoginFeature from 'feature/login/routes';
 import ObjectFeature from './feature/object/routes';
 import DashboardFeature from './feature/dashboard/routes';
@@ -9,9 +10,10 @@ import NotFound from './layout/notFound';
 
 const Routes = (
   <>
+    {CrewRoute}
     {LoginFeature}
-    {DashboardFeature}
     {ObjectFeature}
+    {DashboardFeature}
     <Route isHidden path='*' element={<NotFound />} />
   {
     /**
@@ -29,7 +31,7 @@ const Routes = (
       import Modem from './layout/modem/modem';
       import New from './layout/new';
       import Crews from './layout/crew/crews';
-      import CreateCrew from './layout/crew/createCrew';
+      import CrewEditLayout from './layout/crew/createCrew';
       import Permission from './layout/permission/permissions';
       import Breach from './feature/breach/layout/BreachLayout';
       import Breaches from './feature/breach/layout/breaches';
@@ -56,8 +58,8 @@ const Routes = (
       <Route path='breach' element={<Breach />} />
       <Route path='breaches' element={<Breaches />} />
       <Route path='crews' element={<Crews />} />
-      <Route path='crew/edit/:id' element={<CreateCrew />} />
-      <Route path='crew/new' element={<CreateCrew />} />
+      <Route path='crew/edit/:id' element={<CrewEditLayout />} />
+      <Route path='crew/new' element={<CrewEditLayout />} />
      */
   }
   </>

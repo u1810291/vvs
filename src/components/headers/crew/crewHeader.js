@@ -11,7 +11,7 @@ export function CrewHeader() {
 
   const navigate = useNavigate();
   const navigateToCreateCrew = useCallback(() => {
-    navigate('/CreateCrew')
+    navigate('/CrewEditLayout')
   }, []);
 
   const filterFunc = useCallback(async () => {

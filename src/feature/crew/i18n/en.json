@@ -1,0 +1,21 @@
+{
+  "menu": {
+    "list": "Crews"
+  },
+  "breadcrumbs": {
+    "crews": "Crews",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "name": "Name",
+      "status": "Status",
+      "driver_name": "Driver name",
+      "phone_number": "Phone Number",
+      "abbreviation": "Abbreviation",
+      "dislocation_zone": "Dislocation zone",
+      "is_assigned_automatically": "Assigned automatically"
+    }
+  }
+}
