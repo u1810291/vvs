@@ -1,27 +1,16 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
-import GlobalContext from '../../../context/globalContext';
 import useLanguage from '../../../hook/useLanguage';
 import {Link} from 'react-router-dom';
 import {Search} from '../../../components/input/search';
 
 export function CrewHeader() {
   const {english, lithuanian, t} = useLanguage();
-  const {expandFilterCrew, setExpandFilterCrew} = useContext(GlobalContext);
 
   const navigate = useNavigate();
   const navigateToCreateCrew = useCallback(() => {
     navigate('/CrewEditLayout')
   }, []);
-
-  const filterFunc = useCallback(async () => {
-    if (expandFilterCrew) {
-      setExpandFilterCrew(false);
-    }
-    if (!expandFilterCrew) {
-      setExpandFilterCrew(true);
-    }
-  }, [expandFilterCrew, setExpandFilterCrew]);
 
   return (
     <div className='flex flex-row border h-16 bg-white border-b-2 justify-between'>
@@ -35,7 +24,7 @@ export function CrewHeader() {
         <h4 className='text-lg ml-2 hidden xxl:inline-block font-normal text-gray-500'>
           {t('eurocash.allData')}
         </h4>
-        <button onClick={filterFunc}>
+        <button>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-6 w-6 ml-4 mr-8 fill-gray-300 hover:fill-gray-400'

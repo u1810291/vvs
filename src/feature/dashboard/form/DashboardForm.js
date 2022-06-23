@@ -1,6 +1,4 @@
-import React, {useContext, useEffect, useState, useCallback, useRef} from 'react';
-
-import GlobalContext from '../../../context/globalContext';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 
 import Map from '../../map/component/Map';
 import Details from '../../../components/atom/Details';
@@ -104,7 +102,6 @@ const routesOptions = {
 
 const DashboardForm = () => {
   const {t} = useLanguage();
-  const {setGlobalToken} = useContext(GlobalContext);
   const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
 
   const [directions, setDirections] = useState([]);

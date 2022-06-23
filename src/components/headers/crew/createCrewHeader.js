@@ -1,12 +1,10 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Disconnected} from '../../buttons/disconnected';
-import GlobalContext from '../../../context/globalContext';
 import useLanguage from '../../../hook/useLanguage';
 
 const CreateCrewHeader = ({crew, ...props}) => {
   const {english, lithuanian, t} = useLanguage();
-  const {search, setSearch} = useContext(GlobalContext);
 
   const searchFunc = useCallback(
     async (e) => {
