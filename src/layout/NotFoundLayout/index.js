@@ -1,6 +1,6 @@
 import React from 'react';
 
-function NotFound() {
+function NotFoundLayout() {
   return (
     <>
       <div className='container inset-0 sm:mx-auto max-w-screen-xl'>
@@ -24,13 +24,13 @@ function NotFound() {
                       </div>
                       <div className='mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6'>
                         <a
-                          href='#'
+                          href='layout/NotFoundLayout/notFound#index.js'
                           className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500'
                         >
                           Go back home
                         </a>
                         <a
-                          href='#'
+                          href='layout/NotFoundLayout/notFound#index.js'
                           className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-slate-700 bg-slate-100 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500'
                         >
                           Contact support
@@ -48,4 +48,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default NotFoundLayout;

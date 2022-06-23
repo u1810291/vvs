@@ -1,4 +1,4 @@
-import Listing from 'layout/Listing';
+import Listing from 'layout/ListingLayout';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import useAsync from 'hook/useAsync';
 import {titleCase} from '@s-e/frontend/transformer/string';

@@ -6,7 +6,7 @@ import LoginFeature from 'feature/login/routes';
 import ObjectFeature from './feature/object/routes';
 import DashboardFeature from './feature/dashboard/routes';
 
-import NotFound from './layout/notFound';
+import Index from './layout/NotFoundLayout';
 
 const Routes = (
   <>
@@ -14,7 +14,7 @@ const Routes = (
     {LoginFeature}
     {ObjectFeature}
     {DashboardFeature}
-    <Route isHidden path='*' element={<NotFound />} />
+    <Route isHidden path='*' element={<Index />} />
   {
     /**
      * TODO: redo like LoginFeature, like ObjectFeature
@@ -30,8 +30,6 @@ const Routes = (
       import Key from './layout/key/key';
       import Modem from './layout/modem/modem';
       import New from './layout/new';
-      import Crews from './layout/crew/crews';
-      import CrewEditLayout from './layout/crew/createCrew';
       import Permission from './layout/permission/permissions';
       import Breach from './feature/breach/layout/BreachLayout';
       import Breaches from './feature/breach/layout/breaches';
@@ -57,9 +55,6 @@ const Routes = (
       <Route path='dislocations' element={<Dislocations />} />
       <Route path='breach' element={<Breach />} />
       <Route path='breaches' element={<Breaches />} />
-      <Route path='crews' element={<Crews />} />
-      <Route path='crew/edit/:id' element={<CrewEditLayout />} />
-      <Route path='crew/new' element={<CrewEditLayout />} />
      */
   }
   </>
