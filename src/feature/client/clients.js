@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import {ClientsHeader} from '../../components/headers/clients';
+import {ClientsHeader} from '../../components/obsolete/headers/clients';
 import {ClientList} from '../../components/obsolete/lists/clientsList';
 import {FiltersListClients} from '../../components/obsolete/filters/filterClientsList';
 import {OptionsListClients} from '../../components/obsolete/options/optionsClientsList';

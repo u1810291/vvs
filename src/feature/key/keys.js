@@ -3,7 +3,7 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import {KeysHeader} from '../../components/headers/keys';
+import {KeysHeader} from '../../components/obsolete/headers/keys';
 import {KeysList} from '../../components/obsolete/lists/keysList';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';

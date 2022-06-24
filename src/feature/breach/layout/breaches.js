@@ -8,7 +8,7 @@ import React, {
 import useLanguage from '../../../hook/useLanguage';
 import GlobalContext from '../../../context/globalContext';
 import {PDFExport} from '@progress/kendo-react-pdf';
-import {BreachesHeader} from '../../../components/headers/breach/breachesHeader';
+import {BreachesHeader} from '../../../components/obsolete/headers/breach/breachesHeader';
 import {BreachesList} from '../../../components/obsolete/lists/breachesList';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
 import SlideOver from '../../../components/obsolete/sidebars/slideOver';

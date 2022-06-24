@@ -1,30 +1,29 @@
 import React, {useCallback, useContext} from 'react';
-import {Link} from 'react-router-dom';
 import GlobalContext from '../../../context/globalContext';
-import useLanguage from '../../../hook/useLanguage';
-import {Search} from '../../obsolete/input/search';
+import useLanguage from '../../../../hook/useLanguage';
+import {Link} from 'react-router-dom';
 
-export function PermissionsHeader() {
+export function BreachesHeader() {
   const {english, lithuanian, t} = useLanguage();
-  const {expandFilterPermissions, setExpandFilterPermissions} = useContext(GlobalContext);
+  const {expandFilterBreaches, setExpandFilterBreaches} = useContext(GlobalContext);
 
   const filterFunc = useCallback(async () => {
-    if (expandFilterPermissions) {
-      setExpandFilterPermissions(false);
+    if (expandFilterBreaches) {
+      setExpandFilterBreaches(false);
     }
-    if (!expandFilterPermissions) {
-      setExpandFilterPermissions(true);
+    if (!expandFilterBreaches) {
+      setExpandFilterBreaches(true);
     }
-  }, [expandFilterPermissions, setExpandFilterPermissions]);
+  }, [expandFilterBreaches, setExpandFilterBreaches]);
 
   return (
     <div className='flex flex-row border h-16 bg-white border-b-2 justify-between'>
       <div className='xl:flex hidden xl:flex-row ml-4 items-center'>
-        <Link to='/permissions'>
-          <h4 className='ml-2 text-normal font-normal'>
-            {t('eurocash.permissions')}
-          </h4>
-        </Link>
+        <h4 className='ml-2 text-normal font-normal'>
+          <Link to='/breaches'>
+            {t('eurocash.violations')}
+          </Link>
+        </h4>
         <p className='pl-2 text-gray-600'>/</p>
         <h4 className='text-normal ml-2 hidden xxl:inline-block font-normal text-gray-500'>
           {t('eurocash.allData')}
@@ -42,7 +41,6 @@ export function PermissionsHeader() {
             />
           </svg>
         </button>
-        <Search />
       </div>
       <div className='flex flex-row items-center'>
         <button  className='text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400'>

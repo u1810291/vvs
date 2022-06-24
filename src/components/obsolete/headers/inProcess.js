@@ -1,5 +1,5 @@
 import React from 'react';
-import {RedStatusTop} from '../obsolete/buttons/redStatusTop';
+import {RedStatusTop} from '../buttons/redStatusTop';
 
 
 export function InProcessHeader() {

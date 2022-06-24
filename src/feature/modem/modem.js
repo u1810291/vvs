@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import {ModemHeader} from '../../components/headers/modem';
+import {ModemHeader} from '../../components/obsolete/headers/modem';
 import {Spinner} from 'react-activity';
 import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import {OverlayProvider, usePreventScroll} from 'react-aria';

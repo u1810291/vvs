@@ -5,7 +5,7 @@ import TaskEditForm from '../form/TaskEditForm';
 import Header from '../../../components/atom/Header';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import Index from '../../../layout/SideBarLayout';
-import HeaderButtonGroup from '../../../components/headers/HeaderButtonGroup';
+import HeaderButtonGroup from '../../../components/obsolete/headers/HeaderButtonGroup';
 
 import useLanguage from '../../../hook/useLanguage';
 

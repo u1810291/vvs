@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import {ModemsHeader} from '../../components/headers/modems';
+import {ModemsHeader} from '../../components/obsolete/headers/modems';
 import {ModemsList} from '../../components/obsolete/lists/modemsList';
 
 import {FiltersListModems} from '../../components/obsolete/filters/filterModemsList';

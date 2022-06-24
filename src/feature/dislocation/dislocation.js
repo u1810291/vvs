@@ -4,8 +4,8 @@ import React, {
   useCallback,
 } from 'react';
 import useLanguage from '../../hook/useLanguage';
-import {DislocationHeader} from '../../components/headers/dislocation/dislocationHeader';
-import {DislocationsHeader} from '../../components/headers/dislocation/dislocations';
+import {DislocationHeader} from '../../components/obsolete/headers/dislocation/dislocationHeader';
+import {DislocationsHeader} from '../../components/obsolete/headers/dislocation/dislocations';
 import DislocationSide from '../../components/obsolete/sides/dislocationSide';
 import DislocationSideToArchive from '../../components/obsolete/sides/dislocationSideToArchive';
 import GlobalContext from '../../context/globalContext';

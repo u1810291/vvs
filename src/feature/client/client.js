@@ -2,7 +2,7 @@ import MainSidebar from '../../components/obsolete/sidebars/main';
 import React, {useState, useCallback, useEffect} from 'react';
 import SlideOver from '../../components/obsolete/sidebars/slideOver';
 import useUtils from '../../hook/useUtils';
-import {CreateHeader} from '../../components/headers/create';
+import {CreateHeader} from '../../components/obsolete/headers/create';
 import {Object} from '../../components/obsolete/lists/object';
 import {OverlayProvider, usePreventScroll} from 'react-aria';
 import {Spinner} from 'react-activity';

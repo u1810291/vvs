@@ -1,29 +1,30 @@
 import React, {useCallback, useContext} from 'react';
-import GlobalContext from '../../../context/globalContext';
-import useLanguage from '../../../hook/useLanguage';
 import {Link} from 'react-router-dom';
+import GlobalContext from '../../../context/globalContext';
+import useLanguage from '../../../../hook/useLanguage';
+import {Search} from '../../input/search';
 
-export function BreachesHeader() {
+export function PermissionsHeader() {
   const {english, lithuanian, t} = useLanguage();
-  const {expandFilterBreaches, setExpandFilterBreaches} = useContext(GlobalContext);
+  const {expandFilterPermissions, setExpandFilterPermissions} = useContext(GlobalContext);
 
   const filterFunc = useCallback(async () => {
-    if (expandFilterBreaches) {
-      setExpandFilterBreaches(false);
+    if (expandFilterPermissions) {
+      setExpandFilterPermissions(false);
     }
-    if (!expandFilterBreaches) {
-      setExpandFilterBreaches(true);
+    if (!expandFilterPermissions) {
+      setExpandFilterPermissions(true);
     }
-  }, [expandFilterBreaches, setExpandFilterBreaches]);
+  }, [expandFilterPermissions, setExpandFilterPermissions]);
 
   return (
     <div className='flex flex-row border h-16 bg-white border-b-2 justify-between'>
       <div className='xl:flex hidden xl:flex-row ml-4 items-center'>
-        <h4 className='ml-2 text-normal font-normal'>
-          <Link to='/breaches'>
-            {t('eurocash.violations')}
-          </Link>
-        </h4>
+        <Link to='/permissions'>
+          <h4 className='ml-2 text-normal font-normal'>
+            {t('eurocash.permissions')}
+          </h4>
+        </Link>
         <p className='pl-2 text-gray-600'>/</p>
         <h4 className='text-normal ml-2 hidden xxl:inline-block font-normal text-gray-500'>
           {t('eurocash.allData')}
@@ -41,6 +42,7 @@ export function BreachesHeader() {
             />
           </svg>
         </button>
+        <Search />
       </div>
       <div className='flex flex-row items-center'>
         <button  className='text-lg mx-1 sm:mx-6 h-full font-light text-black hover:border-b-4 mt-2 hover:border-blue-400'>

@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import {DislocationsHeader} from '../../components/headers/dislocation/dislocations';
+import {DislocationsHeader} from '../../components/obsolete/headers/dislocation/dislocations';
 import {DislocationsList} from '../../components/obsolete/lists/dislocationsList';
 import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';

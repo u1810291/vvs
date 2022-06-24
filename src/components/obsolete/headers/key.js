@@ -29,7 +29,7 @@ export function KeyHeader({fullName}) {
       <div className='flex flex-row items-center'>
         <img
           className='h-6 w-4 mr-2 hidden lg:inline-block'
-          src={require('../../assets/assets/doc.png')}
+          src={require('../../../assets/assets/doc.png')}
         ></img>
         <button
           onClick={handleExportWithComponent}

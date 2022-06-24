@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import useLanguage from '../../../hook/useLanguage';
 import {OverlayProvider} from 'react-aria';
-import PermissionConfirmationHeader from '../../../components/headers/permission/permissionConfirmationHeader';
+import PermissionConfirmationHeader from '../../../components/obsolete/headers/permission/permissionConfirmationHeader';
 import PermissionConfirmationSideRight from '../../../components/obsolete/sides/permissionConfirmationSideRight';
 import SlideOver from '../../../components/obsolete/sidebars/slideOver';
 import MainSidebar from '../../../components/obsolete/sidebars/main';

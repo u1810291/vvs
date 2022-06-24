@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react';
-import useLanguage from '../../../hook/useLanguage';
-import {BlueStatus} from '../../obsolete/buttons/blueStatus';
+import useLanguage from '../../../../hook/useLanguage';
+import {BlueStatus} from '../../buttons/blueStatus';
 
 const PermissionConfirmationHeader = () => {
   const {english, lithuanian, t} = useLanguage();

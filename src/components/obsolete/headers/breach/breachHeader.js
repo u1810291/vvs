@@ -1,5 +1,5 @@
 import React from 'react';
-import useLanguage from '../../../hook/useLanguage';
+import useLanguage from '../../../../hook/useLanguage';
 
 export function BreachHeader() {
   const {english, lithuanian, t} = useLanguage();

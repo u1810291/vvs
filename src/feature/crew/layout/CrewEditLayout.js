@@ -5,7 +5,7 @@ import Map from '../../map/component/Map';
 import CheckBox from '../../../components/obsolete/input/CheckBox';
 import ControlledInput from '../../../components/obsolete/input/ControlledInput';
 import CalendarTimeline from '../../../components/CalendarTimeline/CalendarTimeline';
-import CreateCrewHeader from '../../../components/headers/crew/createCrewHeader';
+import CreateCrewHeader from '../../../components/obsolete/headers/crew/createCrewHeader';
 import {useParams} from 'react-router-dom';
 import {crewsQuery} from '../../../mocks/queryForms/queryString/query';
 import SidebarLayout from '../../../layout/SideBarLayout';

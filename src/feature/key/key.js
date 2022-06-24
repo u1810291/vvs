@@ -1,7 +1,7 @@
 import React, {useState, useContext, useCallback} from 'react';
 import {Orders} from '../../mocks/orders';
 import {KeyInternal} from '../../components/obsolete/lists/keyInternal';
-import {KeyHeader} from '../../components/headers/key';
+import {KeyHeader} from '../../components/obsolete/headers/key';
 import {KeyList} from '../../components/obsolete/lists/key';
 import {keyObjectList} from '../../mocks/keyObjectList';
 import {generate} from 'shortid';

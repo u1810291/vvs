@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Disconnected} from '../../obsolete/buttons/disconnected';
-import useLanguage from '../../../hook/useLanguage';
+import {Disconnected} from '../../buttons/disconnected';
+import useLanguage from '../../../../hook/useLanguage';
 
 const CreateCrewHeader = ({crew, ...props}) => {
   const {english, lithuanian, t} = useLanguage();

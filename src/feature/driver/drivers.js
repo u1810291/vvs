@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import {DriversHeader} from '../../components/headers/drivers';
+import {DriversHeader} from '../../components/obsolete/headers/drivers';
 import {DriverList} from '../../components/obsolete/lists/driversList';
 import {FiltersListDrivers} from '../../components/obsolete/filters/filterDriversList';
 import {OptionsListDrivers} from '../../components/obsolete/options/optionsDriversList';
