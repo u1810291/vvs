@@ -1,0 +1,18 @@
+{
+  "menu": {
+    "list": "Clients"
+  },
+  "breadcrumbs": {
+    "clients": "Clients",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "full_name": "Full name",
+      "contract_number": "Contract no.",
+      "phone_number": "Phone number",
+      "email": "Email"
+    }
+  }
+}

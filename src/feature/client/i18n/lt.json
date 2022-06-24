@@ -1,0 +1,18 @@
+{
+  "menu": {
+    "list": "Klientai"
+  },
+  "breadcrumbs": {
+    "clients": "Klientai",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "full_name": "Vardas Pavardė",
+      "contract_number": "Sutarties nr.",
+      "phone_number": "Telefonas",
+      "email": "El. paštas"
+    }
+  }
+}

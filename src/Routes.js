@@ -6,6 +6,7 @@ import TaskFeature from 'feature/task/routes';
 import CrewFeature from 'feature/crew/routes';
 import LoginFeature from 'feature/login/routes';
 import ModemFeature from 'feature/modem/routes';
+import ClientFeature from 'feature/client/routes';
 import ObjectFeature from 'feature/object/routes';
 import DriverFeature from 'feature/driver/routes';
 import DashboardFeature from 'feature/dashboard/routes';
@@ -25,18 +26,15 @@ const Routes = (
     {DriverFeature}
     {KeyFeature}
     {ModemFeature}
+    {ClientFeature}
     {DislocationFeature}
     <Route isHidden path='*' element={<NotFoundLayout />} />
   {
     /**
      * TODO: redo like LoginFeature, like ObjectFeature
      *
-      import Clients from './layout/client/clients';
-      import Client from './layout/client/client';
       import Breach from './feature/breach/layout/BreachLayout';
       import Breaches from './feature/breach/layout/breaches';
-      <Route path='clients' element={<Clients />} />
-      <Route path='client/:id' element={<Client />} />
       <Route path='breach' element={<Breach />} />
       <Route path='breaches' element={<Breaches />} />
      */
