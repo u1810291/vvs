@@ -1,8 +1,9 @@
 import {lazy} from 'react';
 import i18next from 'i18next';
+import {getExactHiddenRoute, getExactRoute} from 'util/react';
+
 import EN from './i18n/en.json';
 import LT from './i18n/lt.json';
-import {getExactHiddenRoute, getExactRoute} from 'util/react';
 
 // TODO: Adjust translations column names regarding response data
 i18next.addResourceBundle('en', 'task', EN);

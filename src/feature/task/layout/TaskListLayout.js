@@ -97,4 +97,3 @@ const TaskListLayout = withPreparedProps(Listing, props => {
 });
 
 export default TaskListLayout;
-
