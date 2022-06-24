@@ -1,0 +1,18 @@
+{
+  "menu": {
+    "list": "Pažeidimai"
+  },
+  "breadcrumbs": {
+    "breaches": "Pažeidimai",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "date_from": "Data nuo",
+      "time_for_outside_the_zone": "Laikas  už zonos ribų",
+      "crew_name": "Ekipažas",
+      "driver_name": "Vairuotojas"
+    }
+  }
+}
