@@ -10,6 +10,7 @@ import ObjectFeature from 'feature/object/routes';
 import DriverFeature from 'feature/driver/routes';
 import DashboardFeature from 'feature/dashboard/routes';
 import PermissionFeature from 'feature/permission/routes';
+import DislocationFeature from 'feature/dislocation/routes';
 
 import NotFoundLayout from './layout/NotFoundLayout';
 
@@ -24,6 +25,7 @@ const Routes = (
     {DriverFeature}
     {KeyFeature}
     {ModemFeature}
+    {DislocationFeature}
     <Route isHidden path='*' element={<NotFoundLayout />} />
   {
     /**
@@ -33,12 +35,8 @@ const Routes = (
       import Client from './layout/client/client';
       import Breach from './feature/breach/layout/BreachLayout';
       import Breaches from './feature/breach/layout/breaches';
-      import Dislocations from './layout/dislocation/dislocations';
-      import Dislocation from './layout/dislocation/dislocation';
       <Route path='clients' element={<Clients />} />
       <Route path='client/:id' element={<Client />} />
-      <Route path='dislocation/:id' element={<Dislocation />} />
-      <Route path='dislocations' element={<Dislocations />} />
       <Route path='breach' element={<Breach />} />
       <Route path='breaches' element={<Breaches />} />
      */

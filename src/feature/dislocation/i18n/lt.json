@@ -1,0 +1,15 @@
+{
+  "menu": {
+    "list": "Dislokacijos zonos"
+  },
+  "breadcrumbs": {
+    "dislocations": "Dislokacijos zonos",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "zone_name": "Pavadinimas"
+    }
+  }
+}

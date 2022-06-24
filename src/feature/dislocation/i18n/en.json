@@ -1,0 +1,15 @@
+{
+  "menu": {
+    "list": "Dislocation zones"
+  },
+  "breadcrumbs": {
+    "dislocations": "Dislocation zones",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "zone_name": "Name"
+    }
+  }
+}
