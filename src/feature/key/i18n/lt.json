@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "list": "Raktai"
+  },
+  "breadcrumbs": {
+    "keys": "Raktai",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "set": "Komplektas",
+      "crew_name": "Ekipažas"
+    }
+  }
+}

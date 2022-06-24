@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "list": "Keys"
+  },
+  "breadcrumbs": {
+    "keys": "Keys",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "set": "Set",
+      "crew_name": "Crew"
+    }
+  }
+}
