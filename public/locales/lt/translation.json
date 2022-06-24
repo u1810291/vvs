@@ -4,6 +4,14 @@
     "myAccount": "Mano paskyra",
     "signOut": "Atsijungti"
   },
+  "Filter": {
+    "Button": {
+      "addColumn": "Pridėti stulpelį"
+    }
+  },
+  "SearchInput": {
+    "placeholder": "Ieškoma..."
+  },
   "loginSystem": {
     "register": "Registracija",
     "login": "Prisijungti",
