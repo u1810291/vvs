@@ -51,21 +51,12 @@ const PermissionListLayout = withPreparedProps(Listing, props  => {
   const {t: tb} = useTranslation('permission', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('permission', {keyPrefix: 'list.column'});
   // TODO: Prepare 'Permission' data in Hasura to be fetched
-  const [state, fork] = useAsync(chain(maybeToAsync('"permission" prop is expected in the response', getProp('permissions')),
+  const [state, fork] = useAsync(chain(maybeToAsync('"permission" prop is expected in the response', getProp('permission')),
     apiQuery(
       `
         query {
-          events {
-            id
-            name
-            status
-            crew_id
-            object_id
-            created_at
-            updated_at
-            provider_id
-            description
-            provider_name
+          permission {
+
           }
         }
       `
