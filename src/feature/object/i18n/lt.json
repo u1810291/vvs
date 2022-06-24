@@ -1,0 +1,26 @@
+{
+  "menu": {
+    "list": "Objektai"
+  },
+  "breadcrumbs": {
+    "objects": "Objektai",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "address": "Adresas",
+      "city": "Miestas",
+      "contract_no": "Kontrakto numeris.",
+      "contract_object_no": "Objektas Nr.",
+      "id": "ID",
+      "is_atm": "ATM",
+      "latitude": "Platuma",
+      "longitude": "Ilguma",
+      "name": "Pavadinimas",
+      "navision_id": "NavID",
+      "phone": "Telefonas",
+      "provider_id": "Teikėjo ID",
+      "provider_name": "Teikėjas"
+    }
+  }
+}

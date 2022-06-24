@@ -28,7 +28,7 @@ const QUERY = `
   }
 `;
 
-const Edit = ({breadcrumbs, children,...props}) => {
+const ObjectEditLayout = ({breadcrumbs, children,...props}) => {
   return (
     <SidebarLayout>
       <Header>{breadcrumbs}</Header>
@@ -39,7 +39,7 @@ const Edit = ({breadcrumbs, children,...props}) => {
 
 const {Rejected, Resolved} = Async;
 
-export default withPreparedProps(Edit, props => {
+export default withPreparedProps(ObjectEditLayout, props => {
   const {api} = useAuth();
   const params = useParams();
   const {t: tb} = useTranslation('object');
