@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "list": "Drivers"
+  },
+  "breadcrumbs": {
+    "drivers": "Drivers",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "full_name": "Full name",
+      "status": "Status"
+    }
+  }
+}

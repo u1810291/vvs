@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "list": "Vairuotojai"
+  },
+  "breadcrumbs": {
+    "drivers": "Vairuotojai",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "full_name": "Vardas Pavardė",
+      "status": "Būsena"
+    }
+  }
+}
