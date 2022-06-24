@@ -48,7 +48,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(
+  const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
     apiQuery(
       `
         query {
@@ -69,10 +69,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
           }
         }
       `
-    )
-    .chain(maybeToAsync(
-      '"object" prop is expected in the response',
-      getProp('object')
     ))
   );
 
