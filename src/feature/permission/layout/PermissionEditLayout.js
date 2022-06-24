@@ -6,7 +6,7 @@ import PermissionConfirmationSideRight from '../../../components/obsolete/sides/
 import SlideOver from '../../../components/obsolete/sidebars/slideOver';
 import MainSidebar from '../../../components/obsolete/sidebars/main';
 
-const PermissionConfirmationLayout = () => {
+const PermissionEditLayout = () => {
   const {english, lithuanian, t} = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const handleOnOpen = useCallback(() => { setIsOpen(true)},[]);
@@ -46,4 +46,4 @@ const PermissionConfirmationLayout = () => {
   );
 };
 
-export default PermissionConfirmationLayout;
+export default PermissionEditLayout;
