@@ -1,0 +1,19 @@
+{
+  "menu": {
+    "list": "Modems"
+  },
+  "breadcrumbs": {
+    "modems": "Modems",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "number": "Number",
+      "object_name": "Object name",
+      "object_number": "Object no.",
+      "contract_number": "Contract no.",
+      "status": "Status"
+    }
+  }
+}
