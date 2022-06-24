@@ -77,7 +77,7 @@ const Listing = ({
     option([]),
   )(tableColumns), [tableColumns, activeTableColumnPred]);
 
-  // TODO: the use of rows is fixed, but it would be nice to check if it's possible to improve
+  // TODO: the usage of rows is fixed, but it would be nice to check if it's possible to improve
   const rows = useMemo(() => reduce((rs, r) => {
     rs.push(ifElse(
       r => tableColumns
