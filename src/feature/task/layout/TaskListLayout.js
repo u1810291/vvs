@@ -55,17 +55,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     apiQuery(
       `
         query {
-          events {
-            id
-            name
-            status
-            crew_id
-            object_id
-            created_at
-            updated_at
-            provider_id
-            description
-            provider_name
+          task {
+
           }
         }
       `

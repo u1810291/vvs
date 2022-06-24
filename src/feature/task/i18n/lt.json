@@ -10,7 +10,7 @@
     "column": {
       "id": "ID",
       "name": "Pavadinimas",
-      "status": "Status",
+      "status": "Būsena",
       "received": "Gauta",
       "object_name": "Objektas",
       "crew_name": "Ekipažas",
