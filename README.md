@@ -1,5 +1,13 @@
 # VVS
 
+## TODO
+
+* Move merge breach and crew features into crew/breach/\*
+* Investigate whether driver feature makes sense merging with crew
+* Merge Key feature with Object feature
+* Why lockfile version changed 2 -> 1?
+* Should we redo Listing Layout?
+
 ## Package manager
 
 **USE ONLY NPM, NOT YARN!**
