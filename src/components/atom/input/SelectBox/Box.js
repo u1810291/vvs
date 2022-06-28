@@ -6,13 +6,15 @@ import {putIntoArray} from 'util/array';
 const Box = ({
   Label,
   ContentContainer,
-  labelText = '',
+  label = '',
+  twLabel,
   Button,
   Options,
   Option,
   optionClassNameFn,
   children,
   value = '',
+  ...props
 }) => {
   const [selectedChildren, setSelectedChildren] = useState();
 
@@ -25,10 +27,10 @@ const Box = ({
   }, [value, children]);
 
   return (
-    <Listbox value={selectedChildren} onChange={setSelectedChildren}>
+    <Listbox value={selectedChildren} onChange={setSelectedChildren} {...props}>
       {({open}) => (
-        <>
-          <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
+        <div>
+          <Nullable on={label}><Label className={twLabel}>{label}</Label></Nullable>
           <ContentContainer>
             <Button displayName={selectedChildren?.props?.children}/>
             <Transition
@@ -47,7 +49,7 @@ const Box = ({
               )}
             </Transition>
           </ContentContainer>
-        </>
+        </div>
       )}
     </Listbox>
   )
