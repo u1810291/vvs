@@ -4,6 +4,7 @@ import {withComponentFactory} from '../../../../util/react';
 import Nullable from '../../Nullable'
 import Input from './Base/Input';
 import Label from './Base/Label';
+import React from 'react';
 
 const InputGroup = ({
   Addon,
@@ -16,12 +17,18 @@ const InputGroup = ({
   inputWrapperWhenLabel = 'mt-1',
   inputwrapperClassName = 'relative rounded-md shadow-sm',
   label,
+  twLabel,
+  isRequired,
+  twRequired,
   ...props
 }) => (
   <div className={className}>
     <Nullable on={label}>
-      <Label htmlFor={props?.id}>
-        {label}
+      <Label className={twLabel} htmlFor={props?.id}>
+        <>
+          {label}
+          {isRequired && <span className={`text-red-500 ${twRequired}`}> * </span>}
+        </>
       </Label>
     </Nullable>
     <div className={`${label ? inputWrapperWhenLabel : ''} ${inputwrapperClassName}`}>
