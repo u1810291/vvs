@@ -77,39 +77,35 @@ const Listing = ({
     option([]),
   )(tableColumns), [tableColumns, activeTableColumnPred]);
 
-  // TODO: the usage of rows is fixed, but it would be nice to check if it's possible to improve
-  const rows = useMemo(() => reduce((rs, r) => {
-    rs.push(ifElse(
-      r => tableColumns
-        .map(c => componentToString(c.Component(c.itemToProps(r).option(''))))
-        .some(c => pipe(
-          safe(not(isEmpty)),
-          map(String),
-          map(c => c.match(new RegExp(asciifyLT(query.replace(/\W+/gm, '')), 'gi'))),
-          map(Boolean),
-          option(false),
-        )(c)),
-      item => (
-        <Table.Tr key={rowKeyLens(item)}>
-          {
-            reduce((cs, c) => ifElse(
-              and(hasProps(['key', 'itemToProps', 'Component']), activeTableColumnPred),
-              ({key, itemToProps, Component}) => [...cs, (
-                <Table.Td key={key}>
-                  <Component {...itemToProps(item).option({className: 'opacity-20 inline-block w-full text-center', children: '—'})} />
-                </Table.Td>
-              )],
-              constant(cs),
-              c,
-            ), [], tableColumns)
-          }
-        </Table.Tr>
-      ),
-      constant(rs),
-      r,
-    ));
-    return rs;
-  }, [], list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
+  const rows = useMemo(() => reduce((rs, r) => ifElse(
+    r => tableColumns
+      .map(c => componentToString(c.Component(c.itemToProps(r).option(''))))
+      .some(c => pipe(
+        safe(not(isEmpty)),
+        map(String),
+        map(c => c.match(new RegExp(asciifyLT(query.replace(/\W+/gm, '')), 'gi'))),
+        map(Boolean),
+        option(false),
+      )(c)),
+    item => [...rs, (
+      <Table.Tr key={rowKeyLens(item)}>
+        {
+          reduce((cs, c) => ifElse(
+            and(hasProps(['key', 'itemToProps', 'Component']), activeTableColumnPred),
+            ({key, itemToProps, Component}) => [...cs, (
+              <Table.Td key={key}>
+                <Component {...itemToProps(item).option({className: 'opacity-20 inline-block w-full text-center', children: '—'})} />
+              </Table.Td>
+            )],
+            constant(cs),
+            c,
+          ), [], tableColumns)
+        }
+      </Table.Tr>
+    )],
+    constant(rs),
+    r,
+  ), [], list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
 
   return (
     <Index>
