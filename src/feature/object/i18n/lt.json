@@ -22,5 +22,26 @@
       "provider_id": "Teikėjo ID",
       "provider_name": "Teikėjas"
     }
+  },
+  "edit": {
+    "title": {
+      "responsible_person": "Atsakingi asmenys",
+      "modems": "Modemas",
+      "object_info": "Objekto informacija"
+    },
+    "field": {
+      "name": "Pavadinimas",
+      "address": "Adresas",
+      "full_name": "Vardas Pavardė",
+      "modem_number": "Modemo nr.",
+      "alarm_management": "Signalizacijos valdymas",
+      "object_number": "Objekto nr.",
+      "contract_number": "Sutarties nr.",
+      "navision_id": "Navision ID",
+      "monas_ms_id": "Monas MS ID",
+      "city": "Miestas",
+      "longitude": "Longitude",
+      "latitude": "Latitude"
+    }
   }
 }

@@ -22,5 +22,26 @@
 			"provider_id": "Provider ID",
 			"provider_name": "Provider"
 		}
+	},
+	"edit": {
+		"title": {
+			"responsible_person": "Responsible person",
+			"modems": "Modems",
+			"object_info": "Object information"
+		},
+		"field": {
+			"name": "Name",
+			"address": "Address",
+			"full_name": "Full name",
+			"modem_number": "Modem no.",
+			"alarm_management": "Alarm management",
+			"object_number": "Object no.",
+			"contract_number": "Contract no.",
+			"navision_id": "Navision ID",
+			"monas_ms_id": "Monas MS ID",
+			"city": "City",
+			"longitude": "Longitude",
+			"latitude": "Latitude"
+		}
 	}
 }
