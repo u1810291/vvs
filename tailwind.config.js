@@ -17,7 +17,8 @@ module.exports = {
         'brick': '#C32A2F',
         'tango': '#F37E16',
         'forest': '#337F2D',
-        'steel': '#5979B3'
+        'steel': '#5979B3',
+        'gray-border': 'rgba(64, 75, 95, 0.17)'
       },
     },
   },
