@@ -8,12 +8,14 @@ const Box = ({
   DetailsContainer,
   name,
   label,
+  twLabel,
   description,
   isChecked,
   onChange = identity,
+  ...props
 }) => {
   return (
-    <CheckboxContainer>
+    <CheckboxContainer {...props}>
       <Input
         id={name}
         name={name}
@@ -22,7 +24,7 @@ const Box = ({
         aria-describedby={`${name}-description`}
       />
       <DetailsContainer>
-        <Label htmlFor={name}>
+        <Label className={twLabel} htmlFor={name}>
           {label}
         </Label>
         {description}
