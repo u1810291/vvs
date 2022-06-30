@@ -17,5 +17,24 @@
       "dislocation_zone": "Dislokacijos zona",
       "is_assigned_automatically": "Automatiškai priskirti"
     }
+  },
+  "edit": {
+    "title": {
+      "dislocationZoneSchedule": "Dislokacijos zonų tvarkaraštis",
+      "automaticAssignment": "Automatinis priskyrimas"
+    },
+    "field": {
+      "name": "Pavadinimas",
+      "shortName": "Trumpas pav.",
+      "deviceId": "Įrenginio ID",
+      "assignAutomatically": "Automatiškai priskirti",
+      "phoneNumber": "Telefonas",
+      "callAfter": "Skambinti po, s.",
+      "assignWhileInBreaks": "Priskirti kol pertraukose"
+    },
+    "button": {
+      "addZone": "Pridėti zoną",
+      "delete": "Archyvuoti"
+    }
   }
 }

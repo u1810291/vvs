@@ -17,5 +17,24 @@
       "dislocation_zone": "Dislocation zone",
       "is_assigned_automatically": "Assigned automatically"
     }
+  },
+  "edit": {
+    "title": {
+      "dislocationZoneSchedule": "Dislocation zone schedule",
+      "automaticAssignment": "Automatic assignment"
+    },
+    "field": {
+      "name": "Name",
+      "shortName": "Short name",
+      "deviceId": "Device Id",
+      "assignAutomatically": "Assign automatically",
+      "phoneNumber": "Phone number",
+      "callAfter": "To call after, s.",
+      "assignWhileInBreaks": "Assign while in breaks"
+    },
+    "button": {
+      "addZone": "Add zone",
+      "delete": "Delete"
+    }
   }
 }
