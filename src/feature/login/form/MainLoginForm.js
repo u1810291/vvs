@@ -23,6 +23,8 @@ const MainLoginForm = () => {
       initial: 'lukas.l@s-e.lt',
       validator: isEmail,
       props: {
+        value: ({value}) => value,
+        onChange: ({set}) => ({target: {value}}) => set(value),
         label: always(t`label.email`),
         type: always('email'),
       }
@@ -31,6 +33,8 @@ const MainLoginForm = () => {
       initial: 'EuroCash2022',
       validator: lengthGt(5),
       props: {
+        value: ({value}) => value,
+        onChange: ({set}) => ({target: {value}}) => set(value),
         label: always(t`label.password`),
         type: always('password'),
       }
@@ -40,6 +44,8 @@ const MainLoginForm = () => {
       validator: always(true),
       opt: true,
       props: {
+        value: ({value}) => value,
+        onChange: ({set}) => ({target: {value}}) => set(value),
         label: always(t`label.rememberMe`),
         type: always('password'),
         name: always('remember-me'),

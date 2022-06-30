@@ -6,7 +6,7 @@ import Input from './Base/Input';
 import Label from './Base/Label';
 import React from 'react';
 
-const InputGroup = ({
+export const InputGroup = ({
   Addon,
   Input,
   Label,

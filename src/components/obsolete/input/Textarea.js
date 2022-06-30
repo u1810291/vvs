@@ -1,8 +1,6 @@
-import React, {useCallback} from 'react';
-
 const Textarea = ({
   value,
-  setValue,
+  onChange,
   title,
   placeholder,
   rows,
@@ -12,10 +10,6 @@ const Textarea = ({
   twBody,
   twRequired,
 }) => {
-
-  const onChange = useCallback(event => {
-    setValue(event.currentTarget.value)
-  }, [setValue]);
 
   return (
     <div className={`flex flex-col ${twBody}`}>
