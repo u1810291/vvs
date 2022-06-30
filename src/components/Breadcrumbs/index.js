@@ -1,28 +1,22 @@
-import {
-  pipe,
-  getProp,
-  map,
-  option,
-  getPropOr,
-} from 'crocks';
-import {putIntoArray} from '../../util/array';
+import {reduce} from 'crocks/pointfree';
+import {useTranslation} from 'react-i18next';
+import {Link} from 'react-router-dom';
+import {putIntoArray} from 'util/array';
 import {withComponentFactory} from '../../util/react';
+import {
+  getProp,
+  isArray,
+  isObject,
+  option,
+  pipe,
+} from 'crocks';
 
-const Breadcrumbs = ({Item, ...props}) => (
+const Box = ({Item, ...props}) => (
   <nav className='flex' aria-label='Breadcrumb'>
     <ol role='list' className='flex items-center space-x-4'>
       {
         pipe(
           getProp('children'),
-          map(putIntoArray),
-          map(array  => array.map((itemComponent, index, all) => (
-            // eslint-disable-next-line react/jsx-key
-            <Item {...{
-              ...getPropOr({}, 'props', itemComponent),
-              key: index,
-              hasSlash: index > 0,
-            }} />
-          ))),
           option(null),
         )(props)
       }
@@ -51,6 +45,33 @@ const Item = ({hasSlash = true, children, props}) => (
   </li>
 );
 
-export default withComponentFactory(Breadcrumbs, {
-  Item,
-});
+const Breadcrumbs =  withComponentFactory(Box, {Item});
+
+export const RouteAsBreadcrumb = ({route}) => {
+  const {t} = useTranslation();
+
+  const routeToBreadCrumbs = (t, component) => pipe(
+    putIntoArray,
+    reduce((carry, item) => {
+      const {translationKey, translationNs, path, element, children, isHidden = false} = item?.props;
+      const isRoute = path && element && !isHidden;
+
+      return [
+        ...carry,
+        ...(isRoute ? [
+          <Breadcrumbs.Item key={path}>
+            <Link to={path}>
+              {t(translationKey, {ns: translationNs, keyPrefix: ''})}
+            </Link>
+          </Breadcrumbs.Item>
+        ] : []),
+        ...(isArray(children) ? children.map(a => routeToBreadCrumbs(t, a)) : []),
+        ...(isObject(children) ? [routeToBreadCrumbs(t, children)] : []),
+      ];
+    }, [])
+  )(component)
+
+  return routeToBreadCrumbs(t, route);
+};
+
+export default Breadcrumbs;
