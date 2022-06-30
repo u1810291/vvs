@@ -4,8 +4,8 @@ import {Link, useNavigate} from 'react-router-dom';
 import TaskEditForm from '../form/TaskEditForm';
 import Header from '../../../components/atom/Header';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import Index from '../../../layout/SideBarLayout';
-import HeaderButtonGroup from '../../../components/obsolete/headers/HeaderButtonGroup';
+import SideBarLayout from '../../../layout/SideBarLayout';
+import HeaderButtonGroup from '../../../components/HeaderButtonGroup';
 
 import useLanguage from '../../../hook/useLanguage';
 
@@ -19,7 +19,7 @@ const TaskEditLayout = () => {
   }, []);
 
   return (
-    <Index>
+    <SideBarLayout>
       <div className='flex flex-col min-h-full'>
         <Header>
           <Breadcrumbs>
@@ -37,7 +37,7 @@ const TaskEditLayout = () => {
         </Header>
         <TaskEditForm />
       </div>
-    </Index>
+    </SideBarLayout>
   );
 };
 
