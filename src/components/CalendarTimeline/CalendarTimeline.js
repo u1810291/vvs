@@ -40,39 +40,41 @@ const CalendarTimeline = ({
   ];
 
   return (
-    <div
-      style={{width: 1246}}
-      className={'flex-col'}>
-      <CalendarModal
-        isOpen={isOpen}
-        setOpen={setOpen}
-        events={events}
-        isNew={true}
-        setEvents={setEvents}
-        getRef={getRef}
-      />
-      <div className={'flex justify-between items-center'}>
-        <h2 className={'mx-4 text-gray-700 font-medium'}>
-          {title}
-        </h2>
-        <button
-          onClick={setOpen}
-          className={'m-4 px-10 text-gray-500 bg-gray-200 rounded-sm'}>
-          {actionButtonTitle}
-        </button>
-      </div>
-      <div className={'shadow-[1px_1px_0_0_rgba(64,75,95,0.1)]'}>
-        <Column
-          interval={columnsTimeInterval}
-        />
-        <Row
-          rowsTitles={rowsTitles}
-          value={events}
-          setValue={setEvents}
-          cellsRefs={cellsRefs}
-          setRef={setRef}
+    <div className={'overflow-x-auto mr-6'}>
+      <div
+        style={{width: 1246}}
+        className={'flex-col mt-20'}>
+        <CalendarModal
+          isOpen={isOpen}
+          setOpen={setOpen}
+          events={events}
+          isNew={true}
+          setEvents={setEvents}
           getRef={getRef}
         />
+        <div className={'flex justify-between items-center'}>
+          <h2 className={'font-bold mb-2'}>
+            {title}
+          </h2>
+          <button
+            onClick={setOpen}
+            className={'mb-4 px-10 text-gray-500 bg-gray-200 rounded-sm'}>
+            {actionButtonTitle}
+          </button>
+        </div>
+        <div className={'shadow-[1px_1px_0_0_rgba(64,75,95,0.1)]'}>
+          <Column
+            interval={columnsTimeInterval}
+          />
+          <Row
+            rowsTitles={rowsTitles}
+            value={events}
+            setValue={setEvents}
+            cellsRefs={cellsRefs}
+            setRef={setRef}
+            getRef={getRef}
+          />
+        </div>
       </div>
     </div>
   );
