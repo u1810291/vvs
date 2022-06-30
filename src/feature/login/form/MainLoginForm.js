@@ -65,7 +65,7 @@ const MainLoginForm = () => {
       <form className='space-y-6'>
         <InputGroup {...ctrl('username')} />
         <InputGroup {...ctrl('password')} />
-        <Checkbox {...ctrl('rememberMe')}/>
+        <Checkbox {...ctrl('rememberMe')} />
         <Button.Sm type='submit' className='w-full' onClick={submit}>
           {t`button.submit`}
         </Button.Sm>
