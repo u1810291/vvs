@@ -8,6 +8,7 @@ const Box = ({
   DetailsContainer,
   name,
   label,
+  twLabel,
   description,
   isChecked,
   onChange = identity,
@@ -23,7 +24,7 @@ const Box = ({
         aria-describedby={`${name}-description`}
       />
       <DetailsContainer>
-        <Label htmlFor={name}>
+        <Label className={twLabel} htmlFor={name}>
           {label}
         </Label>
         {description}
