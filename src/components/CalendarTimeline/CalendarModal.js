@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 
 import Modal from '../atom/Modal';
-import Selectbox from '../obsolete/input/Selectbox';
+import SelectBox from '../atom/input/SelectBox';
 import TimePicker from '../obsolete/input/TimePicker';
 
 import useLanguage from '../../hook/useLanguage';
@@ -85,7 +85,7 @@ const CalendarModal = ({
   }, [selectedCrew, selectedWeekDay, selectedTimeFrom, selectedTimeTo, errorMessage, events])
 
   const createEvent = useCallback(() => {
-    if (selectedCrew, selectedWeekDay && selectedTimeTo && selectedTimeFrom) {
+    if (selectedCrew && selectedWeekDay && selectedTimeTo && selectedTimeFrom) {
       const weekDay = formatISO(new Date(selectedWeekDay));
 
       const timeFrom = formatISO(new Date(selectedTimeFrom));
@@ -122,20 +122,36 @@ const CalendarModal = ({
         setOpen={setOpen}
         title={t('eurocash.addDislocationArea')}
       >
-        <Selectbox
-          title={t('eurocash.dislocationZone')}
-          value={crews}
-          setValue={setSelectedCrew}
-          selectedValue={selectedCrew || eventData?.crew}
-        />
+        <SelectBox
+          label={t('eurocash.dislocationZone')}
+          value={crews[0].value}
+        >
+          {crews.map(crew => (
+            <SelectBox.Option
+              key={crew.key}
+              value={crew.value}
+            >
+              {crew.key}
+            </SelectBox.Option>
+          ))
+          }
+        </SelectBox>
         <div className={'grid grid-cols-3 pt-4 pb-8'}>
-          <Selectbox
-            twSelect={'mr-6'}
-            title={t('eurocash.day')}
-            value={weekDays}
-            setValue={setWeekSelectedDay}
-            selectedValue={selectedWeekDay || eventData?.weekDay}
-          />
+          <SelectBox
+            className={'mr-6 scrollbar-gone'}
+            label={t('eurocash.day')}
+            value={weekDays[0].value}
+          >
+            {weekDays.map(weekDay => (
+              <SelectBox.Option
+                key={weekDay.key}
+                value={weekDay.value}
+              >
+                {weekDay.key}
+              </SelectBox.Option>
+            ))
+            }
+          </SelectBox>
           <TimePicker
             twTimePicker={'mr-6'}
             title={t('eurocash.from')}
