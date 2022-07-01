@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 
 import Modal from '../atom/Modal';
 import SelectBox from '../atom/input/SelectBox';
@@ -26,8 +26,6 @@ const CalendarModal = ({
   const {t} = useLanguage();
   const {getWeekDays} = useWeekDays();
   const weekDays = getWeekDays();
-  const [selectedWeekDay, setWeekSelectedDay] = useState();
-
   const {validateOnEventCreate} = useValidation();
 
   const [crews, setCrew] = useState([
@@ -37,7 +35,14 @@ const CalendarModal = ({
     {key: 'ZXCV', value: 'ZXCV'}
   ]);
 
-  const [selectedCrew, setSelectedCrew] = useState();
+  const [selectedCrew, setSelectedCrew] = useState(crews[0]);
+  const [selectedWeekDay, setSelectedWeekDay] = useState(weekDays[0]);
+
+  useEffect(() => {
+    console.log(selectedCrew)
+    console.log(selectedWeekDay)
+  }, [selectedCrew, selectedWeekDay]);
+
 
   const [errorMessage, setErrorMessage] = useState();
 
@@ -51,7 +56,7 @@ const CalendarModal = ({
   const editEvent = useCallback(() => {
     const eve = events.find(event => {
       if (event.id === id) {
-        const weekDay = formatISO(new Date(selectedWeekDay));
+        const weekDay = formatISO(new Date(selectedWeekDay.value));
 
         const timeFrom = formatISO(new Date(selectedTimeFrom));
         const timeTo = formatISO(new Date(selectedTimeTo));
@@ -63,9 +68,9 @@ const CalendarModal = ({
         const endTimeRef = getRef(String(endTime));
 
         const position = {
-          top: startTimeRef.top,
-          left: startTimeRef.left,
-          width: endTimeRef.left - startTimeRef.left,
+          top: startTimeRef.offsetTop,
+          left: startTimeRef.offsetLeft,
+          width: endTimeRef.offsetLeft - startTimeRef.offsetLeft,
         };
 
         const editedEvent = {
@@ -86,7 +91,7 @@ const CalendarModal = ({
 
   const createEvent = useCallback(() => {
     if (selectedCrew && selectedWeekDay && selectedTimeTo && selectedTimeFrom) {
-      const weekDay = formatISO(new Date(selectedWeekDay));
+      const weekDay = formatISO(new Date(selectedWeekDay.value));
 
       const timeFrom = formatISO(new Date(selectedTimeFrom));
       const timeTo = formatISO(new Date(selectedTimeTo));
@@ -98,15 +103,15 @@ const CalendarModal = ({
       const endTimeRef = getRef(String(endTime));
 
       const position = {
-        top: startTimeRef.top,
-        left: startTimeRef.left,
-        width: endTimeRef.left - startTimeRef.left,
+        top: startTimeRef.offsetTop,
+        left: startTimeRef.offsetLeft,
+        width: endTimeRef.offsetLeft - startTimeRef.offsetLeft,
       };
 
       const newEvent = {
         id: generate(),
         crew: selectedCrew,
-        weekDay: selectedWeekDay,
+        weekDay: selectedWeekDay.value,
         startTime,
         endTime,
         position
@@ -124,37 +129,33 @@ const CalendarModal = ({
       >
         <SelectBox
           label={t('eurocash.dislocationZone')}
-          value={crews[0].value}
+          value={selectedCrew.value}
+          displayValue={selectedCrew.key}
+          setValue={setSelectedCrew}
         >
           {crews.map(crew => (
-            <SelectBox.Option
-              key={crew.key}
-              value={crew.value}
-            >
+            <SelectBox.Option key={crew.key} value={crew.value}>
               {crew.key}
             </SelectBox.Option>
-          ))
-          }
+          ))}
         </SelectBox>
         <div className={'grid grid-cols-3 pt-4 pb-8'}>
           <SelectBox
-            className={'mr-6 scrollbar-gone'}
             label={t('eurocash.day')}
-            value={weekDays[0].value}
+            value={selectedWeekDay.value}
+            displayValue={selectedWeekDay.key}
+            setValue={setSelectedWeekDay}
           >
             {weekDays.map(weekDay => (
-              <SelectBox.Option
-                key={weekDay.key}
-                value={weekDay.value}
-              >
+              <SelectBox.Option key={weekDay.key} value={weekDay.value}>
                 {weekDay.key}
               </SelectBox.Option>
-            ))
-            }
+            ))}
           </SelectBox>
           <TimePicker
             twTimePicker={'mr-6'}
             title={t('eurocash.from')}
+            value={selectedTimeFrom}
             setValue={setTimeFrom}
             selectedValue={selectedTimeFrom || eventData?.startTime}
           />
@@ -186,14 +187,14 @@ const CalendarModal = ({
               </button>
               {isNew && (
                 <button
-                  className={'px-10 text-gray-500 bg-gray-600 text-white font-light rounded-sm'}
+                  className={'px-10 bg-gray-600 text-white font-light rounded-sm'}
                   onClick={createEvent}>
                 {t('eurocash.save')}
               </button>
               )}
               {isEdit && (
                 <button
-                  className={'px-10 text-gray-500 bg-gray-600 text-white font-light rounded-sm'}
+                  className={'px-10 bg-gray-600 text-white font-light rounded-sm'}
                   onClick={editEvent}>
                   {t('eurocash.save')}
                 </button>

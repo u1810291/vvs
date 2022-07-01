@@ -34,7 +34,7 @@ const Row = ({rowsTitles, value, setRef, setValue, getRef}) => {
           </div>
         ))}
       </div>
-      <div className={'flex flex-col w-full'}>
+      <div className={'flex flex-col w-full relative'}>
         <div
           style={{width: 936}}
           className={'flex flex-row w-full flex-wrap'}>

@@ -4,10 +4,8 @@ import Row from './Row';
 import Column from './Column';
 import CalendarModal from './CalendarModal';
 
-
 import useBoolean from '../../hook/useBoolean';
 import useLanguage from '../../hook/useLanguage';
-
 
 const CalendarTimeline = ({
   title,
@@ -26,7 +24,7 @@ const CalendarTimeline = ({
 
   const getRef = useCallback((id) => {
     const ref = cellsRefs.find(ref => ref.id === id);
-    return ref.getBoundingClientRect();
+    return ref;
   }, [cellsRefs]);
 
   const rowsTitles = [
@@ -40,10 +38,10 @@ const CalendarTimeline = ({
   ];
 
   return (
-    <div className={'overflow-x-auto mr-6'}>
+    <div className={'overflow-x-auto mt-6'}>
       <div
         style={{width: 1246}}
-        className={'flex-col mt-20'}>
+        className={'flex-col'}>
         <CalendarModal
           isOpen={isOpen}
           setOpen={setOpen}
@@ -53,7 +51,7 @@ const CalendarTimeline = ({
           getRef={getRef}
         />
         <div className={'flex justify-between items-center'}>
-          <h2 className={'font-bold mb-2'}>
+          <h2 className={'font-bold'}>
             {title}
           </h2>
           <button
@@ -62,7 +60,7 @@ const CalendarTimeline = ({
             {actionButtonTitle}
           </button>
         </div>
-        <div className={'shadow-[1px_1px_0_0_rgba(64,75,95,0.1)]'}>
+        <div className={'mt-6 shadow-[1px_1px_0_0_rgba(64,75,95,0.1)]'}>
           <Column
             interval={columnsTimeInterval}
           />

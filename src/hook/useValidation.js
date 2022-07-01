@@ -1,4 +1,3 @@
-
 import useLanguage from './useLanguage';
 import useWeekDays from './useWeekDays';
 
@@ -12,7 +11,7 @@ function useValidation() {
       setEvents([...events, newEvent]);
       setErrorMessage('');
       setOpen(false);
-    }
+    };
     const isSameWeekDay = (eventDate, newEventDate) => getISODay(eventDate) === getISODay(newEventDate);
     const isStartTimeIsBiggerThanEndTime = Date.parse(endTime) < Date.parse(startTime);
     const isEventsExist = events && events.length > 0;

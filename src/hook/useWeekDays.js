@@ -1,14 +1,9 @@
 import {useCallback} from 'react';
-import {lt, enUS} from 'date-fns/locale';
+import {enUS, lt} from 'date-fns/locale';
 import useLanguage from './useLanguage';
-import {
-  eachDayOfInterval,
-  endOfWeek,
-  format,
-  startOfWeek
-} from 'date-fns';
+import {eachDayOfInterval, endOfWeek, format, startOfWeek} from 'date-fns';
 
-const useWeekDays = () => {
+const useWeekDays = (callback, deps) => {
   const {getLanguage} = useLanguage();
   const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -16,9 +11,8 @@ const useWeekDays = () => {
 
   const getTimeLocals = useCallback(() => {
     const currentLanguage = getLanguage();
-    const lang = currentLanguage === 'lt' ? lt : enUS;
-    return lang;
-  });
+    return currentLanguage === 'lt' ? lt : enUS;
+  }, deps);
 
   const getWeekDays = useCallback(locale => {
     const now = new Date();
