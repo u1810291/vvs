@@ -1,7 +1,6 @@
-import React, {useState, Fragment, useEffect} from 'react';
+import React, {Fragment} from 'react';
 import {Listbox, Transition} from '@headlessui/react';
 import Nullable from '../../Nullable';
-import {putIntoArray} from 'util/array';
 
 const Box = ({
   Label,
@@ -13,26 +12,20 @@ const Box = ({
   Option,
   optionClassNameFn,
   children,
-  value = '',
+  value,
+  setValue,
+  displayValue,
   ...props
 }) => {
-  const [selectedChildren, setSelectedChildren] = useState();
-
-  useEffect(() => {
-    setSelectedChildren(
-      putIntoArray(children).find(
-        c => c?.props?.value === value
-      )
-    )
-  }, [value, children]);
+  const onChange = e => setValue({key: e.key, value: e.props.value});
 
   return (
-    <Listbox value={selectedChildren} onChange={setSelectedChildren} {...props}>
+    <Listbox value={value} onChange={onChange} {...props}>
       {({open}) => (
         <div>
           <Nullable on={label}><Label className={twLabel}>{label}</Label></Nullable>
           <ContentContainer>
-            <Button displayName={selectedChildren?.props?.children}/>
+            <Button displayName={displayValue}/>
             <Transition
               show={open}
               as={Fragment}
@@ -43,7 +36,7 @@ const Box = ({
               {children?.length && (
                 <Options>
                   {children.map(component => (
-                    <Option selected={selectedChildren} {...component.props} key={component.props.children} className={optionClassNameFn} value={component}/>
+                    <Option selected={value} {...component.props} key={component.props.children} className={optionClassNameFn} value={component}/>
                   ))}
                 </Options>
               )}
