@@ -69,23 +69,6 @@ const ObjectEditAside = withMergedClassName(
   )
 );
 
-const TextArea = () => (
-  <div>
-    <label htmlFor='comment' className='block text-bluewood text-base'>
-      Aprašymas
-    </label>
-    <div className='mt-1'>
-      <textarea
-        rows={6}
-        name='comment'
-        id='comment'
-        className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
-        defaultValue={''}
-      />
-    </div>
-  </div>
-);
-
 const ObjectEditLayout = ({headerContent, children, buttonchildren, ...props}) => (
   <SidebarLayout>
     <Header>{headerContent}</Header>
@@ -296,7 +279,3 @@ export default withPreparedProps(ObjectEditLayout, props => {
     )
   };
 });
-
-<Breadcrumbs>
-  <RouteAsBreadcrumb route={ObjectRoute} />
-</Breadcrumbs>
