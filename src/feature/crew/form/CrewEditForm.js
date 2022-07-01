@@ -35,7 +35,6 @@ const polygon = [
 const CrewEditLayout = () => {
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
   const [events, setEvents] = useState([]);
-
   const {ctrl, result, setForm} = useResultForm({
     name: {
       initial: '',
@@ -109,53 +108,52 @@ const CrewEditLayout = () => {
     }
   });
 
+  // flex flex-col justify-between
+
   return (
-    <section className={'mx-6 my-6 flex-auto flex'}>
-      <div className={'w-full mt-4 flex flex-col xl:flex-row'}>
-        <div className={'flex flex-col w-full xl:w-4/5'}>
-          <div className={'flex w-full items-start mb-12 xl:w-1/2'}>
-            <InputGroup className={'flex flex-col justify-between w-full mr-4 xl:w-2/5'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('name')} />
-            <InputGroup className={'flex flex-col justify-between w-full mr-4 xl:w-2/5'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('shortName')} />
-            <InputGroup className={'flex flex-col justify-between w-full mr-4 xl:w-2/5'} twLabel={'text-bluewood text-base'} {...ctrl('deviceId')} />
-          </div>
-          <div className={'flex flex-col w-full xl:w-1/2'}>
-            <h2 className={'font-bold mb-2'}>{t('title.automaticAssignment')}</h2>
-            <div className={'flex w-full justify-end'}>
-              <CheckBox className={'w-full self-end mr-4 xl:w-2/5'} twLabel={'text-bluewood text-base'} {...ctrl('assignAutomatically')} />
-              <InputGroup className={'flex w-full flex-col justify-between mr-4 xl:w-2/5'} twLabel={'text-bluewood text-base'} {...ctrl('phoneNumber')} />
-              <InputGroup className={'flex w-full flex-col justify-between mr-4 xl:w-2/5'} twLabel={'text-bluewood text-base'} {...ctrl('callAfter')} />
-            </div>
-            <div className={'mt-4'}>
-              <CheckBox className={'w-full self-end lg:w-2/5'} twLabel={'text-bluewood text-base'} {...ctrl('assignWhileInBreaks')} />
-            </div>
-          </div>
-          <CalendarTimeline
-            title={t('title.dislocationZoneSchedule')}
-            actionButtonTitle={t('button.addZone')}
-            columnsTimeInterval={4}
-            events={events}
-            setEvents={setEvents}
-          />
-          <button className={'bg-red-700 mt-6 py-4 px-20 text-white mt-auto mb-6 w-max rounded-sm'}>
-            {t('button.delete')}
-          </button>
+    <section className={'m-6 md:flex md:flex-row'}>
+      <div className={'md:w-7/12 md:mr-6 xl:w-9/12'}>
+        <div className={'lg:flex 2xl:w-2/3'}>
+          <InputGroup className={'lg:w-5/12'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('name')} />
+          <InputGroup className={'mt-6 lg:mt-0 lg:ml-6 lg:w-3/12'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('shortName')} />
+          <InputGroup className={'mt-6 lg:mt-0 lg:ml-6 lg:w-4/12'} twLabel={'text-bluewood text-base'} {...ctrl('deviceId')} />
         </div>
-        <div className={'flex flex-col w-full h-screen xl:w-1/5 xl:h-full'}>
-          <ActiveCard
-            key={generate()}
-            id={generate()}
-            crew={'G9'}
-            name={'9 GRE'}
-            status={'online'}
-            inBreak={false}
-            inTask={true}
-            askForBreak={false}
-            connection={'Prarastas rišys'}
-          />
-          <Map>
-            <Polygon path={polygon} options={polygonSetup} />
-          </Map>
+        <div className={'mt-6 2xl:w-2/3'}>
+          <h2 className={'font-bold'}>{t('title.automaticAssignment')}</h2>
+          <div className={'lg:flex'}>
+            <CheckBox className={'px-0 mt-6 lg:mr-6 lg:flex lg:items-center lg:w-5/12'} twLabel={'text-bluewood text-base'} {...ctrl('assignAutomatically')} />
+            <InputGroup className={'mt-6 lg:mr-6 lg:w-4/12'} twLabel={'text-bluewood text-base'} {...ctrl('phoneNumber')} />
+            <InputGroup className={'mt-6 lg:w-3/12'} twLabel={'text-bluewood text-base'} {...ctrl('callAfter')} />
+          </div>
+          <CheckBox className={'px-0 mt-6'} twLabel={'text-bluewood text-base'} {...ctrl('assignWhileInBreaks')} />
         </div>
+        <CalendarTimeline
+          title={t('title.dislocationZoneSchedule')}
+          actionButtonTitle={t('button.addZone')}
+
+          columnsTimeInterval={4}
+          events={events}
+          setEvents={setEvents}
+        />
+        <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white'}>
+          {t('button.delete')}
+        </button>
+      </div>
+      <div className={'mt-6 flex flex-col w-full h-full aspect-square md:w-5/12 md:mt-0 md:aspect-auto md:h-screen xl:w-3/12'}>
+        <ActiveCard
+          key={generate()}
+          id={generate()}
+          crew={'G9'}
+          name={'9 GRE'}
+          status={'online'}
+          inBreak={false}
+          inTask={true}
+          askForBreak={false}
+          connection={'Prarastas rišys'}
+        />
+        <Map>
+          <Polygon path={polygon} options={polygonSetup} />
+        </Map>
       </div>
     </section>
   );
