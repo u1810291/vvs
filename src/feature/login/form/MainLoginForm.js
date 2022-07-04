@@ -67,7 +67,7 @@ const MainLoginForm = () => {
   }, [isAuthorized]);
 
   return (
-    <Card>
+    <Card.SmRounded>
       <form className='space-y-6'>
         <InputGroup {...ctrl('username')} />
         <InputGroup {...ctrl('password')} />
@@ -76,7 +76,7 @@ const MainLoginForm = () => {
           {t`button.submit`}
         </Button.Sm>
       </form>
-    </Card>
+    </Card.SmRounded>
   );
 };
 
