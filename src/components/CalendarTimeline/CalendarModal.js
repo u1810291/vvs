@@ -10,6 +10,7 @@ import useValidation from '../../hook/useValidation';
 
 import {generate} from 'shortid';
 import {formatISO} from 'date-fns';
+import {constant} from 'crocks';
 
 const CalendarModal = ({
   id,
@@ -130,8 +131,7 @@ const CalendarModal = ({
         <SelectBox
           label={t('eurocash.dislocationZone')}
           value={selectedCrew.value}
-          displayValue={selectedCrew.key}
-          setValue={setSelectedCrew}
+          onChange={setSelectedCrew}
         >
           {crews.map(crew => (
             <SelectBox.Option key={crew.key} value={crew.value}>
@@ -143,8 +143,8 @@ const CalendarModal = ({
           <SelectBox
             label={t('eurocash.day')}
             value={selectedWeekDay.value}
-            displayValue={selectedWeekDay.key}
-            setValue={setSelectedWeekDay}
+            displayValue={constant(selectedWeekDay.key)}
+            onChange={setSelectedWeekDay}
           >
             {weekDays.map(weekDay => (
               <SelectBox.Option key={weekDay.key} value={weekDay.value}>

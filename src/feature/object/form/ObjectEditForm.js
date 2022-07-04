@@ -10,22 +10,19 @@ import {
   getProp,
   mapProps,
   pipe,
-  tap,
 } from 'crocks';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import {useCity, useObject} from '../api';
-import {useAuth} from 'context/auth';
 
 const ObjectEditForm = () => {
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
-  const {apiQuery} = useAuth();
 
   const {ctrl, result, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     latitude: FORM_FIELD.TEXT({label: t`field.latitude`, validator: () => true}),
     longitude: FORM_FIELD.TEXT({label: t`field.longitude`, validator: () => true}),
-    description: FORM_FIELD.TEXT({label: t`field.description`, validator: () => true}),
+    city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true}),
   });
 
   const params = useParams();
@@ -34,13 +31,14 @@ const ObjectEditForm = () => {
     [
       console.error,
       pipe(
-        tap(a => console.log(a)),
         getProp('object_by_pk'),
-        map(mapProps({
-          longitude: String,
-          latitude: String,
-        })),
-        map(setForm)
+        map(pipe(
+          mapProps({
+            longitude: String,
+            latitude: String,
+          }),
+          setForm
+        )),
       ),
     ]);
 
@@ -53,9 +51,13 @@ const ObjectEditForm = () => {
           <InputGroup className={''} isRequired={true} {...ctrl('name')} />
           <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
             <InputGroup className={'lg:w-2/3 xl:w-3/4'} {...ctrl('address')} />
-            <SelectBox className={'lg:w-1/3 xl:w-1/4'} value='VILNIUS' label={t('field.city')}>
+            <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('city')}>
               {map(
-                value => <SelectBox.Option key={value} value={value}>{titleCase(value)}</SelectBox.Option>,
+                value => (
+                  <SelectBox.Option key={value} value={value}>
+                    {titleCase(value)}
+                  </SelectBox.Option>
+                ),
                 cities
               )}
             </SelectBox>
