@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import {Listbox, Transition} from '@headlessui/react';
 import Nullable from '../../Nullable';
+import {identity} from 'crocks';
 
 const Box = ({
   Label,
@@ -13,19 +14,17 @@ const Box = ({
   optionClassNameFn,
   children,
   value,
-  setValue,
-  displayValue,
+  onChange,
+  displayValue = identity,
   ...props
 }) => {
-  const onChange = e => setValue({key: e.key, value: e.props.value});
-
   return (
     <Listbox value={value} onChange={onChange} {...props}>
       {({open}) => (
         <div>
           <Nullable on={label}><Label className={twLabel}>{label}</Label></Nullable>
           <ContentContainer>
-            <Button displayName={displayValue}/>
+            <Button displayName={displayValue(value)}/>
             <Transition
               show={open}
               as={Fragment}

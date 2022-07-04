@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import refresh from 'feature/login/api/refresh';
 import useMergeReducer from 'hook/useMergeReducer';
 import {api, apiQuery} from 'api';
@@ -28,6 +28,9 @@ const AuthContextProvider = ({children}) => {
     refreshToken: null
   });
 
+  /**
+   * @type {(variables: Object) => (query: string) => Async}
+   */
   const authorizedApi = useMemo(() => pipe(
     getProp('token'),
     chain(safe(isValid)),
@@ -78,12 +81,12 @@ const AuthContextProvider = ({children}) => {
 };
 
 /**
- * @type {() => {
+ * @type {() => ({
  * isAuthorized: bool,
- * update: (newState: object) => void
- * api: (variables: object) => (query: string) => Async
- * apiQuery: (query: string) => Async
- * }}
+ * update: (newState: object) => void,
+ * api: (variables: object) => (query: string) => Async,
+ * apiQuery: (query: string) => Async,
+ * })}
  */
 const useAuth = () => {
   const context = useContext(AuthContext);
