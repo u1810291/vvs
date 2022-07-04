@@ -17,6 +17,11 @@ import {
   identity,
   map,
   mapProps,
+  getPath,
+
+  isArray,
+  getPropOr,
+  isTruthy,
 } from 'crocks';
 
 const {Resolved, Rejected} = Async;
@@ -40,9 +45,8 @@ const QUERY_OBJECT_BY_ID = `
   }
 `;
 
-export const useObject = (params) => {
+export const useObject = (params, [onQueryRejected, onQueryResolved]) => {
   const {api} = useAuth();
-
   const query = useAsyncEffect(
     Async.of(v => q => api(v, q))
     .ap(maybeToAsync(
@@ -51,16 +55,8 @@ export const useObject = (params) => {
     ))
     .ap(Resolved(QUERY_OBJECT_BY_ID))
     .chain(identity),
-    /*console.error,
-    pipe(
-      tap(console.log),
-      getProp('object_by_pk'),
-      map(mapProps({
-        longitude: String,
-        latitude: String,
-      })),
-      //map(setForm)
-    ),*/
+    onQueryRejected,
+    onQueryResolved,
     [params],
   );
 
@@ -116,4 +112,21 @@ export const useObject = (params) => {
     query,
     mutate,
   }
+};
+
+export const useCity = (isSimplified = false) => {
+  const {apiQuery} = useAuth();
+  const effect = useAsyncEffect(apiQuery('query { city { value } }'));
+
+  if (isSimplified) return (
+    getPath(['data', 'city'], effect)
+    .chain(safe(isArray))
+    .map(pipe(
+      map(getPropOr(null, 'value')),
+      arr => arr.filter(isTruthy)
+    ))
+    .option([])
+  )
+
+  return effect;
 };

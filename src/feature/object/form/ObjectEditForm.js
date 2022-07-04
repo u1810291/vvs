@@ -1,37 +1,24 @@
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {renderWithProps, withMergedClassName} from '../../../util/react';
 import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
 import CheckBox from 'components/obsolete/input/CheckBox';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {
-  getPath,
   map,
-  option,
+  getProp,
+  mapProps,
   pipe,
+  tap,
 } from 'crocks';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
-import {useObject} from '../api';
-
-
-const ObjectEditAside = withMergedClassName(
-  'flex flex-col h-full',
-  ({Tag = 'ul', children, ...props}) => (
-    <aside {...props}>
-      <Tag>
-        {children}
-      </Tag>
-    </aside>
-  )
-);
-
+import {useCity, useObject} from '../api';
+import {useAuth} from 'context/auth';
 
 const ObjectEditForm = () => {
-  const params = useParams();
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
-  const {query} = useObject(params);
+  const {apiQuery} = useAuth();
 
   const {ctrl, result, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
@@ -41,6 +28,24 @@ const ObjectEditForm = () => {
     description: FORM_FIELD.TEXT({label: t`field.description`, validator: () => true}),
   });
 
+  const params = useParams();
+  const {query} = useObject(
+    params,
+    [
+      console.error,
+      pipe(
+        tap(a => console.log(a)),
+        getProp('object_by_pk'),
+        map(mapProps({
+          longitude: String,
+          latitude: String,
+        })),
+        map(setForm)
+      ),
+    ]);
+
+  const cities = useCity(true);
+
   return (
     <section className={'flex'}>
       <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 w-9/12'}>
@@ -49,16 +54,10 @@ const ObjectEditForm = () => {
           <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
             <InputGroup className={'lg:w-2/3 xl:w-3/4'} {...ctrl('address')} />
             <SelectBox className={'lg:w-1/3 xl:w-1/4'} value='VILNIUS' label={t('field.city')}>
-              {
-                pipe(
-                getPath(['data', 'city']),
-                  map(map(pipe(
-                a => ({children: titleCase(a.value), value: a.value, key: a.value}),
-              renderWithProps(SelectBox.Option))
-              )),
-              option(null),
-              )(query)
-              }
+              {map(
+                value => <SelectBox.Option key={value} value={value}>{titleCase(value)}</SelectBox.Option>,
+                cities
+              )}
             </SelectBox>
           </div>
 
@@ -70,8 +69,8 @@ const ObjectEditForm = () => {
         <TextAreaInputGroup inputClassName='min-h-[12.75rem]' className='w-full lg:w-1/2 h-full' {...ctrl('description')} rows={9}/>
       </div>
 
-      <section className={'w-3/12'}>
-        <ObjectEditAside className={'border-l border-gray-border'}>
+      <aside className={'w-3/12 border-l border-gray-border'}>
+        <ul>
           <li className={'px-6 py-4'}>
             <p>{t('title.responsible_person')}</p>
           </li>
@@ -120,8 +119,8 @@ const ObjectEditForm = () => {
             <p className={'mr-2 text-steel col-span-1'}>{t('field.monas_ms_id')}</p>
             <p className={'text-bluewood col-span-1'}>81652</p>
           </li>
-        </ObjectEditAside>
-      </section>
+        </ul>
+      </aside>
     </section>
   );
 }
