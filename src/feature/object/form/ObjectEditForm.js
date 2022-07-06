@@ -1,28 +1,35 @@
-import {useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import CheckBox from 'components/atom/input/CheckBox';
+import Detail from 'components/Disclosure/AsideDisclosure';
+import Input from 'components/atom/input/InputGroup/Base/Input';
 import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
-import CheckBox from 'components/obsolete/input/CheckBox';
+import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
+import {useCity, useObject} from '../api';
+import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import {
   map,
   getProp,
   mapProps,
   pipe,
 } from 'crocks';
-import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
-import {useCity, useObject} from '../api';
 
 const ObjectEditForm = () => {
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
 
   const {ctrl, result, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
+    description: FORM_FIELD.TEXT({label: t`field.description`, validator: () => true}),
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     latitude: FORM_FIELD.TEXT({label: t`field.latitude`, validator: () => true}),
     longitude: FORM_FIELD.TEXT({label: t`field.longitude`, validator: () => true}),
     city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true}),
+    contract_no: FORM_FIELD.TEXT({label: t`field.contractNo`, validator: () => true}),
+    contract_object_no: FORM_FIELD.TEXT({label: t`field.objectNo`, validator: () => true}),
+    navision_id: FORM_FIELD.TEXT({label: t`field.navisionId`, validator: () => true}),
+    provider_id: FORM_FIELD.TEXT({label: t`field.providerId`, validator: () => true}),
   });
 
   const params = useParams();
@@ -36,6 +43,8 @@ const ObjectEditForm = () => {
           mapProps({
             longitude: String,
             latitude: String,
+            provider_id: String,
+            navision_id: String,
           }),
           setForm
         )),
@@ -46,7 +55,7 @@ const ObjectEditForm = () => {
 
   return (
     <section className={'flex'}>
-      <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 w-9/12'}>
+      <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'}>
         <div className={'lg:inline-block lg:w-1/2 space-y-4'}>
           <InputGroup className={''} isRequired={true} {...ctrl('name')} />
           <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
@@ -71,57 +80,27 @@ const ObjectEditForm = () => {
         <TextAreaInputGroup inputClassName='min-h-[12.75rem]' className='w-full lg:w-1/2 h-full' {...ctrl('description')} rows={9}/>
       </div>
 
-      <aside className={'w-3/12 border-l border-gray-border'}>
-        <ul>
-          <li className={'px-6 py-4'}>
-            <p>{t('title.responsible_person')}</p>
-          </li>
-          TODO: the list should be iterable from response
-          <li className={'grid grid-cols-2 px-6 py-4'}>
-            <p className={'mr-2 text-steel col-span-1'}>{t('field.full_name')}</p>
-            <p className={'text-bluewood col-span-1'}>+370656012345</p>
-          </li>
-          <li className={'grid grid-cols-2 px-6 py-4 border-b border-gray-border'}>
-            <p className={'mr-2 text-steel col-span-1'}>{t('field.full_name')}</p>
-            <p className={'text-bluewood col-span-1'}>+370656012345</p>
-          </li>
-          <li className={'px-6 py-4'}>
-            <p>{t('title.modems')}</p>
-          </li>
-          <li className={'grid grid-cols-2 px-6 py-4'}>
-            <InputGroup
-              label={t('field.modem_number')}
-              twLabel={'text-bluewood text-base'}
-            />
-          </li>
-          <li className={'grid grid-cols-1 px-6 py-4 border-b border-gray-border'}>
-            <CheckBox
-              className={'items-center mb-0'}
-              name={t('field.alarm_management')}
-              label={t('field.alarm_management')}
-              twLabel={'text-bluewood text-base'}
-            />
-          </li>
-          <li className={'px-6 py-4'}>
-            <p>{t('title.object_info')}</p>
-          </li>
-          <li className={'grid grid-cols-2 px-6 py-4'}>
-            <p className={'mr-2 text-steel col-span-1'}>{t('field.object_number')}</p>
-            <p className={'text-bluewood col-span-1'}>22-1-9346</p>
-          </li>
-          <li className={'grid grid-cols-2 px-6 py-4'}>
-            <p className={'mr-2 text-steel col-span-1'}>{t('field.contract_number')}</p>
-            <p className={'text-bluewood col-span-1'}>FAF-5441</p>
-          </li>
-          <li className={'grid grid-cols-2 px-6 py-4'}>
-            <p className={'mr-2 text-steel col-span-1'}>{t('field.navision_id')}</p>
-            <p className={'text-bluewood col-span-1'}>1167</p>
-          </li>
-          <li className={'grid grid-cols-2 px-6 py-4 border-b border-gray-border'}>
-            <p className={'mr-2 text-steel col-span-1'}>{t('field.monas_ms_id')}</p>
-            <p className={'text-bluewood col-span-1'}>81652</p>
-          </li>
-        </ul>
+      <aside className={'border-l border-gray-border'}>
+        <Detail title={t`responsiblePeople`}>
+          <Detail.Item left='Vardas Pavardė' right='+370656012345' />
+        </Detail>
+
+        <Detail title={t`modems`}>
+          <Detail.Item>
+            <InputGroup label={t`field.modemNo`} className=''/>
+          </Detail.Item>
+          <Detail.Item>
+            <CheckBox label={t`alarmControl`}/>
+          </Detail.Item>
+        </Detail>
+
+        <Detail title={t`objectInfo`}>
+          <Detail.Item left={t`field.objectNo`} right={<Input {...ctrl('contract_object_no')} />} />
+          <Detail.Item left={t`field.contractNo`} right={<Input {...ctrl('contract_no')} />} />
+          <Detail.Item left={t`field.navisionId`} right={<Input {...ctrl('navision_id')} />} />
+          <Detail.Item left={t`field.providerId`} right={<Input {...ctrl('provider_id')} />} />
+        </Detail>
+
       </aside>
     </section>
   );
