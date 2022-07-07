@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, memo} from 'react';
 
 import Row from './Row';
 import Column from './Column';
@@ -7,16 +7,16 @@ import CalendarModal from './CalendarModal';
 import useBoolean from '../../hook/useBoolean';
 import useLanguage from '../../hook/useLanguage';
 
-const CalendarTimeline = ({
+const CalendarTimeline = memo(({
   title,
-  events,
-  setEvents,
+  value: events,
+  setValue: setEvents,
   actionButtonTitle,
   columnsTimeInterval,
 }) => {
   const {t} = useLanguage();
   const [isOpen, setOpen] = useBoolean();
-  const cellsRefs = new Array;
+  const cellsRefs = [];
 
   const setRef = useCallback((id) => (ref) => {
     cellsRefs.push(ref);
@@ -26,16 +26,6 @@ const CalendarTimeline = ({
     const ref = cellsRefs.find(ref => ref.id === id);
     return ref;
   }, [cellsRefs]);
-
-  const rowsTitles = [
-    t('eurocash.weekdays.monday'),
-    t('eurocash.weekdays.tuesday'),
-    t('eurocash.weekdays.wednesday'),
-    t('eurocash.weekdays.thursday'),
-    t('eurocash.weekdays.friday'),
-    t('eurocash.weekdays.saturday'),
-    t('eurocash.weekdays.sunday')
-  ];
 
   return (
     <div className={'overflow-x-auto mt-6'}>
@@ -65,7 +55,6 @@ const CalendarTimeline = ({
             interval={columnsTimeInterval}
           />
           <Row
-            rowsTitles={rowsTitles}
             value={events}
             setValue={setEvents}
             cellsRefs={cellsRefs}
@@ -76,6 +65,8 @@ const CalendarTimeline = ({
       </div>
     </div>
   );
-};
+}, (prevProps, nextProps) => JSON.stringify(prevProps?.events) === JSON.stringify(nextProps?.events) && prevProps.setValue === nextProps.setValue);
+
+CalendarTimeline.displayName = 'CalendarTimeLine';
 
 export default CalendarTimeline;

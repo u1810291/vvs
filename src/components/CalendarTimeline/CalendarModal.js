@@ -9,8 +9,9 @@ import useWeekDays from '../../hook/useWeekDays';
 import useValidation from '../../hook/useValidation';
 
 import {generate} from 'shortid';
-import {formatISO} from 'date-fns';
+
 import {constant} from 'crocks';
+import {formatISO} from 'date-fns';
 
 const CalendarModal = ({
   id,
@@ -25,8 +26,7 @@ const CalendarModal = ({
   isDeletable,
 }) => {
   const {t} = useLanguage();
-  const {getWeekDays} = useWeekDays();
-  const weekDays = getWeekDays();
+  const {weekDays} = useWeekDays();
   const {validateOnEventCreate} = useValidation();
 
   const [crews, setCrew] = useState([
@@ -36,14 +36,8 @@ const CalendarModal = ({
     {key: 'ZXCV', value: 'ZXCV'}
   ]);
 
-  const [selectedCrew, setSelectedCrew] = useState(crews[0]);
-  const [selectedWeekDay, setSelectedWeekDay] = useState(weekDays[0]);
-
-  useEffect(() => {
-    console.log(selectedCrew)
-    console.log(selectedWeekDay)
-  }, [selectedCrew, selectedWeekDay]);
-
+  const [selectedCrew, setSelectedCrew] = useState([{}]);
+  const [selectedWeekDay, setSelectedWeekDay] = useState([{}]);
 
   const [errorMessage, setErrorMessage] = useState();
 
@@ -53,6 +47,14 @@ const CalendarModal = ({
   const deleteEvent = useCallback(() => {
     setEvents(events.filter(event => event.id !== id))
   }, [events]);
+
+  useEffect(() => {
+    setSelectedCrew(eventData?.crew || crews[0])
+  }, [crews, eventData?.crew]);
+
+  useEffect(() => {
+    setSelectedWeekDay(eventData?.weekDay || weekDays[0])
+  }, [weekDays, eventData?.weekDay]);
 
   const editEvent = useCallback(() => {
     const eve = events.find(event => {
@@ -112,7 +114,7 @@ const CalendarModal = ({
       const newEvent = {
         id: generate(),
         crew: selectedCrew,
-        weekDay: selectedWeekDay.value,
+        weekDay: selectedWeekDay,
         startTime,
         endTime,
         position
@@ -131,6 +133,7 @@ const CalendarModal = ({
         <SelectBox
           label={t('eurocash.dislocationZone')}
           value={selectedCrew.value}
+          displayValue={constant(selectedCrew.key)}
           onChange={setSelectedCrew}
         >
           {crews.map(crew => (
@@ -145,6 +148,7 @@ const CalendarModal = ({
             value={selectedWeekDay.value}
             displayValue={constant(selectedWeekDay.key)}
             onChange={setSelectedWeekDay}
+            className={'mr-4'}
           >
             {weekDays.map(weekDay => (
               <SelectBox.Option key={weekDay.key} value={weekDay.value}>

@@ -8,29 +8,24 @@ import useLanguage from '../../hook/useLanguage';
 import useWeekDays from '../../hook/useWeekDays';
 
 import getTimeslots from './getTimeSlots';
-
 import {generate} from 'shortid';
-import {startOfWeek, endOfWeek,formatISO} from 'date-fns';
+import {startOfWeek, endOfWeek, formatISO} from 'date-fns';
 
-const Row = ({rowsTitles, value, setRef, setValue, getRef}) => {
+const Row = ({value, setRef, setValue, getRef}) => {
   const {t} = useLanguage();
+  const {getWeekDays} = useWeekDays();
   const {getTimeLocals} = useWeekDays();
-  const timeSlots = getTimeslots(
-    formatISO(startOfWeek(new Date(), {locale: getTimeLocals()})),
-    formatISO(endOfWeek(new Date(), {locale: getTimeLocals()})),
-    5
-  );
-  const chunkedTimeSlots = useChunk(timeSlots, 48);
+  const weekDays = getWeekDays();
 
   return (
     <div className={'flex flex-row w-full'}>
       <div className={'flex flex-col'}>
-        {rowsTitles.map(title => (
+        {weekDays.map(({key}) => (
           <div
-            key={generate()}
+            key={key}
             style={{width: 310, height: 60}}
             className={'shadow-[0_-1px_0_0_rgba(64,75,95,0.1)] font-normal text-gray-800 py-4 px-4 pr-4'}>
-            {title}
+            {key}
           </div>
         ))}
       </div>
@@ -52,7 +47,11 @@ const Row = ({rowsTitles, value, setRef, setValue, getRef}) => {
               getRef={getRef}
             />
           ))}
-          {chunkedTimeSlots.map((chunkedSlot) => (
+          {useChunk(getTimeslots(
+            formatISO(startOfWeek(new Date(), {locale: getTimeLocals()})),
+            formatISO(endOfWeek(new Date(), {locale: getTimeLocals()})),
+            5
+          ), 48).map(chunkedSlot => (
             <div
               key={generate()}
               style={{height: 60, width: 156}}
