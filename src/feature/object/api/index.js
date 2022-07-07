@@ -18,7 +18,6 @@ import {
   map,
   mapProps,
   getPath,
-
   isArray,
   getPropOr,
   isTruthy,
