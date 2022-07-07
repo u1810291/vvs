@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import Map from 'feature/map/component/Map';
 import DynamicIcon from '../component/CrewIcon';
@@ -8,12 +8,9 @@ import InputGroup from 'components/atom/input/InputGroup';
 import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
 
 import {useTranslation} from 'react-i18next';
-import useResultForm from 'hook/useResultForm';
+import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 
 import {Polygon} from '@react-google-maps/api';
-
-import {always} from 'util/func';
-import {isEmpty, not} from 'crocks';
 
 const polygonSetup = {
   strokeOpacity: 1,
@@ -33,78 +30,15 @@ const polygon = [
 
 const CrewEditLayout = () => {
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
-  const [events, setEvents] = useState([]);
   const {ctrl, result, setForm} = useResultForm({
-    name: {
-      initial: '',
-      validator: not(isEmpty),
-      props: {
-        value: ({value}) => value,
-        onChange: ({set}) => ({target: {value}}) => set(value),
-        label: always(t`field.name`),
-        type: always('text'),
-      }
-    },
-    shortName: {
-      initial: '',
-      validator: not(isEmpty),
-      props: {
-        value: ({value}) => value,
-        onChange: ({set}) => ({target: {value}}) => set(value),
-        label: always(t`field.shortName`),
-        type: always('text'),
-      }
-    },
-    deviceId: {
-      initial: '',
-      validator: not(isEmpty),
-      props: {
-        value: ({value}) => value,
-        onChange: ({set}) => ({target: {value}}) => set(value),
-        label: always(t`field.deviceId`),
-        type: always('text'),
-      }
-    },
-    assignAutomatically: {
-      initial: false,
-      validator: not(isEmpty),
-      props: {
-        value: ({value}) => value,
-        onChange: ({set}) => ({target: {value}}) => set(value),
-        label: always(t`field.assignAutomatically`),
-        type: always('text'),
-      }
-    },
-    phoneNumber: {
-      initial: '',
-      validator: not(isEmpty),
-      props: {
-        value: ({value}) => value,
-        onChange: ({set}) => ({target: {value}}) => set(value),
-        label: always(t`field.phoneNumber`),
-        type: always('text'),
-      }
-    },
-    callAfter: {
-      initial: '',
-      validator: not(isEmpty),
-      props: {
-        value: ({value}) => value,
-        onChange: ({set}) => ({target: {value}}) => set(value),
-        label: always(t`field.callAfter`),
-        type: always('text'),
-      }
-    },
-    assignWhileInBreaks: {
-      initial: false,
-      validator: not(isEmpty),
-      props: {
-        value: ({value}) => value,
-        onChange: ({set}) => ({target: {value}}) => set(value),
-        label: always(t`field.assignWhileInBreaks`),
-        type: always('text'),
-      }
-    }
+    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
+    shortName: FORM_FIELD.TEXT({label: t`field.shortName`, validator: () => true}),
+    deviceId: FORM_FIELD.TEXT({label: t`field.deviceId`, validator: () => true}),
+    phoneNumber: FORM_FIELD.TEXT({label: t`field.phoneNumber`, validator: () => true}),
+    callAfter: FORM_FIELD.TEXT({label: t`field.callAfter`, validator: () => true}),
+    assignAutomatically: FORM_FIELD.BOOL({label: t`field.assignAutomatically`, validator: () => true}),
+    assignWhileInBreaks: FORM_FIELD.BOOL({label: t`field.assignWhileInBreaks`, validator: () => true}),
+    events: FORM_FIELD.EVENTS({label: '123', validator: () => true})
   });
 
   return (
@@ -127,10 +61,8 @@ const CrewEditLayout = () => {
         <CalendarTimeline
           title={t('title.dislocationZoneSchedule')}
           actionButtonTitle={t('button.addZone')}
-
           columnsTimeInterval={4}
-          events={events}
-          setEvents={setEvents}
+          {...ctrl('events')}
         />
         <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white lg:w-52 lg:mt-4'}>
           {t('button.delete')}
