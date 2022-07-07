@@ -1,9 +1,9 @@
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {enUS, lt} from 'date-fns/locale';
 import useLanguage from './useLanguage';
 import {eachDayOfInterval, endOfWeek, format, startOfWeek} from 'date-fns';
 
-const useWeekDays = (callback, deps) => {
+const useWeekDays = (callback) => {
   const {getLanguage} = useLanguage();
   const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -12,7 +12,7 @@ const useWeekDays = (callback, deps) => {
   const getTimeLocals = useCallback(() => {
     const currentLanguage = getLanguage();
     return currentLanguage === 'lt' ? lt : enUS;
-  }, deps);
+  }, []);
 
   const getWeekDays = useCallback(locale => {
     const now = new Date();
@@ -31,7 +31,12 @@ const useWeekDays = (callback, deps) => {
     return weekDays;
     }, [getLanguage]);
 
-  return {getWeekDays, getTimeLocals};
+
+  const weekDays = useMemo(() => {
+    return getWeekDays(getTimeLocals())
+  }, [getWeekDays, getTimeLocals])
+
+  return {getWeekDays, getTimeLocals, weekDays};
 };
 
 export default useWeekDays;
