@@ -19,6 +19,8 @@ import {
 } from 'crocks';
 import useMergeReducer from './useMergeReducer';
 import {always} from 'util/func';
+import {isBoolean} from 'crocks/predicates';
+import {onCheckboxEvent} from '@s-e/frontend/callbacks/event/input';
 
 /**
  * @type FormInputProps
@@ -119,7 +121,34 @@ const FORM_FIELD = {
       ...(label ? {label: always(label)} : {}),
       ...props
     }
-  }, obj)
+  }, obj),
+  BOOL: ({
+    label,
+    fallbackValue = false,
+    props = {},
+    ...obj
+  }) => defaultProps({
+    validator: not(isEmpty),
+    initial: false,
+    props: {
+      onChange: ({set}) => onCheckboxEvent(fallbackValue, set),
+      checked: ({value}) => isBoolean(value) ? value : fallbackValue,
+      ...(label ? {label: always(label)} : {}),
+      ...props
+    }
+  }, obj),
+  EVENTS: ({
+     label,
+     fallbackValue = [],
+     ...obj
+   }) => defaultProps({
+    validator: not(isEmpty),
+    initial: [],
+    props: {
+      setValue: ({set}) => set,
+      value: ({value}) => value,
+    }
+  }, obj),
 };
 
 export {FORM_FIELD};
