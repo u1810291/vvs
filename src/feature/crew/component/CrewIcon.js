@@ -1,9 +1,9 @@
 import React from 'react';
 
 import {getProp, safe} from 'crocks';
+import {withMergedClassName} from 'util/react';
 import {isString, propEq} from 'crocks/predicates';
 import {caseMap} from '@s-e/frontend/flow-control';
-import {withMergedClassName} from '../../../util/react';
 
 const is = propEq('status');
 
