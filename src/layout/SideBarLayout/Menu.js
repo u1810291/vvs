@@ -29,10 +29,10 @@ const Menu = ({sidebarOpen, setSidebarOpen}) => {
                 <Header setSidebarOpen={setSidebarOpen} title={t('Sidebar.menu')} />
                 <List />
                 <Footer>
-                  <button className='mb-4 text-white font-normal hover:opacity-50'>
+                  <button className='mb-4 text-lilac font-normal hover:opacity-50'>
                     {t('Sidebar.myAccount')}
                   </button>
-                  <button className='mb-4 text-white font-normal hover:opacity-50'>
+                  <button className='mb-4 text-lilac font-normal hover:opacity-50'>
                     {t('Sidebar.signOut')}
                   </button>
                 </Footer>
