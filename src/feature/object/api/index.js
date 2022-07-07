@@ -40,6 +40,7 @@ const QUERY_OBJECT_BY_ID = `
       name
       navision_id
       phone
+      provider_id
     }
   }
 `;
