@@ -1,11 +1,9 @@
 import useLanguage from './useLanguage';
-import useWeekDays from './useWeekDays';
 
 import {areIntervalsOverlapping, getISODay} from 'date-fns';
 
 function useValidation() {
   const {t} = useLanguage();
-  const {getTimeLocals} = useWeekDays();
   const validateOnEventCreate = (events, newEvent, endTime, startTime, setEvents, setErrorMessage, setOpen) => {
     const createEvent = () => {
       setEvents([...events, newEvent]);
