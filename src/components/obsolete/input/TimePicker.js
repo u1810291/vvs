@@ -36,7 +36,7 @@ const TimePickerOptions = ({
     <div className={'grid grid-cols-2 gap-4 mt-1'}>
       <div className={'flex flex-col col-span-1'}>
         <select
-          className={'p-1 border border-gray-300 text-gray-600 rounded-sm focus:outline-none'}
+          className={'p-1 border border-gray-300 text-gray-600 rounded-md focus:outline-none'}
           value={selectedValue ? format(new Date(selectedValue), 'HH') : HOURS[0]}
           onChange={setHourValue}>
           {HOURS.map(hour => (
@@ -52,7 +52,7 @@ const TimePickerOptions = ({
 
       <div className={'flex flex-col col-span-1'}>
         <select
-          className={'p-1 border border-gray-300 text-gray-600 rounded-sm focus:outline-none'}
+          className={'p-1 border border-gray-300 text-gray-600 rounded-md focus:outline-none'}
           value={selectedValue ? format(new Date(selectedValue), 'mm') : MINUTES[0]}
           onChange={setMinuteValue}>
           {MINUTES.map(minute => (
