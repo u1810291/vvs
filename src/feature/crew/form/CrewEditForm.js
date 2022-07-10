@@ -11,6 +11,7 @@ import {useTranslation} from 'react-i18next';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 
 import {Polygon} from '@react-google-maps/api';
+import {useCrewZones} from '../api/crewEditApi';
 
 const polygonSetup = {
   strokeOpacity: 1,
@@ -25,11 +26,12 @@ const polygonSetup = {
 const polygon = [
   {lat: 55.95, lng: 23.3},
   {lat: 55.9, lng: 23.35},
-  {lat: 55.85, lng: 23.3},
-];
+  {lat: 55.85, lng: 23.3},];
+
 
 const CrewEditLayout = () => {
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
+
   const {ctrl, result, setForm} = useResultForm({
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     shortName: FORM_FIELD.TEXT({label: t`field.shortName`, validator: () => true}),
@@ -38,8 +40,16 @@ const CrewEditLayout = () => {
     callAfter: FORM_FIELD.TEXT({label: t`field.callAfter`, validator: () => true}),
     assignAutomatically: FORM_FIELD.BOOL({label: t`field.assignAutomatically`, validator: () => true}),
     assignWhileInBreaks: FORM_FIELD.BOOL({label: t`field.assignWhileInBreaks`, validator: () => true}),
-    events: FORM_FIELD.EVENTS({label: '123', validator: () => true})
+    events: FORM_FIELD.EVENTS({label: null, validator: () => true})
   });
+
+  const crewZones = useCrewZones(true);
+  const mappedZones = crewZones.map(zone => ({key: zone.name, value: zone.id}));
+
+  result.either(
+    console.error,
+    console.log
+  )
 
   return (
     <section className={'m-6 md:flex md:flex-row'}>
@@ -63,6 +73,7 @@ const CrewEditLayout = () => {
           actionButtonTitle={t('button.addZone')}
           columnsTimeInterval={4}
           {...ctrl('events')}
+          crewZones={mappedZones}
         />
         <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white lg:w-52 lg:mt-4'}>
           {t('button.delete')}

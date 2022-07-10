@@ -5,6 +5,7 @@ import CalendarModal from './CalendarModal';
 import useBoolean from '../../hook/useBoolean';
 
 import {format} from 'date-fns';
+import {useCrewZones} from '../../feature/crew/api/crewEditApi';
 
 const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitle, twTime, setEvents, getRef}) => {
   const [isOpen, setOpen] = useBoolean();
@@ -15,6 +16,8 @@ const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitl
     weekDay,
     id,
   }
+  const crewZones = useCrewZones(true);
+  const mappedZones = crewZones.map(zone => ({key: zone.name, value: zone.id}));
   return (
     <>
       <div
@@ -22,7 +25,7 @@ const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitl
         className={'px-1 my-1 flex flex-col absolute justify-center rounded-md text-sm bg-slate-300 opacity-70 select-none'}
         onClick={setOpen}
       >
-        <span className={`text-gray-900 truncate ${twTitle}`}>{title.value}</span>
+        <span className={`text-gray-900 truncate ${twTitle}`}>{title.key}</span>
         <div className={'flex text-ellipsis overflow-hidden'}>
           <span className={`text-gray-600 truncate ${twTime}`}>{format(startTime, 'HH:mm')}</span>
           <span className={'mx-1'}> - </span>
@@ -39,6 +42,7 @@ const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitl
         isDeletable={true}
         eventData={eventData}
         getRef={getRef}
+        crewZones={mappedZones}
       />
     </>
   );
