@@ -1,20 +1,24 @@
-import React, {useCallback, memo} from 'react';
+import React, {memo, useCallback} from 'react';
 
 import Row from './Row';
 import Column from './Column';
 import CalendarModal from './CalendarModal';
 
 import useBoolean from '../../hook/useBoolean';
-import useLanguage from '../../hook/useLanguage';
+
+import {pipe, getProp} from 'crocks';
+import {equals} from 'crocks/pointfree';
+import {and} from 'crocks/logic';
+import {constant} from 'crocks/combinators';
 
 const CalendarTimeline = memo(({
   title,
-  value: events,
-  setValue: setEvents,
+  value,
+  setValue,
   actionButtonTitle,
   columnsTimeInterval,
+  crewZones,
 }) => {
-  const {t} = useLanguage();
   const [isOpen, setOpen] = useBoolean();
   const cellsRefs = [];
 
@@ -23,40 +27,39 @@ const CalendarTimeline = memo(({
   }, [cellsRefs]);
 
   const getRef = useCallback((id) => {
-    const ref = cellsRefs.find(ref => ref.id === id);
-    return ref;
+    return cellsRefs.find(ref => ref.id === id);
   }, [cellsRefs]);
 
   return (
-    <div className={'overflow-x-auto mt-6'}>
+    <div className={'max-w-fit mt-6'}>
+      <div className={'flex justify-between items-center w-full'}>
+        <h2 className={'font-bold'}>
+          {title}
+        </h2>
+        <button
+          onClick={setOpen}
+          className={'px-10 text-gray-500 bg-gray-200 rounded-sm'}>
+          {actionButtonTitle}
+        </button>
+      </div>
       <div
-        style={{width: 1246}}
-        className={'flex-col'}>
+        className={'flex-col overflow-x-auto mt-6'}>
         <CalendarModal
           isOpen={isOpen}
           setOpen={setOpen}
-          events={events}
+          events={value}
           isNew={true}
-          setEvents={setEvents}
+          setEvents={setValue}
           getRef={getRef}
+          crewZones={crewZones}
         />
-        <div className={'flex justify-between items-center'}>
-          <h2 className={'font-bold'}>
-            {title}
-          </h2>
-          <button
-            onClick={setOpen}
-            className={'mb-4 px-10 text-gray-500 bg-gray-200 rounded-sm'}>
-            {actionButtonTitle}
-          </button>
-        </div>
-        <div className={'mt-6 shadow-[1px_1px_0_0_rgba(64,75,95,0.1)]'}>
+        <div className={'shadow-[1px_1px_0_0_rgba(64,75,95,0.1)]'} style={{width: 1246}}>
           <Column
             interval={columnsTimeInterval}
           />
           <Row
-            value={events}
-            setValue={setEvents}
+            value={value}
+            setValue={setValue}
             cellsRefs={cellsRefs}
             setRef={setRef}
             getRef={getRef}
@@ -65,7 +68,13 @@ const CalendarTimeline = memo(({
       </div>
     </div>
   );
-}, (prevProps, nextProps) => JSON.stringify(prevProps?.events) === JSON.stringify(nextProps?.events) && prevProps.setValue === nextProps.setValue);
+}, (prevProps, nextProps) =>
+  and(
+    constant(equals(pipe(getProp('value'))(prevProps), pipe(getProp('value'))(nextProps))),
+    constant(equals(pipe(getProp('crewZones'))(prevProps), pipe(getProp('crewZones'))(nextProps))),
+    'ignored'
+  )
+);
 
 CalendarTimeline.displayName = 'CalendarTimeLine';
 

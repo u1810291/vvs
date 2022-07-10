@@ -24,17 +24,11 @@ const CalendarModal = ({
   setEvents,
   eventData,
   isDeletable,
+  crewZones,
 }) => {
   const {t} = useLanguage();
   const {weekDays} = useWeekDays();
   const {validateOnEventCreate} = useValidation();
-
-  const [crews, setCrew] = useState([
-    {key: '9GRE', value: '9GRE'},
-    {key: '9ASD', value: '9ASD'},
-    {key: 'MGRE', value: 'MGRE'},
-    {key: 'ZXCV', value: 'ZXCV'}
-  ]);
 
   const [selectedCrew, setSelectedCrew] = useState([{}]);
   const [selectedWeekDay, setSelectedWeekDay] = useState([{}]);
@@ -49,8 +43,8 @@ const CalendarModal = ({
   }, [events]);
 
   useEffect(() => {
-    setSelectedCrew(eventData?.crew || crews[0])
-  }, [crews, eventData?.crew]);
+    setSelectedCrew(eventData?.crew || crewZones[0])
+  }, [crewZones, eventData?.crew]);
 
   useEffect(() => {
     setSelectedWeekDay(eventData?.weekDay || weekDays[0])
@@ -132,15 +126,17 @@ const CalendarModal = ({
       >
         <SelectBox
           label={t('eurocash.dislocationZone')}
-          value={selectedCrew.value}
-          displayValue={constant(selectedCrew.key)}
+          value={selectedCrew?.value}
+          displayValue={constant(selectedCrew?.key)}
           onChange={setSelectedCrew}
         >
-          {crews.map(crew => (
-            <SelectBox.Option key={crew.key} value={crew.value}>
-              {crew.key}
-            </SelectBox.Option>
-          ))}
+          {crewZones.map(crewZone => {
+            return (
+              <SelectBox.Option key={crewZone?.key} value={crewZone?.value}>
+                {crewZone.key}
+              </SelectBox.Option>
+            )
+          })}
         </SelectBox>
         <div className={'grid grid-cols-3 pt-4 pb-8'}>
           <SelectBox
