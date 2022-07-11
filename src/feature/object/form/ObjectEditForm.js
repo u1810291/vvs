@@ -11,12 +11,16 @@ import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {
   map,
-  getProp,
-  mapProps,
   pipe,
+  mapProps,
+  safe,
+  isObject,
 } from 'crocks';
+import {useEffect} from 'react';
 
 const ObjectEditForm = () => {
+  const {id} = useParams();
+  const {data} = useObject(id);
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
 
@@ -36,24 +40,19 @@ const ObjectEditForm = () => {
     provider_id: FORM_FIELD.TEXT({label: t`field.providerId`, validator: () => true}),
   });
 
-  const params = useParams();
-  const {query} = useObject(
-    params,
-    [
-      console.error,
-      pipe(
-        getProp('object_by_pk'),
-        map(pipe(
-          mapProps({
-            longitude: String,
-            latitude: String,
-            provider_id: String,
-            navision_id: String,
-          }),
-          setForm
-        )),
-      ),
-    ]);
+
+  useEffect(() => {pipe(
+    safe(isObject),
+    map(pipe(
+      mapProps({
+        longitude: String,
+        latitude: String,
+        provider_id: String,
+        navision_id: String,
+      }),
+      setForm,
+    )),
+  )(data)}, [data])
 
   const cities = useCity(true);
 
