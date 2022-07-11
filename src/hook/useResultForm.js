@@ -132,7 +132,7 @@ const FORM_FIELD = {
     initial: false,
     props: {
       onChange: ({set}) => onCheckboxEvent(fallbackValue, set),
-      checked: ({value}) => isBoolean(value) ? value : fallbackValue,
+      isChecked: ({value}) => isBoolean(value) ? value : fallbackValue,
       ...(label ? {label: always(label)} : {}),
       ...props
     }
