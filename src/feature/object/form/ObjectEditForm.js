@@ -18,6 +18,7 @@ import {
 
 const ObjectEditForm = () => {
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
+  const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
 
   const {ctrl, result, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
@@ -25,7 +26,10 @@ const ObjectEditForm = () => {
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     latitude: FORM_FIELD.TEXT({label: t`field.latitude`, validator: () => true}),
     longitude: FORM_FIELD.TEXT({label: t`field.longitude`, validator: () => true}),
-    city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true}),
+    city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true, props: {
+      displayValue: ({value}) => () => tc(value),
+      onChange: ({set}) => ({value}) => set(value),
+    }}),
     contract_no: FORM_FIELD.TEXT({label: t`field.contractNo`, validator: () => true}),
     contract_object_no: FORM_FIELD.TEXT({label: t`field.objectNo`, validator: () => true}),
     navision_id: FORM_FIELD.TEXT({label: t`field.navisionId`, validator: () => true}),
