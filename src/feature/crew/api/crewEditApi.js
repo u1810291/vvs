@@ -11,6 +11,23 @@ export const getCrewByIdQuery = `
   }
 `;
 
+export const createCrewQuery = `
+  query createCrew($id: ) {
+    insert_crew(objects: {abbreviation: "", dislocation_zone: "", is_assigned_automatically: "", name: "", phone_number: ""}) {
+      returning {
+        abbreviation
+        dislocation_zone
+        driver_name
+        id
+        is_assigned_automatically
+        name
+        phone_number
+        status
+      }
+    }
+  }
+`;
+
 export const useCrewZones = (isSimplified = false) => {
   const {apiQuery} = useAuth();
   const effect = useAsyncEffect(apiQuery('query { crew_zone { crew_id id name nodes } }'));
