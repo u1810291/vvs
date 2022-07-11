@@ -24,7 +24,7 @@ const CrewEditLayout = () => {
   const {Resolved} = Async;
   const params = useParams();
   const navigate = useNavigate();
-  const {t: tb} = useTranslation('crew');
+  const {t: tb} = useTranslation('crew', {keyPrefix: 'edit.header'});
 
   const query = Resolved(getCrewByIdQuery);
   const queryVariables = pipe(
@@ -68,8 +68,8 @@ const CrewEditLayout = () => {
             }
           </Breadcrumbs>
           <HeaderButtonGroup
-            saveButtonText={'eurocash.createNewTask'}
-            cancelButtonText={'eurocash.cancel'}
+            saveButtonText={tb('button.save')}
+            cancelButtonText={tb('button.cancel')}
             onSaveButton={onSaveButton}
             onCancelButton={onCancelButton}
             twSaveButton={'text-white bg-slate-600'}

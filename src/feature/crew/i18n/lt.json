@@ -19,12 +19,19 @@
     }
   },
   "edit": {
+    "header": {
+      "button": {
+        "save": "Atšaukti",
+        "cancel": "Išsaugoti"
+      }
+    },
     "title": {
       "dislocationZoneSchedule": "Dislokacijos zonų tvarkaraštis",
       "automaticAssignment": "Automatinis priskyrimas"
     },
     "field": {
       "name": "Pavadinimas",
+      "event": "Event",
       "shortName": "Trumpas pav.",
       "deviceId": "Įrenginio ID",
       "assignAutomatically": "Automatiškai priskirti",

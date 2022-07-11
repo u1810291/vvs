@@ -19,12 +19,19 @@
     }
   },
   "edit": {
+    "header": {
+      "button": {
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
     "title": {
       "dislocationZoneSchedule": "Dislocation zone schedule",
       "automaticAssignment": "Automatic assignment"
     },
     "field": {
       "name": "Name",
+      "event": "Event",
       "shortName": "Short name",
       "deviceId": "Device Id",
       "assignAutomatically": "Assign automatically",
