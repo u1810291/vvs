@@ -22,13 +22,12 @@ const CalendarModal = ({
   events,
   setEvents,
   eventData,
-  isDeletable,
   crewZones,
+  isDeletable,
 }) => {
   const {t} = useLanguage();
   const {weekDays} = useWeekDays();
   const {validateOnEventCreate} = useValidation();
-
   const [selectedCrew, setSelectedCrew] = useState([{}]);
   const [selectedWeekDay, setSelectedWeekDay] = useState([{}]);
 
@@ -129,13 +128,11 @@ const CalendarModal = ({
           displayValue={constant(selectedCrew?.key)}
           onChange={setSelectedCrew}
         >
-          {crewZones.map(crewZone => {
-            return (
-              <SelectBox.Option key={crewZone?.key} value={crewZone?.value}>
-                {crewZone?.key}
-              </SelectBox.Option>
-            )
-          })}
+          {crewZones.map(crewZone => (
+            <SelectBox.Option key={crewZone?.key} value={crewZone?.value}>
+              {crewZone?.key}
+            </SelectBox.Option>
+          ))}
         </SelectBox>
         <div className={'grid grid-cols-3 pt-4 pb-8'}>
           <SelectBox

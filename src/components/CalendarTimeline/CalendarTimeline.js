@@ -11,9 +11,9 @@ const CalendarTimeline = memo(({
   title,
   value,
   setValue,
+  crewZones,
   actionButtonTitle,
   columnsTimeInterval,
-  crewZones,
 }) => {
   const [isOpen, setOpen] = useBoolean();
   const cellsRefs = [];
@@ -59,6 +59,7 @@ const CalendarTimeline = memo(({
             cellsRefs={cellsRefs}
             setRef={setRef}
             getRef={getRef}
+            crewZones={crewZones}
           />
         </div>
       </div>

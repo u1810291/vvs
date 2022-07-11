@@ -5,9 +5,8 @@ import CalendarModal from './CalendarModal';
 import useBoolean from '../../hook/useBoolean';
 
 import {format} from 'date-fns';
-import {useCrewZones} from '../../feature/crew/api/crewEditApi';
 
-const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitle, twTime, setEvents, getRef}) => {
+const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitle, twTime, setEvents, getRef, crewZones}) => {
   const [isOpen, setOpen] = useBoolean();
   const eventData = {
     crew: title,
@@ -16,8 +15,7 @@ const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitl
     weekDay,
     id,
   }
-  const crewZones = useCrewZones(true);
-  const mappedZones = crewZones.map(zone => ({key: zone.name, value: zone.id}));
+
   return (
     <>
       <div
@@ -42,7 +40,7 @@ const Event = ({events, title, startTime, endTime, position, weekDay, id, twTitl
         isDeletable={true}
         eventData={eventData}
         getRef={getRef}
-        crewZones={mappedZones}
+        crewZones={crewZones}
       />
     </>
   );

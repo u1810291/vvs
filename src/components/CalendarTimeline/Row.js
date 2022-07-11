@@ -10,7 +10,7 @@ import getTimeslots from './getTimeSlots';
 import {generate} from 'shortid';
 import {startOfWeek, endOfWeek, formatISO} from 'date-fns';
 
-const Row = ({value, setRef, setValue, getRef}) => {
+const Row = ({value, setRef, setValue, getRef, crewZones}) => {
   const {getTimeLocals} = useWeekDays();
   const {weekDays} = useWeekDays();
 
@@ -42,6 +42,7 @@ const Row = ({value, setRef, setValue, getRef}) => {
               setEvents={setValue}
               events={value}
               getRef={getRef}
+              crewZones={crewZones}
             />
           ))}
           {useChunk(
