@@ -1,4 +1,4 @@
-const Label = props => <label className='block text-sm font-medium text-gray-700' {...props} />;
+const Label = props => <label className='block text-bluewood text-base' {...props} />;
 
 
 export default Label;
