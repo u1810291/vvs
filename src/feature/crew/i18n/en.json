@@ -4,7 +4,7 @@
   },
   "breadcrumbs": {
     "crews": "Crews",
-    "allData": "All Data"
+    "all_data": "All Data"
   },
   "list": {
     "column": {
@@ -26,21 +26,19 @@
       }
     },
     "title": {
-      "dislocationZoneSchedule": "Dislocation zone schedule",
-      "automaticAssignment": "Automatic assignment"
+      "dislocation_zone_schedule": "Dislocation zone schedule",
+      "automatic_assignment": "Automatic assignment"
     },
     "field": {
-      "name": "Name",
-      "event": "Event",
-      "shortName": "Short name",
-      "deviceId": "Device Id",
-      "assignAutomatically": "Assign automatically",
-      "phoneNumber": "Phone number",
-      "callAfter": "To call after, s.",
-      "assignWhileInBreaks": "Assign while in breaks"
+      "device_id": "Device Id",
+      "phone_number": "Phone number",
+      "abbreviation": "Abbreviation",
+      "to_call_after": "To call after, s.",
+      "is_assigned_automatically": "Assign automatically",
+      "is_assigned_while_in_breaks": "Assign while in breaks"
     },
     "button": {
-      "addZone": "Add zone",
+      "add_zone": "Add zone",
       "delete": "Delete"
     }
   }

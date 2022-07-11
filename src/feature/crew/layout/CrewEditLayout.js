@@ -1,50 +1,34 @@
 import React, {useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 
-import Header from 'components/atom/Header';
-import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import SideBarLayout from 'layout/SideBarLayout';
-import CrewEditForm from 'feature/crew/form/CrewEditForm';
+
+import Header from 'components/atom/Header';
+import Nullable from 'components/atom/Nullable';
 import HeaderButtonGroup from 'components/HeaderButtonGroup';
+import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 
-import {CrewListRoute} from '../routes';
+import {CrewListRoute} from 'feature/crew/routes';
+import {useCrew} from 'feature/crew/api/crewEditApi';
+import CrewEditForm from 'feature/crew/form/CrewEditForm';
 
-import {getCrewByIdQuery} from 'feature/crew/api/crewEditApi';
-
-import {useAuth} from 'context/auth';
-import {useTranslation} from 'react-i18next';
-import {useAsyncEffect} from 'hook/useAsync';
-
-import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-import {getProp, pipe, map, option, getPath, objOf, setProp, Async, identity} from 'crocks';
+import {getProp} from 'crocks';
 
 const CrewEditLayout = () => {
-  const {api} = useAuth();
-  const {Resolved} = Async;
   const params = useParams();
   const navigate = useNavigate();
-  const {t: tb} = useTranslation('crew', {keyPrefix: 'edit.header'});
-
-  const query = Resolved(getCrewByIdQuery);
-  const queryVariables = pipe(
-    getProp('id'),
-    map(objOf('id')),
-    maybeToAsync('"id" param is required in URL'),
-  )(params);
-
-  const a = useAsyncEffect(
-    Async.of(v => q => api(v, q))
-      .ap(queryVariables)
-      .ap(query)
-      .chain(identity),
-    console.error,
-    getProp('crew_by_pk'),
-    [queryVariables, query],
-  );
+  const {data} = useCrew(params?.id);
+  const {t} = useTranslation('crew', {keyPrefix: 'edit.header'});
 
   const onCancelButton = useCallback(() => navigate('/crew'), []);
   const onSaveButton = useCallback(() => {}, []);
+
+  const breadcrumb = (
+    getProp('abbreviation', data)
+      .alt(getProp('id', data))
+      .option(null)
+  );
 
   return (
     <SideBarLayout>
@@ -52,24 +36,15 @@ const CrewEditLayout = () => {
         <Header>
           <Breadcrumbs>
             <RouteAsBreadcrumb route={CrewListRoute} />
-            {
-              pipe(
-                getPath(['data', 'crew_by_pk', 'name']),
-                alt(getPath(['data', 'crew_by_pk', 'id'], a)),
-                map(objOf('children')),
-                map(setProp('className', 'font-semibold')),
-                map(props => (
-                  <Breadcrumbs.Item key={props.children}>
-                    <span {...props} />
-                  </Breadcrumbs.Item>
-                )),
-                option(null)
-              )(a)
-            }
+            <Nullable on={breadcrumb}>
+              <Breadcrumbs.Item>
+                <span className='font-semibold'>{breadcrumb}</span>
+              </Breadcrumbs.Item>
+            </Nullable>
           </Breadcrumbs>
           <HeaderButtonGroup
-            saveButtonText={tb('button.save')}
-            cancelButtonText={tb('button.cancel')}
+            saveButtonText={t`button.save`}
+            cancelButtonText={t`button.cancel`}
             onSaveButton={onSaveButton}
             onCancelButton={onCancelButton}
             twSaveButton={'text-white bg-slate-600'}

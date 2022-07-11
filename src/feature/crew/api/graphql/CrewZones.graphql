@@ -1,0 +1,8 @@
+query CrewZones {
+    crew_zone {
+        id
+        name
+        nodes
+        crew_id
+    }
+}

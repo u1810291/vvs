@@ -4,12 +4,11 @@
   },
   "breadcrumbs": {
     "crews": "Ekipažai",
-    "allData": "Visi duomenys"
+    "all_data": "Visi duomenys"
   },
   "list": {
     "column": {
       "id": "ID",
-      "name": "Pavadinimas",
       "status": "Būsena",
       "driver_name": "Vairuotojo vardas",
       "phone_number": "Telefono numeris",
@@ -26,21 +25,19 @@
       }
     },
     "title": {
-      "dislocationZoneSchedule": "Dislokacijos zonų tvarkaraštis",
-      "automaticAssignment": "Automatinis priskyrimas"
+      "dislocation_zone_schedule": "Dislokacijos zonų tvarkaraštis",
+      "automatic_assignment": "Automatinis priskyrimas"
     },
     "field": {
-      "name": "Pavadinimas",
-      "event": "Event",
-      "shortName": "Trumpas pav.",
-      "deviceId": "Įrenginio ID",
-      "assignAutomatically": "Automatiškai priskirti",
-      "phoneNumber": "Telefonas",
-      "callAfter": "Skambinti po, s.",
-      "assignWhileInBreaks": "Priskirti kol pertraukose"
+      "device_id": "Įrenginio ID",
+      "phone_number": "Telefonas",
+      "abbreviation": "Trumpas pav.",
+      "to_call_after": "Skambinti po, s.",
+      "is_assigned_automatically": "Automatiškai priskirti",
+      "is_assigned_while_in_breaks": "Priskirti kol pertraukose"
     },
     "button": {
-      "addZone": "Pridėti zoną",
+      "add_zone": "Pridėti zoną",
       "delete": "Archyvuoti"
     }
   }

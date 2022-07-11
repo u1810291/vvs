@@ -1,17 +1,21 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
-import Map from 'feature/map/component/Map';
-import DynamicIcon from '../component/CrewIcon';
-import Card from '../../../components/atom/Card';
+import Card from 'components/atom/Card';
 import CheckBox from 'components/atom/input/CheckBox';
 import InputGroup from 'components/atom/input/InputGroup';
 import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
 
-import {useTranslation} from 'react-i18next';
+import Map from 'feature/map/component/Map';
+import DynamicIcon from 'feature/crew/component/CrewIcon';
+import {useCrew, useCrewZones} from 'feature/crew/api/crewEditApi';
+
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 
 import {Polygon} from '@react-google-maps/api';
-import {useCrewZones} from '../api/crewEditApi';
+import {isObject, map, mapProps, pipe, safe} from 'crocks';
+
 
 const polygonSetup = {
   strokeOpacity: 1,
@@ -30,43 +34,81 @@ const polygon = [
 
 
 const CrewEditLayout = () => {
+  const {id} = useParams();
+  const {data} = useCrew(id);
+  const {mapped: crewZones} = useCrewZones();
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
-
   const {ctrl, result, setForm} = useResultForm({
+    status: FORM_FIELD.TEXT({label: null, validator: () => true}),
+    driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validation: () => true}),
+    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: () => true}),
+    phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
+    to_call_after: FORM_FIELD.TEXT({label: t`field.to_call_after`, validator: () => true}),
+    is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
+    is_assigned_while_in_breaks: FORM_FIELD.BOOL({label: t`field.is_assigned_while_in_breaks`, validator: () => true}),
     events: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
-    deviceId: FORM_FIELD.TEXT({label: t`field.deviceId`, validator: () => true}),
-    shortName: FORM_FIELD.TEXT({label: t`field.shortName`, validator: () => true}),
-    callAfter: FORM_FIELD.TEXT({label: t`field.callAfter`, validator: () => true}),
-    phoneNumber: FORM_FIELD.TEXT({label: t`field.phoneNumber`, validator: () => true}),
-    assignAutomatically: FORM_FIELD.BOOL({label: t`field.assignAutomatically`, validator: () => true}),
-    assignWhileInBreaks: FORM_FIELD.BOOL({label: t`field.assignWhileInBreaks`, validator: () => true}),
+    device_id: FORM_FIELD.TEXT({label: t`field.device_id`, validator: () => true}),
   });
 
-  const crewZones = useCrewZones(true);
-  const mappedZones = crewZones.map(zone => ({key: zone.name, value: zone.id}));
+  useEffect(() => {pipe(
+    safe(isObject),
+    map(pipe(
+      mapProps({
+        status: String,
+        driver_name: String,
+        abbreviation: String,
+        phone_number: String,
+        to_call_after: String,
+        is_assigned_automatically: Boolean,
+        is_assigned_while_in_breaks: Boolean,
+      }),
+      setForm,
+    )),
+  )(data)}, [data]);
 
   return (
     <section className={'m-6 md:flex md:flex-row'}>
       <div className={'md:w-7/12 md:mr-6 xl:w-9/12'}>
         <div className={'lg:flex 2xl:w-2/3'}>
-          <InputGroup className={'mt-6 lg:mt-0 lg:w-3/12'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('shortName')} />
-          <InputGroup className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-4/12'} twLabel={'text-bluewood text-base'} {...ctrl('deviceId')} />
+          <InputGroup
+            className={'mt-6 lg:mt-0 lg:w-3/12'}
+            isRequired={true}
+            {...ctrl('abbreviation')}
+          />
+          <InputGroup
+            className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-4/12'}
+            {...ctrl('device_id')}
+          />
         </div>
         <div className={'mt-6 2xl:w-2/3'}>
-          <h2 className={'font-bold'}>{t('title.automaticAssignment')}</h2>
+          <h2 className={'font-bold'}>
+            {t`title.automatic_assignment`}
+          </h2>
           <div className={'lg:flex'}>
-            <CheckBox className={'px-0 mt-6 lg:mr-6 lg:mt-4 lg:flex lg:items-end lg:w-5/12'} twLabel={'text-bluewood text-base'} {...ctrl('assignAutomatically')} />
-            <InputGroup className={'mt-6 lg:mr-6 lg:mt-4 lg:w-4/12'} twLabel={'text-bluewood text-base'} {...ctrl('phoneNumber')} />
-            <InputGroup className={'mt-6 lg:mt-4 lg:w-3/12'} twLabel={'text-bluewood text-base'} {...ctrl('callAfter')} />
+            <CheckBox
+              className={'px-0 mt-6 lg:mr-6 lg:mt-4 lg:flex lg:items-end lg:w-5/12'}
+              {...ctrl('is_assigned_automatically')}
+            />
+            <InputGroup
+              className={'mt-6 lg:mr-6 lg:mt-4 lg:w-4/12'}
+              {...ctrl('phone_number')}
+            />
+            <InputGroup
+              className={'mt-6 lg:mt-4 lg:w-3/12'}
+              {...ctrl('to_call_after')}
+            />
           </div>
-          <CheckBox className={'px-0 mt-6 lg:mt-4 lg:items-end'} twLabel={'text-bluewood text-base'} {...ctrl('assignWhileInBreaks')} />
+          <CheckBox
+            className={'px-0 mt-6 lg:mt-4 lg:items-end'}
+            {...ctrl('is_assigned_while_in_breaks')}
+          />
         </div>
         <CalendarTimeline
-          title={t('title.dislocationZoneSchedule')}
-          actionButtonTitle={t('button.addZone')}
+          title={t('title.dislocation_zone_schedule')}
+          actionButtonTitle={t('button.add_zone')}
           columnsTimeInterval={4}
+          crewZones={crewZones}
           {...ctrl('events')}
-          crewZones={mappedZones}
         />
         <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white lg:w-52 lg:mt-4'}>
           {t('button.delete')}
@@ -75,10 +117,18 @@ const CrewEditLayout = () => {
       <div className={'mt-6 flex flex-col w-full h-full aspect-square md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:-mt-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
         <Card.Sm className={'shadow-none'}>
           <div className='flex flex-row items-center w-full'>
-            <DynamicIcon className={'mr-4'} name={'9'} status={'READY'} />
+            <DynamicIcon
+              className={'mr-4'}
+              status={ctrl('status').value}
+              name={ctrl('abbreviation').value}
+            />
             <div className={'flex flex-col'}>
-              <p className='text-bluewood'>9 GRE</p>
-              <p className='text-regent'>Virginijus Siaurukas</p>
+              <p className='text-bluewood'>
+                {ctrl('abbreviation').value}
+              </p>
+              <p className='text-regent'>
+                {ctrl('driver_name').value}
+              </p>
             </div>
           </div>
         </Card.Sm>

@@ -1,43 +1,36 @@
-import {useAuth} from '../../../context/auth';
-import {useAsyncEffect} from '../../../hook/useAsync';
-import {getPath, isArray, isTruthy, pipe, safe} from 'crocks';
+import raw from 'raw.macro';
 
-export const getCrewByIdQuery = `
-  query getCrewById ($id: uuid!) {
-    crew_by_pk(id: $id) {
-      id
-      name
-    }
+import {useAuth} from 'context/auth';
+import useAsyncSwr from 'hook/useAsyncSwr';
+
+import {either} from 'crocks/pointfree';
+import {getProp, maybeToAsync, pipe, chain, safe, isEmpty, not, map} from 'crocks';
+
+export const useCrew = (id) => {
+  const {api} = useAuth();
+  const getSwr = useAsyncSwr([raw('./graphql/CrewById.graphql'), {id}], (query, params) => (
+    api(params, query).chain(maybeToAsync('crew_by_pk prop was expected', getProp('crew_by_pk')))
+  ));
+
+  return {
+    ...getSwr
   }
-`;
+};
 
-export const createCrewQuery = `
-  query createCrew($id: ) {
-    insert_crew(objects: {abbreviation: "", dislocation_zone: "", is_assigned_automatically: "", name: "", phone_number: ""}) {
-      returning {
-        abbreviation
-        dislocation_zone
-        driver_name
-        id
-        is_assigned_automatically
-        name
-        phone_number
-        status
-      }
-    }
+export const useCrewZones = () => {
+  const {api} = useAuth();
+  const getSwr = useAsyncSwr([raw('./graphql/CrewZones.graphql'), null], (query, params) => (
+    api(params, query).chain(maybeToAsync('crew_zone prop was expected', getProp('crew_zone')))
+  ));
+  const mapped = pipe(
+    getProp('data'),
+    chain(safe(not(isEmpty))),
+    map(map(a => ({key: a.name, value: a.id}))),
+    either(() => [], e => e)
+  )(getSwr);
+
+  return {
+    ...getSwr,
+    mapped
   }
-`;
-
-export const useCrewZones = (isSimplified = false) => {
-  const {apiQuery} = useAuth();
-  const effect = useAsyncEffect(apiQuery('query { crew_zone { crew_id id name nodes } }'));
-
-  if (isSimplified) return (
-    getPath(['data', 'crew_zone'], effect)
-      .chain(safe(isArray))
-      .map(pipe((e) => e, arr => arr.filter(isTruthy)))
-      .option([])
-  )
-
-  return effect;
 };
