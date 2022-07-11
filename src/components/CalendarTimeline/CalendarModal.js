@@ -9,7 +9,6 @@ import useWeekDays from '../../hook/useWeekDays';
 import useValidation from '../../hook/useValidation';
 
 import {generate} from 'shortid';
-
 import {constant} from 'crocks';
 import {formatISO} from 'date-fns';
 
@@ -133,7 +132,7 @@ const CalendarModal = ({
           {crewZones.map(crewZone => {
             return (
               <SelectBox.Option key={crewZone?.key} value={crewZone?.value}>
-                {crewZone.key}
+                {crewZone?.key}
               </SelectBox.Option>
             )
           })}
@@ -141,14 +140,14 @@ const CalendarModal = ({
         <div className={'grid grid-cols-3 pt-4 pb-8'}>
           <SelectBox
             label={t('eurocash.day')}
-            value={selectedWeekDay.value}
-            displayValue={constant(selectedWeekDay.key)}
+            value={selectedWeekDay?.value}
+            displayValue={constant(selectedWeekDay?.key)}
             onChange={setSelectedWeekDay}
             className={'mr-4'}
           >
             {weekDays.map(weekDay => (
-              <SelectBox.Option key={weekDay.key} value={weekDay.value}>
-                {weekDay.key}
+              <SelectBox.Option key={weekDay?.key} value={weekDay?.value}>
+                {weekDay?.key}
               </SelectBox.Option>
             ))}
           </SelectBox>
