@@ -465,8 +465,10 @@ type crew {
     driver_name: String
     id: uuid!
     is_assigned_automatically: String
+    is_assigned_while_in_breaks: String
     phone_number: String
     status: event_status_enum
+    to_call_after: String
     "An array relationship"
     zone(
         "distinct select on columns"
@@ -569,7 +571,9 @@ type crew_max_fields {
     driver_name: String
     id: uuid
     is_assigned_automatically: String
+    is_assigned_while_in_breaks: String
     phone_number: String
+    to_call_after: String
 }
 
 "aggregate min on columns"
@@ -578,7 +582,9 @@ type crew_min_fields {
     driver_name: String
     id: uuid
     is_assigned_automatically: String
+    is_assigned_while_in_breaks: String
     phone_number: String
+    to_call_after: String
 }
 
 "response of any mutation on the table \"crew\""
@@ -5995,9 +6001,13 @@ enum crew_select_column {
     "column name"
     is_assigned_automatically
     "column name"
+    is_assigned_while_in_breaks
+    "column name"
     phone_number
     "column name"
     status
+    "column name"
+    to_call_after
 }
 
 "update columns of table \"crew\""
@@ -6011,9 +6021,13 @@ enum crew_update_column {
     "column name"
     is_assigned_automatically
     "column name"
+    is_assigned_while_in_breaks
+    "column name"
     phone_number
     "column name"
     status
+    "column name"
+    to_call_after
 }
 
 "unique or primary key constraints on table \"crew_zone\""
@@ -8430,8 +8444,10 @@ input crew_bool_exp {
     driver_name: String_comparison_exp
     id: uuid_comparison_exp
     is_assigned_automatically: String_comparison_exp
+    is_assigned_while_in_breaks: String_comparison_exp
     phone_number: String_comparison_exp
     status: event_status_enum_comparison_exp
+    to_call_after: String_comparison_exp
     zone: crew_zone_bool_exp
 }
 
@@ -8500,8 +8516,10 @@ input crew_insert_input {
     driver_name: String
     id: uuid
     is_assigned_automatically: String
+    is_assigned_while_in_breaks: String
     phone_number: String
     status: event_status_enum
+    to_call_after: String
     zone: crew_zone_arr_rel_insert_input
 }
 
@@ -8525,8 +8543,10 @@ input crew_order_by {
     driver_name: order_by
     id: order_by
     is_assigned_automatically: order_by
+    is_assigned_while_in_breaks: order_by
     phone_number: order_by
     status: order_by
+    to_call_after: order_by
     zone_aggregate: crew_zone_aggregate_order_by
 }
 
@@ -8541,8 +8561,10 @@ input crew_set_input {
     driver_name: String
     id: uuid
     is_assigned_automatically: String
+    is_assigned_while_in_breaks: String
     phone_number: String
     status: event_status_enum
+    to_call_after: String
 }
 
 "order by aggregate values of table \"crew_zone\""
