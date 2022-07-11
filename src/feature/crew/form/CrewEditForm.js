@@ -33,30 +33,23 @@ const CrewEditLayout = () => {
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
 
   const {ctrl, result, setForm} = useResultForm({
-    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
-    shortName: FORM_FIELD.TEXT({label: t`field.shortName`, validator: () => true}),
+    events: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
     deviceId: FORM_FIELD.TEXT({label: t`field.deviceId`, validator: () => true}),
-    phoneNumber: FORM_FIELD.TEXT({label: t`field.phoneNumber`, validator: () => true}),
+    shortName: FORM_FIELD.TEXT({label: t`field.shortName`, validator: () => true}),
     callAfter: FORM_FIELD.TEXT({label: t`field.callAfter`, validator: () => true}),
+    phoneNumber: FORM_FIELD.TEXT({label: t`field.phoneNumber`, validator: () => true}),
     assignAutomatically: FORM_FIELD.BOOL({label: t`field.assignAutomatically`, validator: () => true}),
     assignWhileInBreaks: FORM_FIELD.BOOL({label: t`field.assignWhileInBreaks`, validator: () => true}),
-    events: FORM_FIELD.EVENTS({label: null, validator: () => true})
   });
 
   const crewZones = useCrewZones(true);
   const mappedZones = crewZones.map(zone => ({key: zone.name, value: zone.id}));
 
-  result.either(
-    console.error,
-    console.log
-  )
-
   return (
     <section className={'m-6 md:flex md:flex-row'}>
       <div className={'md:w-7/12 md:mr-6 xl:w-9/12'}>
         <div className={'lg:flex 2xl:w-2/3'}>
-          <InputGroup className={'lg:w-5/12 lg:mt-0'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('name')} />
-          <InputGroup className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-3/12'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('shortName')} />
+          <InputGroup className={'mt-6 lg:mt-0 lg:w-3/12'} isRequired={true} twLabel={'text-bluewood text-base'} {...ctrl('shortName')} />
           <InputGroup className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-4/12'} twLabel={'text-bluewood text-base'} {...ctrl('deviceId')} />
         </div>
         <div className={'mt-6 2xl:w-2/3'}>
