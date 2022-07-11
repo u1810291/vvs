@@ -40,7 +40,6 @@ const ObjectEditForm = () => {
     provider_id: FORM_FIELD.TEXT({label: t`field.providerId`, validator: () => true}),
   });
 
-
   useEffect(() => {pipe(
     safe(isObject),
     map(pipe(
