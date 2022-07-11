@@ -6,9 +6,12 @@ import {
   ifElse,
   isString,
   branch,
-  merge
+  merge,
+  getPath,
 } from 'crocks';
 import {mapProps} from 'crocks/helpers';
+import {isTrue} from 'crocks/predicates';
+import {equals} from 'crocks/pointfree';
 import React, {Suspense} from 'react';
 import {Route} from 'react-router-dom';
 
@@ -118,3 +121,12 @@ export const getRoute = curry((
 export const getExactHiddenRoute = getRoute(true, true);
 export const getHiddenRoute = getRoute(false, true);
 export const getExactRoute = getRoute(true, false);
+
+export const compareMemo = (...paths) => (prevProps, nextProps) => (
+  paths
+    .map(path => equals(
+      getPath(path, prevProps),
+      getPath(path, nextProps)
+    ))
+    .every(isTrue)
+)
