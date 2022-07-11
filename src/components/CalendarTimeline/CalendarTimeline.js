@@ -5,11 +5,7 @@ import Column from './Column';
 import CalendarModal from './CalendarModal';
 
 import useBoolean from '../../hook/useBoolean';
-
-import {pipe, getProp} from 'crocks';
-import {equals} from 'crocks/pointfree';
-import {and} from 'crocks/logic';
-import {constant} from 'crocks/combinators';
+import {compareMemo} from '../../util/react';
 
 const CalendarTimeline = memo(({
   title,
@@ -68,13 +64,7 @@ const CalendarTimeline = memo(({
       </div>
     </div>
   );
-}, (prevProps, nextProps) =>
-  and(
-    constant(equals(pipe(getProp('value'))(prevProps), pipe(getProp('value'))(nextProps))),
-    constant(equals(pipe(getProp('crewZones'))(prevProps), pipe(getProp('crewZones'))(nextProps))),
-    'ignored'
-  )
-);
+}, compareMemo(['value'], ['crewZones']));
 
 CalendarTimeline.displayName = 'CalendarTimeLine';
 
