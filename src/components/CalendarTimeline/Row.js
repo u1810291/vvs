@@ -30,13 +30,12 @@ const Row = ({value, setRef, setValue, getRef, crewZones}) => {
         <div
           style={{width: 936}}
           className={'flex flex-row w-full flex-wrap'}>
-          {value && value.map(({crew, startTime, endTime, position, weekDay, id}) => (
+          {value && value.map(({crew, startTime, endTime, weekDay, id}) => (
             <Event
               key={generate()}
               title={crew}
               startTime={startTime}
               endTime={endTime}
-              position={position}
               weekDay={weekDay}
               id={id}
               setEvents={setValue}

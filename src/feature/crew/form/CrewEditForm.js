@@ -16,7 +16,6 @@ import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {Polygon} from '@react-google-maps/api';
 import {isObject, map, mapProps, pipe, safe} from 'crocks';
 
-
 const polygonSetup = {
   strokeOpacity: 1,
   strokeWeight: 0.8,
@@ -31,7 +30,6 @@ const polygon = [
   {lat: 55.95, lng: 23.3},
   {lat: 55.9, lng: 23.35},
   {lat: 55.85, lng: 23.3},];
-
 
 const CrewEditLayout = () => {
   const {id} = useParams();

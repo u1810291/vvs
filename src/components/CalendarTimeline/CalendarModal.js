@@ -59,22 +59,12 @@ const CalendarModal = ({
         const startTime = new Date(weekDay.split('T')[0] + 'T' + timeFrom.split('T')[1]);
         const endTime = new Date(weekDay.split('T')[0] + 'T' + timeTo.split('T')[1]);
 
-        const startTimeRef = getRef(String(startTime));
-        const endTimeRef = getRef(String(endTime));
-
-        const position = {
-          top: startTimeRef.offsetTop,
-          left: startTimeRef.offsetLeft,
-          width: endTimeRef.offsetLeft - startTimeRef.offsetLeft,
-        };
-
         const editedEvent = {
           id: id,
           crew: selectedCrew,
           weekDay: selectedWeekDay,
           startTime,
           endTime,
-          position
         };
 
         const evs = events.filter(event => event.id !== id);
@@ -94,14 +84,7 @@ const CalendarModal = ({
       const startTime = new Date(weekDay.split('T')[0] + 'T' + timeFrom.split('T')[1]);
       const endTime = new Date(weekDay.split('T')[0] + 'T' + timeTo.split('T')[1]);
 
-      const startTimeRef = getRef(String(startTime));
-      const endTimeRef = getRef(String(endTime));
-
-      const position = {
-        top: startTimeRef.offsetTop,
-        left: startTimeRef.offsetLeft,
-        width: endTimeRef.offsetLeft - startTimeRef.offsetLeft,
-      };
+      console.log(getRef(String(endTime))?.offsetLeft)
 
       const newEvent = {
         id: generate(),
@@ -109,7 +92,6 @@ const CalendarModal = ({
         weekDay: selectedWeekDay,
         startTime,
         endTime,
-        position
       };
 
       validateOnEventCreate(events, newEvent, endTime, startTime, setEvents, setErrorMessage, setOpen);

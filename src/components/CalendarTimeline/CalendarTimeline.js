@@ -18,7 +18,7 @@ const CalendarTimeline = memo(({
   const [isOpen, setOpen] = useBoolean();
   const cellsRefs = [];
 
-  const setRef = useCallback((id) => (ref) => {
+  const setRef = useCallback(() => (ref) => {
     cellsRefs.push(ref);
   }, [cellsRefs]);
 
