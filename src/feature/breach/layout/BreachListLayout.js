@@ -56,7 +56,11 @@ const BreachListLayout = withPreparedProps(Listing, props => {
       `
         query {
           breach {
-
+            id
+            crew_id
+            driver_id
+            end_time
+            start_time
           }
         }
       `
@@ -83,10 +87,10 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     // TODO: Adjust column names regarding response data
     tableColumns: [
       c('id', ne, identity),
-      c('date_from', ne, identity),
-      c('time_for_outside_the_zone', ne, identity),
-      c('crew_name', ne, identity),
-      c('driver_name', ne, identity),
+      c('start_time', ne, identity),
+      c('time_outside_the_zone', ne, identity),
+      c('crew_id', ne, identity),
+      c('driver_id', ne, identity),
     ],
   }
 });
