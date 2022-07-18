@@ -10,7 +10,7 @@
     "column": {
       "id": "ID",
       "date_from": "Data nuo",
-      "time_for_outside_the_zone": "Laikas  už zonos ribų",
+      "time_outside_the_zone": "Laikas  už zonos ribų",
       "crew_name": "Ekipažas",
       "driver_name": "Vairuotojas"
     }

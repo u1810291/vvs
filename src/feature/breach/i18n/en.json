@@ -9,8 +9,8 @@
   "list": {
     "column": {
       "id": "ID",
-      "date_from": "Full name",
-      "time_for_outside_the_zone": "Time for outside the zone",
+      "date_from": "Start time",
+      "time_outside_the_zone": "Time for outside the zone",
       "crew_name": "Crew",
       "driver_name": "Driver"
     }
