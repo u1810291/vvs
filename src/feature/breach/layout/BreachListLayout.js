@@ -9,6 +9,8 @@ import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../../context/auth';
 import useAsync from '../../../hook/useAsync';
 
+import {format, intervalToDuration, formatDuration} from 'date-fns';
+
 import {
   chain,
   curry,
@@ -22,8 +24,10 @@ import {
   not,
   objOf,
   pipe,
-  safe
+  safe,
+  hasProps
 } from 'crocks';
+import {pick} from 'crocks/helpers';
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
@@ -43,6 +47,21 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
   )(item),
 }));
 
+const getColumns = curry((t, Component, key, pred, mapper, headerText) => ({
+  Component,
+  headerText: t(headerText),
+  key,
+  itemToProps: item => pipe(
+    safe(hasProps(key)),
+    chain(safe(pred)),
+    map(pick(key)),
+    map(mapper),
+    map(objOf('children')),
+    map(a => ({...item, ...a})),
+    alt(Maybe.Just(item)),
+  )(item)
+}));
+
 const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
@@ -50,7 +69,6 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
-  // TODO: Prepare 'Breach' data in Hasura to be fetched
   const [state, fork] = useAsync(chain(maybeToAsync('"breach" prop is expected in the response', getProp('breach')),
     apiQuery(
       `
@@ -73,6 +91,12 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     </Link>
   )), [t]);
 
+  const cs = useMemo(() => getColumns(t, props => (
+    <Link to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
+      {props?.children}
+    </Link>
+  )), [t]);
+
   useEffect(() => fork(), []);
 
   return {
@@ -84,11 +108,15 @@ const BreachListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
-    // TODO: Adjust column names regarding response data
     tableColumns: [
       c('id', ne, identity),
-      c('start_time', ne, identity),
-      c('time_outside_the_zone', ne, identity),
+      c('start_time', ne, (date) => format(new Date(date), 'Y-MM-d HH:mm')),
+      cs(
+        ['start_time', 'end_time'],
+        ne,
+        ({start_time, end_time}) => formatDuration(intervalToDuration({start: new Date(start_time), end: new Date(end_time)})),
+        'time_outside_the_zone'
+      ),
       c('crew_id', ne, identity),
       c('driver_id', ne, identity),
     ],
