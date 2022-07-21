@@ -8,7 +8,7 @@ import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
 import {renderWithProps} from '../../util/react';
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   and,
   filter,
@@ -23,6 +23,8 @@ import {
   safe,
   constant,
 } from 'crocks';
+import Nullable from 'components/atom/Nullable';
+import FilterGroup from '../../components/FilterGroup';
 
 /**
  * @type TableColumnComponent
@@ -42,6 +44,7 @@ import {
 const Listing = ({
   list = [],
   rowKeyLens,
+  filterables,
   tableColumns,
   breadcrumbs,
 }) => {
@@ -49,6 +52,10 @@ const Listing = ({
   const [query, setQuery] = useState('');
 
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
+
+  useEffect(() => {
+    // console.log(filterables);
+  }, [])
 
   const filterItems = useMemo(() => pipe(
     safe(isArray),
@@ -64,6 +71,20 @@ const Listing = ({
     ))),
     option(null)
   )(tableColumns), [tableColumns]);
+
+   const filters = useMemo(() => pipe(
+    safe(and(isArray, every(hasProps(['key', 'headerText'])))),
+    map(map(pipe(
+      map(a => ({
+        uid: a.key,
+        key: a.key,
+        children: a.headerText,
+      })),
+      map(renderWithProps(FilterGroup.Text)),
+      option(null),
+    ))),
+    option([])
+  )(filterables), [filterables]);
 
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
@@ -115,10 +136,18 @@ const Listing = ({
           <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
         </div>
       </TitleBar>
+      <Nullable on={filterables}>
+        <div className='filters'>
+          {filters}
+          {/* <FilterGroup.Text onValues={setColumns}>
+          </FilterGroup.Text> */}
+        </div>
+      </Nullable>
       <Filter onValues={setColumns}>{filterItems}</Filter>
       <Table>
         <Table.Head>
-          <Table.Tr>{headerColumns}
+          <Table.Tr>
+            {headerColumns}
           </Table.Tr>
         </Table.Head>
         <Table.Body>{rows}</Table.Body>

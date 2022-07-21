@@ -41,6 +41,20 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
   )(item),
 }));
 
+const getFilterText = curry((t, Component, key, pred, mapper) => ({
+  Component,
+  headerText: t(key),
+  key,
+  itemToProps: item => pipe(
+    getProp(key),
+    chain(safe(pred)),
+    map(mapper),
+    map(objOf('children')),
+    map(a => ({...item, ...a})),
+    alt(Maybe.Just(item)),
+  )(item),
+}));
+
 const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
@@ -78,6 +92,10 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     </Link>
   )), [t]);
 
+  const ft = useMemo(() => getFilterText(t, props => (
+    <div>{props?.id}</div>
+  )), [t]);
+
   useEffect(() => { fork() }, []);
 
   return {
@@ -89,6 +107,9 @@ const ObjectList = withPreparedProps(Listing, (props) => {
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
+    filterables: [
+      ft('name', ne),
+    ],
     tableColumns: [
       c('id', ne, identity),
       c('name', ne, identity),
@@ -102,7 +123,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       c('provider_name', ne, titleCase),
       c('provider_id', isFinite, identity),
       c('navision_id',and(not(isEmpty), isFinite) , identity),
-      c('is_atm', ne, bool => bool ? t('bool.yes') : t('bool.yes')),
+      c('is_atm', ne, bool => bool ? t('bool.yes') : t('bool.no')),
     ],
   }
 });
