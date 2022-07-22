@@ -3,7 +3,7 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 import useAsync from 'hook/useAsync';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useAuth} from 'context/auth';
-import {useEffect, useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import withPreparedProps from 'hoc/withPreparedProps';
 import {
@@ -26,6 +26,9 @@ import Breadcrumbs from 'components/Breadcrumbs';
 import {generatePath, Link} from 'react-router-dom';
 import {ObjectEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
+import InputGroup from 'components/atom/input/InputGroup';
+import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
+// import {asciifyLT} from '@s-e/frontend/transformer/string';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -59,14 +62,16 @@ const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
 const ObjectList = withPreparedProps(Listing, (props) => {
-  const {apiQuery} = useAuth();
+  const [name, setName] = useState('%%');
+
+  const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
-    apiQuery(
+    api({name}, 
       `
-        query {
-          object {
+        query Objects($name: String) {
+          object(where: {name: {_ilike: $name}}) {
             address
             city
             contract_no
@@ -82,9 +87,13 @@ const ObjectList = withPreparedProps(Listing, (props) => {
             navision_id
           }
         }
-      `
-    ))
-  );
+      `)
+  ));
+
+  const setNameFilter = v => {
+    // let q = asciifyLT(v.replace(/\W+/gm, ''));
+    setName(`%${v}%`);
+  }
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(ObjectEditRoute.props.path, {id: props?.id})}>
@@ -96,7 +105,10 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     <div>{props?.id}</div>
   )), [t]);
 
-  useEffect(() => { fork() }, []);
+  useEffect(() => { 
+    console.log('name query: ', name);
+    fork() 
+  }, [name]);
 
   return {
     list: safe(isArray, state.data).option([]),
@@ -107,9 +119,15 @@ const ObjectList = withPreparedProps(Listing, (props) => {
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
-    filterables: [
-      ft('name', ne),
-    ],
+    filters: (
+      <InputGroup
+        inputwrapperClassName='relative'
+        inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+        
+        label='Filter name'
+        onChange={onInputEventOrEmpty(setNameFilter)}
+      />
+    ),
     tableColumns: [
       c('id', ne, identity),
       c('name', ne, identity),

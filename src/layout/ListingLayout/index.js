@@ -8,7 +8,7 @@ import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
 import {renderWithProps} from '../../util/react';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {
   and,
   filter,
@@ -24,7 +24,6 @@ import {
   constant,
 } from 'crocks';
 import Nullable from 'components/atom/Nullable';
-import FilterGroup from '../../components/FilterGroup';
 
 /**
  * @type TableColumnComponent
@@ -44,7 +43,7 @@ import FilterGroup from '../../components/FilterGroup';
 const Listing = ({
   list = [],
   rowKeyLens,
-  filterables,
+  filters,
   tableColumns,
   breadcrumbs,
 }) => {
@@ -53,11 +52,9 @@ const Listing = ({
 
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
 
-  useEffect(() => {
-    // console.log(filterables);
-  }, [])
+  
 
-  const filterItems = useMemo(() => pipe(
+  const pickedColumns = useMemo(() => pipe(
     safe(isArray),
     map(map(pipe(
       safe(hasProps(['headerText', 'key'])),
@@ -72,19 +69,19 @@ const Listing = ({
     option(null)
   )(tableColumns), [tableColumns]);
 
-   const filters = useMemo(() => pipe(
-    safe(and(isArray, every(hasProps(['key', 'headerText'])))),
-    map(map(pipe(
-      map(a => ({
-        uid: a.key,
-        key: a.key,
-        children: a.headerText,
-      })),
-      map(renderWithProps(FilterGroup.Text)),
-      option(null),
-    ))),
-    option([])
-  )(filterables), [filterables]);
+  //  const filterItems = useMemo(() => pipe(
+  //   safe(and(isArray, every(hasProps(['key', 'headerText'])))),
+  //   map(map(pipe(
+  //     map(a => ({
+  //       uid: a.key,
+  //       key: a.key,
+  //       children: a.headerText,
+  //     })),
+  //     map(renderWithProps(identity)),
+  //     option(null),
+  //   ))),
+  //   option([])
+  // )(filters), [filters]);
 
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
@@ -136,14 +133,12 @@ const Listing = ({
           <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
         </div>
       </TitleBar>
-      <Nullable on={filterables}>
-        <div className='filters'>
+      <Nullable on={filters}>
+        <div className='w-40 my-10'>
           {filters}
-          {/* <FilterGroup.Text onValues={setColumns}>
-          </FilterGroup.Text> */}
         </div>
       </Nullable>
-      <Filter onValues={setColumns}>{filterItems}</Filter>
+      <Filter onValues={setColumns}>{pickedColumns}</Filter>
       <Table>
         <Table.Head>
           <Table.Tr>
