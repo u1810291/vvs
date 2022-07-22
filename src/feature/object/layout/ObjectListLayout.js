@@ -29,6 +29,8 @@ import {alt} from 'crocks/pointfree';
 import InputGroup from 'components/atom/input/InputGroup';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
+import {useCity} from '../api';
+import SelectBox from 'components/atom/input/SelectBox';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -62,16 +64,20 @@ const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
 const ObjectList = withPreparedProps(Listing, (props) => {
+
+  // filter fields
   const [name, setName] = useState('%%');
+  const [address, setAddress] = useState('%%');
+  const [cities, setCities] = useState(['KAUNAS']);
 
   const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
-    api({name}, 
+    api({name, address, cities}, 
       `
-        query Objects($name: String) {
-          object(where: {name: {_ilike: $name}}) {
+        query Objects($name: String, $address: String, $cities: [city_enum]) {
+          object(where: {_and: [{name: {_ilike: $name}}, {address: {_ilike: $address}} {city: {_in: $cities}}]}) {
             address
             city
             contract_no
@@ -90,9 +96,16 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       `)
   ));
 
+  // api calls for filter
+  const citiesDb = useCity(true);
+
   const setNameFilter = v => {
     // let q = asciifyLT(v.replace(/\W+/gm, ''));
     setName(`%${v}%`);
+  }
+
+  const setCitiesFilter = () => {
+
   }
 
   const c = useMemo(() => getColumn(t, props => (
@@ -101,14 +114,25 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     </Link>
   )), [t]);
 
-  const ft = useMemo(() => getFilterText(t, props => (
-    <div>{props?.id}</div>
-  )), [t]);
+  // const ft = useMemo(() => getFilterText(t, props => (
+  //   <div>{props?.id}</div>
+  // )), [t]);
+
+
+  useEffect(() => {
+    // setCities(citiesDb);
+    console.log('cities from api', citiesDb);
+    // setCities(citiesDb);
+  }, [citiesDb])
 
   useEffect(() => { 
     console.log('name query: ', name);
+    console.log('cities query', cities);
+
     fork() 
-  }, [name]);
+  }, [name, cities]);
+
+
 
   return {
     list: safe(isArray, state.data).option([]),
@@ -120,13 +144,26 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       </Breadcrumbs>
     ),
     filters: (
-      <InputGroup
-        inputwrapperClassName='relative'
-        inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
-        
-        label='Filter name'
-        onChange={onInputEventOrEmpty(setNameFilter)}
-      />
+      <>
+        <InputGroup
+          inputwrapperClassName='relative'
+          inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+          
+          label='Filter name'
+          onChange={onInputEventOrEmpty(setNameFilter)}
+        />
+
+        <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={onInputEventOrEmpty(setCitiesFilter)}>
+          {map(
+            value => (
+              <SelectBox.Option key={value} value={value}>
+                {value}
+              </SelectBox.Option>
+            ),
+            citiesDb
+          )}
+        </SelectBox>
+      </>
     ),
     tableColumns: [
       c('id', ne, identity),
