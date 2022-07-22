@@ -128,7 +128,7 @@ const Listing = ({
 }
 
 const TitleBar = props => (
-  <header className='flex w-full justify-between p-6'>
+  <header className='flex w-full justify-between p-5 h-20'>
     {props?.children}
   </header>
 );
