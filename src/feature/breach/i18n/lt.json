@@ -3,16 +3,22 @@
     "list": "Pažeidimai"
   },
   "breadcrumbs": {
-    "breaches": "Pažeidimai",
+    "breach": "Pažeidimai",
     "allData": "Visi duomenys"
   },
   "list": {
     "column": {
       "id": "ID",
-      "date_from": "Data nuo",
+      "start_time": "Data nuo",
       "time_outside_the_zone": "Laikas  už zonos ribų",
       "crew_name": "Ekipažas",
       "driver_name": "Vairuotojas"
+    }
+  },
+  "edit": {
+    "field": {
+      "received_at": "Gauta",
+      "time_outside_the_zone": "Laikas už zonos"
     }
   }
 }

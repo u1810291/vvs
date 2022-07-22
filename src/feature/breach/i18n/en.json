@@ -3,16 +3,22 @@
     "list": "Breaches"
   },
   "breadcrumbs": {
-    "breaches": "Breaches",
+    "breach": "Breaches",
     "allData": "All Data"
   },
   "list": {
     "column": {
       "id": "ID",
-      "date_from": "Date from",
+      "start_time": "Date from",
       "time_outside_the_zone": "Time for outside the zone",
       "crew_name": "Crew",
       "driver_name": "Driver"
+    }
+  },
+  "edit": {
+    "field": {
+      "received_at": "Received at",
+      "time_outside_the_zone": "Time for outside the zone"
     }
   }
 }
