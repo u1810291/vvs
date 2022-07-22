@@ -31,6 +31,7 @@ import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {useCity} from '../api';
 import SelectBox from 'components/atom/input/SelectBox';
+// import useDebounce from 'hook/useDebounce';
 
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
@@ -67,18 +68,20 @@ const Span = props => <span {...props}/>;
 const ObjectList = withPreparedProps(Listing, (props) => {
 
   // filter fields
-  const [name, setName] = useState(() => '%%');
-  const [address, setAddress] = useState(() => '%%');
-  const [cities, setCities] = useState(() => [])
+  const [name, setName] = useState('%%');
+  const [address, setAddress] = useState('%%');
+  const [cities, setCities] = useState([]);
+  const [providerMin] = useState(0);
+  const [providerMax, setRange] = useState(15000);
 
   const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
-    api({name, address, cities}, 
+    api({name, address, cities, providerMin, providerMax}, 
       `
-        query Objects($name: String, $address: String, $cities: [city_enum]) {
-          object(where: {_and: [{name: {_ilike: $name}}, {address: {_ilike: $address}} {city: {_in: $cities}}]}) {
+        query Objects($name: String, $address: String, $cities: [city_enum!], $providerMin:Int, $providerMax:Int) {
+          object(where: {_and: [{name: {_ilike: $name}}, {address: {_ilike: $address}}, {city: {_in: $cities}}], provider_id: {_gte: $providerMin, _lte: $providerMax}}) {
             address
             city
             contract_no
@@ -97,10 +100,31 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       `)
   ));
 
+
   // api calls for filter
   const citiesDb = useCity(true);
 
+  const [minRange, forkMinRange] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
+    api(undefined, 
+      `
+        query MinProviderId {
+          object(limit: 1, order_by: {provider_id: asc}) {
+            provider_id
+          }
+        }
+      `)
+  ));
 
+  const [maxRange, forkMaxRange] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
+    api(undefined, 
+      `
+        query MaxProviderId {
+          object(limit: 1, order_by: {provider_id: desc}) {
+            provider_id
+          }
+        }
+      `)
+  ));
 
   // filter setters
   const setNameFilter = v => {
@@ -115,7 +139,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
 
   const setCitiesFilter = v => {
     var idx = cities.indexOf(v.key);
-    console.log(idx);
 
     if (idx !== -1) {
       setCities(prevCities => [
@@ -128,7 +151,10 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     setCities(prevCities => [...prevCities, v.key]);
   }
 
-
+  const setRangeFilter = v => {
+    console.log(v);
+    setRange(v);
+  }
 
 
 
@@ -153,14 +179,18 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     // setCities(citiesDb);
     console.log('cities from api', citiesDb);
     // setCities(citiesDb);
-  }, [citiesDb])
+
+    forkMinRange();
+    forkMaxRange();
+
+  }, [])
 
   useEffect(() => { 
-    console.log('name query: ', name);
+    // console.log('name query: ', name);
     console.log('cities query', cities);
 
     fork() 
-  }, [name, address, cities]);
+  }, [name, address, cities, providerMax]);
 
 
 
@@ -201,6 +231,9 @@ const ObjectList = withPreparedProps(Listing, (props) => {
             citiesDb
           )}
         </SelectBox>
+        
+        <label className='block'>Selected range: {providerMax}</label>
+        <input type='range' min={0} max={15000} value={providerMax} onChange={onInputEventOrEmpty(setRangeFilter)} />
       </>
     ),
     tableColumns: [
