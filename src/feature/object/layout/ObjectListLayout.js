@@ -20,7 +20,7 @@ import {
   not,
   objOf,
   pipe,
-  safe,
+  safe
 } from 'crocks';
 import Breadcrumbs from 'components/Breadcrumbs';
 import {generatePath, Link} from 'react-router-dom';
@@ -31,6 +31,7 @@ import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {useCity} from '../api';
 import SelectBox from 'components/atom/input/SelectBox';
+
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -66,9 +67,9 @@ const Span = props => <span {...props}/>;
 const ObjectList = withPreparedProps(Listing, (props) => {
 
   // filter fields
-  const [name, setName] = useState('%%');
-  const [address, setAddress] = useState('%%');
-  const [cities, setCities] = useState(['KAUNAS']);
+  const [name, setName] = useState(() => '%%');
+  const [address, setAddress] = useState(() => '%%');
+  const [cities, setCities] = useState(() => [])
 
   const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
@@ -99,14 +100,43 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   // api calls for filter
   const citiesDb = useCity(true);
 
+
+
+  // filter setters
   const setNameFilter = v => {
     // let q = asciifyLT(v.replace(/\W+/gm, ''));
     setName(`%${v}%`);
   }
 
-  const setCitiesFilter = () => {
-
+  const setAddressFilter = v => {
+    // let q = asciifyLT(v.replace(/\W+/gm, ''));
+    setAddress(`%${v}%`);
   }
+
+  const setCitiesFilter = v => {
+    var idx = cities.indexOf(v.key);
+    console.log(idx);
+
+    if (idx !== -1) {
+      setCities(prevCities => [
+        ...prevCities.slice(0, idx),
+        ...prevCities.slice(idx + 1)
+      ]);  
+      return;
+    }
+
+    setCities(prevCities => [...prevCities, v.key]);
+  }
+
+
+
+
+
+
+
+
+
+
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(ObjectEditRoute.props.path, {id: props?.id})}>
@@ -130,7 +160,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     console.log('cities query', cities);
 
     fork() 
-  }, [name, cities]);
+  }, [name, address, cities]);
 
 
 
@@ -153,7 +183,15 @@ const ObjectList = withPreparedProps(Listing, (props) => {
           onChange={onInputEventOrEmpty(setNameFilter)}
         />
 
-        <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={onInputEventOrEmpty(setCitiesFilter)}>
+        <InputGroup
+          inputwrapperClassName='relative'
+          inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+          
+          label='Filter address'
+          onChange={onInputEventOrEmpty(setAddressFilter)}
+        />
+
+        <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={setCitiesFilter} label='Select cities' value={cities.join(', ')} multiple={true}>
           {map(
             value => (
               <SelectBox.Option key={value} value={value}>
