@@ -11,9 +11,17 @@ import {
   pipe,
 } from 'crocks';
 
+import React from 'react';
+import {HomeIcon} from '@heroicons/react/solid';
+
 const Box = ({Item, ...props}) => (
   <nav className='flex' aria-label='Breadcrumb'>
     <ol role='list' className='flex items-center space-x-4'>
+      <li>
+        <Link to={'/'}>
+          <HomeIcon className='flex-shrink-0 h-6 w-6 text-bluewood' />
+        </Link>
+      </li>
       {
         pipe(
           getProp('children'),
@@ -29,7 +37,7 @@ const Item = ({hasSlash = true, children, props}) => (
     <div className='flex items-center'>
       {hasSlash && (
           <svg
-            className='flex-shrink-0 h-5 w-5 text-gray-300'
+            className='flex-shrink-0 h-5 w-5 text-regent'
             xmlns='http://www.w3.org/2000/svg'
             fill='currentColor'
             viewBox='0 0 20 20'
@@ -38,7 +46,7 @@ const Item = ({hasSlash = true, children, props}) => (
             <path d='M5.555 17.776l8-16 .894.448-8 16-.894-.448z' />
           </svg>
       )}
-      <span className='ml-4 text-lg font-normal text-gray-800'>
+      <span className='ml-4 text-lg font-normal text-bluewood'>
         {children}
       </span>
     </div>
