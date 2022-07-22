@@ -1,125 +1,120 @@
 import React, {useEffect, useMemo} from 'react';
 import {generatePath, Link} from 'react-router-dom';
 
-import Listing from '../../../layout/ListingLayout';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import withPreparedProps from '../../../hoc/withPreparedProps';
+import Listing from 'layout/ListingLayout';
 
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
-import useAsync from '../../../hook/useAsync';
+import Breadcrumbs from 'components/Breadcrumbs';
 
-import {format, intervalToDuration, formatDuration} from 'date-fns';
+import withPreparedProps from 'hoc/withPreparedProps';
 
-import {
-  chain,
-  curry,
-  getProp,
-  getPropOr,
-  identity,
-  isArray,
-  isEmpty,
-  map,
-  Maybe,
-  not,
-  objOf,
-  pipe,
-  safe,
-  hasProps
-} from 'crocks';
-import {pick} from 'crocks/helpers';
-import {alt} from 'crocks/pointfree';
+import {BreachEditRoute} from 'feature/breach/routes';
+
+import useAsync from 'hook/useAsync';
+
+import {useAuth} from 'context/auth';
+
+import {not} from 'crocks/logic';
+import {alt, chain} from 'crocks/pointfree';
+import {getPropOr, objOf, pipe} from 'crocks/helpers';
+import {isEmpty, hasProps, isArray} from 'crocks/predicates';
+import {Maybe, map, safe, curry, getProp, getPath} from 'crocks';
+
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {BreachEditRoute} from '../routes';
+import {useTranslation} from 'react-i18next';
+import {format, intervalToDuration, formatDuration} from 'date-fns';
 
-const getColumn = curry((t, Component, key, pred, mapper) => ({
+const getColumn = curry((t, Component, key, mapper) => ({
   Component,
   headerText: t(key),
   key,
   itemToProps: item => pipe(
-    getProp(key),
-    chain(safe(pred)),
-    map(mapper),
+    mapper,
+    alt(Maybe.Just('-')),
     map(objOf('children')),
-    map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
-  )(item),
-}));
-
-const getColumns = curry((t, Component, key, pred, mapper, headerText) => ({
-  Component,
-  headerText: t(headerText),
-  key,
-  itemToProps: item => pipe(
-    safe(hasProps(key)),
-    chain(safe(pred)),
-    map(pick(key)),
-    map(mapper),
-    map(objOf('children')),
-    map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
+    map(a => ({...item, ...a}))
   )(item)
 }));
 
-const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
-
 const BreachListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
-  const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(chain(maybeToAsync('"breach" prop is expected in the response', getProp('breach')),
-    apiQuery(
-      `
-        query {
-          breach {
-            id
-            crew_id
-            driver_id
-            end_time
-            start_time
+  const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
+  const [breach, forkBreach] = useAsync(
+    chain(
+      maybeToAsync(
+        '"crew_breach" prop is expected in the response',
+        getProp('crew_breach')
+      ),
+      apiQuery(
+        `
+          query {
+            crew_breach {
+              id
+              end_time
+              start_time
+              crew {
+                crew_name
+                driver_name
+              }
+            }
           }
-        }
-      `
-    ))
+        `
+      )
+    )
   );
 
-  const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
-      {props?.children}
-    </Link>
-  )), [t]);
+  const column = useMemo(() => getColumn(t, props =>
+    props?.id &&
+      <Link to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
+        {props?.children}
+      </Link>
+  ), [t]);
 
-  const cs = useMemo(() => getColumns(t, props => (
-    <Link to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
-      {props?.children}
-    </Link>
-  )), [t]);
-
-  useEffect(() => fork(), []);
+  useEffect(() => forkBreach(), []);
 
   return {
-    list: safe(isArray, state.data).option([]),
+    list: safe(isArray, breach.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`breaches`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item>
+          <span className='font-semibold'>
+            {tb`breach`}
+          </span>
+        </Breadcrumbs.Item>
+        <Breadcrumbs.Item>
+          {tb`allData`}
+        </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     tableColumns: [
-      c('id', ne, identity),
-      c('start_time', ne, (date) => format(new Date(date), 'Y-MM-d HH:mm')),
-      cs(
-        ['start_time', 'end_time'],
-        ne,
-        ({start_time, end_time}) => formatDuration(intervalToDuration({start: new Date(start_time), end: new Date(end_time)})),
-        'time_outside_the_zone'
+      column('id', pipe(getProp('id'))),
+      column(
+        'start_time',
+        pipe(
+          getProp('start_time'),
+          chain(safe(not(isEmpty))),
+          map(date => format(new Date(date), 'Y-MM-d HH:mm'))
+        )
       ),
-      c('crew_id', ne, identity),
-      c('driver_id', ne, identity),
-    ],
+      column(
+        'time_outside_the_zone',
+        pipe(
+          safe(hasProps(['start_time', 'end_time'])),
+          map(({start_time, end_time}) =>
+            formatDuration(
+              intervalToDuration({
+                start: new Date(start_time),
+                end: new Date(end_time)
+              })
+            )
+          )
+        )
+      ),
+      column('crew_name', pipe(getPath(['crew', 'crew_name']))),
+      column('driver_name', pipe(getPath(['crew', 'driver_name']))),
+    ]
   }
 });
 
