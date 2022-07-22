@@ -1,0 +1,12 @@
+query CrewBreachById ($id: uuid!) {
+    crew_breach_by_pk(id: $id) {
+        id
+        end_time
+        start_time
+        crew {
+            status
+            crew_name
+            driver_name
+        }
+    }
+}

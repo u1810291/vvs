@@ -149,6 +149,18 @@ const FORM_FIELD = {
       value: ({value}) => value,
     }
   }, obj),
+  OBJECT: ({
+    label,
+    fallbackValue = {},
+    ...obj
+  }) => defaultProps({
+    validator: not(isEmpty),
+    initial: {},
+    props: {
+      setValue: ({set}) => set,
+      value: ({value}) => value,
+    }
+  }, obj)
 };
 
 export {FORM_FIELD};
