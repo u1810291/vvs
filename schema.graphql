@@ -461,13 +461,15 @@ type corresppersons_variance_fields {
 
 "main data regarding crew unit"
 type crew {
-    abbreviation: String
+    "An object relationship"
+    breaches: crew_breach
+    crew_name: String
     driver_name: String
     id: uuid!
-    is_assigned_automatically: String
-    is_assigned_while_in_breaks: String
+    is_assigned_automatically: Boolean!
+    is_assigned_while_in_breaks: Boolean!
     phone_number: String
-    status: event_status_enum
+    status: crew_status_enum
     to_call_after: String
     "An array relationship"
     zone(
@@ -510,18 +512,65 @@ type crew_aggregate_fields {
     min: crew_min_fields
 }
 
+"represents a violation of the boundaries of the dislocation zone"
+type crew_breach {
+    "An object relationship"
+    crew: crew
+    crew_id: uuid
+    driver_id: uuid
+    end_time: timestamptz
+    id: uuid!
+    start_time: timestamptz
+}
+
+"aggregated selection of \"crew_breach\""
+type crew_breach_aggregate {
+    aggregate: crew_breach_aggregate_fields
+    nodes: [crew_breach!]!
+}
+
+"aggregate fields of \"crew_breach\""
+type crew_breach_aggregate_fields {
+    count(columns: [crew_breach_select_column!], distinct: Boolean): Int!
+    max: crew_breach_max_fields
+    min: crew_breach_min_fields
+}
+
+"aggregate max on columns"
+type crew_breach_max_fields {
+    crew_id: uuid
+    driver_id: uuid
+    end_time: timestamptz
+    id: uuid
+    start_time: timestamptz
+}
+
+"aggregate min on columns"
+type crew_breach_min_fields {
+    crew_id: uuid
+    driver_id: uuid
+    end_time: timestamptz
+    id: uuid
+    start_time: timestamptz
+}
+
+"response of any mutation on the table \"crew_breach\""
+type crew_breach_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [crew_breach!]!
+}
+
 "columns and relationships of \"crew_calendar\""
 type crew_calendar {
-    Id: uuid!
-    crew: String
-    endTime: String
-    id: String
-    position(
-        "JSON select path"
-        path: String
-    ): json
-    startTime: String
-    weekDay: String
+    created_at: timestamptz!
+    crew_id: uuid!
+    dislocation_zone_id: uuid!
+    end: timestamptz
+    id: uuid!
+    start: timestamptz
+    updated_at: timestamptz!
 }
 
 "aggregated selection of \"crew_calendar\""
@@ -539,22 +588,24 @@ type crew_calendar_aggregate_fields {
 
 "aggregate max on columns"
 type crew_calendar_max_fields {
-    Id: uuid
-    crew: String
-    endTime: String
-    id: String
-    startTime: String
-    weekDay: String
+    created_at: timestamptz
+    crew_id: uuid
+    dislocation_zone_id: uuid
+    end: timestamptz
+    id: uuid
+    start: timestamptz
+    updated_at: timestamptz
 }
 
 "aggregate min on columns"
 type crew_calendar_min_fields {
-    Id: uuid
-    crew: String
-    endTime: String
-    id: String
-    startTime: String
-    weekDay: String
+    created_at: timestamptz
+    crew_id: uuid
+    dislocation_zone_id: uuid
+    end: timestamptz
+    id: uuid
+    start: timestamptz
+    updated_at: timestamptz
 }
 
 "response of any mutation on the table \"crew_calendar\""
@@ -567,22 +618,18 @@ type crew_calendar_mutation_response {
 
 "aggregate max on columns"
 type crew_max_fields {
-    abbreviation: String
+    crew_name: String
     driver_name: String
     id: uuid
-    is_assigned_automatically: String
-    is_assigned_while_in_breaks: String
     phone_number: String
     to_call_after: String
 }
 
 "aggregate min on columns"
 type crew_min_fields {
-    abbreviation: String
+    crew_name: String
     driver_name: String
     id: uuid
-    is_assigned_automatically: String
-    is_assigned_while_in_breaks: String
     phone_number: String
     to_call_after: String
 }
@@ -593,6 +640,45 @@ type crew_mutation_response {
     affected_rows: Int!
     "data from the rows affected by the mutation"
     returning: [crew!]!
+}
+
+"columns and relationships of \"crew_status\""
+type crew_status {
+    comment: String
+    value: String!
+}
+
+"aggregated selection of \"crew_status\""
+type crew_status_aggregate {
+    aggregate: crew_status_aggregate_fields
+    nodes: [crew_status!]!
+}
+
+"aggregate fields of \"crew_status\""
+type crew_status_aggregate_fields {
+    count(columns: [crew_status_select_column!], distinct: Boolean): Int!
+    max: crew_status_max_fields
+    min: crew_status_min_fields
+}
+
+"aggregate max on columns"
+type crew_status_max_fields {
+    comment: String
+    value: String
+}
+
+"aggregate min on columns"
+type crew_status_min_fields {
+    comment: String
+    value: String
+}
+
+"response of any mutation on the table \"crew_status\""
+type crew_status_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [crew_status!]!
 }
 
 "Crew Dislocation Zones"
@@ -2711,6 +2797,13 @@ type mutation_root {
         "filter the rows which have to be deleted"
         where: crew_bool_exp!
     ): crew_mutation_response
+    "delete data from the table: \"crew_breach\""
+    delete_crew_breach(
+        "filter the rows which have to be deleted"
+        where: crew_breach_bool_exp!
+    ): crew_breach_mutation_response
+    "delete single row from the table: \"crew_breach\""
+    delete_crew_breach_by_pk(id: uuid!): crew_breach
     "delete single row from the table: \"crew\""
     delete_crew_by_pk(id: uuid!): crew
     "delete data from the table: \"crew_calendar\""
@@ -2719,7 +2812,14 @@ type mutation_root {
         where: crew_calendar_bool_exp!
     ): crew_calendar_mutation_response
     "delete single row from the table: \"crew_calendar\""
-    delete_crew_calendar_by_pk(Id: uuid!): crew_calendar
+    delete_crew_calendar_by_pk(id: uuid!): crew_calendar
+    "delete data from the table: \"crew_status\""
+    delete_crew_status(
+        "filter the rows which have to be deleted"
+        where: crew_status_bool_exp!
+    ): crew_status_mutation_response
+    "delete single row from the table: \"crew_status\""
+    delete_crew_status_by_pk(value: String!): crew_status
     "delete data from the table: \"crew_zone\""
     delete_crew_zone(
         "filter the rows which have to be deleted"
@@ -2909,6 +3009,20 @@ type mutation_root {
         "upsert condition"
         on_conflict: crew_on_conflict
     ): crew_mutation_response
+    "insert data into the table: \"crew_breach\""
+    insert_crew_breach(
+        "the rows to be inserted"
+        objects: [crew_breach_insert_input!]!,
+        "upsert condition"
+        on_conflict: crew_breach_on_conflict
+    ): crew_breach_mutation_response
+    "insert a single row into the table: \"crew_breach\""
+    insert_crew_breach_one(
+        "the row to be inserted"
+        object: crew_breach_insert_input!,
+        "upsert condition"
+        on_conflict: crew_breach_on_conflict
+    ): crew_breach
     "insert data into the table: \"crew_calendar\""
     insert_crew_calendar(
         "the rows to be inserted"
@@ -2930,6 +3044,20 @@ type mutation_root {
         "upsert condition"
         on_conflict: crew_on_conflict
     ): crew
+    "insert data into the table: \"crew_status\""
+    insert_crew_status(
+        "the rows to be inserted"
+        objects: [crew_status_insert_input!]!,
+        "upsert condition"
+        on_conflict: crew_status_on_conflict
+    ): crew_status_mutation_response
+    "insert a single row into the table: \"crew_status\""
+    insert_crew_status_one(
+        "the row to be inserted"
+        object: crew_status_insert_input!,
+        "upsert condition"
+        on_conflict: crew_status_on_conflict
+    ): crew_status
     "insert data into the table: \"crew_zone\""
     insert_crew_zone(
         "the rows to be inserted"
@@ -3250,6 +3378,19 @@ type mutation_root {
         "filter the rows which have to be updated"
         where: crew_bool_exp!
     ): crew_mutation_response
+    "update data of the table: \"crew_breach\""
+    update_crew_breach(
+        "sets the columns of the filtered rows to the given values"
+        _set: crew_breach_set_input,
+        "filter the rows which have to be updated"
+        where: crew_breach_bool_exp!
+    ): crew_breach_mutation_response
+    "update single row of the table: \"crew_breach\""
+    update_crew_breach_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: crew_breach_set_input,
+        pk_columns: crew_breach_pk_columns_input!
+    ): crew_breach
     "update single row of the table: \"crew\""
     update_crew_by_pk(
         "sets the columns of the filtered rows to the given values"
@@ -3269,6 +3410,19 @@ type mutation_root {
         _set: crew_calendar_set_input,
         pk_columns: crew_calendar_pk_columns_input!
     ): crew_calendar
+    "update data of the table: \"crew_status\""
+    update_crew_status(
+        "sets the columns of the filtered rows to the given values"
+        _set: crew_status_set_input,
+        "filter the rows which have to be updated"
+        where: crew_status_bool_exp!
+    ): crew_status_mutation_response
+    "update single row of the table: \"crew_status\""
+    update_crew_status_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: crew_status_set_input,
+        pk_columns: crew_status_pk_columns_input!
+    ): crew_status
     "update data of the table: \"crew_zone\""
     update_crew_zone(
         "sets the columns of the filtered rows to the given values"
@@ -4301,6 +4455,34 @@ type query_root {
         "filter the rows returned"
         where: crew_bool_exp
     ): crew_aggregate!
+    "fetch data from the table: \"crew_breach\""
+    crew_breach(
+        "distinct select on columns"
+        distinct_on: [crew_breach_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_breach_order_by!],
+        "filter the rows returned"
+        where: crew_breach_bool_exp
+    ): [crew_breach!]!
+    "fetch aggregated fields from the table: \"crew_breach\""
+    crew_breach_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_breach_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_breach_order_by!],
+        "filter the rows returned"
+        where: crew_breach_bool_exp
+    ): crew_breach_aggregate!
+    "fetch data from the table: \"crew_breach\" using primary key columns"
+    crew_breach_by_pk(id: uuid!): crew_breach
     "fetch data from the table: \"crew\" using primary key columns"
     crew_by_pk(id: uuid!): crew
     "fetch data from the table: \"crew_calendar\""
@@ -4330,7 +4512,35 @@ type query_root {
         where: crew_calendar_bool_exp
     ): crew_calendar_aggregate!
     "fetch data from the table: \"crew_calendar\" using primary key columns"
-    crew_calendar_by_pk(Id: uuid!): crew_calendar
+    crew_calendar_by_pk(id: uuid!): crew_calendar
+    "fetch data from the table: \"crew_status\""
+    crew_status(
+        "distinct select on columns"
+        distinct_on: [crew_status_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_status_order_by!],
+        "filter the rows returned"
+        where: crew_status_bool_exp
+    ): [crew_status!]!
+    "fetch aggregated fields from the table: \"crew_status\""
+    crew_status_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_status_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_status_order_by!],
+        "filter the rows returned"
+        where: crew_status_bool_exp
+    ): crew_status_aggregate!
+    "fetch data from the table: \"crew_status\" using primary key columns"
+    crew_status_by_pk(value: String!): crew_status
     "fetch data from the table: \"crew_zone\""
     crew_zone(
         "distinct select on columns"
@@ -4985,6 +5195,34 @@ type subscription_root {
         "filter the rows returned"
         where: crew_bool_exp
     ): crew_aggregate!
+    "fetch data from the table: \"crew_breach\""
+    crew_breach(
+        "distinct select on columns"
+        distinct_on: [crew_breach_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_breach_order_by!],
+        "filter the rows returned"
+        where: crew_breach_bool_exp
+    ): [crew_breach!]!
+    "fetch aggregated fields from the table: \"crew_breach\""
+    crew_breach_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_breach_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_breach_order_by!],
+        "filter the rows returned"
+        where: crew_breach_bool_exp
+    ): crew_breach_aggregate!
+    "fetch data from the table: \"crew_breach\" using primary key columns"
+    crew_breach_by_pk(id: uuid!): crew_breach
     "fetch data from the table: \"crew\" using primary key columns"
     crew_by_pk(id: uuid!): crew
     "fetch data from the table: \"crew_calendar\""
@@ -5014,7 +5252,35 @@ type subscription_root {
         where: crew_calendar_bool_exp
     ): crew_calendar_aggregate!
     "fetch data from the table: \"crew_calendar\" using primary key columns"
-    crew_calendar_by_pk(Id: uuid!): crew_calendar
+    crew_calendar_by_pk(id: uuid!): crew_calendar
+    "fetch data from the table: \"crew_status\""
+    crew_status(
+        "distinct select on columns"
+        distinct_on: [crew_status_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_status_order_by!],
+        "filter the rows returned"
+        where: crew_status_bool_exp
+    ): [crew_status!]!
+    "fetch aggregated fields from the table: \"crew_status\""
+    crew_status_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_status_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_status_order_by!],
+        "filter the rows returned"
+        where: crew_status_bool_exp
+    ): crew_status_aggregate!
+    "fetch data from the table: \"crew_status\" using primary key columns"
+    crew_status_by_pk(value: String!): crew_status
     "fetch data from the table: \"crew_zone\""
     crew_zone(
         "distinct select on columns"
@@ -5942,46 +6208,88 @@ enum corresppersons_update_column {
     position
 }
 
+"unique or primary key constraints on table \"crew_breach\""
+enum crew_breach_constraint {
+    "unique or primary key constraint"
+    breach_crew_id_key
+    "unique or primary key constraint"
+    breach_driver_id_key
+    "unique or primary key constraint"
+    breach_pkey
+}
+
+"select columns of table \"crew_breach\""
+enum crew_breach_select_column {
+    "column name"
+    crew_id
+    "column name"
+    driver_id
+    "column name"
+    end_time
+    "column name"
+    id
+    "column name"
+    start_time
+}
+
+"update columns of table \"crew_breach\""
+enum crew_breach_update_column {
+    "column name"
+    crew_id
+    "column name"
+    driver_id
+    "column name"
+    end_time
+    "column name"
+    id
+    "column name"
+    start_time
+}
+
 "unique or primary key constraints on table \"crew_calendar\""
 enum crew_calendar_constraint {
     "unique or primary key constraint"
-    monas_events_related_pkey
+    crew_calendar_crew_id_key
+    "unique or primary key constraint"
+    crew_calendar_dislocation_zone_id_key
+    "unique or primary key constraint"
+    crew_calendar_pkey
 }
 
 "select columns of table \"crew_calendar\""
 enum crew_calendar_select_column {
     "column name"
-    Id
+    created_at
     "column name"
-    crew
+    crew_id
     "column name"
-    endTime
+    dislocation_zone_id
+    "column name"
+    end
     "column name"
     id
     "column name"
-    position
+    start
     "column name"
-    startTime
-    "column name"
-    weekDay
+    updated_at
 }
 
 "update columns of table \"crew_calendar\""
 enum crew_calendar_update_column {
     "column name"
-    Id
+    created_at
     "column name"
-    crew
+    crew_id
     "column name"
-    endTime
+    dislocation_zone_id
+    "column name"
+    end
     "column name"
     id
     "column name"
-    position
+    start
     "column name"
-    startTime
-    "column name"
-    weekDay
+    updated_at
 }
 
 "unique or primary key constraints on table \"crew\""
@@ -5993,7 +6301,7 @@ enum crew_constraint {
 "select columns of table \"crew\""
 enum crew_select_column {
     "column name"
-    abbreviation
+    crew_name
     "column name"
     driver_name
     "column name"
@@ -6010,10 +6318,39 @@ enum crew_select_column {
     to_call_after
 }
 
+"unique or primary key constraints on table \"crew_status\""
+enum crew_status_constraint {
+    "unique or primary key constraint"
+    crew_status_pkey
+}
+
+enum crew_status_enum {
+    BREAK
+    BUSY
+    OFFLINE
+    READY
+}
+
+"select columns of table \"crew_status\""
+enum crew_status_select_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
+"update columns of table \"crew_status\""
+enum crew_status_update_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
 "update columns of table \"crew\""
 enum crew_update_column {
     "column name"
-    abbreviation
+    crew_name
     "column name"
     driver_name
     "column name"
@@ -8440,40 +8777,102 @@ input crew_bool_exp {
     _and: [crew_bool_exp!]
     _not: crew_bool_exp
     _or: [crew_bool_exp!]
-    abbreviation: String_comparison_exp
+    breaches: crew_breach_bool_exp
+    crew_name: String_comparison_exp
     driver_name: String_comparison_exp
     id: uuid_comparison_exp
-    is_assigned_automatically: String_comparison_exp
-    is_assigned_while_in_breaks: String_comparison_exp
+    is_assigned_automatically: Boolean_comparison_exp
+    is_assigned_while_in_breaks: Boolean_comparison_exp
     phone_number: String_comparison_exp
-    status: event_status_enum_comparison_exp
+    status: crew_status_enum_comparison_exp
     to_call_after: String_comparison_exp
     zone: crew_zone_bool_exp
 }
 
+"Boolean expression to filter rows from the table \"crew_breach\". All fields are combined with a logical 'AND'."
+input crew_breach_bool_exp {
+    _and: [crew_breach_bool_exp!]
+    _not: crew_breach_bool_exp
+    _or: [crew_breach_bool_exp!]
+    crew: crew_bool_exp
+    crew_id: uuid_comparison_exp
+    driver_id: uuid_comparison_exp
+    end_time: timestamptz_comparison_exp
+    id: uuid_comparison_exp
+    start_time: timestamptz_comparison_exp
+}
+
+"input type for inserting data into table \"crew_breach\""
+input crew_breach_insert_input {
+    crew: crew_obj_rel_insert_input
+    crew_id: uuid
+    driver_id: uuid
+    end_time: timestamptz
+    id: uuid
+    start_time: timestamptz
+}
+
+"input type for inserting object relation for remote table \"crew_breach\""
+input crew_breach_obj_rel_insert_input {
+    data: crew_breach_insert_input!
+    "upsert condition"
+    on_conflict: crew_breach_on_conflict
+}
+
+"on_conflict condition type for table \"crew_breach\""
+input crew_breach_on_conflict {
+    constraint: crew_breach_constraint!
+    update_columns: [crew_breach_update_column!]! = []
+    where: crew_breach_bool_exp
+}
+
+"Ordering options when selecting data from \"crew_breach\"."
+input crew_breach_order_by {
+    crew: crew_order_by
+    crew_id: order_by
+    driver_id: order_by
+    end_time: order_by
+    id: order_by
+    start_time: order_by
+}
+
+"primary key columns input for table: crew_breach"
+input crew_breach_pk_columns_input {
+    id: uuid!
+}
+
+"input type for updating data in table \"crew_breach\""
+input crew_breach_set_input {
+    crew_id: uuid
+    driver_id: uuid
+    end_time: timestamptz
+    id: uuid
+    start_time: timestamptz
+}
+
 "Boolean expression to filter rows from the table \"crew_calendar\". All fields are combined with a logical 'AND'."
 input crew_calendar_bool_exp {
-    Id: uuid_comparison_exp
     _and: [crew_calendar_bool_exp!]
     _not: crew_calendar_bool_exp
     _or: [crew_calendar_bool_exp!]
-    crew: String_comparison_exp
-    endTime: String_comparison_exp
-    id: String_comparison_exp
-    position: json_comparison_exp
-    startTime: String_comparison_exp
-    weekDay: String_comparison_exp
+    created_at: timestamptz_comparison_exp
+    crew_id: uuid_comparison_exp
+    dislocation_zone_id: uuid_comparison_exp
+    end: timestamptz_comparison_exp
+    id: uuid_comparison_exp
+    start: timestamptz_comparison_exp
+    updated_at: timestamptz_comparison_exp
 }
 
 "input type for inserting data into table \"crew_calendar\""
 input crew_calendar_insert_input {
-    Id: uuid
-    crew: String
-    endTime: String
-    id: String
-    position: json
-    startTime: String
-    weekDay: String
+    created_at: timestamptz
+    crew_id: uuid
+    dislocation_zone_id: uuid
+    end: timestamptz
+    id: uuid
+    start: timestamptz
+    updated_at: timestamptz
 }
 
 "on_conflict condition type for table \"crew_calendar\""
@@ -8485,40 +8884,41 @@ input crew_calendar_on_conflict {
 
 "Ordering options when selecting data from \"crew_calendar\"."
 input crew_calendar_order_by {
-    Id: order_by
-    crew: order_by
-    endTime: order_by
+    created_at: order_by
+    crew_id: order_by
+    dislocation_zone_id: order_by
+    end: order_by
     id: order_by
-    position: order_by
-    startTime: order_by
-    weekDay: order_by
+    start: order_by
+    updated_at: order_by
 }
 
 "primary key columns input for table: crew_calendar"
 input crew_calendar_pk_columns_input {
-    Id: uuid!
+    id: uuid!
 }
 
 "input type for updating data in table \"crew_calendar\""
 input crew_calendar_set_input {
-    Id: uuid
-    crew: String
-    endTime: String
-    id: String
-    position: json
-    startTime: String
-    weekDay: String
+    created_at: timestamptz
+    crew_id: uuid
+    dislocation_zone_id: uuid
+    end: timestamptz
+    id: uuid
+    start: timestamptz
+    updated_at: timestamptz
 }
 
 "input type for inserting data into table \"crew\""
 input crew_insert_input {
-    abbreviation: String
+    breaches: crew_breach_obj_rel_insert_input
+    crew_name: String
     driver_name: String
     id: uuid
-    is_assigned_automatically: String
-    is_assigned_while_in_breaks: String
+    is_assigned_automatically: Boolean
+    is_assigned_while_in_breaks: Boolean
     phone_number: String
-    status: event_status_enum
+    status: crew_status_enum
     to_call_after: String
     zone: crew_zone_arr_rel_insert_input
 }
@@ -8539,7 +8939,8 @@ input crew_on_conflict {
 
 "Ordering options when selecting data from \"crew\"."
 input crew_order_by {
-    abbreviation: order_by
+    breaches: crew_breach_order_by
+    crew_name: order_by
     driver_name: order_by
     id: order_by
     is_assigned_automatically: order_by
@@ -8557,14 +8958,62 @@ input crew_pk_columns_input {
 
 "input type for updating data in table \"crew\""
 input crew_set_input {
-    abbreviation: String
+    crew_name: String
     driver_name: String
     id: uuid
-    is_assigned_automatically: String
-    is_assigned_while_in_breaks: String
+    is_assigned_automatically: Boolean
+    is_assigned_while_in_breaks: Boolean
     phone_number: String
-    status: event_status_enum
+    status: crew_status_enum
     to_call_after: String
+}
+
+"Boolean expression to filter rows from the table \"crew_status\". All fields are combined with a logical 'AND'."
+input crew_status_bool_exp {
+    _and: [crew_status_bool_exp!]
+    _not: crew_status_bool_exp
+    _or: [crew_status_bool_exp!]
+    comment: String_comparison_exp
+    value: String_comparison_exp
+}
+
+"Boolean expression to compare columns of type \"crew_status_enum\". All fields are combined with logical 'AND'."
+input crew_status_enum_comparison_exp {
+    _eq: crew_status_enum
+    _in: [crew_status_enum!]
+    _is_null: Boolean
+    _neq: crew_status_enum
+    _nin: [crew_status_enum!]
+}
+
+"input type for inserting data into table \"crew_status\""
+input crew_status_insert_input {
+    comment: String
+    value: String
+}
+
+"on_conflict condition type for table \"crew_status\""
+input crew_status_on_conflict {
+    constraint: crew_status_constraint!
+    update_columns: [crew_status_update_column!]! = []
+    where: crew_status_bool_exp
+}
+
+"Ordering options when selecting data from \"crew_status\"."
+input crew_status_order_by {
+    comment: order_by
+    value: order_by
+}
+
+"primary key columns input for table: crew_status"
+input crew_status_pk_columns_input {
+    value: String!
+}
+
+"input type for updating data in table \"crew_status\""
+input crew_status_set_input {
+    comment: String
+    value: String
 }
 
 "order by aggregate values of table \"crew_zone\""
