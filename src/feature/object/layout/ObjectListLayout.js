@@ -73,8 +73,9 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       phone
       navision_id
     `, [
-    {key: 'name', type: 'String', initial: '%%'},
-    {key: 'address', type: 'String', initial: '%%'},
+    {key: 'name', type: 'String'},
+    {key: 'address', type: 'String'},
+    {key: 'cities', type: 'city_enum!'},
   ]);
 
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
@@ -138,7 +139,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     // console.log('name query: ', name);
     // console.log('cities query', cities);
     console.log('filter values', filterValues);
-    console.log('query', query);
+    console.log('before fork', query);
 
     fork()
   }, [filterValues]);
