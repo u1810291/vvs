@@ -1,59 +1,25 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useRef,
-  useContext,
-} from 'react';
+import React, {useCallback, useState, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import {DrawingManager} from '@react-google-maps/api';
-import useLanguage from '../../../hook/useLanguage';
-import GlobalContext from '../../../context/globalContext';
 
-const drawingManagerOptions = {
-  drawingControl: true,
-  drawingControlOptions: {
-    drawingModes: ['polygon'],
-    position: 3.0,
-  },
-  polygonOptions: {
-    strokeOpacity: 1,
-    strokeWeight: 0.8,
-    strokeColor: '#C32A2F',
-    fillOpacity: 0.4,
-    fillColor: '#C32A2F',
-    clickable: true,
-    draggable: true,
-  },
-};
-
-const GoogleMapTools = ({onMapLoad}) => {
-  const {polygonsCoordinates, setPolygonsCoordinates} = useContext(GlobalContext);
-  const {english, lithuanian, t} = useLanguage();
+const GoogleMapTools = ({onMapLoad, polygonsOptions = {}}) => {
+  const {t} = useTranslation();
   const [polygons, setPolygons] = useState([]);
   const drawingManager = useRef();
 
   const getCoordinates = useCallback(() => {
-    const polygonsBounds = polygons.map((polygon) =>
-      polygon.getPath().getArray()
-    );
-    const polygonsCoordinates = polygonsBounds.map((polygonBound) => {
-      return polygonBound.map((polygonCoordinate) => ({
+    const polygonsBounds = polygons.map(polygon => polygon.getPath().getArray());
+    const polygonsCoordinates = polygonsBounds.map(polygonBound => {
+      return polygonBound.map(polygonCoordinate => ({
         lat: polygonCoordinate.lat(),
-        lng: polygonCoordinate.lng(),
+        lng: polygonCoordinate.lng()
       }));
     });
-    return polygonsCoordinates;
   }, [polygons]);
-
-  let coordinates = getCoordinates();
-  useEffect(() => {
-    setPolygonsCoordinates(coordinates);
-  }
-  , [polygons]);
 
   const clearAllPolygons = useCallback(() => {
     if (polygons.length) {
-      polygons.map((polygon) => polygon.setMap(null));
+      polygons.map(polygon => polygon.setMap(null));
       setPolygons([]);
     }
   }, [polygons]);
@@ -67,8 +33,8 @@ const GoogleMapTools = ({onMapLoad}) => {
 
     // returning only the last one or excludes last item from the list
     const getLastOrExcludeLast = (list, isOnlyLast) => {
-      const lastItem = list[list.length - 1];
-      return list.filter((item) => {
+      const lastItem = list[list.length -1];
+      return list.filter(item => {
         if (isOnlyLast) {
           return item === lastItem;
         } else {
@@ -80,7 +46,7 @@ const GoogleMapTools = ({onMapLoad}) => {
     if (polygons.length) {
       const veryLastPolygon = getLastOrExcludeLast(polygons, true);
       const allExceptLastPolygon = getLastOrExcludeLast(polygons);
-      veryLastPolygon.forEach((polygon) => polygon.setMap(null));
+      veryLastPolygon.forEach(polygon => polygon.setMap(null));
       setPolygons([...allExceptLastPolygon]);
     }
   }, [polygons]);
@@ -94,18 +60,15 @@ const GoogleMapTools = ({onMapLoad}) => {
     } else {
       return;
     }
-  }, []);
+  }, [])
 
-  const onPolygonComplete = useCallback(
-    (polygon) => {
-      setPolygons([...polygons, polygon]);
-      polygon.setEditable(true);
-      polygon.addListener('rightclick', (event) => {
-        deleteVertex(polygon, event.vertex);
-      });
-    },
-    [polygons]
-  );
+  const onPolygonComplete = useCallback(polygon => {
+    setPolygons([...polygons, polygon]);
+    polygon.setEditable(true);
+    polygon.addListener('rightclick', event => {
+      deleteVertex(polygon, event.vertex);
+    });
+  }, [polygons]);
 
   return (
     <>
@@ -121,10 +84,17 @@ const GoogleMapTools = ({onMapLoad}) => {
       >
         {t('eurocash.undo')}
       </button>
+      {/* NOTE: React StrictMode is forcing DrawaingManager to be rendered twice */}
       <DrawingManager
-        onLoad={onMapLoad}
         ref={drawingManager}
-        options={drawingManagerOptions}
+        options={{
+          drawingControl: true,
+          drawingControlOptions: {
+            drawingModes: ['polygon'],
+            position: 3.0
+          },
+          polygonOptions: polygonsOptions
+        }}
         onPolygonComplete={onPolygonComplete}
       />
     </>
