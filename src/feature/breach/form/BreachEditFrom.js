@@ -1,33 +1,36 @@
-import React, {useEffect, useState} from 'react';
-
-import Map from '../../map/component/Map';
-import Card from '../../../components/atom/Card';
-import DynamicIcon from '../../crew/component/CrewIcon';
+import React, {useCallback, useEffect, useState} from 'react';
+import Timecode from 'react-timecode';
+import Timer from 'react-timer-wrapper';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import useResultForm, {FORM_FIELD} from '../../../hook/useResultForm';
-import {pipe, map, safe, isObject, mapProps} from 'crocks';
-import {useBreach} from '../api/breachEditApi';
-import {format, formatDuration, intervalToDuration} from 'date-fns';
-import Timer from 'react-timer-wrapper';
-import Timecode from 'react-timecode';
-import {Polygon} from '@react-google-maps/api';
+import {Polygon, DirectionsRenderer, DirectionsService} from '@react-google-maps/api';
 
-const polygonSetup = {
-  strokeOpacity: 0.8,
-  strokeColor: 'red',
-  fillColor: 'red',
-};
+import Card from 'components/atom/Card';
+import Nullable from 'components/atom/Nullable';
+
+import Map from 'feature/map/component/Map';
+import DynamicIcon from 'feature/crew/component/CrewIcon';
+import {useBreach} from 'feature/breach/api/breachEditApi';
+
+import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
+
+import {POLYGON_OPTIONS_DISPLAY} from '../../map/polygon';
+import {useGoogleApiContext} from '../../../context/google';
+
+import {generate} from 'shortid';
+import {and, not} from 'crocks/logic';
+import {constant} from 'crocks/combinators';
+import {chain, option} from 'crocks/pointfree';
+import {isObject, isEmpty} from 'crocks/predicates';
+import {pipe, map, safe, mapProps, getPath, getProp} from 'crocks';
+import {format, formatDuration, intervalToDuration} from 'date-fns';
 
 const BreachEditForm = () => {
   const {id} = useParams();
   const {data} = useBreach(id);
+  const [routes, setRoutes] = useState();
   const {t} = useTranslation('breach', {keyPrefix: 'edit'});
-  const [polygon, setPolygon] = useState([
-    {lat: 55.95, lng: 23.3},
-    {lat: 55.9, lng: 23.35},
-    {lat: 55.85, lng: 23.3},
-  ]);
+  const {googleMap, bounds, isLoaded} = useGoogleApiContext();
   const {ctrl, result, setForm} = useResultForm({
     crew: FORM_FIELD.OBJECT({label: null, validator: () => true}),
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
@@ -48,14 +51,99 @@ const BreachEditForm = () => {
       ))
     )(data)
   }, [data]);
+
+  let coods = []
+
+  pipe(
+    safe(and(not(isEmpty), isObject)),
+    chain(getPath(['zone'])),
+    option([]),
+    safe(constant(isLoaded)),
+    map(map(map(map(map(coords => {
+      coods.push(coords)
+      bounds?.extend(coords);
+    })))))
+  )(ctrl('crew').value);
+
+  // const zoneNodes = pipe(
+  //   safe(and(not(isEmpty), isObject)),
+  //   chain(getPath(['zone', 0, 'nodes'])),
+  //   option([]),
+  // )(ctrl('crew').value);
+  //
+  // console.log(zoneNodes)
+
+  const directionsCallback = useCallback((response) =>
+    pipe(
+      safe(not(isEmpty)),
+      chain(getProp('status')),
+      map(status => status === 'OK'
+        ? setRoutes(() => (response))
+        : console.warn('response: ', response)
+      ),
+    )(response), []);
+
+  const polygons =
+    pipe(
+      safe(and(not(isEmpty), isObject)),
+      chain(getPath(['zone'])),
+      option([]),
+      map(({nodes}) => nodes),
+    )(ctrl('crew').value);
+
+  const origin = [55.96180703337066, 23.32430656345794];
+  const destination = [55.95347994389237, 23.28757917959692];
+
   return (
-    <section className={'md:flex md:flex-row'}>
+    <section className={'md:flex md:flex-row flex-1'}>
       <div className={'md:w-7/12 xl:w-9/12'}>
-        <Map>
-          <Polygon path={polygon} options={polygonSetup} />
+        <Map
+          id='breach-map'
+          zoom={14}
+          coods={coods}
+          routes={routes}
+        >
+          <Nullable on={polygons}>
+            {map(nodes =>
+              <Polygon
+                paths={nodes}
+                key={generate()}
+                options={POLYGON_OPTIONS_DISPLAY}
+              />,
+              polygons
+            )}
+          </Nullable>
+          <Nullable on={origin && destination}>
+            <DirectionsService
+              options={{
+                origin: new google.maps.LatLng(...origin),
+                destination: new google.maps.LatLng(...destination),
+                travelMode: google.maps.TravelMode.DRIVING,
+              }}
+              callback={directionsCallback}
+            />
+          </Nullable>
+          <Nullable on={routes}>
+            <DirectionsRenderer options={{
+              directions: routes,
+              suppressMarkers: true,
+              polylineOptions: {
+                icons: [
+                  {
+                    icon: {
+                      path: 'M 1, 1 1, 1',
+                      strokeOpacity: 100,
+                      scale: 8,
+                      strokeColor: '#404B5F'
+                    },
+                    repeat: '20px',
+                  }
+                ]}}}
+            />
+          </Nullable>
         </Map>
       </div>
-      <div className={'flex flex-col w-full h-full aspect-square md:w-5/12 md:aspect-auto md:h-screen xl:w-3/12'}>
+      <div className={'flex flex-col w-full md:w-5/12 xl:w-3/12'}>
         <Card.Xs className={'shadow-none'}>
           <div className={'flex flex-row items-start w-full border-b border-border py-4 px-6'}>
             <div className={'flex flex-col mr-6'}>
@@ -86,11 +174,11 @@ const BreachEditForm = () => {
             <DynamicIcon
               className={'mr-4'}
               status={ctrl('crew').value?.status}
-              name={ctrl('crew').value?.crew_name}
+              name={ctrl('crew').value?.name}
             />
             <div className={'flex flex-col'}>
               <p className='text-bluewood'>
-                {ctrl('crew').value?.crew_name}
+                {ctrl('crew').value?.name}
               </p>
               <p className='text-regent'>
                 {ctrl('crew').value?.driver_name}
