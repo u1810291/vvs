@@ -168,8 +168,8 @@ const DashboardForm = () => {
     pipe(
       safe(and(isArray, a => a.length > 0)),
       map(map(item => results = directionService.route({
-          origin: new window.google.maps.LatLng(item.originLat, item.originLon),
-          destination: new window.google.maps.LatLng(
+          origin: new google.maps.LatLng(item.originLat, item.originLon),
+          destination: new google.maps.LatLng(
             item.destinationLat,
             item.destinationLon
           ),
@@ -242,7 +242,7 @@ const DashboardForm = () => {
                 key={generate()}
                 icon={getCrewIcons(marker.crew)}
                 position={
-                  new window.google.maps.LatLng(
+                  new google.maps.LatLng(
                     marker.originLat,
                     marker.originLon
                   )
