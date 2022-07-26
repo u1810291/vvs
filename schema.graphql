@@ -463,11 +463,11 @@ type corresppersons_variance_fields {
 type crew {
     "An object relationship"
     breaches: crew_breach
-    crew_name: String
     driver_name: String
     id: uuid!
     is_assigned_automatically: Boolean!
     is_assigned_while_in_breaks: Boolean!
+    name: String
     phone_number: String
     status: crew_status_enum
     to_call_after: String
@@ -618,18 +618,18 @@ type crew_calendar_mutation_response {
 
 "aggregate max on columns"
 type crew_max_fields {
-    crew_name: String
     driver_name: String
     id: uuid
+    name: String
     phone_number: String
     to_call_after: String
 }
 
 "aggregate min on columns"
 type crew_min_fields {
-    crew_name: String
     driver_name: String
     id: uuid
+    name: String
     phone_number: String
     to_call_after: String
 }
@@ -5955,6 +5955,9 @@ enum city_constraint {
 }
 
 enum city_enum {
+    JONAVA
+    KAUNAS
+    UTENA
     VILNIUS
 }
 
@@ -6301,8 +6304,6 @@ enum crew_constraint {
 "select columns of table \"crew\""
 enum crew_select_column {
     "column name"
-    crew_name
-    "column name"
     driver_name
     "column name"
     id
@@ -6310,6 +6311,8 @@ enum crew_select_column {
     is_assigned_automatically
     "column name"
     is_assigned_while_in_breaks
+    "column name"
+    name
     "column name"
     phone_number
     "column name"
@@ -6350,8 +6353,6 @@ enum crew_status_update_column {
 "update columns of table \"crew\""
 enum crew_update_column {
     "column name"
-    crew_name
-    "column name"
     driver_name
     "column name"
     id
@@ -6359,6 +6360,8 @@ enum crew_update_column {
     is_assigned_automatically
     "column name"
     is_assigned_while_in_breaks
+    "column name"
+    name
     "column name"
     phone_number
     "column name"
@@ -8189,6 +8192,7 @@ enum provider_constraint {
 
 enum provider_enum {
     MONAS
+    PROVIDER_2
 }
 
 "select columns of table \"provider\""
@@ -8778,11 +8782,11 @@ input crew_bool_exp {
     _not: crew_bool_exp
     _or: [crew_bool_exp!]
     breaches: crew_breach_bool_exp
-    crew_name: String_comparison_exp
     driver_name: String_comparison_exp
     id: uuid_comparison_exp
     is_assigned_automatically: Boolean_comparison_exp
     is_assigned_while_in_breaks: Boolean_comparison_exp
+    name: String_comparison_exp
     phone_number: String_comparison_exp
     status: crew_status_enum_comparison_exp
     to_call_after: String_comparison_exp
@@ -8912,11 +8916,11 @@ input crew_calendar_set_input {
 "input type for inserting data into table \"crew\""
 input crew_insert_input {
     breaches: crew_breach_obj_rel_insert_input
-    crew_name: String
     driver_name: String
     id: uuid
     is_assigned_automatically: Boolean
     is_assigned_while_in_breaks: Boolean
+    name: String
     phone_number: String
     status: crew_status_enum
     to_call_after: String
@@ -8940,11 +8944,11 @@ input crew_on_conflict {
 "Ordering options when selecting data from \"crew\"."
 input crew_order_by {
     breaches: crew_breach_order_by
-    crew_name: order_by
     driver_name: order_by
     id: order_by
     is_assigned_automatically: order_by
     is_assigned_while_in_breaks: order_by
+    name: order_by
     phone_number: order_by
     status: order_by
     to_call_after: order_by
@@ -8958,11 +8962,11 @@ input crew_pk_columns_input {
 
 "input type for updating data in table \"crew\""
 input crew_set_input {
-    crew_name: String
     driver_name: String
     id: uuid
     is_assigned_automatically: Boolean
     is_assigned_while_in_breaks: Boolean
+    name: String
     phone_number: String
     status: crew_status_enum
     to_call_after: String
