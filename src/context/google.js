@@ -1,22 +1,43 @@
-import React, {createContext, useContext, useCallback, useRef} from 'react';
-import env from '../env';
+import React, {createContext, useContext, useCallback, useState} from 'react';
+import env from 'env';
 import {useLoadScript} from '@react-google-maps/api';
-import useMergeReducer from '../hook/useMergeReducer';
+import useMergeReducer from 'hook/useMergeReducer';
 
 const Google = createContext(null);
 
 const GoogleContextProvider = ({children}) => {
-  const [state, setValue] = useMergeReducer({
-    libraries: ['drawing'],
+  const [googleMap, setMap] = useState();
+  const [bounds, setBounds] = useState();
+  const [options, setOptions] = useMergeReducer({
+    libraries: ['drawing']
+  });
+  const {isLoaded, loadError} = useLoadScript({
+    googleMapsApiKey: env.GOOGLE_MAPS_API_KEY,
+    libraries: options.libraries
   });
 
-  const {isLoaded, loadError} = useLoadScript({googleMapsApiKey: env.GOOGLE_MAPS_API_KEY, libraries: state.libraries});
-  const mapRef = useRef(null);
-  const onMapLoad = useCallback(map => mapRef.current = map, []);
-  const onMapUnmount = useCallback(() => mapRef.current = null, []);
+  const onMapLoad = useCallback(map => {
+    const newBounds = new google.maps.LatLngBounds();
+    setBounds(newBounds);
+    map.fitBounds(newBounds);
+    setMap(map);
+  }, []);
+  const onMapUnmount = useCallback(() => {
+    setMap(null);
+    setBounds(null);
+  }, []);
   return (
     <Google.Provider
-      value={{...state, setValue, isLoaded, loadError, mapRef, onMapLoad, onMapUnmount}}
+      value={{
+        bounds,
+        isLoaded,
+        loadError,
+        googleMap,
+        onMapLoad,
+        ...options,
+        setOptions,
+        onMapUnmount,
+      }}
     >
       {children}
     </Google.Provider>
