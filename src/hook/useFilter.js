@@ -6,8 +6,6 @@ import {option} from 'crocks/pointfree';
 
 
 // filter fields
-// const [name, setName] = useState('%%');
-// const [address, setAddress] = useState('%%');
 // const [cities, setCities] = useState([]);
 // const [providerMin] = useState(0);
 // const [providerMax, setRange] = useState(15000);
@@ -17,8 +15,8 @@ import {option} from 'crocks/pointfree';
 
 const prepInitialValues = (filters) => pipe(
   safe(isArray),
-  // tap(console.log),
-  // safe(hasProps(['key', 'type', 'initial'])),
+  tap(console.log),
+  safe(hasProps(['key', 'type', 'initial'])),
   map(f => chain(safe(not(isEmpty), getPath(['initial'], f))), option([])),
 
   // pick (key)
@@ -54,7 +52,7 @@ export const useFilter = (name, q, filtersData) => {
   const [filterValues, setFilterValues] = useState(prepInitialValues(filtersData));
   const [query, setQuery] = useState(prepQuery(name, q, filtersData));
 
-  
+
   console.log(prepInitialValues(filtersData));
 
   // filter with like & %{query}%
@@ -71,23 +69,23 @@ export const useFilter = (name, q, filtersData) => {
 
   const filters = (
     <>
-        <InputGroup
-          inputwrapperClassName='relative'
-          inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+      <InputGroup
+        inputwrapperClassName='relative'
+        inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
 
-          label='Filter name'
-          onChange={onInputEventOrEmpty(v => updateTextFilter(v, 'name'))}
-        />
+        label='Filter name'
+        onChange={onInputEventOrEmpty(v => updateTextFilter(v, 'name'))}
+      />
 
-        <InputGroup
-          inputwrapperClassName='relative'
-          inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+      <InputGroup
+        inputwrapperClassName='relative'
+        inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
 
-          label='Filter address'
-          onChange={onInputEventOrEmpty(v => updateTextFilter(v, 'address'))}
-        />
+        label='Filter address'
+        onChange={onInputEventOrEmpty(v => updateTextFilter(v, 'address'))}
+      />
 
-        {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={setCitiesFilter} label='Select cities' value={cities.join(', ')} multiple={true}>
+      {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={setCitiesFilter} label='Select cities' value={cities.join(', ')} multiple={true}>
           {map(
             value => (
               <SelectBox.Option key={value} value={value}>
@@ -100,9 +98,9 @@ export const useFilter = (name, q, filtersData) => {
 
         <label className='block'>Selected range: {providerMax}</label>
         <input type='range' min={0} max={15000} value={providerMax} onChange={onInputEventOrEmpty(setRangeFilter)} /> */}
-      </>
+    </>
   );
-  
+
   return [
     query,
     filterValues,
