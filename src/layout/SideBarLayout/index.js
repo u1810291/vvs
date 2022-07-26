@@ -11,7 +11,7 @@ const SidebarLayout = ({children}) => {
     <section>
       <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
       <Aside setSidebarOpen={setSidebarOpen}/>
-      <main className='flex-1 pl-16 flex flex-col'>
+      <main className='flex-1 pl-16 flex flex-col h-screen'>
         {children}
       </main>
     </section>
