@@ -56,9 +56,9 @@ const CrewListLayout = withPreparedProps(Listing, props => {
         query {
           crew {
             id
+            name
             status
             driver_name
-            abbreviation
             phone_number
             is_assigned_automatically
           }
@@ -86,9 +86,9 @@ const CrewListLayout = withPreparedProps(Listing, props => {
     ),
     tableColumns: [
       c('id', ne, identity),
+      c('name', ne, identity),
       c('status', ne, identity),
       c('driver_name', ne, identity),
-      c('abbreviation', ne, identity),
       c('phone_number', ne, identity),
       c('is_assigned_automatically', ne, identity)
     ],

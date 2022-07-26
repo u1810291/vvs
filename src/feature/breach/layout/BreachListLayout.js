@@ -54,7 +54,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
               end_time
               start_time
               crew {
-                crew_name
+                name
                 driver_name
               }
             }
@@ -112,7 +112,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
           )
         )
       ),
-      column('crew_name', pipe(getPath(['crew', 'crew_name']))),
+      column('crew_name', pipe(getPath(['crew', 'name']))),
       column('driver_name', pipe(getPath(['crew', 'driver_name']))),
     ]
   }

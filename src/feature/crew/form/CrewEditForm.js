@@ -38,8 +38,8 @@ const CrewEditLayout = () => {
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
   const {ctrl, result, setForm} = useResultForm({
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
+    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validation: () => true}),
-    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: () => true}),
     phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
     to_call_after: FORM_FIELD.TEXT({label: t`field.to_call_after`, validator: () => true}),
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
@@ -52,9 +52,9 @@ const CrewEditLayout = () => {
     safe(isObject),
     map(pipe(
       mapProps({
+        name: String,
         status: String,
         driver_name: String,
-        abbreviation: String,
         phone_number: String,
         to_call_after: String,
         is_assigned_automatically: Boolean,
@@ -71,7 +71,7 @@ const CrewEditLayout = () => {
           <InputGroup
             className={'mt-6 lg:mt-0 lg:w-3/12'}
             isRequired={true}
-            {...ctrl('abbreviation')}
+            {...ctrl('name')}
           />
           <InputGroup
             className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-4/12'}
@@ -118,11 +118,11 @@ const CrewEditLayout = () => {
             <DynamicIcon
               className={'mr-4'}
               status={ctrl('status').value}
-              name={ctrl('abbreviation').value}
+              name={ctrl('name').value}
             />
             <div className={'flex flex-col'}>
               <p className='text-bluewood'>
-                {ctrl('abbreviation').value}
+                {ctrl('name').value}
               </p>
               <p className='text-regent'>
                 {ctrl('driver_name').value}

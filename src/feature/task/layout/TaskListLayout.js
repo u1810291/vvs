@@ -87,7 +87,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       c('status', ne, identity),
       c('received', ne, identity),
       c('object_name', ne, identity),
-      c('crew_name', ne, identity),
+      c('name', ne, identity),
       c('approximate_time', ne, identity),
       c('response_time', ne, identity),
       c('time_at_object', ne, identity),

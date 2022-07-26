@@ -16,16 +16,16 @@ import CrewEditForm from 'feature/crew/form/CrewEditForm';
 import {getProp} from 'crocks';
 
 const CrewEditLayout = () => {
-  const params = useParams();
+  const {id} = useParams();
   const navigate = useNavigate();
-  const {data} = useCrew(params?.id);
+  const {data} = useCrew(id);
   const {t} = useTranslation('crew', {keyPrefix: 'edit.header'});
 
   const onCancelButton = useCallback(() => navigate('/crew'), []);
   const onSaveButton = useCallback(() => {}, []);
 
   const breadcrumb = (
-    getProp('abbreviation', data)
+    getProp('name', data)
       .alt(getProp('id', data))
       .option(null)
   );

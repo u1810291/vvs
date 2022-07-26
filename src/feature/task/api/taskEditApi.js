@@ -31,7 +31,7 @@ const getCrewsQuery = `
   query getCrews {
     crew {
       id
-      abbreviation
+      name
     }
   }
 `;

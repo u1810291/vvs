@@ -1,9 +1,9 @@
 query CrewById ($id: uuid!) {
     crew_by_pk(id: $id) {
         id
+        name
         status
         driver_name
-        abbreviation
         phone_number
         to_call_after
         is_assigned_automatically

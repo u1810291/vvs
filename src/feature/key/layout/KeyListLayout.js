@@ -84,7 +84,7 @@ const KeyListLayout = withPreparedProps(Listing, props => {
     tableColumns: [
       c('id', ne, identity),
       c('set', ne, identity),
-      c('crew_name', ne, identity),
+      c('name', ne, identity),
     ],
   }
 });

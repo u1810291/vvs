@@ -86,7 +86,7 @@ const PermissionListLayout = withPreparedProps(Listing, props  => {
       c('name', ne, identity),
       c('status', ne, identity),
       c('date', ne, identity),
-      c('crew_name', ne, identity),
+      c('name', ne, identity),
       c('driver_name', ne, identity),
     ],
   }

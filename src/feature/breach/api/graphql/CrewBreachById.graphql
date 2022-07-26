@@ -4,9 +4,12 @@ query CrewBreachById ($id: uuid!) {
         end_time
         start_time
         crew {
+            name
             status
-            crew_name
             driver_name
+            zone {
+                nodes
+            }
         }
     }
 }
