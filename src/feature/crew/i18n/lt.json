@@ -9,10 +9,10 @@
   "list": {
     "column": {
       "id": "ID",
+      "name": "Pavadinimas",
       "status": "Būsena",
       "driver_name": "Vairuotojo vardas",
       "phone_number": "Telefono numeris",
-      "abbreviation": "Trumpinys",
       "dislocation_zone": "Dislokacijos zona",
       "is_assigned_automatically": "Automatiškai priskirti"
     }
