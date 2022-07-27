@@ -75,7 +75,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     `, [
     {key: 'name', type: 'String'},
     {key: 'address', type: 'String'},
-    {key: 'cities', type: 'city_enum!'},
+    {key: 'city', type: 'city_enum!'},
   ]);
 
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
@@ -109,19 +109,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   ));
 
   // filter setters
-  const setCitiesFilter = v => {
-    var idx = cities.indexOf(v.key);
-
-    if (idx !== -1) {
-      setCities(prevCities => [
-        ...prevCities.slice(0, idx),
-        ...prevCities.slice(idx + 1)
-      ]);
-      return;
-    }
-
-    setCities(prevCities => [...prevCities, v.key]);
-  }
 
   const setRangeFilter = v => {
     console.log(v);
