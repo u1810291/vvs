@@ -29,6 +29,8 @@ import {alt} from 'crocks/pointfree';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {useCity} from '../api';
 import {useFilter} from 'hook/useFilter';
+import InputGroup from 'components/atom/input/InputGroup';
+import SelectBox from 'components/atom/input/SelectBox';
 // import useDebounce from 'hook/useDebounce';
 
 
@@ -73,9 +75,10 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       phone
       navision_id
     `, [
-    {key: 'name', type: 'String'},
-    {key: 'address', type: 'String'},
-    {key: 'city', type: 'city_enum!'},
+    {key: 'name', type: 'String', label: 'Name', filter: 'text', Component: InputGroup},
+    {key: 'address', type: 'String', label: 'Address', filter: 'text', Component: InputGroup},
+    {key: 'provider_name', type: 'provider_enum!', label: 'Provider', filter: 'select', Component: SelectBox},
+    {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox},
   ]);
 
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
@@ -108,8 +111,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       `)
   ));
 
-  // filter setters
-
+  // TODO: move filter setters && delete here
   const setRangeFilter = v => {
     console.log(v);
     setRange(v);
@@ -123,8 +125,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   useEffect(() => {
-    // console.log('name query: ', name);
-    // console.log('cities query', cities);
     console.log('filter values', filterValues);
     console.log('before fork', query);
 

@@ -1,12 +1,23 @@
-import {useState, useMemo} from 'react';
-import InputGroup from 'components/atom/input/InputGroup';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
-import SelectBox from 'components/atom/input/SelectBox';
-import {map} from 'crocks';
+import {useMemo, useReducer} from 'react';
+// import InputGroup from 'components/atom/input/InputGroup';
+// import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
+// import SelectBox from 'components/atom/input/SelectBox';
+// import {map} from 'crocks';
+// import { withComponentFactory } from 'util/react';
 // import { option } from 'crocks/pointfree';
 
 
-// TODO: 1) use reducer for filter updaters; 2) move out UI elements 3) set updater & keys as prop to UI elements
+// TODO: 
+// +1) use reducer for filter updaters; 
+// +2) move out UI elements 
+// 3) set updater & keys as prop to UI elements
+// ask about link to column picker (hidden column -> hides filter)
+// ask about date filter
+// ask about date range filter
+// ask about saving filter (localhost + JSON.stringify)
+// ask about filter styles ?
+
 
 // filter fields
 // const [cities, setCities] = useState([]);
@@ -16,6 +27,65 @@ import {map} from 'crocks';
 // [{key: 'name', type: 'String'},
 // {key: 'address', type: 'String', initial: '%%'},]
 // => { address: '%%'}
+
+const updater = (state, action) => {
+  // console.log(state);
+  // console.log(action);
+  
+  const prevState = {...state};
+
+  switch (action.type) {
+    case 'TEXT':
+      if (action.value) {
+        prevState[action.key] = `%${action.value}%`;
+      } else {
+        delete prevState[action.key];
+      }
+  
+      return {...prevState};
+    
+    case 'SELECT':
+      if (!(action.key in prevState)) {
+        prevState[action.key] = action.value.key;
+      } else {
+        var idx = prevState[action.key].indexOf(action.value.key);
+  
+        if (idx !== -1) {
+          delete prevState[action.key];
+        } else {
+          prevState[action.key] = action.value.key;
+        }
+      }
+  
+      return {...prevState};
+
+    case 'MULTISELECT':
+      if (!(action.key in prevState)) {
+        prevState[action.key] = [action.value.key];
+      } else {
+        var idx = prevState[action.key].indexOf(action.value.key);
+  
+        if (idx !== -1) {
+          prevState[action.key] = [
+            ...prevState[action.key].slice(0, idx),
+            ...prevState[action.key].slice(idx + 1)
+          ];
+        } else {
+          prevState[action.key] = [...prevState[action.key], action.value.key];
+        }
+      }
+
+      if (prevState[action.key].length == 0) delete prevState[action.key];
+
+      return {...prevState};    
+
+    // updateSelectFilter = ...
+    // updateRangeFilter = ...
+
+    default:
+      return prevState;
+  }
+}
 
 const prepInitials = (filters) => {
   const initials = {};
@@ -38,12 +108,27 @@ const prepParts = (filters, currentValues) => {
       params.push(`\$${f.key}: ${f.type}`);
 
       // where: 
-      // check if select -> _eq
-      // check if multi select -> _in []
-      // check if range -> _gte && _lte
+      // +check if text -> _ilike
+      // +check if select -> _eq
+      // +check if multiselect -> _in []
       // check if date ->
+      // check if range -> _gte && _lte
+      let pred = '';
 
-      where.push(`{${f.key}: {_ilike: $${f.key}}}`);
+      switch (f.filter) {
+        case 'select':
+          pred = `{${f.key}: {_eq: $${f.key}}}`;
+          break;
+        
+        case 'multiselect':
+          pred = `{${f.key}: {_in: $${f.key}}}`;
+          break;
+        
+        default:
+          pred = `{${f.key}: {_ilike: $${f.key}}}`; // default is text
+      }
+
+      where.push(pred);
     }
   });
 
@@ -68,86 +153,56 @@ const prepQuery = (name, query, filters, currentValues) => {
 }
 
 export const useFilter = (name, q, filtersData) => {
-  const [filterValues, setFilterValues] = useState(prepInitials(filtersData));
+  const [state, dispatch] = useReducer(updater, prepInitials(filtersData));
 
-  const query = useMemo(() => prepQuery(name, q, filtersData, filterValues), [filterValues]);
+  const query = useMemo(() => prepQuery(name, q, filtersData, state), [state]);
 
   // console.log('initial', filtersData);
 
-  // filter with ilike & %{query}%
-  const updateTextFilter = (v, k) => {
-    if (v) {
-      filterValues[k] = `%${v}%`;
-    } else {
-      delete filterValues[k];
-    }
 
-    setFilterValues({...filterValues})
-
-    console.log('set filter values state: ' + filterValues.toString());
-  }
-
-  const updateSelectFilter = (v, k) => {
-    console.log('on change', v, k);
-
-    if (!(k in filterValues)) {
-      filterValues[k] = [v.key];
-    } else {
-      var idx = filterValues[k].indexOf(v.key);
-
-      if (idx !== -1) {
-        filterValues[k] = [
-          ...filterValues[k].slice(0, idx),
-          ...filterValues[k].slice(idx + 1)
-        ];
-      } else {
-        filterValues[k] = [...filterValues[k], v.key];
-      }
-    }
-
-    if (filterValues[k].length == 0) delete filterValues[k];
-
-    setFilterValues({...filterValues});
-  }
-
-  // updateSelectFilter = ...
-  // updateRangeFilter = ...
 
   // useEffect(() => {
-  //   setQuery(prepQuery(name, q, filtersData, filterValues));
+  //   setQuery(prepQuery(name, q, filtersData, state));
 
-  //   console.log('filter now: ' + filterValues.toString());
+  //   console.log('filter now: ' + state.toString());
   //   console.log('query now: ' + query);
-  // }, [filterValues])
+  // }, [state])
 
 
   const filters = (
     <>
-      <InputGroup
-        inputwrapperClassName='relative'
-        inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
-        label='Filter name'
-        onChange={onInputEventOrEmpty(v => updateTextFilter(v, 'name'))}
-      />
+      {filtersData.map(({key, label, filter, Component}) => (
+        <Component 
+          inputwrapperClassName='relative'
+          inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+          key={key} 
+          label={label} 
+          onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />     
+      ))}
 
-      <InputGroup
-        inputwrapperClassName='relative'
-        inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
-        label='Filter address'
-        onChange={onInputEventOrEmpty(v => updateTextFilter(v, 'address'))}
-      />
-
-      <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={v => updateSelectFilter(v, 'city')} label='Select cities' value={'city' in filterValues ? filterValues['city'].join(', ') : ''} multiple={true}>
+      {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={v => dispatch({type: 'SELECT', value: v, key: 'provider_name'})} label='Select provider_name' value={'provider_name' in state ? state['provider_name'] : ''}>
         {map(
           value => (
             <SelectBox.Option key={value} value={value}>
               {value}
             </SelectBox.Option>
           ),
-          ['KAUNAS']  // get from initials
+          ['MONAS', 'PROVIDER_2']  // get from initials
           // 'initial' in filtersData['cities'] ? filtersData['cities'].initial : []
         )}
       </SelectBox>
+
+      <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={v => dispatch({type: 'MULTISELECT', value: v, key: 'city'})} label='Select cities' value={'city' in state ? state['city'].join(', ') : ''} multiple={true}>
+        {map(
+          value => (
+            <SelectBox.Option key={value} value={value}>
+              {value}
+            </SelectBox.Option>
+          ),
+          ['KAUNAS', 'UTENA', 'VILNIUS']  // get from initials
+          // 'initial' in filtersData['cities'] ? filtersData['cities'].initial : []
+        )}
+      </SelectBox> */}
 
       {/* Date picker */}
 
@@ -159,7 +214,7 @@ export const useFilter = (name, q, filtersData) => {
 
   return [
     query,
-    filterValues,
+    state,
     filters,
   ]
 }
