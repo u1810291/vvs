@@ -1,11 +1,6 @@
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {useMemo, useReducer} from 'react';
-// import InputGroup from 'components/atom/input/InputGroup';
-// import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
-// import SelectBox from 'components/atom/input/SelectBox';
-// import {map} from 'crocks';
-// import { withComponentFactory } from 'util/react';
-// import { option } from 'crocks/pointfree';
+import {map} from 'crocks';
 
 
 // TODO: 
@@ -171,14 +166,44 @@ export const useFilter = (name, q, filtersData) => {
 
   const filters = (
     <>
-      {filtersData.map(({key, label, filter, Component}) => (
-        <Component 
+      {filtersData.map(({key, label, filter, Component, Child, values}) => {
+        if (filter === 'select' || filter === 'multiselect') {
+          console.log([key, label, filter, values]);
+
+          let currentValue = '';
+          if (key in state && filter === 'select') {
+            currentValue = state[key];
+          } else if (key in state && filter === 'multiselect') {
+            currentValue = state[key].join(', ');
+          }
+
+          return <Component 
+            inputwrapperClassName='relative'
+            inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+            key={key} 
+            label={label} 
+            onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
+            multiple={filter === 'multiselect' ? true : false}  
+            value={currentValue} 
+          >
+            {map(
+              value => (
+                <Child key={value} value={value}>
+                  {value}
+                </Child>
+              ),
+              values ?? []
+            )}
+          </Component>
+        }
+
+        return <Component 
           inputwrapperClassName='relative'
           inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
           key={key} 
           label={label} 
-          onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />     
-      ))}
+          onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />
+      })}
 
       {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={v => dispatch({type: 'SELECT', value: v, key: 'provider_name'})} label='Select provider_name' value={'provider_name' in state ? state['provider_name'] : ''}>
         {map(

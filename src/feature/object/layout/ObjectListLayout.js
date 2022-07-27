@@ -77,8 +77,8 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     `, [
     {key: 'name', type: 'String', label: 'Name', filter: 'text', Component: InputGroup},
     {key: 'address', type: 'String', label: 'Address', filter: 'text', Component: InputGroup},
-    {key: 'provider_name', type: 'provider_enum!', label: 'Provider', filter: 'select', Component: SelectBox},
-    {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox},
+    {key: 'provider_name', type: 'provider_enum!', label: 'Provider', filter: 'select', Component: SelectBox, Child: SelectBox.Option, values: ['MONAS', 'PROVIDER_2']},
+    {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['KAUNAS', 'VILNIUS']},
   ]);
 
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
