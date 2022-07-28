@@ -2,17 +2,18 @@ import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {useEffect, useMemo, useReducer, useState} from 'react';
 import {map} from 'crocks';
 import Button from 'components/Button';
-
+import Nullable from 'components/atom/Nullable';
+// import {PencilIcon} from '@heroicons/react/solid';
+// import {TrashIcon} from '@heroicons/react/outline';
+import {generate} from 'shortid';
+import InputGroup from 'components/atom/input/InputGroup';
 
 // TODO: 
 // +1) use reducer for filter updaters; 
 // +2) move out UI elements 
 // +3) set updater & keys as prop to UI elements
-// ask about link to column picker (hidden column -> hides filter)
 // ask about date filter
 // ask about date range filter
-// ask about saving filter (localhost + JSON.stringify)
-// ask about filter styles ?
 
 
 // CONST
@@ -75,6 +76,9 @@ const updater = (state, action) => {
     // updateSelectFilter = ...
     // updateRangeFilter = ...
 
+    case 'APPLY':
+      return action.filter;
+
     default:
       return prevState;
   }
@@ -131,11 +135,11 @@ const prepParts = (filters, currentValues) => {
   ];
 }
 
-const prepQuery = (name, query, filters, currentValues) => {
+const prepQuery = (tableName, query, filters, currentValues) => {
   const [params, where] = prepParts(filters, currentValues);
 
-  let finalQuery = `query ${name}s${params}{
-    ${name}${where} {
+  let finalQuery = `query ${tableName}s${params}{
+    ${tableName}${where} {
       ${query}
     }
   }`;
@@ -143,24 +147,24 @@ const prepQuery = (name, query, filters, currentValues) => {
   return finalQuery;
 }
 
-// get saved filters for [name] from localStorage
+// get saved filters for [tableName] from localStorage
 // structure: listingFilters: { 'object': [{}], 'tasks': [] }
 
 const getAllFilters = () => {
   return JSON.parse(localStorage.getItem(LS_KEY_NAME)) ?? {};
 }
 
-const getSavedFilters = (name) => {
-  const allSaved = getAllFilters();
-  return name in allSaved ? allSaved[name] : [];
+const getSavedFilters = (tableName) => {
+  const all = getAllFilters();
+  return tableName in all ? all[tableName] : [];
 }
 
-export const useFilter = (name, q, filtersData, initialState) => {
+export const useFilter = (tableName, q, filtersData, initialState) => {
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
-  const query = useMemo(() => prepQuery(name, q, filtersData, state), [state]);
+  const query = useMemo(() => prepQuery(tableName, q, filtersData, state), [state]);
 
-  // get saved for 'name' from filters
-  const [savedFilters, setSavedFilters] = useState(getSavedFilters(name));
+  // get saved for 'tableName' from filters
+  const [savedFilters, setSavedFilters] = useState(getSavedFilters(tableName));
 
   useEffect(() => {
     console.log(savedFilters);
@@ -176,51 +180,122 @@ export const useFilter = (name, q, filtersData, initialState) => {
 
   // save filter
   const saveFilter = () => {
+    localStorage.setItem('asd', 'asd');
+
     if (!canSave()) return;
 
-    const allSaved = getAllFilters();
-    
     const newFilter = {
+      id: generate(),
       name: 'New filter',
-      starred: 'false',   // ???
+      starred: false,   // ???
+      editMode: false,
       props: {
-        name: name,
-        query: query,
-        filtersData: filtersData,
-        initialState: state,
+        tableName,
+        query,
+        filtersData,
+        state
       }
     }
-
-    if (name in allSaved) {
-      allSaved[name].push({...newFilter, id: allSaved[name].length + 1});
-    } else {
-      allSaved[name] = [{...newFilter, id: 1}];
-    }
-
+    
+    const newFilters = [...savedFilters, newFilter];
+    
+    const allSaved = getAllFilters();
+    allSaved[tableName] = newFilters;
     localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
 
-    savedFilters.push(allSaved[name].slice(-1))
-    setSavedFilters({...savedFilters})
+    //[...savedFilters, allSaved[tableName][allSaved[tableName].length - 1]]
 
-    console.log('new filters', savedFilters);
+    setSavedFilters(newFilters); 
   }
 
-  const filters = useMemo(() =>
-    <>
-      <div className={'flex flex-col'}>
-        SAVED FILTERS:
-        {savedFilters.map(({id, name}) => 
+  // delete filter
+  const deleteFilter = (e) => {
+    const id = e.target.id;
+
+    const newFilters = savedFilters.filter(f => f.id !== id);
+    
+    // console.log('new filters', newFilters);
+
+    const allSaved = getAllFilters();
+    allSaved[tableName] = newFilters;
+    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
+
+    setSavedFilters(newFilters);
+  }
+
+  // edit filter
+  const editFilter = (e) => {
+    const id = e.target.id;
+
+    updateFilter(id, 'editMode', true);
+  }
+
+  // update filter
+  const updateFilter = (id, prop, value) => {
+    const newFilters = [...savedFilters];
+
+    newFilters.map(f => {
+      if (f.id === id) {
+        f[prop] = value;
+      }
+    })
+
+    setSavedFilters(newFilters);
+  }
+
+  // on filter name changed
+  const onFilterNameChanged = (e) => {
+    if (e.key !== 'Enter') return;
+
+    const id = e.target.id;
+    const newName = e.target.value;
+
+    updateFilter(id, 'name', newName);
+    updateFilter(id, 'editMode', false);
+
+    const allSaved = getAllFilters();
+    allSaved[tableName] = savedFilters;
+    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
+  }
+
+  // apply filter
+  const applyFilter = (e) => {
+    const id = e.target.id;
+
+    const filter = savedFilters.find(f => f.id === id);
+
+    dispatch({type: 'APPLY', filter: filter.props.state});
+  }
+
+  const filters = useMemo(() => {
+    console.log('filters rendered');
+
+    return <>
+      <Nullable on={savedFilters.length > 0}>
+        {savedFilters.map(({id, editMode, name}) => 
           <div key={id} className={'flex flex-row'}>
-            {name}
-            <Button.Xs>Edit</Button.Xs>
-            <Button.Xs>Delete</Button.Xs>
+            
+            <Nullable on={editMode}>
+              <InputGroup id={id} defaultValue={name} onKeyDown={onFilterNameChanged}/>
+            </Nullable>
+
+            <Nullable on={!editMode}>
+              <span onClick={applyFilter} id={id} className={'cursor-pointer hover:opacity-50 active:opacity-80'}>{name}</span>
+            </Nullable>
+
+            <Button.Xs onClick={editFilter} id={id} className={'h-5 w-5 cursor-pointer hover:opacity-50 mr-2'}>Edit</Button.Xs>
+            <Button.Xs onClick={deleteFilter} id={id} className={'h-5 w-5 cursor-pointer hover:opacity-50'}>
+              Delete
+            </Button.Xs>
+
           </div>
         )}
-      </div>
+      </Nullable>
 
       {filtersData.map(({key, label, filter, Component, Child, values}) => {
         if (filter === 'select' || filter === 'multiselect') {
           let currentValue = '';
+
           if (key in state && filter === 'select') {
             currentValue = state[key];
           } else if (key in state && filter === 'multiselect') {
@@ -246,12 +321,13 @@ export const useFilter = (name, q, filtersData, initialState) => {
             )}
           </Component>
         }
-
+        
         return <Component 
           inputwrapperClassName='relative'
           inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
           key={key} 
-          label={label} 
+          label={label}
+          defaultValue={state[key] ? state[key].replace(/%/g, '') : ''}
           onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />
       })}
       
@@ -260,7 +336,8 @@ export const useFilter = (name, q, filtersData, initialState) => {
 
       <Button onClick={saveFilter}>Save Filter</Button>
 
-    </>, [state, savedFilters]
+    </>
+    }, [state, savedFilters]
   );
 
   return [
