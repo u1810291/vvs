@@ -27,7 +27,6 @@ import {generatePath, Link} from 'react-router-dom';
 import {ObjectEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
-import {useCity} from '../api';
 import {useFilter} from 'hook/useFilter';
 import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
@@ -78,7 +77,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     {key: 'name', type: 'String', label: 'Name', filter: 'text', Component: InputGroup},
     {key: 'address', type: 'String', label: 'Address', filter: 'text', Component: InputGroup},
     {key: 'provider_name', type: 'provider_enum!', label: 'Provider', filter: 'select', Component: SelectBox, Child: SelectBox.Option, values: ['MONAS', 'PROVIDER_2']},
-    {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['KAUNAS', 'VILNIUS']},
+    {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['KAUNAS', 'VILNIUS', 'URENA']},
   ]);
 
   const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
@@ -87,35 +86,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
 
 
   // api calls for filter
-  const citiesDb = useCity(true);
-
-  const [minRange, forkMinRange] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
-    api(undefined,
-      `
-        query MinProviderId {
-          object(limit: 1, order_by: {provider_id: asc}) {
-            provider_id
-          }
-        }
-      `)
-  ));
-
-  const [maxRange, forkMaxRange] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
-    api(undefined,
-      `
-        query MaxProviderId {
-          object(limit: 1, order_by: {provider_id: desc}) {
-            provider_id
-          }
-        }
-      `)
-  ));
-
-  // TODO: move filter setters && delete here
-  const setRangeFilter = v => {
-    console.log(v);
-    setRange(v);
-  }
 
 
   const c = useMemo(() => getColumn(t, props => (
@@ -125,8 +95,8 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   useEffect(() => {
-    console.log('filter values', filterValues);
-    console.log('before fork', query);
+    // console.log('filter values', filterValues);
+    // console.log('before fork', query);
 
     fork()
   }, [filterValues]);

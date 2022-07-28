@@ -1,12 +1,13 @@
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
-import {useMemo, useReducer} from 'react';
+import {useEffect, useMemo, useReducer, useState} from 'react';
 import {map} from 'crocks';
+import Button from 'components/Button';
 
 
 // TODO: 
 // +1) use reducer for filter updaters; 
 // +2) move out UI elements 
-// 3) set updater & keys as prop to UI elements
+// +3) set updater & keys as prop to UI elements
 // ask about link to column picker (hidden column -> hides filter)
 // ask about date filter
 // ask about date range filter
@@ -14,14 +15,11 @@ import {map} from 'crocks';
 // ask about filter styles ?
 
 
-// filter fields
-// const [cities, setCities] = useState([]);
-// const [providerMin] = useState(0);
-// const [providerMax, setRange] = useState(15000);
+// CONST
+const LS_KEY_NAME = 'listingFilters';
 
-// [{key: 'name', type: 'String'},
-// {key: 'address', type: 'String', initial: '%%'},]
-// => { address: '%%'}
+
+
 
 const updater = (state, action) => {
   // console.log(state);
@@ -106,8 +104,8 @@ const prepParts = (filters, currentValues) => {
       // +check if text -> _ilike
       // +check if select -> _eq
       // +check if multiselect -> _in []
-      // check if date ->
-      // check if range -> _gte && _lte
+      // check if date -> _eq
+      // check if date range -> _gte && _lte
       let pred = '';
 
       switch (f.filter) {
@@ -142,34 +140,86 @@ const prepQuery = (name, query, filters, currentValues) => {
     }
   }`;
 
-  // console.log(initials, finalQuery);
-
   return finalQuery;
 }
 
-export const useFilter = (name, q, filtersData) => {
-  const [state, dispatch] = useReducer(updater, prepInitials(filtersData));
+// get saved filters for [name] from localStorage
+// structure: listingFilters: { 'object': [{}], 'tasks': [] }
 
+const getAllFilters = () => {
+  return JSON.parse(localStorage.getItem(LS_KEY_NAME)) ?? {};
+}
+
+const getSavedFilters = (name) => {
+  const allSaved = getAllFilters();
+  return name in allSaved ? allSaved[name] : [];
+}
+
+export const useFilter = (name, q, filtersData, initialState) => {
+  const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const query = useMemo(() => prepQuery(name, q, filtersData, state), [state]);
 
-  // console.log('initial', filtersData);
+  // get saved for 'name' from filters
+  const [savedFilters, setSavedFilters] = useState(getSavedFilters(name));
+
+  useEffect(() => {
+    console.log(savedFilters);
 
 
+  }, []);
 
-  // useEffect(() => {
-  //   setQuery(prepQuery(name, q, filtersData, state));
+  // can save filter
+  const canSave = () => {
+    // check whether state has any value ?
+    return true;
+  }
 
-  //   console.log('filter now: ' + state.toString());
-  //   console.log('query now: ' + query);
-  // }, [state])
+  // save filter
+  const saveFilter = () => {
+    if (!canSave()) return;
 
+    const allSaved = getAllFilters();
+    
+    const newFilter = {
+      name: 'New filter',
+      starred: 'false',   // ???
+      props: {
+        name: name,
+        query: query,
+        filtersData: filtersData,
+        initialState: state,
+      }
+    }
 
-  const filters = (
+    if (name in allSaved) {
+      allSaved[name].push({...newFilter, id: allSaved[name].length + 1});
+    } else {
+      allSaved[name] = [{...newFilter, id: 1}];
+    }
+
+    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
+
+    savedFilters.push(allSaved[name].slice(-1))
+    setSavedFilters({...savedFilters})
+
+    console.log('new filters', savedFilters);
+  }
+
+  const filters = useMemo(() =>
     <>
+      <div className={'flex flex-col'}>
+        SAVED FILTERS:
+        {savedFilters.map(({id, name}) => 
+          <div key={id} className={'flex flex-row'}>
+            {name}
+            <Button.Xs>Edit</Button.Xs>
+            <Button.Xs>Delete</Button.Xs>
+          </div>
+        )}
+      </div>
+
       {filtersData.map(({key, label, filter, Component, Child, values}) => {
         if (filter === 'select' || filter === 'multiselect') {
-          console.log([key, label, filter, values]);
-
           let currentValue = '';
           if (key in state && filter === 'select') {
             currentValue = state[key];
@@ -204,37 +254,13 @@ export const useFilter = (name, q, filtersData) => {
           label={label} 
           onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />
       })}
-
-      {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={v => dispatch({type: 'SELECT', value: v, key: 'provider_name'})} label='Select provider_name' value={'provider_name' in state ? state['provider_name'] : ''}>
-        {map(
-          value => (
-            <SelectBox.Option key={value} value={value}>
-              {value}
-            </SelectBox.Option>
-          ),
-          ['MONAS', 'PROVIDER_2']  // get from initials
-          // 'initial' in filtersData['cities'] ? filtersData['cities'].initial : []
-        )}
-      </SelectBox>
-
-      <SelectBox className={'lg:w-1/3 xl:w-1/4'} onChange={v => dispatch({type: 'MULTISELECT', value: v, key: 'city'})} label='Select cities' value={'city' in state ? state['city'].join(', ') : ''} multiple={true}>
-        {map(
-          value => (
-            <SelectBox.Option key={value} value={value}>
-              {value}
-            </SelectBox.Option>
-          ),
-          ['KAUNAS', 'UTENA', 'VILNIUS']  // get from initials
-          // 'initial' in filtersData['cities'] ? filtersData['cities'].initial : []
-        )}
-      </SelectBox> */}
-
+      
       {/* Date picker */}
+      {/* Date picker range */}
 
-      {/* 
-        <label className='block'>Selected range: {providerMax}</label>
-        <input type='range' min={0} max={15000} value={providerMax} onChange={onInputEventOrEmpty(setRangeFilter)} /> */}
-    </>
+      <Button onClick={saveFilter}>Save Filter</Button>
+
+    </>, [state, savedFilters]
   );
 
   return [
