@@ -1,11 +1,12 @@
 import {
   CalendarIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
 } from '@heroicons/react/solid'
 // import InputGroup from 'components/atom/input/InputGroup';
 import Nullable from 'components/atom/Nullable';
 import {useState, useMemo} from 'react';
+import {format} from 'date-fns';
 
 const months = [
   {
@@ -138,7 +139,7 @@ const formatDate = (year, month, day) => {
   return `${year}-${month}-${day}`;
 }
 
-const DateTimePicker = ({key}) => {
+const DatePicker = ({key, label, defaultValue, onChange}) => {
   const getCurrentDays = () => {
     const days = [];
 
@@ -186,15 +187,12 @@ const DateTimePicker = ({key}) => {
   const [isPickerShown, setIsPickerShown] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(getCurrentMonth());
   const [currentYear, setCurrentYear] = useState(getCurrentYear());
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(defaultValue);
   const days = useMemo(() => getCurrentDays(), [currentMonth, currentYear, selectedDate]);
 
   
   // date picker focused
   const onFocus = (e) => {
-    console.log(e);
-    // console.log(e.target.id);
-
     if (!isPickerShown) {
       setCurrentYear(selectedDate ? selectedDate.getFullYear() : new Date().getFullYear());
       setCurrentMonth(selectedDate ? selectedDate.getMonth() : new Date().getMonth());
@@ -231,22 +229,42 @@ const DateTimePicker = ({key}) => {
 
   const selectDay = (e) => {
     const [year, month, day] = e.currentTarget.dataset.date.split('-');
+    let selected = new Date(year, month - 1, day);  
 
     if (selectedDate) {
       if (formatDate(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()) === formatDate(year, month - 1, day)) {
-        setSelectedDate(null);
-        return;
+        selected = null;
       }
     }
 
-    setSelectedDate(new Date(year, month - 1, day));
+    setSelectedDate(selected);
     setIsPickerShown(false);
+
+    // call onChange 
+    onChange(selected);
   }
+
+  // const reset = () => {
+  //   setSelectedDate(null);
+  //   setTimeout(() => setIsPickerShown(false));
+  // }
 
   return (
     <div className={'relative '} onBlur={onBlur}>
-      <button onClick={onFocus} Addon={CalendarIcon} id={key} className={'bg-white h-[38px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}>
-        {selectedDate?.toLocaleDateString()}
+      <Nullable on={label}>
+        <span>{label}</span>
+      </Nullable>
+      <button onClick={onFocus} id={key} className={'bg-white h-[38px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}>
+        {selectedDate && format(selectedDate, 'Y-MM-dd')}
+        
+        {/* <Nullable on={selectedDate}>
+          <span onClick={reset} className={'absolute inset-y-0 right-8 flex items-center pr-2'}>
+            <XIcon className={'h-5 w-5 text-gray-400'} />  
+          </span>
+        </Nullable> */}
+        <span className={'absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none'}>
+          <CalendarIcon className={'h-5 w-5 text-gray-400'} />  
+        </span>
       </button>
 
       <Nullable on={isPickerShown}>
@@ -323,4 +341,4 @@ const DateTimePicker = ({key}) => {
 }
 
 
-export default DateTimePicker;
+export default DatePicker;

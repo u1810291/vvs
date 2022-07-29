@@ -72,7 +72,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
 
   const [query, filterValues, filters] = useFilter(
-    'breach',
+    'crew_breach',
     `
       id
       crew_id
@@ -80,10 +80,10 @@ const BreachListLayout = withPreparedProps(Listing, props => {
       end_time
       start_time
     `, [
-    {key: 'start_time', type: 'Date', label: 'Started At', filter: 'date'},
+    {key: 'start_time', type: 'timestamptz', label: 'Started At', filter: 'date'},
   ]);
 
-  const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
+  const [state, fork] = useAsync(chain(maybeToAsync('"crew_breach" prop is expected in the response', getProp('crew_breach')),
     api(filterValues, query)
   ));
 
@@ -99,7 +99,12 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     </Link>
   )), [t]);
 
-  useEffect(() => fork(), []);
+  useEffect(() => {
+    console.log('filter values', filterValues);
+    console.log('before fork', query);
+
+    fork()
+  }, [filterValues]);
 
   return {
     list: safe(isArray, state.data).option([]),

@@ -3,11 +3,12 @@ import {useEffect, useMemo, useReducer, useState} from 'react';
 import {map} from 'crocks';
 import Button from 'components/Button';
 import Nullable from 'components/atom/Nullable';
+import {format} from 'date-fns';
 
 // import {CalendarIcon} from '@heroicons/react/outline';
 import {generate} from 'shortid';
 import InputGroup from 'components/atom/input/InputGroup';
-import DateTimePicker from 'components/DateTimePicker';
+import DatePicker from 'components/DatePicker';
 
 
 
@@ -28,31 +29,48 @@ const updater = (state, action) => {
     case 'TEXT':
       if (action.value) {
         prevState[action.key] = `%${action.value}%`;
-    } else {
+      } else {
         delete prevState[action.key];
-    }
+      }
   
       return {...prevState};
-    
+
+    case 'DATE':
+      if (action.value) {
+        const year = action.value.getFullYear();
+        const month = action.value.getMonth();
+        const day = action.value.getDate();
+
+        // prevState[`${action.key}`] = `${format(new Date(year, month, day, 0, 0, 0), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
+        prevState[`${action.key}_start`] = `${format(new Date(year, month, day, 0, 0, 0), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
+        prevState[`${action.key}_end`] = `${format(new Date(year, month, day, 23, 59, 59), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
+      } else {
+        // delete prevState[`${action.key}`];
+        delete prevState[`${action.key}_start`];
+        delete prevState[`${action.key}_end`];
+      }
+
+      return {...prevState};
+
     case 'SELECT':
       if (!(action.key in prevState)) {
         prevState[action.key] = action.value.key;
-    } else {
+      } else {
         var idx = prevState[action.key].indexOf(action.value.key);
-  
+    
         if (idx !== -1) {
           delete prevState[action.key];
-      } else {
+        } else {
           prevState[action.key] = action.value.key;
+        }
       }
-    }
   
       return {...prevState};
 
     case 'MULTISELECT':
       if (!(action.key in prevState)) {
         prevState[action.key] = [action.value.key];
-    } else {
+      } else {
         var idx = prevState[action.key].indexOf(action.value.key);
   
         if (idx !== -1) {
@@ -60,10 +78,10 @@ const updater = (state, action) => {
             ...prevState[action.key].slice(0, idx),
             ...prevState[action.key].slice(idx + 1)
           ];
-      } else {
-          prevState[action.key] = [...prevState[action.key], action.value.key];
+        } else {
+            prevState[action.key] = [...prevState[action.key], action.value.key];
+        }
       }
-    }
 
       if (prevState[action.key].length == 0) delete prevState[action.key];
 
@@ -97,16 +115,34 @@ const prepParts = (filters, currentValues) => {
   const where = [];
 
   filters.map(f => {
-    if (f.key in currentValues && currentValues[f.key] || f?.initial) {
-      params.push(`\$${f.key}: ${f.type}`);
+    // console.log(f);
+
+
+    // if sigle date filter
+    if (f.filter === 'date' ) {
+      const keyStart = `${f.key}_start`;
+      const keyEnd = `${f.key}_end`;
+
+      if (keyStart in currentValues && keyEnd in currentValues && currentValues[keyStart] && currentValues[keyEnd] || f?.initial) {
+        let param = `\$${f.key}_start: ${f.type}, \$${f.key}_end: ${f.type}`;
+        let pred = `{${f.key}: {_gte: $${f.key}_start}}, {${f.key}: {_lte: $${f.key}_end}}`;
+      
+        params.push(param);
+        where.push(pred);
+      }
+    }
+
+    // if text, select, multiselect
+    else if (f.key in currentValues && currentValues[f.key] || f?.initial) {
+      let param = `\$${f.key}: ${f.type}`;
+      let pred = '';
 
       // where: 
       // +check if text -> _ilike
       // +check if select -> _eq
       // +check if multiselect -> _in []
-      // check if date -> _eq
+      // check if date -> _gte && _lte
       // check if date range -> _gte && _lte
-      let pred = '';
 
       switch (f.filter) {
         case 'select':
@@ -116,14 +152,16 @@ const prepParts = (filters, currentValues) => {
         case 'multiselect':
           pred = `{${f.key}: {_in: $${f.key}}}`;
           break;
-        
+
         default:
           pred = `{${f.key}: {_ilike: $${f.key}}}`; // default is text
+      }
+
+      params.push(param);
+      where.push(pred);
     }
 
-      where.push(pred);
-  }
-});
+  });
 
   return [
     params.length > 0 ? `(${params.join(', ')})` : '',
@@ -134,7 +172,7 @@ const prepParts = (filters, currentValues) => {
 const prepQuery = (tableName, query, filters, currentValues) => {
   const [params, where] = prepParts(filters, currentValues);
 
-  let finalQuery = `query ${tableName}s${params}{
+  let finalQuery = `query ${tableName}${params}{
     ${tableName}${where} {
       ${query}
   }
@@ -318,67 +356,13 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
         
         else if (filter === 'date') {
           return <>
-            <DateTimePicker key={key} />
+            <DatePicker 
+              key={key} 
+              label={label} 
+              defaultValue={state[key]} 
+              onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})} 
+            />
 
-            {/* <div className='relative grid grid-cols-1 gap-x-14 md:grid-cols-2'>
-              <button
-                type='button'
-                className='absolute -top-1 -left-1.5 flex items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
-              >
-                <span className='sr-only'>Previous month</span>
-                <ChevronLeftIcon className='h-5 w-5' aria-hidden='true' />
-              </button>
-              <button
-                type='button'
-                className='absolute -top-1 -right-1.5 flex items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
-              >
-                <span className='sr-only'>Next month</span>
-                <ChevronRightIcon className='h-5 w-5' aria-hidden='true' />
-              </button>
-              {months.map((month, monthIdx) => (
-                <section
-                  key={monthIdx}
-                  className={classNames(monthIdx === months.length - 1 && 'hidden md:block', 'text-center')}
-                >
-                  <h2 className='font-semibold text-gray-900'>{month.name}</h2>
-                  <div className='mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500'>
-                    <div>M</div>
-                    <div>T</div>
-                    <div>W</div>
-                    <div>T</div>
-                    <div>F</div>
-                    <div>S</div>
-                    <div>S</div>
-                  </div>
-                  <div className='isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200'>
-                    {month.days.map((day, dayIdx) => (
-                      <button
-                        key={day.date}
-                        type='button'
-                        className={classNames(
-                          day.isCurrentMonth ? 'bg-white text-gray-900' : 'bg-gray-50 text-gray-400',
-                          dayIdx === 0 && 'rounded-tl-lg',
-                          dayIdx === 6 && 'rounded-tr-lg',
-                          dayIdx === month.days.length - 7 && 'rounded-bl-lg',
-                          dayIdx === month.days.length - 1 && 'rounded-br-lg',
-                          'relative py-1.5 hover:bg-gray-100 focus:z-10'
-                        )}
-                      >
-                        <time
-                          dateTime={day.date}
-                          className={classNames(
-                            day.isToday && 'bg-indigo-600 font-semibold text-white',
-                            'mx-auto flex h-7 w-7 items-center justify-center rounded-full'
-                          )}
-                        >
-                          {day.date.split('-').pop().replace(/^0/, '')}
-                        </time>
-                      </button>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div> */}
           </>
       }
 
