@@ -134,7 +134,7 @@ const Listing = ({
         </div>
       </TitleBar>
       <Nullable on={filters}>
-        <div className='w-full my-10'>
+        <div className='w-1/2 my-10'>
           {filters}
         </div>
       </Nullable>

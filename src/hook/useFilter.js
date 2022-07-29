@@ -3,21 +3,17 @@ import {useEffect, useMemo, useReducer, useState} from 'react';
 import {map} from 'crocks';
 import Button from 'components/Button';
 import Nullable from 'components/atom/Nullable';
-// import {PencilIcon} from '@heroicons/react/solid';
-// import {TrashIcon} from '@heroicons/react/outline';
+
+// import {CalendarIcon} from '@heroicons/react/outline';
 import {generate} from 'shortid';
 import InputGroup from 'components/atom/input/InputGroup';
+import DateTimePicker from 'components/DateTimePicker';
 
-// TODO: 
-// +1) use reducer for filter updaters; 
-// +2) move out UI elements 
-// +3) set updater & keys as prop to UI elements
-// ask about date filter
-// ask about date range filter
 
 
 // CONST
 const LS_KEY_NAME = 'listingFilters';
+
 
 
 
@@ -32,31 +28,31 @@ const updater = (state, action) => {
     case 'TEXT':
       if (action.value) {
         prevState[action.key] = `%${action.value}%`;
-      } else {
+    } else {
         delete prevState[action.key];
-      }
+    }
   
       return {...prevState};
     
     case 'SELECT':
       if (!(action.key in prevState)) {
         prevState[action.key] = action.value.key;
-      } else {
+    } else {
         var idx = prevState[action.key].indexOf(action.value.key);
   
         if (idx !== -1) {
           delete prevState[action.key];
-        } else {
+      } else {
           prevState[action.key] = action.value.key;
-        }
       }
+    }
   
       return {...prevState};
 
     case 'MULTISELECT':
       if (!(action.key in prevState)) {
         prevState[action.key] = [action.value.key];
-      } else {
+    } else {
         var idx = prevState[action.key].indexOf(action.value.key);
   
         if (idx !== -1) {
@@ -64,10 +60,10 @@ const updater = (state, action) => {
             ...prevState[action.key].slice(0, idx),
             ...prevState[action.key].slice(idx + 1)
           ];
-        } else {
+      } else {
           prevState[action.key] = [...prevState[action.key], action.value.key];
-        }
       }
+    }
 
       if (prevState[action.key].length == 0) delete prevState[action.key];
 
@@ -81,7 +77,7 @@ const updater = (state, action) => {
 
     default:
       return prevState;
-  }
+}
 }
 
 const prepInitials = (filters) => {
@@ -90,8 +86,8 @@ const prepInitials = (filters) => {
   filters.map(f => {
     if (f?.initial) {
       initials[f.key] = f.initial;
-    }
-  });
+  }
+});
 
   return initials;
 }
@@ -123,11 +119,11 @@ const prepParts = (filters, currentValues) => {
         
         default:
           pred = `{${f.key}: {_ilike: $${f.key}}}`; // default is text
-      }
+    }
 
       where.push(pred);
-    }
-  });
+  }
+});
 
   return [
     params.length > 0 ? `(${params.join(', ')})` : '',
@@ -141,14 +137,14 @@ const prepQuery = (tableName, query, filters, currentValues) => {
   let finalQuery = `query ${tableName}s${params}{
     ${tableName}${where} {
       ${query}
-    }
-  }`;
+  }
+}`;
 
   return finalQuery;
 }
 
 // get saved filters for [tableName] from localStorage
-// structure: listingFilters: { 'object': [{}], 'tasks': [] }
+// structure: listingFilters: {'object': [{}], 'tasks': []}
 
 const getAllFilters = () => {
   return JSON.parse(localStorage.getItem(LS_KEY_NAME)) ?? {};
@@ -172,6 +168,10 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
 
   }, []);
 
+
+ 
+
+
   // can save filter
   const canSave = () => {
     // check whether state has any value ?
@@ -180,8 +180,6 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
 
   // save filter
   const saveFilter = () => {
-    localStorage.setItem('asd', 'asd');
-
     if (!canSave()) return;
 
     const newFilter = {
@@ -194,8 +192,8 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
         query,
         filtersData,
         state
-      }
     }
+  }
     
     const newFilters = [...savedFilters, newFilter];
     
@@ -206,29 +204,26 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     //[...savedFilters, allSaved[tableName][allSaved[tableName].length - 1]]
 
     setSavedFilters(newFilters); 
-  }
+}
 
   // delete filter
   const deleteFilter = (e) => {
     const id = e.target.id;
-
     const newFilters = savedFilters.filter(f => f.id !== id);
     
-    // console.log('new filters', newFilters);
-
     const allSaved = getAllFilters();
     allSaved[tableName] = newFilters;
     localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
 
     setSavedFilters(newFilters);
-  }
+}
 
   // edit filter
   const editFilter = (e) => {
     const id = e.target.id;
 
     updateFilter(id, 'editMode', true);
-  }
+}
 
   // update filter
   const updateFilter = (id, prop, value) => {
@@ -237,11 +232,11 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     newFilters.map(f => {
       if (f.id === id) {
         f[prop] = value;
-      }
-    })
+    }
+  })
 
     setSavedFilters(newFilters);
-  }
+}
 
   // on filter name changed
   const onFilterNameChanged = (e) => {
@@ -256,19 +251,18 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     const allSaved = getAllFilters();
     allSaved[tableName] = savedFilters;
     localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
-  }
+}
 
   // apply filter
   const applyFilter = (e) => {
     const id = e.target.id;
-
     const filter = savedFilters.find(f => f.id === id);
 
     dispatch({type: 'APPLY', filter: filter.props.state});
-  }
+}
 
   const filters = useMemo(() => {
-    console.log('filters rendered');
+    // console.log('filters rendered');
 
     return <>
       <Nullable on={savedFilters.length > 0}>
@@ -298,9 +292,9 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
 
           if (key in state && filter === 'select') {
             currentValue = state[key];
-          } else if (key in state && filter === 'multiselect') {
+        } else if (key in state && filter === 'multiselect') {
             currentValue = state[key].join(', ');
-          }
+        }
 
           return <Component 
             inputwrapperClassName='relative'
@@ -320,8 +314,74 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
               values ?? []
             )}
           </Component>
-        }
+      }
         
+        else if (filter === 'date') {
+          return <>
+            <DateTimePicker key={key} />
+
+            {/* <div className='relative grid grid-cols-1 gap-x-14 md:grid-cols-2'>
+              <button
+                type='button'
+                className='absolute -top-1 -left-1.5 flex items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
+              >
+                <span className='sr-only'>Previous month</span>
+                <ChevronLeftIcon className='h-5 w-5' aria-hidden='true' />
+              </button>
+              <button
+                type='button'
+                className='absolute -top-1 -right-1.5 flex items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
+              >
+                <span className='sr-only'>Next month</span>
+                <ChevronRightIcon className='h-5 w-5' aria-hidden='true' />
+              </button>
+              {months.map((month, monthIdx) => (
+                <section
+                  key={monthIdx}
+                  className={classNames(monthIdx === months.length - 1 && 'hidden md:block', 'text-center')}
+                >
+                  <h2 className='font-semibold text-gray-900'>{month.name}</h2>
+                  <div className='mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500'>
+                    <div>M</div>
+                    <div>T</div>
+                    <div>W</div>
+                    <div>T</div>
+                    <div>F</div>
+                    <div>S</div>
+                    <div>S</div>
+                  </div>
+                  <div className='isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200'>
+                    {month.days.map((day, dayIdx) => (
+                      <button
+                        key={day.date}
+                        type='button'
+                        className={classNames(
+                          day.isCurrentMonth ? 'bg-white text-gray-900' : 'bg-gray-50 text-gray-400',
+                          dayIdx === 0 && 'rounded-tl-lg',
+                          dayIdx === 6 && 'rounded-tr-lg',
+                          dayIdx === month.days.length - 7 && 'rounded-bl-lg',
+                          dayIdx === month.days.length - 1 && 'rounded-br-lg',
+                          'relative py-1.5 hover:bg-gray-100 focus:z-10'
+                        )}
+                      >
+                        <time
+                          dateTime={day.date}
+                          className={classNames(
+                            day.isToday && 'bg-indigo-600 font-semibold text-white',
+                            'mx-auto flex h-7 w-7 items-center justify-center rounded-full'
+                          )}
+                        >
+                          {day.date.split('-').pop().replace(/^0/, '')}
+                        </time>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div> */}
+          </>
+      }
+
         return <Component 
           inputwrapperClassName='relative'
           inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
@@ -329,15 +389,16 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
           label={label}
           defaultValue={state[key] ? state[key].replace(/%/g, '') : ''}
           onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />
-      })}
+    })}
       
-      {/* Date picker */}
+
+
       {/* Date picker range */}
 
       <Button onClick={saveFilter}>Save Filter</Button>
 
     </>
-    }, [state, savedFilters]
+  }, [state, savedFilters]
   );
 
   return [

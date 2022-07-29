@@ -32,6 +32,7 @@ import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
 import {BreachEditRoute} from '../routes';
+import {useFilter} from 'hook/useFilter';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -66,24 +67,25 @@ const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
 const BreachListLayout = withPreparedProps(Listing, props => {
-  const {apiQuery} = useAuth();
+  const {api} = useAuth();
   const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(chain(maybeToAsync('"breach" prop is expected in the response', getProp('breach')),
-    apiQuery(
-      `
-        query {
-          breach {
-            id
-            crew_id
-            driver_id
-            end_time
-            start_time
-          }
-        }
-      `
-    ))
-  );
+
+  const [query, filterValues, filters] = useFilter(
+    'breach',
+    `
+      id
+      crew_id
+      driver_id
+      end_time
+      start_time
+    `, [
+    {key: 'start_time', type: 'Date', label: 'Started At', filter: 'date'},
+  ]);
+
+  const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
+    api(filterValues, query)
+  ));
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
@@ -108,6 +110,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
+    filters,
     tableColumns: [
       c('id', ne, identity),
       c('start_time', ne, (date) => format(new Date(date), 'Y-MM-d HH:mm')),
