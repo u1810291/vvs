@@ -5,10 +5,10 @@ import Button from 'components/Button';
 import Nullable from 'components/atom/Nullable';
 import {format} from 'date-fns';
 
-// import {CalendarIcon} from '@heroicons/react/outline';
 import {generate} from 'shortid';
 import InputGroup from 'components/atom/input/InputGroup';
 import DatePicker from 'components/DatePicker';
+import {PencilIcon, TrashIcon, StarIcon} from '@heroicons/react/solid';
 
 
 
@@ -110,20 +110,19 @@ const prepInitials = (filters) => {
   return initials;
 }
 
-const prepParts = (filters, currentValues) => {
+const prepParts = (filters, values) => {
   const params = [];
   const where = [];
 
   filters.map(f => {
     // console.log(f);
 
-
     // if sigle date filter
     if (f.filter === 'date' ) {
       const keyStart = `${f.key}_start`;
       const keyEnd = `${f.key}_end`;
 
-      if (keyStart in currentValues && keyEnd in currentValues && currentValues[keyStart] && currentValues[keyEnd] || f?.initial) {
+      if (keyStart in values && keyEnd in values && values[keyStart] && values[keyEnd] || f?.initial) {
         let param = `\$${f.key}_start: ${f.type}, \$${f.key}_end: ${f.type}`;
         let pred = `{${f.key}: {_gte: $${f.key}_start}}, {${f.key}: {_lte: $${f.key}_end}}`;
       
@@ -132,17 +131,12 @@ const prepParts = (filters, currentValues) => {
       }
     }
 
+    // TODO: check if date range -> _gte && _lte
+
     // if text, select, multiselect
-    else if (f.key in currentValues && currentValues[f.key] || f?.initial) {
+    else if (f.key in values && values[f.key] || f?.initial) {
       let param = `\$${f.key}: ${f.type}`;
       let pred = '';
-
-      // where: 
-      // +check if text -> _ilike
-      // +check if select -> _eq
-      // +check if multiselect -> _in []
-      // check if date -> _gte && _lte
-      // check if date range -> _gte && _lte
 
       switch (f.filter) {
         case 'select':
@@ -198,7 +192,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
   const query = useMemo(() => prepQuery(tableName, q, filtersData, state), [state]);
 
   // get saved for 'tableName' from filters
-  const [savedFilters, setSavedFilters] = useState(getSavedFilters(tableName));
+  const [savedFilters, setSavedFilters] = useState(getSavedFilters(tableName)); // TODO: is this a heavy operation?
 
   useEffect(() => {
     console.log(savedFilters);
@@ -207,13 +201,18 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
   }, []);
 
 
- 
-
-
   // can save filter
   const canSave = () => {
-    // check whether state has any value ?
-    return true;
+    let canSave = false;
+
+    for (const [key, value] of Object.entries(state)) {
+      if (value !== undefined || value !== null) {
+        canSave = true;
+        break;
+      }
+    }
+    
+    return canSave;
   }
 
   // save filter
@@ -229,10 +228,10 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
         tableName,
         query,
         filtersData,
-        state
+        state 
+      }
     }
-  }
-    
+      
     const newFilters = [...savedFilters, newFilter];
     
     const allSaved = getAllFilters();
@@ -242,26 +241,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     //[...savedFilters, allSaved[tableName][allSaved[tableName].length - 1]]
 
     setSavedFilters(newFilters); 
-}
-
-  // delete filter
-  const deleteFilter = (e) => {
-    const id = e.target.id;
-    const newFilters = savedFilters.filter(f => f.id !== id);
-    
-    const allSaved = getAllFilters();
-    allSaved[tableName] = newFilters;
-    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
-
-    setSavedFilters(newFilters);
-}
-
-  // edit filter
-  const editFilter = (e) => {
-    const id = e.target.id;
-
-    updateFilter(id, 'editMode', true);
-}
+  }
 
   // update filter
   const updateFilter = (id, prop, value) => {
@@ -270,11 +250,44 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     newFilters.map(f => {
       if (f.id === id) {
         f[prop] = value;
-    }
-  })
+      }
+    })
+
+    setSavedFilters(newFilters); 
+  }
+
+  // delete filter
+  const deleteFilter = (e) => {
+    const id = e.currentTarget.id;
+    const newFilters = savedFilters.filter(f => f.id !== id);
+    
+    const allSaved = getAllFilters();
+    allSaved[tableName] = newFilters;
+    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
 
     setSavedFilters(newFilters);
-}
+  }
+
+  // edit filter
+  const editFilter = (e) => {
+    const id = e.currentTarget.id;
+
+    updateFilter(id, 'editMode', true);
+  } 
+
+  // star filter
+  const starFilter = (e) => {
+    const id = e.currentTarget.id;
+    const filter = savedFilters.find(f => f.id === id);
+
+    console.log(id, filter);
+
+    updateFilter(id, 'starred', !filter.starred);
+    
+    const allSaved = getAllFilters();
+    allSaved[tableName] = savedFilters;
+    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
+  }
 
   // on filter name changed
   const onFilterNameChanged = (e) => {
@@ -289,50 +302,58 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     const allSaved = getAllFilters();
     allSaved[tableName] = savedFilters;
     localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
-}
+  }
+
+  // blur
+  const onFilterBlur = (e) => {
+    const id = e.target.id;
+    updateFilter(id, 'editMode', false);
+  }
 
   // apply filter
   const applyFilter = (e) => {
     const id = e.target.id;
     const filter = savedFilters.find(f => f.id === id);
 
+    // TODO: check if filter found
+
     dispatch({type: 'APPLY', filter: filter.props.state});
 }
 
   const filters = useMemo(() => {
-    // console.log('filters rendered');
+    console.log('filters rendered with state', state, filtersData);
 
     return <>
       <Nullable on={savedFilters.length > 0}>
-        {savedFilters.map(({id, editMode, name}) => 
+        {savedFilters.map(({id, editMode, name, starred}) => 
           <div key={id} className={'flex flex-row'}>
             
             <Nullable on={editMode}>
-              <InputGroup id={id} defaultValue={name} onKeyDown={onFilterNameChanged}/>
+              <InputGroup id={id} defaultValue={name} onKeyDown={onFilterNameChanged} onBlur={onFilterBlur} autoFocus />
             </Nullable>
 
             <Nullable on={!editMode}>
               <span onClick={applyFilter} id={id} className={'cursor-pointer hover:opacity-50 active:opacity-80'}>{name}</span>
             </Nullable>
 
-            <Button.Xs onClick={editFilter} id={id} className={'h-5 w-5 cursor-pointer hover:opacity-50 mr-2'}>Edit</Button.Xs>
-            <Button.Xs onClick={deleteFilter} id={id} className={'h-5 w-5 cursor-pointer hover:opacity-50'}>
-              Delete
-            </Button.Xs>
+            <PencilIcon onClick={editFilter} id={id} className={'h-5 w-5 cursor-pointer hover:opacity-50 ml-1 mr-1'} />
+            <TrashIcon onClick={deleteFilter} id={id} className={'h-5 w-5 cursor-pointer hover:opacity-50 mr-1'} />
+            <StarIcon onClick={starFilter} id={id} className={`${starred ? 'bg-yellow-500' : ''} h-5 w-5 cursor-pointer hover:opacity-50`} />
 
           </div>
         )}
       </Nullable>
 
       {filtersData.map(({key, label, filter, Component, Child, values}) => {
+        // select or multiselect
         if (filter === 'select' || filter === 'multiselect') {
           let currentValue = '';
-
+            
           if (key in state && filter === 'select') {
             currentValue = state[key];
-        } else if (key in state && filter === 'multiselect') {
+          } else if (key in state && filter === 'multiselect') {
             currentValue = state[key].join(', ');
-        }
+          }
 
           return <Component 
             inputwrapperClassName='relative'
@@ -352,20 +373,23 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
               values ?? []
             )}
           </Component>
-      }
+        }
         
+        // date
         else if (filter === 'date') {
-          return <>
-            <DatePicker 
-              key={key} 
-              label={label} 
-              defaultValue={state[key]} 
-              onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})} 
-            />
+          console.log('it is a date with: ', state[`${key}_start`]);
 
-          </>
-      }
+          return <DatePicker 
+            key={key} 
+            label={label} 
+            defaultValue={state[`${key}_start`] ? new Date(state[`${key}_start`]) : null} 
+            onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})} 
+          />
+        }
 
+        // TODO: Date picker range
+
+        // rest (text)
         return <Component 
           inputwrapperClassName='relative'
           inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
@@ -373,16 +397,11 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
           label={label}
           defaultValue={state[key] ? state[key].replace(/%/g, '') : ''}
           onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />
-    })}
-      
+        })}
 
-
-      {/* Date picker range */}
-
-      <Button onClick={saveFilter}>Save Filter</Button>
-
-    </>
-  }, [state, savedFilters]
+        <Button className={'mt-2'} onClick={saveFilter}>Save Filter</Button>
+      </>
+    }, [state, savedFilters]
   );
 
   return [
