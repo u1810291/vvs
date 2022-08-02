@@ -405,7 +405,9 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
           onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: key}))} />
         })}
 
-        <Button className={'mt-2'} onClick={saveFilter}>Save Filter</Button>
+        <Nullable on={filtersData}>
+          <Button className={'mt-2'} onClick={saveFilter}>Save Filter</Button>
+        </Nullable>
       </>
     }, [state, savedFilters]
   );
