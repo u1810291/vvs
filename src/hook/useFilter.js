@@ -9,12 +9,14 @@ import {generate} from 'shortid';
 import InputGroup from 'components/atom/input/InputGroup';
 import DatePicker from 'components/DatePicker';
 import {PencilIcon, TrashIcon, StarIcon} from '@heroicons/react/solid';
+import {useSearchParams} from 'react-router-dom';
 
 
 
 // CONST
 const LS_KEY_NAME = 'listingFilters';
-
+const DEFAULT_FILTER_NAME = 'New filter';
+const APPLY_FILTER_PARAM = 'af';
 
 
 
@@ -190,16 +192,35 @@ const getSavedFilters = (tableName) => {
 export const useFilter = (tableName, q, filtersData, initialState) => {
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const query = useMemo(() => prepQuery(tableName, q, filtersData, state), [state]);
+  const [params] = useSearchParams();
 
   // get saved for 'tableName' from filters
-  const [savedFilters, setSavedFilters] = useState(getSavedFilters(tableName)); // TODO: is this a heavy operation?
+  const [savedFilters, setSavedFilters] = useState(getSavedFilters(tableName)); // TODO: is this a heavy operation? maybe 'useMemo'...
 
+  // is this ok way?
   useEffect(() => {
-    console.log(savedFilters);
+    console.log('route params', params);
 
-
+    if (params.get(APPLY_FILTER_PARAM)) {
+      applyFilter(params.get(APPLY_FILTER_PARAM));
+    }
   }, []);
 
+  useEffect(() => {
+    // save to local storage
+    saveToStorage();
+  }, [savedFilters]);
+
+
+  const saveToStorage = () => {
+    console.log('save to storage');
+
+    const allSaved = getAllFilters();
+    allSaved[tableName] = savedFilters;
+    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
+    
+    window.dispatchEvent(new Event('storage'))
+  }
 
   // can save filter
   const canSave = () => {
@@ -219,11 +240,13 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
   const saveFilter = () => {
     if (!canSave()) return;
 
+    const id = generate();
     const newFilter = {
-      id: generate(),
-      name: 'New filter',
+      id,
+      name: DEFAULT_FILTER_NAME,
       starred: false,   // ???
       editMode: false,
+      url: `${window.location.pathname}?${APPLY_FILTER_PARAM}=${id}`,  // will not work in Next.js SSR
       props: {
         tableName,
         query,
@@ -234,13 +257,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
       
     const newFilters = [...savedFilters, newFilter];
     
-    const allSaved = getAllFilters();
-    allSaved[tableName] = newFilters;
-    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
-
-    //[...savedFilters, allSaved[tableName][allSaved[tableName].length - 1]]
-
-    setSavedFilters(newFilters); 
+    setSavedFilters(newFilters);
   }
 
   // update filter
@@ -253,7 +270,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
       }
     })
 
-    setSavedFilters(newFilters); 
+    setSavedFilters(newFilters);
   }
 
   // delete filter
@@ -261,17 +278,12 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     const id = e.currentTarget.id;
     const newFilters = savedFilters.filter(f => f.id !== id);
     
-    const allSaved = getAllFilters();
-    allSaved[tableName] = newFilters;
-    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
-
     setSavedFilters(newFilters);
   }
 
   // edit filter
   const editFilter = (e) => {
     const id = e.currentTarget.id;
-
     updateFilter(id, 'editMode', true);
   } 
 
@@ -280,13 +292,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
     const id = e.currentTarget.id;
     const filter = savedFilters.find(f => f.id === id);
 
-    console.log(id, filter);
-
     updateFilter(id, 'starred', !filter.starred);
-    
-    const allSaved = getAllFilters();
-    allSaved[tableName] = savedFilters;
-    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
   }
 
   // on filter name changed
@@ -298,10 +304,6 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
 
     updateFilter(id, 'name', newName);
     updateFilter(id, 'editMode', false);
-
-    const allSaved = getAllFilters();
-    allSaved[tableName] = savedFilters;
-    localStorage.setItem(LS_KEY_NAME, JSON.stringify(allSaved));
   }
 
   // blur
@@ -311,17 +313,21 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
   }
 
   // apply filter
-  const applyFilter = (e) => {
-    const id = e.target.id;
+  const applyFilter = (id) => {
     const filter = savedFilters.find(f => f.id === id);
-
     // TODO: check if filter found
-
     dispatch({type: 'APPLY', filter: filter.props.state});
-}
+  }
+  
+  const onApplyFilter = (e) => {
+    const id = e.target.id;
+    applyFilter(id);
+  }
+
+
 
   const filters = useMemo(() => {
-    console.log('filters rendered with state', state, filtersData);
+    // console.log('filters rendered with state', state, filtersData);
 
     return <>
       <Nullable on={savedFilters.length > 0}>
@@ -333,7 +339,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
             </Nullable>
 
             <Nullable on={!editMode}>
-              <span onClick={applyFilter} id={id} className={'cursor-pointer hover:opacity-50 active:opacity-80'}>{name}</span>
+              <span onClick={onApplyFilter} id={id} className={'cursor-pointer hover:opacity-50 active:opacity-80'}>{name}</span>
             </Nullable>
 
             <PencilIcon onClick={editFilter} id={id} className={'h-5 w-5 cursor-pointer hover:opacity-50 ml-1 mr-1'} />
@@ -377,7 +383,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
         
         // date
         else if (filter === 'date') {
-          console.log('it is a date with: ', state[`${key}_start`]);
+          // console.log('it is a date with: ', state[`${key}_start`]);
 
           return <DatePicker 
             key={key} 

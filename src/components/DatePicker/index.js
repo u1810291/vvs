@@ -82,7 +82,7 @@ const DatePicker = ({key, label, defaultValue, onChange}) => {
   }, [currentMonth, currentYear, selectedDate]);
 
   useEffect(() => {
-    console.log(defaultValue);
+    // console.log(defaultValue);
   }, []);
 
 
