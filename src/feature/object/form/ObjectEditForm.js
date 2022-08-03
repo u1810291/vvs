@@ -15,12 +15,28 @@ import {
   mapProps,
   safe,
   isObject,
+  isNil,
+  ifElse,
+  constant,
+  isSame,
 } from 'crocks';
 import {useEffect} from 'react';
 
-const ObjectEditForm = () => {
+const mapFromNumeric = ifElse(
+  isNil,
+  constant(''),
+  String,
+);
+
+const mapToNumeric = ifElse(
+  isSame(''),
+  constant(null),
+  parseFloat,
+);
+
+const ObjectEditForm = ({saveRef = identity}) => {
   const {id} = useParams();
-  const {data} = useObject(id);
+  const {data, update} = useObject(id);
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
 
@@ -40,14 +56,18 @@ const ObjectEditForm = () => {
     provider_id: FORM_FIELD.TEXT({label: t`field.providerId`, validator: () => true}),
   });
 
+  useEffect(() => {
+    saveRef.current = () => update(result).fork(console.error, console.warn);
+  }, [saveRef.current, result]);
+
   useEffect(() => {pipe(
     safe(isObject),
     map(pipe(
       mapProps({
-        longitude: String,
-        latitude: String,
-        provider_id: String,
-        navision_id: String,
+        longitude: mapFromNumeric,
+        latitude: mapFromNumeric,
+        provider_id: mapFromNumeric,
+        navision_id: mapFromNumeric,
       }),
       setForm,
     )),

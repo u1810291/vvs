@@ -18,6 +18,7 @@ import {
   maybeToAsync,
   not,
   option,
+  pick,
   pipe,
   safe,
 } from 'crocks';
@@ -41,6 +42,19 @@ export const useObject = (id) => {
   const update = useMemo(() => pipe(
     resultToAsync,
     map(a => ({...a, id})),
+    map(pick([
+      'address',
+      'city',
+      'contract_no',
+      'contract_object_no',
+      'description',
+      'is_atm',
+      'latitude',
+      'longitude',
+      'name',
+      'navision_id',
+      'phone',
+    ])),
     map(mapProps({
       latitude: pipe(
         safe(not(isEmpty)),

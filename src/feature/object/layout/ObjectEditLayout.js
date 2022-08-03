@@ -5,16 +5,21 @@ import Nullable from 'components/atom/Nullable';
 import ObjectEditForm from '../form/ObjectEditForm';
 import ObjectRoute from '../routes';
 import SidebarLayout from 'layout/SideBarLayout';
-import {getProp} from 'crocks';
+import {getProp, identity, isFunction} from 'crocks';
 import {useObject} from '../api';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import {useRef} from 'react';
 
 const ObjectEditLayout = () => {
+  const saveRef = useRef(identity);
   const params = useParams();
   const {data} = useObject(params?.id);
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
-  const send = () => {};
+
+  const send = () => {
+    isFunction(saveRef.current) && saveRef.current();
+  };
 
   const breadcrumb = (
     getProp('name', data)
@@ -40,7 +45,7 @@ const ObjectEditLayout = () => {
           </div>
         </>
       </Header>
-      <ObjectEditForm/>
+      <ObjectEditForm saveRef={saveRef}/>
     </SidebarLayout>
   )
 };
