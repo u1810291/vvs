@@ -1,13 +1,12 @@
 import {Transition} from '@headlessui/react';
-import {createContext, useCallback, useContext, useState} from 'react';
-
+import {cloneElement, createContext, useCallback, useContext, useState} from 'react';
 
 const NotificationContext = createContext();
 
 const NotificationContextProvider = ({children}) => {
   const [data, setData] = useState([]);
 
-  const notify = useCallback((children, {timeout = 8000} = {}) => {
+  const notify = useCallback((children, {timeout = 800000} = {}) => {
     setData(d => {
       const notification = {
         id: `${d.length}-${+ new Date()}`,
@@ -38,11 +37,17 @@ const NotificationContextProvider = ({children}) => {
             enter='transition-all duration-300 ease-in-out transform'
             leave='transition-all duration-300 ease-in-out transform'
             enterFrom='-translate-y-full opacity-0 h-0'
-            enterTo='translate-y-0 opacity-100 h-10'
+            enterTo='translate-y-0 opacity-100'
             leaveFrom='translate-y-0 opacity-100 h-10'
             leaveTo='translate-y-full opacity-0 h-0'
           >
-              {notification.children}
+            {cloneElement(notification.children, {
+              closeFn: () => setData(d => d.map(
+                d => d.id === notification.id
+                  ? ({...d, show: false})
+                  : d
+              ))
+            })}
             </Transition>
           ))
         }
