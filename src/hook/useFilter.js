@@ -361,9 +361,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
             currentValue = state[key].join(', ');
           }
 
-          return <Component 
-            inputwrapperClassName='relative'
-            inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+          return <Component
             key={key} 
             label={label} 
             onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
@@ -396,9 +394,7 @@ export const useFilter = (tableName, q, filtersData, initialState) => {
         // TODO: Date picker range
 
         // rest (text)
-        return <Component 
-          inputwrapperClassName='relative'
-          inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full'
+        return <Component
           key={key} 
           label={label}
           defaultValue={state[key] ? state[key].replace(/%/g, '') : ''}
