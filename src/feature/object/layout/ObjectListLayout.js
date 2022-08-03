@@ -1,12 +1,15 @@
+import Breadcrumbs from 'components/Breadcrumbs';
 import Listing from 'layout/ListingLayout';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-import useAsync from 'hook/useAsync';
-import {titleCase} from '@s-e/frontend/transformer/string';
-import {useAuth} from 'context/auth';
-import {useEffect, useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
 import withPreparedProps from 'hoc/withPreparedProps';
+import {ObjectEditRoute} from '../routes';
+import {alt} from 'crocks/pointfree';
+import {generatePath, Link} from 'react-router-dom';
+import {titleCase} from '@s-e/frontend/transformer/string';
+import {useMemo} from 'react';
+import {useObjects} from '../api';
+import {useTranslation} from 'react-i18next';
 import {
+  Maybe,
   and,
   chain,
   curry,
@@ -15,17 +18,13 @@ import {
   identity,
   isArray,
   isEmpty,
+  isNil,
   map,
-  Maybe,
   not,
   objOf,
   pipe,
   safe,
 } from 'crocks';
-import Breadcrumbs from 'components/Breadcrumbs';
-import {generatePath, Link} from 'react-router-dom';
-import {ObjectEditRoute} from '../routes';
-import {alt} from 'crocks/pointfree';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -41,36 +40,13 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
   )(item),
 }));
 
+const nnil = not(isNil);
 const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
 
-const ObjectList = withPreparedProps(Listing, (props) => {
-  const {apiQuery} = useAuth();
+const ObjectList = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
-    apiQuery(
-      `
-        query {
-          object {
-            address
-            city
-            contract_no
-            contract_object_no
-            id
-            is_atm
-            longitude
-            latitude
-            name
-            provider_name
-            provider_id
-            phone
-            navision_id
-          }
-        }
-      `
-    ))
-  );
+  const swr = useObjects();
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(ObjectEditRoute.props.path, {id: props?.id})}>
@@ -78,10 +54,8 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     </Link>
   )), [t]);
 
-  useEffect(() => { fork() }, []);
-
   return {
-    list: safe(isArray, state.data).option([]),
+    list: safe(isArray, swr.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
@@ -95,8 +69,8 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       c('city', ne, titleCase),
       c('address', ne, identity),
       c('phone', ne, identity),
-      c('longitude', ne, identity),
-      c('latitude', ne, identity),
+      c('longitude', nnil, identity),
+      c('latitude', nnil, identity),
       c('contract_no', ne, identity),
       c('contract_object_no', ne, identity),
       c('provider_name', ne, titleCase),
