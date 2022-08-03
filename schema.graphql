@@ -520,6 +520,10 @@ type crew_breach {
     driver_id: uuid
     end_time: timestamptz
     id: uuid!
+    nodes(
+        "JSON select path"
+        path: String
+    ): json
     start_time: timestamptz
 }
 
@@ -640,6 +644,45 @@ type crew_mutation_response {
     affected_rows: Int!
     "data from the rows affected by the mutation"
     returning: [crew!]!
+}
+
+"columns and relationships of \"crew_request\""
+type crew_request {
+    comment: String
+    value: String!
+}
+
+"aggregated selection of \"crew_request\""
+type crew_request_aggregate {
+    aggregate: crew_request_aggregate_fields
+    nodes: [crew_request!]!
+}
+
+"aggregate fields of \"crew_request\""
+type crew_request_aggregate_fields {
+    count(columns: [crew_request_select_column!], distinct: Boolean): Int!
+    max: crew_request_max_fields
+    min: crew_request_min_fields
+}
+
+"aggregate max on columns"
+type crew_request_max_fields {
+    comment: String
+    value: String
+}
+
+"aggregate min on columns"
+type crew_request_min_fields {
+    comment: String
+    value: String
+}
+
+"response of any mutation on the table \"crew_request\""
+type crew_request_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [crew_request!]!
 }
 
 "columns and relationships of \"crew_status\""
@@ -2813,6 +2856,13 @@ type mutation_root {
     ): crew_calendar_mutation_response
     "delete single row from the table: \"crew_calendar\""
     delete_crew_calendar_by_pk(id: uuid!): crew_calendar
+    "delete data from the table: \"crew_request\""
+    delete_crew_request(
+        "filter the rows which have to be deleted"
+        where: crew_request_bool_exp!
+    ): crew_request_mutation_response
+    "delete single row from the table: \"crew_request\""
+    delete_crew_request_by_pk(value: String!): crew_request
     "delete data from the table: \"crew_status\""
     delete_crew_status(
         "filter the rows which have to be deleted"
@@ -2932,6 +2982,20 @@ type mutation_root {
     ): provider_mutation_response
     "delete single row from the table: \"provider\""
     delete_provider_by_pk(value: String!): provider
+    "delete data from the table: \"reason_for_cancellation\""
+    delete_reason_for_cancellation(
+        "filter the rows which have to be deleted"
+        where: reason_for_cancellation_bool_exp!
+    ): reason_for_cancellation_mutation_response
+    "delete single row from the table: \"reason_for_cancellation\""
+    delete_reason_for_cancellation_by_pk(value: String!): reason_for_cancellation
+    "delete data from the table: \"task_type\""
+    delete_task_type(
+        "filter the rows which have to be deleted"
+        where: task_type_bool_exp!
+    ): task_type_mutation_response
+    "delete single row from the table: \"task_type\""
+    delete_task_type_by_pk(value: String!): task_type
     "delete data from the table: \"user_settings\""
     delete_user_settings(
         "filter the rows which have to be deleted"
@@ -3044,6 +3108,20 @@ type mutation_root {
         "upsert condition"
         on_conflict: crew_on_conflict
     ): crew
+    "insert data into the table: \"crew_request\""
+    insert_crew_request(
+        "the rows to be inserted"
+        objects: [crew_request_insert_input!]!,
+        "upsert condition"
+        on_conflict: crew_request_on_conflict
+    ): crew_request_mutation_response
+    "insert a single row into the table: \"crew_request\""
+    insert_crew_request_one(
+        "the row to be inserted"
+        object: crew_request_insert_input!,
+        "upsert condition"
+        on_conflict: crew_request_on_conflict
+    ): crew_request
     "insert data into the table: \"crew_status\""
     insert_crew_status(
         "the rows to be inserted"
@@ -3282,6 +3360,34 @@ type mutation_root {
         "upsert condition"
         on_conflict: provider_on_conflict
     ): provider
+    "insert data into the table: \"reason_for_cancellation\""
+    insert_reason_for_cancellation(
+        "the rows to be inserted"
+        objects: [reason_for_cancellation_insert_input!]!,
+        "upsert condition"
+        on_conflict: reason_for_cancellation_on_conflict
+    ): reason_for_cancellation_mutation_response
+    "insert a single row into the table: \"reason_for_cancellation\""
+    insert_reason_for_cancellation_one(
+        "the row to be inserted"
+        object: reason_for_cancellation_insert_input!,
+        "upsert condition"
+        on_conflict: reason_for_cancellation_on_conflict
+    ): reason_for_cancellation
+    "insert data into the table: \"task_type\""
+    insert_task_type(
+        "the rows to be inserted"
+        objects: [task_type_insert_input!]!,
+        "upsert condition"
+        on_conflict: task_type_on_conflict
+    ): task_type_mutation_response
+    "insert a single row into the table: \"task_type\""
+    insert_task_type_one(
+        "the row to be inserted"
+        object: task_type_insert_input!,
+        "upsert condition"
+        on_conflict: task_type_on_conflict
+    ): task_type
     "insert data into the table: \"user_settings\""
     insert_user_settings(
         "the rows to be inserted"
@@ -3410,6 +3516,19 @@ type mutation_root {
         _set: crew_calendar_set_input,
         pk_columns: crew_calendar_pk_columns_input!
     ): crew_calendar
+    "update data of the table: \"crew_request\""
+    update_crew_request(
+        "sets the columns of the filtered rows to the given values"
+        _set: crew_request_set_input,
+        "filter the rows which have to be updated"
+        where: crew_request_bool_exp!
+    ): crew_request_mutation_response
+    "update single row of the table: \"crew_request\""
+    update_crew_request_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: crew_request_set_input,
+        pk_columns: crew_request_pk_columns_input!
+    ): crew_request
     "update data of the table: \"crew_status\""
     update_crew_status(
         "sets the columns of the filtered rows to the given values"
@@ -3679,6 +3798,32 @@ type mutation_root {
         _set: provider_set_input,
         pk_columns: provider_pk_columns_input!
     ): provider
+    "update data of the table: \"reason_for_cancellation\""
+    update_reason_for_cancellation(
+        "sets the columns of the filtered rows to the given values"
+        _set: reason_for_cancellation_set_input,
+        "filter the rows which have to be updated"
+        where: reason_for_cancellation_bool_exp!
+    ): reason_for_cancellation_mutation_response
+    "update single row of the table: \"reason_for_cancellation\""
+    update_reason_for_cancellation_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: reason_for_cancellation_set_input,
+        pk_columns: reason_for_cancellation_pk_columns_input!
+    ): reason_for_cancellation
+    "update data of the table: \"task_type\""
+    update_task_type(
+        "sets the columns of the filtered rows to the given values"
+        _set: task_type_set_input,
+        "filter the rows which have to be updated"
+        where: task_type_bool_exp!
+    ): task_type_mutation_response
+    "update single row of the table: \"task_type\""
+    update_task_type_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: task_type_set_input,
+        pk_columns: task_type_pk_columns_input!
+    ): task_type
     "update data of the table: \"user_settings\""
     update_user_settings(
         "increments the numeric columns with given value of the filtered values"
@@ -4513,6 +4658,34 @@ type query_root {
     ): crew_calendar_aggregate!
     "fetch data from the table: \"crew_calendar\" using primary key columns"
     crew_calendar_by_pk(id: uuid!): crew_calendar
+    "fetch data from the table: \"crew_request\""
+    crew_request(
+        "distinct select on columns"
+        distinct_on: [crew_request_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_request_order_by!],
+        "filter the rows returned"
+        where: crew_request_bool_exp
+    ): [crew_request!]!
+    "fetch aggregated fields from the table: \"crew_request\""
+    crew_request_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_request_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_request_order_by!],
+        "filter the rows returned"
+        where: crew_request_bool_exp
+    ): crew_request_aggregate!
+    "fetch data from the table: \"crew_request\" using primary key columns"
+    crew_request_by_pk(value: String!): crew_request
     "fetch data from the table: \"crew_status\""
     crew_status(
         "distinct select on columns"
@@ -4981,11 +5154,67 @@ type query_root {
     ): provider_aggregate!
     "fetch data from the table: \"provider\" using primary key columns"
     provider_by_pk(value: String!): provider
+    "fetch data from the table: \"reason_for_cancellation\""
+    reason_for_cancellation(
+        "distinct select on columns"
+        distinct_on: [reason_for_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [reason_for_cancellation_order_by!],
+        "filter the rows returned"
+        where: reason_for_cancellation_bool_exp
+    ): [reason_for_cancellation!]!
+    "fetch aggregated fields from the table: \"reason_for_cancellation\""
+    reason_for_cancellation_aggregate(
+        "distinct select on columns"
+        distinct_on: [reason_for_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [reason_for_cancellation_order_by!],
+        "filter the rows returned"
+        where: reason_for_cancellation_bool_exp
+    ): reason_for_cancellation_aggregate!
+    "fetch data from the table: \"reason_for_cancellation\" using primary key columns"
+    reason_for_cancellation_by_pk(value: String!): reason_for_cancellation
     "refresh"
     refresh(refreshToken: String!): refreshOutput
     register(birthDate: String, email: String!, firstName: String!, lastName: String!, mobilePhone: String!, password: String!, role: String!): loginOutput
     "remind"
     remind(changePasswordId: String!, password: String!): remindOutput
+    "fetch data from the table: \"task_type\""
+    task_type(
+        "distinct select on columns"
+        distinct_on: [task_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [task_type_order_by!],
+        "filter the rows returned"
+        where: task_type_bool_exp
+    ): [task_type!]!
+    "fetch aggregated fields from the table: \"task_type\""
+    task_type_aggregate(
+        "distinct select on columns"
+        distinct_on: [task_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [task_type_order_by!],
+        "filter the rows returned"
+        where: task_type_bool_exp
+    ): task_type_aggregate!
+    "fetch data from the table: \"task_type\" using primary key columns"
+    task_type_by_pk(value: String!): task_type
     "updateRegister"
     updateRegister(roles: String!, userId: String!): updateOutput
     "files"
@@ -5048,6 +5277,45 @@ type query_root {
     user_type_by_pk(value: String!): user_type
     "users"
     users(queryString: String!): usersQuery
+}
+
+"columns and relationships of \"reason_for_cancellation\""
+type reason_for_cancellation {
+    comment: String
+    value: String!
+}
+
+"aggregated selection of \"reason_for_cancellation\""
+type reason_for_cancellation_aggregate {
+    aggregate: reason_for_cancellation_aggregate_fields
+    nodes: [reason_for_cancellation!]!
+}
+
+"aggregate fields of \"reason_for_cancellation\""
+type reason_for_cancellation_aggregate_fields {
+    count(columns: [reason_for_cancellation_select_column!], distinct: Boolean): Int!
+    max: reason_for_cancellation_max_fields
+    min: reason_for_cancellation_min_fields
+}
+
+"aggregate max on columns"
+type reason_for_cancellation_max_fields {
+    comment: String
+    value: String
+}
+
+"aggregate min on columns"
+type reason_for_cancellation_min_fields {
+    comment: String
+    value: String
+}
+
+"response of any mutation on the table \"reason_for_cancellation\""
+type reason_for_cancellation_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [reason_for_cancellation!]!
 }
 
 type refreshOutput {
@@ -5253,6 +5521,34 @@ type subscription_root {
     ): crew_calendar_aggregate!
     "fetch data from the table: \"crew_calendar\" using primary key columns"
     crew_calendar_by_pk(id: uuid!): crew_calendar
+    "fetch data from the table: \"crew_request\""
+    crew_request(
+        "distinct select on columns"
+        distinct_on: [crew_request_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_request_order_by!],
+        "filter the rows returned"
+        where: crew_request_bool_exp
+    ): [crew_request!]!
+    "fetch aggregated fields from the table: \"crew_request\""
+    crew_request_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_request_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_request_order_by!],
+        "filter the rows returned"
+        where: crew_request_bool_exp
+    ): crew_request_aggregate!
+    "fetch data from the table: \"crew_request\" using primary key columns"
+    crew_request_by_pk(value: String!): crew_request
     "fetch data from the table: \"crew_status\""
     crew_status(
         "distinct select on columns"
@@ -5713,6 +6009,62 @@ type subscription_root {
     ): provider_aggregate!
     "fetch data from the table: \"provider\" using primary key columns"
     provider_by_pk(value: String!): provider
+    "fetch data from the table: \"reason_for_cancellation\""
+    reason_for_cancellation(
+        "distinct select on columns"
+        distinct_on: [reason_for_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [reason_for_cancellation_order_by!],
+        "filter the rows returned"
+        where: reason_for_cancellation_bool_exp
+    ): [reason_for_cancellation!]!
+    "fetch aggregated fields from the table: \"reason_for_cancellation\""
+    reason_for_cancellation_aggregate(
+        "distinct select on columns"
+        distinct_on: [reason_for_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [reason_for_cancellation_order_by!],
+        "filter the rows returned"
+        where: reason_for_cancellation_bool_exp
+    ): reason_for_cancellation_aggregate!
+    "fetch data from the table: \"reason_for_cancellation\" using primary key columns"
+    reason_for_cancellation_by_pk(value: String!): reason_for_cancellation
+    "fetch data from the table: \"task_type\""
+    task_type(
+        "distinct select on columns"
+        distinct_on: [task_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [task_type_order_by!],
+        "filter the rows returned"
+        where: task_type_bool_exp
+    ): [task_type!]!
+    "fetch aggregated fields from the table: \"task_type\""
+    task_type_aggregate(
+        "distinct select on columns"
+        distinct_on: [task_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [task_type_order_by!],
+        "filter the rows returned"
+        where: task_type_bool_exp
+    ): task_type_aggregate!
+    "fetch data from the table: \"task_type\" using primary key columns"
+    task_type_by_pk(value: String!): task_type
     "fetch data from the table: \"user_settings\""
     user_settings(
         "distinct select on columns"
@@ -5769,6 +6121,45 @@ type subscription_root {
     ): user_type_aggregate!
     "fetch data from the table: \"user_type\" using primary key columns"
     user_type_by_pk(value: String!): user_type
+}
+
+"columns and relationships of \"task_type\""
+type task_type {
+    comment: String
+    value: String!
+}
+
+"aggregated selection of \"task_type\""
+type task_type_aggregate {
+    aggregate: task_type_aggregate_fields
+    nodes: [task_type!]!
+}
+
+"aggregate fields of \"task_type\""
+type task_type_aggregate_fields {
+    count(columns: [task_type_select_column!], distinct: Boolean): Int!
+    max: task_type_max_fields
+    min: task_type_min_fields
+}
+
+"aggregate max on columns"
+type task_type_max_fields {
+    comment: String
+    value: String
+}
+
+"aggregate min on columns"
+type task_type_min_fields {
+    comment: String
+    value: String
+}
+
+"response of any mutation on the table \"task_type\""
+type task_type_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [task_type!]!
 }
 
 type updateOutput {
@@ -6232,6 +6623,8 @@ enum crew_breach_select_column {
     "column name"
     id
     "column name"
+    nodes
+    "column name"
     start_time
 }
 
@@ -6245,6 +6638,8 @@ enum crew_breach_update_column {
     end_time
     "column name"
     id
+    "column name"
+    nodes
     "column name"
     start_time
 }
@@ -6299,6 +6694,28 @@ enum crew_calendar_update_column {
 enum crew_constraint {
     "unique or primary key constraint"
     monas_crew_related_pkey
+}
+
+"unique or primary key constraints on table \"crew_request\""
+enum crew_request_constraint {
+    "unique or primary key constraint"
+    crew_request_pkey
+}
+
+"select columns of table \"crew_request\""
+enum crew_request_select_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
+"update columns of table \"crew_request\""
+enum crew_request_update_column {
+    "column name"
+    comment
+    "column name"
+    value
 }
 
 "select columns of table \"crew\""
@@ -8211,6 +8628,50 @@ enum provider_update_column {
     value
 }
 
+"unique or primary key constraints on table \"reason_for_cancellation\""
+enum reason_for_cancellation_constraint {
+    "unique or primary key constraint"
+    reason_for_cancellation_pkey
+}
+
+"select columns of table \"reason_for_cancellation\""
+enum reason_for_cancellation_select_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
+"update columns of table \"reason_for_cancellation\""
+enum reason_for_cancellation_update_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
+"unique or primary key constraints on table \"task_type\""
+enum task_type_constraint {
+    "unique or primary key constraint"
+    task_type_pkey
+}
+
+"select columns of table \"task_type\""
+enum task_type_select_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
+"update columns of table \"task_type\""
+enum task_type_update_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
 "unique or primary key constraints on table \"user_settings\""
 enum user_settings_constraint {
     "unique or primary key constraint"
@@ -8803,6 +9264,7 @@ input crew_breach_bool_exp {
     driver_id: uuid_comparison_exp
     end_time: timestamptz_comparison_exp
     id: uuid_comparison_exp
+    nodes: json_comparison_exp
     start_time: timestamptz_comparison_exp
 }
 
@@ -8813,6 +9275,7 @@ input crew_breach_insert_input {
     driver_id: uuid
     end_time: timestamptz
     id: uuid
+    nodes: json
     start_time: timestamptz
 }
 
@@ -8837,6 +9300,7 @@ input crew_breach_order_by {
     driver_id: order_by
     end_time: order_by
     id: order_by
+    nodes: order_by
     start_time: order_by
 }
 
@@ -8851,6 +9315,7 @@ input crew_breach_set_input {
     driver_id: uuid
     end_time: timestamptz
     id: uuid
+    nodes: json
     start_time: timestamptz
 }
 
@@ -8958,6 +9423,45 @@ input crew_order_by {
 "primary key columns input for table: crew"
 input crew_pk_columns_input {
     id: uuid!
+}
+
+"Boolean expression to filter rows from the table \"crew_request\". All fields are combined with a logical 'AND'."
+input crew_request_bool_exp {
+    _and: [crew_request_bool_exp!]
+    _not: crew_request_bool_exp
+    _or: [crew_request_bool_exp!]
+    comment: String_comparison_exp
+    value: String_comparison_exp
+}
+
+"input type for inserting data into table \"crew_request\""
+input crew_request_insert_input {
+    comment: String
+    value: String
+}
+
+"on_conflict condition type for table \"crew_request\""
+input crew_request_on_conflict {
+    constraint: crew_request_constraint!
+    update_columns: [crew_request_update_column!]! = []
+    where: crew_request_bool_exp
+}
+
+"Ordering options when selecting data from \"crew_request\"."
+input crew_request_order_by {
+    comment: order_by
+    value: order_by
+}
+
+"primary key columns input for table: crew_request"
+input crew_request_pk_columns_input {
+    value: String!
+}
+
+"input type for updating data in table \"crew_request\""
+input crew_request_set_input {
+    comment: String
+    value: String
 }
 
 "input type for updating data in table \"crew\""
@@ -11129,6 +11633,84 @@ input provider_pk_columns_input {
 
 "input type for updating data in table \"provider\""
 input provider_set_input {
+    comment: String
+    value: String
+}
+
+"Boolean expression to filter rows from the table \"reason_for_cancellation\". All fields are combined with a logical 'AND'."
+input reason_for_cancellation_bool_exp {
+    _and: [reason_for_cancellation_bool_exp!]
+    _not: reason_for_cancellation_bool_exp
+    _or: [reason_for_cancellation_bool_exp!]
+    comment: String_comparison_exp
+    value: String_comparison_exp
+}
+
+"input type for inserting data into table \"reason_for_cancellation\""
+input reason_for_cancellation_insert_input {
+    comment: String
+    value: String
+}
+
+"on_conflict condition type for table \"reason_for_cancellation\""
+input reason_for_cancellation_on_conflict {
+    constraint: reason_for_cancellation_constraint!
+    update_columns: [reason_for_cancellation_update_column!]! = []
+    where: reason_for_cancellation_bool_exp
+}
+
+"Ordering options when selecting data from \"reason_for_cancellation\"."
+input reason_for_cancellation_order_by {
+    comment: order_by
+    value: order_by
+}
+
+"primary key columns input for table: reason_for_cancellation"
+input reason_for_cancellation_pk_columns_input {
+    value: String!
+}
+
+"input type for updating data in table \"reason_for_cancellation\""
+input reason_for_cancellation_set_input {
+    comment: String
+    value: String
+}
+
+"Boolean expression to filter rows from the table \"task_type\". All fields are combined with a logical 'AND'."
+input task_type_bool_exp {
+    _and: [task_type_bool_exp!]
+    _not: task_type_bool_exp
+    _or: [task_type_bool_exp!]
+    comment: String_comparison_exp
+    value: String_comparison_exp
+}
+
+"input type for inserting data into table \"task_type\""
+input task_type_insert_input {
+    comment: String
+    value: String
+}
+
+"on_conflict condition type for table \"task_type\""
+input task_type_on_conflict {
+    constraint: task_type_constraint!
+    update_columns: [task_type_update_column!]! = []
+    where: task_type_bool_exp
+}
+
+"Ordering options when selecting data from \"task_type\"."
+input task_type_order_by {
+    comment: order_by
+    value: order_by
+}
+
+"primary key columns input for table: task_type"
+input task_type_pk_columns_input {
+    value: String!
+}
+
+"input type for updating data in table \"task_type\""
+input task_type_set_input {
     comment: String
     value: String
 }

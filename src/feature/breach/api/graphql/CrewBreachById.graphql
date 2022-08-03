@@ -3,6 +3,7 @@ query CrewBreachById ($id: uuid!) {
         id
         end_time
         start_time
+        nodes
         crew {
             name
             status

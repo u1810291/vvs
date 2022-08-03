@@ -3,7 +3,7 @@ import Timecode from 'react-timecode';
 import Timer from 'react-timer-wrapper';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {Polygon, DirectionsRenderer, DirectionsService} from '@react-google-maps/api';
+import {Polygon, Marker} from '@react-google-maps/api';
 
 import Card from 'components/atom/Card';
 import Nullable from 'components/atom/Nullable';
@@ -18,11 +18,11 @@ import {POLYGON_OPTIONS_DISPLAY} from '../../map/polygon';
 import {useGoogleApiContext} from '../../../context/google';
 
 import {generate} from 'shortid';
-import {and, not} from 'crocks/logic';
+import {and, ifElse, not} from 'crocks/logic';
 import {constant} from 'crocks/combinators';
-import {chain, option} from 'crocks/pointfree';
-import {isObject, isEmpty} from 'crocks/predicates';
-import {pipe, map, safe, mapProps, getPath, getProp} from 'crocks';
+import {chain, option, map, reduce} from 'crocks/pointfree';
+import {isObject, isEmpty, isArray, hasProps} from 'crocks/predicates';
+import {pipe, safe, mapProps, getPath, getProp} from 'crocks';
 import {format, formatDuration, intervalToDuration} from 'date-fns';
 
 const BreachEditForm = () => {
@@ -35,7 +35,8 @@ const BreachEditForm = () => {
     crew: FORM_FIELD.OBJECT({label: null, validator: () => true}),
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
     end_time: FORM_FIELD.TEXT({label: null, validator: () => true}),
-    start_time: FORM_FIELD.TEXT({label: null, validator: () => true})
+    start_time: FORM_FIELD.TEXT({label: null, validator: () => true}),
+    nodes: FORM_FIELD.ARRAY({label: null, validator: () => true})
   });
 
   useEffect(() => {
@@ -45,7 +46,8 @@ const BreachEditForm = () => {
         mapProps({
           end_time: String,
           start_time: String,
-          crew: Object
+          crew: Object,
+          nodes: Array
         }),
         setForm,
       ))
@@ -65,14 +67,6 @@ const BreachEditForm = () => {
     })))))
   )(ctrl('crew').value);
 
-  // const zoneNodes = pipe(
-  //   safe(and(not(isEmpty), isObject)),
-  //   chain(getPath(['zone', 0, 'nodes'])),
-  //   option([]),
-  // )(ctrl('crew').value);
-  //
-  // console.log(zoneNodes)
-
   const directionsCallback = useCallback((response) =>
     pipe(
       safe(not(isEmpty)),
@@ -91,6 +85,34 @@ const BreachEditForm = () => {
       map(({nodes}) => nodes),
     )(ctrl('crew').value);
 
+  const isNodeArrayValid = and(isArray, a => a.every(hasProps(['latitude', 'longitude'])));
+
+  const transformNode = map(({latitude, longitude}) => ({
+    lat: latitude,
+    lng: longitude
+  }));
+
+  const transformNodes = pipe(
+    safe(isArray),
+    map(reduce((carry, b) => ifElse(
+      isNodeArrayValid,
+      item => [...carry, transformNode(item)],
+      constant(carry),
+      b
+    ), [])),
+  );
+
+  const transformNodeContract = pipe(
+    safe(isArray),
+    map(reduce((carry, a) => [
+      ...carry,
+      ...transformNodes(a).option([]),
+    ], [])),
+    option([]),
+  );
+
+  const breachPath = transformNodeContract(ctrl('nodes').value.flat());
+
   const origin = [55.96180703337066, 23.32430656345794];
   const destination = [55.95347994389237, 23.28757917959692];
 
@@ -101,46 +123,42 @@ const BreachEditForm = () => {
           id='breach-map'
           zoom={14}
           coods={coods}
-          routes={routes}
+          breachPath={breachPath}
         >
           <Nullable on={polygons}>
-            {map(nodes =>
-              <Polygon
-                paths={nodes}
-                key={generate()}
-                options={POLYGON_OPTIONS_DISPLAY}
-              />,
-              polygons
-            )}
+            {map(nodes => <Polygon key={generate()} paths={nodes} options={POLYGON_OPTIONS_DISPLAY} />, polygons)}
           </Nullable>
-          <Nullable on={origin && destination}>
-            <DirectionsService
-              options={{
-                origin: new google.maps.LatLng(...origin),
-                destination: new google.maps.LatLng(...destination),
-                travelMode: google.maps.TravelMode.DRIVING,
-              }}
-              callback={directionsCallback}
-            />
+          <Nullable on={breachPath}>
+            {map(nodes => <Marker key={generate()} position={nodes[0]} />, breachPath)}
           </Nullable>
-          <Nullable on={routes}>
-            <DirectionsRenderer options={{
-              directions: routes,
-              suppressMarkers: true,
-              polylineOptions: {
-                icons: [
-                  {
-                    icon: {
-                      path: 'M 1, 1 1, 1',
-                      strokeOpacity: 100,
-                      scale: 8,
-                      strokeColor: '#404B5F'
-                    },
-                    repeat: '20px',
-                  }
-                ]}}}
-            />
-          </Nullable>
+          {/*<Nullable on={origin && destination}>*/}
+          {/*  <DirectionsService*/}
+          {/*    options={{*/}
+          {/*      origin: new google.maps.LatLng(...origin),*/}
+          {/*      destination: new google.maps.LatLng(...destination),*/}
+          {/*      travelMode: google.maps.TravelMode.DRIVING,*/}
+          {/*    }}*/}
+          {/*    callback={directionsCallback}*/}
+          {/*  />*/}
+          {/*</Nullable>*/}
+          {/*<Nullable on={routes}>*/}
+          {/*  <DirectionsRenderer options={{*/}
+          {/*    directions: routes,*/}
+          {/*    suppressMarkers: true,*/}
+          {/*    polylineOptions: {*/}
+          {/*      icons: [*/}
+          {/*        {*/}
+          {/*          icon: {*/}
+          {/*            path: 'M 1, 1 1, 1',*/}
+          {/*            strokeOpacity: 100,*/}
+          {/*            scale: 8,*/}
+          {/*            strokeColor: '#404B5F'*/}
+          {/*          },*/}
+          {/*          repeat: '20px',*/}
+          {/*        }*/}
+          {/*      ]}}}*/}
+          {/*  />*/}
+          {/*</Nullable>*/}
         </Map>
       </div>
       <div className={'flex flex-col w-full md:w-5/12 xl:w-3/12'}>

@@ -3,7 +3,7 @@ import {compareMemo} from 'util/react';
 import {GoogleMap} from '@react-google-maps/api';
 import {useGoogleApiContext} from 'context/google';
 
-const Map = memo(({id, zoom, coods, children}) => {
+const Map = memo(({id, zoom, coods, breachPath, children}) => {
   const {bounds, googleMap, isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
   if (!isLoaded) return null;
   useEffect(() => {
@@ -11,6 +11,7 @@ const Map = memo(({id, zoom, coods, children}) => {
       lat: bounds?.getCenter().lat(),
       lng: bounds?.getCenter().lng(),
     })
+    googleMap?.setZoom(14);
   }, [googleMap, coods])
   return (
     <div className='w-full h-full relative'>
@@ -27,7 +28,7 @@ const Map = memo(({id, zoom, coods, children}) => {
       </GoogleMap>
     </div>
   );
-}, compareMemo(['id'], ['coodss'], ['bounds'], ['routes']));
+}, compareMemo(['id'], ['coods'], ['bounds'], ['breachPath']));
 
 Map.displayName = 'Map';
 

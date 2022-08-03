@@ -160,6 +160,18 @@ const FORM_FIELD = {
       setValue: ({set}) => set,
       value: ({value}) => value,
     }
+  }, obj),
+  ARRAY: ({
+    label,
+    fallbackValue = [],
+    ...obj
+  }) => defaultProps({
+    validator: not(isEmpty),
+    initial: [],
+    props: {
+      setValue: ({set}) => set,
+      value: ({value}) => [value],
+    }
   }, obj)
 };
 
