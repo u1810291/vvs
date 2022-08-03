@@ -35,7 +35,7 @@ const getLastDayOfMonth = (year, month) => {
 
 
 
-const DatePicker = ({key, label, defaultValue, onChange}) => {
+const DatePicker = ({label, defaultValue, onChange}) => {
   const [isPickerShown, setIsPickerShown] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -47,10 +47,6 @@ const DatePicker = ({key, label, defaultValue, onChange}) => {
     }
   }, [defaultValue])
   
-  // console.log('default value', defaultValue);
-  // setDefaultDate(defaultValue);
-  // console.log('selected date', selectedDate);
-
   // get days for a calendar
   const days = useMemo(() => {
     const days = [];
@@ -76,13 +72,11 @@ const DatePicker = ({key, label, defaultValue, onChange}) => {
       currentDate = addDays(currentDate, 1);
     }
 
-    // console.log(days);
-
     return days;
   }, [currentMonth, currentYear, selectedDate]);
 
   useEffect(() => {
-    // console.log(defaultValue);
+    
   }, []);
 
 
@@ -150,7 +144,7 @@ const DatePicker = ({key, label, defaultValue, onChange}) => {
       <Nullable on={label}>
         <span>{label}</span>
       </Nullable>
-      <button onClick={onFocus} id={key} className={'bg-white h-[38px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}>
+      <button onClick={onFocus} className={'bg-white h-[38px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}>
         {selectedDate && format(selectedDate, 'Y-MM-dd')}
         <Nullable on={selectedDate}>
           <span className={'absolute inset-y-0 right-8 flex items-center pr-2'}>

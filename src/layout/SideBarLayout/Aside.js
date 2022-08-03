@@ -1,29 +1,13 @@
 import React, {forwardRef, useEffect, useState} from 'react';
 import MenuIcon from 'components/atom/icon/MenuIcon';
 import {NavLink} from 'react-router-dom';
+import {getStarredFilters} from 'hook/useFilter';
 
-
-// TODO: we should get this from useFilter 
-const getStarredFilters = () => {
-  const allSaved = JSON.parse(localStorage.getItem('listingFilters')) ?? {};  // name hardcoded
-  const onlyStarred = [];
-
-  for (const key in allSaved) {
-    allSaved[key].map(f => {
-      if (f.starred) {
-        onlyStarred.push(f);
-      }
-    })
-  }
-
-  return onlyStarred;
-}
 
 const ASideBar = ({ref, setSidebarOpen}) => {
   const [starred, setStarred] = useState(getStarredFilters());
 
   const onStorageChange = (e) => {
-    console.log('storage changed event');
     setStarred(getStarredFilters());
   };
 

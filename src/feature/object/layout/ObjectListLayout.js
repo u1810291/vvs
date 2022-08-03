@@ -95,9 +95,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   useEffect(() => {
-    // console.log('filter values', filterValues);
-    // console.log('before fork', query);
-
     fork()
   }, [filterValues]);
 
