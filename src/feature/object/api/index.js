@@ -18,9 +18,19 @@ import {
   maybeToAsync,
   not,
   option,
+  pick,
   pipe,
   safe,
 } from 'crocks';
+
+export const useObjects = () => {
+  const {apiQuery} = useAuth();
+
+  return useAsyncSwr([raw('./graphql/Objects.graphql')], (query) => (
+    apiQuery(query)
+    .chain(maybeToAsync('object prop was expected', getProp('object')))
+  ));
+}
 
 export const useObject = (id) => {
   const {api} = useAuth();
@@ -32,6 +42,20 @@ export const useObject = (id) => {
   const update = useMemo(() => pipe(
     resultToAsync,
     map(a => ({...a, id})),
+    map(pick([
+      'address',
+      'city',
+      'contract_no',
+      'contract_object_no',
+      'description',
+      'is_atm',
+      'latitude',
+      'id',
+      'longitude',
+      'name',
+      'navision_id',
+      'phone',
+    ])),
     map(mapProps({
       latitude: pipe(
         safe(not(isEmpty)),

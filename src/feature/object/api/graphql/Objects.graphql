@@ -1,0 +1,20 @@
+query {
+  object {
+    address
+    city
+    contract_no
+    contract_object_no
+    description
+    id
+    is_atm
+    latitude
+    longitude
+    name
+    navision_id
+    phone
+    provider_id
+    users {
+      user_type
+    }
+  }
+}

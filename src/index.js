@@ -6,15 +6,18 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import {AuthContextProvider} from 'context/auth';
 import GoogleContextProvider from 'context/google';
+import {NotificationContextProvider} from 'feature/ui-notifications/context';
 
 const Root = createRoot(document.getElementById('root'));
 
 Root.render(
   <StrictMode>
-    <AuthContextProvider>
-      <GoogleContextProvider>
-        <App />
-      </GoogleContextProvider>
-    </AuthContextProvider>
+    <NotificationContextProvider>
+      <AuthContextProvider>
+        <GoogleContextProvider>
+          <App />
+        </GoogleContextProvider>
+      </AuthContextProvider>
+    </NotificationContextProvider>
   </StrictMode>
 );
