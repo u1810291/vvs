@@ -26,8 +26,10 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
-
+import {useFilter} from 'hook/useFilter';
 import {CrewEditRoute} from '../routes';
+import InputGroup from 'components/atom/input/InputGroup';
+import SelectBox from 'components/atom/input/SelectBox';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -47,25 +49,36 @@ const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
 const CrewListLayout = withPreparedProps(Listing, props => {
-  const {apiQuery} = useAuth();
+  const {api} = useAuth();
   const {t: tb} = useTranslation('crew', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('crew', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(chain(maybeToAsync('"crew" prop is expected in the response', getProp('crew')),
-    apiQuery(
-      `
-        query {
-          crew {
-            id
-            status
-            driver_name
-            abbreviation
-            phone_number
-            is_assigned_automatically
-          }
-        }
-      `
-    ))
+
+  const tableName = 'crew';
+  const [query, filterValues, filters] = useFilter(
+    tableName,
+    `
+      id
+      status
+      driver_name
+      phone_number
+      is_assigned_automatically
+    `, 
+    [
+      {key: 'driver_name', type: 'String', label: 'Driver name', filter: 'text', Component: InputGroup},
+      {key: 'phone_number', type: 'String', label: 'Phone name', filter: 'text', Component: InputGroup},
+      {key: 'status', type: '[crew_status_enum!]', label: 'Status', filter: 'multiselect', Component: SelectBox, values: ['BREAK', 'BUSY', 'OFFLINE', 'READY']},
+      // {key: 'is_assigned_automatically', type: '[boolean!]', label: 'Is assigned automatically', filter: 'multiselect', Component: SelectBox, values: [true, false]},
+    ]
   );
+
+  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
+    api(filterValues, query)
+  ));
+  
+  useEffect(() => {
+    console.log(query);
+    fork()
+  }, [filterValues]);
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
@@ -84,6 +97,7 @@ const CrewListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item>{tb`all_data`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
+    filters: filters,
     tableColumns: [
       c('id', ne, identity),
       c('status', ne, identity),

@@ -57,8 +57,9 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
 
+  const tableName = 'object';
   const [query, filterValues, filters] = useFilter(
-    'object',
+    tableName,
     `
       address
       city
@@ -80,12 +81,14 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['KAUNAS', 'VILNIUS', 'URENA']},
   ]);
 
-  const [state, fork] = useAsync(chain(maybeToAsync('"object" prop is expected in the response', getProp('object')),
+  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
     api(filterValues, query)
   ));
+  
+  useEffect(() => {
+    fork()
+  }, [filterValues]);
 
-
-  // api calls for filter
 
 
   const c = useMemo(() => getColumn(t, props => (
@@ -94,9 +97,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     </Link>
   )), [t]);
 
-  useEffect(() => {
-    fork()
-  }, [filterValues]);
+ 
 
 
 

@@ -71,21 +71,28 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
 
+  const tableName = 'crew_breach';
   const [query, filterValues, filters] = useFilter(
-    'crew_breach',
+    tableName,
     `
       id
       crew_id
       driver_id
       end_time
       start_time
-    `, [
-    {key: 'start_time', type: 'timestamptz', label: 'Started At', filter: 'date'},
-  ]);
+    `, 
+    [
+      {key: 'start_time', type: 'timestamptz', label: 'Started At', filter: 'date'},
+      {key: 'end_time', type: 'timestamptz', label: 'Ended At', filter: 'date'},
+    ]);
 
-  const [state, fork] = useAsync(chain(maybeToAsync('"crew_breach" prop is expected in the response', getProp('crew_breach')),
+  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
     api(filterValues, query)
   ));
+  
+  useEffect(() => {
+    fork()
+  }, [filterValues]);
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
@@ -99,9 +106,6 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     </Link>
   )), [t]);
 
-  useEffect(() => {
-    fork()
-  }, [filterValues]);
 
   return {
     list: safe(isArray, state.data).option([]),
