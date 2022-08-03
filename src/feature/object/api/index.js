@@ -22,6 +22,15 @@ import {
   safe,
 } from 'crocks';
 
+export const useObjects = () => {
+  const {apiQuery} = useAuth();
+
+  return useAsyncSwr([raw('./graphql/Objects.graphql')], (query) => (
+    apiQuery(query)
+    .chain(maybeToAsync('object prop was expected', getProp('object')))
+  ));
+}
+
 export const useObject = (id) => {
   const {api} = useAuth();
   const getSwr = useAsyncSwr([raw('./graphql/ObjectById.graphql'), {id}], (query, params) => (
