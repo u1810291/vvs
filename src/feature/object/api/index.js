@@ -50,6 +50,7 @@ export const useObject = (id) => {
       'description',
       'is_atm',
       'latitude',
+      'id',
       'longitude',
       'name',
       'navision_id',

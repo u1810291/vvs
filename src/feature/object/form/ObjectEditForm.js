@@ -7,7 +7,7 @@ import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGr
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useCity, useObject} from '../api';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {
   map,
@@ -18,9 +18,12 @@ import {
   isNil,
   ifElse,
   constant,
-  isSame,
 } from 'crocks';
 import {useEffect} from 'react';
+import {useNotification} from 'feature/ui-notifications/context';
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
+import {ObjectListRoute} from '../routes';
 
 const mapFromNumeric = ifElse(
   isNil,
@@ -28,17 +31,14 @@ const mapFromNumeric = ifElse(
   String,
 );
 
-const mapToNumeric = ifElse(
-  isSame(''),
-  constant(null),
-  parseFloat,
-);
-
 const ObjectEditForm = ({saveRef = identity}) => {
   const {id} = useParams();
   const {data, update} = useObject(id);
+  const {t: tn} = useTranslation('notification');
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
+  const {notify} = useNotification();
+  const nav = useNavigate();
 
   const {ctrl, result, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
@@ -57,8 +57,28 @@ const ObjectEditForm = ({saveRef = identity}) => {
   });
 
   useEffect(() => {
-    saveRef.current = () => update(result).fork(console.error, console.warn);
-  }, [saveRef.current, result]);
+    saveRef.current = () => update(result).fork(
+      error => notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={tn('apiError')}
+        >
+          {JSON.stringify(error)}
+        </NotificationSimple>
+      ),
+      () => {
+        notify(
+          <NotificationSimple
+            Icon={CheckCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+            heading={tn('success')}
+          />
+        );
+        nav(ObjectListRoute.props.path)
+      }
+    );
+  }, [saveRef.current, result, tn, nav, notify]);
 
   useEffect(() => {pipe(
     safe(isObject),
