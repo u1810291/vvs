@@ -19,6 +19,7 @@ const Box = ({
   value,
   onChange,
   displayValue = identity,
+  multiple,
   ...props
 }) => {
   const onChangeValue = (e) => onChange({key: e.key, value: e.props.value});
@@ -40,7 +41,7 @@ const Box = ({
                 {children && (
                   <Options>
                     {children.map(component => (
-                      <Option {...component.props} key={component.props.children} selected={displayValue(value)} className={optionClassNameFn} value={component}/>
+                      <Option {...component.props} key={component.props.children} selected={multiple ? value.includes(component.props.children) ? displayValue(component.props.children) : '' : displayValue(value)} className={optionClassNameFn} value={component}/>
                     ))}
                   </Options>
                 )}

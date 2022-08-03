@@ -23,6 +23,7 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 
 import {useTranslation} from 'react-i18next';
 import {format, intervalToDuration, formatDuration} from 'date-fns';
+import {useFilter} from 'hook/useFilter';
 
 const getColumn = curry((t, Component, key, mapper) => ({
   Component,
@@ -37,32 +38,34 @@ const getColumn = curry((t, Component, key, mapper) => ({
 }));
 
 const BreachListLayout = withPreparedProps(Listing, props => {
-  const {apiQuery} = useAuth();
-  const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
+  const {api} = useAuth();
   const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
-  const [breach, forkBreach] = useAsync(
-    chain(
-      maybeToAsync(
-        '"crew_breach" prop is expected in the response',
-        getProp('crew_breach')
-      ),
-      apiQuery(
-        `
-          query {
-            crew_breach {
-              id
-              end_time
-              start_time
-              crew {
-                name
-                driver_name
-              }
-            }
-          }
-        `
-      )
-    )
-  );
+  const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
+
+  const tableName = 'crew_breach';
+  const [query, filterValues, filters] = useFilter(
+    tableName,
+    `
+      id
+      end_time
+      start_time
+      crew {
+        name
+        driver_name
+      }
+    `, 
+    [
+      {key: 'start_time', type: 'timestamptz', label: 'Started At', filter: 'date'},
+      {key: 'end_time', type: 'timestamptz', label: 'Ended At', filter: 'date'},
+    ]);
+
+  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
+    api(filterValues, query)
+  ));
+  
+  useEffect(() => {
+    fork()
+  }, [filterValues]);
 
   const column = useMemo(() => getColumn(t, props =>
     props?.id &&
@@ -71,10 +74,9 @@ const BreachListLayout = withPreparedProps(Listing, props => {
       </Link>
   ), [t]);
 
-  useEffect(() => forkBreach(), []);
 
   return {
-    list: safe(isArray, breach.data).option([]),
+    list: safe(isArray, state.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
@@ -88,6 +90,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
         </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
+    filters,
     tableColumns: [
       column('id', pipe(getProp('id'))),
       column(

@@ -51,6 +51,7 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   const {t: tb} = useTranslation('client', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('client', {keyPrefix: 'list.column'});
   // TODO: Prepare 'Client' data in Hasura to be fetched
+  
   const [state, fork] = useAsync(chain(maybeToAsync('"client" prop is expected in the response', getProp('client')),
     apiQuery(
       `
