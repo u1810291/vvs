@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
@@ -27,9 +27,10 @@ import {
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {useFilter} from 'hook/useFilter';
-import {CrewEditRoute} from '../routes';
+import {CrewCreateRoute, CrewEditRoute} from '../routes';
 import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
+import Button from 'components/Button';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -46,12 +47,13 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 }));
 
 const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
 
-const CrewListLayout = withPreparedProps(Listing, props => {
+const CrewListLayout = withPreparedProps(Listing, () => {
   const {api} = useAuth();
   const {t: tb} = useTranslation('crew', {keyPrefix: 'breadcrumbs'});
+  const {t: tc} = useTranslation('crew');
   const {t} = useTranslation('crew', {keyPrefix: 'list.column'});
+  const nav = useNavigate();
 
   const tableName = 'crew';
   const [query, filterValues, filters] = useFilter(
@@ -95,6 +97,11 @@ const CrewListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item><span className='font-semibold'>{tb`crews`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>{tb`all_data`}</Breadcrumbs.Item>
       </Breadcrumbs>
+    ),
+    buttons: (
+      <>
+        <Button onClick={() => nav(CrewCreateRoute.props.path)}>{tc('create')}</Button>
+      </>
     ),
     filters: filters,
     tableColumns: [

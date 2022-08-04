@@ -54,6 +54,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const nav = useNavigate();
   const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
+  const {t: to} = useTranslation('object');
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
   // const swr = useObjects();
 
@@ -105,7 +106,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     ),
     buttons: (
       <>
-        <Button onClick={() => nav(ObjectCreateRoute.props.path)}>New</Button>
+        <Button onClick={() => nav(ObjectCreateRoute.props.path)}>{to('create')}</Button>
       </>
     ),
     filters,
