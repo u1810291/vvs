@@ -4,15 +4,12 @@ import CheckBox from 'components/atom/input/CheckBox';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
 import InputGroup from 'components/atom/input/InputGroup';
 import Map from 'feature/map/component/Map';
-import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
-import React, {useEffect} from 'react';
+import React from 'react';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {Polygon} from '@react-google-maps/api';
 import {useCrew, useCrewZones} from 'feature/crew/api/crewEditApi';
-import {useNavigate, useParams} from 'react-router-dom';
-import {useNotification} from 'feature/ui-notifications/context';
+import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
 import {CrewListRoute} from '../routes';
 
 const polygonSetup = {
@@ -32,7 +29,6 @@ const polygon = [
 
 const CrewEditLayout = ({saveRef}) => {
   const {id} = useParams();
-  const {data, update, create} = useCrew(id);
   const swr = useCrewZones();
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
   const {ctrl, result, setForm} = useResultForm({
@@ -46,38 +42,13 @@ const CrewEditLayout = ({saveRef}) => {
     device_id: FORM_FIELD.TEXT({initial: '54:21:9D:08:38:8C', label: t`field.device_id`, validator: () => true}),
   });
 
-  const {notify} = useNotification();
-  const nav = useNavigate();
-
-  useEffect(() => {
-    saveRef.current = () => (id ? update(result) : create(result)).fork(
-      error => notify(
-        <NotificationSimple
-          Icon={XCircleIcon}
-          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
-          heading={t`apiError`}
-        >
-          {JSON.stringify(error)}
-        </NotificationSimple>
-      ),
-      () => {
-        notify(
-          <NotificationSimple
-            Icon={CheckCircleIcon}
-            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
-            heading={t`success`}
-          />
-        );
-        nav(CrewListRoute.props.path)
-      }
-    );
-  }, [saveRef.current, result, t, nav, notify]);
-
-  useEffect(() => {
-    setForm(data);
-  }, [data]);
-
-  console.log(ctrl('events'))
+  useCrew({
+    id,
+    saveRef,
+    setForm,
+    formResult: result,
+    successRedirectPath: CrewListRoute.props.path,
+  })
 
   return (
     <section className={'m-6 md:flex md:flex-row'}>

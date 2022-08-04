@@ -15,7 +15,7 @@ const CrewEditLayout = () => {
   const saveRef = useRef(identity);
   const {id} = useParams();
   const navigate = useNavigate();
-  const {data} = useCrew(id);
+  const {data} = useCrew({id});
   const {t} = useTranslation('crew', {keyPrefix: 'edit.header'});
   const send = () => { isFunction(saveRef.current) && saveRef.current(); };
 

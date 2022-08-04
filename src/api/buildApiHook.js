@@ -1,25 +1,33 @@
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+import useAsyncSwr from 'hook/useAsyncSwr';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
+import {useAsyncEffect} from 'hook/useAsync';
 import {useAuth} from 'context/auth';
+import {useEffect} from 'react';
+import {useMemo} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useNotification} from 'feature/ui-notifications/context';
+import {useTranslation} from 'react-i18next';
 import {
   chain,
   constant,
-  resultToAsync,
   flip,
+  getPath,
+  getPropOr,
+  hasProp,
   ifElse,
+  isArray,
   isEmpty,
+  isFunction,
   isNil,
+  isTruthy,
   map,
   not,
   option,
   pipe,
+  resultToAsync,
   safe,
-  getPath,
-  isArray,
-  isTruthy,
-  getPropOr,
 } from 'crocks';
-import {useAsyncEffect} from 'hook/useAsync';
-import useAsyncSwr from 'hook/useAsyncSwr';
-import {useMemo} from 'react';
 
 export const mapToString = ifElse(
   isNil,
@@ -54,9 +62,18 @@ export const createUseOne = ({
   createGraphql,
   updateGraphQl,
   asyncMapFromApi,
-  asyncMapToApi
-}) => (id) => {
+  asyncMapToApi,
+}) => ({
+  id,
+  saveRef,
+  formResult,
+  setForm,
+  successRedirectPath,
+}) => {
+  const nav = useNavigate();
   const {api} = useAuth();
+  const {notify} = useNotification();
+  const {t} = useTranslation();
   const getSwr = useAsyncSwr([getGraphQl, {id}], (query, params) => (
     api(params, query)
     .chain(asyncMapFromApi)
@@ -75,12 +92,41 @@ export const createUseOne = ({
     chain(flip(api)(updateGraphQl))
   ), [api]);
 
+  useEffect(() => {
+    if (isFunction(setForm)) setForm(getSwr.data);
+  }, [getSwr.data, setForm]);
+
+  useEffect(() => {
+    if (!(hasProp('current', saveRef) && formResult)) return;
+    saveRef.current = () => (id ? update(formResult) : create(formResult)).fork(
+      error => notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {JSON.stringify(error)}
+        </NotificationSimple>
+      ),
+      () => {
+        notify(
+          <NotificationSimple
+            Icon={CheckCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+            heading={t`success`}
+            />
+        );
+        if (successRedirectPath) nav(successRedirectPath);
+      }
+    );
+  }, [saveRef?.current, formResult, t, nav, notify, successRedirectPath, formResult]);
+
   return {
     ...getSwr,
     update,
     create,
   }
-}
+};
 
 export const createUseEnum = ({
   graphQl,
@@ -89,7 +135,6 @@ export const createUseEnum = ({
 }) => (isSimplified = false) => {
   const {apiQuery} = useAuth();
   const effect = useAsyncEffect(apiQuery(graphQl));
-
   if (isSimplified) return (
     getPath(['data', itemsProp], effect)
     .chain(safe(isArray))
@@ -99,6 +144,5 @@ export const createUseEnum = ({
     ))
     .option([])
   )
-
   return effect;
 };

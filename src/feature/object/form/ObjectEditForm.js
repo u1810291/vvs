@@ -5,93 +5,40 @@ import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
+import {ObjectListRoute} from '../routes';
+import {map} from 'crocks';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useCity, useObject} from '../api';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {
-  map,
-  pipe,
-  mapProps,
-  safe,
-  isObject,
-  isNil,
-  ifElse,
-  constant,
-} from 'crocks';
-import {useEffect} from 'react';
-import {useNotification} from 'feature/ui-notifications/context';
-import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
-import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
-import {ObjectListRoute} from '../routes';
-
-const mapFromNumeric = ifElse(
-  isNil,
-  constant(''),
-  String,
-);
 
 const ObjectEditForm = ({saveRef}) => {
-  const {id} = useParams();
-  const {data, update, create} = useObject(id);
-  const {t: tn} = useTranslation('notification');
+  const params = useParams();
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
-  const {notify} = useNotification();
-  const nav = useNavigate();
-
   const {ctrl, result, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
-    description: FORM_FIELD.TEXT({label: t`field.description`, validator: () => true}),
-    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
-    latitude: FORM_FIELD.TEXT({label: t`field.latitude`, validator: () => true}),
-    longitude: FORM_FIELD.TEXT({label: t`field.longitude`, validator: () => true}),
     city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true, props: {
       displayValue: ({value}) => () => tc(value),
       onChange: ({set}) => ({value}) => set(value),
     }}),
     contract_no: FORM_FIELD.TEXT({label: t`field.contractNo`, validator: () => true}),
     contract_object_no: FORM_FIELD.TEXT({label: t`field.objectNo`, validator: () => true}),
+    description: FORM_FIELD.TEXT({label: t`field.description`, validator: () => true}),
+    latitude: FORM_FIELD.TEXT({label: t`field.latitude`, validator: () => true}),
+    longitude: FORM_FIELD.TEXT({label: t`field.longitude`, validator: () => true}),
+    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     navision_id: FORM_FIELD.TEXT({label: t`field.navisionId`, validator: () => true}),
     provider_id: FORM_FIELD.TEXT({label: t`field.providerId`, validator: () => true}),
   });
 
-  useEffect(() => {
-    saveRef.current = () => (id ? update(result) : create(result)).fork(
-      error => notify(
-        <NotificationSimple
-          Icon={XCircleIcon}
-          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
-          heading={tn('apiError')}
-        >
-          {JSON.stringify(error)}
-        </NotificationSimple>
-      ),
-      () => {
-        notify(
-          <NotificationSimple
-            Icon={CheckCircleIcon}
-            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
-            heading={tn('success')}
-          />
-        );
-        nav(ObjectListRoute.props.path)
-      }
-    );
-  }, [saveRef.current, result, tn, nav, notify]);
-
-  useEffect(() => {pipe(
-    safe(isObject),
-    map(pipe(
-      mapProps({
-        longitude: mapFromNumeric,
-        latitude: mapFromNumeric,
-        provider_id: mapFromNumeric,
-        navision_id: mapFromNumeric,
-      }),
-      setForm,
-    )),
-  )(data)}, [data])
+  useObject({
+    ...params,
+    formResult: result,
+    saveRef,
+    setForm,
+    successRedirectPath: ObjectListRoute.props.path,
+  });
 
   const cities = useCity(true);
 

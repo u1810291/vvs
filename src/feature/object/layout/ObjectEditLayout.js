@@ -13,8 +13,8 @@ import {useRef} from 'react';
 
 const ObjectEditLayout = () => {
   const saveRef = useRef(identity);
-  const params = useParams();
-  const {data} = useObject(params?.id);
+  const {id} = useParams();
+  const {data} = useObject({id});
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const nav = useNavigate();
 
