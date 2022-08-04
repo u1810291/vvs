@@ -6,7 +6,7 @@ const NotificationContext = createContext();
 const NotificationContextProvider = ({children}) => {
   const [data, setData] = useState([]);
 
-  const notify = useCallback((children, {timeout = 800000} = {}) => {
+  const notify = useCallback((children, {timeout = 8000} = {}) => {
     setData(d => {
       const notification = {
         id: `${d.length}-${+ new Date()}`,
