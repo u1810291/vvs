@@ -45,7 +45,7 @@ const CrewEditLayout = () => {
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
     is_assigned_while_in_breaks: FORM_FIELD.BOOL({label: t`field.is_assigned_while_in_breaks`, validator: () => true}),
     events: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
-    device_id: FORM_FIELD.TEXT({label: t`field.device_id`, validator: () => true}),
+    device_id: FORM_FIELD.TEXT({initial: '54:21:9D:08:38:8C', label: t`field.device_id`, validator: () => true}),
   });
 
   useEffect(() => {pipe(
@@ -63,6 +63,8 @@ const CrewEditLayout = () => {
       setForm,
     )),
   )(data)}, [data]);
+
+  console.log(ctrl('events'))
 
   return (
     <section className={'m-6 md:flex md:flex-row'}>

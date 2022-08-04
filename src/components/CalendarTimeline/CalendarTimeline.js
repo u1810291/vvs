@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo} from 'react';
 
 import Row from './Row';
 import Column from './Column';
@@ -18,13 +18,15 @@ const CalendarTimeline = memo(({
   const [isOpen, setOpen] = useBoolean();
   const cellsRefs = [];
 
-  const setRef = useCallback(() => (ref) => {
-    cellsRefs.push(ref);
-  }, [cellsRefs]);
+  const setRef = () => (ref) => {
+    if (ref) {
+      cellsRefs.push(ref);
+    }
+  };
 
-  const getRef = useCallback((id) => {
+  const getRef = (id) => {
     return cellsRefs.find(ref => ref.id === id);
-  }, [cellsRefs]);
+  };
 
   return (
     <div className={'max-w-fit mt-6'}>

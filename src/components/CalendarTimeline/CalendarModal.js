@@ -16,7 +16,6 @@ const CalendarModal = ({
   id,
   isNew,
   isEdit,
-  getRef,
   isOpen,
   setOpen,
   events,
@@ -83,8 +82,6 @@ const CalendarModal = ({
 
       const startTime = new Date(weekDay.split('T')[0] + 'T' + timeFrom.split('T')[1]);
       const endTime = new Date(weekDay.split('T')[0] + 'T' + timeTo.split('T')[1]);
-
-      console.log(getRef(String(endTime))?.offsetLeft)
 
       const newEvent = {
         id: generate(),

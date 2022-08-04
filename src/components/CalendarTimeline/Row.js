@@ -10,10 +10,9 @@ import getTimeslots from './getTimeSlots';
 import {generate} from 'shortid';
 import {startOfWeek, endOfWeek, formatISO} from 'date-fns';
 
-const Row = ({value, setRef, setValue, getRef, crewZones}) => {
+const Row = ({value, setRef, setValue, getRef, crewZones, cellsRefs}) => {
   const {getTimeLocals} = useWeekDays();
   const {weekDays} = useWeekDays();
-
   return (
     <div className={'flex flex-row w-full'}>
       <div className={'flex flex-col'}>
@@ -34,6 +33,7 @@ const Row = ({value, setRef, setValue, getRef, crewZones}) => {
             <Event
               key={generate()}
               title={crew}
+              cellsRefs={cellsRefs}
               startTime={startTime}
               endTime={endTime}
               weekDay={weekDay}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import CalendarModal from './CalendarModal';
 
@@ -20,6 +20,7 @@ const Event = ({
   twTime,
   setEvents,
   getRef,
+  cellsRefs,
   crewZones,
   height = 51,
   minuteSpan = 3.25
@@ -33,14 +34,20 @@ const Event = ({
     id,
   }
 
-  console.log(getRef(String(endTime))?.offsetLeft)
+  const [endTimeRef, setEndTimeRef] = useState();
+  const [startTimeRef, setStartTimeRef] = useState();
+
+  useEffect(() => {
+    setEndTimeRef(getRef(String(endTime)));
+    setStartTimeRef(getRef(String(startTime)));
+  }, [cellsRefs]);
 
   const dtToRefElement = pipe(
     safe(isValid),
     map(String),
     map(getRef),
     chain(safe(a => a instanceof HTMLElement)),
-  )
+  );
 
   const start = dtToRefElement(startTime);
   const end = dtToRefElement(endTime);
