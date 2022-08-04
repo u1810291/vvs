@@ -27,6 +27,12 @@ export const mapToString = ifElse(
   String,
 );
 
+export const mapToNullableString = pipe(
+  safe(not(isEmpty)),
+  map(String),
+  option(null),
+);
+
 export const mapToNullableNumber = pipe(
   safe(not(isEmpty)),
   map(parseFloat),
@@ -34,7 +40,7 @@ export const mapToNullableNumber = pipe(
   option(null),
 );
 
-export const createUseList = (graphQl, asyncMapFromApi) => () => {
+export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
   const {apiQuery} = useAuth();
 
   return useAsyncSwr([graphQl], (query) => (
