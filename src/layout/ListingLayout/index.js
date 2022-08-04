@@ -23,6 +23,7 @@ import {
   safe,
   constant,
 } from 'crocks';
+import Nullable from 'components/atom/Nullable';
 
 /**
  * @type TableColumnComponent
@@ -42,6 +43,7 @@ import {
 const Listing = ({
   list = [],
   rowKeyLens,
+  filters,
   tableColumns,
   breadcrumbs,
 }) => {
@@ -50,7 +52,9 @@ const Listing = ({
 
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
 
-  const filterItems = useMemo(() => pipe(
+  
+
+  const pickedColumns = useMemo(() => pipe(
     safe(isArray),
     map(map(pipe(
       safe(hasProps(['headerText', 'key'])),
@@ -64,6 +68,20 @@ const Listing = ({
     ))),
     option(null)
   )(tableColumns), [tableColumns]);
+
+  //  const filterItems = useMemo(() => pipe(
+  //   safe(and(isArray, every(hasProps(['key', 'headerText'])))),
+  //   map(map(pipe(
+  //     map(a => ({
+  //       uid: a.key,
+  //       key: a.key,
+  //       children: a.headerText,
+  //     })),
+  //     map(renderWithProps(identity)),
+  //     option(null),
+  //   ))),
+  //   option([])
+  // )(filters), [filters]);
 
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
@@ -115,10 +133,16 @@ const Listing = ({
           <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
         </div>
       </TitleBar>
-      <Filter onValues={setColumns}>{filterItems}</Filter>
+      <Nullable on={filters}>
+        <div className='w-1/2 my-10'>
+          {filters}
+        </div>
+      </Nullable>
+      <Filter onValues={setColumns}>{pickedColumns}</Filter>
       <Table>
         <Table.Head>
-          <Table.Tr>{headerColumns}
+          <Table.Tr>
+            {headerColumns}
           </Table.Tr>
         </Table.Head>
         <Table.Body>{rows}</Table.Body>
