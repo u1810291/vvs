@@ -50,13 +50,13 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('dislocation', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('dislocation', {keyPrefix: 'list.column'});
-  // TODO: Prepare 'Dislocation' data in Hasura to be fetched
-  const [state, fork] = useAsync(chain(maybeToAsync('"dislocation" prop is expected in the response', getProp('dislocation')),
+  const [state, fork] = useAsync(chain(maybeToAsync('"crew_zone" prop is expected in the response', getProp('crew_zone')),
     apiQuery(
       `
         query {
-          dislocation {
-
+          crew_zone {
+            id
+            name
           }
         }
       `
@@ -80,10 +80,9 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
-    // TODO: Adjust column names regarding response data
     tableColumns: [
       c('id', ne, identity),
-      c('zone_name', ne, identity),
+      c('name', ne, identity),
     ],
   }
 });
