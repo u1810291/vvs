@@ -46,13 +46,11 @@ const Listing = ({
   filters,
   tableColumns,
   breadcrumbs,
+  buttons,
 }) => {
   const [columns, setColumns] = useState([]);
   const [query, setQuery] = useState('');
-
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
-
-  
 
   const pickedColumns = useMemo(() => pipe(
     safe(isArray),
@@ -68,20 +66,6 @@ const Listing = ({
     ))),
     option(null)
   )(tableColumns), [tableColumns]);
-
-  //  const filterItems = useMemo(() => pipe(
-  //   safe(and(isArray, every(hasProps(['key', 'headerText'])))),
-  //   map(map(pipe(
-  //     map(a => ({
-  //       uid: a.key,
-  //       key: a.key,
-  //       children: a.headerText,
-  //     })),
-  //     map(renderWithProps(identity)),
-  //     option(null),
-  //   ))),
-  //   option([])
-  // )(filters), [filters]);
 
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
@@ -128,9 +112,16 @@ const Listing = ({
   return (
     <Index>
       <TitleBar>
-        <div className='md:flex md:space-x-4 md:space-y-0 space-y-4'>
+        <div className='md:flex md:space-x-4 md:space-y-0 space-y-4 w-full'>
+          <div className='flex-grow flex-shrink'>
           {breadcrumbs}
-          <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
+          </div>
+          <div className='flex-grow flex-shrink'>
+            <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
+          </div>
+          <div className='flex-grow flex-shrink justify-end flex'>
+            {buttons}
+          </div>
         </div>
       </TitleBar>
       <Nullable on={filters}>
