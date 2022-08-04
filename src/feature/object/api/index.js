@@ -23,6 +23,18 @@ import {
   safe,
 } from 'crocks';
 
+const mapNullableNumeric = pipe(
+    safe(not(isEmpty)),
+    map(Number),
+    option(null),
+  )
+
+const mapObject = mapProps({
+  navision_id: mapNullableNumeric,
+  latitude: mapNullableNumeric,
+  longitude: mapNullableNumeric,
+})
+
 export const useObjects = () => {
   const {apiQuery} = useAuth();
 
@@ -38,6 +50,26 @@ export const useObject = (id) => {
     api(params, query)
     .chain(maybeToAsync('object_by_pk prop was expected', getProp('object_by_pk')))
   ));
+
+  const create = useMemo(() => pipe(
+    resultToAsync,
+    map(a => ({...a, id})),
+    map(pick([
+      'address',
+      'city',
+      'contract_no',
+      'contract_object_no',
+      'description',
+      'is_atm',
+      'latitude',
+      'longitude',
+      'name',
+      'navision_id',
+      'phone',
+    ])),
+    map(mapObject),
+    chain(flip(api)(raw('./graphql/CreateObject.graphql')))
+  ), [api]);
 
   const update = useMemo(() => pipe(
     resultToAsync,
@@ -56,24 +88,14 @@ export const useObject = (id) => {
       'navision_id',
       'phone',
     ])),
-    map(mapProps({
-      latitude: pipe(
-        safe(not(isEmpty)),
-        map(Number),
-        option(null),
-      ),
-      longitude: pipe(
-        safe(not(isEmpty)),
-        map(Number),
-        option(null),
-      ),
-    })),
+    map(mapObject),
     chain(flip(api)(raw('./graphql/UpdateObjectById.graphql')))
   ), [api]);
 
   return {
     ...getSwr,
     update,
+    create,
   }
 };
 

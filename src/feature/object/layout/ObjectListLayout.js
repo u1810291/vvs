@@ -1,9 +1,9 @@
 import Breadcrumbs from 'components/Breadcrumbs';
 import Listing from 'layout/ListingLayout';
 import withPreparedProps from 'hoc/withPreparedProps';
-import {ObjectEditRoute} from '../routes';
+import {ObjectCreateRoute, ObjectEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
-import {generatePath, Link} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useMemo, useEffect} from 'react';
 // import {useObjects} from '../api';
@@ -26,14 +26,12 @@ import {
   safe,
   maybeToAsync,
 } from 'crocks';
-// import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {useFilter} from 'hook/useFilter';
 import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
-// import useDebounce from 'hook/useDebounce';
 import {useAuth} from 'context/auth';
 import useAsync from 'hook/useAsync';
-
+import Button from 'components/Button';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -51,12 +49,12 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 
 const nnil = not(isNil);
 const ne = not(isEmpty);
-const Span = props => <span {...props} />;
 
 const ObjectList = withPreparedProps(Listing, (props) => {
-
+  const nav = useNavigate();
   const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
+  const {t: to} = useTranslation('object');
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
   // const swr = useObjects();
 
@@ -84,15 +82,10 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['KAUNAS', 'VILNIUS', 'URENA']},
   ]);
 
-  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
+  const [state, fork] = useAsync(chain(
+    maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
     api(filterValues, query)
   ));
-  
-  useEffect(() => {
-    fork()
-  }, [filterValues]);
-
-
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(ObjectEditRoute.props.path, {id: props?.id})}>
@@ -100,6 +93,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     </Link>
   )), [t]);
 
+  useEffect(() => {fork()}, [filterValues]);
  
   return {
     list: safe(isArray, state.data).option([]),
@@ -109,6 +103,11 @@ const ObjectList = withPreparedProps(Listing, (props) => {
         <Breadcrumbs.Item><span className='font-semibold'>{tb`objects`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
+    ),
+    buttons: (
+      <>
+        <Button onClick={() => nav(ObjectCreateRoute.props.path)}>{to('create')}</Button>
+      </>
     ),
     filters,
     tableColumns: [

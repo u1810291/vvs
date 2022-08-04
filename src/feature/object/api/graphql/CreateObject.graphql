@@ -1,0 +1,27 @@
+mutation CreateObject(
+  $address: String = null,
+  $city: city_enum = VILNIUS,
+  $contract_no: String = null
+  $description: String = null
+  $contract_object_no: String = null,
+  $is_atm: Boolean = false,
+  $latitude: numeric = null,
+  $longitude: numeric = null,
+  $name: String = null,
+  $navision_id: Int = null,
+  $phone: String = null,
+) {
+  insert_object_one(object: {address: $address, city: $city, contract_no: $contract_no, contract_object_no: $contract_object_no, description: $description, is_atm: $is_atm, latitude: $latitude, longitude: $longitude, name: $name, navision_id: $navision_id, phone: $phone}) {
+    address
+    city
+    contract_no
+    contract_object_no
+    description
+    is_atm
+    latitude
+    longitude
+    name
+    navision_id
+    phone
+  }
+}
