@@ -10,6 +10,6 @@ export const useBreach = id => {
   ));
 
   return {
-    ...getSwr
+    ...getSwr?.data
   }
 };

@@ -30,10 +30,15 @@ export const transformNodeContract = pipe(
   option([]),
 );
 
+const getZonePath =
+  pipe(
+    safe(and(not(isEmpty), isObject)),
+    chain(getPath(['zone'])),
+    option([])
+  );
+
 export const getFlatNodes = pipe(
-  safe(and(not(isEmpty), isObject)),
-  chain(getPath(['zone'])),
-  option([]),
+  getZonePath,
   reduce((carry, item) => [
     ...carry,
     ...pipe(
@@ -44,10 +49,8 @@ export const getFlatNodes = pipe(
   ], [])
 );
 
-export const getZonePath =
+export const getZoneItems =
   pipe(
-    safe(and(not(isEmpty), isObject)),
-    chain(getPath(['zone'])),
-    option([]),
-    map(({nodes}) => nodes),
+    getZonePath,
+    map(({nodes}) => nodes)
   );
