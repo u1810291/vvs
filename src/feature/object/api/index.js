@@ -1,117 +1,63 @@
-import {useAuth} from 'context/auth';
-import resultToAsync from 'crocks/Async/resultToAsync';
-import {useAsyncEffect} from 'hook/useAsync';
-import {useMemo} from 'react';
 import raw from 'raw.macro';
-import useAsyncSwr from 'hook/useAsyncSwr';
 import {
-  chain,
-  flip,
-  getPath,
-  getProp,
-  getPropOr,
-  isArray,
-  isEmpty,
-  isTruthy,
+  createUseEnum,
+  createUseOne,
+  mapToNullableNumber,
+  mapToString
+} from 'api/buildApiHook';
+import {
   map,
   mapProps,
   maybeToAsync,
-  not,
-  option,
-  pick,
   pipe,
-  safe,
+  getProp,
+  Async,
+  pick,
 } from 'crocks';
 
-const mapNullableNumeric = pipe(
-    safe(not(isEmpty)),
-    map(Number),
-    option(null),
-  )
+export const useObject = createUseOne({
+  getGraphQl: raw('./graphql/ObjectById.graphql'),
+  createGraphql: raw('./graphql/CreateObject.graphql'),
+  updateGraphQl: raw('./graphql/UpdateObjectById.graphql'),
 
-const mapObject = mapProps({
-  navision_id: mapNullableNumeric,
-  latitude: mapNullableNumeric,
-  longitude: mapNullableNumeric,
-})
+  asyncMapFromApi: pipe(
+    maybeToAsync('object_by_pk prop was expected', getProp('object_by_pk')),
+    map(
+      mapProps({
+        longitude: mapToString,
+        latitude: mapToString,
+        provider_id: mapToString,
+        navision_id: mapToString,
+      })
+    )
+  ),
 
-export const useObjects = () => {
-  const {apiQuery} = useAuth();
-
-  return useAsyncSwr([raw('./graphql/Objects.graphql')], (query) => (
-    apiQuery(query)
-    .chain(maybeToAsync('object prop was expected', getProp('object')))
-  ));
-}
-
-export const useObject = (id) => {
-  const {api} = useAuth();
-  const getSwr = useAsyncSwr([raw('./graphql/ObjectById.graphql'), {id}], (query, params) => (
-    api(params, query)
-    .chain(maybeToAsync('object_by_pk prop was expected', getProp('object_by_pk')))
-  ));
-
-  const create = useMemo(() => pipe(
-    resultToAsync,
-    map(a => ({...a, id})),
-    map(pick([
-      'address',
-      'city',
-      'contract_no',
-      'contract_object_no',
-      'description',
-      'is_atm',
-      'latitude',
-      'longitude',
-      'name',
-      'navision_id',
-      'phone',
-    ])),
-    map(mapObject),
-    chain(flip(api)(raw('./graphql/CreateObject.graphql')))
-  ), [api]);
-
-  const update = useMemo(() => pipe(
-    resultToAsync,
-    map(a => ({...a, id})),
-    map(pick([
-      'address',
-      'city',
-      'contract_no',
-      'contract_object_no',
-      'description',
-      'is_atm',
-      'latitude',
+  asyncMapToApi: pipe(
+    pick([
       'id',
+      'address',
+      'city',
+      'contract_no',
+      'contract_object_no',
+      'description',
+      'is_atm',
+      'latitude',
       'longitude',
       'name',
       'navision_id',
       'phone',
-    ])),
-    map(mapObject),
-    chain(flip(api)(raw('./graphql/UpdateObjectById.graphql')))
-  ), [api]);
+    ]),
+    mapProps({
+      navision_id: mapToNullableNumber,
+      latitude: mapToNullableNumber,
+      longitude: mapToNullableNumber,
+    }),
+    Async.Resolved
+  ),
+});
 
-  return {
-    ...getSwr,
-    update,
-    create,
-  }
-};
-
-export const useCity = (isSimplified = false) => {
-  const {apiQuery} = useAuth();
-  const effect = useAsyncEffect(apiQuery('query { city { value } }'));
-
-  if (isSimplified) return (
-    getPath(['data', 'city'], effect)
-    .chain(safe(isArray))
-    .map(pipe(
-      map(getPropOr(null, 'value')),
-      arr => arr.filter(isTruthy)
-    ))
-    .option([])
-  )
-
-  return effect;
-};
+export const useCity = createUseEnum({
+  graphQl: 'query { city { value } }',
+  itemsProp: 'city',
+  valueProp: 'value'
+});

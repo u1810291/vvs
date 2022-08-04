@@ -31,7 +31,7 @@ const mapFromNumeric = ifElse(
   String,
 );
 
-const ObjectEditForm = ({saveRef = identity}) => {
+const ObjectEditForm = ({saveRef}) => {
   const {id} = useParams();
   const {data, update, create} = useObject(id);
   const {t: tn} = useTranslation('notification');

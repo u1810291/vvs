@@ -1,20 +1,19 @@
-import React, {useEffect} from 'react';
-import {useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-
+import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
 import Card from 'components/atom/Card';
 import CheckBox from 'components/atom/input/CheckBox';
-import InputGroup from 'components/atom/input/InputGroup';
-import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
-
-import Map from 'feature/map/component/Map';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
-import {useCrew, useCrewZones} from 'feature/crew/api/crewEditApi';
-
+import InputGroup from 'components/atom/input/InputGroup';
+import Map from 'feature/map/component/Map';
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+import React, {useEffect} from 'react';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-
 import {Polygon} from '@react-google-maps/api';
-import {isObject, map, mapProps, pipe, safe} from 'crocks';
+import {useCrew, useCrewZones} from 'feature/crew/api/crewEditApi';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useNotification} from 'feature/ui-notifications/context';
+import {useTranslation} from 'react-i18next';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
+import {CrewListRoute} from '../routes';
 
 const polygonSetup = {
   strokeOpacity: 1,
@@ -31,15 +30,14 @@ const polygon = [
   {lat: 55.9, lng: 23.35},
   {lat: 55.85, lng: 23.3},];
 
-const CrewEditLayout = () => {
+const CrewEditLayout = ({saveRef}) => {
   const {id} = useParams();
-  const {data} = useCrew(id);
-  const {mapped: crewZones} = useCrewZones();
+  const {data, update, create} = useCrew(id);
+  const swr = useCrewZones();
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
   const {ctrl, result, setForm} = useResultForm({
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
-    driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validation: () => true}),
     phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
     to_call_after: FORM_FIELD.TEXT({label: t`field.to_call_after`, validator: () => true}),
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
@@ -48,21 +46,36 @@ const CrewEditLayout = () => {
     device_id: FORM_FIELD.TEXT({initial: '54:21:9D:08:38:8C', label: t`field.device_id`, validator: () => true}),
   });
 
-  useEffect(() => {pipe(
-    safe(isObject),
-    map(pipe(
-      mapProps({
-        name: String,
-        status: String,
-        driver_name: String,
-        phone_number: String,
-        to_call_after: String,
-        is_assigned_automatically: Boolean,
-        is_assigned_while_in_breaks: Boolean,
-      }),
-      setForm,
-    )),
-  )(data)}, [data]);
+  const {notify} = useNotification();
+  const nav = useNavigate();
+
+  useEffect(() => {
+    saveRef.current = () => (id ? update(result) : create(result)).fork(
+      error => notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {JSON.stringify(error)}
+        </NotificationSimple>
+      ),
+      () => {
+        notify(
+          <NotificationSimple
+            Icon={CheckCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+            heading={t`success`}
+          />
+        );
+        nav(CrewListRoute.props.path)
+      }
+    );
+  }, [saveRef.current, result, t, nav, notify]);
+
+  useEffect(() => {
+    setForm(data);
+  }, [data]);
 
   console.log(ctrl('events'))
 
@@ -107,7 +120,7 @@ const CrewEditLayout = () => {
           title={t('title.dislocation_zone_schedule')}
           actionButtonTitle={t('button.add_zone')}
           columnsTimeInterval={4}
-          crewZones={crewZones}
+          crewZones={swr.data || []}
           {...ctrl('events')}
         />
         <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white lg:w-52 lg:mt-4'}>
@@ -127,7 +140,7 @@ const CrewEditLayout = () => {
                 {ctrl('name').value}
               </p>
               <p className='text-regent'>
-                {ctrl('driver_name').value}
+                driver_name
               </p>
             </div>
           </div>

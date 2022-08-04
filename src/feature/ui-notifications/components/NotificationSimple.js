@@ -17,8 +17,8 @@ const NotificationSimple = ({Icon, iconClassName = NOTIFICATION_ICON_CLASS_NAME.
               <Icon className={`h-6 w-6 ${iconClassName}`} aria-hidden='true' />
             </div>)}
           <div className='flex-1 pt-0.5'>
-            <p className='text-sm font-medium text-gray-900'>{heading}</p>
-            <p className='mt-1 text-sm text-gray-500'>{children}</p>
+            <p className='text-sm font-medium text-gray-900 break-all'>{heading}</p>
+            <p className='mt-1 text-sm text-gray-500 break-all'>{children}</p>
           </div>
           <div className='ml-4 flex-shrink-0 flex'>
             <button
