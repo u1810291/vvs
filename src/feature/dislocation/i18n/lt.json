@@ -9,7 +9,7 @@
   "list": {
     "column": {
       "id": "ID",
-      "zone_name": "Pavadinimas"
+      "name": "Pavadinimas"
     }
   }
 }
