@@ -59,6 +59,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const [query, filterValues, filters] = useFilter(
     tableName,
     `
+      name
       id
       status
       driver_name

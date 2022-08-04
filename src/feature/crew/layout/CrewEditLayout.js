@@ -1,33 +1,28 @@
-import React, {useCallback} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
-
-import SideBarLayout from 'layout/SideBarLayout';
-
+import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
+import CrewEditForm from 'feature/crew/form/CrewEditForm';
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
-import HeaderButtonGroup from 'components/HeaderButtonGroup';
-import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
-
+import React, {useRef} from 'react';
+import SideBarLayout from 'layout/SideBarLayout';
 import {CrewListRoute} from 'feature/crew/routes';
+import {getProp, identity, isFunction} from 'crocks';
 import {useCrew} from 'feature/crew/api/crewEditApi';
-import CrewEditForm from 'feature/crew/form/CrewEditForm';
-
-import {getProp} from 'crocks';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import Button from 'components/Button';
 
 const CrewEditLayout = () => {
+  const saveRef = useRef(identity);
   const {id} = useParams();
   const navigate = useNavigate();
   const {data} = useCrew(id);
   const {t} = useTranslation('crew', {keyPrefix: 'edit.header'});
-
-  const onCancelButton = useCallback(() => navigate('/crew'), []);
-  const onSaveButton = useCallback(() => {}, []);
+  const send = () => { isFunction(saveRef.current) && saveRef.current(); };
 
   const breadcrumb = (
     getProp('name', data)
-      .alt(getProp('id', data))
-      .option(null)
+    .alt(getProp('id', data))
+    .option(null)
   );
 
   return (
@@ -42,16 +37,12 @@ const CrewEditLayout = () => {
               </Breadcrumbs.Item>
             </Nullable>
           </Breadcrumbs>
-          <HeaderButtonGroup
-            saveButtonText={t`button.save`}
-            cancelButtonText={t`button.cancel`}
-            onSaveButton={onSaveButton}
-            onCancelButton={onCancelButton}
-            twSaveButton={'text-white bg-slate-600'}
-            twCancelButton={'mr-4 bg-gray-200 text-gray-500'}
-          />
+          <div className='space-x-4'>
+            <Button.Nd onClick={() => navigate(CrewListRoute.props.path)}>{t`cancel`}</Button.Nd>
+            <Button onClick={send}>{t`save`}</Button>
+          </div>
         </Header>
-        <CrewEditForm />
+        <CrewEditForm saveRef={saveRef}/>
       </div>
     </SideBarLayout>
   );

@@ -1,36 +1,50 @@
+import {createUseList, createUseOne, mapToNullableString} from 'api/buildApiHook';
 import raw from 'raw.macro';
+import {
+  pipe,
+  map,
+  ifElse,
+  isEmpty,
+  getProp,
+  pick,
+  mapProps,
+  Async,
+} from 'crocks'
+import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {useAuth} from 'context/auth';
-import useAsyncSwr from 'hook/useAsyncSwr';
+export const useCrew = createUseOne({
+  getGraphQl: raw('./graphql/CrewById.graphql'),
+  createGraphql: raw('./graphql/CreateCrew.graphql'),
+  updateGraphQl: raw('./graphql/UpdateCrewById.graphql'),
+  asyncMapFromApi: pipe(
+    maybeToAsync('prop "crew_by_pk" was expected', getProp('crew_by_pk')),
+  ),
+  asyncMapToApi: pipe(
+    pick([
+      'id',
+      'name',
+      'status',
+      'driver_name',
+      'phone_number',
+      'to_call_after',
+      'is_assigned_automatically',
+      'is_assigned_while_in_breaks',
+    ]),
+    mapProps({
+      name: mapToNullableString,
+      driver_name: mapToNullableString,
+      phone_number: mapToNullableString,
+      to_call_after: mapToNullableString,
+      status: mapToNullableString,
+    }),
+    Async.Resolved
+  ),
+});
 
-import {either} from 'crocks/pointfree';
-import {getProp, maybeToAsync, pipe, chain, safe, isEmpty, not, map} from 'crocks';
-
-export const useCrew = (id) => {
-  const {api} = useAuth();
-  const getSwr = useAsyncSwr([raw('./graphql/CrewById.graphql'), {id}], (query, params) => (
-    api(params, query).chain(maybeToAsync('crew_by_pk prop was expected', getProp('crew_by_pk')))
-  ));
-
-  return {
-    ...getSwr
-  }
-};
-
-export const useCrewZones = () => {
-  const {api} = useAuth();
-  const getSwr = useAsyncSwr([raw('./graphql/CrewZones.graphql'), null], (query, params) => (
-    api(params, query).chain(maybeToAsync('crew_zone prop was expected', getProp('crew_zone')))
-  ));
-  const mapped = pipe(
-    getProp('data'),
-    chain(safe(not(isEmpty))),
-    map(map(a => ({key: a.name, value: a.id}))),
-    either(() => [], e => e)
-  )(getSwr);
-
-  return {
-    ...getSwr,
-    mapped
-  }
-};
+export const useCrewZones = createUseList({
+  graphQl: raw('./graphql/CrewZones.graphql'),
+  asyncMapFromApi: pipe(
+    maybeToAsync('crew_zone prop was expected', getProp('crew_zone')),
+    map(ifElse(isEmpty, () => [], map(a => ({key: a.name, value: a.id})))),
+  ),
+})

@@ -1,0 +1,29 @@
+mutation UpdateCrewById(
+  $id: uuid!,
+  $name: String = null,
+  $status: crew_status_enum = OFFLINE,
+  $driver_name: String = null,
+  $phone_number: String = null,
+  $to_call_after: String = null,
+  $is_assigned_automatically: Boolean = false,
+  $is_assigned_while_in_breaks: Boolean = false,
+  ) {
+  update_crew_by_pk(_set: {
+    name: $name,
+    status: $status,
+    driver_name: $driver_name,
+    phone_number: $phone_number,
+    to_call_after: $to_call_after,
+    is_assigned_automatically: $is_assigned_automatically,
+    is_assigned_while_in_breaks: $is_assigned_while_in_breaks,
+  }, pk_columns: {id: $id}) {
+    id
+    name
+    status
+    driver_name
+    phone_number
+    to_call_after
+    is_assigned_automatically
+    is_assigned_while_in_breaks
+  }
+}
