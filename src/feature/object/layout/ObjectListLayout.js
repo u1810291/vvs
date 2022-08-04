@@ -1,7 +1,7 @@
 import Breadcrumbs from 'components/Breadcrumbs';
 import Listing from 'layout/ListingLayout';
 import withPreparedProps from 'hoc/withPreparedProps';
-import {ObjectCreateRoute} from '../routes';
+import {ObjectCreateRoute, ObjectEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {titleCase} from '@s-e/frontend/transformer/string';
@@ -87,7 +87,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   ));
 
   const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(ObjectCreateRoute.props.path, {id: props?.id})}>
+    <Link to={generatePath(ObjectEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [t]);

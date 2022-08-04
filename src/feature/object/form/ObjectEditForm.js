@@ -33,7 +33,7 @@ const mapFromNumeric = ifElse(
 
 const ObjectEditForm = ({saveRef = identity}) => {
   const {id} = useParams();
-  const {data, update} = useObject(id);
+  const {data, update, create} = useObject(id);
   const {t: tn} = useTranslation('notification');
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
@@ -57,7 +57,7 @@ const ObjectEditForm = ({saveRef = identity}) => {
   });
 
   useEffect(() => {
-    saveRef.current = () => update(result).fork(
+    saveRef.current = () => (id ? update(result) : create(result)).fork(
       error => notify(
         <NotificationSimple
           Icon={XCircleIcon}
