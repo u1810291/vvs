@@ -35,7 +35,7 @@ const getLastDayOfMonth = (year, month) => {
 
 
 
-const DatePicker = ({label, defaultValue, onChange}) => {
+const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
   const [isPickerShown, setIsPickerShown] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -142,10 +142,16 @@ const DatePicker = ({label, defaultValue, onChange}) => {
   return (
     <div className={'relative '} onBlur={onBlur}>
       <Nullable on={label}>
-        <span>{label}</span>
+        <span className='text-sm'>{label}</span>
       </Nullable>
-      <button onClick={onFocus} className={'bg-white h-[38px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}>
+      <button onClick={onFocus} className={'bg-white h-[32px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mt-1'}>
+        
         {selectedDate && format(selectedDate, 'Y-MM-dd')}
+
+        <Nullable on={placeholder && !selectedDate}>
+          <span className='text-slate-700 pointer-events-none'>{placeholder}</span>
+        </Nullable>
+
         <Nullable on={selectedDate}>
           <span className={'absolute inset-y-0 right-8 flex items-center pr-2'}>
             <XIcon className={'h-5 w-5 text-gray-400'} />  

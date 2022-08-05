@@ -1,4 +1,4 @@
-import Filter from '../../components/Filter';
+
 import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
 import Index from '../SideBarLayout';
 import Table from '../../components/Table';
@@ -44,30 +44,17 @@ const Listing = ({
   list = [],
   rowKeyLens,
   filters,
+  columns,
   tableColumns,
   breadcrumbs,
 }) => {
-  const [columns, setColumns] = useState([]);
   const [query, setQuery] = useState('');
 
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
 
   
 
-  const pickedColumns = useMemo(() => pipe(
-    safe(isArray),
-    map(map(pipe(
-      safe(hasProps(['headerText', 'key'])),
-      map(a => ({
-        uid: a.key,
-        key: a.key,
-        children: a.headerText,
-      })),
-      map(renderWithProps(Filter.Item)),
-      option(null),
-    ))),
-    option(null)
-  )(tableColumns), [tableColumns]);
+  
 
   //  const filterItems = useMemo(() => pipe(
   //   safe(and(isArray, every(hasProps(['key', 'headerText'])))),
@@ -134,11 +121,10 @@ const Listing = ({
         </div>
       </TitleBar>
       <Nullable on={filters}>
-        <div className='w-1/2 my-10'>
+        <div className='w-full'>
           {filters}
         </div>
       </Nullable>
-      <Filter onValues={setColumns}>{pickedColumns}</Filter>
       <Table>
         <Table.Head>
           <Table.Tr>
