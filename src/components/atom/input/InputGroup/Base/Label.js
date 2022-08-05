@@ -1,4 +1,5 @@
-const Label = props => <label className='block text-bluewood text-base' {...props} />;
+import React from 'react';
 
+const Label = props => <label className='block text-bluewood text-base' {...props} />;
 
 export default Label;

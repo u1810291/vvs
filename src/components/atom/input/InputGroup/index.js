@@ -1,10 +1,13 @@
-import {omit} from 'crocks';
-import {putIntoArray} from 'util/array';
-import {withComponentFactory} from '../../../../util/react';
-import Nullable from '../../Nullable'
+import React from 'react';
+
 import Input from './Base/Input';
 import Label from './Base/Label';
-import React from 'react';
+import Nullable from 'components/atom/Nullable'
+
+import {putIntoArray} from 'util/array';
+import {withComponentFactory} from 'util/react';
+
+import {omit} from 'crocks';
 
 export const InputGroup = ({
   Addon,
@@ -15,7 +18,7 @@ export const InputGroup = ({
   className,
   inputClassName,
   inputWrapperWhenLabel = 'mt-1',
-  inputwrapperClassName = 'relative rounded-md shadow-sm',
+  inputwrapperClassName = 'relative rounded-md',
   label,
   twLabel,
   isRequired,
