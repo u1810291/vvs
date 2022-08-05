@@ -235,9 +235,6 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, q, tableColumns, filtersData, initialState) => {
-  
-  console.log(tableName, q, tableColumns, filtersData, initialState);
-
   const [showFilter, setShowFilter] = useState(false);
 
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
@@ -428,7 +425,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
   }
   
   const onFilterApply = (e) => {
-    console.log('on filter apply clicked', e.currentTarget.id);
+    // console.log('on filter apply clicked', e.currentTarget.id);
     const id = e.currentTarget.id;
     applyFilter(id);
   }
@@ -697,24 +694,26 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
 
                 // number range
                 else if (filter === 'range') {
-                  return <div className='flex flex-col' key={key}>
-                    <span className='text-sm mb-1'>{label}</span>
-                    <div className='flex flex-row space-x-2'>
-                      <Component
-                        className={'w-full'}
-                        inputClassName={'max-h-8'}
-                        key={`${key}_start`} 
-                        value={state[`${key}_start`] ?? ''}
-                        placeholder={'From...'}
-                        onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: `${key}_start`}))} />
-                      
-                      <Component
-                        className={'w-full'}
-                        inputClassName={'max-h-8'}
-                        key={`${key}_end`} 
-                        value={state[`${key}_end`] ?? ''}
-                        placeholder={'To...'}
-                        onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: `${key}_end`}))} />
+                  return <div className='w-full' key={key}>
+                      <div className='flex flex-col' >
+                      <span className='text-sm mt-1'>{label}</span>
+                      <div className='flex flex-row space-x-2 mt-1'>
+                        <Component
+                          className={'w-full'}
+                          inputClassName={'max-h-8'}
+                          key={`${key}_start`} 
+                          value={state[`${key}_start`] ?? ''}
+                          placeholder={'From...'}
+                          onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: `${key}_start`}))} />
+                        
+                        <Component
+                          className={'w-full'}
+                          inputClassName={'max-h-8'}
+                          key={`${key}_end`} 
+                          value={state[`${key}_end`] ?? ''}
+                          placeholder={'To...'}
+                          onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: `${key}_end`}))} />
+                      </div>
                     </div>
                   </div>
                 }
