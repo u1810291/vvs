@@ -1,7 +1,11 @@
-import {omit} from 'crocks';
+import React from 'react';
+
 import {InputGroup} from '.';
-import {withComponentFactory, withMergedClassName} from '../../../../util/react';
 import Label from './Base/Label';
+
+import {withComponentFactory, withMergedClassName} from 'util/react';
+
+import {omit} from 'crocks';
 
 export default withComponentFactory(InputGroup, {
   mapSetupInComponent: omit(['input']),

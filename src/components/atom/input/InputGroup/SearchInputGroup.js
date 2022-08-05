@@ -1,7 +1,12 @@
-import {SearchIcon} from '@heroicons/react/solid';
-import {defaultProps} from 'crocks';
+import React from 'react';
+
 import InputGroup from './index';
-import useLanguage from '../../../../hook/useLanguage';
+
+import useLanguage from 'hook/useLanguage';
+
+import {SearchIcon} from '@heroicons/react/solid';
+
+import {defaultProps} from 'crocks';
 
 const SearchInputGroup = props => {
   const {t} = useLanguage();
