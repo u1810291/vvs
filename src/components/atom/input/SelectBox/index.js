@@ -13,7 +13,7 @@ const SelectBox = withComponentFactory(Box, {
   Options,
   Option,
   ContentContainer,
-  optionClassNameFn: ({active}) => `cursor-default select-none relative py-2 pl-8 pr-4 ${active ? 'text-white bg-indigo-600' : 'text-gray-900'}`,
+  optionClassNameFn: ({active}) => `cursor-default select-none relative py-1 pl-8 pr-4 ${active ? 'text-white bg-indigo-600' : 'text-gray-900'}`,
 });
 
 export default SelectBox;

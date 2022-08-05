@@ -144,7 +144,7 @@ const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
       <Nullable on={label}>
         <span className='text-sm'>{label}</span>
       </Nullable>
-      <button onClick={onFocus} className={'bg-white h-[32px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mt-1'}>
+      <button onClick={onFocus} className={'bg-white h-[32px] relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mt-1'}>
         
         {selectedDate && format(selectedDate, 'Y-MM-dd')}
 
