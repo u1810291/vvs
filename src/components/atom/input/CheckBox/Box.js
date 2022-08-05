@@ -11,6 +11,7 @@ const Box = ({
   description,
   isChecked,
   onChange = identity,
+  onClick,
   ...props
 }) => {
   return (
@@ -23,7 +24,7 @@ const Box = ({
         aria-describedby={`${name}-description`}
       />
       <DetailsContainer>
-        <Label htmlFor={name}>
+        <Label htmlFor={name} onClick={onClick}>
           {label}
         </Label>
         {description}
