@@ -13,8 +13,7 @@ const Box = ({
   twLabel,
   Button,
   Options,
-  Option,
-  optionClassNameFn,
+  Option, optionClassNameFn,
   children,
   value,
   onChange,
@@ -41,7 +40,7 @@ const Box = ({
                 {children && (
                   <Options>
                     {children.map(component => (
-                      <Option {...component.props} key={component.props.children} selected={multiple ? value.includes(component.props.children) ? displayValue(component.props.children) : '' : displayValue(value)} className={optionClassNameFn} value={component}/>
+                      <Option {...component.props} key={component?.key || component?.props?.key || component.props.children} selected={multiple ? value.includes(component.props.children) ? displayValue(component.props.children) : '' : displayValue(value)} className={optionClassNameFn} value={component}/>
                     ))}
                   </Options>
                 )}

@@ -12,6 +12,13 @@ import {
 } from 'crocks'
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
+export const useCrews = createUseList({
+  graphQl: raw('./graphql/Crews.graphql'),
+  asyncMapFromApi: pipe(
+    maybeToAsync('expected prop "crew" does not exist', getProp('crew')),
+  ),
+});
+
 export const useCrew = createUseOne({
   getGraphQl: raw('./graphql/CrewById.graphql'),
   createGraphql: raw('./graphql/CreateCrew.graphql'),

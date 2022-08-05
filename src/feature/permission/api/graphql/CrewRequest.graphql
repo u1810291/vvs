@@ -1,0 +1,6 @@
+query CrewRequest {
+  crew_request {
+    value
+    comment
+  }
+}

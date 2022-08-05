@@ -9,11 +9,13 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'permission', EN);
 i18next.addResourceBundle('lt', 'permission', LT);
 
+export const PermissionCreateRoute = getExactHiddenRoute('permission', 'menu.create', '/permission/new', lazy(() => import('./layout/PermissionEditLayout')), null);
 export const PermissionEditRoute = getExactHiddenRoute('permission', 'menu.edit', '/permission/:id', lazy(() => import('./layout/PermissionEditLayout')), null);
 export const PermissionListRoute = getExactRoute('permission', 'menu.list', '/permission', lazy(() => import('./layout/PermissionListLayout')), null);
 
 const PermissionRoute = (
   <>
+    {PermissionCreateRoute}
     {PermissionEditRoute}
     {PermissionListRoute}
   </>

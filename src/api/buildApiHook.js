@@ -9,6 +9,7 @@ import {useNavigate} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
 import {useTranslation} from 'react-i18next';
 import {
+    Async,
   chain,
   constant,
   flip,
@@ -61,8 +62,8 @@ export const createUseOne = ({
   getGraphQl,
   createGraphql,
   updateGraphQl,
-  asyncMapFromApi,
-  asyncMapToApi,
+  asyncMapFromApi = Async.Resolved,
+  asyncMapToApi = Async.Resolved,
 }) => ({
   id,
   saveRef,
@@ -74,10 +75,12 @@ export const createUseOne = ({
   const {api} = useAuth();
   const {notify} = useNotification();
   const {t} = useTranslation();
-  const getSwr = useAsyncSwr([getGraphQl, {id}], (query, params) => (
-    api(params, query)
-    .chain(asyncMapFromApi)
-  ));
+  const getSwr = useAsyncSwr(
+    [getGraphQl, {id}],
+    (query, params) => id
+      ? api(params, query).chain(asyncMapFromApi)
+      : Async.Rejected('id missing')
+  );
 
   const create = useMemo(() => pipe(
     resultToAsync,

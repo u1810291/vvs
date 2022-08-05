@@ -2,6 +2,12 @@
   "menu": {
     "list": "Permissions"
   },
+  "status": {
+    "ALLOWED": "Allowed",
+    "ASKED": "Asked",
+    "COMPLETE": "Complete",
+    "REJECTED": "Rejected"
+  },
   "breadcrumbs": {
     "permissions": "Permissions",
     "allData": "All Data"

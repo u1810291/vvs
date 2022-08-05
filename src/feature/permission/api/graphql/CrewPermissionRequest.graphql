@@ -1,0 +1,6 @@
+query CrewRequestStatus {
+  crew_request_status {
+    value
+    comment
+  }
+}

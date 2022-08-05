@@ -1,0 +1,14 @@
+query PermissionById ($id: uuid!) {
+  crew_permission_by_pk(id: $id) {
+    id
+    created_at
+    updated_at
+    crew_id
+    request
+    status
+    crew {
+      id
+      name
+    }
+  }
+}

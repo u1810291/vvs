@@ -1,0 +1,16 @@
+mutation UpdatePermissionById (
+  $id: uuid!,
+  $request: crew_request_enum,
+  $crew_id: uuid!,
+  $status: crew_request_status_enum = REJECTED,
+  $comment: String = null,
+  ) {
+  update_crew_permission_by_pk (_set: {
+    request: $request,
+    crew_id: $crew_id,
+    status: $status,
+    comment: $comment,
+  }, pk_columns: {id: $id}) {
+    id
+  }
+}

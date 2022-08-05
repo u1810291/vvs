@@ -1,0 +1,10 @@
+{
+  "schema": {
+    "https://ec.swarm.testavimui.eu/v1/graphql": {
+      "headers": {
+        "user-agent": "JS GraphQL",
+        "x-hasura-admin-secret": "secret"
+      }
+    }
+  }
+}

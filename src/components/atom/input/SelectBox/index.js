@@ -1,10 +1,9 @@
 import Box from './Box';
-import Label from './Label';
 import Button from './Button';
+import ContentContainer from './ContentContainer';
+import Label from './Label';
 import Option from './Option';
 import Options from './Options';
-import ContentContainer from './ContentContainer';
-
 import {withComponentFactory} from '../../../../util/react';
 
 const SelectBox = withComponentFactory(Box, {
