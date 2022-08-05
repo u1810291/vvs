@@ -33,7 +33,7 @@ const ASideBar = ({ref, setSidebarOpen}) => {
       <ul className='mt-6'>
         {starred.map((filter, index) => {
           return <li key={filter.id} id={filter.id}>
-            <NavLink to={filter.url} className={'text-white hover:opacity-50 cursor-pointer'}>FLTR{index + 1}</NavLink>
+            <NavLink to={filter.url} className={'text-white hover:opacity-50 cursor-pointer'}>{filter.shortcut}</NavLink>
           </li>
         })}
       </ul>

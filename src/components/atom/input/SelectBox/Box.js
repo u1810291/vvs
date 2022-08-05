@@ -19,6 +19,7 @@ const Box = ({
   onChange,
   displayValue = identity,
   multiple,
+  placeholder,
   ...props
 }) => {
   const onChangeValue = (e) => onChange({key: e.key, value: e.props.value});
@@ -28,7 +29,8 @@ const Box = ({
         <div>
           <Nullable on={label}><Label className={twLabel}>{label}</Label></Nullable>
           <ContentContainer>
-            <Button displayName={displayValue(value)}/>
+            <Button displayName={displayValue(value)} placeholder={placeholder} />
+            
             {children && (
               <Transition
                 show={open}

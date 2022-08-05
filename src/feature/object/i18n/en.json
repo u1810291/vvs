@@ -21,6 +21,10 @@
 			"phone": "Phone",
 			"provider_id": "Provider ID",
 			"provider_name": "Provider"
+		},
+		"bool": {
+			"yes": "yes",
+			"no": "no"
 		}
 	},
 	"edit": {

@@ -31,11 +31,13 @@ import {CrewCreateRoute, CrewEditRoute} from '../routes';
 import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
 import Button from 'components/Button';
+import {FilterIcon} from '@heroicons/react/solid';
 
-const getColumn = curry((t, Component, key, pred, mapper) => ({
+const getColumn = curry((t, Component, key, pred, mapper, status) => ({
   Component,
   headerText: t(key),
   key,
+  status,
   itemToProps: item => pipe(
     getProp(key),
     chain(safe(pred)),
@@ -55,8 +57,23 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const {t} = useTranslation('crew', {keyPrefix: 'list.column'});
   const nav = useNavigate();
 
+  const c = useMemo(() => getColumn(t, props => (
+    <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
+      {props?.children}
+    </Link>
+  )), [t]);
+
+  const tableColumns = [
+    c('id', ne, identity, false),
+    c('name', ne, identity, true),
+    c('status', ne, identity, true),
+    c('driver_name', ne, identity, true),
+    c('phone_number', ne, identity, true),
+    c('is_assigned_automatically', ne, identity, true)
+  ];
+
   const tableName = 'crew';
-  const [query, filterValues, filters] = useFilter(
+  const [query, queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     tableName,
     `
       name
@@ -66,6 +83,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       phone_number
       is_assigned_automatically
     `, 
+    tableColumns,
     [
       {key: 'driver_name', type: 'String', label: 'Driver name', filter: 'text', Component: InputGroup},
       {key: 'phone_number', type: 'String', label: 'Phone name', filter: 'text', Component: InputGroup},
@@ -75,20 +93,12 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   );
 
   const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
-    api(filterValues, query)
+    api(queryParams, query)
   ));
   
   useEffect(() => {
     fork()
-  }, [filterValues]);
-
-  const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
-      {props?.children}
-    </Link>
-  )), [t]);
-
-  useEffect(() => fork(), []);
+  }, [queryParams]);
 
   return {
     list: safe(isArray, state.data).option([]),
@@ -96,7 +106,9 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`crews`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`all_data`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item>
+          {defaultFilter.id ? defaultFilter.name : tb('allData') } <FilterIcon onClick={toggleFilter} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block hover:opacity-50' />
+        </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (
@@ -104,15 +116,9 @@ const CrewListLayout = withPreparedProps(Listing, () => {
         <Button onClick={() => nav(CrewCreateRoute.props.path)}>{tc('create')}</Button>
       </>
     ),
-    filters: filters,
-    tableColumns: [
-      c('id', ne, identity),
-      c('name', ne, identity),
-      c('status', ne, identity),
-      c('driver_name', ne, identity),
-      c('phone_number', ne, identity),
-      c('is_assigned_automatically', ne, identity)
-    ],
+    filters,
+    tableColumns,
+    columns
   }
 });
 

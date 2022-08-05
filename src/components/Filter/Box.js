@@ -53,7 +53,7 @@ const Box = ({Dropdown, Item, children, onChange = identity, onValues = identity
   )(children)}, [active]);
 
   return (
-    <div className='flex-wrap flex rounded-md w-full border p-1 bg-white sm:grid-cols-6 font-normal text-black' {...props}>
+    <div className='flex-wrap flex rounded-md w-full border p-0 bg-white sm:grid-cols-6 font-normal text-black' {...props}>
       {pipe(putIntoArray, (a) => a.filter((b) => active.includes(b.props.children)))(children)}
       <Dropdown>
         {
