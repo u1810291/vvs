@@ -1,5 +1,5 @@
 import {useCallback, useMemo} from 'react';
-import {enUS, lt} from 'date-fns/locale';
+import {enGB, lt} from 'date-fns/locale';
 import useLanguage from './useLanguage';
 import {eachDayOfInterval, endOfWeek, format, startOfWeek} from 'date-fns';
 
@@ -11,7 +11,7 @@ const useWeekDays = (callback) => {
 
   const getTimeLocals = useCallback(() => {
     const currentLanguage = getLanguage();
-    return currentLanguage === 'lt' ? lt : enUS;
+    return currentLanguage === 'lt' ? lt : enGB;
   }, []);
 
   const getWeekDays = useCallback(locale => {
