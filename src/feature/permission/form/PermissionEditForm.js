@@ -34,6 +34,7 @@ const PermissionEditForm = ({saveRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('permission', {keyPrefix: 'edit.field'});
+  const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
   const requests = useCrewRequest(true);
   const statuses = useCrewRequestStatus(true);
   const crews = useCrews();
@@ -45,11 +46,11 @@ const PermissionEditForm = ({saveRef}) => {
       disabled: ({value}) => isTruthy(value),
     }}),
     request: FORM_FIELD.TEXT({label: tf`request`, validator: () => true, props: {
-      displayValue: displayValue(identity),
+      displayValue: displayValue(titleCase),
       onChange,
     }}),
     status: FORM_FIELD.TEXT({label: tf`status`, validator: () => true, props: {
-      displayValue: displayValue(identity),
+      displayValue: displayValue(ts),
       onChange,
     }}),
   });

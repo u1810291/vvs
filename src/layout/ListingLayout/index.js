@@ -108,7 +108,7 @@ const Listing = ({
           <div className='flex-grow flex-shrink'>
             <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
           </div>
-          <div className='flex-grow flex-shrink justify-end flex'>
+          <div className='flex-grow flex-shrink justify-end flex md:space-x-4'>
             {buttons}
           </div>
         </div>

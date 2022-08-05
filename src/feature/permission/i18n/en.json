@@ -1,6 +1,7 @@
 {
   "menu": {
-    "list": "Permissions"
+    "list": "Permissions",
+    "requestList": "Requests"
   },
   "status": {
     "ALLOWED": "Allowed",

@@ -1,0 +1,5 @@
+mutation UpdateCrewRequest($id: String!, $value: String!, $comment: String = null) {
+  update_crew_request_by_pk (_set: {value: $value, comment: $comment}, pk_columns: {value: $id}) {
+    value
+  }
+}
