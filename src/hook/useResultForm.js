@@ -131,6 +131,7 @@ const FORM_FIELD = {
     validator: not(isEmpty),
     initial: false,
     props: {
+      onClick: ({set, value}) => () => set(!value),
       onChange: ({set}) => onCheckboxEvent(fallbackValue, set),
       isChecked: ({value}) => isBoolean(value) ? value : fallbackValue,
       ...(label ? {label: always(label)} : {}),
