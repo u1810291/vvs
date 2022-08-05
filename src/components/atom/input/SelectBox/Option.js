@@ -15,7 +15,7 @@ const Option = ({selected, ...props}) => (
         </span>
         {selected === props.children ? (
           <span className={classNames(
-            active ? 'text-white' : 'text-indigo-600',
+            active ? 'text-white' : 'text-steel',
             'absolute inset-y-0 left-2 flex items-center pr-4'
           )}>
             <CheckIcon className='h-5 w-5' aria-hidden='true'/>
