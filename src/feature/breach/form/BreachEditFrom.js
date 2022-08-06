@@ -7,10 +7,16 @@ import Nullable from 'components/atom/Nullable';
 
 import Map from 'feature/map/component/Map';
 import {useBreach} from 'feature/breach/api/breachEditApi';
-import BreachMarker from 'feature/breach/components/BreachMarker';
-import BreachPolygon from 'feature/breach/components/BreachPolygon';
 import BreachInfoCard from 'feature/breach/components/BreachInfoCard';
 import {getZoneItems, getFlatNodes, transformNodeContract} from 'feature/breach/utils';
+import Marker from '../../map/component/Marker';
+import Polygon from '../../map/component/Polygon';
+
+const BREACH_PATH_ICON = {
+  path: 'M 1, 1 1, 1',
+  scale: 10,
+  strokeColor: '#404B5F'
+};
 
 const BreachEditForm = () => {
   const {id: breachId} = useParams();
@@ -30,10 +36,10 @@ const BreachEditForm = () => {
           id={`breach-map-${breachId}`}
         >
           <Nullable on={breachPath}>
-            <BreachMarker breachPath={breachPath} />
+            <Marker path={breachPath} icon={BREACH_PATH_ICON} />
           </Nullable>
           <Nullable on={zonePath}>
-            <BreachPolygon zonePath={zonePath} />
+            <Polygon path={zonePath} />
           </Nullable>
         </Map>
       </div>

@@ -1,36 +1,27 @@
-import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
-import Card from 'components/atom/Card';
-import CheckBox from 'components/atom/input/CheckBox';
-import DynamicIcon from 'feature/crew/component/CrewIcon';
-import InputGroup from 'components/atom/input/InputGroup';
-import Map from 'feature/map/component/Map';
 import React from 'react';
-import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-import {Polygon} from '@react-google-maps/api';
-import {useCrew, useCrewZones} from 'feature/crew/api/crewEditApi';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {CrewListRoute} from '../routes';
 
-const polygonSetup = {
-  strokeOpacity: 1,
-  strokeWeight: 0.8,
-  strokeColor: '#C32A2F',
-  fillOpacity: 0.4,
-  fillColor: '#C32A2F',
-  clickable: true,
-  draggable: true,
-};
+import Card from 'components/atom/Card';
+import Nullable from 'components/atom/Nullable';
+import CheckBox from 'components/atom/input/CheckBox';
+import InputGroup from 'components/atom/input/InputGroup';
+import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
 
-const polygon = [
-  {lat: 55.95, lng: 23.3},
-  {lat: 55.9, lng: 23.35},
-  {lat: 55.85, lng: 23.3},];
+import Map from 'feature/map/component/Map';
+import {CrewListRoute} from 'feature/crew/routes';
+import Polygon from 'feature/map/component/Polygon';
+import DynamicIcon from 'feature/crew/component/CrewIcon';
+import {getFlatNodes, getZoneItems} from 'feature/breach/utils';
+import {useCrew, useCrewById, useCrewZones} from 'feature/crew/api/crewEditApi';
+
+import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 
 const CrewEditLayout = ({saveRef}) => {
-  const {id} = useParams();
-  const swr = useCrewZones();
+  const {id: crewId} = useParams();
+  const {data: crewZones} = useCrewZones();
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
+  const {data: crew} = useCrewById(crewId);
   const {ctrl, result, setForm} = useResultForm({
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
@@ -43,12 +34,17 @@ const CrewEditLayout = ({saveRef}) => {
   });
 
   useCrew({
-    id,
+    id: crewId,
     saveRef,
     setForm,
     formResult: result,
     successRedirectPath: CrewListRoute.props.path,
-  })
+  });
+
+  const zonePath = getZoneItems(crew);
+  const zoneCoordinates = getFlatNodes(crew);
+
+  console.log(crewZones)
 
   return (
     <section className={'m-6 md:flex md:flex-row'}>
@@ -91,7 +87,7 @@ const CrewEditLayout = ({saveRef}) => {
           title={t('title.dislocation_zone_schedule')}
           actionButtonTitle={t('button.add_zone')}
           columnsTimeInterval={4}
-          crewZones={swr.data || []}
+          crewZones={crewZones || []}
           {...ctrl('events')}
         />
         <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white lg:w-52 lg:mt-4'}>
@@ -116,8 +112,15 @@ const CrewEditLayout = ({saveRef}) => {
             </div>
           </div>
         </Card.Sm>
-        <Map>
-          <Polygon path={polygon} options={polygonSetup} />
+        <Map
+          zoom={12}
+          path={zonePath}
+          id={`crew-map-${crewId}`}
+          coordinates={zoneCoordinates}
+        >
+          <Nullable on={zonePath}>
+            <Polygon path={zonePath} />
+          </Nullable>
         </Map>
       </div>
     </section>

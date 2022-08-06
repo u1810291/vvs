@@ -8,5 +8,8 @@ query CrewById ($id: uuid!) {
         to_call_after
         is_assigned_automatically
         is_assigned_while_in_breaks
+        zone {
+            nodes
+        }
     }
 }
