@@ -1,5 +1,8 @@
-import {createUseList, createUseOne, mapToNullableString} from 'api/buildApiHook';
 import raw from 'raw.macro';
+import {useAuth} from 'context/auth';
+import useAsyncSwr from 'hook/useAsyncSwr';
+import {createUseList, createUseOne, mapToNullableString} from 'api/buildApiHook';
+import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {
   pipe,
   map,
@@ -8,9 +11,13 @@ import {
   getProp,
   pick,
   mapProps,
-  Async,
+  Async, safe,
 } from 'crocks'
-import maybeToAsync from 'crocks/Async/maybeToAsync';
+import {option} from 'crocks/pointfree';
+import {not} from 'crocks/logic';
+import {tap} from 'crocks/helpers';
+
+// TODO: Reduce duplicated requests
 
 export const useCrews = createUseList({
   graphQl: raw('./graphql/Crews.graphql'),
@@ -48,10 +55,24 @@ export const useCrew = createUseOne({
   ),
 });
 
+export const useCrewById = id => {
+  const {api} = useAuth();
+  const getSwr = useAsyncSwr([raw('./graphql/CrewById.graphql'), {id}], (query, params) => (
+    api(params, query).chain(maybeToAsync('crew_by_pk prop was expected', getProp('crew_by_pk')))
+  ));
+
+  return {
+    ...getSwr
+  }
+};
+
 export const useCrewZones = createUseList({
   graphQl: raw('./graphql/CrewZones.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('crew_zone prop was expected', getProp('crew_zone')),
     map(ifElse(isEmpty, () => [], map(a => ({key: a.name, value: a.id})))),
+    tap(e => console.log(e.toString())),
+    safe(not(isEmpty)),
+    option([])
   ),
-})
+});
