@@ -72,25 +72,14 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   const tableColumns = [
-    // c('id', ne, identity),
     c('name', ne, identity, true),
     c('city', ne, titleCase, true),
     c('address', ne, identity, true),
     c('contract_object_no', ne, identity, true),
     c('contract_no', ne, identity, true),
     c('is_crew_autoasigned', ne, identity, true),
-    
     c('created', ne, identity, false),
     c('user_id', ne, identity, false),
-
-    // c('is_atm', ne, bool => bool ? t('bool.yes') : t('bool.no')),
-    
-    // c('phone', ne, identity, false),
-    // c('longitude', nnil, identity, false),
-    // c('latitude', nnil, identity, false),
-    // c('provider_name', ne, titleCase),
-    // c('provider_id', isFinite, identity),
-    // c('navision_id', and(not(isEmpty), isFinite), identity),
   ]
 
   const tableName = 'object';
@@ -118,7 +107,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       {key: 'name', type: 'String', label: 'Name', filter: 'text', Component: InputGroup},
       {key: 'contract_object_no', type: 'String', label: 'Object No', filter: 'text', Component: InputGroup},
       
-      // numberic range
       {key: 'latitude', type: 'numeric', label: 'Latitude', filter: 'range', Component: InputGroup},
       {key: 'longitude', type: 'numeric', label: 'Longitude', filter: 'range', Component: InputGroup},
 
@@ -129,7 +117,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       // {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['KAUNAS', 'VILNIUS', 'URENA']},
       
       // automatically send crew? (yes, no)
-      
       // client
     ]
   );

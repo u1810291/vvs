@@ -1,0 +1,11 @@
+mutation CreateKey (
+  $crew_id: uuid!,
+  $set_name: String,
+  ) {
+  insert_object_key_one (object: {
+    crew_id: $crew_id,
+    set_name: $set_name
+  }) {
+    id
+  }
+}

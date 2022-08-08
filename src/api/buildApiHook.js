@@ -25,9 +25,11 @@ import {
   map,
   not,
   option,
+  pick,
   pipe,
   resultToAsync,
   safe,
+  // tap,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -62,6 +64,7 @@ export const createUseOne = ({
   getGraphQl,
   createGraphql,
   updateGraphQl,
+  deleteGraphQL,
   asyncMapFromApi = Async.Resolved,
   asyncMapToApi = Async.Resolved,
 }) => ({
@@ -70,6 +73,7 @@ export const createUseOne = ({
   formResult,
   setForm,
   successRedirectPath,
+  removeRef,
 }) => {
   const nav = useNavigate();
   const {api} = useAuth();
@@ -93,6 +97,19 @@ export const createUseOne = ({
     map(a => ({...a, id})),
     chain(asyncMapToApi),
     chain(flip(api)(updateGraphQl))
+  ), [api]);
+
+  const remove = useMemo(() => pipe(
+    resultToAsync,
+    map(a => ({...a, id})),
+    chain(
+      pipe(
+        pick(['id']), 
+        // tap(console.log), 
+        Async.Resolved
+      )
+    ),
+    chain(flip(api)(deleteGraphQL))
   ), [api]);
 
   useEffect(() => {
@@ -122,12 +139,40 @@ export const createUseOne = ({
         if (successRedirectPath) nav(successRedirectPath);
       }
     );
-  }, [saveRef?.current, formResult, t, nav, notify, successRedirectPath, formResult]);
+  }, [saveRef?.current, formResult, t, nav, notify, successRedirectPath]);
+
+  useEffect(() => {
+    if (!(hasProp('current', removeRef) && formResult)) return;
+    
+    removeRef.current = () => remove(formResult).fork(
+      error => notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {JSON.stringify(error)}
+        </NotificationSimple>
+      ),
+      () => {
+        notify(
+          <NotificationSimple 
+            Icon={CheckCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+            heading={t`success`}
+          />
+        );
+        
+        if (successRedirectPath) nav(successRedirectPath);
+      }
+    );    
+  }, [removeRef?.current, formResult, t, nav, notify, successRedirectPath]);
 
   return {
     ...getSwr,
     update,
     create,
+    remove,
   }
 };
 
