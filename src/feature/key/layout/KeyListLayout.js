@@ -1,21 +1,19 @@
-import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
+import React, {useMemo} from 'react';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 
-import Listing from '../../../layout/ListingLayout';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import withPreparedProps from '../../../hoc/withPreparedProps';
+import Button from 'components/Button';
+import Listing from 'layout/ListingLayout';
+import Breadcrumbs from 'components/Breadcrumbs';
+import withPreparedProps from 'hoc/withPreparedProps';
 
 import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
-import useAsync from '../../../hook/useAsync';
 
 import {
   chain,
   curry,
   getProp,
   getPropOr,
-  identity,
-  isArray,
+  // identity,
   isEmpty,
   map,
   Maybe,
@@ -25,9 +23,10 @@ import {
   safe
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {KeyEditRoute} from '../routes';
+import {KeyEditRoute, KeyCreateRoute} from '../routes';
+import {useKeys} from '../api';
+import {titleCase} from '@s-e/frontend/transformer/string';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -47,21 +46,11 @@ const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
 const KeyListLayout = withPreparedProps(Listing, props => {
-  const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('key', {keyPrefix: 'breadcrumbs'});
+  const {t: tp} = useTranslation('key');
+  const {t: ts} = useTranslation('key', {keyPrefix: 'status'});
   const {t} = useTranslation('key', {keyPrefix: 'list.column'});
-  // TODO: Prepare 'Key' data in Hasura to be fetched
-  const [state, fork] = useAsync(chain(maybeToAsync('"key" prop is expected in the response', getProp('key')),
-    apiQuery(
-      `
-        query {
-          key {
-
-          }
-        }
-      `
-    ))
-  );
+  const nav = useNavigate();
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(KeyEditRoute.props.path, {id: props?.id})}>
@@ -69,22 +58,23 @@ const KeyListLayout = withPreparedProps(Listing, props => {
     </Link>
   )), [t]);
 
-  useEffect(() => fork(), []);
-
   return {
-    list: safe(isArray, state.data).option([]),
+    list: useKeys()?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`keys`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
-    // TODO: Adjust column names regarding response data
+    buttons: (
+      <>
+        <Button onClick={() => nav(KeyCreateRoute.props.path)}>{tp('create')}</Button>
+      </>
+    ),
     tableColumns: [
-      c('id', ne, identity),
-      c('set', ne, identity),
-      c('name', ne, identity),
+      // c('id', ne, identity),
+      c('set_name', ne, titleCase),
+      c('crew_id', ne, ts),
     ],
   }
 });

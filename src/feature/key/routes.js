@@ -11,9 +11,11 @@ i18next.addResourceBundle('lt', 'key', LT);
 
 export const KeyEditRoute = getExactHiddenRoute('key', 'menu.edit', '/key/:id', lazy(() => import('./layout/KeyEditLayout')), null);
 export const KeyListRoute = getExactRoute('key', 'menu.list', '/key', lazy(() => import('./layout/KeyListLayout')), null);
+export const KeyCreateRoute = getExactHiddenRoute('key', 'menu.create', '/key/new', lazy(() => import('./layout/KeyEditLayout')), null);
 
 const KeyRoute = (
   <>
+    {KeyCreateRoute}
     {KeyEditRoute}
     {KeyListRoute}
   </>

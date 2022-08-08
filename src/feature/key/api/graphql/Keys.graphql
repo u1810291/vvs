@@ -1,0 +1,7 @@
+query {
+  object_key {
+    id
+    crew_id
+    set_name
+  }
+}

@@ -1,0 +1,12 @@
+mutation UpdateKeyById (
+  $id: uuid!,
+  $crew_id: uuid!,
+  $set_name: String,
+  ) {
+  update_object_key_by_pk (_set: {
+    crew_id: $crew_id,
+    set_name: $set_name,
+  }, pk_columns: {id: $id}) {
+    id
+  }
+}
