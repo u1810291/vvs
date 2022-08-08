@@ -1,12 +1,12 @@
 mutation CreatePermission (
   $crew_id: uuid!,
   $status: crew_request_status_enum = ASKED,
-  $request: crew_request_enum = BREAK
+  $request_id: String!,
   ) {
   insert_crew_permission_one (object: {
     crew_id: $crew_id,
     status: $status,
-    request: $request,
+    request_id: $request_id,
   }) {
     id
   }

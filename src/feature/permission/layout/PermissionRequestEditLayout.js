@@ -2,7 +2,7 @@ import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import Button from 'components/Button';
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
-import {PermissionListRoute} from '../routes';
+import {PermissionRequestListRoute} from '../routes';
 import SidebarLayout from 'layout/SideBarLayout';
 import {getProp, identity, isFunction} from 'crocks';
 import {useCrewRequestFull} from '../api';
@@ -26,7 +26,7 @@ const PermissionEditLayout = () => {
   const breadcrumb = (
     getProp('value', data)
     .alt(getProp('id', data))
-    .option(null)
+    .option(t('new'))
   );
 
   return (
@@ -42,7 +42,7 @@ const PermissionEditLayout = () => {
             </Nullable>
           </Breadcrumbs>
           <div className='space-x-4'>
-            <Button.Nd onClick={() => nav(PermissionListRoute.props.path)}>{t`cancel`}</Button.Nd>
+            <Button.Nd onClick={() => nav(PermissionRequestListRoute.props.path)}>{t`cancel`}</Button.Nd>
             <Button onClick={send}>{t`save`}</Button>
           </div>
         </>

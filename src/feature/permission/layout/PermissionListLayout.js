@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Button from 'components/Button';
@@ -24,7 +24,7 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
-import {PermissionEditRoute, PermissionCreateRoute} from '../routes';
+import {PermissionEditRoute, PermissionCreateRoute, PermissionRequestListRoute} from '../routes';
 import {usePermissions} from '../api';
 import {titleCase} from '@s-e/frontend/transformer/string';
 
@@ -51,6 +51,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   const {t} = useTranslation('permission', {keyPrefix: 'list.column'});
   const nav = useNavigate();
 
+
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
       {props?.children}
@@ -68,12 +69,18 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     ),
     buttons: (
       <>
-        <Button onClick={() => nav(PermissionCreateRoute.props.path)}>{tp('create')}</Button>
+        <Button.NoBg onClick={useCallback(() => nav(PermissionRequestListRoute.props.path), [nav])}>
+          {tp(
+            PermissionRequestListRoute.props.translationKey,
+            {ns: PermissionRequestListRoute.props.translationNs
+          })}
+        </Button.NoBg>
+        <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button>
       </>
     ),
     tableColumns: [
       c('id', ne, identity),
-      c('request', ne, titleCase),
+      c('request_id', ne, titleCase),
       c('status', ne, ts),
       c('created_at', ne, identity),
       c('updated_at', ne, identity),

@@ -4,7 +4,7 @@ query PermissionById ($id: uuid!) {
     created_at
     updated_at
     crew_id
-    request
+    request_id
     status
     crew {
       id

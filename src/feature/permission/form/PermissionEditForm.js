@@ -39,14 +39,19 @@ const PermissionEditForm = ({saveRef}) => {
   const statuses = useCrewRequestStatus(true);
   const crews = useCrews();
 
+  console.log({requests});
+
   const {ctrl, result, setForm} = useResultForm({
     crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, props: {
       displayValue: displayValue(identity),
       onChange,
       disabled: ({value}) => isTruthy(value),
     }}),
-    request: FORM_FIELD.TEXT({label: tf`request`, validator: () => true, props: {
+    request_id: FORM_FIELD.TEXT({label: tf`request_id`, validator: () => true, props: {
       displayValue: displayValue(titleCase),
+      value: a => {
+        console.log({a});
+      },
       onChange,
     }}),
     status: FORM_FIELD.TEXT({label: tf`status`, validator: () => true, props: {
@@ -74,7 +79,7 @@ const PermissionEditForm = ({saveRef}) => {
           ), statuses)}
         </SelectBox>
 
-        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request')}>
+        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request_id')}>
           {map(value => (
             <SelectBox.Option key={value} value={value}>
               {titleCase(value)}

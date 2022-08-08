@@ -1,12 +1,12 @@
 mutation UpdatePermissionById (
   $id: uuid!,
-  $request: crew_request_enum,
+  $request_id: String!,
   $crew_id: uuid!,
   $status: crew_request_status_enum = REJECTED,
   $comment: String = null,
   ) {
   update_crew_permission_by_pk (_set: {
-    request: $request,
+    request_id: $request_id,
     crew_id: $crew_id,
     status: $status,
     comment: $comment,

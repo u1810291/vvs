@@ -24,7 +24,7 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
-import PermissionRoute, {PermissionCreateRoute, PermissionRequestEditRoute, PermissionRequestListRoute} from '../routes';
+import PermissionRoute, {PermissionRequestCreateRoute, PermissionRequestEditRoute} from '../routes';
 import {useCrewRequest} from '../api';
 import {titleCase} from '@s-e/frontend/transformer/string';
 
@@ -59,7 +59,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
   return {
     list: swr?.data?.crew_request || [],
-    rowKeyLens: getPropOr(0, 'id'),
+    rowKeyLens: getPropOr(0, 'value'),
     breadcrumbs: (
       <Breadcrumbs>
         <RouteAsBreadcrumb route={PermissionRoute}/>
@@ -68,13 +68,12 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     ),
     buttons: (
       <>
-        <Button.NoBg onClick={() => nav(PermissionCreateRoute.props.path)}>{PermissionRequestListRoute.props.translation}</Button.NoBg>
-        <Button onClick={() => nav(PermissionCreateRoute.props.path)}>{tp('create')}</Button>
+        <Button onClick={() => nav(PermissionRequestCreateRoute.props.path)}>{tp('create')}</Button>
       </>
     ),
     tableColumns: [
       c('value', ne, identity),
-      c('comment', ne, titleCase),
+      c('duration', ne, titleCase),
     ],
   }
 });
