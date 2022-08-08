@@ -7,7 +7,7 @@ query {
       id
       name
     }
-    request
+    request_id
     status
   }
 }

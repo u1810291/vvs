@@ -34,9 +34,12 @@ const PermissionEditForm = ({saveRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('permission', {keyPrefix: 'edit.field'});
+  const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
   const requests = useCrewRequest(true);
   const statuses = useCrewRequestStatus(true);
   const crews = useCrews();
+
+  console.log({requests});
 
   const {ctrl, result, setForm} = useResultForm({
     crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, props: {
@@ -44,12 +47,15 @@ const PermissionEditForm = ({saveRef}) => {
       onChange,
       disabled: ({value}) => isTruthy(value),
     }}),
-    request: FORM_FIELD.TEXT({label: tf`request`, validator: () => true, props: {
-      displayValue: displayValue(identity),
+    request_id: FORM_FIELD.TEXT({label: tf`request_id`, validator: () => true, props: {
+      displayValue: displayValue(titleCase),
+      value: a => {
+        console.log({a});
+      },
       onChange,
     }}),
     status: FORM_FIELD.TEXT({label: tf`status`, validator: () => true, props: {
-      displayValue: displayValue(identity),
+      displayValue: displayValue(ts),
       onChange,
     }}),
   });
@@ -73,7 +79,7 @@ const PermissionEditForm = ({saveRef}) => {
           ), statuses)}
         </SelectBox>
 
-        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request')}>
+        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request_id')}>
           {map(value => (
             <SelectBox.Option key={value} value={value}>
               {titleCase(value)}

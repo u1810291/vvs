@@ -1,9 +1,9 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Button from 'components/Button';
 import Listing from 'layout/ListingLayout';
-import Breadcrumbs from 'components/Breadcrumbs';
+import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import withPreparedProps from 'hoc/withPreparedProps';
 
 import {useTranslation} from 'react-i18next';
@@ -24,8 +24,8 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
-import {PermissionEditRoute, PermissionCreateRoute, PermissionRequestListRoute} from '../routes';
-import {usePermissions} from '../api';
+import PermissionRoute, {PermissionRequestCreateRoute, PermissionRequestEditRoute} from '../routes';
+import {useCrewRequest} from '../api';
 import {titleCase} from '@s-e/frontend/transformer/string';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
@@ -47,43 +47,33 @@ const ne = not(isEmpty);
 const PermissionListLayout = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('permission', {keyPrefix: 'breadcrumbs'});
   const {t: tp} = useTranslation('permission');
-  const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
   const {t} = useTranslation('permission', {keyPrefix: 'list.column'});
   const nav = useNavigate();
-
+  const swr = useCrewRequest();
 
   const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
+    <Link to={generatePath(PermissionRequestEditRoute.props.path, {id: props?.value})}>
       {props?.children}
     </Link>
   )), [t]);
 
   return {
-    list: usePermissions()?.data || [],
-    rowKeyLens: getPropOr(0, 'id'),
+    list: swr?.data?.crew_request || [],
+    rowKeyLens: getPropOr(0, 'value'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`permissions`}</span></Breadcrumbs.Item>
+        <RouteAsBreadcrumb route={PermissionRoute}/>
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (
       <>
-        <Button.NoBg onClick={useCallback(() => nav(PermissionRequestListRoute.props.path), [nav])}>
-          {tp(
-            PermissionRequestListRoute.props.translationKey,
-            {ns: PermissionRequestListRoute.props.translationNs
-          })}
-        </Button.NoBg>
-        <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button>
+        <Button onClick={() => nav(PermissionRequestCreateRoute.props.path)}>{tp('create')}</Button>
       </>
     ),
     tableColumns: [
-      c('id', ne, identity),
-      c('request_id', ne, titleCase),
-      c('status', ne, ts),
-      c('created_at', ne, identity),
-      c('updated_at', ne, identity),
+      c('value', ne, identity),
+      c('duration', ne, titleCase),
     ],
   }
 });
