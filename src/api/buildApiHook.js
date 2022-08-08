@@ -29,7 +29,6 @@ import {
   pipe,
   resultToAsync,
   safe,
-  // tap,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -64,7 +63,7 @@ export const createUseOne = ({
   getGraphQl,
   createGraphql,
   updateGraphQl,
-  deleteGraphQL,
+  deleteGraphQl,
   asyncMapFromApi = Async.Resolved,
   asyncMapToApi = Async.Resolved,
 }) => ({
@@ -105,11 +104,10 @@ export const createUseOne = ({
     chain(
       pipe(
         pick(['id']), 
-        // tap(console.log), 
         Async.Resolved
       )
     ),
-    chain(flip(api)(deleteGraphQL))
+    chain(flip(api)(deleteGraphQl))
   ), [api]);
 
   useEffect(() => {

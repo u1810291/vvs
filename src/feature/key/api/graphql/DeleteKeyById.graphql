@@ -1,5 +1,11 @@
 mutation DeleteKeyById ($id: uuid!) {
   delete_object_key_by_pk (id: $id) {
     id
+    crew_id
+    set_name
   }
+
+  # delete_object_key(where: {id: {_eq: $id}}) {
+  #   affected_rows
+  # }
 }
