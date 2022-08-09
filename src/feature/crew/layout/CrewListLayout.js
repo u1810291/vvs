@@ -107,7 +107,10 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`crews`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>
-          {defaultFilter.id ? defaultFilter.name : tb('allData') } <FilterIcon onClick={toggleFilter} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block hover:opacity-50' />
+          <Button.NoBg onClick={toggleFilter}>
+            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+          </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
     ),

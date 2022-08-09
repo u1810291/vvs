@@ -8,6 +8,7 @@ import withPreparedProps from '../../../hoc/withPreparedProps';
 import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../../context/auth';
 import useAsync from '../../../hook/useAsync';
+import Button from 'components/Button';
 
 import {
   chain,
@@ -128,7 +129,10 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`tasks`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>
-          {defaultFilter.id ? defaultFilter.name : tb('allData') } <FilterIcon onClick={toggleFilter} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block hover:opacity-50' />
+          <Button.NoBg onClick={toggleFilter}>
+            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+          </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
     ),

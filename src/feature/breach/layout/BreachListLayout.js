@@ -16,6 +16,7 @@ import {useTranslation} from 'react-i18next';
 import {format, intervalToDuration, formatDuration} from 'date-fns';
 import {useFilter} from 'hook/useFilter';
 import {FilterIcon} from '@heroicons/react/solid';
+import Button from 'components/Button';
 
 const getColumn = curry((t, Component, key, mapper, status) => ({
   Component,
@@ -111,7 +112,10 @@ const BreachListLayout = withPreparedProps(Listing, props => {
           </span>
         </Breadcrumbs.Item>
         <Breadcrumbs.Item>
-          {defaultFilter.id ? defaultFilter.name : tb('allData') } <FilterIcon onClick={toggleFilter} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block hover:opacity-50' />
+          <Button.NoBg onClick={toggleFilter}>
+            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+          </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
     ),

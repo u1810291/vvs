@@ -102,10 +102,10 @@ const Listing = ({
     <Index>
       <TitleBar>
         <div className='md:flex md:space-x-4 md:space-y-0 space-y-4 w-full'>
-          <div className='flex-grow flex-shrink'>
+          <div className=''>
           {breadcrumbs}
           </div>
-          <div className='flex-grow flex-shrink'>
+          <div className='w-96'>
             <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
           </div>
           <div className='flex-grow flex-shrink justify-end flex md:space-x-4'>
