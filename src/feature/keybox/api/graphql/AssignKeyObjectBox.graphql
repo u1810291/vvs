@@ -1,0 +1,15 @@
+mutation AssignKeyObjectBox($object_id: uuid!, $box_id: uuid!, $set_name: String) {
+  insert_object_key_rels_one(
+    object: {
+      key: {
+        data: {
+          set_name: $set_name
+        }
+      }
+      box_id: $box_id, 
+      object_id: $object_id, 
+    }
+  ) {
+    id
+  }
+}

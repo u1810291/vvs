@@ -1,0 +1,6 @@
+
+mutation DeleteKeyObjectBoxRel($box_id: uuid!, $key_id: uuid!) {
+  delete_object_key_rels_by_pk(box_id: $box_id, key_id: $key_id) {
+    id
+  }
+}

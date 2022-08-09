@@ -3,13 +3,13 @@
     "list": "Raktai"
   },
   "breadcrumbs": {
-    "keys": "Raktai",
+    "key_boxes": "Raktai",
     "allData": "Visi duomenys"
   },
   "list": {
     "column": {
       "id": "ID",
-      "set": "Komplektas",
+      "set_name": "Komplektas",
       "crew_name": "Ekipažas"
     }
   }

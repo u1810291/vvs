@@ -24,9 +24,9 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
-import {KeyEditRoute, KeyCreateRoute} from '../routes';
-import {useKeys} from '../api';
+import {KeyBoxEditRoute, KeyBoxCreateRoute} from '../routes';
 import {titleCase} from '@s-e/frontend/transformer/string';
+import {useKeyBoxes} from '../api';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -45,30 +45,30 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
-const KeyListLayout = withPreparedProps(Listing, props => {
-  const {t: tb} = useTranslation('key', {keyPrefix: 'breadcrumbs'});
-  const {t: tp} = useTranslation('key');
-  const {t: ts} = useTranslation('key', {keyPrefix: 'status'});
-  const {t} = useTranslation('key', {keyPrefix: 'list.column'});
+const KeyBoxListLayout = withPreparedProps(Listing, props => {
+  const {t: tb} = useTranslation('keybox', {keyPrefix: 'breadcrumbs'});
+  const {t: tp} = useTranslation('keybox');
+  const {t: ts} = useTranslation('keybox', {keyPrefix: 'status'});
+  const {t} = useTranslation('keybox', {keyPrefix: 'list.column'});
   const nav = useNavigate();
 
   const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(KeyEditRoute.props.path, {id: props?.id})}>
+    <Link to={generatePath(KeyBoxEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [t]);
 
   return {
-    list: useKeys()?.data || [],
+    list: useKeyBoxes()?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`keys`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item><span className='font-semibold'>{tb`key_boxes`}</span></Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (
       <>
-        <Button onClick={() => nav(KeyCreateRoute.props.path)}>{tp('create')}</Button>
+        <Button onClick={() => nav(KeyBoxCreateRoute.props.path)}>{tp('create')}</Button>
       </>
     ),
     tableColumns: [
@@ -79,4 +79,4 @@ const KeyListLayout = withPreparedProps(Listing, props => {
   }
 });
 
-export default KeyListLayout;
+export default KeyBoxListLayout;

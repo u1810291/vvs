@@ -1,0 +1,15 @@
+query ObjectsByKeyBoxId($id: uuid!) {
+  object_key_rels(where: {box_id: {_eq: $id}}) {
+    id
+    key {
+      id
+      set_name
+      crew_id
+    }
+    object {
+      contract_object_no
+      name
+      address
+    }
+  }
+}

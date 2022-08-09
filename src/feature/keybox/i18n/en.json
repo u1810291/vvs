@@ -1,15 +1,15 @@
 {
   "menu": {
-    "list": "Keys"
+    "list": "Key Boxes"
   },
   "breadcrumbs": {
-    "keys": "Keys",
+    "key_boxes": "Key Boxes",
     "allData": "All Data"
   },
   "list": {
     "column": {
       "id": "ID",
-      "set": "Set",
+      "set_name": "Set",
       "crew_name": "Crew"
     }
   }

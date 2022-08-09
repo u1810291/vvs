@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
 
-import KeyFeature from 'feature/key/routes';
+import KeyBoxFeature from 'feature/keybox/routes';
 import TaskFeature from 'feature/task/routes';
 import CrewFeature from 'feature/crew/routes';
 import LoginFeature from 'feature/login/routes';
@@ -25,7 +25,7 @@ const Routes = (
     {CrewFeature}
     {PermissionFeature}
     {DriverFeature}
-    {KeyFeature}
+    {KeyBoxFeature}
     {ModemFeature}
     {ClientFeature}
     {BreachFeature}

@@ -9,7 +9,7 @@ import {useNavigate} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
 import {useTranslation} from 'react-i18next';
 import {
-    Async,
+  Async,
   chain,
   constant,
   flip,
@@ -25,10 +25,11 @@ import {
   map,
   not,
   option,
-  pick,
   pipe,
   resultToAsync,
   safe,
+  Result,
+  // tap,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -59,6 +60,15 @@ export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
   ));
 }
 
+export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({params}) => {
+  const {api} = useAuth();
+
+  return useAsyncSwr([graphQl], (query) => (
+    api(params, query)
+    .chain(asyncMapFromApi)
+  ));
+}
+
 export const createUseOne = ({
   getGraphQl,
   createGraphql,
@@ -66,13 +76,14 @@ export const createUseOne = ({
   deleteGraphQl,
   asyncMapFromApi = Async.Resolved,
   asyncMapToApi = Async.Resolved,
+  asyncRemoveMapToApi = Async.Resolved,
 }) => ({
   id,
   saveRef,
   formResult,
   setForm,
   successRedirectPath,
-  removeRef,
+  removeRef
 }) => {
   const nav = useNavigate();
   const {api} = useAuth();
@@ -101,12 +112,8 @@ export const createUseOne = ({
   const remove = useMemo(() => pipe(
     resultToAsync,
     map(a => ({...a, id})),
-    chain(
-      pipe(
-        pick(['id']), 
-        Async.Resolved
-      )
-    ),
+    // chain(tap(console.log)),
+    chain(asyncRemoveMapToApi),
     chain(flip(api)(deleteGraphQl))
   ), [api]);
 
@@ -142,8 +149,9 @@ export const createUseOne = ({
   useEffect(() => {
     if (!(hasProp('current', removeRef) && formResult)) return;
     
-    removeRef.current = () => remove(formResult).fork(
-      error => notify(
+    removeRef.current = (pk) => remove(Result(pk)).fork(
+      error => {
+        notify(
         <NotificationSimple
           Icon={XCircleIcon}
           iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
@@ -151,7 +159,7 @@ export const createUseOne = ({
         >
           {JSON.stringify(error)}
         </NotificationSimple>
-      ),
+      )},
       () => {
         notify(
           <NotificationSimple 

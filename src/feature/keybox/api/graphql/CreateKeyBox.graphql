@@ -1,0 +1,11 @@
+mutation CreateKeyBox (
+  $crew_id: uuid!,
+  $set_name: String,
+  ) {
+  insert_object_key_box_one (object: {
+    crew_id: $crew_id,
+    set_name: $set_name
+  }) {
+    id
+  }
+}

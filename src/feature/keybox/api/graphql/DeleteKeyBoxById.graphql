@@ -1,5 +1,5 @@
-mutation DeleteKeyById ($id: uuid!) {
-  delete_object_key_by_pk (id: $id) {
+mutation DeleteKeyBoxById ($id: uuid!) {
+  delete_object_key_box_by_pk (id: $id) {
     id
     crew_id
     set_name

@@ -1,8 +1,7 @@
 import SelectBox from 'components/atom/input/SelectBox';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
-import {KeyListRoute} from '../routes';
-import {useKey} from '../api';
+import {useKeyBox} from '../api';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useCrews} from 'feature/crew/api/crewEditApi';
@@ -20,6 +19,11 @@ import {
   // identity,
 } from 'crocks';
 import InputGroup from 'components/atom/input/InputGroup';
+import KeyObjectList from '../components/KeyObjectList';
+import Nullable from 'components/atom/Nullable';
+import {KeyBoxListRoute} from '../routes';
+
+
 
 const displayValue = mapper => pipe(
   getProp('value'),
@@ -33,7 +37,7 @@ const displayValue = mapper => pipe(
 
 const onChange = ({set}) => ({value}) => set(value);
 
-const KeyEditForm = ({saveRef, removeRef}) => {
+const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('key', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('key', {keyPrefix: 'edit.field'});
@@ -50,18 +54,20 @@ const KeyEditForm = ({saveRef, removeRef}) => {
       onChange,
     }}),
   });
-
-  useKey({
+  
+  // save key box
+  useKeyBox({
     id,
     formResult: result,
     setForm,
-    successRedirectPath: KeyListRoute.props.path,
+    successRedirectPath: KeyBoxListRoute.props.path,
     saveRef,
     removeRef,
   });
+  
 
   return (
-    <section className={'flex flex-1 flex-grow h-max'}>
+    <section className={'flex flex-col'}>
       <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'}>
         <InputGroup className={'lg:w-1/3 xl:w-1/4'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
 
@@ -73,8 +79,12 @@ const KeyEditForm = ({saveRef, removeRef}) => {
           ), (crews?.data || []))}
         </SelectBox>
       </div>
+
+      <Nullable on={id}>
+        <KeyObjectList boxId={id} assignRef={assignRef} removeRef={removeRelRef} />
+      </Nullable>
     </section>
   );
 }
 
-export default KeyEditForm;
+export default KeyBoxEditForm;

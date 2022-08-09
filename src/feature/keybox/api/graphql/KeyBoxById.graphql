@@ -1,0 +1,7 @@
+query KeyBoxById ($id: uuid!) {
+  object_key_box_by_pk(id: $id) {
+    id
+    set_name
+    crew_id
+  }
+}

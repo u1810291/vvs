@@ -2,22 +2,23 @@ import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import Button from 'components/Button';
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
-import {KeyListRoute} from '../routes';
 import SidebarLayout from 'layout/SideBarLayout';
 import {getProp, identity, isFunction} from 'crocks';
-import {useKey} from '../api';
+import {useKeyBox} from '../api';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
-import KeyRoute from '../routes';
-import KeyEditForm from '../form/KeyEditForm';
+import KeyBoxRoute, {KeyBoxListRoute} from '../routes';
+import KeyBoxEditForm from '../form/KeyBoxEditForm';
 
-const KeyEditLayout = () => {
+const KeyBoxEditLayout = () => {
   const saveRef = useRef(identity);
   const removeRef = useRef(identity);
+  const assignRef = useRef(identity);
+  const removeRelRef = useRef(identity);
 
   const {id} = useParams();
-  const {data} = useKey({id});
+  const {data} = useKeyBox({id});
   const {t} = useTranslation('Key', {keyPrefix: 'edit'});
   const nav = useNavigate();
 
@@ -28,7 +29,7 @@ const KeyEditLayout = () => {
   const remove = () => { 
     if (!confirm('Are you sure you want to delete?')) return;
     
-    isFunction(removeRef.current) && removeRef.current();
+    isFunction(removeRef.current) && removeRef.current([{id}]);
   }
 
   const breadcrumb = (
@@ -42,7 +43,7 @@ const KeyEditLayout = () => {
       <Header>
         <>
           <Breadcrumbs>
-            <RouteAsBreadcrumb route={KeyRoute}/>
+            <RouteAsBreadcrumb route={KeyBoxRoute}/>
             <Nullable on={breadcrumb}>
               <Breadcrumbs.Item>
                 <span className='font-semibold'>{breadcrumb}</span>
@@ -50,14 +51,22 @@ const KeyEditLayout = () => {
             </Nullable>
           </Breadcrumbs>
           <div className='space-x-4'>
-            <Button.Nd onClick={() => nav(KeyListRoute.props.path)}>{t`cancel`}</Button.Nd>
+            <Button.Nd onClick={() => nav(KeyBoxListRoute.props.path)}>{t`cancel`}</Button.Nd>
             <Button onClick={send}>{t`save`}</Button>
           </div>
         </>
       </Header>
       
-      <KeyEditForm saveRef={saveRef} removeRef={removeRef} />
-
+      <div className='flex-1 flex-grow h-max'>
+        <KeyBoxEditForm 
+          saveRef={saveRef} 
+          removeRef={removeRef} 
+          assignRef={assignRef} 
+          removeRelRef={removeRelRef}
+        />
+      </div>
+      
+      
       <Nullable on={id}>
         <section className={'flex p-6'}>
           <Button.NoBg onClick={remove} className={'bg-red-500 text-white w-min'}>{t`delete`}</Button.NoBg>
@@ -68,4 +77,4 @@ const KeyEditLayout = () => {
   )
 };
 
-export default KeyEditLayout;
+export default KeyBoxEditLayout;

@@ -1,7 +1,0 @@
-query KeyById ($id: uuid!) {
-  object_key_by_pk(id: $id) {
-    id
-    set_name
-    crew_id
-  }
-}
