@@ -26,8 +26,9 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
-
+import Innerlinks from 'components/Innerlinks';
 import {ClientEditRoute} from '../routes';
+import {HelpListRoute} from 'feature/help/routes';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -50,6 +51,7 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('client', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('client', {keyPrefix: 'list.column'});
+  const {t: tp} = useTranslation('client');
   // TODO: Prepare 'Client' data in Hasura to be fetched
   
   const [state, fork] = useAsync(chain(maybeToAsync('"client" prop is expected in the response', getProp('client')),
@@ -80,6 +82,12 @@ const ClientListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item><span className='font-semibold'>{tb`clients`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
+    ),
+    innerlinks: (
+      <Innerlinks>
+        <Innerlinks.Item isCurrent={true}>{tp('Clients')}</Innerlinks.Item>
+        <Innerlinks.Item to={HelpListRoute.props.path}>{tp('Helps')}</Innerlinks.Item>
+      </Innerlinks>
     ),
     // TODO: Adjust column names regarding response data
     tableColumns: [

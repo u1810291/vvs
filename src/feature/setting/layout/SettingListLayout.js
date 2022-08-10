@@ -27,11 +27,9 @@ import {
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {DislocationEditRoute} from '../routes';
+import {SettingEditRoute} from '../routes';
 import Innerlinks from 'components/Innerlinks';
-import {CrewListRoute} from 'feature/crew/routes';
-import {DriverListRoute} from 'feature/driver/routes';
-
+import {UserListRoute} from 'feature/user/routes';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -50,18 +48,18 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
-const DislocationListLayout = withPreparedProps(Listing, props => {
+const SettingListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
-  const {t: tp} = useTranslation('dislocation');
-  const {t: tb} = useTranslation('dislocation', {keyPrefix: 'breadcrumbs'});
-  const {t} = useTranslation('dislocation', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(chain(maybeToAsync('"crew_zone" prop is expected in the response', getProp('crew_zone')),
+  const {t: tb} = useTranslation('setting', {keyPrefix: 'breadcrumbs'});
+  const {t} = useTranslation('setting', {keyPrefix: 'list.column'});
+  const {t: tp} = useTranslation('setting');
+  // TODO: Prepare 'settings' data in Hasura to be fetched
+  const [state, fork] = useAsync(chain(maybeToAsync('"setting" prop is expected in the response', getProp('setting')),
     apiQuery(
       `
         query {
-          crew_zone {
-            id
-            name
+          setting {
+          
           }
         }
       `
@@ -69,7 +67,7 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
   );
 
   const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(DislocationEditRoute.props.path, {id: props?.id})}>
+    <Link to={generatePath(SettingEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [t]);
@@ -81,22 +79,22 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`dislocations`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item><span className='font-semibold'>{tb`settings`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     innerlinks: (
       <Innerlinks>
-        <Innerlinks.Item to={CrewListRoute.props.path}>{tp('Crews')}</Innerlinks.Item>
-        <Innerlinks.Item to={DriverListRoute.props.path}>{tp('Drivers')}</Innerlinks.Item>
-        <Innerlinks.Item isCurrent={true}>{tp('Dislocation zones')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{tp('Settings')}</Innerlinks.Item>
+        <Innerlinks.Item to={'#'}>{tp('Classifiers')}</Innerlinks.Item>
+        <Innerlinks.Item to={UserListRoute.props.path}>{tp('Users')}</Innerlinks.Item>
       </Innerlinks>
     ),
+    // TODO: Adjust column names regarding response data
     tableColumns: [
       c('id', ne, identity),
-      c('name', ne, identity),
     ],
   }
 });
 
-export default DislocationListLayout;
+export default SettingListLayout;

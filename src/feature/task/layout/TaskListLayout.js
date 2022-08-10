@@ -33,6 +33,10 @@ import {FilterIcon} from '@heroicons/react/solid';
 import {useFilter} from 'hook/useFilter';
 import InputGroup from 'components/atom/input/InputGroup';
 import SelectBox from 'components/atom/input/SelectBox';
+import {PermissionListRoute} from 'feature/permission/routes';
+import DashboardRoute from 'feature/dashboard/routes';
+import Innerlinks from 'components/Innerlinks';
+import {BreachListRoute} from 'feature/breach/routes';
 
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
@@ -59,6 +63,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const {api} = useAuth();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('task', {keyPrefix: 'list.column'});
+  const {t: tp} = useTranslation('task');
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
@@ -135,6 +140,14 @@ const TaskListLayout = withPreparedProps(Listing, props => {
           </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
+    ),
+    innerlinks: (
+      <Innerlinks>
+        <Innerlinks.Item to={DashboardRoute.props.path}>{tp('Dashboard')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{tp('Tasks')}</Innerlinks.Item>
+        <Innerlinks.Item to={PermissionListRoute.props.path}>{tp('Permissions')}</Innerlinks.Item>
+        <Innerlinks.Item to={BreachListRoute.props.path}>{tp('Breaches')}</Innerlinks.Item>
+      </Innerlinks>
     ),
     filters,
     tableColumns,

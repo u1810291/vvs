@@ -1,0 +1,14 @@
+{
+  "menu": {
+    "list": "Users"
+  },
+  "breadcrumbs": {
+    "users": "Users",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "id": "ID"
+    }
+  }
+}

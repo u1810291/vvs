@@ -28,6 +28,11 @@ import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
 import {ModemEditRoute} from '../routes';
+import {ObjectListRoute} from 'feature/object/routes';
+import {KeyBoxListRoute} from 'feature/keybox/routes';
+import Innerlinks from 'components/Innerlinks';
+
+
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -50,6 +55,7 @@ const ModemListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('modem', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('modem', {keyPrefix: 'list.column'});
+  const {t: tp} = useTranslation('modem');
   // TODO: Prepare 'Modems' data in Hasura to be fetched
   const [state, fork] = useAsync(chain(maybeToAsync('"modem" prop is expected in the response', getProp('modem')),
     apiQuery(
@@ -79,6 +85,13 @@ const ModemListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item><span className='font-semibold'>{tb`modems`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
+    ),
+    innerlinks: (
+      <Innerlinks>
+        <Innerlinks.Item to={ObjectListRoute.props.path}>{tp('Objects')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{tp('Modems')}</Innerlinks.Item>
+        <Innerlinks.Item to={KeyBoxListRoute.props.path}>{tp('Key Boxes')}</Innerlinks.Item>
+      </Innerlinks>
     ),
     // TODO: Adjust column names regarding response data
     tableColumns: [

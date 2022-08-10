@@ -1,0 +1,14 @@
+{
+  "menu": {
+    "list": "Users"
+  },
+  "breadcrumbs": {
+    "users": "Users",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID"
+    }
+  }
+}

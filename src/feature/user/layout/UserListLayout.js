@@ -27,11 +27,9 @@ import {
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {DislocationEditRoute} from '../routes';
+import {UserEditRoute} from '../routes';
 import Innerlinks from 'components/Innerlinks';
-import {CrewListRoute} from 'feature/crew/routes';
-import {DriverListRoute} from 'feature/driver/routes';
-
+import {SettingListRoute} from 'feature/setting/routes';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -50,18 +48,18 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
-const DislocationListLayout = withPreparedProps(Listing, props => {
+const UserListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
-  const {t: tp} = useTranslation('dislocation');
-  const {t: tb} = useTranslation('dislocation', {keyPrefix: 'breadcrumbs'});
-  const {t} = useTranslation('dislocation', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(chain(maybeToAsync('"crew_zone" prop is expected in the response', getProp('crew_zone')),
+  const {t: tb} = useTranslation('user', {keyPrefix: 'breadcrumbs'});
+  const {t} = useTranslation('user', {keyPrefix: 'list.column'});
+  const {t: tp} = useTranslation('user');
+  // TODO: Prepare 'users' data in Hasura to be fetched
+  const [state, fork] = useAsync(chain(maybeToAsync('"user" prop is expected in the response', getProp('user')),
     apiQuery(
       `
         query {
-          crew_zone {
-            id
-            name
+          user {
+          
           }
         }
       `
@@ -69,7 +67,7 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
   );
 
   const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(DislocationEditRoute.props.path, {id: props?.id})}>
+    <Link to={generatePath(UserEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [t]);
@@ -81,22 +79,24 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`dislocations`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item><span className='font-semibold'>{tb`users`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     innerlinks: (
       <Innerlinks>
-        <Innerlinks.Item to={CrewListRoute.props.path}>{tp('Crews')}</Innerlinks.Item>
-        <Innerlinks.Item to={DriverListRoute.props.path}>{tp('Drivers')}</Innerlinks.Item>
-        <Innerlinks.Item isCurrent={true}>{tp('Dislocation zones')}</Innerlinks.Item>
+        <Innerlinks.Item to={SettingListRoute.props.path}>{tp('Settings')}</Innerlinks.Item>
+        <Innerlinks.Item to={'#'}>{tp('Classifiers')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{tp('Users')}</Innerlinks.Item>
       </Innerlinks>
     ),
+    // TODO: Adjust column names regarding response data
     tableColumns: [
       c('id', ne, identity),
       c('name', ne, identity),
+      c('status', ne, identity),
     ],
   }
 });
 
-export default DislocationListLayout;
+export default UserListLayout;

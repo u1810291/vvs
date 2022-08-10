@@ -48,6 +48,7 @@ const Listing = ({
   tableColumns,
   breadcrumbs,
   buttons,
+  innerlinks,
 }) => {
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
@@ -101,15 +102,20 @@ const Listing = ({
   return (
     <Index>
       <TitleBar>
-        <div className='md:flex md:space-x-4 md:space-y-0 space-y-4 w-full'>
+        <div className='md:flex md:space-x-4 md:space-y-0 space-y-4 w-full items-center'>
           <div className=''>
           {breadcrumbs}
           </div>
           <div className='w-96'>
             <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
           </div>
-          <div className='flex-grow flex-shrink justify-end flex md:space-x-4'>
-            {buttons}
+          <div className='flex-grow flex-shrink justify-end flex items-center space-x-4'>
+            <div className='flex flex-row md:space-x-4'>
+              {buttons}
+            </div>
+            <div>
+              {innerlinks}
+            </div>
           </div>
         </div>
       </TitleBar>

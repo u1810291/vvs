@@ -1,0 +1,19 @@
+{
+  "menu": {
+    "list": "Settings"
+  },
+  "breadcrumbs": {
+    "settings": "Settings",
+    "allData": "Visi duomenys"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "number": "Numeris",
+      "object_name": "Objekto pavadinimas",
+      "object_number": "Objekto nr.",
+      "contract_number": "Sutarties nr.",
+      "status": "Būsena"
+    }
+  }
+}

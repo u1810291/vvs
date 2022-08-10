@@ -27,6 +27,11 @@ import {alt} from 'crocks/pointfree';
 import {KeyBoxEditRoute, KeyBoxCreateRoute} from '../routes';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useKeyBoxes} from '../api';
+import {ModemListRoute} from 'feature/modem/routes';
+import {ObjectListRoute} from 'feature/object/routes';
+import Innerlinks from 'components/Innerlinks';
+
+
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -70,6 +75,13 @@ const KeyBoxListLayout = withPreparedProps(Listing, props => {
       <>
         <Button onClick={() => nav(KeyBoxCreateRoute.props.path)}>{tp('create')}</Button>
       </>
+    ),
+    innerlinks: (
+      <Innerlinks>
+        <Innerlinks.Item to={ObjectListRoute.props.path}>{tp('Objects')}</Innerlinks.Item>
+        <Innerlinks.Item to={ModemListRoute.props.path}>{tp('Modems')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{tp('Key Boxes')}</Innerlinks.Item>
+      </Innerlinks>
     ),
     tableColumns: [
       // c('id', ne, identity),

@@ -7,29 +7,42 @@ import CrewFeature from 'feature/crew/routes';
 import LoginFeature from 'feature/login/routes';
 import ModemFeature from 'feature/modem/routes';
 import ClientFeature from 'feature/client/routes';
+import HelpFeature from 'feature/help/routes';
 import ObjectFeature from 'feature/object/routes';
 import DriverFeature from 'feature/driver/routes';
 import BreachFeature from 'feature/breach/routes';
 import DashboardFeature from 'feature/dashboard/routes';
 import PermissionFeature from 'feature/permission/routes';
 import DislocationFeature from 'feature/dislocation/routes';
+import SettingFeature from 'feature/setting/routes';
+import UserFeature from 'feature/user/routes';
 
 import NotFoundLayout from './layout/NotFoundLayout';
 
 const Routes = (
   <>
     {LoginFeature}
+    
     {DashboardFeature}
     {TaskFeature}
-    {ObjectFeature}
-    {CrewFeature}
     {PermissionFeature}
-    {DriverFeature}
-    {KeyBoxFeature}
-    {ModemFeature}
-    {ClientFeature}
     {BreachFeature}
+    
+    {CrewFeature}
+    {DriverFeature}
     {DislocationFeature}
+
+    {ObjectFeature}
+    {ModemFeature}
+    {KeyBoxFeature}
+    
+    {ClientFeature}
+    {HelpFeature}
+
+    {SettingFeature}
+    {UserFeature}
+    
+    
     <Route isHidden path='*' element={<NotFoundLayout />} />
   </>
 );

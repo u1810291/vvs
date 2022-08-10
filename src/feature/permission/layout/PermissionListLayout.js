@@ -27,6 +27,13 @@ import {alt} from 'crocks/pointfree';
 import {PermissionEditRoute, PermissionCreateRoute, PermissionRequestListRoute} from '../routes';
 import {usePermissions} from '../api';
 import {titleCase} from '@s-e/frontend/transformer/string';
+import DashboardRoute from 'feature/dashboard/routes';
+import {TaskListRoute} from 'feature/task/routes';
+import Innerlinks from 'components/Innerlinks';
+import {BreachListRoute} from 'feature/breach/routes';
+
+
+
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -77,6 +84,14 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
         </Button.NoBg>
         <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button>
       </>
+    ),
+    innerlinks: (
+      <Innerlinks>
+        <Innerlinks.Item to={DashboardRoute.props.path}>{tp('Dashboard')}</Innerlinks.Item>
+        <Innerlinks.Item to={TaskListRoute.props.path}>{tp('Tasks')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{tp('Permissions')}</Innerlinks.Item>
+        <Innerlinks.Item to={BreachListRoute.props.path}>{tp('Breaches')}</Innerlinks.Item>
+      </Innerlinks>
     ),
     tableColumns: [
       c('id', ne, identity),

@@ -26,8 +26,14 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
-
+import Innerlinks from 'components/Innerlinks';
 import {DriverEditRoute} from '../routes';
+import {CrewListRoute} from 'feature/crew/routes';
+import {DislocationListRoute} from 'feature/dislocation/routes';
+
+
+
+
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -48,6 +54,7 @@ const Span = props => <span {...props}/>;
 
 const DriverListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
+  const {t: tp} = useTranslation('driver');
   const {t: tb} = useTranslation('driver', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('driver', {keyPrefix: 'list.column'});
   // TODO: Prepare 'Driver' data in Hasura to be fetched
@@ -80,6 +87,14 @@ const DriverListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
+    innerlinks: (
+      <Innerlinks>
+        <Innerlinks.Item to={CrewListRoute.props.path}>{tp('Crews')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true} >{tp('Drivers')}</Innerlinks.Item>
+        <Innerlinks.Item to={DislocationListRoute.props.path}>{tp('Dislocation zones')}</Innerlinks.Item>
+      </Innerlinks>
+    ),
+
     // TODO: Adjust column names regarding response data
     tableColumns: [
       c('id', ne, identity),
