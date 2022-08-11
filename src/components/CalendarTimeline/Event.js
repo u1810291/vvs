@@ -6,40 +6,47 @@ import useBoolean from '../../hook/useBoolean';
 
 import {format, isValid} from 'date-fns';
 
+import {convertToFullDate} from './utils';
+
 import {isNumber} from 'crocks/predicates';
 import {chain, getProp, map, Maybe, pipe, safe} from 'crocks';
 
 const Event = ({
   events,
-  title,
-  startTime,
-  endTime,
-  weekDay,
-  id,
-  twTitle,
-  twTime,
   setEvents,
+  crewZones,
   getRef,
   cellsRefs,
-  crewZones,
+  id,
+  crewId,
+  weekDay,
+  endTime,
+  startTime,
+  dislocationZone,
+  twTitle,
+  twTime,
   height = 51,
   minuteSpan = 3.25
 }) => {
   const [isOpen, setOpen] = useBoolean();
   const eventData = {
-    crew: title,
+    crew: dislocationZone,
     startTime,
     endTime,
-    weekDay,
+    week_day: weekDay,
     id,
-  }
+    crew_id: crewId
+  };
 
   const [endTimeRef, setEndTimeRef] = useState();
   const [startTimeRef, setStartTimeRef] = useState();
 
+  const timeFrom = convertToFullDate(weekDay, startTime);
+  const timeEnd = convertToFullDate(weekDay, endTime);
+
   useEffect(() => {
-    setEndTimeRef(getRef(String(endTime)));
-    setStartTimeRef(getRef(String(startTime)));
+    setStartTimeRef(getRef(String(timeFrom)));
+    setEndTimeRef(getRef(String(timeEnd)));
   }, [cellsRefs]);
 
   const dtToRefElement = pipe(
@@ -49,8 +56,8 @@ const Event = ({
     chain(safe(a => a instanceof HTMLElement)),
   );
 
-  const start = dtToRefElement(startTime);
-  const end = dtToRefElement(endTime);
+  const start = dtToRefElement(timeFrom);
+  const end = dtToRefElement(timeEnd);
 
   const width = Maybe.of(start => end => minuteSpan => end - start + minuteSpan)
     .ap(start.chain(getProp('offsetLeft')))
@@ -75,11 +82,11 @@ const Event = ({
           className={'px-1 my-1 flex flex-col absolute justify-center rounded-md text-sm bg-slate-300 opacity-70 select-none'}
           onClick={setOpen}
         >
-          <span className={`text-gray-900 truncate ${twTitle}`}>{title.key}</span>
+          <span className={`text-gray-900 truncate ${twTitle}`}>{dislocationZone.key}</span>
           <div className={'flex text-ellipsis overflow-hidden'}>
-            <span className={`text-gray-600 truncate ${twTime}`}>{format(startTime, 'HH:mm')}</span>
+            <span className={`text-gray-600 truncate ${twTime}`}>{format(timeFrom, 'HH:mm')}</span>
             <span className={'mx-1'}> - </span>
-            <span className={`text-gray-600 truncate ${twTime}`}>{format(endTime, 'HH:mm')}</span>
+            <span className={`text-gray-600 truncate ${twTime}`}>{format(timeEnd, 'HH:mm')}</span>
           </div>
         </div>
         <CalendarModal

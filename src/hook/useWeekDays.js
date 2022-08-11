@@ -2,13 +2,10 @@ import {useCallback, useMemo} from 'react';
 import {enGB, lt} from 'date-fns/locale';
 import useLanguage from './useLanguage';
 import {eachDayOfInterval, endOfWeek, format, startOfWeek} from 'date-fns';
+import {capitalize} from '../components/CalendarTimeline/utils';
 
 const useWeekDays = (callback) => {
   const {getLanguage} = useLanguage();
-  const capitalize = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
   const getTimeLocals = useCallback(() => {
     const currentLanguage = getLanguage();
     return currentLanguage === 'lt' ? lt : enGB;
