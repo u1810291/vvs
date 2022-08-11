@@ -1,0 +1,6 @@
+mutation UpdateEventCancellation($id: String!, $value: String!, $comment: String = null) {
+  update_event_cancellation_by_pk (_set: {value: $value, comment: $comment}, pk_columns: {value: $id}) {
+    value
+    comment
+  }
+}

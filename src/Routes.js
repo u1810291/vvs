@@ -16,6 +16,7 @@ import PermissionFeature from 'feature/permission/routes';
 import DislocationFeature from 'feature/dislocation/routes';
 import SettingFeature from 'feature/setting/routes';
 import UserFeature from 'feature/user/routes';
+import ClassifierFeature from 'feature/classifier/routes';
 
 import NotFoundLayout from './layout/NotFoundLayout';
 
@@ -40,6 +41,7 @@ const Routes = (
     {HelpFeature}
 
     {SettingFeature}
+    {ClassifierFeature}
     {UserFeature}
     
     

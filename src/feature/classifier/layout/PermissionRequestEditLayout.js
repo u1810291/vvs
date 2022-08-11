@@ -2,23 +2,21 @@ import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import Button from 'components/Button';
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
-import {PermissionListRoute} from '../routes';
+import {PermissionRequestListRoute} from '../routes';
 import SidebarLayout from 'layout/SideBarLayout';
 import {getProp, identity, isFunction} from 'crocks';
-import {usePermission} from '../api';
+import {useCrewRequestFull} from '../api';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
 import PermissionRoute from '../routes';
-import PermissionEditForm from '../form/PermissionEditForm';
+import PermissionRequestEditForm from '../form/PermissionRequestEditForm';
 
 const PermissionEditLayout = () => {
   const saveRef = useRef(identity);
+  const removeRef = useRef(identity);
   const {id} = useParams();
-  const {data} = usePermission({id});
-  
-  console.log(id, data);
-  
+  const {data} = useCrewRequestFull({id});
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});
   const nav = useNavigate();
 
@@ -26,10 +24,15 @@ const PermissionEditLayout = () => {
     isFunction(saveRef.current) && saveRef.current();
   };
 
+  const remove = () => {
+    if (!confirm('Are you sure you want to delete?')) return;
+    isFunction(removeRef.current) && removeRef.current([{id}]);
+  };
+
   const breadcrumb = (
-    getProp('name', data)
+    getProp('value', data)
     .alt(getProp('id', data))
-    .option(null)
+    .option(t('new'))
   );
 
   return (
@@ -45,12 +48,21 @@ const PermissionEditLayout = () => {
             </Nullable>
           </Breadcrumbs>
           <div className='space-x-4'>
-            <Button.Nd onClick={() => nav(PermissionListRoute.props.path)}>{t`cancel`}</Button.Nd>
+            <Button.Nd onClick={() => nav(PermissionRequestListRoute.props.path)}>{t`cancel`}</Button.Nd>
             <Button onClick={send}>{t`save`}</Button>
           </div>
         </>
       </Header>
-      <PermissionEditForm saveRef={saveRef}/>
+      <div className='flex-1 flex-grow h-max'>
+        <PermissionRequestEditForm saveRef={saveRef} removeRef={removeRef}/>
+      </div>
+      
+      <Nullable on={id}>
+        <section className={'flex p-6'}>
+          <Button.NoBg onClick={remove} className={'bg-red-500 text-white w-min'}>{t`delete`}</Button.NoBg>
+        </section>
+      </Nullable>
+
     </SidebarLayout>
   )
 };

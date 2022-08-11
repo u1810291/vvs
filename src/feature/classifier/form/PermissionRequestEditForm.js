@@ -6,7 +6,7 @@ import {useCrewRequestFull} from '../api';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-const PermissionRequestEditForm = ({saveRef}) => {
+const PermissionRequestEditForm = ({saveRef, removeRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('permission', {keyPrefix: 'request.edit'});
 
@@ -27,6 +27,7 @@ const PermissionRequestEditForm = ({saveRef}) => {
     setForm,
     successRedirectPath: PermissionRequestListRoute.props.path,
     saveRef,
+    removeRef,
   });
 
   return (

@@ -24,7 +24,7 @@ import {
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
-import {PermissionEditRoute, PermissionCreateRoute, PermissionRequestListRoute} from '../routes';
+import {PermissionEditRoute, PermissionCreateRoute} from '../routes';
 import {usePermissions} from '../api';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import DashboardRoute from 'feature/dashboard/routes';
@@ -76,12 +76,12 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     ),
     buttons: (
       <>
-        <Button.NoBg onClick={useCallback(() => nav(PermissionRequestListRoute.props.path), [nav])}>
+        {/* <Button.NoBg onClick={useCallback(() => nav(PermissionRequestListRoute.props.path), [nav])}>
           {tp(
             PermissionRequestListRoute.props.translationKey,
             {ns: PermissionRequestListRoute.props.translationNs
           })}
-        </Button.NoBg>
+        </Button.NoBg> */}
         <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button>
       </>
     ),

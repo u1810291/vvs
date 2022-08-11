@@ -1,0 +1,6 @@
+mutation DeleteCrewPermissionRequestById ($id: String!) {
+  delete_crew_request_by_pk (value: $id) {
+    value
+    duration
+  }
+}

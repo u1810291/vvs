@@ -1,0 +1,6 @@
+mutation DeleteEventCancellationById($id: String!) {
+  delete_event_cancellation_by_pk(value: $id) {
+    value
+    comment
+  }
+}

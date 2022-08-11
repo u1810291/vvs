@@ -13,18 +13,12 @@ export const PermissionCreateRoute = getExactHiddenRoute('permission', 'menu.cre
 export const PermissionEditRoute = getExactHiddenRoute('permission', 'menu.edit', '/permission/:id', lazy(() => import('./layout/PermissionEditLayout')), null);
 export const PermissionListRoute = getExactRoute('permission', 'menu.list', '/permission', lazy(() => import('./layout/PermissionListLayout')), null);
 
-export const PermissionRequestCreateRoute = getExactHiddenRoute('permission', 'menu.create', '/permission/request/new', lazy(() => import('./layout/PermissionRequestEditLayout')), null);
-export const PermissionRequestEditRoute = getExactHiddenRoute('permission', 'menu.edit', '/permission/request/:id', lazy(() => import('./layout/PermissionRequestEditLayout')), null);
-export const PermissionRequestListRoute = getExactRoute('permission', 'menu.requestList', '/permission/request', lazy(() => import('./layout/PermissionRequestListLayout')), null);
 
 const PermissionRoute = (
   <>
     {PermissionCreateRoute}
     {PermissionEditRoute}
     {PermissionListRoute}
-    {PermissionRequestListRoute}
-    {PermissionRequestCreateRoute}
-    {PermissionRequestEditRoute}
   </>
 );
 

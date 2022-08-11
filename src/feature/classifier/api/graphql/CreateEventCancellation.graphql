@@ -1,0 +1,12 @@
+mutation CreateEventCancellation (
+  $value: String!,
+  $comment: String = null,
+  ) {
+  insert_event_cancellation_one (object: {
+    value: $value,
+    comment: $comment
+  }) {
+    value
+    comment
+  }
+}

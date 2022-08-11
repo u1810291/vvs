@@ -147,7 +147,7 @@ export const createUseOne = ({
   }, [saveRef?.current, formResult, t, nav, notify, successRedirectPath]);
 
   useEffect(() => {
-    if (!(hasProp('current', removeRef) && formResult)) return;
+    if (!hasProp('current', removeRef)) return;
     
     removeRef.current = (pk) => remove(Result(pk)).fork(
       error => {
@@ -172,7 +172,7 @@ export const createUseOne = ({
         if (successRedirectPath) nav(successRedirectPath);
       }
     );    
-  }, [removeRef?.current, formResult, t, nav, notify, successRedirectPath]);
+  }, [removeRef?.current, t, nav, notify, successRedirectPath]);
 
   return {
     ...getSwr,

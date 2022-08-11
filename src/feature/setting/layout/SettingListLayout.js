@@ -30,6 +30,13 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {SettingEditRoute} from '../routes';
 import Innerlinks from 'components/Innerlinks';
 import {UserListRoute} from 'feature/user/routes';
+import {TaskCancellationListRoute} from 'feature/classifier/routes';
+
+
+
+
+
+
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -86,7 +93,7 @@ const SettingListLayout = withPreparedProps(Listing, props => {
     innerlinks: (
       <Innerlinks>
         <Innerlinks.Item isCurrent={true}>{tp('Settings')}</Innerlinks.Item>
-        <Innerlinks.Item to={'#'}>{tp('Classifiers')}</Innerlinks.Item>
+        <Innerlinks.Item to={TaskCancellationListRoute.props.path}>{tp('Classifiers')}</Innerlinks.Item>
         <Innerlinks.Item to={UserListRoute.props.path}>{tp('Users')}</Innerlinks.Item>
       </Innerlinks>
     ),

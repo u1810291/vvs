@@ -1,0 +1,12 @@
+mutation CreateEventType (
+  $value: String!,
+  $comment: String = null,
+  ) {
+  insert_event_type_one (object: {
+    value: $value,
+    comment: $comment
+  }) {
+    value
+    comment
+  }
+}
