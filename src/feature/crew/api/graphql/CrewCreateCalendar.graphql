@@ -1,0 +1,22 @@
+mutation CreateCrewCalendar (
+    $week_day: Int!,
+    $end_time: String!,
+    $start_time: String!,
+    $crew_id: String!,
+    $dislocation_zone_id: uuid!
+) {
+    insert_crew_calendar(objects: {
+        week_day: $week_day,
+        end_time: $end_time,
+        start_time: $start_time,
+        crew_id: $crew_id,
+        dislocation_zone_id: $dislocation_zone_id
+    }) {
+        id
+        week_day
+        end_time
+        start_time
+        crew_id
+        dislocation_zone_id
+    }
+}

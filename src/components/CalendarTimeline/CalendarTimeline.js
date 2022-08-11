@@ -10,6 +10,7 @@ import {compareMemo} from '../../util/react';
 const CalendarTimeline = memo(({
   title,
   value,
+  crewId,
   setValue,
   crewZones,
   actionButtonTitle,
@@ -47,6 +48,7 @@ const CalendarTimeline = memo(({
           setOpen={setOpen}
           events={value}
           isNew={true}
+          crewId={crewId}
           setEvents={setValue}
           getRef={getRef}
           crewZones={crewZones}

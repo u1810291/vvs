@@ -11,5 +11,13 @@ query CrewById ($id: uuid!) {
         zone {
             nodes
         }
+        calendars {
+            id
+            crew_id
+            week_day
+            start_time
+            end_time
+            dislocation_zone_id
+        }
     }
 }

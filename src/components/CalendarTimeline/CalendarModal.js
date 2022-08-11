@@ -8,9 +8,10 @@ import useLanguage from '../../hook/useLanguage';
 import useWeekDays from '../../hook/useWeekDays';
 import useValidation from '../../hook/useValidation';
 
-import {generate} from 'shortid';
 import {constant} from 'crocks';
-import {formatISO} from 'date-fns';
+import {format, getDay, setDay} from 'date-fns';
+
+import {generate} from 'shortid';
 
 const CalendarModal = ({
   id,
@@ -19,81 +20,75 @@ const CalendarModal = ({
   isOpen,
   setOpen,
   events,
+  crewId,
   setEvents,
   eventData,
   crewZones,
-  isDeletable,
+  isDeletable
 }) => {
   const {t} = useLanguage();
-  const {weekDays} = useWeekDays();
+  const {weekDays, getTimeLocals} = useWeekDays();
   const {validateOnEventCreate} = useValidation();
-  const [selectedCrew, setSelectedCrew] = useState([{}]);
+  const [selectedDislocationZone, setSelectedDislocationZone] = useState([{}]);
   const [selectedWeekDay, setSelectedWeekDay] = useState([{}]);
-
   const [errorMessage, setErrorMessage] = useState();
 
   const [selectedTimeTo, setTimeTo] = useState();
   const [selectedTimeFrom, setTimeFrom] = useState();
 
   const deleteEvent = useCallback(() => {
-    setEvents(events.filter(event => event.id !== id))
+    setEvents(events.filter(event => event.id !== id));
   }, [events]);
 
   useEffect(() => {
-    setSelectedCrew(eventData?.crew || crewZones[0])
-  }, [crewZones, eventData?.crew]);
+    setSelectedDislocationZone(crewZones.find(z => z.value === eventData?.crew?.value) || crewZones[0]);
+  }, [crewZones, eventData?.crew?.value]);
 
   useEffect(() => {
-    setSelectedWeekDay(eventData?.weekDay || weekDays[0])
-  }, [weekDays, eventData?.weekDay]);
+    const weekDay = {
+      key: format(setDay(new Date(), eventData?.week_day !== undefined ? eventData?.week_day : 1, {locale: getTimeLocals()}), 'EEEE'),
+      value: setDay(new Date(), eventData?.week_day !== undefined ? eventData?.week_day : 1, {locale: getTimeLocals()})
+    };
+    setSelectedWeekDay(weekDay || weekDays[0]);
+  }, [weekDays, eventData]);
 
   const editEvent = useCallback(() => {
-    const eve = events.find(event => {
+    return events.find(event => {
       if (event.id === id) {
-        const weekDay = formatISO(new Date(selectedWeekDay.value));
-
-        const timeFrom = formatISO(new Date(selectedTimeFrom));
-        const timeTo = formatISO(new Date(selectedTimeTo));
-
-        const startTime = new Date(weekDay.split('T')[0] + 'T' + timeFrom.split('T')[1]);
-        const endTime = new Date(weekDay.split('T')[0] + 'T' + timeTo.split('T')[1]);
-
         const editedEvent = {
-          id: id,
-          crew: selectedCrew,
-          weekDay: selectedWeekDay,
-          startTime,
-          endTime,
+          id: event.id,
+          crew_id: eventData?.crew_id,
+          dislocation_zone_id: selectedDislocationZone?.value,
+          week_day: getDay(selectedWeekDay?.value),
+          start_time: selectedTimeFrom,
+          end_time: selectedTimeTo,
         };
 
         const evs = events.filter(event => event.id !== id);
 
-        validateOnEventCreate(evs, editedEvent, endTime, startTime, setEvents, setErrorMessage, setOpen);
+        if (validateOnEventCreate(evs, editedEvent, setEvents, setErrorMessage, setOpen)) {
+          // update
+        };
       }
-    })
-  }, [selectedCrew, selectedWeekDay, selectedTimeFrom, selectedTimeTo, errorMessage, events])
+    });
+  }, [selectedDislocationZone, selectedWeekDay, selectedTimeFrom, selectedTimeTo, errorMessage, events]);
 
   const createEvent = useCallback(() => {
-    if (selectedCrew && selectedWeekDay && selectedTimeTo && selectedTimeFrom) {
-      const weekDay = formatISO(new Date(selectedWeekDay.value));
-
-      const timeFrom = formatISO(new Date(selectedTimeFrom));
-      const timeTo = formatISO(new Date(selectedTimeTo));
-
-      const startTime = new Date(weekDay.split('T')[0] + 'T' + timeFrom.split('T')[1]);
-      const endTime = new Date(weekDay.split('T')[0] + 'T' + timeTo.split('T')[1]);
-
+    if (selectedDislocationZone && selectedWeekDay && selectedTimeTo && selectedTimeFrom) {
       const newEvent = {
         id: generate(),
-        crew: selectedCrew,
-        weekDay: selectedWeekDay,
-        startTime,
-        endTime,
+        crew_id: crewId,
+        dislocation_zone_id: selectedDislocationZone?.value,
+        week_day: getDay(selectedWeekDay?.value),
+        start_time: selectedTimeFrom,
+        end_time: selectedTimeTo,
       };
 
-      validateOnEventCreate(events, newEvent, endTime, startTime, setEvents, setErrorMessage, setOpen);
+      if (validateOnEventCreate(events, newEvent, setEvents, setErrorMessage, setOpen)) {
+        // create
+      };
     }
-  }, [selectedCrew, selectedWeekDay, selectedTimeFrom, selectedTimeTo, errorMessage, events]);
+  }, [selectedDislocationZone, selectedWeekDay, selectedTimeFrom, selectedTimeTo, errorMessage, events]);
 
   return (
     isOpen && (
@@ -103,9 +98,9 @@ const CalendarModal = ({
       >
         <SelectBox
           label={t('eurocash.dislocationZone')}
-          value={selectedCrew?.value}
-          displayValue={constant(selectedCrew?.key)}
-          onChange={setSelectedCrew}
+          value={selectedDislocationZone?.value}
+          displayValue={constant(selectedDislocationZone?.key)}
+          onChange={setSelectedDislocationZone}
         >
           {crewZones.map(crewZone => (
             <SelectBox.Option key={crewZone?.key} value={crewZone?.value}>
@@ -128,6 +123,7 @@ const CalendarModal = ({
             ))}
           </SelectBox>
           <TimePicker
+            isFullTime={false}
             twTimePicker={'mr-6'}
             title={t('eurocash.from')}
             value={selectedTimeFrom}
@@ -135,6 +131,7 @@ const CalendarModal = ({
             selectedValue={selectedTimeFrom || eventData?.startTime}
           />
           <TimePicker
+            isFullTime={false}
             title={t('eurocash.to')}
             value={selectedTimeTo}
             setValue={setTimeTo}

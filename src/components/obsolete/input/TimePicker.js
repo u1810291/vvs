@@ -3,7 +3,6 @@ import React, {useState, useCallback, useEffect} from 'react';
 import useLanguage from '../../../hook/useLanguage';
 
 import {generate} from 'shortid';
-import {formatISO, format} from 'date-fns';
 
 const TimePickerOptions = ({
   setHour,
@@ -28,16 +27,16 @@ const TimePickerOptions = ({
     setMinute(event.currentTarget.value);
   }, []);
   useEffect(() => {
-    setHour(selectedValue ? format(new Date(selectedValue), 'HH') : HOURS[0]);
-    setMinute(selectedValue ? format(new Date(selectedValue), 'mm') : MINUTES[0]);
+    setHour(selectedValue ? selectedValue?.split(':')[0] : HOURS[0]);
+    setMinute(selectedValue ? selectedValue?.split(':')[1] : MINUTES[0]);
   }, []);
 
   return (
     <div className={'grid grid-cols-2 gap-4 mt-1'}>
       <div className={'flex flex-col col-span-1'}>
         <select
-          className={'p-1 border border-gray-300 text-gray-600 rounded-md focus:outline-none'}
-          value={selectedValue ? format(new Date(selectedValue), 'HH') : HOURS[0]}
+          className={'p-1 border border-gray-border text-bluewood rounded-sm focus:border-gray-border focus:ring-0 focus:ring-offset-0'}
+          value={selectedValue ? selectedValue?.split(':')[0] : HOURS[0]}
           onChange={setHourValue}>
           {HOURS.map(hour => (
             <option key={generate()} value={hour}>
@@ -45,15 +44,15 @@ const TimePickerOptions = ({
             </option>
           ))}
         </select>
-        <label className={'text-gray-600 text-sm'}>
+        <label className={'text-bluewood text-sm'}>
           {t('eurocash.hours')}
         </label>
       </div>
 
       <div className={'flex flex-col col-span-1'}>
         <select
-          className={'p-1 border border-gray-300 text-gray-600 rounded-md focus:outline-none'}
-          value={selectedValue ? format(new Date(selectedValue), 'mm') : MINUTES[0]}
+          className={'p-1 border border-gray-border text-bluewood rounded-sm focus:border-gray-border focus:ring-0 focus:ring-offset-0'}
+          value={selectedValue ? selectedValue?.split(':')[1] : MINUTES[0]}
           onChange={setMinuteValue}>
           {MINUTES.map(minute => (
             <option key={generate()} value={minute}>
@@ -61,7 +60,7 @@ const TimePickerOptions = ({
             </option>
           ))}
         </select>
-        <label className={'text-gray-600 text-sm'}>
+        <label className={'text-bluewood text-sm'}>
           {t('eurocash.minutes')}
         </label>
       </div>
@@ -69,24 +68,16 @@ const TimePickerOptions = ({
   );
 };
 
-const TimePicker = ({setValue, selectedValue, title, twTimePicker}) => {
+const TimePicker = ({setValue, selectedValue, title, twTimePicker, isFullTime}) => {
   const [selectedHour, setHour] = useState('');
   const [selectedMinute, setMinute] = useState('');
-
   useEffect(() => {
-    if (selectedHour || selectedMinute) {
-      const now = new Date();
-      const nowToISO = formatISO(now);
-      const nowDate = nowToISO.split('T')[0];
-      const hms = ':' + selectedHour + ':' + selectedMinute + ':' + '00';
-      const time = new Date(nowDate + hms);
-      setValue(time);
-    }
+    if (selectedHour || selectedMinute) setValue(`${selectedHour}:${selectedMinute}:00`);
   }, [selectedHour, selectedMinute]);
 
   return (
     <div className={`flex flex-col focus:outline-none ${twTimePicker}`}>
-      <label className={'text-gray-600'}>{title}</label>
+      <label className={'text-bluewood'}>{title}</label>
       <TimePickerOptions
         setHour={setHour}
         setMinute={setMinute}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
@@ -16,6 +16,8 @@ import {getFlatNodes, getZoneItems} from 'feature/breach/utils';
 import {useCrew, useCrewById, useCrewZones} from 'feature/crew/api/crewEditApi';
 
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
+import {mapProps, pipe} from 'crocks/helpers';
+import {getProp} from 'crocks';
 
 const CrewEditLayout = ({saveRef}) => {
   const {id: crewId} = useParams();
@@ -25,11 +27,12 @@ const CrewEditLayout = ({saveRef}) => {
   const {ctrl, result, setForm} = useResultForm({
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
+    driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validator: () => true}),
     phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
     to_call_after: FORM_FIELD.TEXT({label: t`field.to_call_after`, validator: () => true}),
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
     is_assigned_while_in_breaks: FORM_FIELD.BOOL({label: t`field.is_assigned_while_in_breaks`, validator: () => true}),
-    events: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
+    calendars: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
     device_id: FORM_FIELD.TEXT({initial: '54:21:9D:08:38:8C', label: t`field.device_id`, validator: () => true}),
   });
 
@@ -44,10 +47,15 @@ const CrewEditLayout = ({saveRef}) => {
   const zonePath = getZoneItems(crew);
   const zoneCoordinates = getFlatNodes(crew);
 
-  console.log(crewZones)
+  useEffect(() => {
+    pipe(
+      getProp('calendars'),
+      mapProps({calendars: Array})
+    )(crew)
+  }, [crew]);
 
   return (
-    <section className={'m-6 md:flex md:flex-row'}>
+    <section className={'m-6 h-full md:flex md:flex-row'}>
       <div className={'md:w-7/12 md:mr-6 xl:w-9/12'}>
         <div className={'lg:flex 2xl:w-2/3'}>
           <InputGroup
@@ -87,14 +95,15 @@ const CrewEditLayout = ({saveRef}) => {
           title={t('title.dislocation_zone_schedule')}
           actionButtonTitle={t('button.add_zone')}
           columnsTimeInterval={4}
+          crewId={crewId}
           crewZones={crewZones || []}
-          {...ctrl('events')}
+          {...ctrl('calendars')}
         />
         <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white lg:w-52 lg:mt-4'}>
           {t('button.delete')}
         </button>
       </div>
-      <div className={'mt-6 flex flex-col w-full h-full aspect-square md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:-mt-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
+      <div className={'mt-6 flex flex-col w-full aspect-square lg:h-full md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:-mt-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
         <Card.Sm className={'shadow-none'}>
           <div className='flex flex-row items-center w-full'>
             <DynamicIcon
@@ -107,7 +116,7 @@ const CrewEditLayout = ({saveRef}) => {
                 {ctrl('name').value}
               </p>
               <p className='text-regent'>
-                driver_name
+                {ctrl('driver_name').value}
               </p>
             </div>
           </div>
