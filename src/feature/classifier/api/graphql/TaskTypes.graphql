@@ -1,0 +1,6 @@
+query TaskTypes {
+  event_type {
+    value
+    comment
+  }
+}

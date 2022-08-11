@@ -39,6 +39,7 @@ const onChange = ({set}) => ({value}) => set(value);
 
 const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
   const {id} = useParams();
+
   const {t} = useTranslation('key', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('key', {keyPrefix: 'edit.field'});
   

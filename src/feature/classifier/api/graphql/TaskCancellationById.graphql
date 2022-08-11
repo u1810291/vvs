@@ -1,0 +1,6 @@
+query TaskCancellationById ($id: String!) {
+  event_cancellation_by_pk (value: $id) {
+    value
+    comment
+  }
+}

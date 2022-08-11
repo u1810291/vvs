@@ -1,0 +1,22 @@
+{
+  "menu": {
+    "list": "Classifiers"
+  },
+  "breadcrumbs": {
+    "breaches": "Classifiers",
+    "allData": "All Data"
+  },
+  "cornerBar": {
+    "add": "Add",
+    "reasons_for_cancellation": "Cancellation reasons",
+    "task_types": "Task types",
+    "crew_requests": "Crew requests"
+  },
+  "list": {
+    "column": {
+      "id": "ID",
+      "value": "Title",
+      "comment": "Comment"
+    }
+  }
+}

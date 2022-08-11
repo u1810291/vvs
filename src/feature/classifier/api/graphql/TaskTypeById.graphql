@@ -1,0 +1,6 @@
+query TaskTypeById ($id: String!) {
+  event_type_by_pk (value: $id) {
+    value
+    comment
+  }
+}
