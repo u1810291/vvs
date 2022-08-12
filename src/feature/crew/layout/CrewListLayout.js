@@ -7,7 +7,6 @@ import withPreparedProps from '../../../hoc/withPreparedProps';
 
 import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../../context/auth';
-import useAsync from '../../../hook/useAsync';
 
 import {
   chain,
@@ -25,16 +24,16 @@ import {
   safe
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {useFilter} from 'hook/useFilter';
 import {CrewCreateRoute, CrewEditRoute} from '../routes';
-import InputGroup from 'components/atom/input/InputGroup';
-import SelectBox from 'components/atom/input/SelectBox';
 import Button from 'components/Button';
 import {FilterIcon} from '@heroicons/react/solid';
 import Innerlinks from 'components/Innerlinks';
 import {DriverListRoute} from 'feature/driver/routes';
 import {DislocationListRoute} from 'feature/dislocation/routes';
+import {useCrews} from '../api/crewEditApi';
+
+
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
   Component,
@@ -75,36 +74,26 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     c('is_assigned_automatically', ne, identity, true)
   ];
 
-  const tableName = 'crew';
-  const [query, queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
-    tableName,
-    `
-      name
-      id
-      status
-      driver_name
-      phone_number
-      is_assigned_automatically
-    `, 
-    tableColumns,
-    [
-      {key: 'driver_name', type: 'String', label: 'Driver name', filter: 'text', Component: InputGroup},
-      {key: 'phone_number', type: 'String', label: 'Phone name', filter: 'text', Component: InputGroup},
-      {key: 'status', type: '[crew_status_enum!]', label: 'Status', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['BREAK', 'BUSY', 'OFFLINE', 'READY']},
-      // {key: 'is_assigned_automatically', type: '[boolean!]', label: 'Is assigned automatically', filter: 'multiselect', Component: SelectBox, values: [true, false]},
-    ]
-  );
+  const filtersData = [
+    {key: 'driver_name', label: 'Driver name', filter: 'text'},
+    {key: 'phone_number', label: 'Phone name', filter: 'text'},
+    {key: 'status', label: 'Status', filter: 'multiselect', values: ['BREAK', 'BUSY', 'OFFLINE', 'READY']},
+  ]
 
-  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
-    api(queryParams, query)
-  ));
+  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+    'crew',
+    tableColumns,
+    filtersData
+  );
+  
+  const list = useCrews({filters: queryParams})
   
   useEffect(() => {
-    fork()
+    list.mutate();
   }, [queryParams]);
 
   return {
-    list: safe(isArray, state.data).option([]),
+    list: safe(isArray, list?.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

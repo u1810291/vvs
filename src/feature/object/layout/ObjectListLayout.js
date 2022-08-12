@@ -24,16 +24,16 @@ import {
   objOf,
   pipe,
   safe,
-  maybeToAsync,
+  // maybeToAsync,
   // tap,
   // getPath,
 } from 'crocks';
+import {useObjects} from '../api';
 import {useFilter} from 'hook/useFilter';
-import InputGroup from 'components/atom/input/InputGroup';
 // import SelectBox from 'components/atom/input/SelectBox';
 // import useDebounce from 'hook/useDebounce';
 import {useAuth} from 'context/auth';
-import useAsync from 'hook/useAsync';
+// import useAsync from 'hook/useAsync';
 import {FilterIcon} from '@heroicons/react/solid';
 import Button from 'components/Button';
 import {KeyBoxListRoute} from 'feature/keybox/routes';
@@ -65,7 +65,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t: tp} = useTranslation('object');
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
-  // const swr = useObjects();
 
   
   const c = useMemo(() => getColumn(t, props => (
@@ -85,60 +84,38 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     c('user_id', ne, identity, false),
   ]
 
-  const tableName = 'object';
-  const [query, queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
-    tableName,
-    `
-      address
-      city
-      contract_no
-      contract_object_no
-      id
-      is_atm
-      longitude
-      latitude
-      name
-      provider_name
-      provider_id
-      phone
-      navision_id
-      
-    `,
+  const filtersData = [
+    {key: 'name', label: 'Name', filter: 'text'},
+    {key: 'contract_object_no', label: 'Object No', filter: 'text'},
+    {key: 'latitude', label: 'Latitude', filter: 'range'},
+    {key: 'longitude', label: 'Longitude', filter: 'range'},
+    {key: 'contract_no', label: 'Contract No', filter: 'text'},
+    {key: 'address', label: 'Address', filter: 'text'},
+    {key: 'is_crew_autoasigned', label: 'Auto assigned?', filter: 'select', values: ['true', 'false']},
+    {key: 'user_id', label: 'Client', filter: 'multiselect', values: []},
+    // {key: 'created_at', label: 'Date', filter: 'date'}, // date filter as example
+  ]
+
+  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+    'object',
     tableColumns,
-    [
-      // groups ???
-      {key: 'name', type: 'String', label: 'Name', filter: 'text', Component: InputGroup},
-      {key: 'contract_object_no', type: 'String', label: 'Object No', filter: 'text', Component: InputGroup},
-      
-      {key: 'latitude', type: 'numeric', label: 'Latitude', filter: 'range', Component: InputGroup},
-      {key: 'longitude', type: 'numeric', label: 'Longitude', filter: 'range', Component: InputGroup},
-
-      {key: 'contract_no', type: 'String', label: 'Contract No', filter: 'text', Component: InputGroup},
-      {key: 'address', type: 'String', label: 'Address', filter: 'text', Component: InputGroup},
-
-      // {key: 'provider_name', type: 'provider_enum!', label: 'Provider', filter: 'select', Component: SelectBox, Child: SelectBox.Option, values: ['MONAS', 'PROVIDER_2']},
-      // {key: 'city', type: '[city_enum!]', label: 'City', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['KAUNAS', 'VILNIUS', 'URENA']},
-      
-      // automatically send crew? (yes, no)
-      // client
-    ]
+    filtersData
   );
-
-  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
-    api(queryParams, query)
-  ));
+  
+  const list = useObjects({filters: queryParams})
   
   useEffect(() => {
-    // console.log(queryParams);
     // console.log(query);
+    // console.log(queryParams);
 
-    fork()
+    list.mutate()
   }, [queryParams]);
+
 
 
  
   return {
-    list: safe(isArray, state.data).option([]),
+    list: safe(isArray, list?.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
@@ -148,7 +125,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
             {defaultFilter.id ? defaultFilter.name : tb('allData') } 
             <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
           </Button.NoBg>
-          
         </Breadcrumbs.Item>
       </Breadcrumbs>
     ),

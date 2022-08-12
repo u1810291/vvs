@@ -49,9 +49,9 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const fetcher = useKeyObjects({params: {id: boxId}});
+  const fetcher = useKeyObjects({filters: {id: boxId}});
   const list = fetcher?.data || [];
-  const objects = useObjects();
+  const objects = useObjects({filters: {}});
 
   const toggleModal = (e) => {
     setShowModal(() => !showModal);

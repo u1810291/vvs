@@ -1,7 +1,8 @@
 import {useAuth} from '../../../context/auth';
 import useAsyncSwr from '../../../hook/useAsyncSwr';
 import raw from 'raw.macro';
-import {getProp, maybeToAsync} from 'crocks';
+import {getProp, maybeToAsync, pipe} from 'crocks';
+import {createUseWhereList} from 'api/buildApiHook';
 
 export const useBreach = id => {
   const {api} = useAuth();
@@ -13,3 +14,11 @@ export const useBreach = id => {
     ...getSwr?.data
   }
 };
+
+
+export const useBreaches = createUseWhereList({
+  graphQl: raw('./graphql/GetBreaches.graphql'),
+  asyncMapFromApi: pipe(
+    maybeToAsync('prop "crew_breach" expected but not found.', getProp('crew_breach')),
+  ),
+})

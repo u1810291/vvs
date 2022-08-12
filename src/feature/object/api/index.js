@@ -1,7 +1,7 @@
 import raw from 'raw.macro';
 import {
+  createUseWhereList,
   createUseEnum,
-  createUseList,
   createUseOne,
   mapToNullableNumber,
   mapToString
@@ -16,8 +16,8 @@ import {
   pick,
 } from 'crocks';
 
-export const useObjects = createUseList({
-  graphQl: raw('./graphql/Objects.graphql'),
+export const useObjects = createUseWhereList({
+  graphQl: raw('./graphql/GetObjects.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "object" expected but not found.', getProp('object')),
   ),

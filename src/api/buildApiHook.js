@@ -60,11 +60,11 @@ export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
   ));
 }
 
-export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({params}) => {
+export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) => {
   const {api} = useAuth();
 
-  return useAsyncSwr([graphQl], (query) => (
-    api(params, query)
+  return useAsyncSwr([graphQl, filters], (query) => (
+    api(filters, query)
     .chain(asyncMapFromApi)
   ));
 }

@@ -1,13 +1,10 @@
 import React, {useEffect, useMemo} from 'react';
 import {generatePath, Link} from 'react-router-dom';
-
 import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import withPreparedProps from '../../../hoc/withPreparedProps';
-
 import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../../context/auth';
-import useAsync from '../../../hook/useAsync';
 import Button from 'components/Button';
 
 import {
@@ -26,17 +23,17 @@ import {
   safe
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
 
 import {TaskEditRoute} from '../routes';
 import {FilterIcon} from '@heroicons/react/solid';
 import {useFilter} from 'hook/useFilter';
-import InputGroup from 'components/atom/input/InputGroup';
-import SelectBox from 'components/atom/input/SelectBox';
 import {PermissionListRoute} from 'feature/permission/routes';
 import DashboardRoute from 'feature/dashboard/routes';
 import Innerlinks from 'components/Innerlinks';
 import {BreachListRoute} from 'feature/breach/routes';
+import {useTasks} from '../api';
+
+
 
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
@@ -84,51 +81,35 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     c('reason', ne, identity, true),
   ];
 
-  const tableName = 'task';
-  const [query, queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
-    tableName, 
-    `
-      received
-      object_name
-      name
-      reason
-      operator
-    `,
+  const filtersData = [
+    {key: 'received', label: 'Date from-to', filter: 'date'},
+    {key: 'operator', label: 'Operator', filter: 'multiselect', values: []},
+    {key: 'object', label: 'Object', filter: 'multiselect', values: []},
+    {key: 'address', label: 'Object\'s address', filter: 'text'},
+    {key: 'type', label: 'Type', filter: 'multiselect', values: []},
+    {key: 'groups', label: 'Groups (?)', filter: 'multiselect', values: []},
+    {key: 'status', label: 'Status', filter: 'multiselect', values: ['View Obj', 'Cancelled', 'New', 'Completed']},
+    {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
+    {key: 'crew', label: 'Crew', filter: 'multiselect', values: []},
+    {key: 'driver', label: 'Driver', filter: 'multiselect', values: []},
+    {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', values: ['True', 'False']},
+  ]
+
+  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+    'task', 
     tableColumns,
-    [
-      {key: 'received', type: 'String', label: 'Date from-to', filter: 'date'},
-      {key: 'operator', type: 'String', label: 'Operator', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: []},
-      {key: 'object', type: 'String', label: 'Object', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: []},
-      {key: 'address', type: 'String', label: 'Object\'s address', filter: 'text', Component: InputGroup},
-      {key: 'type', type: 'String', label: 'Type', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: []},
-      {key: 'groups', type: 'String', label: 'Groups (?)', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: []},
-      {key: 'status', type: 'String', label: 'Status', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['View Obj', 'Cancelled', 'New', 'Completed']},
-      {key: 'reason', type: 'String', label: 'Reason', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: []},
-      {key: 'crew', type: 'String', label: 'Crew', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: []},
-      {key: 'driver', type: 'String', label: 'Driver', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: []},
-
-      {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', Component: SelectBox, Child: SelectBox.Option, values: ['True', 'False']},
-      // {key: 'contract_object_no', type: 'String', label: 'Object No', filter: 'text', Component: InputGroup},
-      
-      // {key: 'latitude', type: 'numeric', label: 'Latitude', filter: 'range', Component: InputGroup},
-      // {key: 'longitude', type: 'numeric', label: 'Longitude', filter: 'range', Component: InputGroup},
-
-      // {key: 'contract_no', type: 'String', label: 'Contract No', filter: 'text', Component: InputGroup},
-      // {key: 'address', type: 'String', label: 'Address', filter: 'text', Component: InputGroup},
-    ]
+    filtersData,
   );
 
-  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
-    api(queryParams, query)
-  ));
+  const list = useTasks({filters: queryParams});
   
   useEffect(() => {
-    fork()
+    list.mutate()
   }, [queryParams]);
 
 
   return {
-    list: safe(isArray, state.data).option([]),
+    list: safe(isArray, list?.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

@@ -21,6 +21,7 @@ import {
   safe
 } from 'crocks';
 import {renderWithProps} from 'util/react';
+import SelectBox from 'components/atom/input/SelectBox';
 
 
 
@@ -234,11 +235,11 @@ const getDefaultFilterId = (filters) => {
   return defaultFilter ? defaultFilter.id : null;
 }
 
-export const useFilter = (tableName, q, tableColumns, filtersData, initialState) => {
+export const useFilter = (tableName, tableColumns, filtersData, initialState) => {
   const [showFilter, setShowFilter] = useState(false);
 
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
-  const query = useMemo(() => prepQuery(tableName, q, filtersData, state), [state]);
+  // const query = useMemo(() => prepQuery(tableName, q, filtersData, state), [state]);
   const [params] = useSearchParams();
 
   // get saved for 'tableName' from filters
@@ -280,10 +281,11 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
   }, [savedFilters]);
 
   // for testing
-  useEffect(() => {
-    // console.log(state);
-  }, [state]);
+  // useEffect(() => {
+  //   // console.log(state);
+  // }, [state]);
   
+  // show only picked columns
   const pickedColumns = useMemo(() => pipe(
     safe(isArray),
     map(map(pipe(
@@ -300,7 +302,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
     option(null)
   )(tableColumns), [tableColumns]);
 
-
+  // save to localstorage
   const saveToStorage = () => {
     const allSaved = getAllFilters();
     allSaved[tableName] = savedFilters;
@@ -479,7 +481,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
 
     updateFilter(id, 'props', {
       tableName,
-      query,
+      // query,
       filtersData,
       state 
     });
@@ -499,7 +501,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
       updateFilter(formState.id, 'starred', formState.starred);
       updateFilter(formState.id, 'props', {
         tableName,
-        query,
+        // query,
         filtersData,
         state 
       });
@@ -539,7 +541,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
       editMode: false,
       props: {
         tableName,
-        query,
+        // query,
         filtersData,
         state 
       }
@@ -561,6 +563,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
     setDefaultFiterId(id);  // shoult it be named selectedFilterId ?
   }
 
+  // on user input changed
   const handleUserInput = (e) => {
     const name = e.target.name;
     const value = ['title', 'shortcut'].includes(name) ? e.target.value : e.target.checked;
@@ -572,7 +575,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
 
 
 
-
+  // TODO: move out into separate Component
   const filters = useMemo(() => {
     return (
       <div className={showFilter ? 'visible' : 'hidden'}>
@@ -658,24 +661,24 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
                     currentValue = state[key].join(', ');
                   }
 
-                  return <Component
+                  return <SelectBox
                     className={'w-full'}
                     key={key} 
                     label={label} 
                     onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
                     multiple={filter === 'multiselect' ? true : false}  
                     value={currentValue} 
-                    placeholder={filter === 'multiselect' ? 'Search [Multiple choices]' : 'Any [Select]'}
+                    placeholder={filter === 'multiselect' ? 'Select [Multiple choices]' : 'Any [Select]'}
                   >
                     {map(
                       value => (
-                        <Child key={value} value={value}>
+                        <SelectBox.Option key={value} value={value}>
                           {value}
-                        </Child>
+                        </SelectBox.Option>
                       ),
                       values ?? []
                     )}
-                  </Component>
+                  </SelectBox>
                 }
                 
                 // date
@@ -698,7 +701,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
                       <div className='flex flex-col' >
                       <span className='text-sm mt-1'>{label}</span>
                       <div className='flex flex-row space-x-2 mt-1'>
-                        <Component
+                        <InputGroup
                           className={'w-full'}
                           inputClassName={'max-h-8'}
                           key={`${key}_start`} 
@@ -706,7 +709,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
                           placeholder={'From...'}
                           onChange={onInputEventOrEmpty(v => dispatch({type: filter.toUpperCase(), value: v, key: `${key}_start`}))} />
                         
-                        <Component
+                        <InputGroup
                           className={'w-full'}
                           inputClassName={'max-h-8'}
                           key={`${key}_end`} 
@@ -719,7 +722,7 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
                 }
 
                 // rest (text)
-                return <Component
+                return <InputGroup
                   className={'w-full'}
                   inputClassName={'max-h-8'}
                   twLabel={'text-sm'}
@@ -753,33 +756,50 @@ export const useFilter = (tableName, q, tableColumns, filtersData, initialState)
     )}, 
     [state, savedFilters, mode, formState, showFilter, pickedColumns]
   );
-
+  
+  // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
+    console.log(state);
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
       if (value === undefined || value === null || value === '') continue;
-      
       if (key.includes('_end')) continue;
 
+      // range filters: range, datepicker (single)
       if (key.includes('_start')) {
         const column = key.replace('_start', '');
         
         if (`${column}_end` in state) {
-          params[key] = value;
-          params[`${column}_end`] = state[`${column}_end`];
+          params[column] = {
+            _gte: value, 
+            _lte: state[`${column}_end`]
+          };
         }
-      } else {
-        params[key] = value;
+      } 
+      
+      // single filters
+      else {
+        // array filter -> multiselect
+        if (isArray(value)) {
+          params[key] = {_in: value};
+        }
+
+        // text filter
+        else {
+          params[key] = {_ilike: value}
+        }
       }
     }
     
-
-    return params;
+    return {
+      where: {
+        _and: params
+      }
+    };
   }, [state]);
 
   return [
-    query,
     queryParams,
     filters,
     columns,

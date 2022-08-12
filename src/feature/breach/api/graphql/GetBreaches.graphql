@@ -1,0 +1,16 @@
+query GetBreaches($where: crew_breach_bool_exp) {
+    crew_breach(where: $where) {
+        id
+        end_time
+        start_time
+        nodes
+        crew {
+            name
+            status
+            driver_name
+            zone {
+                nodes
+            }
+        }
+    }
+}

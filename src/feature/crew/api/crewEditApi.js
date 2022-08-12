@@ -1,7 +1,7 @@
 import raw from 'raw.macro';
 import {useAuth} from 'context/auth';
 import useAsyncSwr from 'hook/useAsyncSwr';
-import {createUseList, createUseOne, mapToNullableString} from 'api/buildApiHook';
+import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {
   pipe,
@@ -18,8 +18,8 @@ import {not} from 'crocks/logic';
 
 // TODO: Reduce duplicated requests
 
-export const useCrews = createUseList({
-  graphQl: raw('./graphql/Crews.graphql'),
+export const useCrews = createUseWhereList({
+  graphQl: raw('./graphql/GetCrews.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('expected prop "crew" does not exist', getProp('crew')),
   ),

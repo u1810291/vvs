@@ -1,5 +1,5 @@
-query {
-  object {
+query Objects($where: object_bool_exp) {
+  object(where: $where) {
     address
     city
     contract_no

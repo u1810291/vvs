@@ -4,14 +4,12 @@ import Listing from 'layout/ListingLayout';
 import Breadcrumbs from 'components/Breadcrumbs';
 import withPreparedProps from 'hoc/withPreparedProps';
 import {BreachEditRoute} from 'feature/breach/routes';
-import useAsync from 'hook/useAsync';
 import {useAuth} from 'context/auth';
 import {not} from 'crocks/logic';
 import {alt, chain} from 'crocks/pointfree';
 import {getPropOr, objOf, pipe} from 'crocks/helpers';
 import {isEmpty, hasProps, isArray} from 'crocks/predicates';
 import {Maybe, map, safe, curry, getProp, getPath} from 'crocks';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {useTranslation} from 'react-i18next';
 import {format, intervalToDuration, formatDuration} from 'date-fns';
 import {useFilter} from 'hook/useFilter';
@@ -21,6 +19,9 @@ import {TaskListRoute} from 'feature/task/routes';
 import Innerlinks from 'components/Innerlinks';
 import {PermissionListRoute} from 'feature/permission/routes';
 import DashboardRoute from 'feature/dashboard/routes';
+import {useBreaches} from '../api/breachEditApi';
+
+
 
 const getColumn = curry((t, Component, key, mapper, status) => ({
   Component,
@@ -78,36 +79,27 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     column('driver_name', pipe(getPath(['crew', 'driver_name'])), false),
   ]
 
-  const tableName = 'crew_breach';
-  const [query, queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
-    tableName,
-    `
-      id
-      end_time
-      start_time
-      crew {
-        name
-        driver_name
-      }
-    `, 
-    tableColumns,
-    [
-      {key: 'start_time', type: 'timestamptz', label: 'Started At', filter: 'date'},
-      {key: 'end_time', type: 'timestamptz', label: 'Ended At', filter: 'date'},
-    ]);
+  const filtersData = [
+    {key: 'start_time', label: 'Started At', filter: 'date'},
+    {key: 'end_time', label: 'Ended At', filter: 'date'},
+  ];
 
-  const [state, fork] = useAsync(chain(maybeToAsync(`"${tableName}" prop is expected in the response`, getProp(tableName)),
-    api(queryParams, query)
-  ));
-  
+  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+    'crew_breach',
+    tableColumns,
+    filtersData
+  );
+
+  const list = useBreaches({filters: queryParams})
+
   useEffect(() => {
-    fork()
+    list.mutate();
   }, [queryParams]);
 
   
 
   return {
-    list: safe(isArray, state.data).option([]),
+    list: safe(isArray, list?.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

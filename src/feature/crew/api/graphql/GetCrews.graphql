@@ -1,0 +1,15 @@
+query Crews($where: crew_bool_exp) {
+  crew(where: $where) {
+    id
+    driver_name
+    is_assigned_automatically
+    is_assigned_while_in_breaks
+    name
+    phone_number
+    status
+    to_call_after
+    zone {
+      name
+    }
+  }
+}

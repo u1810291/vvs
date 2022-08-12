@@ -1,7 +1,0 @@
-query Crews {
-  crew {
-    id
-    name
-    status
-  }
-}
