@@ -1,6 +1,6 @@
-
-import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
 import Index from '../SideBarLayout';
+import Nullable from 'components/atom/Nullable';
+import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
 import Table from '../../components/Table';
 import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {componentToString} from '@s-e/frontend/react';
@@ -11,27 +11,25 @@ import {renderWithProps} from '../../util/react';
 import {useCallback, useMemo, useState} from 'react';
 import {
   and,
+  constant,
   filter,
-  not,
   hasProps,
   ifElse,
   isArray,
   isEmpty,
   map,
+  not,
   option,
   pipe,
   safe,
-  constant,
 } from 'crocks';
-import Nullable from 'components/atom/Nullable';
 
 /**
- * @type TableColumnComponent
- * @param {Object} props
- * @param {(item: Object) => Maybe<ComponentProps>} props.itemToProps
- * @param {import('react').ComponentType} props.Component
- * @param {string} props.headerText
- * @param {string} props.key
+ * @typedef {Object} TableColumnComponent
+ * @prop {(item: Object) => Maybe<ComponentProps>} itemToProps
+ * @prop {import('react').ComponentType} Component
+ * @prop {string} headerText
+ * @prop {string} key
  */
 
 /**
@@ -51,10 +49,6 @@ const Listing = ({
 }) => {
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
-
-  
-
-  
 
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),

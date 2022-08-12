@@ -1,3 +1,16 @@
-query GetDriver {
-  
+query GetDrivers {
+  usersByRole(role: "crew") {
+    users {
+      id
+      firstName
+      lastName
+      username
+      verified
+      mobilePhone
+      middleName
+      email
+      birthDate
+      active
+    }
+  }
 }

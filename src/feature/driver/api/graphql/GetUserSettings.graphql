@@ -1,0 +1,6 @@
+query GetUserSettings ($where: user_settings_bool_exp = {}){
+  user_settings (where: $where) {
+    id
+    is_online
+  }
+}

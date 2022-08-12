@@ -50,6 +50,15 @@ export const mapToNullableNumber = pipe(
   option(null),
 );
 
+export const createUseListWithAuth = ({graphQl, asyncMapFromApi}) => () => {
+  const auth = useAuth();
+
+  return useAsyncSwr([graphQl], (query) => (
+    auth.apiQuery(query)
+    .chain(asyncMapFromApi(auth))
+  ));
+}
+
 export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
   const {apiQuery} = useAuth();
 

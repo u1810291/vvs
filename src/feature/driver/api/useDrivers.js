@@ -1,13 +1,27 @@
-import {createUseList} from 'api/buildApiHook';
-import {pipe, getProp} from 'crocks';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
+import {createUseListWithAuth} from 'api/buildApiHook';
+import {augmentUser, getPathAsync} from 'api/buildUserQuery';
+import {getPropOr, isTruthy} from 'crocks';
 import raw from 'raw.macro';
 
-const LIST_PROP = '';
+const LIST_PROPS = ['usersByRole', 'users'];
+const LIST_SETTINGS_PROPS = ['user_settings'];
 
-export default createUseList({
+export default createUseListWithAuth({
   graphQl: raw('./graphql/GetDrivers.graphql'),
-  asyncMapFromApi: pipe(
-    maybeToAsync(`expected prop "${LIST_PROP}" to exist`, getProp(LIST_PROP))
+
+  /**
+   * @param {import('context/auth').useAuth}  auth
+   */
+  asyncMapFromApi: auth => item => (
+    getPathAsync(LIST_PROPS, item)
+    .chain(
+      augmentUser(
+        list => auth.api(
+          {where: {id: {_in: list.map(getPropOr(null, 'id')).filter(isTruthy)}}},
+          raw('./graphql/GetUserSettings.graphql')
+        )
+        .chain(getPathAsync(LIST_SETTINGS_PROPS)),
+      )
+    )
   ),
 });
