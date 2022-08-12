@@ -9,7 +9,7 @@ import {useNavigate} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
 import {useTranslation} from 'react-i18next';
 import {
-    Async,
+  Async,
   chain,
   constant,
   flip,
@@ -50,6 +50,11 @@ export const mapToNullableNumber = pipe(
   option(null),
 );
 
+/**
+ * @param {object} props
+ * @param {string} props.graphQl
+ * @param {(auth: import('context/auth').AuthContextValue) => (data) => import('crocks/Async').default} props.asyncMapFromApi
+ */
 export const createUseListWithAuth = ({graphQl, asyncMapFromApi}) => () => {
   const auth = useAuth();
 
@@ -59,6 +64,11 @@ export const createUseListWithAuth = ({graphQl, asyncMapFromApi}) => () => {
   ));
 }
 
+/**
+ * @param {object} props
+ * @param {string} props.graphQl
+ * @param {(data) => import('crocks/Async').default} props.asyncMapFromApi
+ */
 export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
   const {apiQuery} = useAuth();
 
@@ -68,6 +78,15 @@ export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
   ));
 }
 
+/**
+ * @param {Object} props
+ * @param {String} props.getGraphQl - GraphQL Query to RETRIEVE the single entity.
+ * @param {String} props.createGraphql - GraphQL Query to CREATE the single entity.
+ * @param {String} props.updateGraphQl - GraphQL Query to UPDATE the single entity.
+ * @param {String} props.deleteGraphQl - GraphQL Query to DELETE the single entity.
+ * @param {(data: any) => import('crocks/Async').default} [props.asyncMapFromApi = Async.Resolved]  - Async function that has oppurtunity to modify the data just before using it from API.
+ * @param {(data: any) => import('crocks/Async').default} [props.asyncMapToApi = Async.Resolved]  - Async function that has oppurtunity to modify the data just before sending it to API.
+ */
 export const createUseOne = ({
   getGraphQl,
   createGraphql,

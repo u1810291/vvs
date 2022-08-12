@@ -1,27 +1,37 @@
 import {createUseListWithAuth} from 'api/buildApiHook';
 import {augmentUser, getPathAsync} from 'api/buildUserQuery';
-import {getPropOr, isTruthy} from 'crocks';
+import {getProp, curry} from 'crocks';
 import raw from 'raw.macro';
+import {mapByMaybe} from 'util/array';
 
 const LIST_PROPS = ['usersByRole', 'users'];
 const LIST_SETTINGS_PROPS = ['user_settings'];
 
-export default createUseListWithAuth({
-  graphQl: raw('./graphql/GetDrivers.graphql'),
+/**
+ * @type {(auth: import('context/auth').AuthContextValue) => (usersWithId: Array<{id: string}>) => import('crocks/Async').default}
+ */
+const getUserSettings = curry((
+  /**
+   * @type {import ('context/auth').AuthContextValue}
+   */
+  auth,
 
   /**
-   * @param {import('context/auth').useAuth}  auth
+   * @type {Array<{id: string}>} 
    */
+  usersWithId
+) => (
+  auth.api(
+    {where: {id: {_in: mapByMaybe(getProp('id'), usersWithId)}}},
+    raw('./graphql/GetUserSettings.graphql')
+  )
+  .chain(getPathAsync(LIST_SETTINGS_PROPS))
+));
+
+export default createUseListWithAuth({
+  graphQl: raw('./graphql/GetDrivers.graphql'),
   asyncMapFromApi: auth => item => (
     getPathAsync(LIST_PROPS, item)
-    .chain(
-      augmentUser(
-        list => auth.api(
-          {where: {id: {_in: list.map(getPropOr(null, 'id')).filter(isTruthy)}}},
-          raw('./graphql/GetUserSettings.graphql')
-        )
-        .chain(getPathAsync(LIST_SETTINGS_PROPS)),
-      )
-    )
+    .chain(augmentUser(getUserSettings(auth)))
   ),
 });
