@@ -53,7 +53,7 @@ const DislocationEditLayout = () => {
             </Button.Pxl>
           </div>
         </Header>
-        <DislocationEditForm saveRef={saveRef} removeRef={removeRef}/>
+        <DislocationEditForm saveRef={saveRef} removeRef={removeRef} />
       </div>
     </SideBarLayout>
   );

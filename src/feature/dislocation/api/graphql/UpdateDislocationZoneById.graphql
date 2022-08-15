@@ -1,0 +1,10 @@
+mutation UpdateDislocationZoneById(
+    $id: uuid!,
+    $name: String!,
+    $nodes: json!
+) {
+    update_crew_zone_by_pk(_set: {name: $name, nodes: $nodes}, pk_columns: {id: $id}) {
+        nodes
+        name
+    }
+}

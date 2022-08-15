@@ -22,6 +22,7 @@ const GoogleContextProvider = ({children}) => {
     map.fitBounds(newBounds);
     setMap(map);
   }, []);
+
   const onMapUnmount = useCallback(() => {
     setMap(null);
     setBounds(null);
@@ -32,6 +33,7 @@ const GoogleContextProvider = ({children}) => {
         bounds,
         isLoaded,
         loadError,
+        setBounds,
         googleMap,
         onMapLoad,
         ...options,
