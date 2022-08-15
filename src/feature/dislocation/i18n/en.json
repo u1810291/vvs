@@ -7,9 +7,33 @@
     "allData": "All Data"
   },
   "list": {
+    "header": {
+      "button": {
+        "create": "Create zone"
+      },
+      "links": {
+        "crews": "Crews",
+        "drivers": "Drivers",
+        "dislocation_zones": "Dislocation zones"
+      }
+    },
     "column": {
       "id": "ID",
       "name": "Name"
+    }
+  },
+  "edit": {
+    "header": {
+      "button": {
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
+    "field": {
+      "name": "Name"
+    },
+    "button": {
+      "delete": "Delete"
     }
   }
 }

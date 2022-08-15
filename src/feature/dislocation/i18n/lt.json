@@ -7,9 +7,33 @@
     "allData": "Visi duomenys"
   },
   "list": {
+    "header": {
+      "button": {
+        "create": "Sukurti zoną"
+      },
+      "links": {
+        "crews": "Ekipažai",
+        "drivers": "Vairuotojai",
+        "dislocation_zones": "Dislokacijos zonos"
+      }
+    },
     "column": {
       "id": "ID",
       "name": "Pavadinimas"
+    }
+  },
+  "edit": {
+    "header": {
+      "button": {
+        "save": "Išsaugoti",
+        "cancel": "Atšaukti"
+      }
+    },
+    "field": {
+      "name": "Pavadinimas"
+    },
+    "button": {
+      "delete": "Archyvuoti"
     }
   }
 }

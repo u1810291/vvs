@@ -1,0 +1,7 @@
+query GetDislocationZoneById($id: uuid!) {
+    crew_zone_by_pk(id: $id) {
+        id
+        name
+        nodes
+    }
+}

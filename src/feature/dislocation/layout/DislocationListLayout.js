@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
@@ -27,11 +27,11 @@ import {
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {DislocationEditRoute} from '../routes';
+import {DislocationCreateRoute, DislocationEditRoute} from '../routes';
 import Innerlinks from 'components/Innerlinks';
 import {CrewListRoute} from 'feature/crew/routes';
 import {DriverListRoute} from 'feature/driver/routes';
-
+import Button from '../../../components/Button';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -51,8 +51,10 @@ const ne = not(isEmpty);
 const Span = props => <span {...props}/>;
 
 const DislocationListLayout = withPreparedProps(Listing, props => {
+  const nav = useNavigate();
   const {apiQuery} = useAuth();
   const {t: tp} = useTranslation('dislocation');
+  const {t: th} = useTranslation('dislocation', {keyPrefix: 'list.header'});
   const {t: tb} = useTranslation('dislocation', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('dislocation', {keyPrefix: 'list.column'});
   const [state, fork] = useAsync(chain(maybeToAsync('"crew_zone" prop is expected in the response', getProp('crew_zone')),
@@ -85,15 +87,19 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
         <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
+    buttons: (
+      <>
+        <Button.Pxl onClick={() => nav(DislocationCreateRoute.props.path)}>{th('button.create')}</Button.Pxl>
+      </>
+    ),
     innerlinks: (
       <Innerlinks>
-        <Innerlinks.Item to={CrewListRoute.props.path}>{tp('Crews')}</Innerlinks.Item>
-        <Innerlinks.Item to={DriverListRoute.props.path}>{tp('Drivers')}</Innerlinks.Item>
-        <Innerlinks.Item isCurrent={true}>{tp('Dislocation zones')}</Innerlinks.Item>
+        <Innerlinks.Item to={CrewListRoute.props.path}>{th('links.crews')}</Innerlinks.Item>
+        <Innerlinks.Item to={DriverListRoute.props.path}>{th('links.drivers')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{th('links.dislocation_zones')}</Innerlinks.Item>
       </Innerlinks>
     ),
     tableColumns: [
-      c('id', ne, identity),
       c('name', ne, identity),
     ],
   }
