@@ -39,6 +39,7 @@ type UserObject {
     lastName: String
     middleName: String
     mobilePhone: String
+    password: String
     passwordChangeRequired: Boolean
     passwordLastUpdateInstant: timestamp
     username: String
@@ -481,8 +482,32 @@ type corresppersons_variance_fields {
 type crew {
     "An object relationship"
     breaches: crew_breach
-    "An object relationship"
-    calendar: crew_calendar
+    "An array relationship"
+    calendars(
+        "distinct select on columns"
+        distinct_on: [crew_calendar_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_calendar_order_by!],
+        "filter the rows returned"
+        where: crew_calendar_bool_exp
+    ): [crew_calendar!]!
+    "An aggregate relationship"
+    calendars_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_calendar_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_calendar_order_by!],
+        "filter the rows returned"
+        where: crew_calendar_bool_exp
+    ): crew_calendar_aggregate!
     driver_name: String
     id: uuid!
     is_assigned_automatically: Boolean!
@@ -993,7 +1018,7 @@ type crew_zone {
     nodes(
         "JSON select path"
         path: String
-    ): json!
+    ): json
 }
 
 "aggregated selection of \"crew_zone\""
@@ -1035,6 +1060,45 @@ type deleteQuery {
     userId: String
 }
 
+"columns and relationships of \"event_cancellation\""
+type event_cancellation {
+    comment: String
+    value: String!
+}
+
+"aggregated selection of \"event_cancellation\""
+type event_cancellation_aggregate {
+    aggregate: event_cancellation_aggregate_fields
+    nodes: [event_cancellation!]!
+}
+
+"aggregate fields of \"event_cancellation\""
+type event_cancellation_aggregate_fields {
+    count(columns: [event_cancellation_select_column!], distinct: Boolean): Int!
+    max: event_cancellation_max_fields
+    min: event_cancellation_min_fields
+}
+
+"aggregate max on columns"
+type event_cancellation_max_fields {
+    comment: String
+    value: String
+}
+
+"aggregate min on columns"
+type event_cancellation_min_fields {
+    comment: String
+    value: String
+}
+
+"response of any mutation on the table \"event_cancellation\""
+type event_cancellation_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [event_cancellation!]!
+}
+
 "columns and relationships of \"event_status\""
 type event_status {
     description: String!
@@ -1072,6 +1136,45 @@ type event_status_mutation_response {
     affected_rows: Int!
     "data from the rows affected by the mutation"
     returning: [event_status!]!
+}
+
+"columns and relationships of \"event_type\""
+type event_type {
+    comment: String
+    value: String!
+}
+
+"aggregated selection of \"event_type\""
+type event_type_aggregate {
+    aggregate: event_type_aggregate_fields
+    nodes: [event_type!]!
+}
+
+"aggregate fields of \"event_type\""
+type event_type_aggregate_fields {
+    count(columns: [event_type_select_column!], distinct: Boolean): Int!
+    max: event_type_max_fields
+    min: event_type_min_fields
+}
+
+"aggregate max on columns"
+type event_type_max_fields {
+    comment: String
+    value: String
+}
+
+"aggregate min on columns"
+type event_type_min_fields {
+    comment: String
+    value: String
+}
+
+"response of any mutation on the table \"event_type\""
+type event_type_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [event_type!]!
 }
 
 "columns and relationships of \"events\""
@@ -3157,6 +3260,13 @@ type mutation_root {
     ): crew_zone_mutation_response
     "delete single row from the table: \"crew_zone\""
     delete_crew_zone_by_pk(id: uuid!): crew_zone
+    "delete data from the table: \"event_cancellation\""
+    delete_event_cancellation(
+        "filter the rows which have to be deleted"
+        where: event_cancellation_bool_exp!
+    ): event_cancellation_mutation_response
+    "delete single row from the table: \"event_cancellation\""
+    delete_event_cancellation_by_pk(value: String!): event_cancellation
     "delete data from the table: \"event_status\""
     delete_event_status(
         "filter the rows which have to be deleted"
@@ -3164,6 +3274,13 @@ type mutation_root {
     ): event_status_mutation_response
     "delete single row from the table: \"event_status\""
     delete_event_status_by_pk(value: String!): event_status
+    "delete data from the table: \"event_type\""
+    delete_event_type(
+        "filter the rows which have to be deleted"
+        where: event_type_bool_exp!
+    ): event_type_mutation_response
+    "delete single row from the table: \"event_type\""
+    delete_event_type_by_pk(value: String!): event_type
     "delete data from the table: \"events\""
     delete_events(
         "filter the rows which have to be deleted"
@@ -3289,7 +3406,10 @@ type mutation_root {
         where: user_settings_bool_exp!
     ): user_settings_mutation_response
     "delete single row from the table: \"user_settings\""
-    delete_user_settings_by_pk(id: Int!): user_settings
+    delete_user_settings_by_pk(
+        "UUID matching FusionAuth user.id"
+        id: uuid!
+    ): user_settings
     "delete data from the table: \"user_type\""
     delete_user_type(
         "filter the rows which have to be deleted"
@@ -3479,6 +3599,20 @@ type mutation_root {
         "upsert condition"
         on_conflict: crew_zone_on_conflict
     ): crew_zone
+    "insert data into the table: \"event_cancellation\""
+    insert_event_cancellation(
+        "the rows to be inserted"
+        objects: [event_cancellation_insert_input!]!,
+        "upsert condition"
+        on_conflict: event_cancellation_on_conflict
+    ): event_cancellation_mutation_response
+    "insert a single row into the table: \"event_cancellation\""
+    insert_event_cancellation_one(
+        "the row to be inserted"
+        object: event_cancellation_insert_input!,
+        "upsert condition"
+        on_conflict: event_cancellation_on_conflict
+    ): event_cancellation
     "insert data into the table: \"event_status\""
     insert_event_status(
         "the rows to be inserted"
@@ -3493,6 +3627,20 @@ type mutation_root {
         "upsert condition"
         on_conflict: event_status_on_conflict
     ): event_status
+    "insert data into the table: \"event_type\""
+    insert_event_type(
+        "the rows to be inserted"
+        objects: [event_type_insert_input!]!,
+        "upsert condition"
+        on_conflict: event_type_on_conflict
+    ): event_type_mutation_response
+    "insert a single row into the table: \"event_type\""
+    insert_event_type_one(
+        "the row to be inserted"
+        object: event_type_insert_input!,
+        "upsert condition"
+        on_conflict: event_type_on_conflict
+    ): event_type
     "insert data into the table: \"events\""
     insert_events(
         "the rows to be inserted"
@@ -3941,6 +4089,19 @@ type mutation_root {
         _set: crew_zone_set_input,
         pk_columns: crew_zone_pk_columns_input!
     ): crew_zone
+    "update data of the table: \"event_cancellation\""
+    update_event_cancellation(
+        "sets the columns of the filtered rows to the given values"
+        _set: event_cancellation_set_input,
+        "filter the rows which have to be updated"
+        where: event_cancellation_bool_exp!
+    ): event_cancellation_mutation_response
+    "update single row of the table: \"event_cancellation\""
+    update_event_cancellation_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: event_cancellation_set_input,
+        pk_columns: event_cancellation_pk_columns_input!
+    ): event_cancellation
     "update data of the table: \"event_status\""
     update_event_status(
         "sets the columns of the filtered rows to the given values"
@@ -3954,6 +4115,19 @@ type mutation_root {
         _set: event_status_set_input,
         pk_columns: event_status_pk_columns_input!
     ): event_status
+    "update data of the table: \"event_type\""
+    update_event_type(
+        "sets the columns of the filtered rows to the given values"
+        _set: event_type_set_input,
+        "filter the rows which have to be updated"
+        where: event_type_bool_exp!
+    ): event_type_mutation_response
+    "update single row of the table: \"event_type\""
+    update_event_type_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: event_type_set_input,
+        pk_columns: event_type_pk_columns_input!
+    ): event_type
     "update data of the table: \"events\""
     update_events(
         "increments the numeric columns with given value of the filtered values"
@@ -4223,10 +4397,9 @@ type mutation_root {
         _set: task_type_set_input,
         pk_columns: task_type_pk_columns_input!
     ): task_type
+    update_user(firstName: String, id: uuid, lastName: String, username: String): UserOutput
     "update data of the table: \"user_settings\""
     update_user_settings(
-        "increments the numeric columns with given value of the filtered values"
-        _inc: user_settings_inc_input,
         "sets the columns of the filtered rows to the given values"
         _set: user_settings_set_input,
         "filter the rows which have to be updated"
@@ -4234,8 +4407,6 @@ type mutation_root {
     ): user_settings_mutation_response
     "update single row of the table: \"user_settings\""
     update_user_settings_by_pk(
-        "increments the numeric columns with given value of the filtered values"
-        _inc: user_settings_inc_input,
         "sets the columns of the filtered rows to the given values"
         _set: user_settings_set_input,
         pk_columns: user_settings_pk_columns_input!
@@ -4253,6 +4424,7 @@ type mutation_root {
         _set: user_type_set_input,
         pk_columns: user_type_pk_columns_input!
     ): user_type
+    update_user_with_password(firstName: String, id: uuid, lastName: String, password: String, username: String): UserOutput
 }
 
 "columns and relationships of \"object\""
@@ -5273,6 +5445,34 @@ type query_root {
     crew_zone_by_pk(id: uuid!): crew_zone
     "archive"
     delete(userId: String): deleteQuery
+    "fetch data from the table: \"event_cancellation\""
+    event_cancellation(
+        "distinct select on columns"
+        distinct_on: [event_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_cancellation_order_by!],
+        "filter the rows returned"
+        where: event_cancellation_bool_exp
+    ): [event_cancellation!]!
+    "fetch aggregated fields from the table: \"event_cancellation\""
+    event_cancellation_aggregate(
+        "distinct select on columns"
+        distinct_on: [event_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_cancellation_order_by!],
+        "filter the rows returned"
+        where: event_cancellation_bool_exp
+    ): event_cancellation_aggregate!
+    "fetch data from the table: \"event_cancellation\" using primary key columns"
+    event_cancellation_by_pk(value: String!): event_cancellation
     "fetch data from the table: \"event_status\""
     event_status(
         "distinct select on columns"
@@ -5301,6 +5501,34 @@ type query_root {
     ): event_status_aggregate!
     "fetch data from the table: \"event_status\" using primary key columns"
     event_status_by_pk(value: String!): event_status
+    "fetch data from the table: \"event_type\""
+    event_type(
+        "distinct select on columns"
+        distinct_on: [event_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_type_order_by!],
+        "filter the rows returned"
+        where: event_type_bool_exp
+    ): [event_type!]!
+    "fetch aggregated fields from the table: \"event_type\""
+    event_type_aggregate(
+        "distinct select on columns"
+        distinct_on: [event_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_type_order_by!],
+        "filter the rows returned"
+        where: event_type_bool_exp
+    ): event_type_aggregate!
+    "fetch data from the table: \"event_type\" using primary key columns"
+    event_type_by_pk(value: String!): event_type
     "fetch data from the table: \"events\""
     events(
         "distinct select on columns"
@@ -5385,11 +5613,6 @@ type query_root {
     forgot(loginId: String!, sendForgotPasswordEmail: Boolean!): forgotOutput
     "get current user"
     getMe: UserOutput
-    "get user by user UUID from FusionAuth"
-    getUser(id: uuid!): UserOutput
-    getUsersBy(role: String): usersQuery
-    "Get users using QueryString that searches name, surname, email, username"
-    getUsersByQueryString(queryString: String!): usersQuery
     "fusion auth  login"
     login(password: String!, username: String!): LoginOutput
     "fetch data from the table: \"events\""
@@ -5781,6 +6004,8 @@ type query_root {
     updateRegister(roles: String!, userId: String!): updateOutput
     "files"
     uploadImages(authToken: String!, id: String!, image: String!): uploadQuery
+    "get user by user UUID from FusionAuth"
+    userById(id: uuid!): UserOutput
     "fetch data from the table: \"user_settings\""
     user_settings(
         "distinct select on columns"
@@ -5808,7 +6033,10 @@ type query_root {
         where: user_settings_bool_exp
     ): user_settings_aggregate!
     "fetch data from the table: \"user_settings\" using primary key columns"
-    user_settings_by_pk(id: Int!): user_settings
+    user_settings_by_pk(
+        "UUID matching FusionAuth user.id"
+        id: uuid!
+    ): user_settings
     "fetch data from the table: \"user_type\""
     user_type(
         "distinct select on columns"
@@ -5837,6 +6065,9 @@ type query_root {
     ): user_type_aggregate!
     "fetch data from the table: \"user_type\" using primary key columns"
     user_type_by_pk(value: String!): user_type
+    usersByRole(role: String): usersQuery
+    "Get users using QueryString that searches name, surname, email, username"
+    usersSearch(queryString: String!): usersQuery
 }
 
 "columns and relationships of \"reason_for_cancellation\""
@@ -6249,6 +6480,34 @@ type subscription_root {
     ): crew_zone_aggregate!
     "fetch data from the table: \"crew_zone\" using primary key columns"
     crew_zone_by_pk(id: uuid!): crew_zone
+    "fetch data from the table: \"event_cancellation\""
+    event_cancellation(
+        "distinct select on columns"
+        distinct_on: [event_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_cancellation_order_by!],
+        "filter the rows returned"
+        where: event_cancellation_bool_exp
+    ): [event_cancellation!]!
+    "fetch aggregated fields from the table: \"event_cancellation\""
+    event_cancellation_aggregate(
+        "distinct select on columns"
+        distinct_on: [event_cancellation_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_cancellation_order_by!],
+        "filter the rows returned"
+        where: event_cancellation_bool_exp
+    ): event_cancellation_aggregate!
+    "fetch data from the table: \"event_cancellation\" using primary key columns"
+    event_cancellation_by_pk(value: String!): event_cancellation
     "fetch data from the table: \"event_status\""
     event_status(
         "distinct select on columns"
@@ -6277,6 +6536,34 @@ type subscription_root {
     ): event_status_aggregate!
     "fetch data from the table: \"event_status\" using primary key columns"
     event_status_by_pk(value: String!): event_status
+    "fetch data from the table: \"event_type\""
+    event_type(
+        "distinct select on columns"
+        distinct_on: [event_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_type_order_by!],
+        "filter the rows returned"
+        where: event_type_bool_exp
+    ): [event_type!]!
+    "fetch aggregated fields from the table: \"event_type\""
+    event_type_aggregate(
+        "distinct select on columns"
+        distinct_on: [event_type_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [event_type_order_by!],
+        "filter the rows returned"
+        where: event_type_bool_exp
+    ): event_type_aggregate!
+    "fetch data from the table: \"event_type\" using primary key columns"
+    event_type_by_pk(value: String!): event_type
     "fetch data from the table: \"events\""
     events(
         "distinct select on columns"
@@ -6764,7 +7051,10 @@ type subscription_root {
         where: user_settings_bool_exp
     ): user_settings_aggregate!
     "fetch data from the table: \"user_settings\" using primary key columns"
-    user_settings_by_pk(id: Int!): user_settings
+    user_settings_by_pk(
+        "UUID matching FusionAuth user.id"
+        id: uuid!
+    ): user_settings
     "fetch data from the table: \"user_type\""
     user_type(
         "distinct select on columns"
@@ -6848,10 +7138,12 @@ type uploadQuery {
 "columns and relationships of \"user_settings\""
 type user_settings {
     created_at: timestamptz!
-    fusion_auth_id: uuid!
-    id: Int!
+    "UUID matching FusionAuth user.id"
+    id: uuid!
     imei: String
-    is_logged_in: Boolean
+    "A computed field, executes function \"is_user_online\""
+    is_online: Boolean
+    last_ping: timestamp
     updated_at: timestamptz!
 }
 
@@ -6863,39 +7155,28 @@ type user_settings_aggregate {
 
 "aggregate fields of \"user_settings\""
 type user_settings_aggregate_fields {
-    avg: user_settings_avg_fields
     count(columns: [user_settings_select_column!], distinct: Boolean): Int!
     max: user_settings_max_fields
     min: user_settings_min_fields
-    stddev: user_settings_stddev_fields
-    stddev_pop: user_settings_stddev_pop_fields
-    stddev_samp: user_settings_stddev_samp_fields
-    sum: user_settings_sum_fields
-    var_pop: user_settings_var_pop_fields
-    var_samp: user_settings_var_samp_fields
-    variance: user_settings_variance_fields
-}
-
-"aggregate avg on columns"
-type user_settings_avg_fields {
-    id: Float
 }
 
 "aggregate max on columns"
 type user_settings_max_fields {
     created_at: timestamptz
-    fusion_auth_id: uuid
-    id: Int
+    "UUID matching FusionAuth user.id"
+    id: uuid
     imei: String
+    last_ping: timestamp
     updated_at: timestamptz
 }
 
 "aggregate min on columns"
 type user_settings_min_fields {
     created_at: timestamptz
-    fusion_auth_id: uuid
-    id: Int
+    "UUID matching FusionAuth user.id"
+    id: uuid
     imei: String
+    last_ping: timestamp
     updated_at: timestamptz
 }
 
@@ -6905,41 +7186,6 @@ type user_settings_mutation_response {
     affected_rows: Int!
     "data from the rows affected by the mutation"
     returning: [user_settings!]!
-}
-
-"aggregate stddev on columns"
-type user_settings_stddev_fields {
-    id: Float
-}
-
-"aggregate stddev_pop on columns"
-type user_settings_stddev_pop_fields {
-    id: Float
-}
-
-"aggregate stddev_samp on columns"
-type user_settings_stddev_samp_fields {
-    id: Float
-}
-
-"aggregate sum on columns"
-type user_settings_sum_fields {
-    id: Int
-}
-
-"aggregate var_pop on columns"
-type user_settings_var_pop_fields {
-    id: Float
-}
-
-"aggregate var_samp on columns"
-type user_settings_var_samp_fields {
-    id: Float
-}
-
-"aggregate variance on columns"
-type user_settings_variance_fields {
-    id: Float
 }
 
 "columns and relationships of \"user_type\""
@@ -7592,6 +7838,28 @@ enum crew_zone_update_column {
     nodes
 }
 
+"unique or primary key constraints on table \"event_cancellation\""
+enum event_cancellation_constraint {
+    "unique or primary key constraint"
+    event_cancellation_pkey
+}
+
+"select columns of table \"event_cancellation\""
+enum event_cancellation_select_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
+"update columns of table \"event_cancellation\""
+enum event_cancellation_update_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
 "unique or primary key constraints on table \"event_status\""
 enum event_status_constraint {
     "unique or primary key constraint"
@@ -7618,6 +7886,28 @@ enum event_status_select_column {
 enum event_status_update_column {
     "column name"
     description
+    "column name"
+    value
+}
+
+"unique or primary key constraints on table \"event_type\""
+enum event_type_constraint {
+    "unique or primary key constraint"
+    event_type_pkey
+}
+
+"select columns of table \"event_type\""
+enum event_type_select_column {
+    "column name"
+    comment
+    "column name"
+    value
+}
+
+"update columns of table \"event_type\""
+enum event_type_update_column {
+    "column name"
+    comment
     "column name"
     value
 }
@@ -9484,8 +9774,6 @@ enum task_type_update_column {
 "unique or primary key constraints on table \"user_settings\""
 enum user_settings_constraint {
     "unique or primary key constraint"
-    user_settings_fusion_auth_id_key
-    "unique or primary key constraint"
     user_settings_imei_key
     "unique or primary key constraint"
     user_settings_pkey
@@ -9496,13 +9784,11 @@ enum user_settings_select_column {
     "column name"
     created_at
     "column name"
-    fusion_auth_id
-    "column name"
     id
     "column name"
     imei
     "column name"
-    is_logged_in
+    last_ping
     "column name"
     updated_at
 }
@@ -9512,13 +9798,11 @@ enum user_settings_update_column {
     "column name"
     created_at
     "column name"
-    fusion_auth_id
-    "column name"
     id
     "column name"
     imei
     "column name"
-    is_logged_in
+    last_ping
     "column name"
     updated_at
 }
@@ -10056,7 +10340,7 @@ input crew_bool_exp {
     _not: crew_bool_exp
     _or: [crew_bool_exp!]
     breaches: crew_breach_bool_exp
-    calendar: crew_calendar_bool_exp
+    calendars: crew_calendar_bool_exp
     driver_name: String_comparison_exp
     id: uuid_comparison_exp
     is_assigned_automatically: Boolean_comparison_exp
@@ -10134,6 +10418,33 @@ input crew_breach_set_input {
     start_time: timestamptz
 }
 
+"order by aggregate values of table \"crew_calendar\""
+input crew_calendar_aggregate_order_by {
+    avg: crew_calendar_avg_order_by
+    count: order_by
+    max: crew_calendar_max_order_by
+    min: crew_calendar_min_order_by
+    stddev: crew_calendar_stddev_order_by
+    stddev_pop: crew_calendar_stddev_pop_order_by
+    stddev_samp: crew_calendar_stddev_samp_order_by
+    sum: crew_calendar_sum_order_by
+    var_pop: crew_calendar_var_pop_order_by
+    var_samp: crew_calendar_var_samp_order_by
+    variance: crew_calendar_variance_order_by
+}
+
+"input type for inserting array relation for remote table \"crew_calendar\""
+input crew_calendar_arr_rel_insert_input {
+    data: [crew_calendar_insert_input!]!
+    "upsert condition"
+    on_conflict: crew_calendar_on_conflict
+}
+
+"order by avg() on columns of table \"crew_calendar\""
+input crew_calendar_avg_order_by {
+    week_day: order_by
+}
+
 "Boolean expression to filter rows from the table \"crew_calendar\". All fields are combined with a logical 'AND'."
 input crew_calendar_bool_exp {
     _and: [crew_calendar_bool_exp!]
@@ -10168,11 +10479,24 @@ input crew_calendar_insert_input {
     week_day: Int
 }
 
-"input type for inserting object relation for remote table \"crew_calendar\""
-input crew_calendar_obj_rel_insert_input {
-    data: crew_calendar_insert_input!
-    "upsert condition"
-    on_conflict: crew_calendar_on_conflict
+"order by max() on columns of table \"crew_calendar\""
+input crew_calendar_max_order_by {
+    created_at: order_by
+    crew_id: order_by
+    dislocation_zone_id: order_by
+    id: order_by
+    updated_at: order_by
+    week_day: order_by
+}
+
+"order by min() on columns of table \"crew_calendar\""
+input crew_calendar_min_order_by {
+    created_at: order_by
+    crew_id: order_by
+    dislocation_zone_id: order_by
+    id: order_by
+    updated_at: order_by
+    week_day: order_by
 }
 
 "on_conflict condition type for table \"crew_calendar\""
@@ -10210,6 +10534,41 @@ input crew_calendar_set_input {
     start_time: interval
     updated_at: timestamptz
     week_day: Int
+}
+
+"order by stddev() on columns of table \"crew_calendar\""
+input crew_calendar_stddev_order_by {
+    week_day: order_by
+}
+
+"order by stddev_pop() on columns of table \"crew_calendar\""
+input crew_calendar_stddev_pop_order_by {
+    week_day: order_by
+}
+
+"order by stddev_samp() on columns of table \"crew_calendar\""
+input crew_calendar_stddev_samp_order_by {
+    week_day: order_by
+}
+
+"order by sum() on columns of table \"crew_calendar\""
+input crew_calendar_sum_order_by {
+    week_day: order_by
+}
+
+"order by var_pop() on columns of table \"crew_calendar\""
+input crew_calendar_var_pop_order_by {
+    week_day: order_by
+}
+
+"order by var_samp() on columns of table \"crew_calendar\""
+input crew_calendar_var_samp_order_by {
+    week_day: order_by
+}
+
+"order by variance() on columns of table \"crew_calendar\""
+input crew_calendar_variance_order_by {
+    week_day: order_by
 }
 
 "Boolean expression to filter rows from the table \"crew_driver\". All fields are combined with a logical 'AND'."
@@ -10262,7 +10621,7 @@ input crew_driver_set_input {
 "input type for inserting data into table \"crew\""
 input crew_insert_input {
     breaches: crew_breach_obj_rel_insert_input
-    calendar: crew_calendar_obj_rel_insert_input
+    calendars: crew_calendar_arr_rel_insert_input
     driver_name: String
     id: uuid
     is_assigned_automatically: Boolean
@@ -10292,7 +10651,7 @@ input crew_on_conflict {
 "Ordering options when selecting data from \"crew\"."
 input crew_order_by {
     breaches: crew_breach_order_by
-    calendar: crew_calendar_order_by
+    calendars_aggregate: crew_calendar_aggregate_order_by
     driver_name: order_by
     id: order_by
     is_assigned_automatically: order_by
@@ -10670,6 +11029,45 @@ input datetime_MSSQL_comparison_exp {
     _nin: [datetime!]
 }
 
+"Boolean expression to filter rows from the table \"event_cancellation\". All fields are combined with a logical 'AND'."
+input event_cancellation_bool_exp {
+    _and: [event_cancellation_bool_exp!]
+    _not: event_cancellation_bool_exp
+    _or: [event_cancellation_bool_exp!]
+    comment: String_comparison_exp
+    value: String_comparison_exp
+}
+
+"input type for inserting data into table \"event_cancellation\""
+input event_cancellation_insert_input {
+    comment: String
+    value: String
+}
+
+"on_conflict condition type for table \"event_cancellation\""
+input event_cancellation_on_conflict {
+    constraint: event_cancellation_constraint!
+    update_columns: [event_cancellation_update_column!]! = []
+    where: event_cancellation_bool_exp
+}
+
+"Ordering options when selecting data from \"event_cancellation\"."
+input event_cancellation_order_by {
+    comment: order_by
+    value: order_by
+}
+
+"primary key columns input for table: event_cancellation"
+input event_cancellation_pk_columns_input {
+    value: String!
+}
+
+"input type for updating data in table \"event_cancellation\""
+input event_cancellation_set_input {
+    comment: String
+    value: String
+}
+
 "Boolean expression to filter rows from the table \"event_status\". All fields are combined with a logical 'AND'."
 input event_status_bool_exp {
     _and: [event_status_bool_exp!]
@@ -10715,6 +11113,45 @@ input event_status_pk_columns_input {
 "input type for updating data in table \"event_status\""
 input event_status_set_input {
     description: String
+    value: String
+}
+
+"Boolean expression to filter rows from the table \"event_type\". All fields are combined with a logical 'AND'."
+input event_type_bool_exp {
+    _and: [event_type_bool_exp!]
+    _not: event_type_bool_exp
+    _or: [event_type_bool_exp!]
+    comment: String_comparison_exp
+    value: String_comparison_exp
+}
+
+"input type for inserting data into table \"event_type\""
+input event_type_insert_input {
+    comment: String
+    value: String
+}
+
+"on_conflict condition type for table \"event_type\""
+input event_type_on_conflict {
+    constraint: event_type_constraint!
+    update_columns: [event_type_update_column!]! = []
+    where: event_type_bool_exp
+}
+
+"Ordering options when selecting data from \"event_type\"."
+input event_type_order_by {
+    comment: order_by
+    value: order_by
+}
+
+"primary key columns input for table: event_type"
+input event_type_pk_columns_input {
+    value: String!
+}
+
+"input type for updating data in table \"event_type\""
+input event_type_set_input {
+    comment: String
     value: String
 }
 
@@ -12850,6 +13287,19 @@ input timestamp_MSSQL_comparison_exp {
     _nin: [timestamp!]
 }
 
+"Boolean expression to compare columns of type \"timestamp\". All fields are combined with logical 'AND'."
+input timestamp_comparison_exp {
+    _eq: timestamp
+    _gt: timestamp
+    _gte: timestamp
+    _in: [timestamp!]
+    _is_null: Boolean
+    _lt: timestamp
+    _lte: timestamp
+    _neq: timestamp
+    _nin: [timestamp!]
+}
+
 "Boolean expression to compare columns of type \"timestamptz\". All fields are combined with logical 'AND'."
 input timestamptz_comparison_exp {
     _eq: timestamptz
@@ -12882,25 +13332,20 @@ input user_settings_bool_exp {
     _not: user_settings_bool_exp
     _or: [user_settings_bool_exp!]
     created_at: timestamptz_comparison_exp
-    fusion_auth_id: uuid_comparison_exp
-    id: Int_comparison_exp
+    id: uuid_comparison_exp
     imei: String_comparison_exp
-    is_logged_in: Boolean_comparison_exp
+    is_online: Boolean_comparison_exp
+    last_ping: timestamp_comparison_exp
     updated_at: timestamptz_comparison_exp
-}
-
-"input type for incrementing numeric columns in table \"user_settings\""
-input user_settings_inc_input {
-    id: Int
 }
 
 "input type for inserting data into table \"user_settings\""
 input user_settings_insert_input {
     created_at: timestamptz
-    fusion_auth_id: uuid
-    id: Int
+    "UUID matching FusionAuth user.id"
+    id: uuid
     imei: String
-    is_logged_in: Boolean
+    last_ping: timestamp
     updated_at: timestamptz
 }
 
@@ -12914,25 +13359,26 @@ input user_settings_on_conflict {
 "Ordering options when selecting data from \"user_settings\"."
 input user_settings_order_by {
     created_at: order_by
-    fusion_auth_id: order_by
     id: order_by
     imei: order_by
-    is_logged_in: order_by
+    is_online: order_by
+    last_ping: order_by
     updated_at: order_by
 }
 
 "primary key columns input for table: user_settings"
 input user_settings_pk_columns_input {
-    id: Int!
+    "UUID matching FusionAuth user.id"
+    id: uuid!
 }
 
 "input type for updating data in table \"user_settings\""
 input user_settings_set_input {
     created_at: timestamptz
-    fusion_auth_id: uuid
-    id: Int
+    "UUID matching FusionAuth user.id"
+    id: uuid
     imei: String
-    is_logged_in: Boolean
+    last_ping: timestamp
     updated_at: timestamptz
 }
 

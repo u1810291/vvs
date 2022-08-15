@@ -30,7 +30,9 @@ const DislocationEditLayout = () => {
       .option(null)
   );
 
-  const send = () => isFunction(saveRef.current) && saveRef.current();
+  const send = () => {
+    isFunction(saveRef.current) && saveRef.current();
+  };
 
   return (
     <SideBarLayout>
