@@ -11,7 +11,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
 
-const CrewEditLayout = () => {
+const CrewCreateLayout = () => {
   const saveRef = useRef(identity);
   const removeRef = useRef(identity);
   const {id} = useParams();
@@ -53,4 +53,4 @@ const CrewEditLayout = () => {
   );
 };
 
-export default CrewEditLayout;
+export default CrewCreateLayout;

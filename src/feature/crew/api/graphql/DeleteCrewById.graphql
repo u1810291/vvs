@@ -1,0 +1,5 @@
+mutation DeleteCrewById($id: uuid!) {
+    delete_crew_by_pk(id: $id) {
+        id
+    }
+}

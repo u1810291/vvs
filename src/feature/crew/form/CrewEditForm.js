@@ -17,9 +17,10 @@ import {useCrew, useCrewById, useCrewZones} from 'feature/crew/api/crewEditApi';
 
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {mapProps, pipe} from 'crocks/helpers';
-import {getProp} from 'crocks';
+import {getProp, isFunction} from 'crocks';
+import Button from '../../../components/Button';
 
-const CrewEditLayout = ({saveRef}) => {
+const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
   const {data: crewZones} = useCrewZones();
   const {t} = useTranslation('crew', {keyPrefix: 'edit'});
@@ -40,12 +41,17 @@ const CrewEditLayout = ({saveRef}) => {
     id: crewId,
     saveRef,
     setForm,
+    removeRef,
     formResult: result,
     successRedirectPath: CrewListRoute.props.path,
   });
 
   const zonePath = getZoneItems(crew);
   const zoneCoordinates = getFlatNodes(crew);
+
+  const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
+
+  console.log(ctrl('calendars').value)
 
   useEffect(() => {
     pipe(
@@ -56,7 +62,7 @@ const CrewEditLayout = ({saveRef}) => {
 
   return (
     <section className={'m-6 h-full md:flex md:flex-row'}>
-      <div className={'md:w-7/12 md:mr-6 xl:w-9/12'}>
+      <div className={'md:w-7/12 md:mr-6 xl:w-9/12 flex flex-col'}>
         <div className={'lg:flex 2xl:w-2/3'}>
           <InputGroup
             className={'mt-6 lg:mt-0 lg:w-3/12'}
@@ -91,17 +97,17 @@ const CrewEditLayout = ({saveRef}) => {
             {...ctrl('is_assigned_while_in_breaks')}
           />
         </div>
-        <CalendarTimeline
-          title={t('title.dislocation_zone_schedule')}
-          actionButtonTitle={t('button.add_zone')}
-          columnsTimeInterval={4}
-          crewId={crewId}
-          crewZones={crewZones || []}
-          {...ctrl('calendars')}
-        />
-        <button className={'mt-6 py-4 w-full rounded-sm text-center bg-brick text-white lg:w-52 lg:mt-4'}>
-          {t('button.delete')}
-        </button>
+        <div className={'flex-1'}>
+          <CalendarTimeline
+            title={t('title.dislocation_zone_schedule')}
+            actionButtonTitle={t('button.add_zone')}
+            columnsTimeInterval={4}
+            crewId={crewId}
+            crewZones={crewZones || []}
+            {...ctrl('calendars')}
+          />
+        </div>
+        <Button.Dxl className={'flex-0 self-start'} onClick={remove}>{t('button.delete')}</Button.Dxl>
       </div>
       <div className={'mt-6 flex flex-col w-full aspect-square lg:h-full md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:-mt-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
         <Card.Sm className={'shadow-none'}>

@@ -33,8 +33,6 @@ import {DriverListRoute} from 'feature/driver/routes';
 import {DislocationListRoute} from 'feature/dislocation/routes';
 import {useCrews} from '../api/crewEditApi';
 
-
-
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
   Component,
   headerText: t(key),
@@ -55,7 +53,7 @@ const ne = not(isEmpty);
 const CrewListLayout = withPreparedProps(Listing, () => {
   const {api} = useAuth();
   const {t: tb} = useTranslation('crew', {keyPrefix: 'breadcrumbs'});
-  const {t: tp} = useTranslation('crew');
+  const {t: th} = useTranslation('crew', {keyPrefix: 'list.header'});
   const {t} = useTranslation('crew', {keyPrefix: 'list.column'});
   const nav = useNavigate();
 
@@ -85,9 +83,9 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     tableColumns,
     filtersData
   );
-  
+
   const list = useCrews({filters: queryParams})
-  
+
   useEffect(() => {
     list.mutate();
   }, [queryParams]);
@@ -100,7 +98,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
         <Breadcrumbs.Item><span className='font-semibold'>{tb`crews`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>
           <Button.NoBg onClick={toggleFilter}>
-            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            {defaultFilter.id ? defaultFilter.name : tb('all_data') }
             <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
           </Button.NoBg>
         </Breadcrumbs.Item>
@@ -108,14 +106,14 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     ),
     buttons: (
       <>
-        <Button onClick={() => nav(CrewCreateRoute.props.path)}>{tp('create')}</Button>
+        <Button.Pxl onClick={() => nav(CrewCreateRoute.props.path)}>{th('button.create')}</Button.Pxl>
       </>
     ),
     innerlinks: (
       <Innerlinks>
-        <Innerlinks.Item isCurrent={true} >{tp('Crews')}</Innerlinks.Item>
-        <Innerlinks.Item to={DriverListRoute.props.path}>{tp('Drivers')}</Innerlinks.Item>
-        <Innerlinks.Item to={DislocationListRoute.props.path}>{tp('Dislocation zones')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true} >{th('links.crews')}</Innerlinks.Item>
+        <Innerlinks.Item to={DriverListRoute.props.path}>{th('links.drivers')}</Innerlinks.Item>
+        <Innerlinks.Item to={DislocationListRoute.props.path}>{th('links.dislocation_zones')}</Innerlinks.Item>
       </Innerlinks>
     ),
     filters,
