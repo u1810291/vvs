@@ -7,6 +7,16 @@
     "all_data": "All Data"
   },
   "list": {
+    "header": {
+      "button": {
+        "create": "Create crew"
+      },
+      "links": {
+        "crews": "Crews",
+        "drivers": "Drivers",
+        "dislocation_zones": "Dislocation zones"
+      }
+    },
     "column": {
       "id": "ID",
       "name": "Name",

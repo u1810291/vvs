@@ -7,6 +7,16 @@
     "all_data": "Visi duomenys"
   },
   "list": {
+    "header": {
+      "button": {
+        "create": "Sukurti ekipažą"
+      },
+      "links": {
+        "crews": "Ekipažai",
+        "drivers": "Vairuotojai",
+        "dislocation_zones": "Dislokacijos zonos"
+      }
+    },
     "column": {
       "id": "ID",
       "name": "Pavadinimas",
