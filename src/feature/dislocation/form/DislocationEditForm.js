@@ -49,7 +49,7 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
     successRedirectPath: DislocationListRoute.props.path,
   });
 
-  const remove = () => isFunction(removeRef.current) && removeRef.current([{dislocationZoneId}]);
+  const remove = () => isFunction(removeRef.current) && removeRef.current([{id: dislocationZoneId}]);
 
   return (
     <section className={'m-6 h-full flex md:flex-col lg:flex-row'}>

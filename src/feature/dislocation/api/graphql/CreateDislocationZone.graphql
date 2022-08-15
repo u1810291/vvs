@@ -1,7 +1,9 @@
 mutation CreateDislocationZone($name: String!, $nodes: json!) {
     insert_crew_zone(objects: {name: $name, nodes: $nodes}) {
-        id
-        name
-        nodes
+        returning {
+            id
+            name
+            nodes
+        }
     }
 }
