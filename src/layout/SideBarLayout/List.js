@@ -1,19 +1,21 @@
-import Routes from '../../Routes';
-import {Fragment, useMemo} from 'react'
+import React, {Fragment, useMemo, forwardRef} from 'react'
+
 import {NavLink} from 'react-router-dom';
-import {forwardRef} from 'react';
-import {isEmpty, isTrue, not} from 'crocks';
-import {renderChildren} from '@s-e/frontend/react';
 import {useTranslation} from 'react-i18next';
+
+import Routes from 'Routes';
+
+import {renderChildren} from '@s-e/frontend/react';
+
+import {isEmpty, isTrue, not} from 'crocks';
 
 const parseRoutes = (t, component) => renderChildren((c, index) => {
   const isHidden = isTrue(c?.props?.isHidden);
   const hasChildren = not(isEmpty, c?.props?.children);
   const isRoute = c?.props?.path && c?.props?.element;
 
+  // TODO: Improve logic to prevent rendering empty items
   if (isHidden && !hasChildren) return null;
-
-  // TODO: Adjust media queries for mobile
 
   return (
     <Fragment key={String(`${c?.props?.path}-${index}-${c?.props?.children?.length}`)}>
@@ -41,6 +43,7 @@ const List = forwardRef((props, ref) => {
   const {t} = useTranslation();
   const routes = useMemo(() => parseRoutes(t, Routes), []);
   return (
+    // TODO: Adjust media queries for mobile
     <div className='flex w-full my-8 overflow-auto w-1/6 h-1/4 xl:h-3/4' ref={ref} {...props}>
       <nav className='w-full flex flex-col sm:flex-wrap'>
         {routes}
