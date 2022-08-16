@@ -8,14 +8,20 @@
   },
   "list": {
     "header": {
-      "button": {
-        "create": "Create crew"
-      },
-      "links": {
-        "crews": "Crews",
-        "drivers": "Drivers",
-        "dislocation_zones": "Dislocation zones"
-      }
+      "create": "Create crew",
+      "crews": "Crews",
+      "drivers": "Drivers",
+      "dislocation_zones": "Dislocation zones"
+    },
+    "status": {
+      "YES": "Yes",
+      "NO": "No",
+      "READY": "Ready",
+      "BREAK": "Break",
+      "BUSSY": "Bussy",
+      "OFFLINE": "Offline",
+      "DRIVE_BACK": "Returning",
+      "-": "-"
     },
     "column": {
       "id": "ID",

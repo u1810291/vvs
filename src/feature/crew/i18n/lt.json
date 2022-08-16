@@ -8,14 +8,20 @@
   },
   "list": {
     "header": {
-      "button": {
-        "create": "Sukurti ekipažą"
-      },
-      "links": {
-        "crews": "Ekipažai",
-        "drivers": "Vairuotojai",
-        "dislocation_zones": "Dislokacijos zonos"
-      }
+      "create": "Sukurti ekipažą",
+      "crews": "Ekipažai",
+      "drivers": "Vairuotojai",
+      "dislocation_zones": "Dislokacijos zonos"
+    },
+    "status": {
+      "YES": "Taip",
+      "NO": "Ne",
+      "READY": "Laisvas",
+      "BREAK": "Pertrauka",
+      "BUSSY": "Užimtas",
+      "OFFLINE": "Neprisijungęs",
+      "DRIVE_BACK": "Grįžta",
+      "-": "-"
     },
     "column": {
       "id": "ID",
