@@ -18,7 +18,6 @@ const PermissionRoute = (
   <>
     {PermissionCreateRoute}
     {PermissionEditRoute}
-    {PermissionListRoute}
   </>
 );
 

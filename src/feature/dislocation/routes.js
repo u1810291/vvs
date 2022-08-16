@@ -14,7 +14,6 @@ export const DislocationEditRoute = getExactHiddenRoute('dislocation', 'menu.edi
 
 const DislocationRoute = (
   <>
-    {DislocationListRoute}
     {DislocationCreateRoute}
     {DislocationEditRoute}
   </>

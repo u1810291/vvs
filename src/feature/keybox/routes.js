@@ -17,7 +17,6 @@ const KeyBoxRoute = (
   <>
     {KeyBoxCreateRoute}
     {KeyBoxEditRoute}
-    {KeyBoxListRoute}
   </>
 );
 

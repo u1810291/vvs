@@ -2,20 +2,25 @@ import {lazy} from 'react';
 import i18next from 'i18next';
 import {getExactRoute} from 'util/react';
 
+import {TaskListRoute} from 'feature/task/routes';
+import {BreachListRoute} from 'feature/breach/routes';
+import {PermissionListRoute} from 'feature/permission/routes';
+
 import EN from './i18n/en.json';
 import LT from './i18n/lt.json';
-
-export const ROOT_PAGE = '/';
 
 i18next.addResourceBundle('en', 'dashboard', EN);
 i18next.addResourceBundle('lt', 'dashboard', LT);
 
-const DashboardRoute = getExactRoute(
-  'dashboard',
-  'menu.main',
-  ROOT_PAGE,
-  lazy(() => import('./layout/DashboardLayout')),
-  null
+export const DashboardEditRoute = getExactRoute('dashboard', 'menu.main', '/', lazy(() => import('./layout/DashboardLayout')), null);
+
+const DashboardRoute = (
+  <>
+    {DashboardEditRoute}
+    {TaskListRoute}
+    {PermissionListRoute}
+    {BreachListRoute}
+  </>
 );
 
 export default DashboardRoute;

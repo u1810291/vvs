@@ -15,7 +15,6 @@ export const HelpListRoute = getExactRoute('help', 'menu.list', '/help', lazy(()
 const HelpRoute = (
   <>
     {HelpEditRoute}
-    {HelpListRoute}
   </>
 );
 
