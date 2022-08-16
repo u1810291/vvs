@@ -13,6 +13,7 @@ const parseRoutes = (t, component) => renderChildren((c, index) => {
   const isHidden = isTrue(c?.props?.isHidden);
   const hasChildren = not(isEmpty, c?.props?.children);
   const isRoute = c?.props?.path && c?.props?.element;
+  const isHiddenChildren = isTrue(c?.props?.children?.props?.isHidden);
 
   // TODO: Improve logic to prevent rendering empty items
   if (isHidden && !hasChildren) return null;
@@ -29,7 +30,7 @@ const parseRoutes = (t, component) => renderChildren((c, index) => {
           </NavLink>
         </div>
       )}
-      {hasChildren && (
+      {hasChildren && !isHiddenChildren && (
         <div className='flex items-start'>
           {parseRoutes(t, c?.props?.children[0])}
           <div className='flex flex-col flex-1 mb-4'>{parseRoutes(t, c?.props?.children)}</div>
