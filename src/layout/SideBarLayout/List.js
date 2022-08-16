@@ -45,7 +45,7 @@ const List = forwardRef((props, ref) => {
   const routes = useMemo(() => parseRoutes(t, Routes), []);
   return (
     // TODO: Adjust media queries for mobile
-    <div className='flex w-full my-8 overflow-auto w-1/4 h-1/4 xl:h-3/4' ref={ref} {...props}>
+    <div className='flex w-full my-8 overflow-auto w-1/6 h-1/4 xl:h-3/4' ref={ref} {...props}>
       <nav className='w-full flex flex-col sm:flex-wrap'>
         {routes}
       </nav>
