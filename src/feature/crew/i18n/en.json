@@ -26,6 +26,7 @@
     "column": {
       "id": "ID",
       "name": "Name",
+      "abbreviation": "Abbreviation",
       "status": "Status",
       "driver_name": "Driver name",
       "phone_number": "Phone Number",
