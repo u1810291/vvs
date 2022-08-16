@@ -48,6 +48,7 @@ export const useCrew = createUseOne({
     mapProps({
       name: mapToNullableString,
       driver_name: mapToNullableString,
+      abbreviation: mapToNullableString,
       phone_number: mapToNullableString,
       to_call_after: mapToNullableString,
       status: mapToNullableString,
