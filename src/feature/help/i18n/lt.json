@@ -1,10 +1,10 @@
 {
   "menu": {
-    "list": "Helps"
+    "list": "Pagalba"
   },
   "breadcrumbs": {
-    "helps": "Helps",
-    "allData": "Visi duomenys"
+    "helps": "Pagalba",
+    "all_data": "Visi duomenys"
   },
   "list": {
     "column": {

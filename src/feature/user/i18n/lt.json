@@ -1,10 +1,10 @@
 {
   "menu": {
-    "list": "Users"
+    "list": "Vartotojai"
   },
   "breadcrumbs": {
-    "users": "Users",
-    "allData": "Visi duomenys"
+    "users": "Vartotojai",
+    "all_data": "Visi duomenys"
   },
   "list": {
     "column": {

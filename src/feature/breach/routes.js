@@ -15,7 +15,6 @@ export const BreachListRoute = getExactRoute('breach', 'menu.list', '/breach', l
 const BreachRoute = (
   <>
     {BreachEditRoute}
-    {BreachListRoute}
   </>
 );
 

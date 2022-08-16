@@ -2,6 +2,9 @@ import {lazy} from 'react';
 import i18next from 'i18next';
 import {getExactHiddenRoute, getExactRoute} from 'util/react';
 
+import {UserListRoute} from 'feature/user/routes';
+import {TaskCancellationListRoute} from 'feature/classifier/routes';
+
 import EN from './i18n/en.json';
 import LT from './i18n/lt.json';
 
@@ -14,8 +17,10 @@ export const SettingListRoute = getExactRoute('setting', 'menu.list', '/setting'
 
 const SettingRoute = (
   <>
-    {SettingEditRoute}
     {SettingListRoute}
+    {SettingEditRoute}
+    {TaskCancellationListRoute}
+    {UserListRoute}
   </>
 );
 

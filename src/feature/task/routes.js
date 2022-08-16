@@ -15,7 +15,6 @@ export const TaskListRoute = getExactRoute('task', 'menu.list', '/task', lazy(()
 const TaskRoute = (
   <>
     {TaskEditRoute}
-    {TaskListRoute}
   </>
 );
 
