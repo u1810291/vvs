@@ -69,6 +69,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const nullToStr = useCallback((e) => !e ? '-' : e, [tc]);
 
   const tableColumns = [
+    // TODO: Add dislocation zones list as a column from response
     c('id', constant(true), nullToStr, false),
     c('name', constant(true), nullToStr, true),
     c('abbreviation', constant(true), nullToStr, true),
