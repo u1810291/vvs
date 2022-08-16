@@ -6,6 +6,7 @@ query Crews($where: crew_bool_exp) {
     is_assigned_while_in_breaks
     name
     phone_number
+    abbreviation
     status
     to_call_after
     zone {
