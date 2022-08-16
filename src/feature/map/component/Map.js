@@ -23,16 +23,11 @@ const Map = memo(({id, zoom, coordinates, path, children}) => {
   if (!isLoaded) return null;
   useEffect(() => {
     if (googleMap && bounds) {
-      // TODO: Fix polygon shapes
       if (coordinates?.length) map(coordinate => bounds.extend(coordinate), coordinates);
       else if (!coordinates?.length) bounds.extend(LITHUANIA_COORDINATES);
+      googleMap.setZoom(zoom || 7);
       setBounds(new google.maps.LatLngBounds());
       googleMap.setCenter({lat: bounds.getCenter().lat(), lng: bounds.getCenter().lng()});
-      const listener = new google.maps.event.addListener(googleMap, 'idle',() => {
-        if (zoom) googleMap.setZoom(zoom)
-        else if (!zoom && googleMap.getZoom() > 7) googleMap.setZoom(7);
-        new google.maps.event.removeListener(listener);
-      });
     }
   }, [googleMap, coordinates, zoom]);
 
@@ -48,7 +43,7 @@ const Map = memo(({id, zoom, coordinates, path, children}) => {
       </GoogleMap>
     </div>
   );
-}, compareMemo(['id'], ['zoom'], ['coordinates'], ['path']));
+}, compareMemo(['id'], ['coordinates'], ['path']));
 
 Map.displayName = 'Map';
 
