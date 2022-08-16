@@ -1,10 +1,10 @@
 {
   "menu": {
-    "list": "Settings"
+    "list": "Nustatymai"
   },
   "breadcrumbs": {
-    "settings": "Settings",
-    "allData": "Visi duomenys"
+    "settings": "Nustatymai",
+    "all_data": "Visi duomenys"
   },
   "list": {
     "column": {
