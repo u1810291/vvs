@@ -26,6 +26,7 @@
     "column": {
       "id": "ID",
       "name": "Pavadinimas",
+      "abbreviation": "Trumpinys",
       "status": "Būsena",
       "driver_name": "Vairuotojo vardas",
       "phone_number": "Telefono numeris",
