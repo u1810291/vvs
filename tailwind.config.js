@@ -19,6 +19,7 @@ module.exports = {
         'mantis': '#92C46B',
         'brick': '#C32A2F',
         'brick-hover': '#AF252A',
+        'burgundy': '#C32A2F',
         'tango': '#F37E16',
         'forest': '#337F2D',
         'steel': '#5979B3',

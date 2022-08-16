@@ -1,37 +1,34 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
-import Listing from '../../../layout/ListingLayout';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import withPreparedProps from '../../../hoc/withPreparedProps';
-
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
-
-import {
-  chain,
-  curry,
-  getProp,
-  getPropOr,
-  identity,
-  isArray,
-  isEmpty,
-  map,
-  Maybe,
-  not,
-  objOf,
-  pipe,
-  safe
-} from 'crocks';
-import {alt} from 'crocks/pointfree';
-import {useFilter} from 'hook/useFilter';
-import {CrewCreateRoute, CrewEditRoute} from '../routes';
-import Button from 'components/Button';
 import {FilterIcon} from '@heroicons/react/solid';
+
+import {useAuth} from 'context/auth';
+
+import {useFilter} from 'hook/useFilter';
+
+import Listing from 'layout/ListingLayout';
+
+import withPreparedProps from 'hoc/withPreparedProps';
+
+import Button from 'components/Button';
 import Innerlinks from 'components/Innerlinks';
+import Breadcrumbs from 'components/Breadcrumbs';
+
+import {useCrews} from 'feature/crew/api/crewEditApi';
 import {DriverListRoute} from 'feature/driver/routes';
 import {DislocationListRoute} from 'feature/dislocation/routes';
-import {useCrews} from '../api/crewEditApi';
+import {CrewCreateRoute, CrewEditRoute} from 'feature/crew/routes';
+import DynamicStatus from 'feature/crew/component/CrewStatus';
+
+import {Maybe, safe, getProp} from 'crocks';
+import {constant} from 'crocks/combinators';
+import {alt, chain, map, option} from 'crocks/pointfree';
+import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
+import {isArray, isBoolean, isObject} from 'crocks/predicates';
+
+const {Just} = Maybe;
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
   Component,
@@ -44,39 +41,71 @@ const getColumn = curry((t, Component, key, pred, mapper, status) => ({
     map(mapper),
     map(objOf('children')),
     map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
-  )(item),
+    alt(Just(item))
+  )(item)
 }));
-
-const ne = not(isEmpty);
 
 const CrewListLayout = withPreparedProps(Listing, () => {
   const {api} = useAuth();
+  const nav = useNavigate();
   const {t: tb} = useTranslation('crew', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('crew', {keyPrefix: 'list.header'});
-  const {t} = useTranslation('crew', {keyPrefix: 'list.column'});
-  const nav = useNavigate();
+  const {t: ts} = useTranslation('crew', {keyPrefix: 'list.status'});
+  const {t: tc} = useTranslation('crew', {keyPrefix: 'list.column'});
 
-  const c = useMemo(() => getColumn(t, props => (
+  const c = useMemo(() => getColumn(tc, props => (
     <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
-  )), [t]);
+  )), [tc]);
+
+  const cs = useMemo(() => getColumn(tc, props => (
+    <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
+      <DynamicStatus status={props?.status}/>
+    </Link>
+  )), [tc]);
+
+  const boolToStr = useCallback((e) => e ? ts`YES` : ts`NO`, [tc]);
+  const nullToStr = useCallback((e) => !e ? '-' : e, [tc]);
 
   const tableColumns = [
-    c('id', ne, identity, false),
-    c('name', ne, identity, true),
-    c('status', ne, identity, true),
-    c('driver_name', ne, identity, true),
-    c('phone_number', ne, identity, true),
-    c('is_assigned_automatically', ne, identity, true)
+    c('id', constant(true), nullToStr, false),
+    c('name', constant(true), nullToStr, true),
+    cs('status', constant(true), nullToStr, true),
+    c('driver_name', constant(true), nullToStr, true),
+    c('phone_number', constant(true), nullToStr, true),
+    c('is_assigned_automatically', isBoolean, boolToStr, true)
   ];
 
   const filtersData = [
-    {key: 'driver_name', label: 'Driver name', filter: 'text'},
-    {key: 'phone_number', label: 'Phone name', filter: 'text'},
-    {key: 'status', label: 'Status', filter: 'multiselect', values: ['BREAK', 'BUSY', 'OFFLINE', 'READY']},
-  ]
+    {
+      key: 'name',
+      label: tc('name'),
+      filter: 'text'
+    },
+    {
+      key: 'status',
+      label: tc('status'),
+      filter: 'multiselect',
+      values: ['BREAK', 'BUSY', 'OFFLINE', 'READY']
+    },
+    {
+      key: 'driver_name',
+      label: tc('driver_name'),
+      filter: 'text'
+    },
+    {
+      key: 'phone_number',
+      label: tc('phone_number'),
+      filter: 'text'
+    },
+    {
+      key: 'is_assigned_automatically',
+      label: tc('is_assigned_automatically'),
+      filter: 'multiselect',
+      values: ['YES', 'NO']
+    }
+  ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'crew',
@@ -84,36 +113,34 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     filtersData
   );
 
-  const list = useCrews({filters: queryParams})
+  const list = useCrews({filters: queryParams});
 
   useEffect(() => {
     list.mutate();
   }, [queryParams]);
 
   return {
-    list: safe(isArray, list?.data).option([]),
+    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`crews`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item><span className='font-semibold'>{tb('crews')}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>
           <Button.NoBg onClick={toggleFilter}>
             {defaultFilter.id ? defaultFilter.name : tb('all_data') }
-            <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+            <FilterIcon className='w-6 h-6 ml-2 inline-block cursor-pointer text-geyser' />
           </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (
-      <>
-        <Button.Pxl onClick={() => nav(CrewCreateRoute.props.path)}>{th('button.create')}</Button.Pxl>
-      </>
+      <Button.Pxl onClick={() => nav(CrewCreateRoute.props.path)}>{th('create')}</Button.Pxl>
     ),
     innerlinks: (
       <Innerlinks>
-        <Innerlinks.Item isCurrent={true} >{th('links.crews')}</Innerlinks.Item>
-        <Innerlinks.Item to={DriverListRoute.props.path}>{th('links.drivers')}</Innerlinks.Item>
-        <Innerlinks.Item to={DislocationListRoute.props.path}>{th('links.dislocation_zones')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true} >{th('crews')}</Innerlinks.Item>
+        <Innerlinks.Item to={DriverListRoute.props.path}>{th('drivers')}</Innerlinks.Item>
+        <Innerlinks.Item to={DislocationListRoute.props.path}>{th('dislocation_zones')}</Innerlinks.Item>
       </Innerlinks>
     ),
     filters,
