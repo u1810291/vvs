@@ -82,7 +82,7 @@ const Event = ({
           className={'px-1 my-1 flex flex-col absolute justify-center rounded-md text-sm bg-slate-300 opacity-70 select-none'}
           onClick={setOpen}
         >
-          <span className={`text-gray-900 truncate ${twTitle}`}>{dislocationZone.key}</span>
+          <span className={`text-gray-900 truncate ${twTitle}`}>{dislocationZone?.key}</span>
           <div className={'flex text-ellipsis overflow-hidden'}>
             <span className={`text-gray-600 truncate ${twTime}`}>{format(timeFrom, 'HH:mm')}</span>
             <span className={'mx-1'}> - </span>
