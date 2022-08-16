@@ -1,10 +1,10 @@
 {
   "menu": {
-    "list": "Classifiers"
+    "list": "Klasifikatoriai"
   },
   "breadcrumbs": {
-    "breaches": "Classifiers",
-    "allData": "All Data"
+    "classifiers": "Klasifikatoriai",
+    "all_data": "Visi duomenys"
   },
   "cornerBar": {
     "add": "Add",

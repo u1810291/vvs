@@ -15,7 +15,6 @@ export const ClientListRoute = getExactRoute('client', 'menu.list', '/client', l
 const ClientRoute = (
   <>
     {ClientEditRoute}
-    {ClientListRoute}
   </>
 );
 

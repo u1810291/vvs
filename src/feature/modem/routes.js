@@ -15,7 +15,6 @@ export const ModemListRoute = getExactRoute('modem', 'menu.list', '/modem', lazy
 const ModemRoute = (
   <>
     {ModemEditRoute}
-    {ModemListRoute}
   </>
 );
 

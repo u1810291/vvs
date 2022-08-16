@@ -15,7 +15,6 @@ export const DriverListRoute = getExactRoute('driver', 'menu.list', '/driver', l
 const DriverRoute = (
   <>
     {DriverEditRoute}
-    {DriverListRoute}
   </>
 );
 

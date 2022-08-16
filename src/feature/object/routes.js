@@ -2,6 +2,9 @@ import {lazy} from 'react';
 import i18next from 'i18next';
 import {getExactHiddenRoute, getExactRoute} from 'util/react';
 
+import {ModemListRoute} from 'feature/modem/routes';
+import {KeyBoxListRoute} from 'feature/keybox/routes';
+
 import EN from './i18n/en.json';
 import LT from './i18n/lt.json';
 
@@ -17,6 +20,8 @@ const ObjectRoute = (
     {ObjectListRoute}
     {ObjectEditRoute}
     {ObjectCreateRoute}
+    {ModemListRoute}
+    {KeyBoxListRoute}
   </>
 );
 

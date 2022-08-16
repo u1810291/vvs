@@ -27,7 +27,6 @@ export const PermissionRequestListRoute = getExactHiddenRoute('classifier', 'men
 
 const ClassifierRoute = (
   <>
-    {TaskCancellationListRoute}
     {TaskCancellationCreateRoute}
     {TaskCancellationEditRoute}
 

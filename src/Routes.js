@@ -17,34 +17,29 @@ import DislocationFeature from 'feature/dislocation/routes';
 import SettingFeature from 'feature/setting/routes';
 import UserFeature from 'feature/user/routes';
 import ClassifierFeature from 'feature/classifier/routes';
+import SelfServiceRoute from 'feature/self-service/routes';
 
 import NotFoundLayout from './layout/NotFoundLayout';
 
 const Routes = (
   <>
     {LoginFeature}
-    
     {DashboardFeature}
     {TaskFeature}
     {PermissionFeature}
     {BreachFeature}
-    
     {CrewFeature}
     {DriverFeature}
     {DislocationFeature}
-
     {ObjectFeature}
     {ModemFeature}
     {KeyBoxFeature}
-    
     {ClientFeature}
     {HelpFeature}
-
+    {SelfServiceRoute}
     {SettingFeature}
     {ClassifierFeature}
     {UserFeature}
-    
-    
     <Route isHidden path='*' element={<NotFoundLayout />} />
   </>
 );
