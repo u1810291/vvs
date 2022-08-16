@@ -39,6 +39,7 @@ export const useCrew = createUseOne({
       'name',
       'status',
       'driver_name',
+      'abbreviation',
       'phone_number',
       'to_call_after',
       'is_assigned_automatically',

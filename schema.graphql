@@ -480,6 +480,7 @@ type corresppersons_variance_fields {
 
 "main data regarding crew unit"
 type crew {
+    abbreviation: String
     "An object relationship"
     breaches: crew_breach
     "An array relationship"
@@ -787,6 +788,7 @@ type crew_driver_mutation_response {
 
 "aggregate max on columns"
 type crew_max_fields {
+    abbreviation: String
     driver_name: String
     id: uuid
     name: String
@@ -796,6 +798,7 @@ type crew_max_fields {
 
 "aggregate min on columns"
 type crew_min_fields {
+    abbreviation: String
     driver_name: String
     id: uuid
     name: String
@@ -7742,6 +7745,8 @@ enum crew_request_update_column {
 "select columns of table \"crew\""
 enum crew_select_column {
     "column name"
+    abbreviation
+    "column name"
     driver_name
     "column name"
     id
@@ -7790,6 +7795,8 @@ enum crew_status_update_column {
 
 "update columns of table \"crew\""
 enum crew_update_column {
+    "column name"
+    abbreviation
     "column name"
     driver_name
     "column name"
@@ -10339,6 +10346,7 @@ input crew_bool_exp {
     _and: [crew_bool_exp!]
     _not: crew_bool_exp
     _or: [crew_bool_exp!]
+    abbreviation: String_comparison_exp
     breaches: crew_breach_bool_exp
     calendars: crew_calendar_bool_exp
     driver_name: String_comparison_exp
@@ -10620,6 +10628,7 @@ input crew_driver_set_input {
 
 "input type for inserting data into table \"crew\""
 input crew_insert_input {
+    abbreviation: String
     breaches: crew_breach_obj_rel_insert_input
     calendars: crew_calendar_arr_rel_insert_input
     driver_name: String
@@ -10650,6 +10659,7 @@ input crew_on_conflict {
 
 "Ordering options when selecting data from \"crew\"."
 input crew_order_by {
+    abbreviation: order_by
     breaches: crew_breach_order_by
     calendars_aggregate: crew_calendar_aggregate_order_by
     driver_name: order_by
@@ -10867,6 +10877,7 @@ input crew_request_status_set_input {
 
 "input type for updating data in table \"crew\""
 input crew_set_input {
+    abbreviation: String
     driver_name: String
     id: uuid
     is_assigned_automatically: Boolean

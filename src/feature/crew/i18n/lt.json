@@ -45,6 +45,7 @@
       "automatic_assignment": "Automatinis priskyrimas"
     },
     "field": {
+      "name": "Pavadinimas",
       "device_id": "Įrenginio ID",
       "phone_number": "Telefonas",
       "abbreviation": "Trumpas pav.",

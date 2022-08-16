@@ -45,6 +45,7 @@
       "automatic_assignment": "Automatic assignment"
     },
     "field": {
+      "name": "Name",
       "device_id": "Device Id",
       "phone_number": "Phone number",
       "abbreviation": "Abbreviation",

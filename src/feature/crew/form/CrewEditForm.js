@@ -29,6 +29,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validator: () => true}),
+    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: () => true}),
     phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
     to_call_after: FORM_FIELD.TEXT({label: t`field.to_call_after`, validator: () => true}),
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
@@ -49,9 +50,11 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const zonePath = getZoneItems(crew);
   const zoneCoordinates = getFlatNodes(crew);
 
-  const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
+  const {name} = ctrl('name').value;
+  const {status} = ctrl('status').value;
+  const {driver_name} = ctrl('driver_name').value;
 
-  console.log(ctrl('calendars').value)
+  const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
 
   useEffect(() => {
     pipe(
@@ -65,12 +68,17 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
       <div className={'md:w-7/12 md:mr-6 xl:w-9/12 flex flex-col'}>
         <div className={'lg:flex 2xl:w-2/3'}>
           <InputGroup
-            className={'mt-6 lg:mt-0 lg:w-3/12'}
+            className={'mt-6 lg:mt-0 lg:w-5/12'}
             isRequired={true}
             {...ctrl('name')}
           />
           <InputGroup
-            className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-4/12'}
+            className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-2/12'}
+            isRequired={true}
+            {...ctrl('abbreviation')}
+          />
+          <InputGroup
+            className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-5/12'}
             {...ctrl('device_id')}
           />
         </div>
@@ -109,20 +117,20 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
         </div>
         <Button.Dxl className={'flex-0 self-start'} onClick={remove}>{t('button.delete')}</Button.Dxl>
       </div>
-      <div className={'mt-6 flex flex-col w-full aspect-square lg:h-full md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:-mt-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
+      <div className={'mt-6 flex flex-col w-full aspect-square lg:h-full md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:h-auto lg:-mt-6 lg:-mb-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
         <Card.Sm className={'shadow-none'}>
           <div className='flex flex-row items-center w-full'>
             <DynamicIcon
               className={'mr-4'}
-              status={ctrl('status').value}
-              name={ctrl('name').value}
+              status={status}
+              name={name}
             />
             <div className={'flex flex-col'}>
               <p className='text-bluewood'>
-                {ctrl('name').value}
+                {name}
               </p>
               <p className='text-regent'>
-                {ctrl('driver_name').value}
+                {driver_name}
               </p>
             </div>
           </div>
