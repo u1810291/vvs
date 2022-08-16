@@ -21,8 +21,8 @@ const CrewRoute = (
     {CrewListRoute}
     {CrewEditRoute}
     {CrewCreateRoute}
-    {DislocationListRoute}
     {DriverListRoute}
+    {DislocationListRoute}
   </>
 );
 
