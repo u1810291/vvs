@@ -50,9 +50,9 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const zonePath = getZoneItems(crew);
   const zoneCoordinates = getFlatNodes(crew);
 
-  const {name} = ctrl('name').value;
-  const {status} = ctrl('status').value;
-  const {driver_name} = ctrl('driver_name').value;
+  const {value: name} = ctrl('name');
+  const {value: status} = ctrl('status');
+  const {value: driver_name} = ctrl('driver_name');
 
   const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
 
