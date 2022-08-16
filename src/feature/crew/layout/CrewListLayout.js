@@ -71,9 +71,8 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const tableColumns = [
     c('id', constant(true), nullToStr, false),
     c('name', constant(true), nullToStr, true),
+    c('abbreviation', constant(true), nullToStr, true),
     cs('status', constant(true), nullToStr, true),
-    c('driver_name', constant(true), nullToStr, true),
-    c('phone_number', constant(true), nullToStr, true),
     c('is_assigned_automatically', isBoolean, boolToStr, true)
   ];
 
@@ -84,20 +83,15 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       filter: 'text'
     },
     {
+      key: 'abbreviation',
+      label: tc('abbreviation'),
+      filter: 'text'
+    },
+    {
       key: 'status',
       label: tc('status'),
       filter: 'multiselect',
       values: ['BREAK', 'BUSY', 'OFFLINE', 'READY']
-    },
-    {
-      key: 'driver_name',
-      label: tc('driver_name'),
-      filter: 'text'
-    },
-    {
-      key: 'phone_number',
-      label: tc('phone_number'),
-      filter: 'text'
     },
     {
       key: 'is_assigned_automatically',
