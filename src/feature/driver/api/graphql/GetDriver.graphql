@@ -1,0 +1,10 @@
+query GetDriver ($id: uuid!) {
+  userById (id: $id) {
+    user {
+      firstName
+      id
+      lastName
+      username
+    }
+  }
+}

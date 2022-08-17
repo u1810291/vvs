@@ -51,6 +51,25 @@ export const mapToNullableNumber = pipe(
   option(null),
 );
 
+/**
+ * @param {object} props
+ * @param {string} props.graphQl
+ * @param {(auth: import('context/auth').AuthContextValue) => (data) => import('crocks/Async').default} props.asyncMapFromApi
+ */
+export const createUseListWithAuth = ({graphQl, asyncMapFromApi}) => () => {
+  const auth = useAuth();
+
+  return useAsyncSwr([graphQl], (query) => (
+    auth.apiQuery(query)
+    .chain(asyncMapFromApi(auth))
+  ));
+}
+
+/**
+ * @param {object} props
+ * @param {string} props.graphQl
+ * @param {(data) => import('crocks/Async').default} props.asyncMapFromApi
+ */
 export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
   const {apiQuery} = useAuth();
 
@@ -69,6 +88,15 @@ export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) =>
   ));
 }
 
+/**
+ * @param {Object} props
+ * @param {String} props.getGraphQl - GraphQL Query to RETRIEVE the single entity.
+ * @param {String} props.createGraphql - GraphQL Query to CREATE the single entity.
+ * @param {String} props.updateGraphQl - GraphQL Query to UPDATE the single entity.
+ * @param {String} props.deleteGraphQl - GraphQL Query to DELETE the single entity.
+ * @param {(data: any) => import('crocks/Async').default} [props.asyncMapFromApi = Async.Resolved]  - Async function that has oppurtunity to modify the data just before using it from API.
+ * @param {(data: any) => import('crocks/Async').default} [props.asyncMapToApi = Async.Resolved]  - Async function that has oppurtunity to modify the data just before sending it to API.
+ */
 export const createUseOne = ({
   getGraphQl,
   createGraphql,

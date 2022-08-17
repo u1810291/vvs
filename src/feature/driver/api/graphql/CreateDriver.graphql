@@ -1,0 +1,13 @@
+mutation RegisterDriver (
+  $birthDate: String = null,
+  $username: String!,
+  $firstName: String = "",
+  $lastName: String = "",
+  $mobilePhone: String = null,
+  $password: String!,
+  $role: String = "crew"
+  ) {
+  register(birthDate: $birthDate, email: $username, firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, password: $password, role: $role) {
+    token
+  }
+}

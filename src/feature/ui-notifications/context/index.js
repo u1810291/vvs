@@ -56,6 +56,9 @@ const NotificationContextProvider = ({children}) => {
   );
 }
 
+/**
+ * @type {() => {notify: (children: import('react').ReactNode, params: {timout?: Number}) => void}}
+ */
 const useNotification = () => {
   const context = useContext(NotificationContext);
 

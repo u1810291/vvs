@@ -1,105 +1,73 @@
-import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
-
-import Listing from '../../../layout/ListingLayout';
-import Breadcrumbs from '../../../components/Breadcrumbs';
+import Breadcrumbs, {RouteAsBreadcrumb} from '../../../components/Breadcrumbs';
+import ListingLayout from '../../../layout/ListingLayout';
+import React, {useMemo} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
-
+import DriverRoute, {DriverCreateRoute, DriverEditRoute} from '../routes';
 import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
-import useAsync from '../../../hook/useAsync';
-
-import {
-  chain,
-  curry,
-  getProp,
-  getPropOr,
-  identity,
-  isArray,
-  isEmpty,
-  map,
-  Maybe,
-  not,
-  objOf,
-  pipe,
-  safe
-} from 'crocks';
+import {getPropOr, identity, pipe, safe, and, hasProp, map, isTruthy, propSatisfies, pick} from 'crocks';
+import useDrivers from '../api/useDrivers';
 import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-import Innerlinks from 'components/Innerlinks';
-import {DriverEditRoute} from '../routes';
-import {CrewListRoute} from 'feature/crew/routes';
-import {DislocationListRoute} from 'feature/dislocation/routes';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
+import Button from 'components/Button';
 
+const DriverListLayout = withPreparedProps(ListingLayout, () => {
+  const api = useDrivers();
+  const {t} = useTranslation('driver', {keyPrefix: 'list'});
+  const nav = useNavigate();
 
+  const c = useMemo(() => (prop, mapper = identity) => ({
+    key: prop,
+    headerText: t(prop),
+    itemToProps: item => pipe(
+      safe(and(hasProp('id'), propSatisfies(prop, isTruthy))),
+      map(item => ({id: item?.id, children: mapper(item?.[prop])})),
+      alt(pipe(
+        safe(hasProp('id')),
+        map(pick(['id'])),
+      )(item)),
+    )(item),
+    Component: ({id, children, fallback = '—'}) => {
+      if (!id && !children) return fallback;
+      if (!id) return children || fallback;
+      return (
+        <Link to={generatePath(DriverEditRoute.props.path, {id})}>
+          {children || fallback}
+        </Link>
+      )
+    },
+  }), [t]);
 
-
-
-const getColumn = curry((t, Component, key, pred, mapper) => ({
-  Component,
-  headerText: t(key),
-  key,
-  itemToProps: item => pipe(
-    getProp(key),
-    chain(safe(pred)),
-    map(mapper),
-    map(objOf('children')),
-    map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
-  )(item),
-}));
-
-const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
-
-const DriverListLayout = withPreparedProps(Listing, props => {
-  const {apiQuery} = useAuth();
-  const {t: tp} = useTranslation('driver');
-  const {t: tb} = useTranslation('driver', {keyPrefix: 'breadcrumbs'});
-  const {t} = useTranslation('driver', {keyPrefix: 'list.column'});
-  // TODO: Prepare 'Driver' data in Hasura to be fetched
-  const [state, fork] = useAsync(chain(maybeToAsync('"driver" prop is expected in the response', getProp('driver')),
-    apiQuery(
-      `
-        query {
-          driver {
-
-          }
-        }
-      `
-    ))
-  );
-
-  const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(DriverEditRoute.props.path, {id: props?.id})}>
-      {props?.children}
-    </Link>
-  )), [t]);
-
-  useEffect(() => fork(), []);
+  const boolCol = useMemo(() => pipe(String, t), [t]);
 
   return {
-    list: safe(isArray, state.data).option([]),
+    list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
+    buttons: <Button onClick={() => nav(DriverCreateRoute.props.path)}>{t`create`}</Button>,
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`drivers`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
+        <RouteAsBreadcrumb route={DriverRoute}/>
+        <Breadcrumbs.Item>
+          {useTranslation('driver', {keyPrefix: 'breadcrumbs'}).t`allData`}
+        </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
-    innerlinks: (
-      <Innerlinks>
-        <Innerlinks.Item to={CrewListRoute.props.path}>{tp('Crews')}</Innerlinks.Item>
-        <Innerlinks.Item isCurrent={true} >{tp('Drivers')}</Innerlinks.Item>
-        <Innerlinks.Item to={DislocationListRoute.props.path}>{tp('Dislocation zones')}</Innerlinks.Item>
-      </Innerlinks>
-    ),
 
-    // TODO: Adjust column names regarding response data
+    /**
+     * @type {Array<import('../../../layout/ListingLayout/index.js').TableColumnComponent>}
+     */
     tableColumns: [
-      c('id', ne, identity),
-      c('full_name', ne, identity),
-      c('status', ne, identity),
+      c('id', identity),
+      c('firstName'),
+      c('lastName'),
+      c('username'),
+      c('verified', boolCol),
+      c('mobilePhone'),
+      c('middleName'),
+      c('email'),
+      c('birthDate'),
+      c('is_online', pipe(
+        boolCol
+      )),
     ],
   }
 });

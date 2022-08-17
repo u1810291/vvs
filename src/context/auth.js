@@ -18,6 +18,14 @@ import {
   tap,
 } from 'crocks';
 
+/**
+ * @typedef {object} AuthContextValue
+ * @property {bool} isAuthorized: bool,
+ * @property {(newState: object) => void} update
+ * @property {(variables: object) => (query: string) => Async} api
+ * @property {(query: string) => Async} apiQuery
+ */
+
 const AuthContext = createContext();
 const isValid = and(isString, not(isEmpty));
 
@@ -81,12 +89,8 @@ const AuthContextProvider = ({children}) => {
 };
 
 /**
- * @type {() => ({
- * isAuthorized: bool,
- * update: (newState: object) => void,
- * api: (variables: object) => (query: string) => Async,
- * apiQuery: (query: string) => Async,
- * })}
+ * @type {() => AuthContextValue}
+ * @throws {Error}
  */
 const useAuth = () => {
   const context = useContext(AuthContext);
