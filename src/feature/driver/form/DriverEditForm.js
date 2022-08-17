@@ -1,5 +1,5 @@
 import InputGroup from 'components/atom/input/InputGroup';
-import {isEmpty, not, or} from 'crocks';
+import {constant, isEmpty, or} from 'crocks';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
@@ -11,9 +11,9 @@ const DriverEditForm = ({saveRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {ctrl, result, setForm} = useResultForm({
-    firstName: FORM_FIELD.TEXT({label: t`firstName`, validator: not(isEmpty)}),
-    lastName: FORM_FIELD.TEXT({label: t`lastName`, validator: not(isEmpty)}),
-    username: FORM_FIELD.TEXT({label: t`username`, validator: not(isEmpty)}),
+    firstName: FORM_FIELD.TEXT({label: t`firstName`, validator: constant(true)}),
+    lastName: FORM_FIELD.TEXT({label: t`lastName`, validator: constant(true)}),
+    username: FORM_FIELD.TEXT({label: t`username`, validator: constant(true)}),
     password: FORM_FIELD.TEXT({
       label: t`password`,
       validator: or(isEmpty, lengthGt(5)),
