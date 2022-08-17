@@ -2,16 +2,18 @@ import Breadcrumbs, {RouteAsBreadcrumb} from '../../../components/Breadcrumbs';
 import ListingLayout from '../../../layout/ListingLayout';
 import React, {useMemo} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
-import DriverRoute, {DriverEditRoute} from '../routes';
+import DriverRoute, {DriverCreateRoute, DriverEditRoute} from '../routes';
 import {useTranslation} from 'react-i18next';
 import {getPropOr, identity, pipe, safe, and, hasProp, map, isTruthy, propSatisfies, pick} from 'crocks';
 import useDrivers from '../api/useDrivers';
 import {alt} from 'crocks/pointfree';
-import {generatePath, Link} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
+import Button from 'components/Button';
 
 const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const api = useDrivers();
   const {t} = useTranslation('driver', {keyPrefix: 'list'});
+  const nav = useNavigate();
 
   const c = useMemo(() => (prop, mapper = identity) => ({
     key: prop,
@@ -40,6 +42,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   return {
     list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
+    buttons: <Button onClick={() => nav(DriverCreateRoute.props.path)}>{t`create`}</Button>,
     breadcrumbs: (
       <Breadcrumbs>
         <RouteAsBreadcrumb route={DriverRoute}/>
