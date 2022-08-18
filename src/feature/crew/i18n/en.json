@@ -28,9 +28,9 @@
       "name": "Name",
       "abbreviation": "Abbreviation",
       "status": "Status",
+      "zone": "Dislocation zone",
       "driver_name": "Driver name",
       "phone_number": "Phone Number",
-      "dislocation_zone": "Dislocation zone",
       "is_assigned_automatically": "Assigned automatically"
     }
   },
