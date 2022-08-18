@@ -4,7 +4,7 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 
 export const useKeyBoxes = createUseList({
-  graphQl: raw('./graphql/KeyBoxes.graphql'),
+  graphQl: raw('./graphql/GetKeyBoxes.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "object_key_box" expected but not found.', getProp('object_key_box')),
   ),

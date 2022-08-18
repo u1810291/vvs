@@ -9,7 +9,7 @@ import withPreparedProps from 'hoc/withPreparedProps';
 import {useTranslation} from 'react-i18next';
 
 import {
-  chain,
+  // chain,
   curry,
   getProp,
   getPropOr,
@@ -20,7 +20,8 @@ import {
   not,
   objOf,
   pipe,
-  safe
+  // safe,
+  getPath,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
@@ -33,14 +34,14 @@ import Innerlinks from 'components/Innerlinks';
 
 
 
-const getColumn = curry((t, Component, key, pred, mapper) => ({
+const getColumn = curry((t, Component, key, mapper) => ({
   Component,
   headerText: t(key),
   key,
   itemToProps: item => pipe(
-    getProp(key),
-    chain(safe(pred)),
-    map(mapper),
+    // getProp(key),
+    // chain(safe(pred)),
+    mapper,
     map(objOf('children')),
     map(a => ({...item, ...a})),
     alt(Maybe.Just(item)),
@@ -85,8 +86,8 @@ const KeyBoxListLayout = withPreparedProps(Listing, props => {
     ),
     tableColumns: [
       // c('id', ne, identity),
-      c('set_name', ne, titleCase),
-      c('crew_id', ne, ts),
+      c('set_name', pipe(getProp('set_name')), titleCase),
+      c('crew_name', pipe(getPath(['crew', 'name'])), ts),
     ],
   }
 });

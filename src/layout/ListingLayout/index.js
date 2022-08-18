@@ -2,7 +2,7 @@ import Index from '../SideBarLayout';
 import Nullable from 'components/atom/Nullable';
 import SearchInputGroup from '../../components/atom/input/InputGroup/SearchInputGroup';
 import Table from '../../components/Table';
-import {asciifyLT} from '@s-e/frontend/transformer/string';
+// import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {componentToString} from '@s-e/frontend/react';
 import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
@@ -22,7 +22,20 @@ import {
   option,
   pipe,
   safe,
+  // tap,
 } from 'crocks';
+
+
+
+const asciifyLT2 = string => string
+  .replace(/a/gi, '(a|ą)')
+  .replace(/c/gi, '(c|č)')
+  .replace(/e/gi, '(e|ė|ę)')
+  .replace(/i/gi, '(i|į)')
+  .replace(/s/gi, '(s|š)')
+  .replace(/u/gi, '(u|ų|ū)')
+  .replace(/z/gi, '(z|ž)');
+
 
 /**
  * @typedef {Object} TableColumnComponent
@@ -69,7 +82,8 @@ const Listing = ({
       .some(c => pipe(
         safe(not(isEmpty)),
         map(String),
-        map(c => c.match(new RegExp(asciifyLT(query.replace(/\W+/gm, '')), 'gi'))),
+        // map(c => c.match(new RegExp(asciifyLT(query.replace(/\W+/gm, '')), 'gi'))),
+        map(c => c.match(new RegExp(asciifyLT2(query.replace(/[^\w\d -]/gm, '')), 'gi'))),
         map(Boolean),
         option(false),
       )(c)),
