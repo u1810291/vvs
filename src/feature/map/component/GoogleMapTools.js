@@ -56,7 +56,8 @@ const GoogleMapTools = ({
   }, []);
 
   const onPolygonComplete = useCallback(polygon => {
-    setRawPolygons([...rawPolygons, polygon]);
+    rawPolygons.map(polygon => polygon.setMap(null));
+    setRawPolygons([polygon]);
     polygon.setEditable(true);
     deleteVertexHandler(polygon);
   }, [rawPolygons]);
@@ -94,7 +95,7 @@ const GoogleMapTools = ({
   }, [drawingManager]);
 
   useEffect(() => {
-    if (!isArrayEqual(...value, getCoordinates(rawPolygons))) {
+    if (!isArrayEqual(getCoordinates(rawPolygons))) {
       setValue(getCoordinates(rawPolygons));
     }
   }, [rawPolygons]);
@@ -114,7 +115,7 @@ const GoogleMapTools = ({
         });
       });
       if (!isArrayEqual(...value, getCoordinates(rawPolygons))) {
-        setRawPolygons([...rawPolygons, ...polygonInstances]);
+        setRawPolygons([...polygonInstances]);
         polygonInstances.map(polygon => polygon.setMap(googleMap));
         polygonInstances.map(polygon => deleteVertexHandler(polygon));
       }
