@@ -1,5 +1,5 @@
-query Objects($where: object_bool_exp) {
-  object(where: $where) {
+query ObjectById ($id: uuid!) {
+  object_by_pk(id: $id) {
     address
     city
     contract_no
@@ -7,6 +7,11 @@ query Objects($where: object_bool_exp) {
     description
     id
     is_atm
+    is_crew_autoasigned
+    is_call_after_inspection
+    feedback_from
+    feedback_until
+    feedback_sla_time_in_min
     latitude
     longitude
     name

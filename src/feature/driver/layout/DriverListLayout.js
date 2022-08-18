@@ -9,15 +9,18 @@ import useDrivers from '../api/useDrivers';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import Button from 'components/Button';
+import {useFilter} from 'hook/useFilter';
+import {FilterIcon} from '@heroicons/react/solid';
 
 const DriverListLayout = withPreparedProps(ListingLayout, () => {
-  const api = useDrivers();
   const {t} = useTranslation('driver', {keyPrefix: 'list'});
+  const {t: tb} = useTranslation('driver', {keyPrefix: 'breadcrumbs'});
   const nav = useNavigate();
 
-  const c = useMemo(() => (prop, mapper = identity) => ({
+  const c = useMemo(() => (prop, mapper = identity, status) => ({
     key: prop,
     headerText: t(prop),
+    status,
     itemToProps: item => pipe(
       safe(and(hasProp('id'), propSatisfies(prop, isTruthy))),
       map(item => ({id: item?.id, children: mapper(item?.[prop])})),
@@ -39,6 +42,33 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
 
   const boolCol = useMemo(() => pipe(String, t), [t]);
 
+  const tableColumns = [
+    c('id', identity, false),
+    c('firstName', identity, true),
+    c('lastName', identity, true),
+    c('username', identity, false),
+    c('verified', boolCol, false),
+    c('mobilePhone', identity, false),
+    c('middleName', identity, false),
+    c('email', identity, false),
+    c('birthDate', identity, false),
+    c('is_online', boolCol, true),
+  ];
+
+  const filtersData = [
+    {key: 'firstName', label: 'firstName', filter: 'text'},
+    {key: 'lastName', label: 'lastName', filter: 'text'},
+    {key: 'is_online', label: 'Status', filter: 'select', values: ['deactivated', 'offline', 'online']},
+  ];
+  
+  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+    'driver',
+    tableColumns,
+    filtersData
+  );
+
+  const api = useDrivers({filters: queryParams});
+
   return {
     list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
@@ -46,29 +76,22 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     breadcrumbs: (
       <Breadcrumbs>
         <RouteAsBreadcrumb route={DriverRoute}/>
+        <Breadcrumbs.Item><span className='font-semibold'>{tb`drivers`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>
-          {useTranslation('driver', {keyPrefix: 'breadcrumbs'}).t`allData`}
+          <Button.NoBg onClick={toggleFilter}>
+            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+          </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
+    filters,
+    columns,
 
     /**
      * @type {Array<import('../../../layout/ListingLayout/index.js').TableColumnComponent>}
      */
-    tableColumns: [
-      c('id', identity),
-      c('firstName'),
-      c('lastName'),
-      c('username'),
-      c('verified', boolCol),
-      c('mobilePhone'),
-      c('middleName'),
-      c('email'),
-      c('birthDate'),
-      c('is_online', pipe(
-        boolCol
-      )),
-    ],
+    tableColumns,
   }
 });
 

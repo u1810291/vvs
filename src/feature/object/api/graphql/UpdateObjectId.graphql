@@ -1,0 +1,38 @@
+mutation UpdateObject(
+  $id: uuid!,
+  $address: String = null,
+  $city: city_enum = VILNIUS,
+  $contract_no: String = null
+  $description: String = null
+  $contract_object_no: String = null,
+  $is_atm: Boolean = false,  
+  $latitude: numeric = null,
+  $longitude: numeric = null,
+  $name: String = null,
+  $navision_id: Int = null,
+  $phone: String = null,
+  $is_crew_autoasigned: Boolean = false,
+  $is_call_after_inspection: Boolean = false,
+  $feedback_from: interval = null,
+  $feedback_until: interval = null,
+  $feedback_sla_time_in_min: Int = null,
+) {
+  update_object_by_pk(_set: {address: $address, city: $city, contract_no: $contract_no, contract_object_no: $contract_object_no, description: $description, is_atm: $is_atm, is_crew_autoasigned: $is_crew_autoasigned, is_call_after_inspection: $is_call_after_inspection, latitude: $latitude, longitude: $longitude, name: $name, navision_id: $navision_id, phone: $phone, feedback_from: $feedback_from, feedback_until: $feedback_until, feedback_sla_time_in_min: $feedback_sla_time_in_min}, pk_columns: {id: $id}) {
+    address
+    city
+    contract_no
+    contract_object_no
+    description
+    is_atm
+    is_crew_autoasigned
+    is_call_after_inspection
+    feedback_from
+    feedback_until
+    feedback_sla_time_in_min
+    latitude
+    longitude
+    name
+    navision_id
+    phone
+  }
+}

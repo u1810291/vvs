@@ -37,7 +37,7 @@ const PermissionEditForm = ({saveRef}) => {
   const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
   const requests = useCrewRequest(true);
   const statuses = useCrewRequestStatus(true);
-  const crews = useCrews();
+  const crews = useCrews({filters: {}});
 
   console.log({requests});
 

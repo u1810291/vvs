@@ -30,6 +30,12 @@ const ObjectEditForm = ({saveRef}) => {
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     navision_id: FORM_FIELD.TEXT({label: t`field.navisionId`, validator: () => true}),
     provider_id: FORM_FIELD.TEXT({label: t`field.providerId`, validator: () => true}),
+    is_atm: FORM_FIELD.BOOL({label: t`field.is_atm`, validator: () => true}),
+    is_crew_autoasigned: FORM_FIELD.BOOL({label: t`field.is_crew_autoasigned`, validator: () => true}),
+    is_call_after_inspection: FORM_FIELD.BOOL({label: t`field.is_call_after_inspection`, validator: () => true}),
+    feedback_from: FORM_FIELD.TEXT({initial: '00:00', label: t`field.feedback_from`, validator: () => true}),
+    feedback_until: FORM_FIELD.TEXT({initial: '23:59', label: t`field.feedback_until`, validator: () => true}),
+    feedback_sla_time_in_min: FORM_FIELD.TEXT({initial: '15', label: t`field.feedback_sla_time_in_min`, validator: () => true}),
   });
 
   useObject({
@@ -44,29 +50,48 @@ const ObjectEditForm = ({saveRef}) => {
 
   return (
     <section className={'flex'}>
-      <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'}>
-        <div className={'lg:inline-block lg:w-1/2 space-y-4'}>
-          <InputGroup className={''} isRequired={true} {...ctrl('name')} />
-          <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
-            <InputGroup className={'lg:w-2/3 xl:w-3/4'} {...ctrl('address')} />
-            <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('city')}>
-              {map(
-                value => (
-                  <SelectBox.Option key={value} value={value}>
-                    {titleCase(value)}
-                  </SelectBox.Option>
-                ),
-                cities
-              )}
-            </SelectBox>
-          </div>
+      <div className='flex flex-col flex-grow'>
+        <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 '}>
+          <div className={'lg:inline-block lg:w-1/2 space-y-4'}>
+            <InputGroup className={''} isRequired={true} {...ctrl('name')} />
+            <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
+              <InputGroup className={'lg:w-2/3 xl:w-3/4'} {...ctrl('address')} />
+              <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('city')}>
+                {map(
+                  value => (
+                    <SelectBox.Option key={value} value={value}>
+                      {titleCase(value)}
+                    </SelectBox.Option>
+                  ),
+                  cities
+                )}
+              </SelectBox>
+            </div>
 
-          <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
-            <InputGroup className={'lg:w-1/2'} {...ctrl('longitude')} />
-            <InputGroup className={'lg:w-1/2'} {...ctrl('latitude')} />
+            <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
+              <InputGroup className={'lg:w-1/2'} {...ctrl('longitude')} />
+              <InputGroup className={'lg:w-1/2'} {...ctrl('latitude')} />
+            </div>
+          </div>
+          <TextAreaInputGroup inputClassName='min-h-[12.75rem]' className='w-full lg:w-1/2 h-full' {...ctrl('description')} rows={9}/>
+        </div>
+
+        <div className='p-6 flex flex-col space-y-8'>
+          <h2 className='font-bold text-xl'>{t('feedback_settings')}</h2>
+
+          <div className='flex flex-row w-full space-x-10'>
+            <CheckBox className='items-end' {...ctrl('is_crew_autoasigned')}/>
+            <InputGroup  {...ctrl('feedback_from')}/>
+            <InputGroup {...ctrl('feedback_until')}/>
+            <InputGroup {...ctrl('feedback_sla_time_in_min')} type='number'/>
+          </div>
+          <div>
+            <CheckBox className='items-end' {...ctrl('is_call_after_inspection')} />
+          </div>
+          <div>
+            <CheckBox className='items-end' {...ctrl('is_atm')}/>
           </div>
         </div>
-        <TextAreaInputGroup inputClassName='min-h-[12.75rem]' className='w-full lg:w-1/2 h-full' {...ctrl('description')} rows={9}/>
       </div>
 
       <aside className={'border-l border-gray-border'}>

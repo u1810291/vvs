@@ -27,7 +27,7 @@ const PermissionEditLayout = () => {
   };
 
   const breadcrumb = (
-    getProp('name', data)
+    getProp('crew_id', data)
     .alt(getProp('id', data))
     .option(null)
   );

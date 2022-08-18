@@ -84,7 +84,6 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`dislocations`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (

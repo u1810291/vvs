@@ -1,11 +1,11 @@
-import {createUseEnum, createUseList, createUseOne} from 'api/buildApiHook';
+import {createUseEnum, createUseWhereList, createUseOne} from 'api/buildApiHook';
 import {pipe, getProp, pick, Async} from 'crocks';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 
 
-export const usePermissions = createUseList({
-  graphQl: raw('./graphql/Permissions.graphql'),
+export const usePermissions = createUseWhereList({
+  graphQl: raw('./graphql/PermissionsWhere.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "crew_permission" expected but not found.', getProp('crew_permission')),
   ),
