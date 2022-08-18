@@ -43,7 +43,7 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
   const {t} = useTranslation('key', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('key', {keyPrefix: 'edit.field'});
   
-  const crews = useCrews();
+  const crews = useCrews({filters: {}});
 
   const {ctrl, result, setForm} = useResultForm({
     set_name: FORM_FIELD.TEXT({label: tf`set_name`}),
