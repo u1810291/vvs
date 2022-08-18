@@ -70,7 +70,7 @@ export const useCrewRequestFull = createUseOne({
 
 
 export const useTaskCancellations = createUseEnum({
-  graphQl: raw('./graphql/TaskCancellationsNoSystemField.graphql'),
+  graphQl: raw('./graphql/TaskCancellationsWithNoSpecial.graphql'),
   itemsProp: 'event_cancellation',
   valueProp: 'value',
 });
