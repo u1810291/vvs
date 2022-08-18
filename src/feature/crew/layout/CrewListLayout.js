@@ -26,11 +26,11 @@ import {Maybe, safe, getProp} from 'crocks';
 import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
-import {isArray, isBoolean, isObject} from 'crocks/predicates';
+import {isArray, isBoolean, isObject, isString} from 'crocks/predicates';
 
 const {Just} = Maybe;
 
-const getColumn = curry((t, Component, key, pred, mapper, status) => ({
+const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
   Component,
   headerText: t(key),
   key,
@@ -42,7 +42,11 @@ const getColumn = curry((t, Component, key, pred, mapper, status) => ({
     map(objOf('children')),
     map(a => ({...item, ...a})),
     alt(Just(item))
-  )(item)
+  )(item),
+  styles: pipe(
+    safe(isString),
+    option(''),
+  )(styles)
 }));
 
 const CrewListLayout = withPreparedProps(Listing, () => {
@@ -54,7 +58,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const {t: tc} = useTranslation('crew', {keyPrefix: 'list.column'});
 
   const c = useMemo(() => getColumn(tc, props => (
-    <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
+    <Link className={props?.className} to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [tc]);
@@ -65,16 +69,17 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     </Link>
   )), [tc]);
 
-  const boolToStr = useCallback((e) => e ? ts`YES` : ts`NO`, [tc]);
-  const nullToStr = useCallback((e) => !e ? '-' : e, [tc]);
+  const nullToStr = e => !e ? '-' : e;
+  const boolToStr = useCallback(e => e ? ts`YES` : ts`NO`, [tc]);
+  const arrToStr = e => !e?.length ? '-' : e?.map(({name}, ixd) => `${name}${ixd !== e.length -1 ? ', ' : ''}`);
 
   const tableColumns = [
-    // TODO: Add dislocation zones list as a column from response
-    c('id', constant(true), nullToStr, false),
-    c('name', constant(true), nullToStr, true),
-    c('abbreviation', constant(true), nullToStr, true),
-    cs('status', constant(true), nullToStr, true),
-    c('is_assigned_automatically', isBoolean, boolToStr, true)
+    c('id', constant(true), nullToStr, false, 'text-regent'),
+    c('name', constant(true), nullToStr, true, 'text-bluewood'),
+    c('abbreviation', constant(true), nullToStr, true, 'text-regent'),
+    c('zone', constant(true), arrToStr, true, 'text-steel'),
+    cs('status', constant(true), nullToStr, true, null),
+    c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent')
   ];
 
   const filtersData = [
@@ -86,6 +91,11 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     {
       key: 'abbreviation',
       label: tc('abbreviation'),
+      filter: 'text'
+    },
+    {
+      key: 'zone',
+      label: tc('zone'),
       filter: 'text'
     },
     {
