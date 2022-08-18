@@ -1,6 +1,5 @@
 
 import InputGroup from 'components/atom/input/InputGroup';
-import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -45,7 +44,7 @@ const TaskCancellationEditForm = ({saveRef, removeRef}) => {
           <InputGroup isRequired={true} {...ctrl('value')} />
         </div>
           
-        <TextAreaInputGroup inputClassName='min-h-[12.75rem]' className='w-full lg:w-1/2 h-full' {...ctrl('comment')} rows={9}/>
+        {/* <TextAreaInputGroup inputClassName='min-h-[12.75rem]' className='w-full lg:w-1/2 h-full' {...ctrl('comment')} rows={9}/> */}
       </div>
     </section>
   );

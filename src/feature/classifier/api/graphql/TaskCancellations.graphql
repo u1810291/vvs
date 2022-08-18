@@ -1,6 +1,0 @@
-query TaskCancellations {
-  event_cancellation {
-    value
-    comment
-  }
-}
