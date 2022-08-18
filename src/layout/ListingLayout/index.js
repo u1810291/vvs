@@ -77,7 +77,7 @@ const Listing = ({
       <Table.Tr key={rowKeyLens(item)}>
         {
           reduce((cs, c) => ifElse(
-            and(hasProps(['key', 'itemToProps', 'Component', 'styles']), activeTableColumnPred),
+            and(hasProps(['key', 'itemToProps', 'Component']), activeTableColumnPred),
             ({key, itemToProps, Component, styles}) => [...cs, (
               <Table.Td key={key}>
                 <Component className={styles} {...itemToProps(item).option({className: 'opacity-20 inline-block w-full text-center', children: '—'})} />
