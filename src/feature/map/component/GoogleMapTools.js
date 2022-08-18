@@ -13,6 +13,7 @@ const GoogleMapTools = ({
   value,
   setValue,
   onMapLoad,
+  drawingMode,
   polygonsOptions = {}
 }) => {
   const {t} = useTranslation();
@@ -20,13 +21,19 @@ const GoogleMapTools = ({
   const {googleMap} = useGoogleApiContext();
 
   const [rawPolygons, setRawPolygons] = useState([]);
+  const [mode, setMode] = useState('');
+  const [modes, setModes] = useState([]);
 
   const isArrayEqual = (x, y) => _(x).xorWith(y, _.isEqual).isEmpty();
 
-  const deleteVertexHandler = (polygon) => {
-    polygon.addListener('rightclick', event => {
-      deleteVertex(polygon, event.vertex);
-    });
+  const dragPolygonHandler = polygon => {
+    polygon.addListener('dragend', () => setRawPolygons([polygon]))
+  };
+  const resizePolygonHandler = polygon => {
+    polygon.addListener('mouseup', () => setRawPolygons([polygon]));
+  };
+  const deleteVertexHandler = polygon => {
+    polygon.addListener('rightclick', event => deleteVertex(polygon, event.vertex));
   };
 
   const getLastOrExcludeLast = (list, isOnlyLast) => {
@@ -56,10 +63,11 @@ const GoogleMapTools = ({
   }, []);
 
   const onPolygonComplete = useCallback(polygon => {
-    rawPolygons.map(polygon => polygon.setMap(null));
-    setRawPolygons([polygon]);
+    setRawPolygons([...rawPolygons, polygon]);
     polygon.setEditable(true);
     deleteVertexHandler(polygon);
+    dragPolygonHandler(polygon);
+    resizePolygonHandler(polygon);
   }, [rawPolygons]);
 
   const clearAllPolygons = useCallback(() => {
@@ -89,16 +97,17 @@ const GoogleMapTools = ({
     // mode === null means we are using an edit tool but not others like polygon, circle etc.
     if (mode === null && vertex != undefined && path.getLength() > 2) {
       path.removeAt(vertex);
+      setRawPolygons([...rawPolygons, polygon]);
     } else {
       return;
     }
   }, [drawingManager]);
 
   useEffect(() => {
-    if (!isArrayEqual(getCoordinates(rawPolygons))) {
+    if (!isArrayEqual(...value, getCoordinates(rawPolygons))) {
       setValue(getCoordinates(rawPolygons));
     }
-  }, [rawPolygons]);
+  }, [value, rawPolygons]);
 
   useEffect(() => {
     if (value) {
@@ -115,40 +124,59 @@ const GoogleMapTools = ({
         });
       });
       if (!isArrayEqual(...value, getCoordinates(rawPolygons))) {
-        setRawPolygons([...polygonInstances]);
+        setRawPolygons([...rawPolygons, ...polygonInstances]);
         polygonInstances.map(polygon => polygon.setMap(googleMap));
-        polygonInstances.map(polygon => deleteVertexHandler(polygon));
+        polygonInstances.map(polygon => {
+          dragPolygonHandler(polygon);
+          deleteVertexHandler(polygon);
+          resizePolygonHandler(polygon);
+        });
       }
     };
   }, [value]);
 
   useEffect(() => {
+    if (!rawPolygons.length) {
+      setMode(drawingMode);
+      setModes([drawingMode]);
+    }
+    if (!!rawPolygons.length) {
+      setMode(null);
+      setModes([]);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    rawPolygons.map(polygon => polygon.setMap(null));
     return () => {
-      rawPolygons.map(polygon => polygon.setMap(null))
+      rawPolygons.map(polygon => polygon.setMap(null));
     };
-  }, []);
+  }, [googleMap]);
+
+  console.log(rawPolygons)
 
   return (
     <>
-      <button
-        className='absolute z-1 top-24 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white'
-        onClick={clearAllPolygons}
-      >
-        {t('eurocash.clear')}
-      </button>
-      <button
-        className='absolute z-1 top-36 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white'
-        onClick={undoPreviousPolygon}
-      >
-        {t('eurocash.undo')}
-      </button>
+      {/*<button*/}
+      {/*  className='absolute z-1 top-24 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white'*/}
+      {/*  onClick={clearAllPolygons}*/}
+      {/*>*/}
+      {/*  {t('eurocash.clear')}*/}
+      {/*</button>*/}
+      {/*<button*/}
+      {/*  className='absolute z-1 top-36 border text-gray-900 text-sm rounded-sm shadow-md right-3 p-2 bg-white'*/}
+      {/*  onClick={undoPreviousPolygon}*/}
+      {/*>*/}
+      {/*  {t('eurocash.undo')}*/}
+      {/*</button>*/}
       {/* NOTE: React StrictMode is forcing DrawaingManager to be rendered twice */}
       <DrawingManager
         ref={drawingManager}
+        drawingMode={mode}
         options={{
           drawingControl: true,
           drawingControlOptions: {
-            drawingModes: ['polygon'],
+            drawingModes: modes,
             position: 3.0
           },
           polygonOptions: polygonsOptions

@@ -65,7 +65,7 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
           id={`dislocation-map-${dislocationZoneId}`}
         >
           <Nullable on={isLoaded}>
-            <GoogleMapTools polygonsOptions={POLYGON_OPTIONS} {...ctrl('nodes')} />
+            <GoogleMapTools polygonsOptions={POLYGON_OPTIONS} {...ctrl('nodes')} drawingMode={'polygon'}/>
           </Nullable>
         </Map>
       </div>
