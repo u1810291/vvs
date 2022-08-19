@@ -1,6 +1,0 @@
-mutation UpdateCrewRequest($id: String!, $value: String!, $duration: interval = null) {
-  update_crew_request_by_pk (_set: {value: $value, duration: $duration}, pk_columns: {value: $id}) {
-    value
-    duration
-  }
-}

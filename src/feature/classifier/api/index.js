@@ -1,7 +1,7 @@
 import raw from 'raw.macro';
 import {createUseEnum, createUseOne} from 'api/buildApiHook';
 import {Async, pipe, pick, mapProps, maybeToAsync, getProp, map, option} from 'crocks';
-import {mStrToIsoPeriod, mPgIntervalToStr, DEFAULT_DENOTION_SECOND, DEFAULT_DENOTION_HOUR, DEFAULT_DENOTION_MINUTE} from 'util/datetime';
+import {mPgIntervalToStr} from 'util/datetime';
 
 export const useTaskTypes = createUseEnum({
   graphQl: raw('./graphql/TaskTypes.graphql'),
@@ -34,9 +34,9 @@ export const useTaskType = createUseOne({
 })
 
 export const useCrewRequestFull = createUseOne({
-  getGraphQl: raw('./graphql/CrewRequestById.graphql'),
-  updateGraphQl: raw('./graphql/UpdateCrewRequest.graphql'),
-  createGraphql: raw('./graphql/CreateCrewPermissionRequest.graphql'),
+  getGraphQl: raw('./graphql/CrewRequestByPk.graphql'),
+  updateGraphQl: raw('./graphql/UpdateCrewRequestByPk.graphql'),
+  createGraphql: raw('./graphql/CreatePermissionRequest.graphql'),
   deleteGraphQl: raw('./graphql/DeleteCrewPermissionRequest.graphql'),
 
   asyncMapFromApi: pipe(
@@ -44,20 +44,20 @@ export const useCrewRequestFull = createUseOne({
     map(mapProps({
       duration: pipe(
         mPgIntervalToStr,
-        map(({hours, minutes, seconds}) => `${hours}${DEFAULT_DENOTION_HOUR} ${minutes}${DEFAULT_DENOTION_MINUTE} ${seconds}${DEFAULT_DENOTION_SECOND}`),
+        map(({hours, minutes}) => `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`),
         option(''),
       ),
     }))
   ),
 
   asyncMapToApi: pipe(
-    pick(['value', 'duration', 'id']),
+    pick(['value', 'duration', 'is_assigned_while_in_breaks', 'id']),
     mapProps({
       value: a => String(a).toUpperCase(),
-      duration: pipe(
-        mStrToIsoPeriod,
-        option(null),
-      ),
+      // duration: pipe(
+      //   mStrToIsoPeriod,
+      //   option(null),
+      // ),
     }),
     Async.Resolved,
   ),

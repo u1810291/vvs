@@ -1,9 +1,0 @@
-mutation CreateCrewPermissionRequest ($value: String!, $duration: interval = null) {
-  insert_crew_request_one (object: {
-    value: $value,
-    duration: $duration
-  }) {
-    value
-    duration
-  }
-}

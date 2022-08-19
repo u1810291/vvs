@@ -1,0 +1,10 @@
+mutation CreateCrewPermissionRequest ($value: String!, $duration: interval = null, $is_assigned_while_in_breaks: Boolean = false) {
+  insert_crew_request_one (object: {
+    value: $value,
+    duration: $duration,
+    is_assigned_while_in_breaks: $is_assigned_while_in_breaks
+  }) {
+    value
+    duration
+  }
+}

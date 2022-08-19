@@ -8,30 +8,31 @@ import withPreparedProps from 'hoc/withPreparedProps';
 import {useTranslation} from 'react-i18next';
 
 import {
-  chain,
+  // chain,
   curry,
-  getProp,
+  // getProp,
   getPropOr,
-  identity,
+  // identity,
   isEmpty,
   map,
   not,
   objOf,
   pipe,
-  safe,
-  isArray,
-  isString,
-  option,
-  constant,
-  isObject,
+  // safe,
+  // isArray,
+  // isString,
+  // option,
+  // constant,
+  // isObject,
+  getProp,
   Maybe,
+  getPath,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
-const {Just} = Maybe;
 
 import {PermissionEditRoute} from '../routes';
 import {usePermissions} from '../api';
-import {titleCase} from '@s-e/frontend/transformer/string';
+// import {titleCase} from '@s-e/frontend/transformer/string';
 import DashboardRoute from 'feature/dashboard/routes';
 import {TaskListRoute} from 'feature/task/routes';
 import Innerlinks from 'components/Innerlinks';
@@ -44,23 +45,19 @@ import DynamicStatus from 'feature/permission/component/PermissionStatus';
 
 
 
-const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
+const getColumn = curry((t, Component, key, mapper, status) => ({
   Component,
   headerText: t(key),
   key,
   status,
   itemToProps: item => pipe(
-    getProp(key),
-    chain(safe(pred)),
-    map(mapper),
+    // getProp(key),
+    // chain(safe(pred)),
+    mapper,
     map(objOf('children')),
     map(a => ({...item, ...a})),
-    alt(Just(item)),
+    alt(Maybe.Just('-')),
   )(item),
-  styles: pipe(
-    safe(isString),
-    option(''),
-  )(styles)
 }));
 
 const ne = not(isEmpty);
@@ -75,25 +72,25 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
 
   const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
+    props?.id && <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [t]);
 
   const cs = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
+    props?.id && <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
       <DynamicStatus status={props?.status}/>
     </Link>
   )), [t]);
 
   const tableColumns = [
-    c('id', ne, identity, false, null),
-    c('created_at', ne, identity, true, null),
-    c('request_id', ne, titleCase, true, null),
-    cs('status', constant(true), nullToStr, true, null),
-    c('crew_id', ne, identity, true, null),
-    c('crew_id.driver_name', ne, identity, true, null),
-    c('updated_at', ne, identity, false, null),
+    c('id', pipe(getProp('id')), false, null),
+    c('created_at', pipe(getProp('created_at')), false, null),
+    c('request_id', pipe(getProp('request_id')), true, null),
+    cs('status', pipe(getProp('status')), true, null),
+    c('crew_name', pipe(getPath(['crew', 'name'])), true, null),
+    c('driver_name', pipe(getPath(['crew', 'driver_name'])), true, null),
+    c('updated_at', pipe(getProp('updated_at')), false, null), 
   ];
 
   const filtersData = [
@@ -117,7 +114,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
   return {
     // list: safe(isArray, api?.data).option([]),
-    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(api),
+    list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

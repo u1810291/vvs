@@ -14,12 +14,16 @@ import {
   getProp,
   Async,
   pick,
+  option,
 } from 'crocks';
+import {mPgIntervalToStr} from 'util/datetime';
+
 
 export const useObjects = createUseWhereList({
   graphQl: raw('./graphql/Objects.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "object" expected but not found.', getProp('object')),
+    
   ),
 })
 
@@ -37,6 +41,18 @@ export const useObject = createUseOne({
         provider_id: mapToString,
         navision_id: mapToString,
         feedback_sla_time_in_min: mapToString,
+        feedback_from
+          : pipe(
+            mPgIntervalToStr,
+            map(({hours, minutes}) => `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`),
+            option(''),
+          ),
+        feedback_until
+          : pipe(
+            mPgIntervalToStr,
+            map(({hours, minutes}) => `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`),
+            option(''),
+          ),
       })
     )
   ),

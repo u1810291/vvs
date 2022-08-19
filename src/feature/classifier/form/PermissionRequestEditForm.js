@@ -5,6 +5,16 @@ import {constant} from 'crocks';
 import {useCrewRequestFull} from '../api';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import CheckBox from 'components/atom/input/CheckBox';
+import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
+
+
+
+
+
+const DEFAULT_DURATION = '00:20';
+
+
 
 const PermissionRequestEditForm = ({saveRef, removeRef}) => {
   const {id} = useParams();
@@ -18,7 +28,8 @@ const PermissionRequestEditForm = ({saveRef, removeRef}) => {
       props: {
         onChange: ({set}) => ({target: {value}}) => set(value),
       }
-    })
+    }),
+    is_assigned_while_in_breaks: FORM_FIELD.BOOL({label: t`is_assigned_while_in_breaks`, validator: constant(true)}),
   });
 
   useCrewRequestFull({
@@ -30,11 +41,22 @@ const PermissionRequestEditForm = ({saveRef, removeRef}) => {
     removeRef,
   });
 
+  const setDefaultDuration = (v) => {
+    if (!v) {
+      setForm({duration: DEFAULT_DURATION});
+    }
+  }
+
   return (
-    <section className={'flex'}>
-      <div className={'p-6 space-y-4 flex-grow'}>
-        <InputGroup {...ctrl('value')} />
-        <InputGroup {...ctrl('duration')} />
+    <section className={'flex p-6 flex-grow space-x-6 items-center'}>
+      <div className={'lg:w-1/4 '}>
+        <InputGroup {...ctrl('value')} isRequired={true} />
+      </div>
+      <div className={'lg:w-1/4 '}>
+        <InputGroup {...ctrl('duration')} isRequired={true} onBlur={onInputEventOrEmpty(v => setDefaultDuration(v))} />
+      </div>
+      <div className={'lg:w-1/4 '}>
+        <CheckBox className='items-end block' {...ctrl('is_assigned_while_in_breaks')} />
       </div>
     </section>
   );
