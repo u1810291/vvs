@@ -1,9 +1,10 @@
-query GetBreaches($where: crew_breach_bool_exp) {
+query GetBreaches($where: crew_breach_bool_exp = {}) {
     crew_breach(where: $where) {
         id
         end_time
         start_time
         nodes
+        crew_id
         crew {
             name
             status

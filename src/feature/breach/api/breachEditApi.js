@@ -17,7 +17,7 @@ export const useBreach = id => {
 
 
 export const useBreaches = createUseWhereList({
-  graphQl: raw('./graphql/GetBreaches.graphql'),
+  graphQl: raw('./graphql/Breaches.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "crew_breach" expected but not found.', getProp('crew_breach')),
   ),
