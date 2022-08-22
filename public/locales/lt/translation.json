@@ -60,6 +60,7 @@
   "error": {
     "timeSlotIsTaken": "Pradžios laikas negali būti didesnis negu pabaigos laikas",
     "startTimeIsBiggerThanEndTime": "Norima laiko zona jau yra užimta, koreguokite nurodytus laiko tarpus",
+    "durationLessThanFiveMinutes": "Duration must be at least 5 minutes",
     "newEvent": {
       "eventServiceOffline": "Renginių sistema nepasiekiama",
       "dataIsInvalid": "Duomenys neteisingi",
