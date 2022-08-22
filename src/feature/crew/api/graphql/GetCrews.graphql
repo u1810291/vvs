@@ -9,8 +9,10 @@ query Crews($where: crew_bool_exp) {
     abbreviation
     status
     to_call_after
-    zone {
-      name
+    calendars {
+      crew_zone {
+        name
+      }
     }
   }
 }

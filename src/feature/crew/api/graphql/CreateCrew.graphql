@@ -1,22 +1,22 @@
 mutation CreateCrew(
   $name: String = null,
-  $status: crew_status_enum = OFFLINE,
   $abbreviation: String = null,
   $driver_name: String = null,
   $phone_number: String = null,
   $to_call_after: String = null,
   $is_assigned_automatically: Boolean = false,
   $is_assigned_while_in_breaks: Boolean = false,
+  $calendars: crew_calendar_arr_rel_insert_input,
   ) {
   insert_crew_one(object: {
     name: $name,
-    status: $status,
     driver_name: $driver_name,
     phone_number: $phone_number,
     abbreviation: $abbreviation,
     to_call_after: $to_call_after,
     is_assigned_automatically: $is_assigned_automatically,
     is_assigned_while_in_breaks: $is_assigned_while_in_breaks,
+    calendars: $calendars,
   }) {
     id
     name
