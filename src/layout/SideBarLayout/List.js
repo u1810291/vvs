@@ -23,7 +23,7 @@ const parseRoutes = (t, component) => renderChildren((c, index) => {
       {isRoute && (
         <div className='flex-1'>
           <NavLink
-            className={'inline-block px-2 py-2 text-base text-lilac font-thin bg-oxford hover:text-geyser'}
+            className={'inline-block px-2 py-2 font-normal text-lilac bg-oxford hover:text-geyser leading-6'}
             to={c.props.path}
           >
             {t(c?.props?.translationKey, {ns: c?.props?.translationNs}) || c?.props?.path}
@@ -31,9 +31,9 @@ const parseRoutes = (t, component) => renderChildren((c, index) => {
         </div>
       )}
       {hasChildren && !isHiddenChildren && (
-        <div className='flex items-start'>
+        <div className='flex items-start text-[1.125rem]'>
           {parseRoutes(t, c?.props?.children[0])}
-          <div className='flex flex-col flex-1 mb-4'>{parseRoutes(t, c?.props?.children)}</div>
+          <div className='flex flex-col flex-1 mb-4 text-[0.875rem]'>{parseRoutes(t, c?.props?.children)}</div>
         </div>
       )}
     </Fragment>
