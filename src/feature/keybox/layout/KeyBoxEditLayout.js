@@ -8,7 +8,7 @@ import {useKeyBox} from '../api';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
-import KeyBoxRoute, {KeyBoxListRoute} from '../routes';
+import {KeyBoxListRoute} from '../routes';
 import KeyBoxEditForm from '../form/KeyBoxEditForm';
 
 const KeyBoxEditLayout = () => {
@@ -43,7 +43,7 @@ const KeyBoxEditLayout = () => {
       <Header>
         <>
           <Breadcrumbs>
-            <RouteAsBreadcrumb route={KeyBoxRoute}/>
+            <RouteAsBreadcrumb route={KeyBoxListRoute}/>
             <Nullable on={breadcrumb}>
               <Breadcrumbs.Item>
                 <span className='font-semibold'>{breadcrumb}</span>

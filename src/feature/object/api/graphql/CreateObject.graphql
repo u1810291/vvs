@@ -10,8 +10,13 @@ mutation CreateObject(
   $name: String = null,
   $navision_id: Int = null,
   $phone: String = null,
+  $is_crew_autoasigned: Boolean = false,
+  $is_call_after_inspection: Boolean = false,
+  $feedback_from: interval = null,
+  $feedback_until: interval = null,
+  $feedback_sla_time_in_min: Int = null,
 ) {
-  insert_object_one(object: {address: $address, city: $city, contract_no: $contract_no, contract_object_no: $contract_object_no, description: $description, is_atm: $is_atm, latitude: $latitude, longitude: $longitude, name: $name, navision_id: $navision_id, phone: $phone}) {
+  insert_object_one(object: {address: $address, city: $city, contract_no: $contract_no, contract_object_no: $contract_object_no, description: $description, is_atm: $is_atm, latitude: $latitude, longitude: $longitude, name: $name, navision_id: $navision_id, phone: $phone, is_crew_autoasigned: $is_crew_autoasigned, is_call_after_inspection: $is_call_after_inspection, feedback_from: $feedback_from, feedback_until: $feedback_until, feedback_sla_time_in_min: $feedback_sla_time_in_min}) {
     address
     city
     contract_no

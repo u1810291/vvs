@@ -90,7 +90,7 @@ const TaskTypeListLayout = withPreparedProps(Listing, props => {
     ),
     tableColumns: [
       c('value', ne, identity),
-      c('comment', ne, identity),
+      // c('comment', ne, identity),
     ],
   }
 });

@@ -1,0 +1,7 @@
+mutation UpdateCrewRequest($id: String!, $value: String!, $duration: interval = null, $is_assigned_while_in_breaks: Boolean = false) {
+  update_crew_request_by_pk (_set: {value: $value, duration: $duration, is_assigned_while_in_breaks: $is_assigned_while_in_breaks}, pk_columns: {value: $id}) {
+    value
+    duration
+    is_assigned_while_in_breaks
+  }
+}

@@ -1,4 +1,4 @@
-import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
+import Breadcrumbs from 'components/Breadcrumbs';
 import Button from 'components/Button';
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
@@ -10,7 +10,7 @@ import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
 import TaskTypeEditForm from '../form/TaskTypeEditForm';
 import {useTaskType} from '../api';
-
+import {Link} from 'react-router-dom';
 
 
 
@@ -46,7 +46,12 @@ const TaskTypeEditLayout = () => {
       <Header>
         <>
           <Breadcrumbs>
-            <RouteAsBreadcrumb route={TaskTypeListRoute}/>
+            {/* <RouteAsBreadcrumb route={TaskTypeListRoute}/> */}
+            <Breadcrumbs.Item>
+              <Link to={TaskTypeListRoute.props.path}>
+                {t('classifiers')}
+              </Link>
+            </Breadcrumbs.Item>
             <Nullable on={breadcrumb}>
               <Breadcrumbs.Item>
                 <span className='font-semibold'>{breadcrumb}</span>

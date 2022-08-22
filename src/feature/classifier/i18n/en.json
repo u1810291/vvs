@@ -16,7 +16,9 @@
     "column": {
       "id": "ID",
       "value": "Title",
-      "comment": "Comment"
+      "comment": "Comment",
+      "true": "true",
+      "false": "false"
     }
   }
 }

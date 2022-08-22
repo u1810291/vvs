@@ -14,6 +14,13 @@
       "status": "Būsena",
       "crew_name": "Ekipažas",
       "driver_name": "Vairuotojas"
+    },
+    "status": {
+      "ALLOWED": "Allowed",
+      "ASKED": "Asked",
+      "COMPLETE": "Complete",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
     }
   }
 }

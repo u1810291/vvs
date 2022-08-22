@@ -1,0 +1,15 @@
+query($where: crew_permission_bool_exp = {}) {
+  crew_permission(where: $where) {
+    id
+    created_at
+    updated_at
+    crew_id
+    crew {
+      id
+      name
+      driver_name
+    }
+    request_id
+    status
+  }
+}

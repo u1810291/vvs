@@ -36,7 +36,7 @@ const DynamicStatus = caseMap(CrewStatus, [
   [is('BREAK'), CrewStatus.Break],
   [is('READY'), CrewStatus.Ready],
   [is('OFFLINE'), CrewStatus.Offline],
-  [is('DRIVE_BACK'), CrewStatus.DriveBack]
+  [is('DRIVE_BACK'), CrewStatus.DriveBack],
 ]);
 
 export default DynamicStatus;

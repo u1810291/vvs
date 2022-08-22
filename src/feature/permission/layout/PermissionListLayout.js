@@ -1,7 +1,6 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo, useEffect} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
-import Button from 'components/Button';
 import Listing from 'layout/ListingLayout';
 import Breadcrumbs from 'components/Breadcrumbs';
 import withPreparedProps from 'hoc/withPreparedProps';
@@ -9,47 +8,60 @@ import withPreparedProps from 'hoc/withPreparedProps';
 import {useTranslation} from 'react-i18next';
 
 import {
-  chain,
+  // chain,
   curry,
-  getProp,
+  // getProp,
   getPropOr,
-  identity,
+  // identity,
   isEmpty,
   map,
-  Maybe,
   not,
   objOf,
   pipe,
-  safe
+  // safe,
+  // isArray,
+  // isString,
+  // option,
+  // constant,
+  // isObject,
+  getProp,
+  Maybe,
+  getPath,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
-import {PermissionEditRoute, PermissionCreateRoute} from '../routes';
+import {PermissionEditRoute} from '../routes';
 import {usePermissions} from '../api';
-import {titleCase} from '@s-e/frontend/transformer/string';
+// import {titleCase} from '@s-e/frontend/transformer/string';
 import DashboardRoute from 'feature/dashboard/routes';
 import {TaskListRoute} from 'feature/task/routes';
 import Innerlinks from 'components/Innerlinks';
 import {BreachListRoute} from 'feature/breach/routes';
+import {FilterIcon} from '@heroicons/react/solid';
+import Button from 'components/Button';
+import {useFilter} from 'hook/useFilter';
+import DynamicStatus from 'feature/permission/component/PermissionStatus';
 
 
 
 
-const getColumn = curry((t, Component, key, pred, mapper) => ({
+const getColumn = curry((t, Component, key, mapper, status) => ({
   Component,
   headerText: t(key),
   key,
+  status,
   itemToProps: item => pipe(
-    getProp(key),
-    chain(safe(pred)),
-    map(mapper),
+    // getProp(key),
+    // chain(safe(pred)),
+    mapper,
     map(objOf('children')),
     map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
+    alt(Maybe.Just('-')),
   )(item),
 }));
 
 const ne = not(isEmpty);
+const nullToStr = e => !e ? '-' : e;
 
 const PermissionListLayout = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('permission', {keyPrefix: 'breadcrumbs'});
@@ -60,29 +72,64 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
 
   const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
+    props?.id && <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [t]);
 
+  const cs = useMemo(() => getColumn(t, props => (
+    props?.id && <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
+      <DynamicStatus status={props?.status}/>
+    </Link>
+  )), [t]);
+
+  const tableColumns = [
+    c('id', pipe(getProp('id')), false, null),
+    c('created_at', pipe(getProp('created_at')), false, null),
+    c('request_id', pipe(getProp('request_id')), true, null),
+    cs('status', pipe(getProp('status')), true, null),
+    c('crew_name', pipe(getPath(['crew', 'name'])), true, null),
+    c('driver_name', pipe(getPath(['crew', 'driver_name'])), true, null),
+    c('updated_at', pipe(getProp('updated_at')), false, null), 
+  ];
+
+  const filtersData = [
+    {key: 'created_at', label: 'Created_at', filter: 'date'},
+    {key: 'reason', label: 'Reason', filter: 'select', values: []},
+    {key: 'crew', label: 'Crew', filter: 'text'},
+    {key: 'driver', label: 'Driver', filter: 'text'},
+  ];
+
+  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+    'crew_permission',
+    tableColumns,
+    filtersData
+  );
+  
+  const api = usePermissions({filters: queryParams})
+  
+  useEffect(() => {
+    api.mutate()
+  }, [queryParams]);
+
   return {
-    list: usePermissions()?.data || [],
+    // list: safe(isArray, api?.data).option([]),
+    list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`permissions`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item>
+          <Button.NoBg onClick={toggleFilter}>
+            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            <FilterIcon className='w-6 h-6 ml-2 text-geyser cursor-pointer inline-block focus:ring-0' />
+          </Button.NoBg>
+        </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (
       <>
-        {/* <Button.NoBg onClick={useCallback(() => nav(PermissionRequestListRoute.props.path), [nav])}>
-          {tp(
-            PermissionRequestListRoute.props.translationKey,
-            {ns: PermissionRequestListRoute.props.translationNs
-          })}
-        </Button.NoBg> */}
-        <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button>
+        {/* <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button> */}
       </>
     ),
     innerlinks: (
@@ -93,13 +140,9 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
         <Innerlinks.Item to={BreachListRoute.props.path}>{tp('Breaches')}</Innerlinks.Item>
       </Innerlinks>
     ),
-    tableColumns: [
-      c('id', ne, identity),
-      c('request_id', ne, titleCase),
-      c('status', ne, ts),
-      c('created_at', ne, identity),
-      c('updated_at', ne, identity),
-    ],
+    tableColumns,
+    filters,
+    columns,
   }
 });
 

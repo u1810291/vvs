@@ -1,0 +1,7 @@
+query TaskCancellations {
+  event_cancellation(where: { comment: { _neq: "is_system_field"}}) {
+  # event_cancellation {
+    value
+    comment
+  }
+}

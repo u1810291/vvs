@@ -2,5 +2,6 @@ query CrewRequestById ($id: String!) {
   crew_request_by_pk (value: $id) {
     value
     duration
+    is_assigned_while_in_breaks
   }
 }

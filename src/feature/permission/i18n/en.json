@@ -3,12 +3,6 @@
     "list": "Permissions",
     "requestList": "Requests"
   },
-  "status": {
-    "ALLOWED": "Allowed",
-    "ASKED": "Asked",
-    "COMPLETE": "Complete",
-    "REJECTED": "Rejected"
-  },
   "breadcrumbs": {
     "permissions": "Permissions",
     "allData": "All Data"
@@ -21,6 +15,13 @@
       "status": "Status",
       "crew_name": "Crew",
       "driver_name": "Driver"
+    },    
+    "status": {
+      "ALLOWED": "Allowed",
+      "ASKED": "Asked",
+      "COMPLETE": "Complete",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
     }
   }
 }

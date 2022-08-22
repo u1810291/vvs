@@ -9,42 +9,26 @@ import withPreparedProps from 'hoc/withPreparedProps';
 import {useTranslation} from 'react-i18next';
 
 import {
-  chain,
-  curry,
-  getProp,
   getPropOr,
   identity,
-  isEmpty,
   map,
-  Maybe,
-  not,
-  objOf,
   pipe,
-  safe
+  safe,
+  and,
+  hasProp,
+  propSatisfies,
+  pick,
+  isTruthy,
+  option,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
-
+import {mPgIntervalToStr} from 'util/datetime';
 import {PermissionRequestCreateRoute, PermissionRequestEditRoute} from '../routes';
 import {useCrewRequest} from '../../permission/api';
-import {titleCase} from '@s-e/frontend/transformer/string';
 import {TaskCancellationListRoute, TaskTypeListRoute} from 'feature/classifier/routes';
 import Innerlinks from 'components/Innerlinks';
 
-const getColumn = curry((t, Component, key, pred, mapper) => ({
-  Component,
-  headerText: t(key),
-  key,
-  itemToProps: item => pipe(
-    getProp(key),
-    chain(safe(pred)),
-    map(mapper),
-    map(objOf('children')),
-    map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
-  )(item),
-}));
 
-const ne = not(isEmpty);
 
 const PermissionListLayout = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('classifier', {keyPrefix: 'breadcrumbs'});
@@ -53,14 +37,34 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   const nav = useNavigate();
   const swr = useCrewRequest();
 
-  const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(PermissionRequestEditRoute.props.path, {id: props?.value})}>
-      {props?.children}
-    </Link>
-  )), [t]);
+  const c = useMemo(() => (prop, mapper = identity, status) => ({
+    key: prop,
+    headerText: t(prop),
+    status,
+    itemToProps: item => pipe(
+      safe(and(hasProp('value'), propSatisfies(prop, isTruthy))),
+      map(item => ({id: item?.value, children: mapper(item?.[prop])})),
+      alt(pipe(
+        safe(hasProp('value')),
+        map(pick(['value'])),
+      )(item)),
+    )(item),
+    Component: ({id, children, fallback = '—'}) => {
+      if (!id && !children) return fallback;
+      if (!id) return children || fallback;
+      return (
+        <Link to={generatePath(PermissionRequestEditRoute.props.path, {id})}>
+          {children || fallback}
+        </Link>
+      )
+    },
+  }), [t]);
+
+  const boolCol = useMemo(() => pipe(String, t), [t]);
+
 
   return {
-    list: swr?.data?.crew_request || [],
+    list: swr?.data || [],
     rowKeyLens: getPropOr(0, 'value'),
     breadcrumbs: (
       <Breadcrumbs>
@@ -81,8 +85,13 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
       </Innerlinks>
     ),
     tableColumns: [
-      c('value', ne, identity),
-      c('duration', ne, titleCase),
+      c('value', identity),
+      c('duration', pipe(
+        mPgIntervalToStr,
+        map(({hours, minutes}) => `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`),
+        option(''),
+      ),),
+      c('is_assigned_while_in_breaks', boolCol),
     ],
   }
 });

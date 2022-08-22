@@ -82,6 +82,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     c('is_crew_autoasigned', ne, identity, true),
     c('created', ne, identity, false),
     c('user_id', ne, identity, false),
+    c('feedback_sla_time_in_min', ne, identity, true),
   ]
 
   const filtersData = [

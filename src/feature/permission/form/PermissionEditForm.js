@@ -35,11 +35,11 @@ const PermissionEditForm = ({saveRef}) => {
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('permission', {keyPrefix: 'edit.field'});
   const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
-  const requests = useCrewRequest(true);
+  const requests = useCrewRequest();
   const statuses = useCrewRequestStatus(true);
-  const crews = useCrews();
+  const crews = useCrews({filters: {}});
 
-  console.log({requests});
+  // console.log({requests});
 
   const {ctrl, result, setForm} = useResultForm({
     crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, props: {
@@ -80,11 +80,11 @@ const PermissionEditForm = ({saveRef}) => {
         </SelectBox>
 
         <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request_id')}>
-          {map(value => (
-            <SelectBox.Option key={value} value={value}>
-              {titleCase(value)}
+          {map(request => (
+            <SelectBox.Option key={request.value} value={request.value}>
+              {titleCase(request.value)}
             </SelectBox.Option>
-          ), requests)}
+          ), requests?.data || [])}
         </SelectBox>
 
         <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('crew_id')}>

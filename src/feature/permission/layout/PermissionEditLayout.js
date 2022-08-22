@@ -9,7 +9,6 @@ import {usePermission} from '../api';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
-import PermissionRoute from '../routes';
 import PermissionEditForm from '../form/PermissionEditForm';
 
 const PermissionEditLayout = () => {
@@ -27,7 +26,7 @@ const PermissionEditLayout = () => {
   };
 
   const breadcrumb = (
-    getProp('name', data)
+    getProp('crew_id', data)
     .alt(getProp('id', data))
     .option(null)
   );
@@ -37,7 +36,7 @@ const PermissionEditLayout = () => {
       <Header>
         <>
           <Breadcrumbs>
-            <RouteAsBreadcrumb route={PermissionRoute}/>
+            <RouteAsBreadcrumb route={PermissionListRoute}/>
             <Nullable on={breadcrumb}>
               <Breadcrumbs.Item>
                 <span className='font-semibold'>{breadcrumb}</span>

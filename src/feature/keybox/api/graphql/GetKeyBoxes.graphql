@@ -3,5 +3,9 @@ query {
     crew_id
     set_name
     id
+    crew {
+      id
+      name
+    }
   }
 }
