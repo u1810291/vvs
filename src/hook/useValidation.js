@@ -17,6 +17,7 @@ function useValidation() {
 
     const isSameWeekDay = (eventDate, newEventDate) => getISODay(eventDate) === getISODay(newEventDate);
     const isStartTimeIsBiggerThanEndTime = Date.parse(endTime) < Date.parse(startTime);
+    const isDurationLessThanFiveMinutes = (Date.parse(endTime) - Date.parse(startTime)) <= (5 * 60000);
     const isEventsExist = events && events.length > 0;
     const getSameWeekDayOverlappedEvent = events
       .filter(event => isSameWeekDay(convertToFullDate(event?.week_day, event?.start_time), startTime))
@@ -39,6 +40,9 @@ function useValidation() {
 
     if (isStartTimeIsBiggerThanEndTime) {
       return setErrorMessage(t('error.startTimeIsBiggerThanEndTime'));
+    }
+    if (isDurationLessThanFiveMinutes) {
+      return setErrorMessage(t('error.durationLessThanFiveMinutes'));
     }
     if (isEventsExist) {
       if (getSameWeekDayOverlappedEvent) {
