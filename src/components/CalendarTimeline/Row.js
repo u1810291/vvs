@@ -29,7 +29,7 @@ const Row = ({value, setRef, setValue, getRef, crewZones, cellsRefs}) => {
         <div
           style={{width: 936}}
           className={'flex flex-row w-full flex-wrap'}>
-          {value && value.map(({id, crew_id, dislocation_zone_id, end_time, start_time, week_day}) => (
+          {value && value.map(({id, crew_id, dislocation_zone_id, crew_zone, end_time, start_time, week_day}) => (
             <Event
               key={generate()}
               events={value}
@@ -42,7 +42,7 @@ const Row = ({value, setRef, setValue, getRef, crewZones, cellsRefs}) => {
               weekDay={week_day}
               endTime={end_time}
               startTime={start_time}
-              dislocationZone={crewZones.find(z => z.value === dislocation_zone_id)}
+              dislocationZone={crewZones.find(z => z.value === dislocation_zone_id || z.value === crew_zone?.id)}
             />
           ))}
           {useChunk(
