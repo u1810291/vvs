@@ -1,12 +1,10 @@
 import React from 'react';
-
 import Input from './Base/Input';
 import Label from './Base/Label';
+import ErrorText from './Base/ErrorText';
 import Nullable from 'components/atom/Nullable'
-
 import {putIntoArray} from 'util/array';
 import {withComponentFactory} from 'util/react';
-
 import {omit} from 'crocks';
 
 export const InputGroup = ({
@@ -23,6 +21,7 @@ export const InputGroup = ({
   twLabel,
   isRequired,
   twRequired,
+  below,
   ...props
 }) => (
   <div className={className}>
@@ -41,11 +40,15 @@ export const InputGroup = ({
         <Addon className={addonClassName} aria-hidden='true' />
       </div>)}
     </div>
+    <Nullable on={below}>
+      {below}
+    </Nullable>
   </div>
 );
 
 export default withComponentFactory(InputGroup, {
-  mapSetupInComponent: omit(['input']),
+  mapSetupInComponent: omit(['input', 'ErrorText']),
   Label,
   Input,
+  ErrorText,
 });

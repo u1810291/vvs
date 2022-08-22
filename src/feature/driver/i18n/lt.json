@@ -12,5 +12,17 @@
       "full_name": "Vardas Pavardė",
       "status": "Būsena"
     }
+  },
+  "edit": {
+    "field": {
+      "firstName": "Vardas",
+      "lastName": "Pavardė",
+      "username": "El. paštas",
+      "password": "Slaptažodis"
+    },
+    "validation": {
+      "firstName": "Vardas negali būti tuščias",
+      "password": "Slaptažodis negali būti tuščias"
+    }
   }
 }
