@@ -1,7 +1,11 @@
 import React, {useEffect} from 'react';
+
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
+import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
+
+import Button from 'components/Button';
 import Card from 'components/atom/Card';
 import Nullable from 'components/atom/Nullable';
 import CheckBox from 'components/atom/input/CheckBox';
@@ -12,13 +16,11 @@ import Map from 'feature/map/component/Map';
 import {CrewListRoute} from 'feature/crew/routes';
 import Polygon from 'feature/map/component/Polygon';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
-import {getFlatNodes, getZoneItems} from 'feature/breach/utils';
+import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
 import {useCrew, useCrewById, useCrewZones} from 'feature/crew/api/crewEditApi';
 
-import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-import {mapProps, pipe} from 'crocks/helpers';
 import {getProp, isFunction} from 'crocks';
-import Button from '../../../components/Button';
+import {mapProps, pipe} from 'crocks/helpers';
 
 const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
@@ -47,8 +49,8 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
     successRedirectPath: CrewListRoute.props.path,
   });
 
-  const zonePath = getZoneItems(crew);
-  const zoneCoordinates = getFlatNodes(crew);
+  const zonePath = getZoneItemsThroughCalendar(crew);
+  const zoneCoordinates = getFlatNodesThroughCalendar(crew);
 
   const {value: name} = ctrl('name');
   const {value: status} = ctrl('status');
