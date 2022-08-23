@@ -86,7 +86,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   ]
 
   const {data: crewDropdown} = useCrewDropdown();
-  console.log(crewDropdown);
+  // console.log(crewDropdown);
 
   const filtersData = [
     // {key: 'start_time', label: 'Started At', filter: 'date'},
@@ -109,7 +109,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const list = useBreaches({filters: queryParams})
 
   useEffect(() => {
-    console.log(queryParams);
+    // console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

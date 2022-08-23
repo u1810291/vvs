@@ -238,7 +238,7 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, tableColumns, filtersData, initialState) => {
-  console.log('filters data', filtersData);
+  // console.log('filters data', filtersData);
 
   const [showFilter, setShowFilter] = useState(true);
 
@@ -791,7 +791,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    console.log(state);
+    // console.log(state);
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
