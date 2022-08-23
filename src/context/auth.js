@@ -55,24 +55,20 @@ const AuthContextProvider = ({children}) => {
     setState({token: null, refreshToken: null});
   }, [setAuthorized, setState]);
 
-  const success = useCallback(() => {
-    setAuthorized(true);
-  }, [setAuthorized])
+  const success = useCallback(() => setAuthorized(true), [setAuthorized]);
 
   useEffect(() => {
-    const refreshtoken = (
-      getProp('refreshToken', state)
-      .chain(safe(isValid))
-      .map(tap(value => localStorage.setItem('refreshToken', value)))
-      .alt(safe(isValid, localStorage.getItem('refreshToken')))
-      .either(fail, refreshToken => {
-        if (state.token) return success();
+    getProp('refreshToken', state)
+    .chain(safe(isValid))
+    .map(tap(value => localStorage.setItem('refreshToken', value)))
+    .alt(safe(isValid, localStorage.getItem('refreshToken')))
+    .either(fail, refreshToken => {
+      if (state.token) return success();
 
-        refresh(refreshToken)
-          .map(tap(setState))
-          .fork(fail, success)
-      })
-    );
+      refresh(refreshToken)
+        .map(tap(setState))
+        .fork(fail, success)
+    });
   }, [state, fail, success]);
 
   return (
