@@ -12,7 +12,7 @@ import {
   curry,
   getProp,
   getPropOr,
-  identity,
+  // identity,
   isEmpty,
   map,
   Maybe,
@@ -29,6 +29,7 @@ import {PermissionRequestListRoute, TaskCancellationEditRoute, TaskCancellationC
 import Button from 'components/Button';
 import Innerlinks from 'components/Innerlinks';
 import {useTaskCancellations} from '../api';
+import {titleCase} from '@s-e/frontend/transformer/string';
 
 
 
@@ -89,7 +90,7 @@ const TaskCancellationListLayout = withPreparedProps(Listing, props => {
       </Innerlinks>
     ),
     tableColumns: [
-      c('value', ne, identity),
+      c('value', ne, titleCase),
       // c('comment', ne, identity),
     ],
   }

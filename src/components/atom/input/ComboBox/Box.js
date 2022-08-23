@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {putIntoArray} from '../../../../util/array';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {Combobox} from '@headlessui/react';
@@ -14,6 +14,7 @@ import {
   // option,
   pipe,
 } from 'crocks';
+import Tag from './Tag';
 
 
 const asciifyLT2 = string => string
@@ -82,30 +83,45 @@ const Box = ({
 
     setState(prevState);
   }
+
+  const onDeselect = (event) => {
+    console.log('deselect',  event);
+    return;
+    let prevState = [...state];
+    const exists = prevState.find(s => s.key === event.target.key);
+    
+    if (exists) {
+      prevState = prevState.filter(s => s.key !== exists.key);
+    }
+
+    setState(prevState);
+  }
   
   useEffect(() => {
     // console.log('combobox', state);
     onChangeValue(selected);
   }, [state]);
 
-  const displayName = useCallback(() => {
-    let display = []; 
-    state.forEach(s => display.push(s.value));
-    // console.log(display.join(', '));
-    return display.join(', ');
-  }, [state])
+  // const displayName = useCallback(() => {
+  //   let display = []; 
+  //   state.forEach(s => display.push(s.value));
+  //   // console.log(display.join(', '));
+  //   return display.join(', ');
+  // }, [state])
 
   return (
     <Combobox as='div' value={state} onChange={onSelect}>
       <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
       <InputContainer>
-        <Input
-          onChange={onChange}
-          displayValue={displayName}
-          placeholder={placeholder}
-          {...props}
-        />
-        <Button/>
+        <div className='flex flex-row relative'>
+          <Input
+            onChange={onChange}
+            // displayValue={displayName}
+            placeholder={placeholder}
+            {...props}
+          />
+          <Button/>
+        </div>
         <Nullable on={filteredChildren.length}>
           <Options>
             {filteredChildren.map((component) => (
@@ -125,7 +141,15 @@ const Box = ({
             ))}
           </Options>
         </Nullable>
+        
+        <Nullable on={state.length}>
+          {state.map(({key, value}) => (
+            <Tag key={key} onDelete={onDeselect}>{value}</Tag>
+          ))}
+        </Nullable>
       </InputContainer>
+      
+      
     </Combobox>
   );
 };

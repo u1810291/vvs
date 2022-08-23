@@ -27,6 +27,7 @@ import {PermissionRequestCreateRoute, PermissionRequestEditRoute} from '../route
 import {useCrewRequest} from '../../permission/api';
 import {TaskCancellationListRoute, TaskTypeListRoute} from 'feature/classifier/routes';
 import Innerlinks from 'components/Innerlinks';
+import {titleCase} from '@s-e/frontend/transformer/string';
 
 
 
@@ -85,7 +86,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
       </Innerlinks>
     ),
     tableColumns: [
-      c('value', identity),
+      c('value', titleCase),
       c('duration', pipe(
         mPgIntervalToStr,
         map(({hours, minutes}) => `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`),
