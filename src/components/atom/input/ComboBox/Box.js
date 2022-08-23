@@ -6,12 +6,12 @@ import Nullable from '../../Nullable'
 import {componentToString} from '@s-e/frontend/react';
 import {
   filter,
-  getPath,
+  // getPath,
   identity,
   ifElse,
   isEmpty,
   isTruthy,
-  option,
+  // option,
   pipe,
 } from 'crocks';
 
@@ -45,7 +45,8 @@ const Box = ({
   ...props
 }) => {
   const [query, setQuery] = useState('');
-  const [selectedChildren, setSelectedChildren] = useState('');
+  const [selected, setSelected] = useState({});
+  const [state, setState] = useState([]);
 
   const filteredChildren = useMemo(() => pipe(
     putIntoArray,
@@ -64,19 +65,38 @@ const Box = ({
   const onChange = (event) => {
     setQuery(event.target.value)
   };
+
+  const onSelect = (event) => {
+    // console.log('onselect', event);
+    const current = {key: event.props.value, value: event.props.children};
+    setSelected(current);
+
+    let prevState = [...state];
+    const exists = prevState.find(s => s.key === current.key);
+    
+    if (exists) {
+      prevState = prevState.filter(s => s.key !== exists.key);
+    } else {
+      prevState.push(current);
+    }
+
+    setState(prevState);
+  }
   
   useEffect(() => {
-    console.log(selectedChildren);
-    onChangeValue({key: selectedChildren?.key, value: selectedChildren?.props?.value});
-  }, [selectedChildren]);
+    // console.log('combobox', state);
+    onChangeValue(selected);
+  }, [state]);
 
-  const displayName = useCallback(event => pipe(
-    getPath(['props', 'children']),
-    option(''),
-  )(event), []);
+  const displayName = useCallback(() => {
+    let display = []; 
+    state.forEach(s => display.push(s.value));
+    // console.log(display.join(', '));
+    return display.join(', ');
+  }, [state])
 
   return (
-    <Combobox as='div' value={selectedChildren} onChange={setSelectedChildren}>
+    <Combobox as='div' value={state} onChange={onSelect}>
       <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
       <InputContainer>
         <Input
@@ -94,7 +114,7 @@ const Box = ({
                 className={optionClassNameFn} 
                 value={component}              
                 key={component?.key || component?.props?.key || component.props.children}
-                selected={displayValue(value)}
+                selected={state.find(s => s.key === component?.key)}
                 //   multiple
                 //     ? value.includes(component.props.children)
                 //       ? displayValue(component.props.children)

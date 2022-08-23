@@ -238,6 +238,8 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, tableColumns, filtersData, initialState) => {
+  console.log('filters data', filtersData);
+
   const [showFilter, setShowFilter] = useState(true);
 
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
@@ -702,8 +704,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                   >
                     {map(
                       value => (
-                        <ComboBox.Option key={value} value={value}>
-                          {value}
+                        <ComboBox.Option key={value?.value ?? value} value={value?.value ?? value}>
+                          {value?.name ?? value}
                         </ComboBox.Option>
                       ),
                       values ?? []

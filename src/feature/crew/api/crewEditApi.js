@@ -104,3 +104,14 @@ export const useCrewZones = createUseList({
     option([])
   ),
 });
+
+
+export const useCrewDropdown = createUseList({
+  graphQl: raw('./graphql/GetCrews.graphql'),
+  asyncMapFromApi: pipe(
+    maybeToAsync('crew prop was expected', getProp('crew')),
+    map(ifElse(isEmpty, () => [], map(a => ({value: a.id, name: a.name})))),
+    safe(not(isEmpty)),
+    option([])
+  ),
+});
