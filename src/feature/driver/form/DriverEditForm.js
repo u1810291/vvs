@@ -10,7 +10,7 @@ import {useTranslation} from 'react-i18next';
 
 const DriverEditForm = ({saveRef}) => {
   const {id} = useParams();
-  const {t} = useTranslation('driver', {keyPrefix: 'edit'});
+  const {t} = useTranslation('driver');
   const {ctrl, result, setForm} = useResultForm({
     firstName: FORM_FIELD.TEXT({
       label: t`field.firstName`,

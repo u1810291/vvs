@@ -14,13 +14,14 @@ import {withComponentFactory} from 'util/react';
 
 const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const {t} = useTranslation('driver', {keyPrefix: 'list'});
+  const {t: tc} = useTranslation('driver', {keyPrefix: 'field'});
   const {t: tos} = useTranslation('driver', {keyPrefix: 'onlineStatus'});
   const {t: tb} = useTranslation('driver', {keyPrefix: 'breadcrumbs'});
   const nav = useNavigate();
 
   const c = (prop, mapper = identity, status) => ({
     key: prop,
-    headerText: t(prop),
+    headerText: tc(prop),
     status,
     itemToProps: item => pipe(
       safe(and(hasProp('id'), propSatisfies(prop, isTruthy))),
@@ -55,7 +56,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     c('birthDate', identity, false),
     {
       key: 'status',
-      headerText: t`status`,
+      headerText: tc`status`,
       itemToProps: Maybe.Just,
       Component: withComponentFactory(DriverOnlineTag, {t: tos}),
     }

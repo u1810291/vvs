@@ -1,4 +1,7 @@
 {
+  "list": {
+    "create": "Create"
+  },
   "menu": {
     "list": "Drivers"
   },
@@ -6,24 +9,22 @@
     "drivers": "Drivers",
     "allData": "All Data"
   },
-  "list": {
-    "column": {
-      "id": "ID",
-      "full_name": "Full name",
-      "status": "Status"
-    }
+  "field": {
+    "status": "Status",
+    "active": "Active",
+    "birthDate": "Birth date",
+    "email": "Email",
+    "firstName": "First name",
+    "id": "ID",
+    "lastName": "Last name",
+    "mobilePhone": "Middle name",
+    "password": "Password",
+    "username": "Email",
+    "verified": "Verified"
   },
-  "edit": {
-    "field": {
-      "firstName": "First name",
-      "lastName": "Last name",
-      "username": "Email",
-      "password": "Password"
-    },
-    "validation": {
-      "firstName": "First name cannot be empty",
-      "password": "Password cannot be empty"
-    }
+  "validation": {
+    "firstName": "First name cannot be empty",
+    "password": "Password cannot be empty"
   },
   "onlineStatus": {
     "unknown": "Unknown",

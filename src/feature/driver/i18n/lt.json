@@ -1,4 +1,7 @@
 {
+  "list": {
+    "create": "Naujas"
+  },
   "menu": {
     "list": "Vairuotojai"
   },
@@ -6,24 +9,22 @@
     "drivers": "Vairuotojai",
     "allData": "Visi duomenys"
   },
-  "list": {
-    "column": {
-      "id": "ID",
-      "full_name": "Vardas Pavardė",
-      "status": "Būsena"
-    }
+  "field": {
+    "status": "Būsena",
+    "active": "Aktyvus",
+    "birthDate": "Gimimo data",
+    "email": "El. paštas",
+    "firstName": "Vardas",
+    "id": "ID",
+    "lastName": "Pavardė",
+    "mobilePhone": "Antrasis vardas",
+    "password": "Slaptažodis",
+    "username": "El. paštas",
+    "verified": "Patvirtintas"
   },
-  "edit": {
-    "field": {
-      "firstName": "Vardas",
-      "lastName": "Pavardė",
-      "username": "El. paštas",
-      "password": "Slaptažodis"
-    },
-    "validation": {
-      "firstName": "Vardas negali būti tuščias",
-      "password": "Slaptažodis negali būti tuščias"
-    }
+  "validation": {
+    "firstName": "Vardas negali būti tuščias",
+    "password": "Slaptažodis negali būti tuščias"
   },
   "onlineStatus": {
     "unknown": "Nežinoma",
