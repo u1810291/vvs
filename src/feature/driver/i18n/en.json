@@ -2,6 +2,10 @@
   "list": {
     "create": "Create"
   },
+  "edit": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
   "menu": {
     "list": "Drivers"
   },
@@ -17,14 +21,15 @@
     "firstName": "First name",
     "id": "ID",
     "lastName": "Last name",
-    "mobilePhone": "Middle name",
+    "middleName": "Middle name",
+    "mobilePhone": "Mobile phone",
     "password": "Password",
     "username": "Email",
     "verified": "Verified"
   },
   "validation": {
     "firstName": "First name cannot be empty",
-    "password": "Password cannot be empty"
+    "password": "Password must have at least 6 symbols"
   },
   "onlineStatus": {
     "unknown": "Unknown",

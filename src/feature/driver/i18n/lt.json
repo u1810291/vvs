@@ -2,6 +2,10 @@
   "list": {
     "create": "Naujas"
   },
+  "edit": {
+    "save": "Saugoti",
+    "cancel": "Atšaukti"
+  },
   "menu": {
     "list": "Vairuotojai"
   },
@@ -17,14 +21,15 @@
     "firstName": "Vardas",
     "id": "ID",
     "lastName": "Pavardė",
-    "mobilePhone": "Antrasis vardas",
+    "middleName": "Antras vardas",
+    "mobilePhone": "Telefono Nr.",
     "password": "Slaptažodis",
     "username": "El. paštas",
     "verified": "Patvirtintas"
   },
   "validation": {
     "firstName": "Vardas negali būti tuščias",
-    "password": "Slaptažodis negali būti tuščias"
+    "password": "Slaptažodis turi būti bent 6-ių simbolių"
   },
   "onlineStatus": {
     "unknown": "Nežinoma",
