@@ -1,23 +1,24 @@
-import Breadcrumbs, {RouteAsBreadcrumb} from '../../../components/Breadcrumbs';
+import Breadcrumbs from '../../../components/Breadcrumbs';
 import ListingLayout from '../../../layout/ListingLayout';
 import React, {useMemo} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
-import DriverRoute, {DriverCreateRoute, DriverEditRoute} from '../routes';
+import {DriverCreateRoute, DriverEditRoute} from '../routes';
 import {useTranslation} from 'react-i18next';
-import {getPropOr, identity, pipe, safe, and, hasProp, map, isTruthy, propSatisfies, pick} from 'crocks';
+import {getPropOr, identity, pipe, safe, and, hasProp, map, isTruthy, propSatisfies, pick, Maybe} from 'crocks';
 import useDrivers from '../api/useDrivers';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import Button from 'components/Button';
-import {useFilter} from 'hook/useFilter';
-import {FilterIcon} from '@heroicons/react/solid';
+import DriverOnlineTag from '../component/DriverOnlineTag';
+import {withComponentFactory} from 'util/react';
 
 const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const {t} = useTranslation('driver', {keyPrefix: 'list'});
+  const {t: tos} = useTranslation('driver', {keyPrefix: 'onlineStatus'});
   const {t: tb} = useTranslation('driver', {keyPrefix: 'breadcrumbs'});
   const nav = useNavigate();
 
-  const c = useMemo(() => (prop, mapper = identity, status) => ({
+  const c = (prop, mapper = identity, status) => ({
     key: prop,
     headerText: t(prop),
     status,
@@ -38,7 +39,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
         </Link>
       )
     },
-  }), [t]);
+  });
 
   const boolCol = useMemo(() => pipe(String, t), [t]);
 
@@ -52,22 +53,15 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     c('middleName', identity, false),
     c('email', identity, false),
     c('birthDate', identity, false),
-    c('is_online', boolCol, true),
+    {
+      key: 'status',
+      headerText: t`status`,
+      itemToProps: Maybe.Just,
+      Component: withComponentFactory(DriverOnlineTag, {t: tos}),
+    }
   ];
 
-  const filtersData = [
-    {key: 'firstName', label: 'firstName', filter: 'text'},
-    {key: 'lastName', label: 'lastName', filter: 'text'},
-    {key: 'is_online', label: 'Status', filter: 'select', values: ['deactivated', 'offline', 'online']},
-  ];
-  
-  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
-    'driver',
-    tableColumns,
-    filtersData
-  );
-
-  const api = useDrivers({filters: queryParams});
+  const api = useDrivers();
 
   return {
     list: api?.data || [],
@@ -75,19 +69,9 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     buttons: <Button onClick={() => nav(DriverCreateRoute.props.path)}>{t`create`}</Button>,
     breadcrumbs: (
       <Breadcrumbs>
-        <RouteAsBreadcrumb route={DriverRoute}/>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`drivers`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>
-          <Button.NoBg onClick={toggleFilter}>
-            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
-            <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
-          </Button.NoBg>
-        </Breadcrumbs.Item>
       </Breadcrumbs>
     ),
-    filters,
-    columns,
-
     /**
      * @type {Array<import('../../../layout/ListingLayout/index.js').TableColumnComponent>}
      */

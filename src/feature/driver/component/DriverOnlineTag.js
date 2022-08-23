@@ -1,9 +1,15 @@
 import {caseMap} from '@s-e/frontend/flow-control';
-import {not, pipe, getProp, curry, map, option} from 'crocks';
-import {constant} from 'lodash';
-import {useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
+import {pipe, getProp, curry, option, identity, isTrue, chain, safe, constant, isFalse, map} from 'crocks';
 import Tag from 'components/atom/Tag';
+import withPreparedProps from 'hoc/withPreparedProps';
+import {useTranslation} from 'react-i18next';
+
+const lensCase = (lens, pred) => pipe(
+  lens,
+  chain(safe(pred)),
+  map(constant(true)),
+  option(false)
+);
 
 const getStatus = curry(
   (
@@ -15,13 +21,13 @@ const getStatus = curry(
     onOffline,
     props
   ) => caseMap(onUnknown, [
-      [pipe(isActiveLens, map(Boolean), map(not), option(false)), onInactive],
-      [pipe(isOnlineLens, map(Boolean), option(false)), onOnline],
-      [pipe(isOnlineLens, map(Boolean), map(not), option(false)), onOffline],
+      [lensCase(isActiveLens, isFalse), onInactive],
+      [lensCase(isOnlineLens, isTrue), onOnline],
+      [lensCase(isOnlineLens, isFalse), onOffline],
     ], props)
 );
 
-const DriverOnlineTag = ({
+const UntranslatedDriverOnlineTag = ({
   lens = {
     /**
      * @type {(obj: Object) => boolean}
@@ -39,27 +45,23 @@ const DriverOnlineTag = ({
     online: 'bg-mantis',
     offline: 'bg-brick',
   },
+  getText = {
+    unknown: constant('unknown'),
+    inactive: constant('inactive'),
+    online: constant('online'),
+    offline: constant('offline'),
+  },
+  translateFn = identity,
   Component = Tag,
   ...props
 } = {}) => {
-  const {t} = useTranslation('driver', {keyPrefix: 'onlineStatus'});
 
-  const _getStatus = useMemo(() => getStatus(
+  const _getStatus = getStatus(
     lens.isOnline,
     lens.isActive
-  ), [lens.isActive, lens.isOnline]);
+  );
 
-  const text = useMemo(() => pipe(
-    _getStatus(
-      constant('unknown'),
-      constant('inactive'),
-      constant('online'),
-      constant('offline'),
-    ),
-    t
-  )(props), [_getStatus, t]);
-
-  const className = useMemo(() => pipe(
+  const className = pipe(
     _getStatus(
       constant(classNames.unknown),
       constant(classNames.inactive),
@@ -67,11 +69,33 @@ const DriverOnlineTag = ({
       constant(classNames.offline),
     ),
     status => [status, props?.className].join(' '),
-  )(props), [_getStatus, props, classNames]);
+  )(props);
 
-
-  return <Component className={className}>{text}</Component>;
+  return <Component className={className}>
+    {pipe(
+      _getStatus(
+        getText.unknown,
+        getText.inactive,
+        getText.online,
+        getText.offline,
+      ),
+    )(props)}
+  </Component>;
 };
 
+const DriverOnlineTag = withPreparedProps(UntranslatedDriverOnlineTag, () => {
+  const {t} = useTranslation('driver', {keyPrefix: 'onlineStatus'});
+
+  return {
+    getText: {
+      unknown: constant(t('unknown')),
+      inactive: constant(t('inactive')),
+      online: constant(t('online')),
+      offline: constant(t('offline')),
+    }
+  };
+});
+
+DriverOnlineTag.Untranslated = UntranslatedDriverOnlineTag;
 
 export default DriverOnlineTag;

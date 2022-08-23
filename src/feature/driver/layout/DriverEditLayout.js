@@ -9,9 +9,14 @@ import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
 import DriverEditForm from '../form/DriverEditForm';
 import useDriver from 'feature/driver/api/useDriver';
-import {getProp, hasProps, identity, isFunction, safe, not, isEmpty, Maybe} from 'crocks';
+import {getProp, hasProps, identity, isFunction, safe, not, isEmpty, Maybe, pipe} from 'crocks';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import DriverOnlineTag from '../component/DriverOnlineTag';
+
+const toBreadcrumbValue = pipe(
+  a => String(a || '').trim(),
+  safe(not(isEmpty)),
+);
 
 const DriverEditLayout = () => {
   const saveRef = useRef(identity);
@@ -25,16 +30,16 @@ const DriverEditLayout = () => {
     .alt((
       safe(hasProps(['firstName', 'middleName', 'lastName']), data)
       .map(({firstName, middleName, lastName}) => `${firstName} ${middleName} ${lastName}`)
-      .chain(safe(not(isEmpty)))
+      .chain(toBreadcrumbValue)
     ))
     .alt((
       safe(hasProps(['firstName', 'lastName']), data)
       .map(({firstName, lastName}) => `${firstName} ${lastName}`)
-      .chain(safe(not(isEmpty)))
+      .chain(toBreadcrumbValue)
     ))
-    .alt(getProp('firstName', data).chain(safe(not(isEmpty))))
-    .alt(getProp('lastName', data).chain(safe(not(isEmpty))))
-    .alt(getProp('id', data).chain(safe(not(isEmpty))))
+    .alt(getProp('firstName', data).chain(toBreadcrumbValue))
+    .alt(getProp('lastName', data).chain(toBreadcrumbValue))
+    .alt(getProp('id', data).chain(toBreadcrumbValue))
     .alt(Maybe.Just(t`newDriver`))
     .map(titleCase)
     .option(null)

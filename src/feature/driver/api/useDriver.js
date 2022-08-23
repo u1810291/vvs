@@ -1,7 +1,7 @@
+import raw from 'raw.macro';
+import {Async, pipe, branch, merge, bimap, assign, hasProps, getProp, safe, chain, option} from 'crocks';
 import {createUseOne} from 'api/buildApiHook';
 import {getPathAsync} from 'api/buildUserQuery';
-import {Async, pipe, getPropOr, branch, merge, bimap, assign} from 'crocks';
-import raw from 'raw.macro';
 import {removeFalsyFields} from 'util/obj';
 
 export default createUseOne({
@@ -11,7 +11,11 @@ export default createUseOne({
   asyncMapFromApi: pipe(
     branch,
     bimap(
-      getPropOr({is_online: false}, 'user_settings_by_pk'),
+      pipe(
+        getProp('user_settings_by_pk'),
+        chain(safe(hasProps(['is_online']))),
+        option({}),
+      ),
       getPathAsync(['userById', 'user'])
     ),
     merge((l, r) => r.map(assign(l)))
