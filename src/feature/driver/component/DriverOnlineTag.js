@@ -1,5 +1,5 @@
 import {caseMap} from '@s-e/frontend/flow-control';
-import {pipe, getProp, curry, option, identity, isTrue, chain, safe, constant, isFalse, map} from 'crocks';
+import {pipe, getProp, curry, option, isTrue, chain, safe, constant, isFalse, map} from 'crocks';
 import Tag from 'components/atom/Tag';
 import withPreparedProps from 'hoc/withPreparedProps';
 import {useTranslation} from 'react-i18next';
@@ -51,7 +51,6 @@ const UntranslatedDriverOnlineTag = ({
     online: constant('online'),
     offline: constant('offline'),
   },
-  translateFn = identity,
   Component = Tag,
   ...props
 } = {}) => {
