@@ -7,18 +7,26 @@ import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import CheckBox from 'components/atom/input/CheckBox';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
+// import {mStrToIsoPeriod} from '../../../util/datetime';
+// import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+// import {XCircleIcon} from '@heroicons/react/outline';
+import {useNotification} from 'feature/ui-notifications/context';
 
 
 
-
-
-const DEFAULT_DURATION = '00:20';
+const DEFAULT_DURATION = '00:05';
 
 
 
 const PermissionRequestEditForm = ({saveRef, removeRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('permission', {keyPrefix: 'request.edit'});
+  const {notify} = useNotification();
+
+  
+  const isValidDuration = interval => {
+    return interval.match(new RegExp(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/));
+  }
 
   const {ctrl, result, setForm} = useResultForm({
     value: FORM_FIELD.TEXT({label: t`value`}),
@@ -41,9 +49,15 @@ const PermissionRequestEditForm = ({saveRef, removeRef}) => {
     removeRef,
   });
 
+
   const setDefaultDuration = (v) => {
-    if (!v) {
-      setForm({duration: DEFAULT_DURATION});
+    if (!isNaN(v) && parseInt(v) >= 0 && parseInt(v) <= 59) {
+      setForm({duration: `00:${v.padStart(2, '0')}`})
+      return;
+    }
+
+    if (!v || !isValidDuration(v)) {
+      // setForm({duration: DEFAULT_DURATION});
     }
   }
 
