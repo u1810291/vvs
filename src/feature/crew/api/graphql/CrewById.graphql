@@ -18,7 +18,12 @@ query CrewById ($id: uuid!) {
             week_day
             start_time
             end_time
-            dislocation_zone_id
+            crew_zone {
+                name
+                nodes
+                id
+                crew_id
+            }
         }
     }
 }

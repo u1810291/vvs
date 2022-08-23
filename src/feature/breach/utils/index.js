@@ -54,3 +54,28 @@ export const getZoneItems =
     getZonePath,
     map(({nodes}) => nodes)
   );
+
+const getZonePathThroughCalendar =
+  pipe(
+    safe(and(not(isEmpty), isObject)),
+    chain(getPath(['calendars'])),
+    option([])
+  );
+
+export const getFlatNodesThroughCalendar = pipe(
+  getZonePathThroughCalendar,
+  reduce((carry, item) => [
+    ...carry,
+    ...pipe(
+      getPath(['crew_zone', 'nodes']),
+      map(a => a.flat()),
+      option([])
+    )(item),
+  ], [])
+);
+
+export const getZoneItemsThroughCalendar =
+  pipe(
+    getZonePathThroughCalendar,
+    map((nodes) => nodes?.crew_zone?.nodes)
+  );

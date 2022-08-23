@@ -1,28 +1,38 @@
 import raw from 'raw.macro';
-import {useAuth} from 'context/auth';
-import useAsyncSwr from 'hook/useAsyncSwr';
-import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-import {
-  pipe,
-  map,
-  ifElse,
-  isEmpty,
-  getProp,
-  pick,
-  mapProps,
-  Async, safe,
-} from 'crocks'
-import {option} from 'crocks/pointfree';
-import {not} from 'crocks/logic';
 
-// TODO: Reduce duplicated requests
+import {useAuth} from 'context/auth';
+
+import useAsyncSwr from 'hook/useAsyncSwr';
+
+import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
+
+import maybeToAsync from 'crocks/Async/maybeToAsync';
+
+import {Async, safe, omit, getProp} from 'crocks'
+import {not, ifElse} from 'crocks/logic';
+import {isEmpty} from 'crocks/predicates';
+import {constant} from 'crocks/combinators';
+import {map, option} from 'crocks/pointfree';
+import {pipe, pick, objOf, mapProps} from 'crocks/helpers';
+
+const {Resolved, Rejected} = Async;
+
+const mapOnActionIdentification = obj => ifElse(
+  constant(obj?.id),
+  pipe(
+    map(e => ({...e, dislocation_zone_id: e?.crew_zone ? e?.crew_zone?.id : e?.dislocation_zone_id})),
+    map(pipe(omit(['id', 'crew_zone'])))
+  ),
+  pipe(map(pipe(omit(['id']))),
+    objOf('data')
+  )
+);
 
 export const useCrews = createUseWhereList({
   graphQl: raw('./graphql/GetCrews.graphql'),
   asyncMapFromApi: pipe(
-    maybeToAsync('expected prop "crew" does not exist', getProp('crew')),
-  ),
+    maybeToAsync('expected prop "crew" does not exist', getProp('crew'))
+  )
 });
 
 export const useCrew = createUseOne({
@@ -37,7 +47,7 @@ export const useCrew = createUseOne({
     pick([
       'id',
       'name',
-      'status',
+      'calendars',
       'driver_name',
       'abbreviation',
       'phone_number',
@@ -45,43 +55,18 @@ export const useCrew = createUseOne({
       'is_assigned_automatically',
       'is_assigned_while_in_breaks',
     ]),
-    mapProps({
-      name: mapToNullableString,
-      driver_name: mapToNullableString,
-      abbreviation: mapToNullableString,
-      phone_number: mapToNullableString,
-      to_call_after: mapToNullableString,
-      status: mapToNullableString,
-    }),
-    Async.Resolved
+    obj =>
+      mapProps({
+        name: mapToNullableString,
+        driver_name: mapToNullableString,
+        abbreviation: mapToNullableString,
+        phone_number: mapToNullableString,
+        to_call_after: mapToNullableString,
+        calendars: mapOnActionIdentification(obj)
+    }, obj),
+    Resolved
   ),
-  asyncRemoveMapToApi: pipe(
-    pick(['id']),
-    Async.Resolved
-  )
-});
-
-export const useCrewCalendar = createUseOne({
-  createGraphql: raw('./graphql/CrewCreateCalendar.graphql'),
-  asyncMapFromApi: pipe(
-    maybeToAsync('prop "crew_calendar_by_pk" was expected', getProp('crew_calendar_by_pk')),
-  ),
-  asyncMapToApi: pipe(
-    pick([
-      'id',
-      'week_day',
-      'end_time',
-      'start_time',
-      'dislocation_zone_id'
-    ]),
-    mapProps({
-      week_day: mapToNullableString,
-      end_time: mapToNullableString,
-      start_time: mapToNullableString,
-      dislocation_zone_id: mapToNullableString,
-    }),
-    Async.Resolved
-  ),
+  asyncRemoveMapToApi: pipe(pick(['id']), Resolved)
 });
 
 export const useCrewById = id => {
@@ -102,7 +87,7 @@ export const useCrewZones = createUseList({
     map(ifElse(isEmpty, () => [], map(a => ({key: a.name, value: a.id})))),
     safe(not(isEmpty)),
     option([])
-  ),
+  )
 });
 
 

@@ -10,6 +10,7 @@ import {useCrew} from 'feature/crew/api/crewEditApi';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
+import DynamicStatus from '../component/CrewStatus';
 
 const CrewEditLayout = () => {
   const saveRef = useRef(identity);
@@ -26,6 +27,11 @@ const CrewEditLayout = () => {
       .option(null)
   );
 
+  const status = (
+    getProp('status', data)
+      .option(null)
+  );
+
   return (
     <SideBarLayout>
       <div className='flex flex-col min-h-full'>
@@ -36,6 +42,9 @@ const CrewEditLayout = () => {
               <Breadcrumbs.Item>
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
+              <Nullable on={status}>
+                <DynamicStatus className='w-full px-2 text-xl items-center font-thin uppercase' status={status}/>
+              </Nullable>
             </Nullable>
           </Breadcrumbs>
           <div className='space-x-4'>

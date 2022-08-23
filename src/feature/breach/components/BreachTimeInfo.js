@@ -17,7 +17,7 @@ const BreachTimeInfo = ({start_time, end_time}) => (
     </p>
     <p className={'text-bluewood'}>
       {
-        start_time && format(new Date(start_time), 'Y-MM-d HH:mm')
+        start_time && format(new Date(start_time), 'Y-MM-d HH:mm:ss')
       }
     </p>
   </Nullable>

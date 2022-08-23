@@ -1,4 +1,5 @@
 import {useMemo, useCallback} from 'react';
+import InputGroup from 'components/atom/input/InputGroup';
 import {ensureOptionalProp, ensureProp} from '../util/result';
 import {
   Result,
@@ -111,6 +112,7 @@ const FORM_FIELD = {
     label,
     fallbackValue = '',
     props = {},
+    showValidationBelow = false,
     ...obj
   }) => defaultProps({
     validator: not(isEmpty),
@@ -119,6 +121,15 @@ const FORM_FIELD = {
       onChange: ({set}) => ({target: {value}}) => set(value),
       value: ({value}) => isString(value) ? value : fallbackValue,
       ...(label ? {label: always(label)} : {}),
+      ...(
+        showValidationBelow
+          ? {below: ({isValid, message}) => (
+            !isValid && message
+              ? <InputGroup.ErrorText>{message}</InputGroup.ErrorText>
+              : null
+          )}
+          : {}
+      ),
       ...props
     }
   }, obj),

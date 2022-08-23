@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
@@ -65,19 +65,19 @@ const CrewListLayout = withPreparedProps(Listing, () => {
 
   const cs = useMemo(() => getColumn(tc, props => (
     <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
-      <DynamicStatus status={props?.status}/>
+      <DynamicStatus className={'w-20'} status={props?.status}/>
     </Link>
   )), [tc]);
 
   const nullToStr = e => !e ? '-' : e;
-  const boolToStr = useCallback(e => e ? ts`YES` : ts`NO`, [tc]);
-  const arrToStr = e => !e?.length ? '-' : e?.map(({name}, ixd) => `${name}${ixd !== e.length -1 ? ', ' : ''}`);
+  const boolToStr = e => e ? ts`YES` : ts`NO`;
+  const arrToStr = e => !e?.length ? '-' : e?.map(({crew_zone}, ixd) => `${crew_zone?.name}${ixd !== e.length -1 ? ', ' : ''}`);
 
   const tableColumns = [
     c('id', constant(true), nullToStr, false, 'text-regent'),
     c('name', constant(true), nullToStr, true, 'text-bluewood'),
     c('abbreviation', constant(true), nullToStr, true, 'text-regent'),
-    c('zone', constant(true), arrToStr, true, 'text-steel'),
+    c('calendars', constant(true), arrToStr, true, 'text-steel'),
     cs('status', constant(true), nullToStr, true, null),
     c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent')
   ];
@@ -95,14 +95,14 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     },
     {
       key: 'zone',
-      label: tc('zone'),
+      label: tc('calendars'),
       filter: 'text'
     },
     {
       key: 'status',
       label: tc('status'),
       filter: 'multiselect',
-      values: ['BREAK', 'BUSY', 'OFFLINE', 'READY']
+      values: ['BREAK', 'BUSY', 'OFFLINE', 'READY', 'DRIVE_BACK']
     },
     {
       key: 'is_assigned_automatically',

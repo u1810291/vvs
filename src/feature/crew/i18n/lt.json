@@ -28,7 +28,7 @@
       "name": "Pavadinimas",
       "abbreviation": "Trumpinys",
       "status": "Būsena",
-      "zone": "Dislokacijos zona",
+      "calendars": "Dislokacijos zona",
       "driver_name": "Vairuotojo vardas",
       "phone_number": "Telefono numeris",
       "is_assigned_automatically": "Automatiškai priskirti"

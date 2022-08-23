@@ -42,7 +42,7 @@ const CalendarTimeline = memo(({
         </button>
       </div>
       <div
-        className={'flex-col overflow-x-auto mt-6'}>
+        className={'flex-col overflow-x-auto mt-6 shadow-[0px_0px_0px_1px_rgba(64,75,95,0.1)]'}>
         <CalendarModal
           isOpen={isOpen}
           setOpen={setOpen}

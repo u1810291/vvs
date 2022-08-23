@@ -1,7 +1,11 @@
 import React, {useEffect} from 'react';
+
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
+import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
+
+import Button from 'components/Button';
 import Card from 'components/atom/Card';
 import Nullable from 'components/atom/Nullable';
 import CheckBox from 'components/atom/input/CheckBox';
@@ -12,13 +16,13 @@ import Map from 'feature/map/component/Map';
 import {CrewListRoute} from 'feature/crew/routes';
 import Polygon from 'feature/map/component/Polygon';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
-import {getFlatNodes, getZoneItems} from 'feature/breach/utils';
+import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
 import {useCrew, useCrewById, useCrewZones} from 'feature/crew/api/crewEditApi';
 
-import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
+import {lengthGt} from 'util/pred';
+
 import {mapProps, pipe} from 'crocks/helpers';
 import {getProp, isFunction} from 'crocks';
-import Button from '../../../components/Button';
 
 const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
@@ -27,15 +31,15 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const {data: crew} = useCrewById(crewId);
   const {ctrl, result, setForm} = useResultForm({
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
-    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
+    name: FORM_FIELD.TEXT({label: t`field.name`, validator: lengthGt(4)}),
     driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validator: () => true}),
-    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: () => true}),
+    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: lengthGt(1)}),
     phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
-    to_call_after: FORM_FIELD.TEXT({label: t`field.to_call_after`, validator: () => true}),
+    to_call_after: FORM_FIELD.TEXT({initial: '10', label: t`field.to_call_after`, validator: lengthGt(9)}),
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
     is_assigned_while_in_breaks: FORM_FIELD.BOOL({label: t`field.is_assigned_while_in_breaks`, validator: () => true}),
     calendars: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
-    device_id: FORM_FIELD.TEXT({initial: '54:21:9D:08:38:8C', label: t`field.device_id`, validator: () => true}),
+    device_id: FORM_FIELD.TEXT({initial: '54:21:9D:08:38:8C', label: t`field.device_id`, validator: lengthGt(10)}),
   });
 
   useCrew({
@@ -47,8 +51,8 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
     successRedirectPath: CrewListRoute.props.path,
   });
 
-  const zonePath = getZoneItems(crew);
-  const zoneCoordinates = getFlatNodes(crew);
+  const zonePath = getZoneItemsThroughCalendar(crew);
+  const zoneCoordinates = getFlatNodesThroughCalendar(crew);
 
   const {value: name} = ctrl('name');
   const {value: status} = ctrl('status');
@@ -79,6 +83,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
           />
           <InputGroup
             className={'mt-6 lg:mt-0 lg:ml-6 lg:mt-0 lg:w-5/12'}
+            isRequired={true}
             {...ctrl('device_id')}
           />
         </div>
@@ -122,7 +127,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
           <div className='flex flex-row items-center w-full'>
             <DynamicIcon
               className={'mr-4'}
-              status={status}
+              status={status || 'OFFLINE'}
               name={name}
             />
             <div className={'flex flex-col'}>

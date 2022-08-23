@@ -10,6 +10,7 @@ import {useCrew} from 'feature/crew/api/crewEditApi';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
+import DynamicStatus from '../component/CrewStatus';
 
 const CrewCreateLayout = () => {
   const saveRef = useRef(identity);
@@ -37,6 +38,7 @@ const CrewCreateLayout = () => {
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
             </Nullable>
+            <DynamicStatus className='w-full px-2 text-xl items-center font-thin uppercase' status={'OFFLINE'}/>
           </Breadcrumbs>
           <div className='space-x-4'>
             <Button.Sxl onClick={() => navigate(CrewListRoute.props.path)}>

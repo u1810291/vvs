@@ -29,7 +29,8 @@ import {
   resultToAsync,
   safe,
   Result,
-  // tap,
+  reduce,
+  isObject,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -87,6 +88,18 @@ export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) =>
     .chain(asyncMapFromApi)
   ));
 }
+
+const errorToText = pipe(
+  safe(isObject),
+  map(pipe(
+    Object.entries,
+    reduce((carry, [key, value]) => [
+      ...carry,
+      <span className='block' key={key}>{value}</span>
+    ], []),
+  )),
+  option(JSON.stringify),
+);
 
 /**
  * @param {Object} props
@@ -158,7 +171,7 @@ export const createUseOne = ({
           iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
           heading={t`apiError`}
         >
-          {JSON.stringify(error)}
+          {errorToText(error)}
         </NotificationSimple>
       ),
       () => {
@@ -185,7 +198,7 @@ export const createUseOne = ({
           iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
           heading={t`apiError`}
         >
-          {JSON.stringify(error)}
+          {errorToText(error)}
         </NotificationSimple>
       )},
       () => {

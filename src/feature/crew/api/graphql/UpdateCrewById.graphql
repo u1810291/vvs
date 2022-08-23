@@ -1,22 +1,16 @@
 mutation UpdateCrewById(
   $id: uuid!,
   $name: String = null,
-  $status: crew_status_enum = OFFLINE,
+  $abbreviation: String = null,
   $driver_name: String = null,
   $phone_number: String = null,
-  $abbreviation: String = null,
   $to_call_after: String = null,
   $is_assigned_automatically: Boolean = false,
   $is_assigned_while_in_breaks: Boolean = false,
-#  $week_day: Int!,
-#  $end_time: String!,
-#  $start_time: String!,
-#  $crew_id: String!,
-#  $dislocation_zone_id: uuid!
+  $calendars: [crew_calendar_insert_input!] = {}
   ) {
   update_crew_by_pk(_set: {
     name: $name,
-    status: $status,
     driver_name: $driver_name,
     phone_number: $phone_number,
     abbreviation: $abbreviation,
@@ -33,21 +27,17 @@ mutation UpdateCrewById(
     to_call_after
     is_assigned_automatically
     is_assigned_while_in_breaks
-  },
-#  update_crew_calendar(where: {
-#    crew_id: {_eq: $id}
-#  }, _set: {
-#      end_time: $end_time,
-#      week_day: $week_day,
-#      start_time: $start_time,
-#      dislocation_zone_id: $dislocation_zone_id
-#    }
-#  ) {
-#    id
-#    crew_id
-#    end_time
-#    week_day
-#    start_time
-#    dislocation_zone_id
-#  }
+  }
+  delete_crew_calendar(where: {crew_id: {_eq: $id}}) {
+    affected_rows
+  }
+  insert_crew_calendar(objects: $calendars) {
+    returning {
+      id
+      crew_id
+      week_day
+      end_time
+      start_time
+    }
+  }
 }

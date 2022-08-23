@@ -1,4 +1,5 @@
 {
+  "apiError": "Error",
   "Sidebar": {
     "menu": "Menu",
     "myAccount": "My Account",
@@ -60,6 +61,7 @@
   "error": {
     "timeSlotIsTaken": "Time Slot is already taken",
     "startTimeIsBiggerThanEndTime": "Start time is bigger than the end time",
+    "durationLessThanFiveMinutes": "Duration must be at least 5 minutes",
     "newEvent": {
       "eventServiceOffline": "Event system not available",
       "dataIsInvalid": "Data is invalid",

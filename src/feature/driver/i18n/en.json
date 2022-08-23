@@ -12,5 +12,17 @@
       "full_name": "Full name",
       "status": "Status"
     }
+  },
+  "edit": {
+    "field": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "username": "Email",
+      "password": "Password"
+    },
+    "validation": {
+      "firstName": "First name cannot be empty",
+      "password": "Password cannot be empty"
+    }
   }
 }

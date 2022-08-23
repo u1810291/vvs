@@ -153,8 +153,6 @@ const GoogleMapTools = ({
     };
   }, [googleMap]);
 
-  console.log(rawPolygons)
-
   return (
     <>
       {/*<button*/}
