@@ -10,7 +10,6 @@ import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import Button from 'components/Button';
 import DriverOnlineTag from '../component/DriverOnlineTag';
-import {withComponentFactory} from 'util/react';
 
 const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const {t} = useTranslation('driver', {keyPrefix: 'list'});
@@ -58,7 +57,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
       key: 'status',
       headerText: tc`status`,
       itemToProps: Maybe.Just,
-      Component: withComponentFactory(DriverOnlineTag, {t: tos}),
+      Component: withPreparedProps(DriverOnlineTag, identity),
     }
   ];
 
