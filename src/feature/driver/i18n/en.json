@@ -4,7 +4,8 @@
   },
   "edit": {
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "crewDetails": "Crew details"
   },
   "menu": {
     "list": "Drivers"
@@ -14,6 +15,7 @@
     "allData": "All Data"
   },
   "field": {
+    "crewName": "Logged in from crew",
     "status": "Status",
     "active": "Active",
     "birthDate": "Birth date",
