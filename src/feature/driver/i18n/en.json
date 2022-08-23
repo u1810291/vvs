@@ -1,4 +1,12 @@
 {
+  "list": {
+    "create": "Create"
+  },
+  "edit": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "crewDetails": "Crew details"
+  },
   "menu": {
     "list": "Drivers"
   },
@@ -6,23 +14,29 @@
     "drivers": "Drivers",
     "allData": "All Data"
   },
-  "list": {
-    "column": {
-      "id": "ID",
-      "full_name": "Full name",
-      "status": "Status"
-    }
+  "field": {
+    "crewName": "Logged in from crew",
+    "status": "Status",
+    "active": "Active",
+    "birthDate": "Birth date",
+    "email": "Email",
+    "firstName": "First name",
+    "id": "ID",
+    "lastName": "Last name",
+    "middleName": "Middle name",
+    "mobilePhone": "Mobile phone",
+    "password": "Password",
+    "username": "Email",
+    "verified": "Verified"
   },
-  "edit": {
-    "field": {
-      "firstName": "First name",
-      "lastName": "Last name",
-      "username": "Email",
-      "password": "Password"
-    },
-    "validation": {
-      "firstName": "First name cannot be empty",
-      "password": "Password cannot be empty"
-    }
+  "validation": {
+    "firstName": "First name cannot be empty",
+    "password": "Password must have at least 6 symbols"
+  },
+  "onlineStatus": {
+    "unknown": "Unknown",
+    "inactive": "Inactive",
+    "online": "Online",
+    "offline": "Offline"
   }
 }

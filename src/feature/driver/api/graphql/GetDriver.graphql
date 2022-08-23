@@ -7,4 +7,10 @@ query GetDriver ($id: uuid!) {
       username
     }
   }
+  user_settings_by_pk (id: $id) {
+    is_online
+    crew {
+      name
+    }
+  }
 }

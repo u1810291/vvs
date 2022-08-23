@@ -1,16 +1,16 @@
 query GetDrivers {
   usersByRole(role: "crew") {
     users {
-      id
+      active
+      birthDate
+      email
       firstName
+      id
       lastName
+      middleName
+      mobilePhone
       username
       verified
-      mobilePhone
-      middleName
-      email
-      birthDate
-      active
     }
   }
 }

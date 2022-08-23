@@ -114,7 +114,6 @@ const ObjectEditForm = ({saveRef}) => {
           <Detail.Item left={t`field.navisionId`} right={<Input {...ctrl('navision_id')} />} />
           <Detail.Item left={t`field.providerId`} right={<Input {...ctrl('provider_id')} />} />
         </Detail>
-
       </aside>
     </section>
   );
