@@ -24,5 +24,11 @@
       "firstName": "Vardas negali būti tuščias",
       "password": "Slaptažodis negali būti tuščias"
     }
+  },
+  "onlineStatus": {
+    "unknown": "Nežinoma",
+    "inactive": "Deaktyvuotas",
+    "online": "Prisijungęs",
+    "offline": "Neprisijungęs"
   }
 }

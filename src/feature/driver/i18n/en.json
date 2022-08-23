@@ -24,5 +24,11 @@
       "firstName": "First name cannot be empty",
       "password": "Password cannot be empty"
     }
+  },
+  "onlineStatus": {
+    "unknown": "Unknown",
+    "inactive": "Inactive",
+    "online": "Online",
+    "offline": "Offline"
   }
 }
