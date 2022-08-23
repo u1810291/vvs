@@ -18,10 +18,10 @@ import {
   not,
   objOf,
   pipe,
-  // safe,
+  safe,
   // isArray,
-  // isString,
-  // option,
+  isString,
+  option,
   // constant,
   // isObject,
   getProp,
@@ -45,7 +45,7 @@ import DynamicStatus from 'feature/permission/component/PermissionStatus';
 
 
 
-const getColumn = curry((t, Component, key, mapper, status) => ({
+const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   Component,
   headerText: t(key),
   key,
@@ -58,6 +58,10 @@ const getColumn = curry((t, Component, key, mapper, status) => ({
     map(a => ({...item, ...a})),
     alt(Maybe.Just('-')),
   )(item),
+  styles: pipe(
+    safe(isString),
+    option(''),
+  )(styles)
 }));
 
 const ne = not(isEmpty);
@@ -72,7 +76,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
 
   const c = useMemo(() => getColumn(t, props => (
-    props?.id && <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
+    props?.id && <Link className={props?.className} to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
   )), [t]);
@@ -88,8 +92,8 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     c('created_at', pipe(getProp('created_at')), false, null),
     c('request_id', pipe(getProp('request_id')), true, null),
     cs('status', pipe(getProp('status')), true, null),
-    c('crew_name', pipe(getPath(['crew', 'name'])), true, null),
-    c('driver_name', pipe(getPath(['crew', 'driver_name'])), true, null),
+    c('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
+    c('driver_name', pipe(getPath(['crew', 'driver_name'])), true, 'text-steel'),
     c('updated_at', pipe(getProp('updated_at')), false, null), 
   ];
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
@@ -13,6 +13,12 @@ import {useTranslation} from 'react-i18next';
 
 const BreachInfoCard = ({crew, start_time, end_time}) => {
   const {t} = useTranslation('breach', {keyPrefix: 'edit'});
+
+  const [timer, setTimer] = useState({});
+
+  const onTimerUpdate = useCallback(({time, duration}) => setTimer({time, duration}), [timer]);
+  const {time, duration} = timer;
+
   return (
     <Card.Xs className={'shadow-none'}>
       <div className={'flex flex-row items-start w-full border-b border-border py-4 px-6'}>
@@ -29,9 +35,8 @@ const BreachInfoCard = ({crew, start_time, end_time}) => {
           <BreachCrewStatus crew={crew} />
         </Nullable>
         <div className='ml-auto mt-auto flex justify-center w-16 border border-transparent rounded-sm text-xs font-normal text-bluewood bg-geyser'>
-          <Timer active duration={null}>
-            <Timecode />
-          </Timer>
+          <Timer active duration={Date.parse(end_time) - Date.parse(start_time)} onTimeUpdate={onTimerUpdate}/>
+          <Timecode time={duration + time} format={'HH:mm:ss'} />
         </div>
       </div>
     </Card.Xs>

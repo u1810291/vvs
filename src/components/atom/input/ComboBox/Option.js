@@ -6,15 +6,15 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const Option = ({...props}) => (
+const Option = ({selected, ...props}) => (
   <Combobox.Option{...props}>
-    {({active, selected}) => (
+    {({active}) => (
       <>
         <span className={classNames('block truncate', selected && 'font-semibold')}>{props.children}</span>
         {selected && (
           <span
             className={classNames(
-              'absolute inset-y-0 right-0 flex items-center pr-4',
+              'absolute inset-y-0 left-0 flex items-center pl-1.5',
               active ? 'text-white' : 'text-indigo-600'
             )}
           >

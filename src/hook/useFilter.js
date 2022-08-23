@@ -22,6 +22,7 @@ import {
 } from 'crocks';
 import {renderWithProps} from 'util/react';
 import SelectBox from 'components/atom/input/SelectBox';
+import ComboBox from 'components/atom/input/ComboBox';
 
 
 
@@ -95,6 +96,7 @@ const updater = (state, action) => {
       return {...prevState};
 
     case 'MULTISELECT':
+    case 'AUTOCOMPLETE':
       if (!(action.key in prevState)) {
         prevState[action.key] = [action.value.key];
       } else {
@@ -236,7 +238,9 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, tableColumns, filtersData, initialState) => {
-  const [showFilter, setShowFilter] = useState(false);
+  // console.log('filters data', filtersData);
+
+  const [showFilter, setShowFilter] = useState(true);
 
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   // const query = useMemo(() => prepQuery(tableName, q, filtersData, state), [state]);
@@ -681,6 +685,34 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                   </SelectBox>
                 }
                 
+                // autocomplete or combobox
+                if (filter === 'autocomplete') {
+                  let currentValue = '';
+                    
+                  if (key in state && filter === 'multiselect') {
+                    currentValue = state[key].join(', ');
+                  }
+
+                  return <ComboBox 
+                    key={key}
+                    labelText={label}
+                    placeholder={'Search [Multiple choices]'}
+                    className={'w-full'}
+                    value={currentValue}
+                    onChangeValue={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
+                    multiple={true}   // TODO: single autocomplete ?
+                  >
+                    {map(
+                      value => (
+                        <ComboBox.Option key={value?.value ?? value} value={value?.value ?? value}>
+                          {value?.name ?? value}
+                        </ComboBox.Option>
+                      ),
+                      values ?? []
+                    )}
+                  </ComboBox>
+                }
+
                 // date
                 else if (filter === 'date') {
                   return <DatePicker 
@@ -759,7 +791,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    console.log(state);
+    // console.log(state);
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {

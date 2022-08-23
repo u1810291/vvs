@@ -16,11 +16,11 @@ const Menu = ({sidebarOpen, setSidebarOpen}) => {
           <Transition.Child
             as={Fragment}
             enter='transition ease-in-out duration-200 transform'
-            enterFrom='scale-0 opacity-0'
-            enterTo='scale-100 opacity-100'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
             leave='transition ease-in-out duration-200 transform'
-            leaveFrom='scale-100 opacity-100'
-            leaveTo='scale-0 opacity-0'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
           >
             <Dialog.Panel className='relative flex flex-col ml-auto w-[calc(100%-5.625rem)] bg-oxford'>
               <div className='h-full'>

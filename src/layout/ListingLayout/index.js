@@ -27,7 +27,7 @@ import {
 
 
 
-const asciifyLT2 = string => string
+export const asciifyLT2 = string => string
   .replace(/a/gi, '(a|ą)')
   .replace(/c/gi, '(c|č)')
   .replace(/e/gi, '(e|ė|ę)')

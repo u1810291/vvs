@@ -31,7 +31,7 @@ const parseRoutes = (t, component) => renderChildren((c, index) => {
         </div>
       )}
       {hasChildren && !isHiddenChildren && (
-        <div className='flex items-start text-[1.125rem]'>
+        <div className='flex items-start text-[1.125rem] flex-col sm:flex-row'>
           {parseRoutes(t, c?.props?.children[0])}
           <div className='flex flex-col flex-1 mb-4 text-[0.875rem]'>{parseRoutes(t, c?.props?.children)}</div>
         </div>
@@ -45,7 +45,7 @@ const List = forwardRef((props, ref) => {
   const routes = useMemo(() => parseRoutes(t, Routes), []);
   return (
     // TODO: Adjust media queries for mobile
-    <div className='flex w-full my-8 overflow-auto w-1/6 h-1/4 xl:h-3/4' ref={ref} {...props}>
+    <div className='flex w-full h-1/2 my-8 overflow-auto sm:w-1/2 sm:h-3/4 md:w-[350px]' ref={ref} {...props}>
       <nav className='w-full flex flex-col sm:flex-wrap'>
         {routes}
       </nav>

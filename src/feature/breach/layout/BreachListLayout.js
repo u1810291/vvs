@@ -8,8 +8,8 @@ import {useAuth} from 'context/auth';
 import {not} from 'crocks/logic';
 import {alt, chain} from 'crocks/pointfree';
 import {getPropOr, objOf, pipe} from 'crocks/helpers';
-import {isEmpty, hasProps, isArray} from 'crocks/predicates';
-import {Maybe, map, safe, curry, getProp, getPath} from 'crocks';
+import {isEmpty, hasProps, isArray, isString} from 'crocks/predicates';
+import {Maybe, map, safe, curry, getProp, getPath, option} from 'crocks';
 import {useTranslation} from 'react-i18next';
 import {format, intervalToDuration, formatDuration} from 'date-fns';
 import {useFilter} from 'hook/useFilter';
@@ -20,10 +20,11 @@ import Innerlinks from 'components/Innerlinks';
 import {PermissionListRoute} from 'feature/permission/routes';
 import DashboardRoute from 'feature/dashboard/routes';
 import {useBreaches} from '../api/breachEditApi';
+import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
 
 
 
-const getColumn = curry((t, Component, key, mapper, status) => ({
+const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   Component,
   headerText: t(key),
   key,
@@ -33,7 +34,11 @@ const getColumn = curry((t, Component, key, mapper, status) => ({
     alt(Maybe.Just('-')),
     map(objOf('children')),
     map(a => ({...item, ...a}))
-  )(item)
+  )(item),
+  styles: pipe(
+    safe(isString),
+    option(''),
+  )(styles)
 }));
 
 const BreachListLayout = withPreparedProps(Listing, props => {
@@ -44,14 +49,14 @@ const BreachListLayout = withPreparedProps(Listing, props => {
 
   const column = useMemo(() => getColumn(t, props =>
     props?.id &&
-      <Link to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
+      <Link className={props?.className} to={generatePath(BreachEditRoute.props.path, {id: props?.id})}>
         {props?.children}
       </Link>
   ), [t]);
 
 
   const tableColumns = [
-    column('id', pipe(getProp('id')), true),
+    // column('id', pipe(getProp('id')), true, null,),
     column(
       'start_time',
       pipe(
@@ -59,7 +64,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
         chain(safe(not(isEmpty))),
         map(date => format(new Date(date), 'Y-MM-d HH:mm'))
       ),
-      true
+      true, null,
     ),
     column(
       'time_outside_the_zone',
@@ -73,15 +78,26 @@ const BreachListLayout = withPreparedProps(Listing, props => {
             })
           )
         )
-      ), true
+      ), true, null
     ),
-    column('crew_name', pipe(getPath(['crew', 'name'])), true),
-    column('driver_name', pipe(getPath(['crew', 'driver_name'])), false),
+    // column('crew_id', pipe(getProp('crew_id')), true, 'text-steel'),
+    column('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
+    column('driver_name', pipe(getPath(['crew', 'driver_name'])), true, 'text-steel'),
   ]
 
+  const {data: crewDropdown} = useCrewDropdown();
+  // console.log(crewDropdown);
+
   const filtersData = [
-    {key: 'start_time', label: 'Started At', filter: 'date'},
-    {key: 'end_time', label: 'Ended At', filter: 'date'},
+    // {key: 'start_time', label: 'Started At', filter: 'date'},
+    // {key: 'end_time', label: 'Ended At', filter: 'date'},
+    {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || []},
+    // [
+    //   {value: '741a3a7d-38ef-4e75-821e-b096771ed8bb', name: '9RG1'}, 
+    //   {value: 'db4b46af-a700-46a1-a638-34d8efbfcedc', name: '8GB'}
+    // ]},
+    {key: 'driver_id', label: 'Driver', filter: 'multiselect', values: ['1', '2', '3']},
+    {key: 'time_outside_the_zone', label: 'Time outside zone', filter: 'range'},
   ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
@@ -93,6 +109,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const list = useBreaches({filters: queryParams})
 
   useEffect(() => {
+    // console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 
