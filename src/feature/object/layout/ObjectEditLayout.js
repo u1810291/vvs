@@ -1,21 +1,23 @@
-import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
+import Breadcrumbs from 'components/Breadcrumbs';
 import Button from 'components/Button';
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
 import ObjectEditForm from '../form/ObjectEditForm';
-import ObjectRoute, {ObjectListRoute} from '../routes';
 import SidebarLayout from 'layout/SideBarLayout';
-import {getProp, identity, isFunction} from 'crocks';
+import {Maybe, getProp, identity, isFunction, safe} from 'crocks';
+import {NavLink, useNavigate, useParams} from 'react-router-dom';
+import {ObjectListRoute} from '../routes';
+import {hasLength} from '@s-e/frontend/pred';
 import {useObject} from '../api';
-import {useNavigate, useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 
 const ObjectEditLayout = () => {
   const saveRef = useRef(identity);
   const {id} = useParams();
   const {data} = useObject({id});
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
+  const {t: tglobal} = useTranslation();
   const nav = useNavigate();
 
   const send = () => {
@@ -24,7 +26,9 @@ const ObjectEditLayout = () => {
 
   const breadcrumb = (
     getProp('name', data)
-    .alt(getProp('id', data))
+    .chain(safe(hasLength))
+    .alt(getProp('id', data).chain(safe(hasLength)))
+    .alt(Maybe.Just(t('new')))
     .option(null)
   );
 
@@ -33,9 +37,13 @@ const ObjectEditLayout = () => {
       <Header>
         <>
           <Breadcrumbs>
-            <RouteAsBreadcrumb route={ObjectRoute}/>
+            <Breadcrumbs.Item>
+              <NavLink to={ObjectListRoute.props.path}>
+                {tglobal(ObjectListRoute.props.translationKey, {ns: ObjectListRoute.props.translationNs})}
+              </NavLink>
+            </Breadcrumbs.Item>
             <Nullable on={breadcrumb}>
-              <Breadcrumbs.Item>
+              <Breadcrumbs.Item hasSlash={false}>
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
             </Nullable>

@@ -17,6 +17,7 @@ import {
   option,
 } from 'crocks';
 import {mPgIntervalToStr} from 'util/datetime';
+import {removeFalsyFields} from 'util/obj';
 
 
 export const useObjects = createUseWhereList({
@@ -83,6 +84,7 @@ export const useObject = createUseOne({
       latitude: mapToNullableNumber,
       longitude: mapToNullableNumber,
     }),
+    removeFalsyFields,
     Async.Resolved
   ),
 });

@@ -6,7 +6,8 @@ import SelectBox from 'components/atom/input/SelectBox';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {ObjectListRoute} from '../routes';
-import {map} from 'crocks';
+import {constant, map} from 'crocks';
+import {hasLength} from '@s-e/frontend/pred';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useCity, useObject} from '../api';
 import {useParams} from 'react-router-dom';
@@ -27,7 +28,13 @@ const ObjectEditForm = ({saveRef}) => {
     description: FORM_FIELD.TEXT({label: t`field.description`, validator: () => true}),
     latitude: FORM_FIELD.TEXT({label: t`field.latitude`, validator: () => true}),
     longitude: FORM_FIELD.TEXT({label: t`field.longitude`, validator: () => true}),
-    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
+    name: FORM_FIELD.TEXT({
+      label: t`field.name`,
+      validator: hasLength,
+      message: t`validation.name`,
+      showValidationBelow: true,
+      props: {isRequired: constant(true)},
+    }),
     navision_id: FORM_FIELD.TEXT({label: t`field.navisionId`, validator: () => true}),
     provider_id: FORM_FIELD.TEXT({label: t`field.providerId`, validator: () => true}),
     is_atm: FORM_FIELD.BOOL({label: t`field.is_atm`, validator: () => true}),
@@ -49,11 +56,11 @@ const ObjectEditForm = ({saveRef}) => {
   const cities = useCity(true);
 
   return (
-    <section className={'flex'}>
+    <section className={'flex flex-col lg:flex-row lg:min-h-full'}>
       <div className='flex flex-col flex-grow'>
         <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 '}>
           <div className={'lg:inline-block lg:w-1/2 space-y-4'}>
-            <InputGroup className={''} isRequired={true} {...ctrl('name')} />
+            <InputGroup {...ctrl('name')} />
             <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
               <InputGroup className={'lg:w-2/3 xl:w-3/4'} {...ctrl('address')} />
               <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('city')}>
@@ -96,7 +103,7 @@ const ObjectEditForm = ({saveRef}) => {
 
       <aside className={'border-l border-gray-border'}>
         <Detail title={t`responsiblePeople`}>
-          <Detail.Item left='Vardas Pavardė' right='+370656012345' />
+          <Detail.Item left={t`fullName`} right='+370656012345' />
         </Detail>
 
         <Detail title={t`modems`}>
@@ -104,7 +111,7 @@ const ObjectEditForm = ({saveRef}) => {
             <InputGroup label={t`field.modemNo`} className=''/>
           </Detail.Item>
           <Detail.Item>
-            <CheckBox label={t`alarmControl`}/>
+            <CheckBox label={t`field.alarm_management`}/>
           </Detail.Item>
         </Detail>
 

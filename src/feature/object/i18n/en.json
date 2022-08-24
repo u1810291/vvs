@@ -1,51 +1,73 @@
 {
-	"menu": {
-		"list": "Objects"
-	},
-	"breadcrumbs": {
-		"objects": "Objects",
-		"allData": "All Data"
-	},
-	"list": {
-		"column": {
-			"address": "Address",
-			"city": "City",
-			"contract_no": "Contract No.",
-			"contract_object_no": "Object No.",
-			"id": "ID",
-			"is_atm": "ATM",
-			"latitude": "Latitude",
-			"longitude": "Longitude",
-			"name": "Name",
-			"navision_id": "NavID",
-			"phone": "Phone",
-			"provider_id": "Provider ID",
-			"provider_name": "Provider"
-		},
-		"bool": {
-			"yes": "yes",
-			"no": "no"
-		}
-	},
-	"edit": {
-		"title": {
-			"responsible_person": "Responsible person",
-			"modems": "Modems",
-			"object_info": "Object information"
-		},
-		"field": {
-			"name": "Name",
-			"address": "Address",
-			"full_name": "Full name",
-			"modem_number": "Modem no.",
-			"alarm_management": "Alarm management",
-			"object_number": "Object no.",
-			"contract_number": "Contract no.",
-			"navision_id": "Navision ID",
-			"monas_ms_id": "Monas MS ID",
-			"city": "City",
-			"longitude": "Longitude",
-			"latitude": "Latitude"
-		}
-	}
+  "menu": {
+    "list": "Objects"
+  },
+  "breadcrumbs": {
+    "objects": "Objects",
+    "allData": "All Data"
+  },
+  "list": {
+    "column": {
+      "address": "Address",
+      "city": "City",
+      "contract_no": "Contract No.",
+      "contract_object_no": "Object No.",
+      "id": "ID",
+      "is_atm": "ATM",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "name": "Name",
+      "navision_id": "NavID",
+      "phone": "Phone",
+      "provider_id": "Provider ID",
+      "provider_name": "Provider"
+    },
+    "bool": {
+      "yes": "yes",
+      "no": "no"
+    }
+  },
+  "edit": {
+    "fullName": "Full name",
+    "responsiblePeople": "Responsible people",
+    "modems": "Modems",
+    "objectInfo": "Additional info",
+    "feedback_settings": "Feedback settings",
+    "validation": {
+      "name": "Pavadinimas negali būti tuščias"
+    },
+    "title": {
+      "responsible_person": "Responsible person",
+      "modems": "Modems",
+      "object_info": "Object information"
+    },
+    "field": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "objectNo": "Object No.",
+      "contractNo": "Contract No.",
+      "is_crew_autoasigned": "Send crew automatically",
+      "feedback_from": "From",
+      "feedback_until": "Until",
+      "feedback_sla_time_in_min": "SLA time (min.)",
+      "is_call_after_inspection": "Call after inspection",
+      "is_atm": "ATM",
+      "navisionId": "Navision ID",
+      "providerId": "Provider ID",
+      "description": "Description",
+      "modemNo": "Modem No.",
+      "name": "Name",
+      "address": "Address",
+      "full_name": "Full name",
+      "modem_number": "Modem no.",
+      "alarm_management": "Alarm management",
+      "object_number": "Object no.",
+      "contract_number": "Contract no.",
+      "navision_id": "Navision ID",
+      "monas_ms_id": "Monas MS ID",
+      "city": "City",
+      "longitude": "Longitude",
+      "latitude": "Latitude"
+    }
+  }
 }

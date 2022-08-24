@@ -24,12 +24,34 @@
     }
   },
   "edit": {
+    "fullName": "Vardas Pavardė",
+    "cancel": "Atšaukti",
+    "save": "Saugoti",
+    "responsiblePeople": "Atsakingi asmenys",
+    "modems": "Modemai",
+    "objectInfo": "Objekto informacija",
+    "feedback_settings": "Reagavimo informacija",
+    "validation": {
+      "name": "Pavadinimas negali būti tuščias"
+    },
     "title": {
       "responsible_person": "Atsakingi asmenys",
       "modems": "Modemas",
       "object_info": "Objekto informacija"
     },
     "field": {
+      "objectNo": "Objekto Nr.",
+      "contractNo": "Sutarties Nr.",
+      "is_crew_autoasigned": "Siųsti ekipažą automatiškai",
+      "feedback_from": "Nuo",
+      "feedback_until": "Iki",
+      "feedback_sla_time_in_min": "SLA laikas (min.)",
+      "is_call_after_inspection": "Skambinti po apžiūros",
+      "is_atm": "Bankomatas",
+      "navisionId": "Navision ID",
+      "providerId": "Tiekėjo ID",
+      "description": "Aprašymas",
+      "modemNo": "Modemo Nr.",
       "name": "Pavadinimas",
       "address": "Adresas",
       "full_name": "Vardas Pavardė",
@@ -40,8 +62,8 @@
       "navision_id": "Navision ID",
       "monas_ms_id": "Monas MS ID",
       "city": "Miestas",
-      "longitude": "Longitude",
-      "latitude": "Latitude"
+      "longitude": "Ilguma",
+      "latitude": "Platuma"
     }
   }
 }

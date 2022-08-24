@@ -2,6 +2,7 @@ import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notif
 import useAsyncSwr from 'hook/useAsyncSwr';
 import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
 import {every} from 'util/array';
+import {removeFalsyFields} from 'util/obj';
 import {useAsyncEffect} from 'hook/useAsync';
 import {useAuth} from 'context/auth';
 import {useEffect} from 'react';
@@ -11,6 +12,9 @@ import {useNotification} from 'feature/ui-notifications/context';
 import {useTranslation} from 'react-i18next';
 import {
   Async,
+  Result,
+  alt,
+  and,
   chain,
   constant,
   flip,
@@ -22,18 +26,16 @@ import {
   isEmpty,
   isFunction,
   isNil,
+  isObject,
+  isString,
   isTruthy,
   map,
   not,
   option,
   pipe,
+  reduce,
   resultToAsync,
   safe,
-  Result,
-  alt,
-  reduce,
-  isObject,
-  and,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -95,7 +97,9 @@ export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) =>
 const errorToText = error => pipe(
   safe(isObject),
   map(pipe(
+    removeFalsyFields,
     Object.entries,
+    a => a.filter(([key, value]) => key !== 'id' && isString(value)),
     reduce((carry, [key, value]) => [
       ...carry,
       <span className='block' key={key}>{value}</span>
