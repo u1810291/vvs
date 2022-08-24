@@ -1,6 +1,7 @@
 import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
 import useAsyncSwr from 'hook/useAsyncSwr';
 import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
+import {every} from 'util/array';
 import {useAsyncEffect} from 'hook/useAsync';
 import {useAuth} from 'context/auth';
 import {useEffect} from 'react';
@@ -29,8 +30,10 @@ import {
   resultToAsync,
   safe,
   Result,
+  alt,
   reduce,
   isObject,
+  and,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -89,7 +92,7 @@ export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) =>
   ));
 }
 
-const errorToText = pipe(
+const errorToText = error => pipe(
   safe(isObject),
   map(pipe(
     Object.entries,
@@ -98,8 +101,15 @@ const errorToText = pipe(
       <span className='block' key={key}>{value}</span>
     ], []),
   )),
-  option(JSON.stringify),
-);
+  alt(pipe(
+    safe(and(isArray, every(hasProp('message')))),
+    map(reduce((carry, {message}) => [
+      ...carry,
+      <span className='block' key={message}>{message}</span>
+    ], [])),
+  )(error)),
+  option(JSON.stringify(error)),
+)(error);
 
 /**
  * @param {Object} props
@@ -153,7 +163,6 @@ export const createUseOne = ({
   const remove = useMemo(() => pipe(
     resultToAsync,
     map(a => ({...a, id})),
-    // chain(tap(console.log)),
     chain(asyncRemoveMapToApi),
     chain(flip(api)(deleteGraphQl))
   ), [api]);
