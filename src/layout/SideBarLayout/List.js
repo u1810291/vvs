@@ -23,7 +23,7 @@ const parseRoutes = (t, component) => renderChildren((c, index) => {
       {isRoute && (
         <div className='flex-1'>
           <NavLink
-            className={'inline-block px-2 py-2 font-normal text-lilac bg-oxford hover:text-geyser leading-6'}
+            className={'focus:outline-none inline-block px-2 py-2 font-normal text-lilac bg-oxford hover:text-geyser leading-6'}
             to={c.props.path}
           >
             {t(c?.props?.translationKey, {ns: c?.props?.translationNs}) || c?.props?.path}
