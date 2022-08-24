@@ -22,5 +22,11 @@
       "REJECTED": "Rejected",
       "CANCELLED": "Cancelled"
     }
+  },
+  "edit": {
+    "button": {
+      "reject": "Atmesti",
+      "approve": "Leisti"
+    }
   }
 }

@@ -50,7 +50,7 @@ const PermissionEditForm = ({saveRef}) => {
     request_id: FORM_FIELD.TEXT({label: tf`request_id`, validator: () => true, props: {
       displayValue: displayValue(titleCase),
       value: a => {
-        console.log({a});
+        // console.log({a});
       },
       onChange,
     }}),

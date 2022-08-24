@@ -2,7 +2,8 @@ import {createUseEnum, createUseList, createUseWhereList, createUseOne} from 'ap
 import {pipe, getProp, pick, Async} from 'crocks';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
-
+import ENV from '../../../env';
+import {fetchGql} from '@s-e/frontend/fetch';
 
 export const usePermissions = createUseWhereList({
   graphQl: raw('./graphql/PermissionsWhere.graphql'),
@@ -29,8 +30,6 @@ export const usePermission = createUseOne({
   ),
 });
 
-
-
 export const useCrewRequest = createUseList({
   graphQl: raw('./graphql/CrewRequests.graphql'),
   asyncMapFromApi: pipe(
@@ -43,3 +42,22 @@ export const useCrewRequestStatus = createUseEnum({
   itemsProp: 'crew_request_status',
   valueProp: 'value',
 });
+
+const updatePermissionRequestQueryById = `
+  mutation RejectPermissionRequestById($id: uuid!, $status: crew_request_status_enum!) {
+    update_crew_permission_by_pk(pk_columns: {id: $id}, _set: {status: $status}) {
+      status
+    }
+  }
+`;
+// NOTE: Temporary solution on how to allow and reject permission requests
+export const asyncUpdatePermissionRequestById = ({token, id, status}) =>
+  fetchGql(
+    ENV.API_ENDPOINT,
+    {
+      'x-hasura-admin-secret': ENV.API_SECRET,
+      authorization: token,
+    },
+    updatePermissionRequestQueryById,
+    {id, status},
+  );

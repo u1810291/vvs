@@ -13,7 +13,6 @@ export const PermissionCreateRoute = getExactHiddenRoute('permission', 'menu.cre
 export const PermissionEditRoute = getExactHiddenRoute('permission', 'menu.edit', '/permission/:id', lazy(() => import('./layout/PermissionEditLayout')), null);
 export const PermissionListRoute = getExactRoute('permission', 'menu.list', '/permission', lazy(() => import('./layout/PermissionListLayout')), null);
 
-
 const PermissionRoute = (
   <>
     {PermissionCreateRoute}

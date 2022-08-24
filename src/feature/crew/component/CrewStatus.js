@@ -14,7 +14,7 @@ import {isString, propEq} from 'crocks/predicates';
 const is = propEq('status');
 
 const CrewStatusBase = (props) => {
-  const {t} = useTranslation('crew', {keyPrefix: 'list.status'});
+  const {t} = useTranslation(props.t, {keyPrefix: 'list.status'});
   return (
     <div className={'flex flex-col items-center justify-center rounded-md min-w-20 w-fit p-1 text-white text-xs font-normal'} {...props}>
       {t(`${pipe(getProp('status'), chain(safe(isString)), option('-'))(props)}`)}
@@ -36,6 +36,7 @@ const DynamicStatus = caseMap(CrewStatus, [
   [is('BREAK'), CrewStatus.Break],
   [is('READY'), CrewStatus.Ready],
   [is('OFFLINE'), CrewStatus.Offline],
+  [is('ASKED'), CrewStatus.Offline],
   [is('DRIVE_BACK'), CrewStatus.DriveBack],
 ]);
 

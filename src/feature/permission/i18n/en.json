@@ -15,13 +15,19 @@
       "status": "Status",
       "crew_name": "Crew",
       "driver_name": "Driver"
-    },    
+    },
     "status": {
       "ALLOWED": "Allowed",
       "ASKED": "Asked",
       "COMPLETE": "Complete",
       "REJECTED": "Rejected",
       "CANCELLED": "Cancelled"
+    }
+  },
+  "edit": {
+    "button": {
+      "reject": "Reject",
+      "approve": "Approve"
     }
   }
 }
