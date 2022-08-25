@@ -3,6 +3,7 @@
     "create": "Naujas"
   },
   "edit": {
+    "newDriver": "Naujas vairuotojas",
     "save": "Saugoti",
     "cancel": "Atšaukti",
     "crewDetails": "Ekipažas"

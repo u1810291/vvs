@@ -3,6 +3,7 @@
     "create": "Create"
   },
   "edit": {
+    "newDriver": "New driver",
     "save": "Save",
     "cancel": "Cancel",
     "crewDetails": "Crew details"
