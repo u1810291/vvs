@@ -98,7 +98,7 @@ const updater = (state, action) => {
 
     case 'MULTISELECT':
     case 'AUTOCOMPLETE':
-      console.log('dispatcher', action.value);
+      // console.log('dispatcher', action.value);
 
       if (!(action.key in prevState)) {
         prevState[action.key] = [action.value];
@@ -694,7 +694,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                 // autocomplete or combobox
                 if (filter === 'autocomplete') {
                   const currentValue = state[key] ?? [];
-                  console.log('autocomplete current value', currentValue);
+                  // console.log('autocomplete current value', currentValue);
                     
                   // if (key in state && filter === 'multiselect') {
                   //   currentValue = state[key].join(', ');
@@ -798,7 +798,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    console.log('filter state', state);
+    // console.log('filter state', state);
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
@@ -821,7 +821,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
       else {
         // array filter -> multiselect
         if (isArray(value)) {
-          console.log('prep array params', value);
+          // console.log('prep array params', value);
           params[key] = {_in: value.map(v => v.value)};
         }
 

@@ -49,13 +49,13 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     set_name: FORM_FIELD.TEXT({label: tf`set_name`}),
     crew_id: FORM_FIELD.OBJECT({label: tf`crew_id`, props: {      
       displayValue: displayValue((v) => {
-        console.log('dv', v);
+        // console.log('dv', v);
         const crew = crews?.data?.find(c => c.id === v);
         return titleCase(crew?.name || crew?.id);
       }),
       onChange,
       value: ({value}) => {
-        console.log('value', value);
+        // console.log('value', value);
         // return [value];
       }
     }}),

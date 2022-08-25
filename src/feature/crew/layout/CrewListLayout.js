@@ -127,7 +127,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const list = useCrews({filters: queryParams});
 
   useEffect(() => {
-    console.log(queryParams);
+    // console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

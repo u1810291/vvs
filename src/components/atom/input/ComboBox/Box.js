@@ -47,7 +47,7 @@ const Box = ({
   placeholder,  
   ...props
 }) => {
-  console.log('initial combobox value', value);
+  // console.log('initial combobox value', value);
 
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState({});

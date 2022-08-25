@@ -68,7 +68,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     set_name: FORM_FIELD.TEXT({label: tf`set_name`, validator: () => true}),
     object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true, props: {
       displayValue: displayValue((v) => {
-        console.log(v);
+        // console.log(v);
         const object = objects?.data?.find(c => c.id === v);
         return titleCase(object?.name || object?.id);
       }),
