@@ -1,34 +1,34 @@
 import React from 'react';
-
-import {useTranslation} from 'react-i18next';
-
+import Tag, {CLASS_NAME} from 'components/atom/Tag';
 import {caseMap} from '@s-e/frontend/flow-control';
-
-import {withMergedClassName} from 'util/react';
-
+import {getProp, safe, chain, option, isString, propEq} from 'crocks';
 import {pipe} from 'crocks/helpers';
-import {getProp, safe} from 'crocks';
-import {chain, option} from 'crocks/pointfree';
-import {isString, propEq} from 'crocks/predicates';
+import {titleCase} from '@s-e/frontend/transformer/string';
+import {useTranslation} from 'react-i18next';
+import {withMergedClassName} from 'util/react';
 
 const is = propEq('status');
 
 const CrewStatusBase = (props) => {
   const {t} = useTranslation(props.t, {keyPrefix: 'list.status'});
   return (
-    <div className={'flex flex-col items-center justify-center rounded-md min-w-20 w-fit p-1 text-white text-xs font-normal'} {...props}>
-      {t(`${pipe(getProp('status'), chain(safe(isString)), option('-'))(props)}`)}
-    </div>
+    <Tag {...props}>
+      {pipe(
+        getProp('status'),
+        chain(safe(isString)),
+        option('-'),
+        t,
+        titleCase,
+      )(props)}
+    </Tag>
   );
 };
-
-const CLASS_NAME = 'flex flex-col items-start justify-center rounded-md min-w-20 w-fit p-1 text-white text-xs font-normal';
 
 const CrewStatus = withMergedClassName(`${CLASS_NAME} text-black`, CrewStatusBase);
 CrewStatus.Busy = withMergedClassName(`${CLASS_NAME} bg-burgundy`, CrewStatusBase);
 CrewStatus.Break = withMergedClassName(`${CLASS_NAME} bg-tango`, CrewStatusBase);
 CrewStatus.Ready = withMergedClassName(`${CLASS_NAME} bg-mantis`, CrewStatusBase);
-CrewStatus.Offline = withMergedClassName(`${CLASS_NAME} bg-geyser`, CrewStatusBase);
+CrewStatus.Offline = withMergedClassName(`${CLASS_NAME} bg-geyser text-black`, CrewStatusBase);
 CrewStatus.DriveBack = withMergedClassName(`${CLASS_NAME} bg-mantis`, CrewStatusBase);
 
 const DynamicStatus = caseMap(CrewStatus, [
