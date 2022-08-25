@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState, useCallback} from 'react';
 import {putIntoArray} from '../../../../util/array';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {Combobox} from '@headlessui/react';
@@ -9,12 +9,14 @@ import {
   // getPath,
   identity,
   ifElse,
+  // isArray,
   isEmpty,
   isTruthy,
   // option,
   pipe,
 } from 'crocks';
 import Tag from './Tag';
+// import {equals} from 'crocks/pointfree';
 
 
 const asciifyLT2 = string => string
@@ -38,16 +40,22 @@ const Box = ({
   Option,
   children,
   optionClassNameFn = ({active}) => `relative cursor-default select-none py-2 pl-3 pr-9 ${active ? 'bg-indigo-600 text-white' : 'text-gray-900'}`,
-  onChangeValue,
+  onChange,
   value, 
   displayValue = identity,
-  // multiple,
+  multiple,
   placeholder,  
   ...props
 }) => {
+  console.log('initial combobox value', value);
+
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState({});
-  const [state, setState] = useState([]);
+  const [state, setState] = useState(value);
+
+  // useEffect(() => {
+  //   if (isArray(value) && value.length > 0 && !equals(state, value)) setState(value);
+  // }, [value]);
 
   const filteredChildren = useMemo(() => pipe(
     putIntoArray,
@@ -63,60 +71,63 @@ const Box = ({
     )
   )(children), [children, query]);
   
-  const onChange = (event) => {
+  const onInputChange = (event) => {
     setQuery(event.target.value)
   };
 
   const onSelect = (event) => {
     // console.log('onselect', event);
-    const current = {key: event.props.value, value: event.props.children};
+    const current = {value: event.props.value, name: event.props.children};
     setSelected(current);
 
     let prevState = [...state];
-    const exists = prevState.find(s => s.key === current.key);
+    const exists = prevState.find(s => s.value === current.value);
     
     if (exists) {
-      prevState = prevState.filter(s => s.key !== exists.key);
+      prevState = prevState.filter(s => s.value !== exists.value);
     } else {
       prevState.push(current);
+    }
+
+    // if it is not multiple autocomplete
+    if (!multiple && prevState.length > 1) {
+      prevState = [prevState[prevState.length - 1]];
     }
 
     setState(prevState);
   }
 
   const onDeselect = (event) => {
-    console.log('deselect',  event);
-    return;
+    // console.log('deselect',  event.target.dataset.value);
+    
     let prevState = [...state];
-    const exists = prevState.find(s => s.key === event.target.key);
+    const exists = prevState.find(s => s.value === event.target.dataset.value);
     
     if (exists) {
-      prevState = prevState.filter(s => s.key !== exists.key);
+      prevState = prevState.filter(s => s.value !== exists.value);
     }
 
     setState(prevState);
   }
   
   useEffect(() => {
-    // console.log('combobox', state);
-    onChangeValue(selected);
-  }, [state]);
+    // console.log('combobox state changed', state, selected);
+    onChange(selected);
+  }, [state, selected]);
 
-  // const displayName = useCallback(() => {
-  //   let display = []; 
-  //   state.forEach(s => display.push(s.value));
-  //   // console.log(display.join(', '));
-  //   return display.join(', ');
-  // }, [state])
+  const displayName = useCallback(() => {
+    // console.log('dn', state);
+    return !multiple && state.length > 0 ? state[state.length - 1].name : '';
+  }, [state])
 
   return (
-    <Combobox as='div' value={state} onChange={onSelect}>
+    <Combobox as='div' value={value} onChange={onSelect}>
       <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
       <InputContainer>
         <div className='flex flex-row relative'>
           <Input
-            onChange={onChange}
-            // displayValue={displayName}
+            onChange={onInputChange}
+            displayValue={displayName}
             placeholder={placeholder}
             {...props}
           />
@@ -130,7 +141,7 @@ const Box = ({
                 className={optionClassNameFn} 
                 value={component}              
                 key={component?.key || component?.props?.key || component.props.children}
-                selected={state.find(s => s.key === component?.key)}
+                selected={state.find(s => s.value === component?.key)}
                 //   multiple
                 //     ? value.includes(component.props.children)
                 //       ? displayValue(component.props.children)
@@ -142,9 +153,9 @@ const Box = ({
           </Options>
         </Nullable>
         
-        <Nullable on={state.length}>
-          {state.map(({key, value}) => (
-            <Tag key={key} onDelete={onDeselect}>{value}</Tag>
+        <Nullable on={state.length && multiple}>
+          {state.map(({value, name}) => (
+            <Tag key={value} value={value} onDelete={onDeselect}>{name}</Tag>
           ))}
         </Nullable>
       </InputContainer>

@@ -8,7 +8,7 @@ query GetBreaches($where: crew_breach_bool_exp = {}) {
         crew {
             name
             status
-            driver_name
+            # driver_name
             zone {
                 nodes
             }

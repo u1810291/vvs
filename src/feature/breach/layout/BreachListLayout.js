@@ -82,7 +82,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     ),
     // column('crew_id', pipe(getProp('crew_id')), true, 'text-steel'),
     column('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
-    column('driver_name', pipe(getPath(['crew', 'driver_name'])), true, 'text-steel'),
+    // column('driver_name', pipe(getPath(['crew', 'driver_name'])), true, 'text-steel'),
   ]
 
   const {data: crewDropdown} = useCrewDropdown();
@@ -96,7 +96,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     //   {value: '741a3a7d-38ef-4e75-821e-b096771ed8bb', name: '9RG1'}, 
     //   {value: 'db4b46af-a700-46a1-a638-34d8efbfcedc', name: '8GB'}
     // ]},
-    {key: 'driver_id', label: 'Driver', filter: 'multiselect', values: ['1', '2', '3']},
+    {key: 'driver_id', label: 'Driver', filter: 'multiselect', values: [{value: 1, name: 'driver 1'}, {value: 2, name: 'driver 2'}]},
     {key: 'time_outside_the_zone', label: 'Time outside zone', filter: 'range'},
   ];
 
@@ -109,7 +109,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const list = useBreaches({filters: queryParams})
 
   useEffect(() => {
-    // console.log(queryParams);
+    console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

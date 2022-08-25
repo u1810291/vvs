@@ -15,6 +15,7 @@ import Filter from 'components/Filter';
 import {
   hasProps,
   isArray,
+  isObject,
   map,
   option,
   pipe,
@@ -82,14 +83,14 @@ const updater = (state, action) => {
 
     case 'SELECT':
       if (!(action.key in prevState)) {
-        prevState[action.key] = action.value.key;
+        prevState[action.key] = action.value;
       } else {
-        var idx = prevState[action.key].indexOf(action.value.key);
+        // var idx = prevState[action.key]
     
-        if (idx !== -1) {
+        if (prevState[action.key].value === action.value.value) {
           delete prevState[action.key];
         } else {
-          prevState[action.key] = action.value.key;
+          prevState[action.key] = action.value;
         }
       }
   
@@ -97,18 +98,21 @@ const updater = (state, action) => {
 
     case 'MULTISELECT':
     case 'AUTOCOMPLETE':
+      console.log('dispatcher', action.value);
+
       if (!(action.key in prevState)) {
-        prevState[action.key] = [action.value.key];
+        prevState[action.key] = [action.value];
       } else {
-        var idx = prevState[action.key].indexOf(action.value.key);
+        let exists = prevState[action.key].find(s => s.value === action.value.value);
   
-        if (idx !== -1) {
+        if (exists) {
           prevState[action.key] = [
-            ...prevState[action.key].slice(0, idx),
-            ...prevState[action.key].slice(idx + 1)
+            // ...prevState[action.key].slice(0, idx),
+            // ...prevState[action.key].slice(idx + 1)
+            ...prevState[action.key].filter(s => s.value !== action.value.value)
           ];
         } else {
-            prevState[action.key] = [...prevState[action.key], action.value.key];
+            prevState[action.key] = [...prevState[action.key], action.value];
         }
       }
 
@@ -238,7 +242,7 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, tableColumns, filtersData, initialState) => {
-  // console.log('filters data', filtersData);
+  // console.log('filters initial state', initialState);
 
   const [showFilter, setShowFilter] = useState(true);
 
@@ -632,8 +636,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
             {(mode === Mode.Create || mode === Mode.Edit) &&
               <div className='flex flex-col p-6'>
                 <div className='flex space-x-6'>
-                  <InputGroup label={'Title'} onChange={handleUserInput} defaultValue={formState.title ?? null} name='title' />
-                  <InputGroup label={'Shortcut'} onChange={handleUserInput} defaultValue={formState.shortcut ?? null} name='shortcut' className={'w-24'} maxLength={SHORTCUT_MAXLENGTH} />
+                  <InputGroup label={'Title'} onChange={handleUserInput} defaultValue={formState.title ?? null} name='title' inputClassName={'pr-0'} />
+                  <InputGroup label={'Shortcut'} onChange={handleUserInput} defaultValue={formState.shortcut ?? null} name='shortcut' className={'w-24'} maxLength={SHORTCUT_MAXLENGTH} inputClassName={'pr-0'} />
                 </div>
 
                 <div className='flex flex-col space-y-2 mt-3'>
@@ -657,12 +661,14 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
               {filtersData.map(({key, label, filter, Component, Child, values}, index) => {
                 // select or multiselect
                 if (filter === 'select' || filter === 'multiselect') {
+                  // console.log('inside select/multiselect', state[key]);
+
                   let currentValue = '';
                     
                   if (key in state && filter === 'select') {
-                    currentValue = state[key];
+                    currentValue = state[key].name;
                   } else if (key in state && filter === 'multiselect') {
-                    currentValue = state[key].join(', ');
+                    currentValue = state[key].map(f => f.name).join(', ');
                   }
 
                   return <SelectBox
@@ -676,8 +682,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                   >
                     {map(
                       value => (
-                        <SelectBox.Option key={value} value={value}>
-                          {value}
+                        <SelectBox.Option key={value?.value ?? value} value={value?.value ?? value}>
+                          {value?.name ?? value}
                         </SelectBox.Option>
                       ),
                       values ?? []
@@ -687,11 +693,12 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                 
                 // autocomplete or combobox
                 if (filter === 'autocomplete') {
-                  let currentValue = '';
+                  const currentValue = state[key] ?? [];
+                  console.log('autocomplete current value', currentValue);
                     
-                  if (key in state && filter === 'multiselect') {
-                    currentValue = state[key].join(', ');
-                  }
+                  // if (key in state && filter === 'multiselect') {
+                  //   currentValue = state[key].join(', ');
+                  // }
 
                   return <ComboBox 
                     key={key}
@@ -699,7 +706,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                     placeholder={'Search [Multiple choices]'}
                     className={'w-full'}
                     value={currentValue}
-                    onChangeValue={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
+                    onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
                     multiple={true}   // TODO: single autocomplete ?
                   >
                     {map(
@@ -791,7 +798,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    // console.log(state);
+    console.log('filter state', state);
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
@@ -814,7 +821,19 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
       else {
         // array filter -> multiselect
         if (isArray(value)) {
-          params[key] = {_in: value};
+          console.log('prep array params', value);
+          params[key] = {_in: value.map(v => v.value)};
+        }
+
+        else if (isObject(value)) {
+          // console.log('prep object param', value.value);
+
+          if (!isObject(value.value)) {
+            params[key] = {_eq: value.value};
+          } else {
+            delete params[key];
+          }
+
         }
 
         // text filter

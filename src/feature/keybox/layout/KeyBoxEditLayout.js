@@ -33,7 +33,7 @@ const KeyBoxEditLayout = () => {
   }
 
   const breadcrumb = (
-    getProp('name', data)
+    getProp('set_name', data)
     .alt(getProp('id', data))
     .option(null)
   );

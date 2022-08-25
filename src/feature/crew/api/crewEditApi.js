@@ -29,7 +29,7 @@ const mapOnActionIdentification = obj => ifElse(
 );
 
 export const useCrews = createUseWhereList({
-  graphQl: raw('./graphql/GetCrews.graphql'),
+  graphQl: raw('./graphql/GetAllCrews.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('expected prop "crew" does not exist', getProp('crew'))
   )
@@ -92,7 +92,7 @@ export const useCrewZones = createUseList({
 
 
 export const useCrewDropdown = createUseList({
-  graphQl: raw('./graphql/GetCrews.graphql'),
+  graphQl: raw('./graphql/GetAllCrews.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('crew prop was expected', getProp('crew')),
     map(ifElse(isEmpty, () => [], map(a => ({value: a.id, name: a.name})))),

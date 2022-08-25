@@ -51,7 +51,7 @@ export const useKeyObjectBox = createUseOne({
 })
 
 export const useKeyObjects = createUseWhereList({
-  graphQl: raw('./graphql/ObjectsByKeyBoxId.graphql'),
+  graphQl: raw('./graphql/ObjectsByKeyBoxPk.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "object_key_rels" expected but not found.', getProp('object_key_rels')),
   ),
