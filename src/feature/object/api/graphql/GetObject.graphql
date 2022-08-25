@@ -20,6 +20,7 @@ query ObjectById ($id: uuid!) {
     provider_id
     users {
       user_type
+      user_id
     }
   }
 }

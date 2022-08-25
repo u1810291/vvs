@@ -101,6 +101,9 @@ const ObjectEditForm = ({saveRef}) => {
         </div>
       </div>
 
+      {/**
+        @TODO: map api.users -> responsiblePeople
+      **/}
       <aside className={'border-l border-gray-border'}>
         <Detail title={t`responsiblePeople`}>
           <Detail.Item left={t`fullName`} right='+370656012345' />

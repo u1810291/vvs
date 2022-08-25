@@ -123,6 +123,7 @@ const errorToText = curry((mapper, error) => pipe(
  * @param {String} props.createGraphql - GraphQL Query to CREATE the single entity.
  * @param {String} props.updateGraphQl - GraphQL Query to UPDATE the single entity.
  * @param {String} props.deleteGraphQl - GraphQL Query to DELETE the single entity.
+ * @param {boolean} [props.mapFromApiUsingAuth = false] - Should asyncMapFromApi first parameter should be auth hook
  * @param {(data: any) => import('crocks/Async').default} [props.asyncMapFromApi = Async.Resolved]  - Async function that has oppurtunity to modify the data just before using it from API.
  * @param {(data: any) => import('crocks/Async').default} [props.asyncMapToApi = Async.Resolved]  - Async function that has oppurtunity to modify the data just before sending it to API.
  */
@@ -131,6 +132,7 @@ export const createUseOne = ({
   createGraphql,
   updateGraphQl,
   deleteGraphQl,
+  mapFromApiUsingAuth = false,
   asyncMapFromApi = Async.Resolved,
   asyncMapToApi = Async.Resolved,
   asyncRemoveMapToApi = Async.Resolved,
@@ -144,13 +146,17 @@ export const createUseOne = ({
   errorMapper = identity,
 }) => {
   const nav = useNavigate();
-  const {api} = useAuth();
+  const {api, ...auth} = useAuth();
   const {notify} = useNotification();
   const {t} = useTranslation();
   const getSwr = useAsyncSwr(
     [getGraphQl, {id}],
     (query, params) => id
-      ? api(params, query).chain(asyncMapFromApi)
+      ? api(params, query).chain(
+          r => mapFromApiUsingAuth
+            ? asyncMapFromApi({api, ...auth})(r)
+            : asyncMapFromApi(r)
+        )
       : Async.Rejected('id missing')
   );
 
@@ -164,7 +170,6 @@ export const createUseOne = ({
     resultToAsync,
     map(a => ({...a, id})),
     chain(asyncMapToApi),    
-    // chain(tap(console.log)),
     chain(flip(api)(updateGraphQl))
   ), [api]);
 
