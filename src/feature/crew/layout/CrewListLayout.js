@@ -27,6 +27,9 @@ import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
 import {isArray, isBoolean, isObject, isString} from 'crocks/predicates';
+import {useDislocationZonesDropdown} from 'feature/dislocation/api/dislocationEditApi';
+
+
 
 const {Just} = Maybe;
 
@@ -82,6 +85,8 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent')
   ];
 
+  const {data: crewZones} = useDislocationZonesDropdown();
+
   const filtersData = [
     {
       key: 'name',
@@ -96,19 +101,20 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     {
       key: 'zone',
       label: tc('calendars'),
-      filter: 'text'
+      filter: 'autocomplete',
+      values: crewZones || []
     },
     {
       key: 'status',
       label: tc('status'),
       filter: 'multiselect',
-      values: ['BREAK', 'BUSY', 'OFFLINE', 'READY', 'DRIVE_BACK']
+      values: [{value: 'BREAK', name: 'Break'}, {value: 'BUSY', name: 'Busy'}, {value: 'OFFLINE', name: 'Offline'}, {value: 'READY', name: 'Ready'}, {value: 'DRIVE_BACK', name: 'Returning'}]
     },
     {
       key: 'is_assigned_automatically',
       label: tc('is_assigned_automatically'),
-      filter: 'multiselect',
-      values: ['YES', 'NO']
+      filter: 'select',
+      values: [{value: null, name: 'Any'}, {value: 'YES', name: 'Yes'}, {value: 'NO', name: 'No'}]
     }
   ];
 
@@ -121,6 +127,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const list = useCrews({filters: queryParams});
 
   useEffect(() => {
+    console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

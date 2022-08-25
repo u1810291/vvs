@@ -31,6 +31,7 @@ import {
   Result,
   reduce,
   isObject,
+  // tap,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -146,7 +147,8 @@ export const createUseOne = ({
   const update = useMemo(() => pipe(
     resultToAsync,
     map(a => ({...a, id})),
-    chain(asyncMapToApi),
+    chain(asyncMapToApi),    
+    // chain(tap(console.log)),
     chain(flip(api)(updateGraphQl))
   ), [api]);
 

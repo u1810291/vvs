@@ -1,4 +1,3 @@
-import SelectBox from 'components/atom/input/SelectBox';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useKeyBox} from '../api';
@@ -22,6 +21,7 @@ import InputGroup from 'components/atom/input/InputGroup';
 import KeyObjectList from '../components/KeyObjectList';
 import Nullable from 'components/atom/Nullable';
 import {KeyBoxListRoute} from '../routes';
+import ComboBox from 'components/atom/input/ComboBox';
 
 
 
@@ -45,14 +45,19 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
   
   const crews = useCrews({filters: {}});
 
-  const {ctrl, result, setForm} = useResultForm({
+  const {ctrl, result, form, setForm} = useResultForm({
     set_name: FORM_FIELD.TEXT({label: tf`set_name`}),
-    crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, props: {
+    crew_id: FORM_FIELD.OBJECT({label: tf`crew_id`, props: {      
       displayValue: displayValue((v) => {
+        console.log('dv', v);
         const crew = crews?.data?.find(c => c.id === v);
         return titleCase(crew?.name || crew?.id);
       }),
       onChange,
+      value: ({value}) => {
+        console.log('value', value);
+        // return [value];
+      }
     }}),
   });
   
@@ -65,20 +70,30 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     saveRef,
     removeRef,
   });
+
+  // console.log('form', form);
   
 
   return (
     <section className={'flex flex-col'}>
       <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'}>
-        <InputGroup className={'lg:w-1/3 xl:w-1/4'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
+        <InputGroup className={'lg:w-1/8 xl:w-1/8'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
 
-        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('crew_id')}>
+        <ComboBox 
+          className={''} 
+          labelText={tf('crew')}
+          multiple={false}
+          placeholder={'Search [Single choice]'}
+          {...ctrl('crew_id')} 
+          value={[{value: form['crew_id'], name: crews?.data?.find(c => c.id === form['crew_id'])?.name}]}
+          data-id={form['crew_id']}
+        >
           {map(crew => (
-            <SelectBox.Option key={`${crew.id} ${+ new Date()}`} value={crew.id}>
+            <ComboBox.Option key={crew.id} value={crew.id}>
               {titleCase(crew.name || crew.id)}
-            </SelectBox.Option>
+            </ComboBox.Option>
           ), (crews?.data || []))}
-        </SelectBox>
+        </ComboBox>
       </div>
 
       <Nullable on={id}>

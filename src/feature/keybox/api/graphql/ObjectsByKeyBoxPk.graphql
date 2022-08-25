@@ -7,9 +7,11 @@ query ObjectsByKeyBoxId($id: uuid!) {
       crew_id
     }
     object {
+      id
       contract_object_no
       name
       address
+      city
     }
   }
 }

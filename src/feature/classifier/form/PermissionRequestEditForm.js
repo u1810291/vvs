@@ -11,6 +11,7 @@ import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 // import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
 // import {XCircleIcon} from '@heroicons/react/outline';
 import {useNotification} from 'feature/ui-notifications/context';
+import {hasLength} from '@s-e/frontend/pred';
 
 
 
@@ -29,10 +30,20 @@ const PermissionRequestEditForm = ({saveRef, removeRef}) => {
   }
 
   const {ctrl, result, setForm} = useResultForm({
-    value: FORM_FIELD.TEXT({label: t`value`}),
+    value: FORM_FIELD.TEXT({
+      label: t`value`,
+      validator: hasLength,
+      message: t`validation.required`,
+      showValidationBelow: true,
+    }),
     duration: FORM_FIELD.TEXT({
       label: t`duration`,
-      validator: constant(true),
+      validator: (v) => {
+        // console.log(v);
+        return true;
+      },
+      message: t`validation.duration`,
+      showValidationBelow: true,
       props: {
         onChange: ({set}) => ({target: {value}}) => set(value),
       }
@@ -62,14 +73,14 @@ const PermissionRequestEditForm = ({saveRef, removeRef}) => {
   }
 
   return (
-    <section className={'flex p-6 flex-grow space-x-6 items-center'}>
+    <section className={'flex p-6 flex-grow space-x-6 items-start'}>
       <div className={'lg:w-1/4 '}>
         <InputGroup {...ctrl('value')} isRequired={true} />
       </div>
       <div className={'lg:w-1/4 '}>
         <InputGroup {...ctrl('duration')} isRequired={true} onBlur={onInputEventOrEmpty(v => setDefaultDuration(v))} />
       </div>
-      <div className={'lg:w-1/4 '}>
+      <div className={'lg:w-1/4 self-center'}>
         <CheckBox className='items-end block' {...ctrl('is_assigned_while_in_breaks')} />
       </div>
     </section>

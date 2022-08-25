@@ -18,7 +18,7 @@ import {
 import Table from 'components/Table';
 import Modal from 'components/atom/Modal';
 import Nullable from 'components/atom/Nullable';
-import SelectBox from 'components/atom/input/SelectBox';
+// import SelectBox from 'components/atom/input/SelectBox';
 import useResultForm from 'hook/useResultForm';
 import {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
@@ -27,6 +27,8 @@ import InputGroup from 'components/atom/input/InputGroup';
 import {KeyBoxEditRoute} from '../routes';
 import {generatePath} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
+import ComboBox from 'components/atom/input/ComboBox';
+
 
 
 const displayValue = mapper => pipe(
@@ -57,21 +59,36 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     setShowModal(() => !showModal);
   }
 
-  const resetPage = () => {
-    // fetcher.mutate({shouldRevalidate: true});
-  }
+  // useEffect(() => {
+  //   // console.log(queryParams);
+  //   fetcher.mutate();
+  // }, [showModal]);
 
-  const {ctrl, result, setForm} = useResultForm({
+  const formData = {
     set_name: FORM_FIELD.TEXT({label: tf`set_name`, validator: () => true}),
     object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true, props: {
       displayValue: displayValue((v) => {
+        console.log(v);
         const object = objects?.data?.find(c => c.id === v);
         return titleCase(object?.name || object?.id);
       }),
       onChange,
     }}),
     box_id: FORM_FIELD.TEXT({label: '', initial: boxId, validator: () => true}),
-  });
+  };
+
+  const {ctrl, result, form, setForm} = useResultForm(formData);
+
+  const resetPage = () => {
+    // reset form
+    const resetForm = {...form};
+    resetForm['set_name'] = '';
+    resetForm['object_id'] = '';
+    setForm(resetForm);
+    
+    // refetch
+    fetcher.mutate();
+  }
 
   // 
   const assign = () => {
@@ -84,6 +101,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     if (!confirm('Are you sure you want to delete?')) return;
     
     isFunction(removeRef.current) && removeRef.current({box_id: boxId, key_id: e.target.id});
+    resetPage();
   }
   
   // assign key + object to box
@@ -119,7 +137,10 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
               <Table.Td>{r.key.set_name}</Table.Td>
               <Table.Td>{r.object.contract_object_no}</Table.Td>
               <Table.Td>{r.object.name}</Table.Td>
-              <Table.Td>{r.object.address}</Table.Td>
+              <Table.Td>
+                {r.object.address}
+                <Nullable on={r.object.city}>, {titleCase(r.object.city)}</Nullable>  
+              </Table.Td>
               <Table.Td>
                 <Button.NoBg id={r.key.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
               </Table.Td>
@@ -137,15 +158,31 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
             {/* <h3>Assign an Object</h3> */}
             
             <div className='w-full flex flex-row space-x-2'>
-              <InputGroup className={'w-1/2'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
+              <InputGroup className={'w-1/4'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
 
-              <SelectBox className={'w-full'} {...ctrl('object_id')}>
+              {/* <SelectBox className={'w-full'} {...ctrl('object_id')}>
                 {map(object => (
                   <SelectBox.Option key={`${object.id} ${+ new Date()}`} value={object.id}>
                     {titleCase(object.name || object.id)}
                   </SelectBox.Option>
                 ), (objects?.data || []))}
-              </SelectBox>
+              </SelectBox> */}
+
+              <ComboBox 
+                className={''} 
+                labelText={tf('object')}
+                multiple={false}
+                placeholder={'Search [Single choice]'}
+                {...ctrl('object_id')} 
+                value={[{value: form['object_id'], name: objects?.data?.find(c => c.id === form['object_id'])?.name}]}
+                data-id={form['object_id']}
+              >
+                {map(object => (
+                  <ComboBox.Option key={object.id} value={object.id}>
+                    {titleCase(object.name || object.id)}
+                  </ComboBox.Option>
+                ), (objects?.data || []))}
+              </ComboBox>
             </div>
 
             <div className={'flex justify-end mt-10 space-x-4'}>

@@ -1,0 +1,6 @@
+query GetDislocationZones {
+  crew_zone {
+    name
+    id
+  }
+}

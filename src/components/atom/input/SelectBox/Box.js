@@ -22,7 +22,13 @@ const Box = ({
   placeholder,
   ...props
 }) => {
-  const onChangeValue = (e) => onChange({key: e.key, value: e.props.value});
+  // console.log('selectbox initial value', value);
+
+  const onChangeValue = (e) => {
+    // console.log(e);
+    onChange({value: e.props.value, name: e.props.children})
+  };
+  
   return (
     <Listbox value={value} onChange={onChangeValue} {...props}>
       {({open}) => (
