@@ -2,12 +2,13 @@ import InputGroup from 'components/atom/input/InputGroup';
 import useDriver from '../api/useDriver';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {DriverListRoute} from '../routes';
-import {constant, or, isEmpty, getPathOr} from 'crocks';
-import {hasLength} from '@s-e/frontend/pred';
+import {constant, or, isEmpty, getPathOr, identity, isSame} from 'crocks';
+import {hasLength, isEmail} from '@s-e/frontend/pred';
 import {lengthGt} from 'util/pred';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import AsideDisclosure from 'components/Disclosure/AsideDisclosure';
+import {caseMap} from '@s-e/frontend/flow-control';
 
 const DriverEditForm = ({saveRef}) => {
   const {id} = useParams();
@@ -20,7 +21,12 @@ const DriverEditForm = ({saveRef}) => {
       showValidationBelow: true,
     }),
     lastName: FORM_FIELD.TEXT({label: t`field.lastName`, validator: constant(true)}),
-    username: FORM_FIELD.TEXT({label: t`field.username`, validator: constant(true)}),
+    username: FORM_FIELD.TEXT({
+      label: t`field.username`,
+      validator: isEmail,
+      message: t`validation.username`,
+      showValidationBelow: true,
+    }),
     password: FORM_FIELD.TEXT({
       label: t`field.password`,
       validator: id ? or(isEmpty, lengthGt(5)) : lengthGt(5),
@@ -35,6 +41,9 @@ const DriverEditForm = ({saveRef}) => {
     saveRef,
     setForm,
     successRedirectPath: DriverListRoute.props.path,
+    errorMapper: caseMap(identity, [
+      [isSame('the key \'message\' was not present'), constant(t('error.usernameAleardyExists'))]
+    ]),
   });
 
   return (

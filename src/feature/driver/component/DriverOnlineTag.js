@@ -62,7 +62,7 @@ const UntranslatedDriverOnlineTag = ({
 
   const className = pipe(
     _getStatus(
-      constant(classNames.unknown),
+      constant(classNames.offline),
       constant(classNames.inactive),
       constant(classNames.online),
       constant(classNames.offline),
@@ -73,7 +73,7 @@ const UntranslatedDriverOnlineTag = ({
   return <Component className={className}>
     {pipe(
       _getStatus(
-        getText.unknown,
+        getText.offline,
         getText.inactive,
         getText.online,
         getText.offline,

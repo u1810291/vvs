@@ -1,4 +1,7 @@
 {
+  "error": {
+    "usernameAleardyExists": "Email already taken"
+  },
   "list": {
     "create": "Create"
   },
@@ -32,7 +35,9 @@
   },
   "validation": {
     "firstName": "First name cannot be empty",
-    "password": "Password must have at least 6 symbols"
+    "password": "Password must have at least 6 symbols",
+    "email": "Email must be valid & non-empty",
+    "username": "Email must be valid & non-empty"
   },
   "onlineStatus": {
     "unknown": "Unknown",

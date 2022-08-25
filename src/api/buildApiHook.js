@@ -36,7 +36,8 @@ import {
   reduce,
   resultToAsync,
   safe,
-  // tap,
+  identity,
+  curry,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -95,7 +96,7 @@ export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) =>
   ));
 }
 
-const errorToText = error => pipe(
+const errorToText = curry((mapper, error) => pipe(
   safe(isObject),
   map(pipe(
     removeFalsyFields,
@@ -103,18 +104,18 @@ const errorToText = error => pipe(
     a => a.filter(([key, value]) => key !== 'id' && isString(value)),
     reduce((carry, [key, value]) => [
       ...carry,
-      <span className='block' key={key}>{value}</span>
+      <span className='block' key={key}>{mapper(value)}</span>
     ], []),
   )),
   alt(pipe(
     safe(and(isArray, every(hasProp('message')))),
     map(reduce((carry, {message}) => [
       ...carry,
-      <span className='block' key={message}>{message}</span>
+      <span className='block' key={message}>{mapper(message)}</span>
     ], [])),
   )(error)),
   option(JSON.stringify(error)),
-)(error);
+)(error));
 
 /**
  * @param {Object} props
@@ -139,7 +140,8 @@ export const createUseOne = ({
   formResult,
   setForm,
   successRedirectPath,
-  removeRef
+  removeRef,
+  errorMapper = identity,
 }) => {
   const nav = useNavigate();
   const {api} = useAuth();
@@ -186,7 +188,7 @@ export const createUseOne = ({
           iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
           heading={t`apiError`}
         >
-          {errorToText(error)}
+          {errorToText(errorMapper, error)}
         </NotificationSimple>
       ),
       () => {
@@ -214,7 +216,7 @@ export const createUseOne = ({
           iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
           heading={t`apiError`}
         >
-          {errorToText(error)}
+          {errorToText(errorMapper, error)}
         </NotificationSimple>
       )},
       () => {

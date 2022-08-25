@@ -1,4 +1,7 @@
 {
+  "error": {
+    "usernameAleardyExists": "El. paštas užimtas, įveskitę kitą"
+  },
   "list": {
     "create": "Naujas"
   },
@@ -32,7 +35,9 @@
   },
   "validation": {
     "firstName": "Vardas negali būti tuščias",
-    "password": "Slaptažodis turi būti bent 6-ių simbolių"
+    "password": "Slaptažodis turi būti bent 6-ių simbolių",
+    "email": "El. paštas turi būti validus ir netuščias",
+    "username": "El. paštas turi būti validus ir netuščias"
   },
   "onlineStatus": {
     "unknown": "Nežinoma",
