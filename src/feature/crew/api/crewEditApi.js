@@ -1,20 +1,10 @@
-import raw from 'raw.macro';
-
-import {useAuth} from 'context/auth';
-
-import useAsyncSwr from 'hook/useAsyncSwr';
-
-import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
-
 import maybeToAsync from 'crocks/Async/maybeToAsync';
-
-import {Async, safe, omit, getProp, setProp} from 'crocks'
-import {not, ifElse} from 'crocks/logic';
-import {isEmpty} from 'crocks/predicates';
-import {constant} from 'crocks/combinators';
-import {map, option, chain} from 'crocks/pointfree';
-import {pipe, pick, objOf, mapProps, tap} from 'crocks/helpers';
-import {augmentsToUsers} from '../../../api/buildUserQuery';
+import raw from 'raw.macro';
+import useAsyncSwr from 'hook/useAsyncSwr';
+import {Async, safe, omit, getProp, setProp, not, ifElse, isEmpty, constant, map, option, chain, pipe, pick, objOf, mapProps, tap} from 'crocks'
+import {augmentToUser} from '../../../api/buildUserQuery';
+import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
+import {useAuth} from 'context/auth';
 
 const {Resolved, Rejected} = Async;
 
@@ -45,11 +35,11 @@ export const useCrew = createUseOne({
   asyncMapFromApi: auth => pipe(
     maybeToAsync('prop "crew_by_pk" was expected', getProp('crew_by_pk')),
     chain(
-      obj => Async.of(obj => augmentedUsers => setProp('driver', augmentedUsers, obj))
+      obj => Async.of(obj => user => setProp('driver', user, obj))
         .ap(Async.of(obj))
-        .ap(augmentsToUsers(auth, getProp('driver_user_id'), [obj]))
+        .ap(augmentToUser(auth, 'driver_user_id', obj))
     ),
-    map(tap(console.log))
+    map(tap(console.warn)),
   ),
   asyncMapToApi: pipe(
     pick([
