@@ -77,10 +77,10 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
   return (
     <section className={'flex flex-col'}>
       <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'}>
-        <InputGroup className={'lg:w-1/8 xl:w-1/8'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
+        <InputGroup className={'lg:w-1/4 xl:w-1/4'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
 
         <ComboBox 
-          className={''} 
+          className={'w-1/4'} 
           labelText={tf('crew')}
           multiple={false}
           placeholder={'Search [Single choice]'}

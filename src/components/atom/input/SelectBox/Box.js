@@ -27,6 +27,7 @@ const Box = ({
   const onChangeValue = (e) => {
     // console.log(e);
     onChange({value: e.props.value, name: e.props.children})
+    // onChange(e.props.value)
   };
   
   return (

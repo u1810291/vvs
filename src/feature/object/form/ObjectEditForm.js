@@ -32,7 +32,7 @@ const ObjectEditForm = ({saveRef}) => {
   const {ctrl, result, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
     city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true, props: {
-      displayValue: ({value}) => () => tc(value),
+      displayValue: ({value}) => () => titleCase(value),
       onChange: ({set}) => ({value}) => set(value),
     }}),
     contract_no: FORM_FIELD.TEXT({label: t`field.contractNo`, validator: () => true}),

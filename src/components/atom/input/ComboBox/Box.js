@@ -121,7 +121,7 @@ const Box = ({
   }, [state])
 
   return (
-    <Combobox as='div' value={value} onChange={onSelect}>
+    <Combobox as='div' value={value} onChange={onSelect} {...props}>
       <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
       <InputContainer>
         <div className='flex flex-row relative'>
@@ -130,8 +130,10 @@ const Box = ({
             displayValue={displayName}
             placeholder={placeholder}
             {...props}
+            className={'w-full'}
+            
           />
-          <Button/>
+          <Button />
         </div>
         <Nullable on={filteredChildren.length}>
           <Options>
