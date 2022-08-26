@@ -21,6 +21,7 @@ import {PermissionListRoute} from 'feature/permission/routes';
 import DashboardRoute from 'feature/dashboard/routes';
 import {useBreaches} from '../api/breachEditApi';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
+import {useDriverDropdown} from 'feature/driver/api/useDrivers';
 
 
 
@@ -86,7 +87,8 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   ]
 
   const {data: crewDropdown} = useCrewDropdown();
-  // console.log(crewDropdown);
+  const {data: driverDropdown} = useDriverDropdown();
+  // console.log(crewDropdown, driverDropdown);
 
   const filtersData = [
     // {key: 'start_time', label: 'Started At', filter: 'date'},
@@ -96,7 +98,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     //   {value: '741a3a7d-38ef-4e75-821e-b096771ed8bb', name: '9RG1'}, 
     //   {value: 'db4b46af-a700-46a1-a638-34d8efbfcedc', name: '8GB'}
     // ]},
-    {key: 'driver_id', label: 'Driver', filter: 'multiselect', values: [{value: 1, name: 'driver 1'}, {value: 2, name: 'driver 2'}]},
+    {key: 'driver_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || []},
     {key: 'time_outside_the_zone', label: 'Time outside zone', filter: 'range'},
   ];
 

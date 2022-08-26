@@ -1,4 +1,5 @@
 import SelectBox from 'components/atom/input/SelectBox';
+import ComboBox from 'components/atom/input/ComboBox';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {PermissionListRoute} from '../routes';
@@ -18,9 +19,11 @@ import {
   pipe,
   safe,
   identity,
+  // tap,
 } from 'crocks';
 
 const displayValue = mapper => pipe(
+  // tap(console.log),
   getProp('value'),
   chain(safe(not(isEmpty))),
   map(mapper),
@@ -41,7 +44,7 @@ const PermissionEditForm = ({saveRef}) => {
 
   // console.log({requests});
 
-  const {ctrl, result, setForm} = useResultForm({
+  const {ctrl, result, form, setForm} = useResultForm({
     crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, props: {
       displayValue: displayValue(identity),
       onChange,
@@ -55,7 +58,7 @@ const PermissionEditForm = ({saveRef}) => {
       onChange,
     }}),
     status: FORM_FIELD.TEXT({label: tf`status`, validator: () => true, props: {
-      displayValue: displayValue(ts),
+      displayValue: displayValue(titleCase),
       onChange,
     }}),
   });
@@ -71,7 +74,7 @@ const PermissionEditForm = ({saveRef}) => {
   return (
     <section className={'flex'}>
       <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'}>
-        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('status')}>
+        <SelectBox className={'lg:w-1/4 xl:w-1/4'} {...ctrl('status')}>
           {map(value => (
             <SelectBox.Option key={value} value={value}>
               {titleCase(value)}
@@ -79,21 +82,53 @@ const PermissionEditForm = ({saveRef}) => {
           ), statuses)}
         </SelectBox>
 
-        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request_id')}>
+        {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request_id')}>
           {map(request => (
             <SelectBox.Option key={request.value} value={request.value}>
               {titleCase(request.value)}
             </SelectBox.Option>
           ), requests?.data || [])}
-        </SelectBox>
+        </SelectBox> */}
 
-        <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('crew_id')}>
+        <ComboBox 
+          className={'w-1/4'} 
+          labelText={tf('request_id')}
+          multiple={false}
+          placeholder={'Search [Single choice]'}
+          {...ctrl('request_id')} 
+          value={[{value: form['request_id'], name: requests?.data?.find(c => c.value === form['request_id'])?.value}]}
+          data-id={form['request_id']}
+        >
+          {map(request => (
+            <ComboBox.Option key={request.value} value={request.value}>
+              {titleCase(request.value)}
+            </ComboBox.Option>
+          ), (requests?.data || []))}
+        </ComboBox>
+
+        {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('crew_id')}>
           {map(crew => (
             <SelectBox.Option key={`${crew.id} ${+ new Date()}`} value={crew.id}>
               {titleCase(crew.name || crew.id)}
             </SelectBox.Option>
           ), (crews?.data || []))}
-        </SelectBox>
+        </SelectBox> */}
+
+        <ComboBox 
+          className={'w-1/4'} 
+          labelText={tf('crew')}
+          multiple={false}
+          placeholder={'Search [Single choice]'}
+          {...ctrl('crew_id')} 
+          value={[{value: form['crew_id'], name: crews?.data?.find(c => c.id === form['crew_id'])?.name}]}
+          data-id={form['crew_id']}
+        >
+          {map(crew => (
+            <ComboBox.Option key={crew.id} value={crew.id}>
+              {titleCase(crew.name || crew.id)}
+            </ComboBox.Option>
+          ), (crews?.data || []))}
+        </ComboBox>
       </div>
     </section>
   );

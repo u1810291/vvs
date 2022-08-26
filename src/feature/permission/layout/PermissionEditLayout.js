@@ -19,6 +19,8 @@ const PermissionEditLayout = () => {
   const {id} = useParams();
   const {data} = usePermission({id});
 
+console.log(data);
+
   const {token} = useAuth();
 
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});

@@ -1,9 +1,10 @@
 import {createUseEnum, createUseList, createUseWhereList, createUseOne} from 'api/buildApiHook';
-import {pipe, getProp, pick, Async} from 'crocks';
+import {pipe, getProp, pick, Async, map, ifElse, safe, not, isEmpty, option} from 'crocks';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 import ENV from '../../../env';
 import {fetchGql} from '@s-e/frontend/fetch';
+import {titleCase} from '@s-e/frontend/transformer/string';
 
 export const usePermissions = createUseWhereList({
   graphQl: raw('./graphql/PermissionsWhere.graphql'),
@@ -43,6 +44,19 @@ export const useCrewRequestStatus = createUseEnum({
   valueProp: 'value',
 });
 
+
+
+export const useCrewRequestDropdown = createUseList({
+  graphQl: raw('./graphql/CrewRequests.graphql'),
+  asyncMapFromApi: pipe(
+    maybeToAsync('prop "crew_request" was expected', getProp('crew_request')),
+    map(ifElse(isEmpty, () => [], map(a => ({value: a.value, name: titleCase(a.value)})))),
+    safe(not(isEmpty)),
+    option([])
+  ),
+});
+
+
 const updatePermissionRequestQueryById = `
   mutation RejectPermissionRequestById($id: uuid!, $status: crew_request_status_enum!) {
     update_crew_permission_by_pk(pk_columns: {id: $id}, _set: {status: $status}) {
@@ -61,3 +75,4 @@ export const asyncUpdatePermissionRequestById = ({token, id, status}) =>
     updatePermissionRequestQueryById,
     {id, status},
   );
+

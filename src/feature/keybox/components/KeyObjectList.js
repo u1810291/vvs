@@ -158,7 +158,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
             {/* <h3>Assign an Object</h3> */}
             
             <div className='w-full flex flex-row space-x-2'>
-              <InputGroup className={'w-1/4'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
+              <InputGroup className={'w-1/2'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
 
               {/* <SelectBox className={'w-full'} {...ctrl('object_id')}>
                 {map(object => (
@@ -169,7 +169,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
               </SelectBox> */}
 
               <ComboBox 
-                className={''} 
+                className={'w-1/2'} 
                 labelText={tf('object')}
                 multiple={false}
                 placeholder={'Search [Single choice]'}
