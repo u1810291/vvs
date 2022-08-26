@@ -91,8 +91,6 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   const {data: crewDropdown} = useCrewDropdown();
   const {data: driverDropdown} = useDriverDropdown();
 
-  console.log(crewRequestDropdown);
-
   const tableColumns = [
     c('id', pipe(getProp('id')), false, null),
     c('created_at', pipe(getProp('created_at')), false, null),
