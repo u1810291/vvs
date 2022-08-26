@@ -57,7 +57,7 @@ export const useCrewRequestDropdown = createUseList({
 });
 
 
-const updatePermissionRequestQueryById = `
+export const updatePermissionRequestQueryById = `
   mutation RejectPermissionRequestById($id: uuid!, $status: crew_request_status_enum!) {
     update_crew_permission_by_pk(pk_columns: {id: $id}, _set: {status: $status}) {
       status
