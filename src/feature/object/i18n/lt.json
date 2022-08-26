@@ -24,6 +24,9 @@
     }
   },
   "edit": {
+    "modem_central": "Centralė",
+    "modem_contract_no": "Modemo Nr.",
+    "modem_area_no": "Zonos Nr.",
     "fullName": "Vardas Pavardė",
     "cancel": "Atšaukti",
     "save": "Saugoti",
