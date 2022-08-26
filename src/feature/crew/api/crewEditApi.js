@@ -8,12 +8,13 @@ import {createUseList, createUseOne, createUseWhereList, mapToNullableString} fr
 
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {Async, safe, omit, getProp} from 'crocks'
+import {Async, safe, omit, getProp, setProp} from 'crocks'
 import {not, ifElse} from 'crocks/logic';
 import {isEmpty} from 'crocks/predicates';
 import {constant} from 'crocks/combinators';
-import {map, option} from 'crocks/pointfree';
-import {pipe, pick, objOf, mapProps} from 'crocks/helpers';
+import {map, option, chain} from 'crocks/pointfree';
+import {pipe, pick, objOf, mapProps, tap} from 'crocks/helpers';
+import {augmentsToUsers} from '../../../api/buildUserQuery';
 
 const {Resolved, Rejected} = Async;
 
@@ -40,15 +41,22 @@ export const useCrew = createUseOne({
   createGraphql: raw('./graphql/CreateCrew.graphql'),
   updateGraphQl: raw('./graphql/UpdateCrewById.graphql'),
   deleteGraphQl: raw('./graphql/DeleteCrewById.graphql'),
-  asyncMapFromApi: pipe(
+  mapFromApiUsingAuth: true,
+  asyncMapFromApi: auth => pipe(
     maybeToAsync('prop "crew_by_pk" was expected', getProp('crew_by_pk')),
+    chain(
+      obj => Async.of(obj => augmentedUsers => setProp('driver', augmentedUsers, obj))
+        .ap(Async.of(obj))
+        .ap(augmentsToUsers(auth, getProp('driver_user_id'), [obj]))
+    ),
+    map(tap(console.log))
   ),
   asyncMapToApi: pipe(
     pick([
       'id',
       'name',
       'calendars',
-      'driver_name',
+      'driver_user_id',
       'abbreviation',
       'phone_number',
       'to_call_after',
@@ -58,7 +66,7 @@ export const useCrew = createUseOne({
     obj =>
       mapProps({
         name: mapToNullableString,
-        driver_name: mapToNullableString,
+        driver_user_id: mapToNullableString,
         abbreviation: mapToNullableString,
         phone_number: mapToNullableString,
         to_call_after: mapToNullableString,

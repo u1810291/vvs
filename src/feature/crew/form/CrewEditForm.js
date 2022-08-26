@@ -31,11 +31,11 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const {data: crew} = useCrewById(crewId);
   const {ctrl, result, setForm} = useResultForm({
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
-    name: FORM_FIELD.TEXT({label: t`field.name`, validator: lengthGt(4)}),
+    name: FORM_FIELD.TEXT({label: t`field.name`, validator: lengthGt(2)}),
     driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validator: () => true}),
-    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: lengthGt(1)}),
+    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: lengthGt(0)}),
     phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
-    to_call_after: FORM_FIELD.TEXT({initial: '10', label: t`field.to_call_after`, validator: lengthGt(9)}),
+    to_call_after: FORM_FIELD.TEXT({initial: '10', label: t`field.to_call_after`, validator: lengthGt(0)}),
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
     is_assigned_while_in_breaks: FORM_FIELD.BOOL({label: t`field.is_assigned_while_in_breaks`, validator: () => true}),
     calendars: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
