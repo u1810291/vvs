@@ -37,9 +37,14 @@
   "edit": {
     "header": {
       "button": {
-        "save": "Atšaukti",
-        "cancel": "Išsaugoti"
+        "save": "Išsaugoti",
+        "cancel": "Atšaukti"
       }
+    },
+    "validation": {
+      "name": "Name must be at least 3 letters long",
+      "abbreviation": "Abbreviation must be at least 2 letters long",
+      "device_id": "Device id must not be empty"
     },
     "title": {
       "dislocation_zone_schedule": "Dislokacijos zonų tvarkaraštis",

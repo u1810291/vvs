@@ -41,6 +41,11 @@
         "cancel": "Cancel"
       }
     },
+    "validation": {
+      "name": "Name must be at least 3 letters long",
+      "abbreviation": "Abbreviation must be at least 2 letters long",
+      "device_id": "Device id must not be empty"
+    },
     "title": {
       "dislocation_zone_schedule": "Dislocation zone schedule",
       "automatic_assignment": "Automatic assignment"
