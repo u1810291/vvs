@@ -21,11 +21,11 @@ const BREACH_PATH_ICON = {
 const BreachEditForm = () => {
   const {id: breachId} = useParams();
   const {googleMap, bounds, isLoaded} = useGoogleApiContext();
-  const {crew, nodes, start_time, end_time} = useBreach(breachId);
+  const {data} = useBreach({id: breachId});
 
-  const zonePath = getZoneItems(crew);
-  const zoneCoordinates = getFlatNodes(crew);
-  const breachPath = transformNodeContract([nodes]);
+  const zonePath = getZoneItems(data?.crew);
+  const zoneCoordinates = getFlatNodes(data?.crew);
+  const breachPath = transformNodeContract([data?.nodes]);
 
   return (
     <section className={'md:flex md:flex-row flex-1'}>
@@ -44,7 +44,12 @@ const BreachEditForm = () => {
         </Map>
       </div>
       <div className={'flex flex-col w-full md:w-5/12 xl:w-3/12'}>
-        <BreachInfoCard crew={crew} start_time={start_time} end_time={end_time} />
+        <BreachInfoCard
+          crew={data?.crew}
+          driver={data?.driver}
+          start_time={data?.start_time}
+          end_time={data?.end_time}
+        />
       </div>
     </section>
   );
