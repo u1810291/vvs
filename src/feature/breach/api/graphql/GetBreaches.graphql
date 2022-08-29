@@ -5,10 +5,10 @@ query GetBreaches($where: crew_breach_bool_exp = {}) {
         start_time
         nodes
         crew_id
+        driver_user_id
         crew {
             name
             status
-            # driver_name
             zone {
                 nodes
             }
