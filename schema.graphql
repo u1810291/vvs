@@ -129,185 +129,6 @@ type city_mutation_response {
     returning: [city!]!
 }
 
-"columns and relationships of \"coresppersons\""
-type coresppersons {
-    Id: String
-    SendMail: String
-    SendSMS: String
-    ShowAtWorkTimeOnly: String
-    address: String
-    category: Int
-    deleted: Boolean!
-    email: String
-    id: String!
-    index: Int
-    key: String
-    letConnect: Boolean!
-    letSeeInvoices: Boolean!
-    name: String
-    notes: String
-    objectid: Int
-    office: String
-    onvacationfrom: String
-    onvacationto: String
-    personid: Int
-    phone: String
-    phone2: String
-    phone3: String
-    position: Int
-}
-
-"aggregated selection of \"coresppersons\""
-type coresppersons_aggregate {
-    aggregate: coresppersons_aggregate_fields
-    nodes: [coresppersons!]!
-}
-
-"aggregate fields of \"coresppersons\""
-type coresppersons_aggregate_fields {
-    avg: coresppersons_avg_fields
-    count(columns: [coresppersons_select_column!], distinct: Boolean): Int!
-    max: coresppersons_max_fields
-    min: coresppersons_min_fields
-    stddev: coresppersons_stddev_fields
-    stddev_pop: coresppersons_stddev_pop_fields
-    stddev_samp: coresppersons_stddev_samp_fields
-    sum: coresppersons_sum_fields
-    var_pop: coresppersons_var_pop_fields
-    var_samp: coresppersons_var_samp_fields
-    variance: coresppersons_variance_fields
-}
-
-"aggregate avg on columns"
-type coresppersons_avg_fields {
-    category: Float
-    index: Float
-    objectid: Float
-    personid: Float
-    position: Float
-}
-
-"aggregate max on columns"
-type coresppersons_max_fields {
-    Id: String
-    SendMail: String
-    SendSMS: String
-    ShowAtWorkTimeOnly: String
-    address: String
-    category: Int
-    email: String
-    id: String
-    index: Int
-    key: String
-    name: String
-    notes: String
-    objectid: Int
-    office: String
-    onvacationfrom: String
-    onvacationto: String
-    personid: Int
-    phone: String
-    phone2: String
-    phone3: String
-    position: Int
-}
-
-"aggregate min on columns"
-type coresppersons_min_fields {
-    Id: String
-    SendMail: String
-    SendSMS: String
-    ShowAtWorkTimeOnly: String
-    address: String
-    category: Int
-    email: String
-    id: String
-    index: Int
-    key: String
-    name: String
-    notes: String
-    objectid: Int
-    office: String
-    onvacationfrom: String
-    onvacationto: String
-    personid: Int
-    phone: String
-    phone2: String
-    phone3: String
-    position: Int
-}
-
-"response of any mutation on the table \"coresppersons\""
-type coresppersons_mutation_response {
-    "number of rows affected by the mutation"
-    affected_rows: Int!
-    "data from the rows affected by the mutation"
-    returning: [coresppersons!]!
-}
-
-"aggregate stddev on columns"
-type coresppersons_stddev_fields {
-    category: Float
-    index: Float
-    objectid: Float
-    personid: Float
-    position: Float
-}
-
-"aggregate stddev_pop on columns"
-type coresppersons_stddev_pop_fields {
-    category: Float
-    index: Float
-    objectid: Float
-    personid: Float
-    position: Float
-}
-
-"aggregate stddev_samp on columns"
-type coresppersons_stddev_samp_fields {
-    category: Float
-    index: Float
-    objectid: Float
-    personid: Float
-    position: Float
-}
-
-"aggregate sum on columns"
-type coresppersons_sum_fields {
-    category: Int
-    index: Int
-    objectid: Int
-    personid: Int
-    position: Int
-}
-
-"aggregate var_pop on columns"
-type coresppersons_var_pop_fields {
-    category: Float
-    index: Float
-    objectid: Float
-    personid: Float
-    position: Float
-}
-
-"aggregate var_samp on columns"
-type coresppersons_var_samp_fields {
-    category: Float
-    index: Float
-    objectid: Float
-    personid: Float
-    position: Float
-}
-
-"aggregate variance on columns"
-type coresppersons_variance_fields {
-    category: Float
-    index: Float
-    objectid: Float
-    personid: Float
-    position: Float
-}
-
 "columns and relationships of \"corresppersons\""
 type corresppersons {
     SendMail: String!
@@ -478,7 +299,7 @@ type corresppersons_variance_fields {
     position: Float
 }
 
-"main data regarding crew unit"
+"It is the tablet that connects users with role \"crew\" inside the car"
 type crew {
     abbreviation: String
     "An object relationship"
@@ -509,11 +330,37 @@ type crew {
         "filter the rows returned"
         where: crew_calendar_bool_exp
     ): crew_calendar_aggregate!
-    driver_name: String
+    driver_user_id: uuid
     id: uuid!
     is_assigned_automatically: Boolean!
     is_assigned_while_in_breaks: Boolean!
     name: String
+    "An array relationship"
+    object_key_boxes(
+        "distinct select on columns"
+        distinct_on: [object_key_box_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [object_key_box_order_by!],
+        "filter the rows returned"
+        where: object_key_box_bool_exp
+    ): [object_key_box!]!
+    "An aggregate relationship"
+    object_key_boxes_aggregate(
+        "distinct select on columns"
+        distinct_on: [object_key_box_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [object_key_box_order_by!],
+        "filter the rows returned"
+        where: object_key_box_bool_exp
+    ): object_key_box_aggregate!
     "An array relationship"
     permissions(
         "distinct select on columns"
@@ -543,6 +390,32 @@ type crew {
     phone_number: String
     status: crew_status_enum
     to_call_after: String
+    "An array relationship"
+    user_settings(
+        "distinct select on columns"
+        distinct_on: [user_settings_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [user_settings_order_by!],
+        "filter the rows returned"
+        where: user_settings_bool_exp
+    ): [user_settings!]!
+    "An aggregate relationship"
+    user_settings_aggregate(
+        "distinct select on columns"
+        distinct_on: [user_settings_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [user_settings_order_by!],
+        "filter the rows returned"
+        where: user_settings_bool_exp
+    ): user_settings_aggregate!
     "An array relationship"
     zone(
         "distinct select on columns"
@@ -589,7 +462,7 @@ type crew_breach {
     "An object relationship"
     crew: crew
     crew_id: uuid
-    driver_id: uuid
+    driver_user_id: uuid
     end_time: timestamptz
     id: uuid!
     nodes(
@@ -615,7 +488,7 @@ type crew_breach_aggregate_fields {
 "aggregate max on columns"
 type crew_breach_max_fields {
     crew_id: uuid
-    driver_id: uuid
+    driver_user_id: uuid
     end_time: timestamptz
     id: uuid
     start_time: timestamptz
@@ -624,7 +497,7 @@ type crew_breach_max_fields {
 "aggregate min on columns"
 type crew_breach_min_fields {
     crew_id: uuid
-    driver_id: uuid
+    driver_user_id: uuid
     end_time: timestamptz
     id: uuid
     start_time: timestamptz
@@ -644,7 +517,9 @@ type crew_calendar {
     "An object relationship"
     crew: crew!
     crew_id: uuid!
-    dislocation_zone_id: uuid!
+    "An object relationship"
+    crew_zone: crew_zone
+    dislocation_zone_id: uuid
     end_time: interval!
     id: uuid!
     start_time: interval!
@@ -741,55 +616,10 @@ type crew_calendar_variance_fields {
     week_day: Float
 }
 
-"id should match user from user service (FusionAuth)"
-type crew_driver {
-    created_at: timestamptz!
-    crew_id: uuid
-    id: uuid!
-    updated_at: timestamptz!
-}
-
-"aggregated selection of \"crew_driver\""
-type crew_driver_aggregate {
-    aggregate: crew_driver_aggregate_fields
-    nodes: [crew_driver!]!
-}
-
-"aggregate fields of \"crew_driver\""
-type crew_driver_aggregate_fields {
-    count(columns: [crew_driver_select_column!], distinct: Boolean): Int!
-    max: crew_driver_max_fields
-    min: crew_driver_min_fields
-}
-
-"aggregate max on columns"
-type crew_driver_max_fields {
-    created_at: timestamptz
-    crew_id: uuid
-    id: uuid
-    updated_at: timestamptz
-}
-
-"aggregate min on columns"
-type crew_driver_min_fields {
-    created_at: timestamptz
-    crew_id: uuid
-    id: uuid
-    updated_at: timestamptz
-}
-
-"response of any mutation on the table \"crew_driver\""
-type crew_driver_mutation_response {
-    "number of rows affected by the mutation"
-    affected_rows: Int!
-    "data from the rows affected by the mutation"
-    returning: [crew_driver!]!
-}
-
 "aggregate max on columns"
 type crew_max_fields {
     abbreviation: String
-    driver_name: String
+    driver_user_id: uuid
     id: uuid
     name: String
     phone_number: String
@@ -799,7 +629,7 @@ type crew_max_fields {
 "aggregate min on columns"
 type crew_min_fields {
     abbreviation: String
-    driver_name: String
+    driver_user_id: uuid
     id: uuid
     name: String
     phone_number: String
@@ -873,6 +703,7 @@ type crew_permission_mutation_response {
 "columns and relationships of \"crew_request\""
 type crew_request {
     duration: interval!
+    is_assigned_while_in_breaks: Boolean!
     "An array relationship"
     permissions(
         "distinct select on columns"
@@ -1015,6 +846,32 @@ type crew_status_mutation_response {
 type crew_zone {
     "An object relationship"
     crew: crew
+    "An array relationship"
+    crew_calendar(
+        "distinct select on columns"
+        distinct_on: [crew_calendar_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_calendar_order_by!],
+        "filter the rows returned"
+        where: crew_calendar_bool_exp
+    ): [crew_calendar!]!
+    "An aggregate relationship"
+    crew_calendar_aggregate(
+        "distinct select on columns"
+        distinct_on: [crew_calendar_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [crew_calendar_order_by!],
+        "filter the rows returned"
+        where: crew_calendar_bool_exp
+    ): crew_calendar_aggregate!
     crew_id: uuid
     id: uuid!
     name: String!
@@ -1618,6 +1475,93 @@ type loginOutput {
     token: String
 }
 
+"columns and relationships of \"cities\""
+type monas_cities {
+    id: Int!
+    name: String!
+}
+
+"aggregated selection of \"cities\""
+type monas_cities_aggregate {
+    aggregate: monas_cities_aggregate_fields
+    nodes: [monas_cities!]!
+}
+
+"aggregate fields of \"cities\""
+type monas_cities_aggregate_fields {
+    avg: monas_cities_avg_fields
+    count(column: monas_cities_select_column, distinct: Boolean): Int!
+    max: monas_cities_max_fields
+    min: monas_cities_min_fields
+    stddev: monas_cities_stddev_fields
+    stddev_pop: monas_cities_stddev_pop_fields
+    stddev_samp: monas_cities_stddev_samp_fields
+    sum: monas_cities_sum_fields
+    var_pop: monas_cities_var_pop_fields
+    var_samp: monas_cities_var_samp_fields
+    variance: monas_cities_variance_fields
+}
+
+"aggregate avg on columns"
+type monas_cities_avg_fields {
+    id: Float
+}
+
+"aggregate max on columns"
+type monas_cities_max_fields {
+    id: Int
+    name: String
+}
+
+"aggregate min on columns"
+type monas_cities_min_fields {
+    id: Int
+    name: String
+}
+
+"response of any mutation on the table \"cities\""
+type monas_cities_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [monas_cities!]!
+}
+
+"aggregate stddev on columns"
+type monas_cities_stddev_fields {
+    id: Float
+}
+
+"aggregate stddev_pop on columns"
+type monas_cities_stddev_pop_fields {
+    id: Float
+}
+
+"aggregate stddev_samp on columns"
+type monas_cities_stddev_samp_fields {
+    id: Float
+}
+
+"aggregate sum on columns"
+type monas_cities_sum_fields {
+    id: Int
+}
+
+"aggregate var_pop on columns"
+type monas_cities_var_pop_fields {
+    id: Float
+}
+
+"aggregate var_samp on columns"
+type monas_cities_var_samp_fields {
+    id: Float
+}
+
+"aggregate variance on columns"
+type monas_cities_variance_fields {
+    id: Float
+}
+
 "columns and relationships of \"events\""
 type monas_events {
     ObjectName: String
@@ -1631,6 +1575,8 @@ type monas_events {
     addedtoarchivetime: datetime
     clasificator: String
     closedby: String
+    "An object relationship"
+    description: eventsdescription
     eventcode: String
     eventdescid: Int
     eventname: String
@@ -1640,6 +1586,8 @@ type monas_events {
     linename: String
     linenr: Int
     lockedby: Int!
+    "An object relationship"
+    object: monas_objects
     objectdbid: Int
     objectnr: Int
     playsound: String
@@ -2046,6 +1994,8 @@ type monas_objects {
     linenr: String!
     longitude: Float
     mainsubgroup: String!
+    "An object relationship"
+    monas_city: monas_cities
     mondayclosehour: Int!
     mondayclosemin: Int!
     mondayopenhour: Int!
@@ -3186,13 +3136,6 @@ type mutation_root {
     ): city_mutation_response
     "delete single row from the table: \"city\""
     delete_city_by_pk(value: String!): city
-    "delete data from the table: \"coresppersons\""
-    delete_coresppersons(
-        "filter the rows which have to be deleted"
-        where: coresppersons_bool_exp!
-    ): coresppersons_mutation_response
-    "delete single row from the table: \"coresppersons\""
-    delete_coresppersons_by_pk(id: String!): coresppersons
     "delete data from the table: \"corresppersons\""
     delete_corresppersons(
         "filter the rows which have to be deleted"
@@ -3221,13 +3164,6 @@ type mutation_root {
     ): crew_calendar_mutation_response
     "delete single row from the table: \"crew_calendar\""
     delete_crew_calendar_by_pk(id: uuid!): crew_calendar
-    "delete data from the table: \"crew_driver\""
-    delete_crew_driver(
-        "filter the rows which have to be deleted"
-        where: crew_driver_bool_exp!
-    ): crew_driver_mutation_response
-    "delete single row from the table: \"crew_driver\""
-    delete_crew_driver_by_pk(id: uuid!): crew_driver
     "delete data from the table: \"crew_permission\""
     delete_crew_permission(
         "filter the rows which have to be deleted"
@@ -3305,6 +3241,13 @@ type mutation_root {
     ): filters_mutation_response
     "delete single row from the table: \"filters\""
     delete_filters_by_pk(Id: uuid!): filters
+    "delete data from the table: \"cities\""
+    delete_monas_cities(
+        "filter the rows which have to be deleted"
+        where: monas_cities_bool_exp!
+    ): monas_cities_mutation_response
+    "delete single row from the table: \"cities\""
+    delete_monas_cities_by_pk(id: Int!): monas_cities
     "delete data from the table: \"events\""
     delete_monas_events(
         "filter the rows which have to be deleted"
@@ -3448,20 +3391,6 @@ type mutation_root {
         "upsert condition"
         on_conflict: city_on_conflict
     ): city
-    "insert data into the table: \"coresppersons\""
-    insert_coresppersons(
-        "the rows to be inserted"
-        objects: [coresppersons_insert_input!]!,
-        "upsert condition"
-        on_conflict: coresppersons_on_conflict
-    ): coresppersons_mutation_response
-    "insert a single row into the table: \"coresppersons\""
-    insert_coresppersons_one(
-        "the row to be inserted"
-        object: coresppersons_insert_input!,
-        "upsert condition"
-        on_conflict: coresppersons_on_conflict
-    ): coresppersons
     "insert data into the table: \"corresppersons\""
     insert_corresppersons(
         "upsert condition"
@@ -3511,20 +3440,6 @@ type mutation_root {
         "upsert condition"
         on_conflict: crew_calendar_on_conflict
     ): crew_calendar
-    "insert data into the table: \"crew_driver\""
-    insert_crew_driver(
-        "the rows to be inserted"
-        objects: [crew_driver_insert_input!]!,
-        "upsert condition"
-        on_conflict: crew_driver_on_conflict
-    ): crew_driver_mutation_response
-    "insert a single row into the table: \"crew_driver\""
-    insert_crew_driver_one(
-        "the row to be inserted"
-        object: crew_driver_insert_input!,
-        "upsert condition"
-        on_conflict: crew_driver_on_conflict
-    ): crew_driver
     "insert a single row into the table: \"crew\""
     insert_crew_one(
         "the row to be inserted"
@@ -3686,6 +3601,20 @@ type mutation_root {
         "upsert condition"
         on_conflict: filters_on_conflict
     ): filters
+    "insert data into the table: \"cities\""
+    insert_monas_cities(
+        "upsert condition"
+        if_matched: monas_cities_if_matched,
+        "the rows to be inserted"
+        objects: [monas_cities_insert_input!]!
+    ): monas_cities_mutation_response
+    "insert a single row into the table: \"cities\""
+    insert_monas_cities_one(
+        "upsert condition"
+        if_matched: monas_cities_if_matched,
+        "the row to be inserted"
+        object: monas_cities_insert_input!
+    ): monas_cities
     "insert data into the table: \"events\""
     insert_monas_events(
         "upsert condition"
@@ -3910,6 +3839,7 @@ type mutation_root {
         "upsert condition"
         on_conflict: user_type_on_conflict
     ): user_type
+    register(birthDate: String, email: String!, firstName: String, lastName: String, mobilePhone: String, password: String!, role: String!): loginOutput
     storeFile(base64: String!, namespace: String, path: String!): FilestoreSave
     "update data of the table: \"central\""
     update_central(
@@ -3924,6 +3854,11 @@ type mutation_root {
         _set: central_set_input,
         pk_columns: central_pk_columns_input!
     ): central
+    "update multiples rows of table: \"central\""
+    update_central_many(
+        "updates to execute, in order"
+        updates: [central_updates!]!
+    ): [central_mutation_response]
     "update data of the table: \"city\""
     update_city(
         "sets the columns of the filtered rows to the given values"
@@ -3937,23 +3872,11 @@ type mutation_root {
         _set: city_set_input,
         pk_columns: city_pk_columns_input!
     ): city
-    "update data of the table: \"coresppersons\""
-    update_coresppersons(
-        "increments the numeric columns with given value of the filtered values"
-        _inc: coresppersons_inc_input,
-        "sets the columns of the filtered rows to the given values"
-        _set: coresppersons_set_input,
-        "filter the rows which have to be updated"
-        where: coresppersons_bool_exp!
-    ): coresppersons_mutation_response
-    "update single row of the table: \"coresppersons\""
-    update_coresppersons_by_pk(
-        "increments the numeric columns with given value of the filtered values"
-        _inc: coresppersons_inc_input,
-        "sets the columns of the filtered rows to the given values"
-        _set: coresppersons_set_input,
-        pk_columns: coresppersons_pk_columns_input!
-    ): coresppersons
+    "update multiples rows of table: \"city\""
+    update_city_many(
+        "updates to execute, in order"
+        updates: [city_updates!]!
+    ): [city_mutation_response]
     "update data of the table: \"corresppersons\""
     update_corresppersons(
         "increments the numeric columns with given value of the filtered values"
@@ -3991,6 +3914,11 @@ type mutation_root {
         _set: crew_breach_set_input,
         pk_columns: crew_breach_pk_columns_input!
     ): crew_breach
+    "update multiples rows of table: \"crew_breach\""
+    update_crew_breach_many(
+        "updates to execute, in order"
+        updates: [crew_breach_updates!]!
+    ): [crew_breach_mutation_response]
     "update single row of the table: \"crew\""
     update_crew_by_pk(
         "sets the columns of the filtered rows to the given values"
@@ -4014,19 +3942,16 @@ type mutation_root {
         _set: crew_calendar_set_input,
         pk_columns: crew_calendar_pk_columns_input!
     ): crew_calendar
-    "update data of the table: \"crew_driver\""
-    update_crew_driver(
-        "sets the columns of the filtered rows to the given values"
-        _set: crew_driver_set_input,
-        "filter the rows which have to be updated"
-        where: crew_driver_bool_exp!
-    ): crew_driver_mutation_response
-    "update single row of the table: \"crew_driver\""
-    update_crew_driver_by_pk(
-        "sets the columns of the filtered rows to the given values"
-        _set: crew_driver_set_input,
-        pk_columns: crew_driver_pk_columns_input!
-    ): crew_driver
+    "update multiples rows of table: \"crew_calendar\""
+    update_crew_calendar_many(
+        "updates to execute, in order"
+        updates: [crew_calendar_updates!]!
+    ): [crew_calendar_mutation_response]
+    "update multiples rows of table: \"crew\""
+    update_crew_many(
+        "updates to execute, in order"
+        updates: [crew_updates!]!
+    ): [crew_mutation_response]
     "update data of the table: \"crew_permission\""
     update_crew_permission(
         "sets the columns of the filtered rows to the given values"
@@ -4040,6 +3965,11 @@ type mutation_root {
         _set: crew_permission_set_input,
         pk_columns: crew_permission_pk_columns_input!
     ): crew_permission
+    "update multiples rows of table: \"crew_permission\""
+    update_crew_permission_many(
+        "updates to execute, in order"
+        updates: [crew_permission_updates!]!
+    ): [crew_permission_mutation_response]
     "update data of the table: \"crew_request\""
     update_crew_request(
         "sets the columns of the filtered rows to the given values"
@@ -4053,6 +3983,11 @@ type mutation_root {
         _set: crew_request_set_input,
         pk_columns: crew_request_pk_columns_input!
     ): crew_request
+    "update multiples rows of table: \"crew_request\""
+    update_crew_request_many(
+        "updates to execute, in order"
+        updates: [crew_request_updates!]!
+    ): [crew_request_mutation_response]
     "update data of the table: \"crew_request_status\""
     update_crew_request_status(
         "sets the columns of the filtered rows to the given values"
@@ -4066,6 +4001,11 @@ type mutation_root {
         _set: crew_request_status_set_input,
         pk_columns: crew_request_status_pk_columns_input!
     ): crew_request_status
+    "update multiples rows of table: \"crew_request_status\""
+    update_crew_request_status_many(
+        "updates to execute, in order"
+        updates: [crew_request_status_updates!]!
+    ): [crew_request_status_mutation_response]
     "update data of the table: \"crew_status\""
     update_crew_status(
         "sets the columns of the filtered rows to the given values"
@@ -4079,6 +4019,11 @@ type mutation_root {
         _set: crew_status_set_input,
         pk_columns: crew_status_pk_columns_input!
     ): crew_status
+    "update multiples rows of table: \"crew_status\""
+    update_crew_status_many(
+        "updates to execute, in order"
+        updates: [crew_status_updates!]!
+    ): [crew_status_mutation_response]
     "update data of the table: \"crew_zone\""
     update_crew_zone(
         "sets the columns of the filtered rows to the given values"
@@ -4092,6 +4037,11 @@ type mutation_root {
         _set: crew_zone_set_input,
         pk_columns: crew_zone_pk_columns_input!
     ): crew_zone
+    "update multiples rows of table: \"crew_zone\""
+    update_crew_zone_many(
+        "updates to execute, in order"
+        updates: [crew_zone_updates!]!
+    ): [crew_zone_mutation_response]
     "update data of the table: \"event_cancellation\""
     update_event_cancellation(
         "sets the columns of the filtered rows to the given values"
@@ -4105,6 +4055,11 @@ type mutation_root {
         _set: event_cancellation_set_input,
         pk_columns: event_cancellation_pk_columns_input!
     ): event_cancellation
+    "update multiples rows of table: \"event_cancellation\""
+    update_event_cancellation_many(
+        "updates to execute, in order"
+        updates: [event_cancellation_updates!]!
+    ): [event_cancellation_mutation_response]
     "update data of the table: \"event_status\""
     update_event_status(
         "sets the columns of the filtered rows to the given values"
@@ -4118,6 +4073,11 @@ type mutation_root {
         _set: event_status_set_input,
         pk_columns: event_status_pk_columns_input!
     ): event_status
+    "update multiples rows of table: \"event_status\""
+    update_event_status_many(
+        "updates to execute, in order"
+        updates: [event_status_updates!]!
+    ): [event_status_mutation_response]
     "update data of the table: \"event_type\""
     update_event_type(
         "sets the columns of the filtered rows to the given values"
@@ -4131,6 +4091,11 @@ type mutation_root {
         _set: event_type_set_input,
         pk_columns: event_type_pk_columns_input!
     ): event_type
+    "update multiples rows of table: \"event_type\""
+    update_event_type_many(
+        "updates to execute, in order"
+        updates: [event_type_updates!]!
+    ): [event_type_mutation_response]
     "update data of the table: \"events\""
     update_events(
         "increments the numeric columns with given value of the filtered values"
@@ -4148,6 +4113,11 @@ type mutation_root {
         _set: events_set_input,
         pk_columns: events_pk_columns_input!
     ): events
+    "update multiples rows of table: \"events\""
+    update_events_many(
+        "updates to execute, in order"
+        updates: [events_updates!]!
+    ): [events_mutation_response]
     "update data of the table: \"eventsdescription\""
     update_eventsdescription(
         "increments the numeric columns with given value of the filtered values"
@@ -4198,6 +4168,24 @@ type mutation_root {
         _set: filters_set_input,
         pk_columns: filters_pk_columns_input!
     ): filters
+    "update multiples rows of table: \"filters\""
+    update_filters_many(
+        "updates to execute, in order"
+        updates: [filters_updates!]!
+    ): [filters_mutation_response]
+    "update data of the table: \"cities\""
+    update_monas_cities(
+        "sets the columns of the filtered rows to the given values"
+        _set: monas_cities_set_input,
+        "filter the rows which have to be updated"
+        where: monas_cities_bool_exp!
+    ): monas_cities_mutation_response
+    "update single row of the table: \"cities\""
+    update_monas_cities_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: monas_cities_set_input,
+        pk_columns: monas_cities_pk_columns_input!
+    ): monas_cities
     "update data of the table: \"events\""
     update_monas_events(
         "increments the numeric columns with given value of the filtered values"
@@ -4249,6 +4237,11 @@ type mutation_root {
         _set: monas_related_set_input,
         pk_columns: monas_related_pk_columns_input!
     ): monas_related
+    "update multiples rows of table: \"monas_related\""
+    update_monas_related_many(
+        "updates to execute, in order"
+        updates: [monas_related_updates!]!
+    ): [monas_related_mutation_response]
     "update data of the table: \"object\""
     update_object(
         "increments the numeric columns with given value of the filtered values"
@@ -4279,6 +4272,11 @@ type mutation_root {
         _set: object_image_set_input,
         pk_columns: object_image_pk_columns_input!
     ): object_image
+    "update multiples rows of table: \"object_image\""
+    update_object_image_many(
+        "updates to execute, in order"
+        updates: [object_image_updates!]!
+    ): [object_image_mutation_response]
     "update data of the table: \"object_key\""
     update_object_key(
         "sets the columns of the filtered rows to the given values"
@@ -4299,12 +4297,22 @@ type mutation_root {
         _set: object_key_box_set_input,
         pk_columns: object_key_box_pk_columns_input!
     ): object_key_box
+    "update multiples rows of table: \"object_key_box\""
+    update_object_key_box_many(
+        "updates to execute, in order"
+        updates: [object_key_box_updates!]!
+    ): [object_key_box_mutation_response]
     "update single row of the table: \"object_key\""
     update_object_key_by_pk(
         "sets the columns of the filtered rows to the given values"
         _set: object_key_set_input,
         pk_columns: object_key_pk_columns_input!
     ): object_key
+    "update multiples rows of table: \"object_key\""
+    update_object_key_many(
+        "updates to execute, in order"
+        updates: [object_key_updates!]!
+    ): [object_key_mutation_response]
     "update data of the table: \"object_key_rels\""
     update_object_key_rels(
         "sets the columns of the filtered rows to the given values"
@@ -4318,6 +4326,16 @@ type mutation_root {
         _set: object_key_rels_set_input,
         pk_columns: object_key_rels_pk_columns_input!
     ): object_key_rels
+    "update multiples rows of table: \"object_key_rels\""
+    update_object_key_rels_many(
+        "updates to execute, in order"
+        updates: [object_key_rels_updates!]!
+    ): [object_key_rels_mutation_response]
+    "update multiples rows of table: \"object\""
+    update_object_many(
+        "updates to execute, in order"
+        updates: [object_updates!]!
+    ): [object_mutation_response]
     "update data of the table: \"object_modem\""
     update_object_modem(
         "sets the columns of the filtered rows to the given values"
@@ -4331,6 +4349,11 @@ type mutation_root {
         _set: object_modem_set_input,
         pk_columns: object_modem_pk_columns_input!
     ): object_modem
+    "update multiples rows of table: \"object_modem\""
+    update_object_modem_many(
+        "updates to execute, in order"
+        updates: [object_modem_updates!]!
+    ): [object_modem_mutation_response]
     "update data of the table: \"object_user_rel\""
     update_object_user_rel(
         "sets the columns of the filtered rows to the given values"
@@ -4344,6 +4367,11 @@ type mutation_root {
         _set: object_user_rel_set_input,
         pk_columns: object_user_rel_pk_columns_input!
     ): object_user_rel
+    "update multiples rows of table: \"object_user_rel\""
+    update_object_user_rel_many(
+        "updates to execute, in order"
+        updates: [object_user_rel_updates!]!
+    ): [object_user_rel_mutation_response]
     "update data of the table: \"objectimages\""
     update_objectimages(
         "increments the numeric columns with given value of the filtered values"
@@ -4374,6 +4402,11 @@ type mutation_root {
         _set: provider_set_input,
         pk_columns: provider_pk_columns_input!
     ): provider
+    "update multiples rows of table: \"provider\""
+    update_provider_many(
+        "updates to execute, in order"
+        updates: [provider_updates!]!
+    ): [provider_mutation_response]
     "update data of the table: \"reason_for_cancellation\""
     update_reason_for_cancellation(
         "sets the columns of the filtered rows to the given values"
@@ -4387,6 +4420,11 @@ type mutation_root {
         _set: reason_for_cancellation_set_input,
         pk_columns: reason_for_cancellation_pk_columns_input!
     ): reason_for_cancellation
+    "update multiples rows of table: \"reason_for_cancellation\""
+    update_reason_for_cancellation_many(
+        "updates to execute, in order"
+        updates: [reason_for_cancellation_updates!]!
+    ): [reason_for_cancellation_mutation_response]
     "update data of the table: \"task_type\""
     update_task_type(
         "sets the columns of the filtered rows to the given values"
@@ -4400,7 +4438,12 @@ type mutation_root {
         _set: task_type_set_input,
         pk_columns: task_type_pk_columns_input!
     ): task_type
-    update_user(firstName: String, id: uuid, lastName: String, username: String): UserOutput
+    "update multiples rows of table: \"task_type\""
+    update_task_type_many(
+        "updates to execute, in order"
+        updates: [task_type_updates!]!
+    ): [task_type_mutation_response]
+    update_user(firstName: String, id: uuid, lastName: String, password: String, username: String): UserOutput
     "update data of the table: \"user_settings\""
     update_user_settings(
         "sets the columns of the filtered rows to the given values"
@@ -4414,6 +4457,11 @@ type mutation_root {
         _set: user_settings_set_input,
         pk_columns: user_settings_pk_columns_input!
     ): user_settings
+    "update multiples rows of table: \"user_settings\""
+    update_user_settings_many(
+        "updates to execute, in order"
+        updates: [user_settings_updates!]!
+    ): [user_settings_mutation_response]
     "update data of the table: \"user_type\""
     update_user_type(
         "sets the columns of the filtered rows to the given values"
@@ -4427,7 +4475,11 @@ type mutation_root {
         _set: user_type_set_input,
         pk_columns: user_type_pk_columns_input!
     ): user_type
-    update_user_with_password(firstName: String, id: uuid, lastName: String, password: String, username: String): UserOutput
+    "update multiples rows of table: \"user_type\""
+    update_user_type_many(
+        "updates to execute, in order"
+        updates: [user_type_updates!]!
+    ): [user_type_mutation_response]
 }
 
 "columns and relationships of \"object\""
@@ -4437,6 +4489,9 @@ type object {
     contract_no: String
     contract_object_no: String
     description: String
+    feedback_from: interval!
+    feedback_sla_time_in_min: Int!
+    feedback_until: interval!
     id: uuid!
     "An array relationship"
     images(
@@ -4465,6 +4520,7 @@ type object {
         where: object_image_bool_exp
     ): object_image_aggregate!
     is_atm: Boolean
+    is_call_after_inspection: Boolean!
     is_crew_autoasigned: Boolean!
     "An array relationship"
     keys(
@@ -4577,6 +4633,7 @@ type object_aggregate_fields {
 
 "aggregate avg on columns"
 type object_avg_fields {
+    feedback_sla_time_in_min: Float
     latitude: Float
     longitude: Float
     navision_id: Float
@@ -4651,6 +4708,8 @@ type object_key_aggregate_fields {
 
 "columns and relationships of \"object_key_box\""
 type object_key_box {
+    "An object relationship"
+    crew: crew
     crew_id: uuid
     id: uuid!
     set_name: String!
@@ -4768,6 +4827,7 @@ type object_max_fields {
     contract_no: String
     contract_object_no: String
     description: String
+    feedback_sla_time_in_min: Int
     id: uuid
     latitude: numeric
     longitude: numeric
@@ -4783,6 +4843,7 @@ type object_min_fields {
     contract_no: String
     contract_object_no: String
     description: String
+    feedback_sla_time_in_min: Int
     id: uuid
     latitude: numeric
     longitude: numeric
@@ -4796,6 +4857,7 @@ type object_min_fields {
 type object_modem {
     area_no: String!
     central: central_enum
+    contract_modem_no: String
     id: uuid!
     "An object relationship"
     object: object!
@@ -4818,6 +4880,7 @@ type object_modem_aggregate_fields {
 "aggregate max on columns"
 type object_modem_max_fields {
     area_no: String
+    contract_modem_no: String
     id: uuid
     object_id: uuid
 }
@@ -4825,6 +4888,7 @@ type object_modem_max_fields {
 "aggregate min on columns"
 type object_modem_min_fields {
     area_no: String
+    contract_modem_no: String
     id: uuid
     object_id: uuid
 }
@@ -4847,6 +4911,7 @@ type object_mutation_response {
 
 "aggregate stddev on columns"
 type object_stddev_fields {
+    feedback_sla_time_in_min: Float
     latitude: Float
     longitude: Float
     navision_id: Float
@@ -4855,6 +4920,7 @@ type object_stddev_fields {
 
 "aggregate stddev_pop on columns"
 type object_stddev_pop_fields {
+    feedback_sla_time_in_min: Float
     latitude: Float
     longitude: Float
     navision_id: Float
@@ -4863,6 +4929,7 @@ type object_stddev_pop_fields {
 
 "aggregate stddev_samp on columns"
 type object_stddev_samp_fields {
+    feedback_sla_time_in_min: Float
     latitude: Float
     longitude: Float
     navision_id: Float
@@ -4871,6 +4938,7 @@ type object_stddev_samp_fields {
 
 "aggregate sum on columns"
 type object_sum_fields {
+    feedback_sla_time_in_min: Int
     latitude: numeric
     longitude: numeric
     navision_id: Int
@@ -4922,6 +4990,7 @@ type object_user_rel_mutation_response {
 
 "aggregate var_pop on columns"
 type object_var_pop_fields {
+    feedback_sla_time_in_min: Float
     latitude: Float
     longitude: Float
     navision_id: Float
@@ -4930,6 +4999,7 @@ type object_var_pop_fields {
 
 "aggregate var_samp on columns"
 type object_var_samp_fields {
+    feedback_sla_time_in_min: Float
     latitude: Float
     longitude: Float
     navision_id: Float
@@ -4938,6 +5008,7 @@ type object_var_samp_fields {
 
 "aggregate variance on columns"
 type object_variance_fields {
+    feedback_sla_time_in_min: Float
     latitude: Float
     longitude: Float
     navision_id: Float
@@ -5142,34 +5213,6 @@ type query_root {
     ): city_aggregate!
     "fetch data from the table: \"city\" using primary key columns"
     city_by_pk(value: String!): city
-    "fetch data from the table: \"coresppersons\""
-    coresppersons(
-        "distinct select on columns"
-        distinct_on: [coresppersons_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [coresppersons_order_by!],
-        "filter the rows returned"
-        where: coresppersons_bool_exp
-    ): [coresppersons!]!
-    "fetch aggregated fields from the table: \"coresppersons\""
-    coresppersons_aggregate(
-        "distinct select on columns"
-        distinct_on: [coresppersons_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [coresppersons_order_by!],
-        "filter the rows returned"
-        where: coresppersons_bool_exp
-    ): coresppersons_aggregate!
-    "fetch data from the table: \"coresppersons\" using primary key columns"
-    coresppersons_by_pk(id: String!): coresppersons
     "fetch data from the table: \"corresppersons\""
     corresppersons(
         "limit the number of rows returned"
@@ -5250,7 +5293,7 @@ type query_root {
     crew_breach_by_pk(id: uuid!): crew_breach
     "fetch data from the table: \"crew\" using primary key columns"
     crew_by_pk(id: uuid!): crew
-    "fetch data from the table: \"crew_calendar\""
+    "An array relationship"
     crew_calendar(
         "distinct select on columns"
         distinct_on: [crew_calendar_select_column!],
@@ -5263,7 +5306,7 @@ type query_root {
         "filter the rows returned"
         where: crew_calendar_bool_exp
     ): [crew_calendar!]!
-    "fetch aggregated fields from the table: \"crew_calendar\""
+    "An aggregate relationship"
     crew_calendar_aggregate(
         "distinct select on columns"
         distinct_on: [crew_calendar_select_column!],
@@ -5278,34 +5321,6 @@ type query_root {
     ): crew_calendar_aggregate!
     "fetch data from the table: \"crew_calendar\" using primary key columns"
     crew_calendar_by_pk(id: uuid!): crew_calendar
-    "fetch data from the table: \"crew_driver\""
-    crew_driver(
-        "distinct select on columns"
-        distinct_on: [crew_driver_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [crew_driver_order_by!],
-        "filter the rows returned"
-        where: crew_driver_bool_exp
-    ): [crew_driver!]!
-    "fetch aggregated fields from the table: \"crew_driver\""
-    crew_driver_aggregate(
-        "distinct select on columns"
-        distinct_on: [crew_driver_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [crew_driver_order_by!],
-        "filter the rows returned"
-        where: crew_driver_bool_exp
-    ): crew_driver_aggregate!
-    "fetch data from the table: \"crew_driver\" using primary key columns"
-    crew_driver_by_pk(id: uuid!): crew_driver
     "fetch data from the table: \"crew_permission\""
     crew_permission(
         "distinct select on columns"
@@ -5618,6 +5633,30 @@ type query_root {
     getMe: UserOutput
     "fusion auth  login"
     login(password: String!, username: String!): LoginOutput
+    "fetch data from the table: \"cities\""
+    monas_cities(
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [monas_cities_order_by!],
+        "filter the rows returned"
+        where: monas_cities_bool_exp
+    ): [monas_cities!]!
+    "fetch aggregated fields from the table: \"cities\""
+    monas_cities_aggregate(
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [monas_cities_order_by!],
+        "filter the rows returned"
+        where: monas_cities_bool_exp
+    ): monas_cities_aggregate!
+    "fetch data from the table: \"cities\" using primary key columns"
+    monas_cities_by_pk(id: Int!): monas_cities
     "fetch data from the table: \"events\""
     monas_events(
         "limit the number of rows returned"
@@ -5972,7 +6011,6 @@ type query_root {
     reason_for_cancellation_by_pk(value: String!): reason_for_cancellation
     "refresh"
     refresh(refreshToken: String!): refreshOutput
-    register(birthDate: String, email: String!, firstName: String!, lastName: String!, mobilePhone: String!, password: String!, role: String!): loginOutput
     "remind"
     remind(changePasswordId: String!, password: String!): remindOutput
     "fetch data from the table: \"task_type\""
@@ -6009,7 +6047,7 @@ type query_root {
     uploadImages(authToken: String!, id: String!, image: String!): uploadQuery
     "get user by user UUID from FusionAuth"
     userById(id: uuid!): UserOutput
-    "fetch data from the table: \"user_settings\""
+    "An array relationship"
     user_settings(
         "distinct select on columns"
         distinct_on: [user_settings_select_column!],
@@ -6022,7 +6060,7 @@ type query_root {
         "filter the rows returned"
         where: user_settings_bool_exp
     ): [user_settings!]!
-    "fetch aggregated fields from the table: \"user_settings\""
+    "An aggregate relationship"
     user_settings_aggregate(
         "distinct select on columns"
         distinct_on: [user_settings_select_column!],
@@ -6070,7 +6108,7 @@ type query_root {
     user_type_by_pk(value: String!): user_type
     usersByRole(role: String): usersQuery
     "Get users using QueryString that searches name, surname, email, username"
-    usersSearch(queryString: String!): usersQuery
+    usersSearch(ids: [uuid], queryString: String): usersQuery
 }
 
 "columns and relationships of \"reason_for_cancellation\""
@@ -6179,34 +6217,6 @@ type subscription_root {
     ): city_aggregate!
     "fetch data from the table: \"city\" using primary key columns"
     city_by_pk(value: String!): city
-    "fetch data from the table: \"coresppersons\""
-    coresppersons(
-        "distinct select on columns"
-        distinct_on: [coresppersons_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [coresppersons_order_by!],
-        "filter the rows returned"
-        where: coresppersons_bool_exp
-    ): [coresppersons!]!
-    "fetch aggregated fields from the table: \"coresppersons\""
-    coresppersons_aggregate(
-        "distinct select on columns"
-        distinct_on: [coresppersons_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [coresppersons_order_by!],
-        "filter the rows returned"
-        where: coresppersons_bool_exp
-    ): coresppersons_aggregate!
-    "fetch data from the table: \"coresppersons\" using primary key columns"
-    coresppersons_by_pk(id: String!): coresppersons
     "fetch data from the table: \"corresppersons\""
     corresppersons(
         "limit the number of rows returned"
@@ -6287,7 +6297,7 @@ type subscription_root {
     crew_breach_by_pk(id: uuid!): crew_breach
     "fetch data from the table: \"crew\" using primary key columns"
     crew_by_pk(id: uuid!): crew
-    "fetch data from the table: \"crew_calendar\""
+    "An array relationship"
     crew_calendar(
         "distinct select on columns"
         distinct_on: [crew_calendar_select_column!],
@@ -6300,7 +6310,7 @@ type subscription_root {
         "filter the rows returned"
         where: crew_calendar_bool_exp
     ): [crew_calendar!]!
-    "fetch aggregated fields from the table: \"crew_calendar\""
+    "An aggregate relationship"
     crew_calendar_aggregate(
         "distinct select on columns"
         distinct_on: [crew_calendar_select_column!],
@@ -6315,34 +6325,6 @@ type subscription_root {
     ): crew_calendar_aggregate!
     "fetch data from the table: \"crew_calendar\" using primary key columns"
     crew_calendar_by_pk(id: uuid!): crew_calendar
-    "fetch data from the table: \"crew_driver\""
-    crew_driver(
-        "distinct select on columns"
-        distinct_on: [crew_driver_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [crew_driver_order_by!],
-        "filter the rows returned"
-        where: crew_driver_bool_exp
-    ): [crew_driver!]!
-    "fetch aggregated fields from the table: \"crew_driver\""
-    crew_driver_aggregate(
-        "distinct select on columns"
-        distinct_on: [crew_driver_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [crew_driver_order_by!],
-        "filter the rows returned"
-        where: crew_driver_bool_exp
-    ): crew_driver_aggregate!
-    "fetch data from the table: \"crew_driver\" using primary key columns"
-    crew_driver_by_pk(id: uuid!): crew_driver
     "fetch data from the table: \"crew_permission\""
     crew_permission(
         "distinct select on columns"
@@ -6647,6 +6629,30 @@ type subscription_root {
     ): filters_aggregate!
     "fetch data from the table: \"filters\" using primary key columns"
     filters_by_pk(Id: uuid!): filters
+    "fetch data from the table: \"cities\""
+    monas_cities(
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [monas_cities_order_by!],
+        "filter the rows returned"
+        where: monas_cities_bool_exp
+    ): [monas_cities!]!
+    "fetch aggregated fields from the table: \"cities\""
+    monas_cities_aggregate(
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [monas_cities_order_by!],
+        "filter the rows returned"
+        where: monas_cities_bool_exp
+    ): monas_cities_aggregate!
+    "fetch data from the table: \"cities\" using primary key columns"
+    monas_cities_by_pk(id: Int!): monas_cities
     "fetch data from the table: \"events\""
     monas_events(
         "limit the number of rows returned"
@@ -7027,7 +7033,7 @@ type subscription_root {
     ): task_type_aggregate!
     "fetch data from the table: \"task_type\" using primary key columns"
     task_type_by_pk(value: String!): task_type
-    "fetch data from the table: \"user_settings\""
+    "An array relationship"
     user_settings(
         "distinct select on columns"
         distinct_on: [user_settings_select_column!],
@@ -7040,7 +7046,7 @@ type subscription_root {
         "filter the rows returned"
         where: user_settings_bool_exp
     ): [user_settings!]!
-    "fetch aggregated fields from the table: \"user_settings\""
+    "An aggregate relationship"
     user_settings_aggregate(
         "distinct select on columns"
         distinct_on: [user_settings_select_column!],
@@ -7141,6 +7147,9 @@ type uploadQuery {
 "columns and relationships of \"user_settings\""
 type user_settings {
     created_at: timestamptz!
+    "An object relationship"
+    crew: crew
+    crew_id: uuid
     "UUID matching FusionAuth user.id"
     id: uuid!
     imei: String
@@ -7166,6 +7175,7 @@ type user_settings_aggregate_fields {
 "aggregate max on columns"
 type user_settings_max_fields {
     created_at: timestamptz
+    crew_id: uuid
     "UUID matching FusionAuth user.id"
     id: uuid
     imei: String
@@ -7176,6 +7186,7 @@ type user_settings_max_fields {
 "aggregate min on columns"
 type user_settings_min_fields {
     created_at: timestamptz
+    crew_id: uuid
     "UUID matching FusionAuth user.id"
     id: uuid
     imei: String
@@ -7236,7 +7247,7 @@ type usersQuery {
 
 "unique or primary key constraints on table \"central\""
 enum central_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     central_pkey
 }
 
@@ -7262,7 +7273,7 @@ enum central_update_column {
 
 "unique or primary key constraints on table \"city\""
 enum city_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     city_pkey
 }
 
@@ -7287,116 +7298,6 @@ enum city_update_column {
     comment
     "column name"
     value
-}
-
-"unique or primary key constraints on table \"coresppersons\""
-enum coresppersons_constraint {
-    "unique or primary key constraint"
-    monas_coresppersons_related_pkey
-}
-
-"select columns of table \"coresppersons\""
-enum coresppersons_select_column {
-    "column name"
-    Id
-    "column name"
-    SendMail
-    "column name"
-    SendSMS
-    "column name"
-    ShowAtWorkTimeOnly
-    "column name"
-    address
-    "column name"
-    category
-    "column name"
-    deleted
-    "column name"
-    email
-    "column name"
-    id
-    "column name"
-    index
-    "column name"
-    key
-    "column name"
-    letConnect
-    "column name"
-    letSeeInvoices
-    "column name"
-    name
-    "column name"
-    notes
-    "column name"
-    objectid
-    "column name"
-    office
-    "column name"
-    onvacationfrom
-    "column name"
-    onvacationto
-    "column name"
-    personid
-    "column name"
-    phone
-    "column name"
-    phone2
-    "column name"
-    phone3
-    "column name"
-    position
-}
-
-"update columns of table \"coresppersons\""
-enum coresppersons_update_column {
-    "column name"
-    Id
-    "column name"
-    SendMail
-    "column name"
-    SendSMS
-    "column name"
-    ShowAtWorkTimeOnly
-    "column name"
-    address
-    "column name"
-    category
-    "column name"
-    deleted
-    "column name"
-    email
-    "column name"
-    id
-    "column name"
-    index
-    "column name"
-    key
-    "column name"
-    letConnect
-    "column name"
-    letSeeInvoices
-    "column name"
-    name
-    "column name"
-    notes
-    "column name"
-    objectid
-    "column name"
-    office
-    "column name"
-    onvacationfrom
-    "column name"
-    onvacationto
-    "column name"
-    personid
-    "column name"
-    phone
-    "column name"
-    phone2
-    "column name"
-    phone3
-    "column name"
-    position
 }
 
 "select match_columns of table \"corresppersons\""
@@ -7525,11 +7426,9 @@ enum corresppersons_update_column {
 
 "unique or primary key constraints on table \"crew_breach\""
 enum crew_breach_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"crew_id\""
     breach_crew_id_key
-    "unique or primary key constraint"
-    breach_driver_id_key
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     breach_pkey
 }
 
@@ -7538,7 +7437,7 @@ enum crew_breach_select_column {
     "column name"
     crew_id
     "column name"
-    driver_id
+    driver_user_id
     "column name"
     end_time
     "column name"
@@ -7554,7 +7453,7 @@ enum crew_breach_update_column {
     "column name"
     crew_id
     "column name"
-    driver_id
+    driver_user_id
     "column name"
     end_time
     "column name"
@@ -7567,9 +7466,7 @@ enum crew_breach_update_column {
 
 "unique or primary key constraints on table \"crew_calendar\""
 enum crew_calendar_constraint {
-    "unique or primary key constraint"
-    crew_calendar_dislocation_zone_id_key
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     crew_calendar_pkey
 }
 
@@ -7615,43 +7512,13 @@ enum crew_calendar_update_column {
 
 "unique or primary key constraints on table \"crew\""
 enum crew_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     monas_crew_related_pkey
-}
-
-"unique or primary key constraints on table \"crew_driver\""
-enum crew_driver_constraint {
-    "unique or primary key constraint"
-    crew_driver_pkey
-}
-
-"select columns of table \"crew_driver\""
-enum crew_driver_select_column {
-    "column name"
-    created_at
-    "column name"
-    crew_id
-    "column name"
-    id
-    "column name"
-    updated_at
-}
-
-"update columns of table \"crew_driver\""
-enum crew_driver_update_column {
-    "column name"
-    created_at
-    "column name"
-    crew_id
-    "column name"
-    id
-    "column name"
-    updated_at
 }
 
 "unique or primary key constraints on table \"crew_permission\""
 enum crew_permission_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     crew_permission_pkey
 }
 
@@ -7693,7 +7560,7 @@ enum crew_permission_update_column {
 
 "unique or primary key constraints on table \"crew_request\""
 enum crew_request_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     crew_request_pkey1
 }
 
@@ -7702,18 +7569,21 @@ enum crew_request_select_column {
     "column name"
     duration
     "column name"
+    is_assigned_while_in_breaks
+    "column name"
     value
 }
 
 "unique or primary key constraints on table \"crew_request_status\""
 enum crew_request_status_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     crew_request_pkey
 }
 
 enum crew_request_status_enum {
     ALLOWED
     ASKED
+    CANCELLED
     COMPLETE
     REJECTED
 }
@@ -7739,6 +7609,8 @@ enum crew_request_update_column {
     "column name"
     duration
     "column name"
+    is_assigned_while_in_breaks
+    "column name"
     value
 }
 
@@ -7747,7 +7619,7 @@ enum crew_select_column {
     "column name"
     abbreviation
     "column name"
-    driver_name
+    driver_user_id
     "column name"
     id
     "column name"
@@ -7766,13 +7638,14 @@ enum crew_select_column {
 
 "unique or primary key constraints on table \"crew_status\""
 enum crew_status_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     crew_status_pkey
 }
 
 enum crew_status_enum {
     BREAK
     BUSY
+    DRIVE_BACK
     OFFLINE
     READY
 }
@@ -7798,7 +7671,7 @@ enum crew_update_column {
     "column name"
     abbreviation
     "column name"
-    driver_name
+    driver_user_id
     "column name"
     id
     "column name"
@@ -7817,7 +7690,7 @@ enum crew_update_column {
 
 "unique or primary key constraints on table \"crew_zone\""
 enum crew_zone_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     crew_zones_pkey
 }
 
@@ -7847,7 +7720,7 @@ enum crew_zone_update_column {
 
 "unique or primary key constraints on table \"event_cancellation\""
 enum event_cancellation_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     event_cancellation_pkey
 }
 
@@ -7869,7 +7742,7 @@ enum event_cancellation_update_column {
 
 "unique or primary key constraints on table \"event_status\""
 enum event_status_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     event_status_pkey
 }
 
@@ -7899,7 +7772,7 @@ enum event_status_update_column {
 
 "unique or primary key constraints on table \"event_type\""
 enum event_type_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     event_type_pkey
 }
 
@@ -7921,10 +7794,12 @@ enum event_type_update_column {
 
 "unique or primary key constraints on table \"events\""
 enum events_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"crew_id\""
     events_crew_id_key
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     events_pkey
+    "unique or primary key constraint on columns \"provider_id\", \"provider_name\""
+    events_provider_id_provider_name_key
 }
 
 "select columns of table \"events\""
@@ -8155,7 +8030,7 @@ enum eventsdescription_update_column {
 
 "unique or primary key constraints on table \"filters\""
 enum filters_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"Id\""
     filters_pkey
 }
 
@@ -8241,6 +8116,28 @@ enum filters_update_column {
     type
     "column name"
     userId
+}
+
+"select match_columns of table \"cities\""
+enum monas_cities_insert_match_column {
+    "column name"
+    id
+    "column name"
+    name
+}
+
+"select columns of table \"cities\""
+enum monas_cities_select_column {
+    "column name"
+    id
+    "column name"
+    name
+}
+
+"update columns of table \"cities\""
+enum monas_cities_update_column {
+    "column name"
+    name
 }
 
 "select match_columns of table \"events\""
@@ -9333,7 +9230,7 @@ enum monas_objects_update_column {
 
 "unique or primary key constraints on table \"monas_related\""
 enum monas_related_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     test_pkey
 }
 
@@ -9403,17 +9300,17 @@ enum monas_related_update_column {
 
 "unique or primary key constraints on table \"object\""
 enum object_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     object_id_key
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     object_pkey
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"provider_id\", \"provider_name\""
     object_provider_id_provider_name_key
 }
 
 "unique or primary key constraints on table \"object_image\""
 enum object_image_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     object_image_pkey
 }
 
@@ -9439,7 +9336,7 @@ enum object_image_update_column {
 
 "unique or primary key constraints on table \"object_key_box\""
 enum object_key_box_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     object_key_box_pkey
 }
 
@@ -9465,15 +9362,15 @@ enum object_key_box_update_column {
 
 "unique or primary key constraints on table \"object_key\""
 enum object_key_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     object_key_pkey
 }
 
 "unique or primary key constraints on table \"object_key_rels\""
 enum object_key_rels_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"key_id\", \"object_id\""
     object_key_rels_object_id_key_id_key
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"key_id\", \"box_id\""
     object_key_rels_pkey
 }
 
@@ -9523,7 +9420,7 @@ enum object_key_update_column {
 
 "unique or primary key constraints on table \"object_modem\""
 enum object_modem_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     object_modem_pkey
 }
 
@@ -9533,6 +9430,8 @@ enum object_modem_select_column {
     area_no
     "column name"
     central
+    "column name"
+    contract_modem_no
     "column name"
     id
     "column name"
@@ -9545,6 +9444,8 @@ enum object_modem_update_column {
     area_no
     "column name"
     central
+    "column name"
+    contract_modem_no
     "column name"
     id
     "column name"
@@ -9564,9 +9465,17 @@ enum object_select_column {
     "column name"
     description
     "column name"
+    feedback_from
+    "column name"
+    feedback_sla_time_in_min
+    "column name"
+    feedback_until
+    "column name"
     id
     "column name"
     is_atm
+    "column name"
+    is_call_after_inspection
     "column name"
     is_crew_autoasigned
     "column name"
@@ -9598,9 +9507,17 @@ enum object_update_column {
     "column name"
     description
     "column name"
+    feedback_from
+    "column name"
+    feedback_sla_time_in_min
+    "column name"
+    feedback_until
+    "column name"
     id
     "column name"
     is_atm
+    "column name"
+    is_call_after_inspection
     "column name"
     is_crew_autoasigned
     "column name"
@@ -9621,9 +9538,9 @@ enum object_update_column {
 
 "unique or primary key constraints on table \"object_user_rel\""
 enum object_user_rel_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"user_id\", \"object_id\""
     object_user_rel_pkey
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"user_id\", \"object_id\""
     object_user_rel_user_id_object_id_key
 }
 
@@ -9709,7 +9626,7 @@ enum order_by {
 
 "unique or primary key constraints on table \"provider\""
 enum provider_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     provider_pkey
 }
 
@@ -9736,7 +9653,7 @@ enum provider_update_column {
 
 "unique or primary key constraints on table \"reason_for_cancellation\""
 enum reason_for_cancellation_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     reason_for_cancellation_pkey
 }
 
@@ -9758,7 +9675,7 @@ enum reason_for_cancellation_update_column {
 
 "unique or primary key constraints on table \"task_type\""
 enum task_type_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     task_type_pkey
 }
 
@@ -9780,9 +9697,9 @@ enum task_type_update_column {
 
 "unique or primary key constraints on table \"user_settings\""
 enum user_settings_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"imei\""
     user_settings_imei_key
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"id\""
     user_settings_pkey
 }
 
@@ -9790,6 +9707,8 @@ enum user_settings_constraint {
 enum user_settings_select_column {
     "column name"
     created_at
+    "column name"
+    crew_id
     "column name"
     id
     "column name"
@@ -9805,6 +9724,8 @@ enum user_settings_update_column {
     "column name"
     created_at
     "column name"
+    crew_id
+    "column name"
     id
     "column name"
     imei
@@ -9816,7 +9737,7 @@ enum user_settings_update_column {
 
 "unique or primary key constraints on table \"user_type\""
 enum user_type_constraint {
-    "unique or primary key constraint"
+    "unique or primary key constraint on columns \"value\""
     user_type_pkey
 }
 
@@ -10044,6 +9965,12 @@ input central_set_input {
     value: String
 }
 
+input central_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: central_set_input
+    where: central_bool_exp!
+}
+
 "Boolean expression to filter rows from the table \"city\". All fields are combined with a logical 'AND'."
 input city_bool_exp {
     _and: [city_bool_exp!]
@@ -10092,140 +10019,10 @@ input city_set_input {
     value: String
 }
 
-"Boolean expression to filter rows from the table \"coresppersons\". All fields are combined with a logical 'AND'."
-input coresppersons_bool_exp {
-    Id: String_comparison_exp
-    SendMail: String_comparison_exp
-    SendSMS: String_comparison_exp
-    ShowAtWorkTimeOnly: String_comparison_exp
-    _and: [coresppersons_bool_exp!]
-    _not: coresppersons_bool_exp
-    _or: [coresppersons_bool_exp!]
-    address: String_comparison_exp
-    category: Int_comparison_exp
-    deleted: Boolean_comparison_exp
-    email: String_comparison_exp
-    id: String_comparison_exp
-    index: Int_comparison_exp
-    key: String_comparison_exp
-    letConnect: Boolean_comparison_exp
-    letSeeInvoices: Boolean_comparison_exp
-    name: String_comparison_exp
-    notes: String_comparison_exp
-    objectid: Int_comparison_exp
-    office: String_comparison_exp
-    onvacationfrom: String_comparison_exp
-    onvacationto: String_comparison_exp
-    personid: Int_comparison_exp
-    phone: String_comparison_exp
-    phone2: String_comparison_exp
-    phone3: String_comparison_exp
-    position: Int_comparison_exp
-}
-
-"input type for incrementing numeric columns in table \"coresppersons\""
-input coresppersons_inc_input {
-    category: Int
-    index: Int
-    objectid: Int
-    personid: Int
-    position: Int
-}
-
-"input type for inserting data into table \"coresppersons\""
-input coresppersons_insert_input {
-    Id: String
-    SendMail: String
-    SendSMS: String
-    ShowAtWorkTimeOnly: String
-    address: String
-    category: Int
-    deleted: Boolean
-    email: String
-    id: String
-    index: Int
-    key: String
-    letConnect: Boolean
-    letSeeInvoices: Boolean
-    name: String
-    notes: String
-    objectid: Int
-    office: String
-    onvacationfrom: String
-    onvacationto: String
-    personid: Int
-    phone: String
-    phone2: String
-    phone3: String
-    position: Int
-}
-
-"on_conflict condition type for table \"coresppersons\""
-input coresppersons_on_conflict {
-    constraint: coresppersons_constraint!
-    update_columns: [coresppersons_update_column!]! = []
-    where: coresppersons_bool_exp
-}
-
-"Ordering options when selecting data from \"coresppersons\"."
-input coresppersons_order_by {
-    Id: order_by
-    SendMail: order_by
-    SendSMS: order_by
-    ShowAtWorkTimeOnly: order_by
-    address: order_by
-    category: order_by
-    deleted: order_by
-    email: order_by
-    id: order_by
-    index: order_by
-    key: order_by
-    letConnect: order_by
-    letSeeInvoices: order_by
-    name: order_by
-    notes: order_by
-    objectid: order_by
-    office: order_by
-    onvacationfrom: order_by
-    onvacationto: order_by
-    personid: order_by
-    phone: order_by
-    phone2: order_by
-    phone3: order_by
-    position: order_by
-}
-
-"primary key columns input for table: coresppersons"
-input coresppersons_pk_columns_input {
-    id: String!
-}
-
-"input type for updating data in table \"coresppersons\""
-input coresppersons_set_input {
-    Id: String
-    SendMail: String
-    SendSMS: String
-    ShowAtWorkTimeOnly: String
-    address: String
-    category: Int
-    deleted: Boolean
-    email: String
-    id: String
-    index: Int
-    key: String
-    letConnect: Boolean
-    letSeeInvoices: Boolean
-    name: String
-    notes: String
-    objectid: Int
-    office: String
-    onvacationfrom: String
-    onvacationto: String
-    personid: Int
-    phone: String
-    phone2: String
-    phone3: String
-    position: Int
+input city_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: city_set_input
+    where: city_bool_exp!
 }
 
 "Boolean expression to filter rows from the table \"corresppersons\". All fields are combined with a logical 'AND'."
@@ -10349,15 +10146,17 @@ input crew_bool_exp {
     abbreviation: String_comparison_exp
     breaches: crew_breach_bool_exp
     calendars: crew_calendar_bool_exp
-    driver_name: String_comparison_exp
+    driver_user_id: uuid_comparison_exp
     id: uuid_comparison_exp
     is_assigned_automatically: Boolean_comparison_exp
     is_assigned_while_in_breaks: Boolean_comparison_exp
     name: String_comparison_exp
+    object_key_boxes: object_key_box_bool_exp
     permissions: crew_permission_bool_exp
     phone_number: String_comparison_exp
     status: crew_status_enum_comparison_exp
     to_call_after: String_comparison_exp
+    user_settings: user_settings_bool_exp
     zone: crew_zone_bool_exp
 }
 
@@ -10368,7 +10167,7 @@ input crew_breach_bool_exp {
     _or: [crew_breach_bool_exp!]
     crew: crew_bool_exp
     crew_id: uuid_comparison_exp
-    driver_id: uuid_comparison_exp
+    driver_user_id: uuid_comparison_exp
     end_time: timestamptz_comparison_exp
     id: uuid_comparison_exp
     nodes: json_comparison_exp
@@ -10379,7 +10178,7 @@ input crew_breach_bool_exp {
 input crew_breach_insert_input {
     crew: crew_obj_rel_insert_input
     crew_id: uuid
-    driver_id: uuid
+    driver_user_id: uuid
     end_time: timestamptz
     id: uuid
     nodes: json
@@ -10404,7 +10203,7 @@ input crew_breach_on_conflict {
 input crew_breach_order_by {
     crew: crew_order_by
     crew_id: order_by
-    driver_id: order_by
+    driver_user_id: order_by
     end_time: order_by
     id: order_by
     nodes: order_by
@@ -10419,11 +10218,17 @@ input crew_breach_pk_columns_input {
 "input type for updating data in table \"crew_breach\""
 input crew_breach_set_input {
     crew_id: uuid
-    driver_id: uuid
+    driver_user_id: uuid
     end_time: timestamptz
     id: uuid
     nodes: json
     start_time: timestamptz
+}
+
+input crew_breach_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_breach_set_input
+    where: crew_breach_bool_exp!
 }
 
 "order by aggregate values of table \"crew_calendar\""
@@ -10461,6 +10266,7 @@ input crew_calendar_bool_exp {
     created_at: timestamptz_comparison_exp
     crew: crew_bool_exp
     crew_id: uuid_comparison_exp
+    crew_zone: crew_zone_bool_exp
     dislocation_zone_id: uuid_comparison_exp
     end_time: interval_comparison_exp
     id: uuid_comparison_exp
@@ -10479,6 +10285,7 @@ input crew_calendar_insert_input {
     created_at: timestamptz
     crew: crew_obj_rel_insert_input
     crew_id: uuid
+    crew_zone: crew_zone_obj_rel_insert_input
     dislocation_zone_id: uuid
     end_time: interval
     id: uuid
@@ -10519,6 +10326,7 @@ input crew_calendar_order_by {
     created_at: order_by
     crew: crew_order_by
     crew_id: order_by
+    crew_zone: crew_zone_order_by
     dislocation_zone_id: order_by
     end_time: order_by
     id: order_by
@@ -10564,6 +10372,14 @@ input crew_calendar_sum_order_by {
     week_day: order_by
 }
 
+input crew_calendar_updates {
+    "increments the numeric columns with given value of the filtered values"
+    _inc: crew_calendar_inc_input
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_calendar_set_input
+    where: crew_calendar_bool_exp!
+}
+
 "order by var_pop() on columns of table \"crew_calendar\""
 input crew_calendar_var_pop_order_by {
     week_day: order_by
@@ -10579,67 +10395,22 @@ input crew_calendar_variance_order_by {
     week_day: order_by
 }
 
-"Boolean expression to filter rows from the table \"crew_driver\". All fields are combined with a logical 'AND'."
-input crew_driver_bool_exp {
-    _and: [crew_driver_bool_exp!]
-    _not: crew_driver_bool_exp
-    _or: [crew_driver_bool_exp!]
-    created_at: timestamptz_comparison_exp
-    crew_id: uuid_comparison_exp
-    id: uuid_comparison_exp
-    updated_at: timestamptz_comparison_exp
-}
-
-"input type for inserting data into table \"crew_driver\""
-input crew_driver_insert_input {
-    created_at: timestamptz
-    crew_id: uuid
-    id: uuid
-    updated_at: timestamptz
-}
-
-"on_conflict condition type for table \"crew_driver\""
-input crew_driver_on_conflict {
-    constraint: crew_driver_constraint!
-    update_columns: [crew_driver_update_column!]! = []
-    where: crew_driver_bool_exp
-}
-
-"Ordering options when selecting data from \"crew_driver\"."
-input crew_driver_order_by {
-    created_at: order_by
-    crew_id: order_by
-    id: order_by
-    updated_at: order_by
-}
-
-"primary key columns input for table: crew_driver"
-input crew_driver_pk_columns_input {
-    id: uuid!
-}
-
-"input type for updating data in table \"crew_driver\""
-input crew_driver_set_input {
-    created_at: timestamptz
-    crew_id: uuid
-    id: uuid
-    updated_at: timestamptz
-}
-
 "input type for inserting data into table \"crew\""
 input crew_insert_input {
     abbreviation: String
     breaches: crew_breach_obj_rel_insert_input
     calendars: crew_calendar_arr_rel_insert_input
-    driver_name: String
+    driver_user_id: uuid
     id: uuid
     is_assigned_automatically: Boolean
     is_assigned_while_in_breaks: Boolean
     name: String
+    object_key_boxes: object_key_box_arr_rel_insert_input
     permissions: crew_permission_arr_rel_insert_input
     phone_number: String
     status: crew_status_enum
     to_call_after: String
+    user_settings: user_settings_arr_rel_insert_input
     zone: crew_zone_arr_rel_insert_input
 }
 
@@ -10662,15 +10433,17 @@ input crew_order_by {
     abbreviation: order_by
     breaches: crew_breach_order_by
     calendars_aggregate: crew_calendar_aggregate_order_by
-    driver_name: order_by
+    driver_user_id: order_by
     id: order_by
     is_assigned_automatically: order_by
     is_assigned_while_in_breaks: order_by
     name: order_by
+    object_key_boxes_aggregate: object_key_box_aggregate_order_by
     permissions_aggregate: crew_permission_aggregate_order_by
     phone_number: order_by
     status: order_by
     to_call_after: order_by
+    user_settings_aggregate: user_settings_aggregate_order_by
     zone_aggregate: crew_zone_aggregate_order_by
 }
 
@@ -10773,6 +10546,12 @@ input crew_permission_set_input {
     updated_at: timestamptz
 }
 
+input crew_permission_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_permission_set_input
+    where: crew_permission_bool_exp!
+}
+
 "primary key columns input for table: crew"
 input crew_pk_columns_input {
     id: uuid!
@@ -10784,6 +10563,7 @@ input crew_request_bool_exp {
     _not: crew_request_bool_exp
     _or: [crew_request_bool_exp!]
     duration: interval_comparison_exp
+    is_assigned_while_in_breaks: Boolean_comparison_exp
     permissions: crew_permission_bool_exp
     value: String_comparison_exp
 }
@@ -10791,6 +10571,7 @@ input crew_request_bool_exp {
 "input type for inserting data into table \"crew_request\""
 input crew_request_insert_input {
     duration: interval
+    is_assigned_while_in_breaks: Boolean
     permissions: crew_permission_arr_rel_insert_input
     value: String
 }
@@ -10812,6 +10593,7 @@ input crew_request_on_conflict {
 "Ordering options when selecting data from \"crew_request\"."
 input crew_request_order_by {
     duration: order_by
+    is_assigned_while_in_breaks: order_by
     permissions_aggregate: crew_permission_aggregate_order_by
     value: order_by
 }
@@ -10824,6 +10606,7 @@ input crew_request_pk_columns_input {
 "input type for updating data in table \"crew_request\""
 input crew_request_set_input {
     duration: interval
+    is_assigned_while_in_breaks: Boolean
     value: String
 }
 
@@ -10875,10 +10658,22 @@ input crew_request_status_set_input {
     value: String
 }
 
+input crew_request_status_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_request_status_set_input
+    where: crew_request_status_bool_exp!
+}
+
+input crew_request_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_request_set_input
+    where: crew_request_bool_exp!
+}
+
 "input type for updating data in table \"crew\""
 input crew_set_input {
     abbreviation: String
-    driver_name: String
+    driver_user_id: uuid
     id: uuid
     is_assigned_automatically: Boolean
     is_assigned_while_in_breaks: Boolean
@@ -10936,6 +10731,18 @@ input crew_status_set_input {
     value: String
 }
 
+input crew_status_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_status_set_input
+    where: crew_status_bool_exp!
+}
+
+input crew_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_set_input
+    where: crew_bool_exp!
+}
+
 "order by aggregate values of table \"crew_zone\""
 input crew_zone_aggregate_order_by {
     count: order_by
@@ -10956,6 +10763,7 @@ input crew_zone_bool_exp {
     _not: crew_zone_bool_exp
     _or: [crew_zone_bool_exp!]
     crew: crew_bool_exp
+    crew_calendar: crew_calendar_bool_exp
     crew_id: uuid_comparison_exp
     id: uuid_comparison_exp
     name: String_comparison_exp
@@ -10965,6 +10773,7 @@ input crew_zone_bool_exp {
 "input type for inserting data into table \"crew_zone\""
 input crew_zone_insert_input {
     crew: crew_obj_rel_insert_input
+    crew_calendar: crew_calendar_arr_rel_insert_input
     crew_id: uuid
     id: uuid
     name: String
@@ -10985,6 +10794,13 @@ input crew_zone_min_order_by {
     name: order_by
 }
 
+"input type for inserting object relation for remote table \"crew_zone\""
+input crew_zone_obj_rel_insert_input {
+    data: crew_zone_insert_input!
+    "upsert condition"
+    on_conflict: crew_zone_on_conflict
+}
+
 "on_conflict condition type for table \"crew_zone\""
 input crew_zone_on_conflict {
     constraint: crew_zone_constraint!
@@ -10995,6 +10811,7 @@ input crew_zone_on_conflict {
 "Ordering options when selecting data from \"crew_zone\"."
 input crew_zone_order_by {
     crew: crew_order_by
+    crew_calendar_aggregate: crew_calendar_aggregate_order_by
     crew_id: order_by
     id: order_by
     name: order_by
@@ -11012,6 +10829,12 @@ input crew_zone_set_input {
     id: uuid
     name: String
     nodes: json
+}
+
+input crew_zone_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: crew_zone_set_input
+    where: crew_zone_bool_exp!
 }
 
 "Boolean expression to compare columns of type \"datetime2\". All fields are combined with logical 'AND'."
@@ -11079,6 +10902,12 @@ input event_cancellation_set_input {
     value: String
 }
 
+input event_cancellation_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: event_cancellation_set_input
+    where: event_cancellation_bool_exp!
+}
+
 "Boolean expression to filter rows from the table \"event_status\". All fields are combined with a logical 'AND'."
 input event_status_bool_exp {
     _and: [event_status_bool_exp!]
@@ -11127,6 +10956,12 @@ input event_status_set_input {
     value: String
 }
 
+input event_status_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: event_status_set_input
+    where: event_status_bool_exp!
+}
+
 "Boolean expression to filter rows from the table \"event_type\". All fields are combined with a logical 'AND'."
 input event_type_bool_exp {
     _and: [event_type_bool_exp!]
@@ -11164,6 +10999,12 @@ input event_type_pk_columns_input {
 input event_type_set_input {
     comment: String
     value: String
+}
+
+input event_type_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: event_type_set_input
+    where: event_type_bool_exp!
 }
 
 "Boolean expression to filter rows from the table \"events\". All fields are combined with a logical 'AND'."
@@ -11240,6 +11081,14 @@ input events_set_input {
     provider_name: provider_enum
     status: event_status_enum
     updated_at: timestamptz
+}
+
+input events_updates {
+    "increments the numeric columns with given value of the filtered values"
+    _inc: events_inc_input
+    "sets the columns of the filtered rows to the given values"
+    _set: events_set_input
+    where: events_bool_exp!
 }
 
 "Boolean expression to filter rows from the table \"eventsdescription\". All fields are combined with a logical 'AND'."
@@ -11528,6 +11377,22 @@ input filters_set_input {
     userId: String
 }
 
+input filters_updates {
+    "append existing jsonb value of filtered columns with new jsonb value"
+    _append: filters_append_input
+    "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+    _delete_at_path: filters_delete_at_path_input
+    "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+    _delete_elem: filters_delete_elem_input
+    "delete key/value pair or string element. key/value pairs are matched based on their key value"
+    _delete_key: filters_delete_key_input
+    "prepend existing jsonb value of filtered columns with new jsonb value"
+    _prepend: filters_prepend_input
+    "sets the columns of the filtered rows to the given values"
+    _set: filters_set_input
+    where: filters_bool_exp!
+}
+
 "Boolean expression to compare columns of type \"interval\". All fields are combined with logical 'AND'."
 input interval_comparison_exp {
     _eq: interval
@@ -11582,6 +11447,43 @@ input jsonb_comparison_exp {
     _nin: [jsonb!]
 }
 
+"Boolean expression to filter rows from the table \"cities\". All fields are combined with a logical 'AND'."
+input monas_cities_bool_exp {
+    _and: [monas_cities_bool_exp!]
+    _not: monas_cities_bool_exp
+    _or: [monas_cities_bool_exp!]
+    id: Int_MSSQL_comparison_exp
+    name: String_MSSQL_comparison_exp
+}
+
+"upsert condition type for table \"cities\""
+input monas_cities_if_matched {
+    match_columns: [monas_cities_insert_match_column!]! = []
+    update_columns: [monas_cities_update_column!]! = []
+    where: monas_cities_bool_exp
+}
+
+"input type for inserting data into table \"cities\""
+input monas_cities_insert_input {
+    name: String
+}
+
+"Ordering options when selecting data from \"cities\"."
+input monas_cities_order_by {
+    id: order_by
+    name: order_by
+}
+
+"primary key columns input for table: monas_cities"
+input monas_cities_pk_columns_input {
+    id: Int!
+}
+
+"input type for updating data in table \"cities\""
+input monas_cities_set_input {
+    name: String
+}
+
 "Boolean expression to filter rows from the table \"events\". All fields are combined with a logical 'AND'."
 input monas_events_bool_exp {
     ObjectName: String_MSSQL_comparison_exp
@@ -11598,6 +11500,7 @@ input monas_events_bool_exp {
     addedtoarchivetime: datetime_MSSQL_comparison_exp
     clasificator: String_MSSQL_comparison_exp
     closedby: String_MSSQL_comparison_exp
+    description: eventsdescription_bool_exp
     eventcode: String_MSSQL_comparison_exp
     eventdescid: Int_MSSQL_comparison_exp
     eventname: String_MSSQL_comparison_exp
@@ -11607,6 +11510,7 @@ input monas_events_bool_exp {
     linename: String_MSSQL_comparison_exp
     linenr: Int_MSSQL_comparison_exp
     lockedby: Int_MSSQL_comparison_exp
+    object: monas_objects_bool_exp
     objectdbid: Int_MSSQL_comparison_exp
     objectnr: Int_MSSQL_comparison_exp
     playsound: String_MSSQL_comparison_exp
@@ -11719,6 +11623,7 @@ input monas_events_order_by {
     addedtoarchivetime: order_by
     clasificator: order_by
     closedby: order_by
+    description: eventsdescription_order_by
     eventcode: order_by
     eventdescid: order_by
     eventname: order_by
@@ -11728,6 +11633,7 @@ input monas_events_order_by {
     linename: order_by
     linenr: order_by
     lockedby: order_by
+    object: monas_objects_order_by
     objectdbid: order_by
     objectnr: order_by
     playsound: order_by
@@ -11860,6 +11766,7 @@ input monas_objects_bool_exp {
     linenr: String_MSSQL_comparison_exp
     longitude: Float_MSSQL_comparison_exp
     mainsubgroup: String_MSSQL_comparison_exp
+    monas_city: monas_cities_bool_exp
     mondayclosehour: Int_MSSQL_comparison_exp
     mondayclosemin: Int_MSSQL_comparison_exp
     mondayopenhour: Int_MSSQL_comparison_exp
@@ -12223,6 +12130,7 @@ input monas_objects_order_by {
     linenr: order_by
     longitude: order_by
     mainsubgroup: order_by
+    monas_city: monas_cities_order_by
     mondayclosehour: order_by
     mondayclosemin: order_by
     mondayopenhour: order_by
@@ -12545,6 +12453,14 @@ input monas_related_set_input {
     send_crew: Boolean
 }
 
+input monas_related_updates {
+    "increments the numeric columns with given value of the filtered values"
+    _inc: monas_related_inc_input
+    "sets the columns of the filtered rows to the given values"
+    _set: monas_related_set_input
+    where: monas_related_bool_exp!
+}
+
 "Boolean expression to compare columns of type \"numeric\". All fields are combined with logical 'AND'."
 input numeric_comparison_exp {
     _eq: numeric
@@ -12568,9 +12484,13 @@ input object_bool_exp {
     contract_no: String_comparison_exp
     contract_object_no: String_comparison_exp
     description: String_comparison_exp
+    feedback_from: interval_comparison_exp
+    feedback_sla_time_in_min: Int_comparison_exp
+    feedback_until: interval_comparison_exp
     id: uuid_comparison_exp
     images: object_image_bool_exp
     is_atm: Boolean_comparison_exp
+    is_call_after_inspection: Boolean_comparison_exp
     is_crew_autoasigned: Boolean_comparison_exp
     keys: object_key_rels_bool_exp
     latitude: numeric_comparison_exp
@@ -12658,8 +12578,15 @@ input object_image_set_input {
     src: String
 }
 
+input object_image_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: object_image_set_input
+    where: object_image_bool_exp!
+}
+
 "input type for incrementing numeric columns in table \"object\""
 input object_inc_input {
+    feedback_sla_time_in_min: Int
     latitude: numeric
     longitude: numeric
     navision_id: Int
@@ -12673,9 +12600,13 @@ input object_insert_input {
     contract_no: String
     contract_object_no: String
     description: String
+    feedback_from: interval
+    feedback_sla_time_in_min: Int
+    feedback_until: interval
     id: uuid
     images: object_image_arr_rel_insert_input
     is_atm: Boolean
+    is_call_after_inspection: Boolean
     is_crew_autoasigned: Boolean
     keys: object_key_rels_arr_rel_insert_input
     latitude: numeric
@@ -12700,11 +12631,26 @@ input object_key_bool_exp {
     set_name: String_comparison_exp
 }
 
+"order by aggregate values of table \"object_key_box\""
+input object_key_box_aggregate_order_by {
+    count: order_by
+    max: object_key_box_max_order_by
+    min: object_key_box_min_order_by
+}
+
+"input type for inserting array relation for remote table \"object_key_box\""
+input object_key_box_arr_rel_insert_input {
+    data: [object_key_box_insert_input!]!
+    "upsert condition"
+    on_conflict: object_key_box_on_conflict
+}
+
 "Boolean expression to filter rows from the table \"object_key_box\". All fields are combined with a logical 'AND'."
 input object_key_box_bool_exp {
     _and: [object_key_box_bool_exp!]
     _not: object_key_box_bool_exp
     _or: [object_key_box_bool_exp!]
+    crew: crew_bool_exp
     crew_id: uuid_comparison_exp
     id: uuid_comparison_exp
     set_name: String_comparison_exp
@@ -12712,9 +12658,24 @@ input object_key_box_bool_exp {
 
 "input type for inserting data into table \"object_key_box\""
 input object_key_box_insert_input {
+    crew: crew_obj_rel_insert_input
     crew_id: uuid
     id: uuid
     set_name: String
+}
+
+"order by max() on columns of table \"object_key_box\""
+input object_key_box_max_order_by {
+    crew_id: order_by
+    id: order_by
+    set_name: order_by
+}
+
+"order by min() on columns of table \"object_key_box\""
+input object_key_box_min_order_by {
+    crew_id: order_by
+    id: order_by
+    set_name: order_by
 }
 
 "on_conflict condition type for table \"object_key_box\""
@@ -12726,6 +12687,7 @@ input object_key_box_on_conflict {
 
 "Ordering options when selecting data from \"object_key_box\"."
 input object_key_box_order_by {
+    crew: crew_order_by
     crew_id: order_by
     id: order_by
     set_name: order_by
@@ -12741,6 +12703,12 @@ input object_key_box_set_input {
     crew_id: uuid
     id: uuid
     set_name: String
+}
+
+input object_key_box_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: object_key_box_set_input
+    where: object_key_box_bool_exp!
 }
 
 "input type for inserting data into table \"object_key\""
@@ -12869,11 +12837,23 @@ input object_key_rels_set_input {
     object_id: uuid
 }
 
+input object_key_rels_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: object_key_rels_set_input
+    where: object_key_rels_bool_exp!
+}
+
 "input type for updating data in table \"object_key\""
 input object_key_set_input {
     crew_id: uuid
     id: uuid
     set_name: String
+}
+
+input object_key_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: object_key_set_input
+    where: object_key_bool_exp!
 }
 
 "order by aggregate values of table \"object_modem\""
@@ -12897,6 +12877,7 @@ input object_modem_bool_exp {
     _or: [object_modem_bool_exp!]
     area_no: String_comparison_exp
     central: central_enum_comparison_exp
+    contract_modem_no: String_comparison_exp
     id: uuid_comparison_exp
     object: object_bool_exp
     object_id: uuid_comparison_exp
@@ -12906,6 +12887,7 @@ input object_modem_bool_exp {
 input object_modem_insert_input {
     area_no: String
     central: central_enum
+    contract_modem_no: String
     id: uuid
     object: object_obj_rel_insert_input
     object_id: uuid
@@ -12914,6 +12896,7 @@ input object_modem_insert_input {
 "order by max() on columns of table \"object_modem\""
 input object_modem_max_order_by {
     area_no: order_by
+    contract_modem_no: order_by
     id: order_by
     object_id: order_by
 }
@@ -12921,6 +12904,7 @@ input object_modem_max_order_by {
 "order by min() on columns of table \"object_modem\""
 input object_modem_min_order_by {
     area_no: order_by
+    contract_modem_no: order_by
     id: order_by
     object_id: order_by
 }
@@ -12936,6 +12920,7 @@ input object_modem_on_conflict {
 input object_modem_order_by {
     area_no: order_by
     central: order_by
+    contract_modem_no: order_by
     id: order_by
     object: object_order_by
     object_id: order_by
@@ -12950,8 +12935,15 @@ input object_modem_pk_columns_input {
 input object_modem_set_input {
     area_no: String
     central: central_enum
+    contract_modem_no: String
     id: uuid
     object_id: uuid
+}
+
+input object_modem_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: object_modem_set_input
+    where: object_modem_bool_exp!
 }
 
 "input type for inserting object relation for remote table \"object\""
@@ -12975,9 +12967,13 @@ input object_order_by {
     contract_no: order_by
     contract_object_no: order_by
     description: order_by
+    feedback_from: order_by
+    feedback_sla_time_in_min: order_by
+    feedback_until: order_by
     id: order_by
     images_aggregate: object_image_aggregate_order_by
     is_atm: order_by
+    is_call_after_inspection: order_by
     is_crew_autoasigned: order_by
     keys_aggregate: object_key_rels_aggregate_order_by
     latitude: order_by
@@ -13003,8 +12999,12 @@ input object_set_input {
     contract_no: String
     contract_object_no: String
     description: String
+    feedback_from: interval
+    feedback_sla_time_in_min: Int
+    feedback_until: interval
     id: uuid
     is_atm: Boolean
+    is_call_after_inspection: Boolean
     is_crew_autoasigned: Boolean
     latitude: numeric
     longitude: numeric
@@ -13013,6 +13013,14 @@ input object_set_input {
     phone: String
     provider_id: Int
     provider_name: provider_enum
+}
+
+input object_updates {
+    "increments the numeric columns with given value of the filtered values"
+    _inc: object_inc_input
+    "sets the columns of the filtered rows to the given values"
+    _set: object_set_input
+    where: object_bool_exp!
 }
 
 "order by aggregate values of table \"object_user_rel\""
@@ -13090,6 +13098,12 @@ input object_user_rel_set_input {
     object_id: uuid
     user_id: uuid
     user_type: user_type_enum
+}
+
+input object_user_rel_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: object_user_rel_set_input
+    where: object_user_rel_bool_exp!
 }
 
 "Boolean expression to filter rows from the table \"objectimages\". All fields are combined with a logical 'AND'."
@@ -13194,6 +13208,12 @@ input provider_set_input {
     value: String
 }
 
+input provider_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: provider_set_input
+    where: provider_bool_exp!
+}
+
 "Boolean expression to filter rows from the table \"reason_for_cancellation\". All fields are combined with a logical 'AND'."
 input reason_for_cancellation_bool_exp {
     _and: [reason_for_cancellation_bool_exp!]
@@ -13233,6 +13253,12 @@ input reason_for_cancellation_set_input {
     value: String
 }
 
+input reason_for_cancellation_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: reason_for_cancellation_set_input
+    where: reason_for_cancellation_bool_exp!
+}
+
 "Boolean expression to filter rows from the table \"task_type\". All fields are combined with a logical 'AND'."
 input task_type_bool_exp {
     _and: [task_type_bool_exp!]
@@ -13270,6 +13296,12 @@ input task_type_pk_columns_input {
 input task_type_set_input {
     comment: String
     value: String
+}
+
+input task_type_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: task_type_set_input
+    where: task_type_bool_exp!
 }
 
 "Boolean expression to compare columns of type \"time\". All fields are combined with logical 'AND'."
@@ -13337,12 +13369,28 @@ input uniqueidentifier_MSSQL_comparison_exp {
     _nin: [uniqueidentifier!]
 }
 
+"order by aggregate values of table \"user_settings\""
+input user_settings_aggregate_order_by {
+    count: order_by
+    max: user_settings_max_order_by
+    min: user_settings_min_order_by
+}
+
+"input type for inserting array relation for remote table \"user_settings\""
+input user_settings_arr_rel_insert_input {
+    data: [user_settings_insert_input!]!
+    "upsert condition"
+    on_conflict: user_settings_on_conflict
+}
+
 "Boolean expression to filter rows from the table \"user_settings\". All fields are combined with a logical 'AND'."
 input user_settings_bool_exp {
     _and: [user_settings_bool_exp!]
     _not: user_settings_bool_exp
     _or: [user_settings_bool_exp!]
     created_at: timestamptz_comparison_exp
+    crew: crew_bool_exp
+    crew_id: uuid_comparison_exp
     id: uuid_comparison_exp
     imei: String_comparison_exp
     is_online: Boolean_comparison_exp
@@ -13353,11 +13401,35 @@ input user_settings_bool_exp {
 "input type for inserting data into table \"user_settings\""
 input user_settings_insert_input {
     created_at: timestamptz
+    crew: crew_obj_rel_insert_input
+    crew_id: uuid
     "UUID matching FusionAuth user.id"
     id: uuid
     imei: String
     last_ping: timestamp
     updated_at: timestamptz
+}
+
+"order by max() on columns of table \"user_settings\""
+input user_settings_max_order_by {
+    created_at: order_by
+    crew_id: order_by
+    "UUID matching FusionAuth user.id"
+    id: order_by
+    imei: order_by
+    last_ping: order_by
+    updated_at: order_by
+}
+
+"order by min() on columns of table \"user_settings\""
+input user_settings_min_order_by {
+    created_at: order_by
+    crew_id: order_by
+    "UUID matching FusionAuth user.id"
+    id: order_by
+    imei: order_by
+    last_ping: order_by
+    updated_at: order_by
 }
 
 "on_conflict condition type for table \"user_settings\""
@@ -13370,6 +13442,8 @@ input user_settings_on_conflict {
 "Ordering options when selecting data from \"user_settings\"."
 input user_settings_order_by {
     created_at: order_by
+    crew: crew_order_by
+    crew_id: order_by
     id: order_by
     imei: order_by
     is_online: order_by
@@ -13386,11 +13460,18 @@ input user_settings_pk_columns_input {
 "input type for updating data in table \"user_settings\""
 input user_settings_set_input {
     created_at: timestamptz
+    crew_id: uuid
     "UUID matching FusionAuth user.id"
     id: uuid
     imei: String
     last_ping: timestamp
     updated_at: timestamptz
+}
+
+input user_settings_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: user_settings_set_input
+    where: user_settings_bool_exp!
 }
 
 "Boolean expression to filter rows from the table \"user_type\". All fields are combined with a logical 'AND'."
@@ -13439,6 +13520,12 @@ input user_type_pk_columns_input {
 input user_type_set_input {
     comment: String
     value: String
+}
+
+input user_type_updates {
+    "sets the columns of the filtered rows to the given values"
+    _set: user_type_set_input
+    where: user_type_bool_exp!
 }
 
 "Boolean expression to compare columns of type \"uuid\". All fields are combined with logical 'AND'."
