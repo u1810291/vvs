@@ -43,7 +43,7 @@ const CrewEditLayout = () => {
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
               <Nullable on={status}>
-                <DynamicStatus status={status} />
+                <DynamicStatus t={'crew'} className={'w-full px-2 text-xl items-center font-thin uppercase'} status={status} />
               </Nullable>
             </Nullable>
           </Breadcrumbs>

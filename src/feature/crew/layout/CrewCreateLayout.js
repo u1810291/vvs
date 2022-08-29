@@ -38,7 +38,7 @@ const CrewCreateLayout = () => {
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
             </Nullable>
-            <DynamicStatus className='w-full px-2 text-xl items-center font-thin uppercase' status={'OFFLINE'}/>
+            <DynamicStatus t={'crew'} className='w-full px-2 text-xl items-center font-thin uppercase' status={'OFFLINE'}/>
           </Breadcrumbs>
           <div className='space-x-4'>
             <Button.Sxl onClick={() => navigate(CrewListRoute.props.path)}>
