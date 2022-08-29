@@ -22,6 +22,7 @@ export const InputGroup = ({
   isRequired,
   twRequired,
   below,
+  placeholder,
   ...props
 }) => (
   <div className={className}>
@@ -34,7 +35,7 @@ export const InputGroup = ({
       </Label>
     </Nullable>
     <div className={`${label ? inputWrapperWhenLabel : ''} ${inputwrapperClassName}`}>
-      <Input {...{...props, className: [...putIntoArray(inputClassName), Addon ? 'pr-10' : ''].join(' ')}} />
+      <Input {...{...props, placeholder: placeholder, className: [...putIntoArray(inputClassName), Addon ? 'pr-10' : ''].join(' ')}} />
       {Addon && (
       <div className={`${addonWrapperClassName}`}>
         <Addon className={addonClassName} aria-hidden='true' />
