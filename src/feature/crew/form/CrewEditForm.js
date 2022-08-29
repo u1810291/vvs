@@ -16,13 +16,14 @@ import Map from 'feature/map/component/Map';
 import {CrewListRoute} from 'feature/crew/routes';
 import Polygon from 'feature/map/component/Polygon';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
+import {useCrew, useCrewZones, useCrewById} from 'feature/crew/api/crewEditApi';
 import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
-import {useCrew, useCrewById, useCrewZones} from 'feature/crew/api/crewEditApi';
 
 import {lengthGt} from 'util/pred';
 
+import {getProp} from 'crocks';
+import {isFunction} from 'crocks/predicates';
 import {mapProps, pipe} from 'crocks/helpers';
-import {getProp, isFunction} from 'crocks';
 
 const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
@@ -31,15 +32,30 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const {data: crew} = useCrewById(crewId);
   const {ctrl, result, setForm} = useResultForm({
     status: FORM_FIELD.TEXT({label: null, validator: () => true}),
-    name: FORM_FIELD.TEXT({label: t`field.name`, validator: lengthGt(2)}),
-    driver_name: FORM_FIELD.TEXT({label: t`field.driver_name`, validator: () => true}),
-    abbreviation: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: lengthGt(0)}),
+    name: FORM_FIELD.TEXT({
+      label: t`field.name`,
+      message: t`validation.name`,
+      showValidationBelow: true,
+      validator: lengthGt(2)
+    }),
+    driver: FORM_FIELD.OBJECT({label: t`field.driver_name`, validator: () => true}),
+    abbreviation: FORM_FIELD.TEXT({
+      label: t`field.abbreviation`,
+      message: t`validation.abbreviation`,
+      showValidationBelow: true,
+      validator: lengthGt(0)
+    }),
     phone_number: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
-    to_call_after: FORM_FIELD.TEXT({initial: '10', label: t`field.to_call_after`, validator: lengthGt(0)}),
+    to_call_after: FORM_FIELD.TEXT({initial: '10', label: t`field.to_call_after`, validator: () => true}),
     is_assigned_automatically: FORM_FIELD.BOOL({label: t`field.is_assigned_automatically`, validator: () => true}),
     is_assigned_while_in_breaks: FORM_FIELD.BOOL({label: t`field.is_assigned_while_in_breaks`, validator: () => true}),
     calendars: FORM_FIELD.EVENTS({label: t`field.events`, validator: () => true}),
-    device_id: FORM_FIELD.TEXT({initial: '54:21:9D:08:38:8C', label: t`field.device_id`, validator: lengthGt(10)}),
+    device_id: FORM_FIELD.TEXT({
+      label: t`field.device_id`,
+      message: t`validation.device_id`,
+      showValidationBelow: true,
+      validator: lengthGt(10)
+    }),
   });
 
   useCrew({
@@ -56,7 +72,10 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
 
   const {value: name} = ctrl('name');
   const {value: status} = ctrl('status');
-  const {value: driver_name} = ctrl('driver_name');
+  const {value: driver} = ctrl('driver');
+
+  const {firstName} = driver;
+  const {lastName} = driver;
 
   const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
 
@@ -102,6 +121,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
             />
             <InputGroup
               className={'mt-6 lg:mt-4 lg:w-3/12'}
+              placeholder={'10'}
               {...ctrl('to_call_after')}
             />
           </div>
@@ -134,9 +154,14 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
               <p className='text-bluewood'>
                 {name}
               </p>
-              <p className='text-regent'>
-                {driver_name}
-              </p>
+              <div className='flex'>
+                <p className='text-regent mr-1'>
+                  {firstName}
+                </p>
+                <p className='text-regent'>
+                  {lastName}
+                </p>
+              </div>
             </div>
           </div>
         </Card.Sm>
