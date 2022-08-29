@@ -2,7 +2,6 @@ mutation UpdateCrewById(
   $id: uuid!,
   $name: String = null,
   $abbreviation: String = null,
-  $driver_id: String = null,
   $phone_number: String = null,
   $to_call_after: String = null,
   $is_assigned_automatically: Boolean = false,
@@ -20,7 +19,6 @@ mutation UpdateCrewById(
     id
     name
     status
-    driver_id
     abbreviation
     phone_number
     to_call_after

@@ -1,6 +1,5 @@
 mutation CreateCrew(
   $name: String = null,
-  $driver_id: uuid = null,
   $abbreviation: String = null,
   $phone_number: String = null,
   $to_call_after: String = null,
@@ -20,7 +19,6 @@ mutation CreateCrew(
     id
     name
     status
-    driver_id
     abbreviation
     phone_number
     to_call_after

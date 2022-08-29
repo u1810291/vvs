@@ -1,7 +1,7 @@
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 import useAsyncSwr from 'hook/useAsyncSwr';
-import {Async, safe, omit, getProp, setProp, not, ifElse, isEmpty, constant, map, option, chain, pipe, pick, objOf, mapProps, tap} from 'crocks'
+import {Async, safe, omit, getProp, setProp, not, ifElse, isEmpty, constant, map, option, chain, pipe, pick, objOf, mapProps} from 'crocks'
 import {augmentToUser} from '../../../api/buildUserQuery';
 import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
 import {useAuth} from 'context/auth';
@@ -38,15 +38,13 @@ export const useCrew = createUseOne({
       obj => Async.of(obj => user => setProp('driver', user, obj))
         .ap(Async.of(obj))
         .ap(augmentToUser(auth, 'driver_user_id', obj))
-    ),
-    map(tap(console.warn)),
+    )
   ),
   asyncMapToApi: pipe(
     pick([
       'id',
       'name',
       'calendars',
-      'driver_user_id',
       'abbreviation',
       'phone_number',
       'to_call_after',
@@ -56,7 +54,6 @@ export const useCrew = createUseOne({
     obj =>
       mapProps({
         name: mapToNullableString,
-        driver_user_id: mapToNullableString,
         abbreviation: mapToNullableString,
         phone_number: mapToNullableString,
         to_call_after: mapToNullableString,
