@@ -3,24 +3,22 @@ import Tag, {CLASS_NAME} from 'components/atom/Tag';
 import {caseMap} from '@s-e/frontend/flow-control';
 import {getProp, safe, chain, option, isString, propEq} from 'crocks';
 import {pipe} from 'crocks/helpers';
-import {titleCase} from '@s-e/frontend/transformer/string';
 import {useTranslation} from 'react-i18next';
 import {withMergedClassName} from 'util/react';
 
 const is = propEq('status');
 
 const CrewStatusBase = (props) => {
-  const {t} = useTranslation(props.t, {keyPrefix: 'list.status'});
+  const {t} = useTranslation(props?.t, {keyPrefix: 'list.status'});
   return (
-    <Tag {...props}>
+    <Tag.Sm {...props}>
       {pipe(
         getProp('status'),
         chain(safe(isString)),
         option('-'),
         t,
-        titleCase,
       )(props)}
-    </Tag>
+    </Tag.Sm>
   );
 };
 
