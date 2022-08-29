@@ -11,7 +11,7 @@ import BreachTimeInfo from 'feature/breach/components/BreachTimeInfo';
 
 import {useTranslation} from 'react-i18next';
 
-const BreachInfoCard = ({crew, start_time, end_time}) => {
+const BreachInfoCard = ({crew, start_time, end_time, driver}) => {
   const {t} = useTranslation('breach', {keyPrefix: 'edit'});
 
   const [timer, setTimer] = useState({});
@@ -31,8 +31,8 @@ const BreachInfoCard = ({crew, start_time, end_time}) => {
         </div>
       </div>
       <div className='flex flex-row items-center w-full border-b border-border py-4 px-6'>
-        <Nullable on={crew}>
-          <BreachCrewStatus crew={crew} />
+        <Nullable on={crew && driver}>
+          <BreachCrewStatus crew={crew} driver={driver} />
         </Nullable>
         <div className='ml-auto mt-auto flex justify-center w-16 border border-transparent rounded-sm text-xs font-normal text-bluewood bg-geyser'>
           <Timer active duration={Date.parse(end_time) - Date.parse(start_time)} onTimeUpdate={onTimerUpdate}/>

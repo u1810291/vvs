@@ -1,8 +1,9 @@
 import React from 'react';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
 
-const BreachCrewStatus = ({crew}) => {
-  const {name, status, driver_name} = crew;
+const BreachCrewStatus = ({crew, driver}) => {
+  const {name, status} = crew;
+  const {firstName, lastName} = driver;
   return (
     <>
       <DynamicIcon
@@ -14,9 +15,14 @@ const BreachCrewStatus = ({crew}) => {
         <p className='text-bluewood'>
           {name}
         </p>
-        <p className='text-regent'>
-          {driver_name}
-        </p>
+        <div className='flex'>
+          <p className='text-regent mr-1'>
+            {firstName}
+          </p>
+          <p className='text-regent'>
+            {lastName}
+          </p>
+        </div>
       </div>
     </>
   )
