@@ -54,7 +54,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
       label: t`field.device_id`,
       message: t`validation.device_id`,
       showValidationBelow: true,
-      validator: lengthGt(10)
+      validator: lengthGt(5)
     }),
   });
 
