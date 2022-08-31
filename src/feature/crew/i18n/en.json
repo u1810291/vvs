@@ -44,7 +44,7 @@
     "validation": {
       "name": "Name must be at least 3 letters long",
       "abbreviation": "Abbreviation must be at least 2 letters long",
-      "device_id": "Device id must not be empty"
+      "device_id": "Device id must be at least 6 letters long"
     },
     "title": {
       "dislocation_zone_schedule": "Dislocation zone schedule",
