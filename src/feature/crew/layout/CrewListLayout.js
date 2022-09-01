@@ -68,7 +68,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
 
   const cs = useMemo(() => getColumn(tc, props => (
     <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
-      <DynamicStatus className={'w-20'} status={props?.status}/>
+      <DynamicStatus t={'crew'} className={'w-20'} status={props?.status}/>
     </Link>
   )), [tc]);
 
@@ -130,7 +130,6 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const list = useCrews({filters: queryParams});
 
   useEffect(() => {
-    console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

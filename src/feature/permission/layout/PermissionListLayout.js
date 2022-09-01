@@ -74,10 +74,10 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
   const cs = useMemo(() => getColumn(t, props => (
     props?.id && <Link to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
-      <DynamicStatus status={props?.status}/>
+      <DynamicStatus t={'permission'} status={props?.status}/>
     </Link>
   )), [t]);
-  
+
   const {data: crewRequestDropdown} = useCrewRequestDropdown();
   const {data: crewDropdown} = useCrewDropdown();
   const {data: driverDropdown} = useDriverDropdown();
@@ -89,7 +89,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     cs('status', pipe(getProp('status')), true, null),
     c('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
     c('driver_name', pipe(getPath(['crew', 'driver_name'])), true, 'text-steel'),
-    c('updated_at', pipe(getProp('updated_at')), false, null), 
+    c('updated_at', pipe(getProp('updated_at')), false, null),
   ];
 
   const filtersData = [
@@ -110,9 +110,8 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     tableColumns,
     filtersData
   );
-  
+
   const api = usePermissions({filters: queryParams})
-  console.log(api?.data);
 
   useEffect(() => {
     api.mutate()
@@ -127,7 +126,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
         <Breadcrumbs.Item><span className='font-semibold'>{tb`permissions`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>
           <Button.NoBg onClick={toggleFilter}>
-            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            {defaultFilter.id ? defaultFilter.name : tb('allData') }
             <FilterIcon className='w-6 h-6 ml-2 text-geyser cursor-pointer inline-block focus:ring-0' />
           </Button.NoBg>
         </Breadcrumbs.Item>

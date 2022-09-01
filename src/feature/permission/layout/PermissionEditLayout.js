@@ -4,15 +4,15 @@ import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
 import {PermissionListRoute} from '../routes';
 import SidebarLayout from 'layout/SideBarLayout';
-import {getProp, identity, isFunction} from 'crocks';
-import {asyncUpdatePermissionRequestById, usePermission} from '../api';
+import {flip, getProp, identity, isFunction} from 'crocks';
+import {usePermission} from '../api';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import React, {useRef} from 'react';
 import PermissionEditForm from '../form/PermissionEditForm';
 import DynamicStatus from '../../crew/component/CrewStatus';
 import {useAuth} from '../../../context/auth';
-import useAsync from '../../../hook/useAsync';
+import raw from 'raw.macro';
 
 const PermissionEditLayout = () => {
   const saveRef = useRef(identity);
@@ -38,15 +38,8 @@ const PermissionEditLayout = () => {
       .option(null)
   );
 
-  // NOTE: Temporary solution on how to allow and reject permission requests
-  const [responseRejectPermissionRequest, forkRejectPermissionRequest] = useAsync(
-    asyncUpdatePermissionRequestById({token: `Bearer ${token}`, id, status: 'REJECTED'}),
-    identity
-  );
-  const [responseApprovePermissionRequest, forkApprovePermissionRequest] = useAsync(
-    asyncUpdatePermissionRequestById({token: `Bearer ${token}`, id, status: 'ALLOWED'}),
-    identity
-  );
+  const auth = useAuth();
+  const _do = flip(auth.api)(raw('../api/graphql/UpdatePermissionById.graphql'));
 
   return (
     <SidebarLayout>
@@ -68,12 +61,15 @@ const PermissionEditLayout = () => {
             </Nullable>
           </Breadcrumbs>
           <div className='space-x-4'>
-            <Button.Dxl onClick={forkRejectPermissionRequest}>
+            <Button.Dxl onClick={() => _do({id, status: 'REJECTED'}).fork(console.error, console.log)}>
               {t`button.reject`}
             </Button.Dxl>
-            <Button.Pxl onClick={forkApprovePermissionRequest}>
+            <Button.Pxl onClick={() => _do({id, status: 'ALLOWED'}).fork(console.error, console.log)}>
               {t`button.approve`}
             </Button.Pxl>
+              <Button onClick={saveRef.current}>
+              send
+              </Button>
           </div>
         </>
       </Header>

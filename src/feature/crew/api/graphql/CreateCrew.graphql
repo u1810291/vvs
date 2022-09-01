@@ -1,7 +1,6 @@
 mutation CreateCrew(
   $name: String = null,
   $abbreviation: String = null,
-  $driver_name: String = null,
   $phone_number: String = null,
   $to_call_after: String = null,
   $is_assigned_automatically: Boolean = false,
@@ -10,7 +9,6 @@ mutation CreateCrew(
   ) {
   insert_crew_one(object: {
     name: $name,
-    driver_name: $driver_name,
     phone_number: $phone_number,
     abbreviation: $abbreviation,
     to_call_after: $to_call_after,
@@ -21,7 +19,6 @@ mutation CreateCrew(
     id
     name
     status
-    driver_name
     abbreviation
     phone_number
     to_call_after

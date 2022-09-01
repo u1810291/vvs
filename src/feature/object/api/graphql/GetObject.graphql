@@ -1,6 +1,12 @@
 query ObjectById ($id: uuid!) {
   object_by_pk(id: $id) {
     address
+    modems {
+      id
+      area_no
+      central
+      contract_modem_no
+    }
     city
     contract_no
     contract_object_no

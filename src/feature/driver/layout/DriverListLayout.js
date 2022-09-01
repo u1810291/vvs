@@ -69,7 +69,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     buttons: <Button onClick={() => nav(DriverCreateRoute.props.path)}>{t`create`}</Button>,
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`drivers`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item hasSlash={false}><span className='font-semibold'>{tb`drivers`}</span></Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     /**

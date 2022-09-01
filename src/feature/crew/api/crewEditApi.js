@@ -1,19 +1,10 @@
-import raw from 'raw.macro';
-
-import {useAuth} from 'context/auth';
-
-import useAsyncSwr from 'hook/useAsyncSwr';
-
-import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
-
 import maybeToAsync from 'crocks/Async/maybeToAsync';
-
-import {Async, safe, omit, getProp} from 'crocks'
-import {not, ifElse} from 'crocks/logic';
-import {isEmpty} from 'crocks/predicates';
-import {constant} from 'crocks/combinators';
-import {map, option} from 'crocks/pointfree';
-import {pipe, pick, objOf, mapProps} from 'crocks/helpers';
+import raw from 'raw.macro';
+import useAsyncSwr from 'hook/useAsyncSwr';
+import {Async, safe, omit, getProp, setProp, not, ifElse, isEmpty, constant, map, option, chain, pipe, pick, objOf, mapProps} from 'crocks'
+import {augmentToUser} from '../../../api/buildUserQuery';
+import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
+import {useAuth} from 'context/auth';
 
 const {Resolved, Rejected} = Async;
 
@@ -40,15 +31,20 @@ export const useCrew = createUseOne({
   createGraphql: raw('./graphql/CreateCrew.graphql'),
   updateGraphQl: raw('./graphql/UpdateCrewById.graphql'),
   deleteGraphQl: raw('./graphql/DeleteCrewById.graphql'),
-  asyncMapFromApi: pipe(
+  mapFromApiUsingAuth: true,
+  asyncMapFromApi: auth => pipe(
     maybeToAsync('prop "crew_by_pk" was expected', getProp('crew_by_pk')),
+    chain(
+      obj => Async.of(obj => user => setProp('driver', user, obj))
+        .ap(Async.of(obj))
+        .ap(augmentToUser(auth, 'driver_user_id', obj))
+    )
   ),
   asyncMapToApi: pipe(
     pick([
       'id',
       'name',
       'calendars',
-      'driver_name',
       'abbreviation',
       'phone_number',
       'to_call_after',
@@ -58,7 +54,6 @@ export const useCrew = createUseOne({
     obj =>
       mapProps({
         name: mapToNullableString,
-        driver_name: mapToNullableString,
         abbreviation: mapToNullableString,
         phone_number: mapToNullableString,
         to_call_after: mapToNullableString,

@@ -4,21 +4,22 @@ import Map from '../../map/component/Map';
 import Nullable from '../../../components/atom/Nullable';
 import Textarea from '../../../components/obsolete/input/Textarea';
 import Selectbox from '../../../components/obsolete/input/Selectbox';
-import ControlledInput from '../../../components/obsolete/input/ControlledInput';
+import InputGroup from 'components/atom/input/InputGroup';
 
 import useAsync from '../../../hook/useAsync';
 import useGeocode from '../../../hook/useGeocode';
 import useLanguage from '../../../hook/useLanguage';
-import useResultForm from '../../../hook/useResultForm';
+import useResultForm, {FORM_FIELD} from '../../../hook/useResultForm';
 import {useGoogleApiContext} from '../../../context/google';
 
 import {asyncCreateEvent} from '../api/taskEditApi';
 
 import {generate} from 'shortid';
-import {identity, or, isEmpty} from 'crocks';
+import {identity, isEmpty} from 'crocks';
 import resultToAsync from 'crocks/Async/resultToAsync';
-import {lengthGt, hasntLength} from '../../../util/pred';
+import {lengthGt} from '../../../util/pred';
 import {Marker} from '@react-google-maps/api';
+import SelectBox from '../../../components/atom/input/SelectBox';
 
 const TaskEditForm = () => {
   const {t} = useLanguage();
@@ -46,53 +47,17 @@ const TaskEditForm = () => {
     setValue: ({set}) => set
   };
 
-  const {
-    isFullyComplete: isEventFullyComplete,
-    ctrl: ctrlEvent,
-    result: eventResult,
-    setForm: setEventForm,
-  } = useResultForm({
-    // token: {
-    //   initial: `Bearer ${accessToken}`,
-    //   validator: or(hasntLength, lengthGt(5)),
-    //   message: t('validation.error.token'),
-    //   props: () => {}
-    // },
-    name: {
-      initial: '',
-      validator: or(hasntLength, lengthGt(5)),
-      message: t('validation.error.taskName'),
-      props: inputGroupValidationProps,
-    },
-    description: {
-      initial: '',
-      validator: or(hasntLength, lengthGt(5)),
-      message: t('validation.error.taskDescription'),
-      props: inputGroupValidationProps,
-    },
-    status: {
-      initial: '',
-      validator: or(hasntLength, lengthGt(5)),
-      message: t('validation.error.taskStatus'),
-      props: () => {},
-    },
-    crewID: {
-      initial: '',
-      validator: or(hasntLength, lengthGt(5)),
-      message: t('validation.error.crewID'),
-      props: () => {},
-    },
-    objectID: {
-      initial: '',
-      validator: or(hasntLength, lengthGt(5)),
-      message: t('validation.error.objectID'),
-      props: () => {},
-    },
+  const {ctrl, result, setForm} = useResultForm({
+    name: FORM_FIELD.TEXT({label: t`field.name`, validator: lengthGt(4)}),
+    description: FORM_FIELD.TEXT({label: t`field.driver_name`, validator: () => true}),
+    status: FORM_FIELD.TEXT({label: t`field.abbreviation`, validator: lengthGt(1)}),
+    crewId: FORM_FIELD.TEXT({label: t`field.phone_number`, validator: () => true}),
+    objectId: FORM_FIELD.TEXT({initial: '10', label: t`field.to_call_after`, validator: lengthGt(9)}),
   });
 
   // const [crewsResponse, forkCrews] = useAsync(asyncGetCrews(accessToken), identity);
   // const [objectsResponse, forkObjects] = useAsync(asyncGetObjects(accessToken), identity);
-  const [eventResponse, forkEvent] = useAsync(resultToAsync(eventResult).chain(asyncCreateEvent), identity);
+  const [eventResponse, forkEvent] = useAsync(resultToAsync(result).chain(asyncCreateEvent), identity);
 
   // useEffect(() => {
   //   forkCrews();
@@ -148,19 +113,21 @@ const TaskEditForm = () => {
   return (
     <section className={'flex flex-col w-1/4 p-5'}>
       <div className={'flex mb-6'}>
-        <Selectbox
-          label={t('eurocash.type')}
-          twBody={'w-1/2 mr-4'}
+        <SelectBox>
+
+        </SelectBox>
+        {/*<Selectbox*/}
+        {/*  label={t('eurocash.type')}*/}
+        {/*  twBody={'w-1/2 mr-4'}*/}
+        {/*  isRequired={true}*/}
+        {/*  items={taskStatus}*/}
+        {/*  value={selectedTaskStatus}*/}
+        {/*  setValue={setSelectedTaskStatus}*/}
+        {/*/>*/}
+        <InputGroup
+          className={'mt-6 lg:mt-0 lg:w-5/12'}
           isRequired={true}
-          items={taskStatus}
-          value={selectedTaskStatus}
-          setValue={setSelectedTaskStatus}
-        />
-        <ControlledInput
-          title={t('eurocash.name')}
-          twBody={'mr-0 w-1/2'}
-          isRequired={true}
-          {...ctrlEvent('name')}
+          {...ctrl('name')}
         />
       </div>
       <Textarea
@@ -168,7 +135,7 @@ const TaskEditForm = () => {
         twBody={'mb-6'}
         rows={4}
         isRequired={true}
-        {...ctrlEvent('description')}
+        {...ctrl('description')}
       />
       <Selectbox
         label={t('eurocash.objectsAndAddresses')}

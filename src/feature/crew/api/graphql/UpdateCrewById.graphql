@@ -2,7 +2,6 @@ mutation UpdateCrewById(
   $id: uuid!,
   $name: String = null,
   $abbreviation: String = null,
-  $driver_name: String = null,
   $phone_number: String = null,
   $to_call_after: String = null,
   $is_assigned_automatically: Boolean = false,
@@ -11,7 +10,6 @@ mutation UpdateCrewById(
   ) {
   update_crew_by_pk(_set: {
     name: $name,
-    driver_name: $driver_name,
     phone_number: $phone_number,
     abbreviation: $abbreviation,
     to_call_after: $to_call_after,
@@ -21,7 +19,6 @@ mutation UpdateCrewById(
     id
     name
     status
-    driver_name
     abbreviation
     phone_number
     to_call_after

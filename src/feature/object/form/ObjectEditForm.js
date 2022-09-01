@@ -6,12 +6,24 @@ import SelectBox from 'components/atom/input/SelectBox';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {ObjectListRoute} from '../routes';
-import {constant, map} from 'crocks';
+import {constant, map, getPath, pipe, not, isEmpty, chain, safe, curry, isArray,} from 'crocks';
+import {getName} from 'feature/user/utils';
 import {hasLength} from '@s-e/frontend/pred';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useCity, useObject} from '../api';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+
+const detailsOf = curry((
+  detailsProps,
+  itemToProps,
+  items
+) => pipe(
+  safe(isArray),
+  map(map(itemToProps)),
+  chain(safe(not(isEmpty))),
+  map(listOfContacts => <Detail {...detailsProps}>{listOfContacts}</Detail>),
+)(items));
 
 const ObjectEditForm = ({saveRef}) => {
   const params = useParams();
@@ -45,7 +57,8 @@ const ObjectEditForm = ({saveRef}) => {
     feedback_sla_time_in_min: FORM_FIELD.TEXT({initial: '15', label: t`field.feedback_sla_time_in_min`, validator: () => true}),
   });
 
-  useObject({
+
+  const api = useObject({
     ...params,
     formResult: result,
     saveRef,
@@ -108,28 +121,47 @@ const ObjectEditForm = ({saveRef}) => {
         </div>
       </div>
 
-      {/**
-        @TODO: map api.users -> responsiblePeople
-      **/}
       <aside className={'border-l border-gray-border'}>
-        <Detail title={t`responsiblePeople`}>
-          <Detail.Item left={t`fullName`} right='+370656012345' />
-        </Detail>
+        {(
+          getPath(['data', 'users'], api)
+          .chain(detailsOf({title: t`responsiblePeople`}, user => (
+            <Detail.Item
+              key={user?.id}
+              left={<span className='whitespace-nowrap'>{getName(user).option('Name Surname')}</span>}
+              right={<span>{user?.mobilePhone || user?.email || '—'}</span>}
+            />
+          )))
+          .option(null)
+        )}
 
-        <Detail title={t`modems`}>
-          <Detail.Item>
-            <InputGroup label={t`field.modemNo`} className=''/>
-          </Detail.Item>
-          <Detail.Item>
-            <CheckBox label={t`field.alarm_management`}/>
-          </Detail.Item>
-        </Detail>
+        {(
+          getPath(['data', 'modems'], api)
+          .chain(detailsOf(
+            {title: t`modems`}, 
+            modem => (
+              <Detail className='' title={modem?.contract_modem_no || modem?.id} key={modem?.id}>
+                <Detail.Item left={t`modem_central`} right={titleCase(modem?.central)} />
+                <Detail.Item left={t`modem_contract_no`} right={modem?.contract_modem_no} />
+                <Detail.Item left={t`modem_area_no`} right={modem?.area_no} />
+              </Detail>
+            ),
+          ))
+          .map(detail => {
+            detail.props.children.push(
+              <Detail.Item key='alarmManagement'>
+                <CheckBox label={t`field.alarm_management`} />
+              </Detail.Item>
+            );
+            return detail;
+          })
+          .option(null)
+        )}
 
         <Detail title={t`objectInfo`}>
-          <Detail.Item left={t`field.objectNo`} right={<Input {...ctrl('contract_object_no')} />} />
-          <Detail.Item left={t`field.contractNo`} right={<Input {...ctrl('contract_no')} />} />
-          <Detail.Item left={t`field.navisionId`} right={<Input {...ctrl('navision_id')} />} />
-          <Detail.Item left={t`field.providerId`} right={<Input {...ctrl('provider_id')} />} />
+          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.objectNo`}</span>} right={<Input {...ctrl('contract_object_no')} />} />
+          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.contractNo`}</span>} right={<Input {...ctrl('contract_no')} />} />
+          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.navisionId`}</span>} right={<Input {...ctrl('navision_id')} />} />
+          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.providerId`}</span>} right={<Input {...ctrl('provider_id')} />} />
         </Detail>
       </aside>
     </section>

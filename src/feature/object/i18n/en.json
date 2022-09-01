@@ -28,6 +28,9 @@
     }
   },
   "edit": {
+    "modem_central": "Center type",
+    "modem_contract_no": "Modem No.",
+    "modem_area_no": "Area No.",
     "fullName": "Full name",
     "responsiblePeople": "Responsible people",
     "modems": "Modems",

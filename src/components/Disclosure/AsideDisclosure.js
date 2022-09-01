@@ -3,7 +3,7 @@ import Disclosure from '.';
 
 export const AsideDisclosure = ({title,  ...props}) => (
   <Disclosure
-    text={<span className='block px-4 py-4 font-semibold w-full'>{title}</span>}
+    text={<span title={title} className='block px-4 py-4 font-semibold w-full truncate'>{title}</span>}
     defaultOpen
     className='border-b border-gray-300'
     as='div'

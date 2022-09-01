@@ -1,24 +1,18 @@
-import {createUseListWithAuth} from 'api/buildApiHook';
+import raw from 'raw.macro';
 import {augmentUser, getPathAsync} from 'api/buildUserQuery';
+import {createUseListWithAuth} from 'api/buildApiHook';
+import {mapByMaybe} from 'util/array';
+import {titleCase} from '@s-e/frontend/transformer/string';
 import {
   getProp, 
   curry, 
   map, 
   pipe, 
-  // ifElse, 
   safe,
-  // option, 
   isEmpty, 
   not, 
   hasProps,
-  // tap,
-  // Async,
-  // chain
 } from 'crocks';
-// import {map} from 'crocks/pointfree';
-import raw from 'raw.macro';
-import {mapByMaybe} from 'util/array';
-import {titleCase} from '@s-e/frontend/transformer/string';
 
 const LIST_PROPS = ['usersByRole', 'users'];
 const LIST_SETTINGS_PROPS = ['user_settings'];
@@ -85,6 +79,5 @@ export const useDriverDropdown = createUseListWithAuth({
           .option(null)
       }
     )))
-    // .chain(obj => Async.of(console.log('asd', obj)))
   )
 });

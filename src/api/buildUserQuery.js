@@ -4,6 +4,9 @@ import {hasLength} from '@s-e/frontend/pred';
 import {mIsSame} from 'util/pred';
 import {
   Async,
+  pick,
+  omit,
+  head,
   branch,
   chain,
   curry,
@@ -87,3 +90,15 @@ export const augmentsToUsers = curry((auth, userIdLens, users) => pipe(
     .alt(Async.of(augments))
   ),
 )(users));
+
+/**
+ * @type {(auth: import('context/auth').AuthContextValue) => (userIdProp: String) => (user: Object) => Async}
+ */
+export const augmentToUser = curry((auth, userIdProp, user) => (
+  augmentsToUsers(auth, getProp(userIdProp), [pick([userIdProp], user)])
+  .chain(pipe(
+    head,
+    maybeToAsync('user not found'),
+  ))
+  .map(omit([userIdProp]))
+))
