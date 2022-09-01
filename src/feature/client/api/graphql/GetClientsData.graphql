@@ -1,0 +1,17 @@
+query GetClients {
+  usersByRole(role: "customer") {
+    users {
+      active
+      birthDate
+      email
+      firstName
+      id
+      lastName
+      fullName
+      middleName
+      mobilePhone
+      username
+      verified
+    }
+  }
+}

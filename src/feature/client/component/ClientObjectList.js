@@ -1,7 +1,7 @@
 import Button from 'components/Button'
 import React, {useState} from 'react'
 import {useTranslation} from 'react-i18next';
-import {useKeyObjects, useKeyObjectBox} from '../api';
+
 import {
   chain,
   getProp,
@@ -23,11 +23,12 @@ import useResultForm from 'hook/useResultForm';
 import {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useObjects} from 'feature/object/api';
-import InputGroup from 'components/atom/input/InputGroup';
-import {KeyBoxEditRoute} from '../routes';
-import {generatePath} from 'react-router-dom';
+// import {ClientEditRoute} from '../routes';
+// import {generatePath} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import ComboBox from 'components/atom/input/ComboBox';
+import useClientObjects from '../api/useClientObjects';
+import useClientObject from '../api/useClientObject';
 
 
 
@@ -41,17 +42,17 @@ const displayValue = mapper => pipe(
 
 const onChange = ({set}) => ({value}) => set(value);
 
-const KeyObjectList = ({boxId, assignRef, removeRef}) => {
+const ClientObjectList = ({userId, assignRef, removeRef}) => {
 
-  const {t: tp} = useTranslation('keybox');
-  const {t: tf} = useTranslation('keybox', {keyPrefix: 'form'});
-  const {t: ts} = useTranslation('keybox', {keyPrefix: 'status'});
-  const {t} = useTranslation('keybox', {keyPrefix: 'list.column'});
+  const {t: tp} = useTranslation('client');
+  const {t: tf} = useTranslation('client', {keyPrefix: 'form'});
+  const {t: ts} = useTranslation('client', {keyPrefix: 'status'});
+  const {t} = useTranslation('client', {keyPrefix: 'list.column'});
   const nav = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
 
-  const fetcher = useKeyObjects({filters: {id: boxId}});
+  const fetcher = useClientObjects({filters: {id: userId}});
   const list = fetcher?.data || [];
   const objects = useObjects({filters: {}});
 
@@ -65,15 +66,8 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   // }, [showModal]);
 
   const formData = {
-    set_name: FORM_FIELD.TEXT({label: tf`set_name`, validator: () => true}),
-    object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true, props: {
-      // displayValue: displayValue((v) => {
-      //   const object = objects?.data?.find(c => c.id === v);
-      //   return titleCase(object?.name || object?.id);
-      // }),
-      // onChange,
-    }}),
-    box_id: FORM_FIELD.TEXT({label: '', initial: boxId, validator: () => true}),
+    object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true}),
+    user_id: FORM_FIELD.TEXT({label: '', initial: userId, validator: () => true}),
   };
 
   const {ctrl, result, form, setForm} = useResultForm(formData);
@@ -81,7 +75,6 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   const resetPage = () => {
     // reset form
     const resetForm = {...form};
-    resetForm['set_name'] = '';
     resetForm['object_id'] = '';
     setForm(resetForm);
     
@@ -99,17 +92,17 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   const remove = (e) => { 
     if (!confirm('Are you sure you want to delete?')) return;
     
-    isFunction(removeRef.current) && removeRef.current({box_id: boxId, key_id: e.target.id});
+    isFunction(removeRef.current) && removeRef.current({user_id: userId, object_id: e.target.id});
     resetPage();
   }
   
-  // assign key + object to box
-  useKeyObjectBox({
+  // assign client + object to box
+  useClientObject({
     formResult: result,
     setForm,
     saveRef: assignRef,
     removeRef: removeRef,
-    successRedirectPath: generatePath(KeyBoxEditRoute.props.path, {id: boxId}),
+    // successRedirectPath: generatePath(ClientEditRoute.props.path, {id: userId}),
   })
 
 
@@ -124,24 +117,24 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
         <Table.Head>
           <Table.Tr>
             <Table.Th>{t`Nr`}</Table.Th>
-            <Table.Th>{t`Object nr.`}</Table.Th>
             <Table.Th>{t`Object`}</Table.Th>
             <Table.Th>{t`Address`}</Table.Th>
+            <Table.Th>{t`Contract nr.`}</Table.Th>
             <Table.Th></Table.Th>
           </Table.Tr>
         </Table.Head>
         <Table.Body>
           {list.map((r, index) => (
             <Table.Tr key={r.id}>
-              <Table.Td>{r.key.set_name}</Table.Td>
-              <Table.Td>{r.object.contract_object_no}</Table.Td>
+              <Table.Td>{index + 1}</Table.Td>
               <Table.Td>{r.object.name}</Table.Td>
               <Table.Td>
                 {r.object.address}
                 <Nullable on={r.object.city}>, {titleCase(r.object.city)}</Nullable>  
               </Table.Td>
+              <Table.Td>{r.object.contract_object_no}</Table.Td>
               <Table.Td>
-                <Button.NoBg id={r.key.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
+                <Button.NoBg id={r.client.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
               </Table.Td>
             </Table.Tr>
           ))}
@@ -157,8 +150,6 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
             {/* <h3>Assign an Object</h3> */}
             
             <div className='w-full flex flex-row space-x-2'>
-              <InputGroup className={'w-1/2'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
-
               <ComboBox 
                 className={'w-1/2'} 
                 labelText={tf('object')}
@@ -195,4 +186,4 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   )
 }
 
-export default KeyObjectList;
+export default ClientObjectList;

@@ -8,7 +8,7 @@ import useLanguage from '../../hook/useLanguage';
 import useWeekDays from '../../hook/useWeekDays';
 import useValidation from '../../hook/useValidation';
 
-import {constant, isEmpty} from 'crocks';
+import {isEmpty} from 'crocks';
 import {format, getDay, setDay} from 'date-fns';
 
 import {generate} from 'shortid';
@@ -29,8 +29,8 @@ const CalendarModal = ({
   const {t} = useLanguage();
   const {weekDays, getTimeLocals} = useWeekDays();
   const {validateOnEventCreate} = useValidation();
-  const [selectedDislocationZone, setSelectedDislocationZone] = useState([{}]);
-  const [selectedWeekDay, setSelectedWeekDay] = useState([{}]);
+  const [selectedDislocationZone, setSelectedDislocationZone] = useState('');
+  const [selectedWeekDay, setSelectedWeekDay] = useState('');
   const [errorMessage, setErrorMessage] = useState();
 
   const [selectedTimeTo, setTimeTo] = useState();
@@ -44,7 +44,7 @@ const CalendarModal = ({
     if (isEmpty(crewZones)) return;
 
     const zone = crewZones.find(z => z.value === eventData?.crew?.value) || crewZones[0];
-    setSelectedDislocationZone({value: zone.value, name: zone.key});
+    setSelectedDislocationZone(zone.value);
   }, [crewZones, eventData?.crew?.value]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const CalendarModal = ({
       key: format(setDay(new Date(), eventData?.week_day !== undefined ? eventData?.week_day : 1, {locale: getTimeLocals()}), 'EEEE'),
       value: setDay(new Date(), eventData?.week_day !== undefined ? eventData?.week_day : 1, {locale: getTimeLocals()})
     };
-    setSelectedWeekDay({value: weekDay.value, name: weekDay.key});
+    setSelectedWeekDay(weekDay.value);
   }, [weekDays, eventData]);
 
   const editEvent = useCallback(() => {
@@ -61,8 +61,8 @@ const CalendarModal = ({
         const editedEvent = {
           id: event.id,
           crew_id: eventData?.crew_id,
-          dislocation_zone_id: selectedDislocationZone?.value,
-          week_day: getDay(selectedWeekDay?.value),
+          dislocation_zone_id: selectedDislocationZone,
+          week_day: getDay(selectedWeekDay),
           start_time: selectedTimeFrom,
           end_time: selectedTimeTo,
         };
@@ -81,8 +81,8 @@ const CalendarModal = ({
       const newEvent = {
         id: generate(),
         crew_id: crewId,
-        dislocation_zone_id: selectedDislocationZone?.value,
-        week_day: getDay(selectedWeekDay?.value),
+        dislocation_zone_id: selectedDislocationZone,
+        week_day: getDay(selectedWeekDay),
         start_time: selectedTimeFrom,
         end_time: selectedTimeTo,
       };
@@ -101,8 +101,8 @@ const CalendarModal = ({
       >
         <SelectBox
           label={t('eurocash.dislocationZone')}
-          value={selectedDislocationZone?.value}
-          displayValue={constant(selectedDislocationZone?.name)}
+          value={selectedDislocationZone}
+          displayValue={(v) => crewZones.find(z => z.value === v)?.key}
           onChange={setSelectedDislocationZone}
         >
           {crewZones.map(crewZone => (
@@ -114,8 +114,8 @@ const CalendarModal = ({
         <div className={'grid grid-cols-3 pt-4 pb-8'}>
           <SelectBox
             label={t('eurocash.day')}
-            value={selectedWeekDay?.value}
-            displayValue={constant(selectedWeekDay?.name)}
+            value={selectedWeekDay}
+            displayValue={(v) => format(v, 'EEEE')}
             onChange={setSelectedWeekDay}
             className={'mr-4'}
           >

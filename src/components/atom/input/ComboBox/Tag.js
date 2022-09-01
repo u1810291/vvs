@@ -7,7 +7,7 @@ export const Tag = ({
   onDelete = identity,
   ...props
 }) => (
-  <div data-value={value} onClick={onDelete} className='min-w-[4rem] cursor-pointer max-w-[12rem] m-1 p-1 rounded-sm text-xs font-normal text-gray-500 bg-gray-200 inline-flex items-center justify-between'>
+  <div data-value={value} value={value} onClick={onDelete} className='min-w-[4rem] cursor-pointer max-w-[12rem] m-1 p-1 rounded-sm text-xs font-normal text-gray-500 bg-gray-200 inline-flex items-center justify-between'>
     <span className='whitespace-nowrap leading-none align-baseline pointer-events-none'>{children}</span>
     <button {...props} className='focus:outline-none pointer-events-none'>
       <svg

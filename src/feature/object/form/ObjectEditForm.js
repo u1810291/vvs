@@ -17,11 +17,11 @@ const ObjectEditForm = ({saveRef}) => {
   const params = useParams();
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
-  const {ctrl, result, setForm} = useResultForm({
+  const {ctrl, result, form, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
     city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true, props: {
       displayValue: ({value}) => () => titleCase(value),
-      onChange: ({set}) => ({value}) => set(value),
+      // onChange: ({set}) => ({value}) => set(value),
     }}),
     contract_no: FORM_FIELD.TEXT({label: t`field.contractNo`, validator: () => true}),
     contract_object_no: FORM_FIELD.TEXT({label: t`field.objectNo`, validator: () => true}),
@@ -63,7 +63,14 @@ const ObjectEditForm = ({saveRef}) => {
             <InputGroup {...ctrl('name')} />
             <div className='lg:flex lg:space-x-4 space-y-4 lg:space-y-0'>
               <InputGroup className={'lg:w-2/3 xl:w-3/4'} {...ctrl('address')} />
-              <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('city')}>
+              <SelectBox 
+                className={'lg:w-1/3 xl:w-1/4'} 
+                {...ctrl('city')}
+                onChange={(v) => {
+                  const theForm = {...form};
+                  theForm['city'] = v;
+                  setForm(theForm);
+                }}>
                 {map(
                   value => (
                     <SelectBox.Option key={value} value={value}>

@@ -47,17 +47,15 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
 
   const {ctrl, result, form, setForm} = useResultForm({
     set_name: FORM_FIELD.TEXT({label: tf`set_name`}),
-    crew_id: FORM_FIELD.OBJECT({label: tf`crew_id`, props: {      
+    crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, validator: () => true, props: {      
       displayValue: displayValue((v) => {
-        // console.log('dv', v);
         const crew = crews?.data?.find(c => c.id === v);
         return titleCase(crew?.name || crew?.id);
       }),
-      onChange,
-      value: ({value}) => {
-        // console.log('value', value);
-        // return [value];
-      }
+      // onChange: (v) => {
+      //   console.log(v);
+      //   onChange(v);
+      // },
     }}),
   });
   
@@ -85,8 +83,14 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
           multiple={false}
           placeholder={'Search [Single choice]'}
           {...ctrl('crew_id')} 
-          value={[{value: form['crew_id'], name: crews?.data?.find(c => c.id === form['crew_id'])?.name}]}
+          value={form['crew_id']}
           data-id={form['crew_id']}
+          displayValue={v => crews?.data?.find(o => o.id === v)?.name}
+          onChange={(v) => {
+            const theForm = {...form};
+            theForm['crew_id'] = v;
+            setForm(theForm);
+          }}
         >
           {map(crew => (
             <ComboBox.Option key={crew.id} value={crew.id}>

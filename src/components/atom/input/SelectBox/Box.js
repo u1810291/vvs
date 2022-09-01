@@ -25,9 +25,7 @@ const Box = ({
   // console.log('selectbox initial value', value);
 
   const onChangeValue = (e) => {
-    // console.log(e);
-    onChange({value: e.props.value, name: e.props.children})
-    // onChange(e.props.value)
+    onChange(e.props.value)
   };
   
   return (
@@ -52,13 +50,7 @@ const Box = ({
                         {...component.props}
                         value={component}
                         key={component?.key || component?.props?.key || component.props.children}
-                        selected={
-                          multiple
-                            ? value.includes(component.props.children)
-                              ? displayValue(component.props.children)
-                              : ''
-                            : displayValue(value)
-                        }
+                        selected={multiple && value ? value?.toString().includes(component?.key) : value === component?.key}
                         className={optionClassNameFn}
                       />
                     ))}

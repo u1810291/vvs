@@ -92,7 +92,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     {key: 'longitude', label: 'Longitude', filter: 'range'},
     {key: 'contract_no', label: 'Contract No', filter: 'text'},
     {key: 'address', label: 'Address', filter: 'text'},
-    {key: 'is_crew_autoasigned', label: 'Auto assigned?', filter: 'select', values: ['true', 'false']},
+    {key: 'is_crew_autoasigned', label: 'Auto assigned?', filter: 'select', values: ['ANY', 'YES', 'NO']},
     {key: 'user_id', label: 'Client', filter: 'multiselect', values: []},
     // {key: 'created_at', label: 'Date', filter: 'date'}, // date filter as example
   ]

@@ -7,7 +7,7 @@ import {fetchGql} from '@s-e/frontend/fetch';
 import {titleCase} from '@s-e/frontend/transformer/string';
 
 export const usePermissions = createUseWhereList({
-  graphQl: raw('./graphql/PermissionsWhere.graphql'),
+  graphQl: raw('./graphql/PermissionsData.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "crew_permission" expected but not found.', getProp('crew_permission')),
   ),

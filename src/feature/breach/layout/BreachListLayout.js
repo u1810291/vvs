@@ -93,12 +93,12 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const filtersData = [
     // {key: 'start_time', label: 'Started At', filter: 'date'},
     // {key: 'end_time', label: 'Ended At', filter: 'date'},
-    {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || []},
-    // [
-    //   {value: '741a3a7d-38ef-4e75-821e-b096771ed8bb', name: '9RG1'}, 
-    //   {value: 'db4b46af-a700-46a1-a638-34d8efbfcedc', name: '8GB'}
-    // ]},
-    {key: 'driver_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || []},
+    {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || [], displayValue: (v) => {
+      return crewDropdown?.find(c => c.value === v)?.name;
+    }},
+    {key: 'driver_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
+      return driverDropdown?.find(d => d.value === v)?.name;
+    }},
     {key: 'time_outside_the_zone', label: 'Time outside zone', filter: 'range'},
   ];
 

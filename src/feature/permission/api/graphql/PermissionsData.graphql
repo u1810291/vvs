@@ -7,7 +7,7 @@ query($where: crew_permission_bool_exp = {}) {
     crew {
       id
       name
-      driver_name
+      driver_user_id
     }
     request_id
     status

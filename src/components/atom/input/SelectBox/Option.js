@@ -13,7 +13,7 @@ const Option = ({selected, ...props}) => (
         <span className={classNames(selected === props.children ? 'font-semibold' : 'font-normal', 'block truncate')}>
           {props.children}
         </span>
-        {selected === props.children ? (
+        {selected ? (
           <span className={classNames(
             active ? 'text-white' : 'text-steel',
             'absolute inset-y-0 left-2 flex items-center pr-4'

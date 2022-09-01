@@ -1,4 +1,4 @@
-import React, {useMemo, useEffect, useCallback} from 'react';
+import React, {useMemo, useEffect} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Listing from 'layout/ListingLayout';
@@ -8,31 +8,24 @@ import withPreparedProps from 'hoc/withPreparedProps';
 import {useTranslation} from 'react-i18next';
 
 import {
-  // chain,
   curry,
-  // getProp,
   getPropOr,
-  // identity,
   isEmpty,
   map,
   not,
   objOf,
   pipe,
   safe,
-  // isArray,
   isString,
   option,
-  // constant,
-  // isObject,
   getProp,
   Maybe,
   getPath,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
-import {PermissionEditRoute, PermissionCreateRoute} from '../routes';
+import {PermissionEditRoute} from '../routes';
 import {useCrewRequestDropdown, usePermissions} from '../api';
-// import {titleCase} from '@s-e/frontend/transformer/string';
 import DashboardRoute from 'feature/dashboard/routes';
 import {TaskListRoute} from 'feature/task/routes';
 import Innerlinks from 'components/Innerlinks';
@@ -51,8 +44,6 @@ const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   key,
   status,
   itemToProps: item => pipe(
-    // getProp(key),
-    // chain(safe(pred)),
     mapper,
     map(objOf('children')),
     map(a => ({...item, ...a})),
@@ -103,9 +94,15 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
   const filtersData = [
     {key: 'created_at', label: 'Created_at', filter: 'date'},
-    {key: 'reason', label: 'Reason', filter: 'autocomplete', values: crewRequestDropdown || []},
-    {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || []},
-    {key: 'driver_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || []},
+    {key: 'reason', label: 'Reason', filter: 'autocomplete', values: crewRequestDropdown || [], displayValue: (v) => {
+      return crewRequestDropdown?.find(c => c.value === v)?.name;
+    }},
+    {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || [], displayValue: (v) => {
+      return crewDropdown?.find(c => c.value === v)?.name;
+    }},
+    {key: 'driver_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
+      return driverDropdown?.find(d => d.value === v)?.name;
+    }},
   ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
@@ -115,7 +112,8 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   );
   
   const api = usePermissions({filters: queryParams})
-  
+  console.log(api?.data);
+
   useEffect(() => {
     api.mutate()
   }, [queryParams]);
@@ -137,7 +135,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     ),
     buttons: (
       <>
-        <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button>
+        {/* <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button> */}
       </>
     ),
     innerlinks: (

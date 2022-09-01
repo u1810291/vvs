@@ -102,19 +102,22 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       key: 'zone',
       label: tc('calendars'),
       filter: 'autocomplete',
-      values: crewZones || []
+      values: crewZones || [],
+      displayValue: (v) => {
+        return crewZones?.find(c => c.value === v)?.name;
+      }
     },
     {
       key: 'status',
       label: tc('status'),
       filter: 'multiselect',
-      values: [{value: 'BREAK', name: 'Break'}, {value: 'BUSY', name: 'Busy'}, {value: 'OFFLINE', name: 'Offline'}, {value: 'READY', name: 'Ready'}, {value: 'DRIVE_BACK', name: 'Returning'}]
+      values: ['BREAK', 'BUSY', 'OFFLINE', 'READY', 'DRIVE_BACK']
     },
     {
       key: 'is_assigned_automatically',
       label: tc('is_assigned_automatically'),
       filter: 'select',
-      values: [{value: null, name: 'Any'}, {value: 'YES', name: 'Yes'}, {value: 'NO', name: 'No'}]
+      values: ['ANY', 'YES', 'NO']
     }
   ];
 
@@ -127,7 +130,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const list = useCrews({filters: queryParams});
 
   useEffect(() => {
-    // console.log(queryParams);
+    console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

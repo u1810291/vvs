@@ -15,11 +15,12 @@ import Filter from 'components/Filter';
 import {
   hasProps,
   isArray,
-  isObject,
+  // isObject,
   map,
   option,
   pipe,
-  safe
+  safe,
+  // identity,
 } from 'crocks';
 import {renderWithProps} from 'util/react';
 import SelectBox from 'components/atom/input/SelectBox';
@@ -85,9 +86,7 @@ const updater = (state, action) => {
       if (!(action.key in prevState)) {
         prevState[action.key] = action.value;
       } else {
-        // var idx = prevState[action.key]
-    
-        if (prevState[action.key].value === action.value.value) {
+        if (prevState[action.key].value === action.value) {
           delete prevState[action.key];
         } else {
           prevState[action.key] = action.value;
@@ -103,13 +102,11 @@ const updater = (state, action) => {
       if (!(action.key in prevState)) {
         prevState[action.key] = [action.value];
       } else {
-        let exists = prevState[action.key].find(s => s.value === action.value.value);
+        let exists = prevState[action.key].find(s => s === action.value);
   
         if (exists) {
           prevState[action.key] = [
-            // ...prevState[action.key].slice(0, idx),
-            // ...prevState[action.key].slice(idx + 1)
-            ...prevState[action.key].filter(s => s.value !== action.value.value)
+            ...prevState[action.key].filter(s => s !== action.value)
           ];
         } else {
             prevState[action.key] = [...prevState[action.key], action.value];
@@ -658,17 +655,15 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
 
           <div className='flex-grow flex flex-col border-l-2 border-slate-200 py-6 px-6'>
             <div className='grid grid-cols-4 gap-x-6 gap-y-5 mb-6'>
-              {filtersData.map(({key, label, filter, Component, Child, values}, index) => {
+              {filtersData.map(({key, label, filter, Component, Child, values, displayValue}, index) => {
                 // select or multiselect
                 if (filter === 'select' || filter === 'multiselect') {
-                  // console.log('inside select/multiselect', state[key]);
-
                   let currentValue = '';
                     
                   if (key in state && filter === 'select') {
-                    currentValue = state[key].name;
+                    currentValue = state[key];
                   } else if (key in state && filter === 'multiselect') {
-                    currentValue = state[key].map(f => f.name).join(', ');
+                    currentValue = state[key].map(f => f).join(', ');
                   }
 
                   return <SelectBox
@@ -693,12 +688,11 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                 
                 // autocomplete or combobox
                 if (filter === 'autocomplete') {
-                  const currentValue = state[key] ?? [];
-                  // console.log('autocomplete current value', currentValue);
-                    
-                  // if (key in state && filter === 'multiselect') {
-                  //   currentValue = state[key].join(', ');
-                  // }
+                  let currentValue = '';
+                  
+                  if (key in state && isArray(state[key])) {
+                    currentValue = state[key].map(f => f).join(', ');
+                  } 
 
                   return <ComboBox 
                     key={key}
@@ -707,12 +701,13 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                     className={'w-full'}
                     value={currentValue}
                     onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
-                    multiple={true}   // TODO: single autocomplete ?
+                    multiple={true}
+                    displayValue={displayValue}
                   >
                     {map(
                       value => (
                         <ComboBox.Option key={value?.value ?? value} value={value?.value ?? value}>
-                          {value?.name ?? value}
+                          {value?.name ?? displayValue(value)}
                         </ComboBox.Option>
                       ),
                       values ?? []
@@ -737,7 +732,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                 // number range
                 else if (filter === 'range') {
                   return <div className='w-full' key={key}>
-                      <div className='flex flex-col' >
+                    <div className='flex flex-col' >
                       <span className='text-sm mt-1'>{label}</span>
                       <div className='flex flex-row space-x-2 mt-1'>
                         <InputGroup
@@ -786,10 +781,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
             </div>
           </div>
           
-
-          <div className='w-1/5 md:none'>
-            
-          </div>
+          <div className='w-1/5 md:none'></div>
         </div>
       </div>
     )}, 
@@ -798,10 +790,12 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    // console.log('filter state', state);
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
+      const filter = filtersData.find(f => f.key === key);
+      if (!filter) continue;
+
       if (value === undefined || value === null || value === '') continue;
       if (key.includes('_end')) continue;
 
@@ -819,26 +813,20 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
       
       // single filters
       else {
-        // array filter -> multiselect
+        // array filter / multiselect
         if (isArray(value)) {
-          // console.log('prep array params', value);
-          params[key] = {_in: value.map(v => v.value)};
+          params[key] = {_in: value.map(v => v)};
         }
 
-        else if (isObject(value)) {
-          // console.log('prep object param', value.value);
-
-          if (!isObject(value.value)) {
-            params[key] = {_eq: value.value};
-          } else {
-            delete params[key];
-          }
-
+        // single select
+        else if (filter.filter === 'select') {
+          if (value.toUpperCase() === 'ANY') continue; // special case
+          params[key] = {_eq: value};
         }
 
-        // text filter
+        // text/single value filter
         else {
-          params[key] = {_ilike: value}
+          params[key] = {_eq: value};
         }
       }
     }
@@ -848,7 +836,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
         _and: params
       }
     };
-  }, [state]);
+  }, [state, filtersData]);
 
   return [
     queryParams,

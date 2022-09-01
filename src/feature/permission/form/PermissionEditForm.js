@@ -47,7 +47,7 @@ const PermissionEditForm = ({saveRef}) => {
   const {ctrl, result, form, setForm} = useResultForm({
     crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, props: {
       displayValue: displayValue(identity),
-      onChange,
+      // onChange,
       disabled: ({value}) => isTruthy(value),
     }}),
     request_id: FORM_FIELD.TEXT({label: tf`request_id`, validator: () => true, props: {
@@ -55,7 +55,7 @@ const PermissionEditForm = ({saveRef}) => {
       value: a => {
         // console.log({a});
       },
-      onChange,
+      // onChange,
     }}),
     status: FORM_FIELD.TEXT({label: tf`status`, validator: () => true, props: {
       displayValue: displayValue(titleCase),
@@ -74,7 +74,15 @@ const PermissionEditForm = ({saveRef}) => {
   return (
     <section className={'flex'}>
       <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'}>
-        <SelectBox className={'lg:w-1/4 xl:w-1/4'} {...ctrl('status')}>
+        <SelectBox 
+          className={'lg:w-1/4 xl:w-1/4'} 
+          {...ctrl('status')} 
+          multiple={false}
+          onChange={(v) => {
+            const theForm = {...form};
+            theForm['status'] = v;
+            setForm(theForm);
+          }}>
           {map(value => (
             <SelectBox.Option key={value} value={value}>
               {titleCase(value)}
@@ -82,22 +90,19 @@ const PermissionEditForm = ({saveRef}) => {
           ), statuses)}
         </SelectBox>
 
-        {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('request_id')}>
-          {map(request => (
-            <SelectBox.Option key={request.value} value={request.value}>
-              {titleCase(request.value)}
-            </SelectBox.Option>
-          ), requests?.data || [])}
-        </SelectBox> */}
-
         <ComboBox 
           className={'w-1/4'} 
           labelText={tf('request_id')}
           multiple={false}
           placeholder={'Search [Single choice]'}
           {...ctrl('request_id')} 
-          value={[{value: form['request_id'], name: requests?.data?.find(c => c.value === form['request_id'])?.value}]}
+          value={form['request_id']}
           data-id={form['request_id']}
+          onChange={(v) => {
+            const theForm = {...form};
+            theForm['request_id'] = v;
+            setForm(theForm);
+          }}
         >
           {map(request => (
             <ComboBox.Option key={request.value} value={request.value}>
@@ -106,22 +111,20 @@ const PermissionEditForm = ({saveRef}) => {
           ), (requests?.data || []))}
         </ComboBox>
 
-        {/* <SelectBox className={'lg:w-1/3 xl:w-1/4'} {...ctrl('crew_id')}>
-          {map(crew => (
-            <SelectBox.Option key={`${crew.id} ${+ new Date()}`} value={crew.id}>
-              {titleCase(crew.name || crew.id)}
-            </SelectBox.Option>
-          ), (crews?.data || []))}
-        </SelectBox> */}
-
         <ComboBox 
           className={'w-1/4'} 
           labelText={tf('crew')}
           multiple={false}
           placeholder={'Search [Single choice]'}
           {...ctrl('crew_id')} 
-          value={[{value: form['crew_id'], name: crews?.data?.find(c => c.id === form['crew_id'])?.name}]}
+          value={form['crew_id']}
           data-id={form['crew_id']}
+          displayValue={v => crews?.data?.find(o => o.id === v)?.name}
+          onChange={(v) => {
+            const theForm = {...form};
+            theForm['crew_id'] = v;
+            setForm(theForm);
+          }}
         >
           {map(crew => (
             <ComboBox.Option key={crew.id} value={crew.id}>

@@ -1,0 +1,12 @@
+query ObjectsByUserId($id: uuid!) {
+  object_user_rel(where: {user_id: {_eq: $id}}) {
+    user_id
+    object {
+      id
+      contract_object_no
+      name
+      address
+      city
+    }
+  }
+}
