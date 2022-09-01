@@ -99,7 +99,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       filter: 'text'
     },
     {
-      key: 'zone',
+      key: 'calendars.crew_zone.id',
       label: tc('calendars'),
       filter: 'autocomplete',
       values: crewZones || [],
@@ -130,6 +130,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const list = useCrews({filters: queryParams});
 
   useEffect(() => {
+    console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

@@ -10,6 +10,7 @@ query Crews($where: crew_bool_exp) {
     to_call_after
     calendars {
       crew_zone {
+        id
         name
       }
     }

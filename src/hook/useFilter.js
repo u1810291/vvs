@@ -25,6 +25,7 @@ import {
 import {renderWithProps} from 'util/react';
 import SelectBox from 'components/atom/input/SelectBox';
 import ComboBox from 'components/atom/input/ComboBox';
+import {unflatten} from 'util/obj';
 
 
 
@@ -800,6 +801,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
       if (key.includes('_end')) continue;
 
       // range filters: range, datepicker (single)
+      // console.log(filter.key);
+      
       if (key.includes('_start')) {
         const column = key.replace('_start', '');
         
@@ -813,8 +816,17 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
       
       // single filters
       else {
+        console.log(filter.key);
+        
         // array filter / multiselect
         if (isArray(value)) {
+          if (filter.key.includes('.')) {
+            const columns = filter.key.split('.');
+            
+            params[columns[0]] = unflatten({[filter.key.replace(`${columns[0]}.`, '')]: {_in: value.map(v => v)}});
+            continue;
+          }
+
           params[key] = {_in: value.map(v => v)};
         }
 
@@ -822,6 +834,16 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
         else if (filter.filter === 'select') {
           if (value.toUpperCase() === 'ANY') continue; // special case
           params[key] = {_eq: value};
+        }
+
+        // has . -> has inner column key
+        else if (filter.key.includes('.')) {
+          const columns = filter.key.split('.');
+          console.log(columns);
+          
+          for (c of columns) {
+            console.log(c);
+          }
         }
 
         // text/single value filter
