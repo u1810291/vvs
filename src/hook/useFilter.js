@@ -846,7 +846,12 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
           }
         }
 
-        // text/single value filter
+        // text filter
+        else if (filter.filter === 'text') {
+          params[key] = {_ilike: value};
+        }
+
+        // single value
         else {
           params[key] = {_eq: value};
         }
