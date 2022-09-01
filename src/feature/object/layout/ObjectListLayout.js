@@ -6,11 +6,9 @@ import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useMemo, useEffect} from 'react';
-// import {useObjects} from '../api';
 import {useTranslation} from 'react-i18next';
 import {
   Maybe,
-  // and,
   chain,
   curry,
   getProp,
@@ -24,21 +22,17 @@ import {
   objOf,
   pipe,
   safe,
-  // maybeToAsync,
-  // tap,
-  // getPath,
+  constant,
 } from 'crocks';
 import {useObjects} from '../api';
 import {useFilter} from 'hook/useFilter';
-// import SelectBox from 'components/atom/input/SelectBox';
-// import useDebounce from 'hook/useDebounce';
 import {useAuth} from 'context/auth';
-// import useAsync from 'hook/useAsync';
 import {FilterIcon} from '@heroicons/react/solid';
 import Button from 'components/Button';
 import {KeyBoxListRoute} from 'feature/keybox/routes';
 import {ModemListRoute} from 'feature/modem/routes';
 import Innerlinks from 'components/Innerlinks';
+import {useClientDropdown} from 'feature/client/api/useClients';
 
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
@@ -53,11 +47,10 @@ const getColumn = curry((t, Component, key, pred, mapper, status) => ({
     map(objOf('children')),
     map(a => ({...item, ...a})),
     alt(Maybe.Just(item)),
+    // chain(tap(console.log)),
   )(item),
 }));
 
-const nnil = not(isNil);
-const ne = not(isEmpty);
 
 const ObjectList = withPreparedProps(Listing, (props) => {
   const nav = useNavigate();
@@ -73,6 +66,13 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     </Link>
   )), [t]);
 
+  const {data: clientsDropdown} = useClientDropdown();
+  // console.log(clientsDropdown);
+
+  const nnil = not(isNil);
+  const ne = not(isEmpty);
+  const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.value === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
+
   const tableColumns = [
     c('name', ne, identity, true),
     c('city', ne, titleCase, true),
@@ -81,7 +81,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     c('contract_no', ne, identity, true),
     c('is_crew_autoasigned', ne, identity, true),
     c('created', ne, identity, false),
-    c('user_id', ne, identity, false),
+    c('users', constant(true), userToStr, false),
     c('feedback_sla_time_in_min', ne, identity, true),
   ]
 
@@ -93,7 +93,15 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     {key: 'contract_no', label: 'Contract No', filter: 'text'},
     {key: 'address', label: 'Address', filter: 'text'},
     {key: 'is_crew_autoasigned', label: 'Auto assigned?', filter: 'select', values: ['ANY', 'YES', 'NO']},
-    {key: 'user_id', label: 'Client', filter: 'multiselect', values: []},
+    {
+      key: 'users.user_id', 
+      label: 'Client', 
+      filter: 'autocomplete', 
+      values: clientsDropdown || [] , 
+      displayValue: (v) => {
+        return clientsDropdown?.find(c => c.value === v)?.name;
+      }
+    },
     // {key: 'created_at', label: 'Date', filter: 'date'}, // date filter as example
   ]
 
@@ -113,7 +121,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   }, [queryParams]);
 
 
-
+  console.log(list?.data);
  
   return {
     list: safe(isArray, list?.data).option([]),

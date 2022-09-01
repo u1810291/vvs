@@ -76,6 +76,8 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const boolToStr = e => e ? ts`YES` : ts`NO`;
   const arrToStr = e => !e?.length ? '-' : e?.map(({crew_zone}, ixd) => `${crew_zone?.name}${ixd !== e.length -1 ? ', ' : ''}`);
 
+  const {data: crewZones} = useDislocationZonesDropdown();
+
   const tableColumns = [
     c('id', constant(true), nullToStr, false, 'text-regent'),
     c('name', constant(true), nullToStr, true, 'text-bluewood'),
@@ -84,8 +86,6 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     cs('status', constant(true), nullToStr, true, null),
     c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent')
   ];
-
-  const {data: crewZones} = useDislocationZonesDropdown();
 
   const filtersData = [
     {
@@ -128,6 +128,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   );
 
   const list = useCrews({filters: queryParams});
+  console.log(list?.data);
 
   useEffect(() => {
     console.log(queryParams);

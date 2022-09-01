@@ -816,8 +816,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
       
       // single filters
       else {
-        console.log(filter.key);
-        
         // array filter / multiselect
         if (isArray(value)) {
           if (filter.key.includes('.')) {

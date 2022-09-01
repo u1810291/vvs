@@ -59,20 +59,9 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     setShowModal(() => !showModal);
   }
 
-  // useEffect(() => {
-  //   // console.log(queryParams);
-  //   fetcher.mutate();
-  // }, [showModal]);
-
   const formData = {
     set_name: FORM_FIELD.TEXT({label: tf`set_name`, validator: () => true}),
-    object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true, props: {
-      // displayValue: displayValue((v) => {
-      //   const object = objects?.data?.find(c => c.id === v);
-      //   return titleCase(object?.name || object?.id);
-      // }),
-      // onChange,
-    }}),
+    object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true}),
     box_id: FORM_FIELD.TEXT({label: '', initial: boxId, validator: () => true}),
   };
 

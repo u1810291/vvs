@@ -1,5 +1,5 @@
 import Button from 'components/Button'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useTranslation} from 'react-i18next';
 
 import {
@@ -60,10 +60,12 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
     setShowModal(() => !showModal);
   }
 
-  // useEffect(() => {
-  //   // console.log(queryParams);
-  //   fetcher.mutate();
-  // }, [showModal]);
+  
+  console.log(list);
+
+  useEffect(() => {
+    fetcher.mutate();
+  }, [showModal]);
 
   const formData = {
     object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true}),
@@ -84,6 +86,7 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
 
   // 
   const assign = () => {
+    console.log('assign');
     isFunction(assignRef.current) && assignRef.current();
     toggleModal();
     resetPage();

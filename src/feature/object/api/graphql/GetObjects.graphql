@@ -16,7 +16,7 @@ query Objects($where: object_bool_exp) {
     phone
     provider_id
     users {
-      user_type
+      user_id
     }
   }
 }
