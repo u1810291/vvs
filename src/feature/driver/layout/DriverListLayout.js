@@ -95,9 +95,9 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
 
   
   const api = useDrivers();
-  const dropDown = useDriversDropdown();
+  const {data: driverDropdown} = useDriversDropdown();
   
-  console.log(api?.data, dropDown?.data);
+  console.log(api?.data, driverDropdown);
 
 
 
