@@ -9,8 +9,14 @@ import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
 import ClientEditForm from '../form/ClientEditForm';
 import useClient from 'feature/client/api/useClient';
-import {getProp, hasProps, identity, isFunction, safe, not, isEmpty, Maybe, pipe} from 'crocks';
+import {getProp, hasProps, identity, isFunction, safe, not, isEmpty, Maybe, pipe, flip} from 'crocks';
 import {titleCase} from '@s-e/frontend/transformer/string';
+import {useAuth} from 'context/auth';
+import raw from 'raw.macro';
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
+import {errorToText} from 'api/buildApiHook';
+import {useNotification} from 'feature/ui-notifications/context';
 
 const toBreadcrumbValue = pipe(
   a => String(a || '').trim(),
@@ -48,6 +54,56 @@ const ClientEditLayout = () => {
     .option(null)
   );
 
+  const auth = useAuth();
+  const _archive = flip(auth.api)(raw('../api/graphql/ArchiveClientById.graphql'));
+  const {notify} = useNotification();
+
+  const archive = () => {
+    if (!confirm('Are you sure you want to archive the client?')) return;
+    _archive({id, archived_at: new Date()}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+    }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+    })
+  }
+
+  const unarchive = () => {
+    if (!confirm('Are you sure you want to restore the client?')) return;
+    _archive({id, archived_at: null}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+    }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+    })
+  }
+
   return (
     <SidebarLayout>
       <Header>
@@ -71,9 +127,16 @@ const ClientEditLayout = () => {
         <ClientEditForm saveRef={saveRef} assignRef={assignRef} removeRelRef={removeRelRef} />
       </div>
 
-      <Nullable on={id}>
+      <Nullable on={id && !data?.archived_at}>
         <section className={'flex p-6'}>
-          <Button.NoBg onClick={() => isFunction(archiveRef.current) && archiveRef.current()} className={'bg-red-500 text-white w-min'}>{t`archive`}</Button.NoBg>
+          <Button.NoBg onClick={() => archive()} className={'bg-red-500 text-white w-min'}>{t`archive`}</Button.NoBg>
+        </section>
+      </Nullable>
+
+      <Nullable on={id && data?.archived_at}>
+        <section className={'flex flex-col p-6'}>
+          {t`archived_at`}: {data?.archived_at}
+          <Button.NoBg onClick={() => unarchive()} className={'bg-blue-500 text-white w-min'}>{t`restore`}</Button.NoBg>
         </section>
       </Nullable>
     </SidebarLayout>

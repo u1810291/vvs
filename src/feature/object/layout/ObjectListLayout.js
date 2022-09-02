@@ -120,8 +120,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     list.mutate()
   }, [queryParams]);
 
-
-  console.log(list?.data);
  
   return {
     list: safe(isArray, list?.data).option([]),

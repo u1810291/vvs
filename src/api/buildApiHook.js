@@ -101,7 +101,7 @@ export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) =>
   ));
 }
 
-const errorToText = curry((mapper, error) => pipe(
+export const errorToText = curry((mapper, error) => pipe(
   safe(isObject),
   map(pipe(
     removeFalsyFields,

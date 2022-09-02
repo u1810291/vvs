@@ -1,0 +1,5 @@
+mutation UpdateUserSettingsById($id: uuid!, $archived_at: timestamptz) {
+  update_user_settings_by_pk(pk_columns: {id: $id}, _set: {archived_at: $archived_at}) {
+    id
+  }
+}

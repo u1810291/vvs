@@ -1,5 +1,5 @@
 import Button from 'components/Button'
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {useTranslation} from 'react-i18next';
 
 import {
@@ -60,13 +60,6 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
     setShowModal(() => !showModal);
   }
 
-  
-  console.log(list);
-
-  useEffect(() => {
-    fetcher.mutate();
-  }, [showModal]);
-
   const formData = {
     object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true}),
     user_id: FORM_FIELD.TEXT({label: '', initial: userId, validator: () => true}),
@@ -81,12 +74,11 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
     setForm(resetForm);
     
     // refetch
-    fetcher.mutate();
+    // fetcher.mutate();
   }
 
   // 
   const assign = () => {
-    console.log('assign');
     isFunction(assignRef.current) && assignRef.current();
     toggleModal();
     resetPage();
@@ -94,7 +86,7 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
 
   const remove = (e) => { 
     if (!confirm('Are you sure you want to delete?')) return;
-    
+
     isFunction(removeRef.current) && removeRef.current({user_id: userId, object_id: e.target.id});
     resetPage();
   }
@@ -128,7 +120,7 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
         </Table.Head>
         <Table.Body>
           {list.map((r, index) => (
-            <Table.Tr key={r.id}>
+            <Table.Tr key={r.object.id}>
               <Table.Td>{index + 1}</Table.Td>
               <Table.Td>{r.object.name}</Table.Td>
               <Table.Td>
@@ -137,7 +129,7 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
               </Table.Td>
               <Table.Td>{r.object.contract_object_no}</Table.Td>
               <Table.Td>
-                <Button.NoBg id={r.client.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
+                <Button.NoBg id={r.object.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
               </Table.Td>
             </Table.Tr>
           ))}

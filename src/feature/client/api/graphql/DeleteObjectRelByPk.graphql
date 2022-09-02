@@ -1,4 +1,3 @@
-
 mutation DeleteObjectRel($user_id: uuid!, $object_id: uuid!) {
   delete_object_user_rel_by_pk(user_id: $user_id, object_id: $object_id) {
     user_id

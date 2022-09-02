@@ -10,12 +10,10 @@ import {
   getProp,
   isEmpty,
   map,
-  // isTruthy,
   not,
   option,
   pipe,
   safe,
-  // identity,
 } from 'crocks';
 import InputGroup from 'components/atom/input/InputGroup';
 import KeyObjectList from '../components/KeyObjectList';
@@ -52,10 +50,6 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
         const crew = crews?.data?.find(c => c.id === v);
         return titleCase(crew?.name || crew?.id);
       }),
-      // onChange: (v) => {
-      //   console.log(v);
-      //   onChange(v);
-      // },
     }}),
   });
   
@@ -69,8 +63,6 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     removeRef,
   });
 
-  // console.log('form', form);
-  
 
   return (
     <section className={'flex flex-col'}>

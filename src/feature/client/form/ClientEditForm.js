@@ -2,7 +2,7 @@ import InputGroup from 'components/atom/input/InputGroup';
 import useClient from '../api/useClient';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {ClientListRoute} from '../routes';
-import {constant, or, isEmpty, getPathOr, identity, isSame} from 'crocks';
+import {constant, or, isEmpty, getPathOr, identity, isSame, flip} from 'crocks';
 import {hasLength, isEmail} from '@s-e/frontend/pred';
 import {lengthGt} from 'util/pred';
 import {useParams} from 'react-router-dom';
@@ -13,6 +13,12 @@ import CheckBox from 'components/atom/input/CheckBox';
 import Button from 'components/Button';
 import Nullable from 'components/atom/Nullable';
 import ClientObjectList from '../component/ClientObjectList';
+import {useAuth} from 'context/auth';
+import raw from 'raw.macro';
+import {useNotification} from 'feature/ui-notifications/context';
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
+import {errorToText} from 'api/buildApiHook';
 
 
 const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
@@ -76,8 +82,6 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     })
   });
 
-  // console.log(form);
-
   const api = useClient({
     id,
     formResult: result,
@@ -88,6 +92,34 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
       [isSame('the key \'message\' was not present'), constant(t('error.usernameAleardyExists'))]
     ]),
   });
+
+  const auth = useAuth();
+  const _forgot = flip(auth.api)(raw('../api/graphql/ForgotPassword.graphql'));
+  const {notify} = useNotification();
+
+  const forgotPassword = () => {
+    if (!form['username']) return;
+
+    _forgot({userId: form['username']}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+    }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+    });
+  }
 
 
   return (
@@ -105,7 +137,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
             <CheckBox {...ctrl('is_send_report')} />
           </div>
           <div className=''>
-            <Button.Xs>{t`restore_password`}</Button.Xs>
+            <Button.Xs onClick={() => forgotPassword()}>{t`restore_password`}</Button.Xs>
           </div>
         </div>
         <aside className='border-l border-gray-border min-w-fit'>

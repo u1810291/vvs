@@ -5,8 +5,8 @@ import raw from 'raw.macro';
 
 
 export default createUseOne({
-  createGraphql: raw('./graphql/AssignObject.graphql'),
-  deleteGraphQl: raw('./graphql/DeleteObjectRel.graphql'),
+  createGraphql: raw('./graphql/AssignObjectToClient.graphql'),
+  deleteGraphQl: raw('./graphql/DeleteObjectRelByPk.graphql'),
   asyncMapToApi: pipe(
     pick([
       'object_id', 

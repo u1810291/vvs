@@ -13,12 +13,10 @@ import {
   option,
   constant,
   isFunction,
-  // maybeToAsync,
 } from 'crocks';
 import Table from 'components/Table';
 import Modal from 'components/atom/Modal';
 import Nullable from 'components/atom/Nullable';
-// import SelectBox from 'components/atom/input/SelectBox';
 import useResultForm from 'hook/useResultForm';
 import {FORM_FIELD} from 'hook/useResultForm';
 import {titleCase} from '@s-e/frontend/transformer/string';
@@ -26,7 +24,6 @@ import {useObjects} from 'feature/object/api';
 import InputGroup from 'components/atom/input/InputGroup';
 import {KeyBoxEditRoute} from '../routes';
 import {generatePath} from 'react-router-dom';
-import {useNavigate} from 'react-router-dom';
 import ComboBox from 'components/atom/input/ComboBox';
 
 
@@ -47,7 +44,6 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   const {t: tf} = useTranslation('keybox', {keyPrefix: 'form'});
   const {t: ts} = useTranslation('keybox', {keyPrefix: 'status'});
   const {t} = useTranslation('keybox', {keyPrefix: 'list.column'});
-  const nav = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -67,22 +63,28 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
 
   const {ctrl, result, form, setForm} = useResultForm(formData);
 
+
   const resetPage = () => {
-    // reset form
-    const resetForm = {...form};
-    resetForm['set_name'] = '';
-    resetForm['object_id'] = '';
-    setForm(resetForm);
-    
-    // refetch
-    fetcher.mutate();
+    const theForm = {...form};
+    theForm['set_name'] = '';
+    theForm['object_id'] = '';
+    setForm(theForm);
+
+    // console.log('before mutate', list);
+    // console.log(fetcher);
+    fetcher.mutate().then((v) => {
+      // console.log('after mutate', v, list);
+    });
   }
 
   // 
   const assign = () => {
+    console.log('before', list);
     isFunction(assignRef.current) && assignRef.current();
     toggleModal();
     resetPage();
+
+    // console.log('after', list);
   };
 
   const remove = (e) => { 
@@ -101,6 +103,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     successRedirectPath: generatePath(KeyBoxEditRoute.props.path, {id: boxId}),
   })
 
+  // console.log('list', fetcher?.data);
 
   return (
     <div className='flex flex-col w-4/6 p-6'>
@@ -143,8 +146,6 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
           setOpen={toggleModal}
         >
           <div className='flex flex-col'>
-            {/* <h3>Assign an Object</h3> */}
-            
             <div className='w-full flex flex-row space-x-2'>
               <InputGroup className={'w-1/2'} inputClassName={'h-[32px]'} {...ctrl('set_name')} />
 

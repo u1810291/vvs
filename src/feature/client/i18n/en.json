@@ -14,5 +14,9 @@
       "phone_number": "Phone number",
       "email": "Email"
     }
+  },
+  "edit": {
+    "success": "Success",
+    "apiError": "Error"
   }
 }
