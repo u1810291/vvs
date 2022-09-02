@@ -1,0 +1,5 @@
+mutation UploadImage($object_id: uuid!, $src: String!) {
+  insert_object_image_one(object: {src: $src, object_id: $object_id}) {
+    id
+  }
+}

@@ -28,5 +28,9 @@ query ObjectById ($id: uuid!) {
       user_type
       user_id
     }
+    images {
+      id
+      src
+    }
   }
 }

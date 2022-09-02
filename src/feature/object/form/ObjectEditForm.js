@@ -6,13 +6,23 @@ import SelectBox from 'components/atom/input/SelectBox';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {ObjectListRoute} from '../routes';
-import {constant, map, getPath, pipe, not, isEmpty, chain, safe, curry, isArray,} from 'crocks';
+import {constant, map, getPath, pipe, not, isEmpty, chain, safe, curry, isArray, flip, identity,} from 'crocks';
 import {getName} from 'feature/user/utils';
 import {hasLength} from '@s-e/frontend/pred';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useCity, useObject} from '../api';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import Button from 'components/Button';
+import {useAuth} from 'context/auth';
+import {useNotification} from 'feature/ui-notifications/context';
+import raw from 'raw.macro';
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
+import {errorToText} from 'api/buildApiHook';
+
+
+
 
 const detailsOf = curry((
   detailsProps,
@@ -29,6 +39,7 @@ const ObjectEditForm = ({saveRef}) => {
   const params = useParams();
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
   const {t: tc} = useTranslation('enum', {keyPrefix: 'city'});
+
   const {ctrl, result, form, setForm} = useResultForm({
     address: FORM_FIELD.TEXT({label: t`field.address`, validator: () => true}),
     city: FORM_FIELD.TEXT({label: t`field.city`, validator: () => true, props: {
@@ -57,16 +68,89 @@ const ObjectEditForm = ({saveRef}) => {
     feedback_sla_time_in_min: FORM_FIELD.TEXT({initial: '15', label: t`field.feedback_sla_time_in_min`, validator: () => true}),
   });
 
-
   const api = useObject({
     ...params,
     formResult: result,
     saveRef,
+    form,
     setForm,
     successRedirectPath: ObjectListRoute.props.path,
   });
-
+  
   const cities = useCity(true);
+
+
+  const auth = useAuth();
+  const _uploadImage = flip(auth.api)(raw('../api/graphql/UploadImage.graphql'));
+  const _removeImage = flip(auth.api)(raw('../api/graphql/RemoveImage.graphql'));
+  const {notify} = useNotification();
+
+  const getBase64 = (file, cb) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+        cb(reader.result)
+    };
+    reader.onerror = function (error) {
+        console.log('Error: ', error);
+    };
+  }
+
+  const uploadImage = () => {
+    document.getElementById('chooseImage').click();
+  }
+
+  const onFileChoose = (event) => {
+    const file = event.target.files[0];
+
+    getBase64(file, (result) => {
+      _uploadImage({object_id: params.id, src: result}).fork((error) => {
+        notify(
+          <NotificationSimple
+            Icon={XCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+            heading={t`apiError`}
+          >
+            {errorToText(identity, error)}
+          </NotificationSimple>
+        )
+      }, () => {
+        notify(
+          <NotificationSimple
+            Icon={CheckCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+            heading={t`success`}
+            />
+        );
+      });
+    })
+  }
+
+  const removeImage = (e) => {
+    if (!confirm('Are you sure you want to delete?')) return;
+  
+    _removeImage({id: e.target.id}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+    }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+    })
+  }
+
+
 
   return (
     <section className={'flex flex-col lg:flex-row lg:min-h-full'}>
@@ -103,6 +187,32 @@ const ObjectEditForm = ({saveRef}) => {
           <TextAreaInputGroup inputClassName='min-h-[12.75rem]' className='w-full lg:w-1/2 h-full' {...ctrl('description')} rows={9}/>
         </div>
 
+        {/* Object photos */}
+        <div className='p-6 flex flex-col space-y-8 w-1/2'>
+          <h2 className='font-bold text-xl'>{t('object_photos')}</h2>
+
+          <div className='grid grid-cols-4 gap-4'>
+            {form['images']?.map(img => (
+              <div key={img.id} className={'flex flex-col items-end'}>
+                <Button.NoBg id={img.id} onClick={removeImage} className={'w-fit text-red-500 '}>{t('delete')}</Button.NoBg>
+                <img src={img.src} />
+              </div>
+            ))}
+          </div>
+
+          <div className='flex justify-end w-full'>
+            <input
+              id='chooseImage'
+              type='file'
+              name='image'
+              onChange={onFileChoose}
+              hidden={true}
+            />
+            <Button.Nd onClick={uploadImage}>{t('upload_photo')}</Button.Nd>
+          </div>
+        </div>            
+        
+        {/* Object settings */}
         <div className='p-6 flex flex-col space-y-8'>
           <h2 className='font-bold text-xl'>{t('feedback_settings')}</h2>
 

@@ -134,7 +134,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
 
 
   useEffect(() => {
-    api.mutate()
+    // api.mutate()
   }, [queryParams]);
 
   return {

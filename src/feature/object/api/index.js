@@ -31,7 +31,7 @@ export const useObjects = createUseWhereList({
 })
 
 export const useObject = createUseOne({
-  getGraphQl: raw('./graphql/GetObject.graphql'),
+  getGraphQl: raw('./graphql/GetObjectData.graphql'),
   createGraphql: raw('./graphql/CreateObject.graphql'),
   updateGraphQl: raw('./graphql/UpdateObjectId.graphql'),
   mapFromApiUsingAuth: true,
