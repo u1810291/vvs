@@ -21,6 +21,8 @@ import {
   getProp,
   Maybe,
   getPath,
+  // tap,
+  // chain,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 
@@ -36,6 +38,7 @@ import {useFilter} from 'hook/useFilter';
 import DynamicStatus from 'feature/permission/component/PermissionStatus';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
 import {useDriverDropdown} from 'feature/driver/api/useDrivers';
+import {format} from 'date-fns';
 
 
 const getColumn = curry((t, Component, key, mapper, status, styles) => ({
@@ -84,23 +87,23 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
   const tableColumns = [
     c('id', pipe(getProp('id')), false, null),
-    c('created_at', pipe(getProp('created_at')), false, null),
+    c('created_at', pipe(getProp('created_at'), map(d => format(new Date(d), 'Y-MM-dd HH:mm'))), true, null),
     c('request_id', pipe(getProp('request_id')), true, null),
     cs('status', pipe(getProp('status')), true, null),
     c('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
-    c('driver_name', pipe(getPath(['crew', 'driver_name'])), true, 'text-steel'),
-    c('updated_at', pipe(getProp('updated_at')), false, null),
+    c('crew.driver_user_id', pipe(getPath(['crew', 'driver_user_id']), map(d => driverDropdown?.find(dr => dr.value === d)?.name)), true, 'text-steel'),
   ];
 
   const filtersData = [
     {key: 'created_at', label: 'Created_at', filter: 'date'},
-    {key: 'reason', label: 'Reason', filter: 'autocomplete', values: crewRequestDropdown || [], displayValue: (v) => {
+    {key: 'request_id', label: 'Reason', filter: 'autocomplete', values: crewRequestDropdown || [], displayValue: (v) => {
       return crewRequestDropdown?.find(c => c.value === v)?.name;
     }},
+    {key: 'status', label: 'Status', filter: 'multiselect', values: ['ALLOWED', 'CANCELLED', 'COMPLETE', 'ASKED', 'REJECTED']},
     {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || [], displayValue: (v) => {
       return crewDropdown?.find(c => c.value === v)?.name;
     }},
-    {key: 'driver_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
+    {key: 'crew.driver_user_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
       return driverDropdown?.find(d => d.value === v)?.name;
     }},
   ];

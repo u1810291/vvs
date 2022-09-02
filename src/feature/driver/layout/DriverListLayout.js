@@ -63,6 +63,13 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
 
   const api = useDrivers();
 
+  const filtersData = [
+    {key: 'fullName', label: 'Name Surname', filter: 'autocomplete', values: []},
+    {key: 'username', label: 'Email', filter: 'autocomplete', values: []},
+    {key: 'phone', label: 'Phone', filter: 'autocomplete', values: []},
+    {key: 'object', label: 'Object', filter: 'autocomplete', values: []},
+  ]
+
   return {
     list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
