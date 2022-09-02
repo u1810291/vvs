@@ -37,7 +37,7 @@ import Button from 'components/Button';
 import {useFilter} from 'hook/useFilter';
 import DynamicStatus from 'feature/permission/component/PermissionStatus';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
-import {useDriverDropdown} from 'feature/driver/api/useDrivers';
+import useDriversDropdown from 'feature/driver/api/useDriversDropdown';
 import {format} from 'date-fns';
 
 
@@ -83,7 +83,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
   const {data: crewRequestDropdown} = useCrewRequestDropdown();
   const {data: crewDropdown} = useCrewDropdown();
-  const {data: driverDropdown} = useDriverDropdown();
+  const {data: driverDropdown} = useDriversDropdown();
 
   const tableColumns = [
     c('id', pipe(getProp('id')), false, null),

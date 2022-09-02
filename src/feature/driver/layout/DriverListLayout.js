@@ -22,7 +22,8 @@ import {
   // propSatisfies, 
   // pick, 
 } from 'crocks';
-import useDrivers, {useDriverDropdown} from '../api/useDrivers';
+import useDrivers from '../api/useDrivers';
+import useDriversDropdown from '../api/useDriversDropdown';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import Button from 'components/Button';
@@ -93,7 +94,13 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   }
 
   
-  const {data: driverDropdown} = useDriverDropdown();
+  const api = useDrivers();
+  const dropDown = useDriversDropdown();
+  
+  console.log(api?.data, dropDown?.data);
+
+
+
 
   const tableColumns = [
     c('id', pipe(getProp('id')), false, null),
@@ -124,7 +131,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     filtersData
   );
 
-  const api = useDrivers();
+
 
   useEffect(() => {
     api.mutate()
