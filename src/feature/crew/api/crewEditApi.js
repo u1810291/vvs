@@ -45,6 +45,7 @@ export const useCrew = createUseOne({
       'id',
       'name',
       'calendars',
+      'device_id',
       'abbreviation',
       'phone_number',
       'to_call_after',
@@ -54,6 +55,7 @@ export const useCrew = createUseOne({
     obj =>
       mapProps({
         name: mapToNullableString,
+        device_id: mapToNullableString,
         abbreviation: mapToNullableString,
         phone_number: mapToNullableString,
         to_call_after: mapToNullableString,
