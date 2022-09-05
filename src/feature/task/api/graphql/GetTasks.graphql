@@ -9,6 +9,14 @@ query GetTasks($where: events_bool_exp) {
     provider_id
     provider_name
     status
+    reason
     updated_at
+    crew {
+      name
+    }
+    object {
+      address
+      name
+    }
   }
 }
