@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
+// import {generatePath, Link} from 'react-router-dom';
 
 import {FilterIcon} from '@heroicons/react/solid';
 
@@ -9,6 +9,7 @@ import withPreparedProps from 'hoc/withPreparedProps';
 
 import {useAuth} from 'context/auth';
 import {useFilter} from 'hook/useFilter';
+import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import Button from 'components/Button';
@@ -17,7 +18,7 @@ import Breadcrumbs from 'components/Breadcrumbs';
 import DynamicStatus from 'components/atom/Status';
 
 import {useTasks} from 'feature/task/api';
-import {TaskEditRoute} from 'feature/task/routes';
+import {TaskCreateRoute} from 'feature/task/routes';
 import {BreachListRoute} from 'feature/breach/routes';
 import {DashboardEditRoute} from 'feature/dashboard/routes';
 import {PermissionListRoute} from 'feature/permission/routes';
@@ -55,21 +56,24 @@ const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
 
 const TaskListLayout = withPreparedProps(Listing, props => {
   const {api} = useAuth();
+  const nav = useNavigate();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('task', {keyPrefix: 'list.header'});
   const {t: ts} = useTranslation('task', {keyPrefix: 'list.status'});
   const {t: tc} = useTranslation('task', {keyPrefix: 'list.column'});
 
   const c = useMemo(() => getColumn(tc, props => (
-    <Link className={props?.className} to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
-      {props?.children}
-    </Link>
+    props?.children
+    // <Link className={props?.className} to={generatePath(TaskCreateRoute.props.path, {id: props?.id})}>
+    //
+    // </Link>
   )), [tc]);
 
   const cs = useMemo(() => getColumn(tc, props => (
-    <Link to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
-      <DynamicStatus t={'task'} className={'w-20'} status={props?.status}/>
-    </Link>
+    <DynamicStatus t={'task'} className={'w-20'} status={props?.status}/>
+    // <Link to={generatePath(TaskCreateRoute.props.path, {id: props?.id})}>
+    //
+    // </Link>
   )), [tc]);
 
   const bullet = '\u2022';
@@ -160,6 +164,9 @@ const TaskListLayout = withPreparedProps(Listing, props => {
           </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
+    ),
+    buttons: (
+      <Button.Pxl onClick={() => nav(TaskCreateRoute.props.path)}>{th('create')}</Button.Pxl>
     ),
     innerlinks: (
       <Innerlinks>
