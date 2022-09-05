@@ -330,6 +330,7 @@ type crew {
         "filter the rows returned"
         where: crew_calendar_bool_exp
     ): crew_calendar_aggregate!
+    device_id: String
     driver_user_id: uuid
     id: uuid!
     is_assigned_automatically: Boolean!
@@ -619,6 +620,7 @@ type crew_calendar_variance_fields {
 "aggregate max on columns"
 type crew_max_fields {
     abbreviation: String
+    device_id: String
     driver_user_id: uuid
     id: uuid
     name: String
@@ -629,6 +631,7 @@ type crew_max_fields {
 "aggregate min on columns"
 type crew_min_fields {
     abbreviation: String
+    device_id: String
     driver_user_id: uuid
     id: uuid
     name: String
@@ -1040,10 +1043,14 @@ type event_type_mutation_response {
 "columns and relationships of \"events\""
 type events {
     created_at: timestamptz!
+    "An object relationship"
+    crew: crew
     crew_id: uuid
     description: String
     id: uuid!
     name: String
+    "An object relationship"
+    object: object
     object_id: uuid
     provider_id: Int
     provider_name: provider_enum
@@ -4443,7 +4450,7 @@ type mutation_root {
         "updates to execute, in order"
         updates: [task_type_updates!]!
     ): [task_type_mutation_response]
-    update_user(firstName: String, id: uuid, lastName: String, password: String, username: String): UserOutput
+    update_user(firstName: String, fullName: String, id: uuid, lastName: String, last_ping: timestamp, mobilePhone: String, password: String, username: String): UserOutput
     "update data of the table: \"user_settings\""
     update_user_settings(
         "sets the columns of the filtered rows to the given values"
@@ -7146,6 +7153,7 @@ type uploadQuery {
 
 "columns and relationships of \"user_settings\""
 type user_settings {
+    archived_at: timestamptz
     created_at: timestamptz!
     "An object relationship"
     crew: crew
@@ -7153,8 +7161,10 @@ type user_settings {
     "UUID matching FusionAuth user.id"
     id: uuid!
     imei: String
+    is_company_admin: Boolean
     "A computed field, executes function \"is_user_online\""
     is_online: Boolean
+    is_send_report: Boolean
     last_ping: timestamp
     updated_at: timestamptz!
 }
@@ -7174,6 +7184,7 @@ type user_settings_aggregate_fields {
 
 "aggregate max on columns"
 type user_settings_max_fields {
+    archived_at: timestamptz
     created_at: timestamptz
     crew_id: uuid
     "UUID matching FusionAuth user.id"
@@ -7185,6 +7196,7 @@ type user_settings_max_fields {
 
 "aggregate min on columns"
 type user_settings_min_fields {
+    archived_at: timestamptz
     created_at: timestamptz
     crew_id: uuid
     "UUID matching FusionAuth user.id"
@@ -7512,6 +7524,8 @@ enum crew_calendar_update_column {
 
 "unique or primary key constraints on table \"crew\""
 enum crew_constraint {
+    "unique or primary key constraint on columns \"device_id\""
+    crew_device_id_key
     "unique or primary key constraint on columns \"id\""
     monas_crew_related_pkey
 }
@@ -7619,6 +7633,8 @@ enum crew_select_column {
     "column name"
     abbreviation
     "column name"
+    device_id
+    "column name"
     driver_user_id
     "column name"
     id
@@ -7670,6 +7686,8 @@ enum crew_status_update_column {
 enum crew_update_column {
     "column name"
     abbreviation
+    "column name"
+    device_id
     "column name"
     driver_user_id
     "column name"
@@ -9706,6 +9724,8 @@ enum user_settings_constraint {
 "select columns of table \"user_settings\""
 enum user_settings_select_column {
     "column name"
+    archived_at
+    "column name"
     created_at
     "column name"
     crew_id
@@ -9713,6 +9733,10 @@ enum user_settings_select_column {
     id
     "column name"
     imei
+    "column name"
+    is_company_admin
+    "column name"
+    is_send_report
     "column name"
     last_ping
     "column name"
@@ -9722,6 +9746,8 @@ enum user_settings_select_column {
 "update columns of table \"user_settings\""
 enum user_settings_update_column {
     "column name"
+    archived_at
+    "column name"
     created_at
     "column name"
     crew_id
@@ -9729,6 +9755,10 @@ enum user_settings_update_column {
     id
     "column name"
     imei
+    "column name"
+    is_company_admin
+    "column name"
+    is_send_report
     "column name"
     last_ping
     "column name"
@@ -10146,6 +10176,7 @@ input crew_bool_exp {
     abbreviation: String_comparison_exp
     breaches: crew_breach_bool_exp
     calendars: crew_calendar_bool_exp
+    device_id: String_comparison_exp
     driver_user_id: uuid_comparison_exp
     id: uuid_comparison_exp
     is_assigned_automatically: Boolean_comparison_exp
@@ -10400,6 +10431,7 @@ input crew_insert_input {
     abbreviation: String
     breaches: crew_breach_obj_rel_insert_input
     calendars: crew_calendar_arr_rel_insert_input
+    device_id: String
     driver_user_id: uuid
     id: uuid
     is_assigned_automatically: Boolean
@@ -10433,6 +10465,7 @@ input crew_order_by {
     abbreviation: order_by
     breaches: crew_breach_order_by
     calendars_aggregate: crew_calendar_aggregate_order_by
+    device_id: order_by
     driver_user_id: order_by
     id: order_by
     is_assigned_automatically: order_by
@@ -10673,6 +10706,7 @@ input crew_request_updates {
 "input type for updating data in table \"crew\""
 input crew_set_input {
     abbreviation: String
+    device_id: String
     driver_user_id: uuid
     id: uuid
     is_assigned_automatically: Boolean
@@ -11013,10 +11047,12 @@ input events_bool_exp {
     _not: events_bool_exp
     _or: [events_bool_exp!]
     created_at: timestamptz_comparison_exp
+    crew: crew_bool_exp
     crew_id: uuid_comparison_exp
     description: String_comparison_exp
     id: uuid_comparison_exp
     name: String_comparison_exp
+    object: object_bool_exp
     object_id: uuid_comparison_exp
     provider_id: Int_comparison_exp
     provider_name: provider_enum_comparison_exp
@@ -11032,10 +11068,12 @@ input events_inc_input {
 "input type for inserting data into table \"events\""
 input events_insert_input {
     created_at: timestamptz
+    crew: crew_obj_rel_insert_input
     crew_id: uuid
     description: String
     id: uuid
     name: String
+    object: object_obj_rel_insert_input
     object_id: uuid
     provider_id: Int
     provider_name: provider_enum
@@ -11053,10 +11091,12 @@ input events_on_conflict {
 "Ordering options when selecting data from \"events\"."
 input events_order_by {
     created_at: order_by
+    crew: crew_order_by
     crew_id: order_by
     description: order_by
     id: order_by
     name: order_by
+    object: object_order_by
     object_id: order_by
     provider_id: order_by
     provider_name: order_by
@@ -13388,30 +13428,37 @@ input user_settings_bool_exp {
     _and: [user_settings_bool_exp!]
     _not: user_settings_bool_exp
     _or: [user_settings_bool_exp!]
+    archived_at: timestamptz_comparison_exp
     created_at: timestamptz_comparison_exp
     crew: crew_bool_exp
     crew_id: uuid_comparison_exp
     id: uuid_comparison_exp
     imei: String_comparison_exp
+    is_company_admin: Boolean_comparison_exp
     is_online: Boolean_comparison_exp
+    is_send_report: Boolean_comparison_exp
     last_ping: timestamp_comparison_exp
     updated_at: timestamptz_comparison_exp
 }
 
 "input type for inserting data into table \"user_settings\""
 input user_settings_insert_input {
+    archived_at: timestamptz
     created_at: timestamptz
     crew: crew_obj_rel_insert_input
     crew_id: uuid
     "UUID matching FusionAuth user.id"
     id: uuid
     imei: String
+    is_company_admin: Boolean
+    is_send_report: Boolean
     last_ping: timestamp
     updated_at: timestamptz
 }
 
 "order by max() on columns of table \"user_settings\""
 input user_settings_max_order_by {
+    archived_at: order_by
     created_at: order_by
     crew_id: order_by
     "UUID matching FusionAuth user.id"
@@ -13423,6 +13470,7 @@ input user_settings_max_order_by {
 
 "order by min() on columns of table \"user_settings\""
 input user_settings_min_order_by {
+    archived_at: order_by
     created_at: order_by
     crew_id: order_by
     "UUID matching FusionAuth user.id"
@@ -13441,12 +13489,15 @@ input user_settings_on_conflict {
 
 "Ordering options when selecting data from \"user_settings\"."
 input user_settings_order_by {
+    archived_at: order_by
     created_at: order_by
     crew: crew_order_by
     crew_id: order_by
     id: order_by
     imei: order_by
+    is_company_admin: order_by
     is_online: order_by
+    is_send_report: order_by
     last_ping: order_by
     updated_at: order_by
 }
@@ -13459,11 +13510,14 @@ input user_settings_pk_columns_input {
 
 "input type for updating data in table \"user_settings\""
 input user_settings_set_input {
+    archived_at: timestamptz
     created_at: timestamptz
     crew_id: uuid
     "UUID matching FusionAuth user.id"
     id: uuid
     imei: String
+    is_company_admin: Boolean
+    is_send_report: Boolean
     last_ping: timestamp
     updated_at: timestamptz
 }
