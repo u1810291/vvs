@@ -10,7 +10,7 @@ import {useCrew} from 'feature/crew/api/crewEditApi';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
-import DynamicStatus from '../component/CrewStatus';
+import DynamicStatus from '../../../components/atom/Status';
 
 const CrewCreateLayout = () => {
   const saveRef = useRef(identity);
