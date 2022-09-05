@@ -4,16 +4,34 @@
   },
   "breadcrumbs": {
     "tasks": "Tasks",
-    "allData": "All Data"
+    "all_data": "All Data"
   },
   "list": {
+    "header": {
+      "dashboard": "Dashboard",
+      "tasks": "Tasks",
+      "permissions": "Permissions",
+      "breaches": "Breaches"
+    },
+    "status": {
+      "YES": "Yes",
+      "NO": "No",
+      "NEW": "New",
+      "WAIT_FOR_CREW_APPROVAL": "Wait for crew Approval",
+      "ON_THE_ROAD": "On the road",
+      "INSPECTION": "Inspection",
+      "INSPECTION_DONE": "Inspection Done",
+      "FINISHED": "Finished",
+      "CANCELLED": "Cancelled",
+      "-": "-"
+    },
     "column": {
       "id": "ID",
       "name": "Name",
       "status": "Status",
-      "received": "Received",
-      "object_name": "Object",
-      "crew_name": "Crew",
+      "created_at": "Received",
+      "object": "Object",
+      "crew": "Crew",
       "approximate_time": "The approximate time",
       "response_time": "Response time",
       "time_at_object": "Time at object",
