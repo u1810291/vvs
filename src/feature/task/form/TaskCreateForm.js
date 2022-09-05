@@ -21,7 +21,7 @@ import {lengthGt} from '../../../util/pred';
 import {Marker} from '@react-google-maps/api';
 import SelectBox from '../../../components/atom/input/SelectBox';
 
-const TaskEditForm = () => {
+const TaskCreateForm = () => {
   const {t} = useLanguage();
   const {onMapLoad} = useGoogleApiContext();
   const {getCoordsByAddress} = useGeocode();
@@ -162,4 +162,4 @@ const TaskEditForm = () => {
   );
 };
 
-export default TaskEditForm;
+export default TaskCreateForm;
