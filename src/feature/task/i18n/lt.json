@@ -6,8 +6,17 @@
     "tasks": "Užduotys",
     "all_data": "Visi duomenys"
   },
+  "create": {
+    "header": {
+      "button": {
+        "save": "Sukurti užduotį",
+        "cancel": "Atšaukti"
+      }
+    }
+  },
   "list": {
     "header": {
+      "create": "Sukurti užduotį",
       "dashboard": "Pultas",
       "tasks": "Užduotys",
       "permissions": "Leidimai",

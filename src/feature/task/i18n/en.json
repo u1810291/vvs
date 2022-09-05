@@ -6,8 +6,17 @@
     "tasks": "Tasks",
     "all_data": "All Data"
   },
+  "create": {
+    "header": {
+      "button": {
+        "save": "Create Task",
+        "cancel": "Cancel"
+      }
+    }
+  },
   "list": {
     "header": {
+      "create": "Create Task",
       "dashboard": "Dashboard",
       "tasks": "Tasks",
       "permissions": "Permissions",
