@@ -1,10 +1,23 @@
-import env from '../../../env';
+import env from 'env';
+import raw from 'raw.macro';
+
+import {t} from 'i18n';
+
+import {createUseList} from 'api/buildApiHook';
+
 import Async from 'crocks/Async';
+import maybeToAsync from 'crocks/Async/maybeToAsync';
+
 import {fetchGql} from '@s-e/frontend/fetch';
 import {caseMap} from '@s-e/frontend/flow-control';
-import {lengthGt} from '../../../util/pred';
-import {getProp, tap, pipe, chain, safe, option, map, isString, getPath} from 'crocks';
-import {t} from '../../../i18n';
+
+import {lengthGt} from 'util/pred';
+
+import {safe, getProp, getPath} from 'crocks';
+import {pipe, tap} from 'crocks/helpers';
+import {not, ifElse} from 'crocks/logic';
+import {chain, map, option} from 'crocks/pointfree';
+import {isString, isEmpty} from 'crocks/predicates';
 
 const {Rejected} = Async;
 
@@ -95,3 +108,13 @@ export const asyncCreateEvent = ({token, name, description, status, crewID, obje
     caseMap(responseHandling.onUnknownState, [[responseHandling.serviceDown.check, responseHandling.serviceDown.output]]),
   );
 };
+
+export const useObjectsDropdown = createUseList({
+  graphQl: raw('./graphql/GetAllObjects.graphql'),
+  asyncMapFromApi: pipe(
+    maybeToAsync('object prop was expected', getProp('object')),
+    map(ifElse(isEmpty, () => [], map(a => ({value: a.id, name: a.name})))),
+    safe(not(isEmpty)),
+    option([])
+  )
+});
