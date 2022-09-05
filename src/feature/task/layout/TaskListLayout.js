@@ -1,42 +1,40 @@
 import React, {useEffect, useMemo} from 'react';
 import {generatePath, Link} from 'react-router-dom';
-import Listing from '../../../layout/ListingLayout';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import withPreparedProps from '../../../hoc/withPreparedProps';
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
-import Button from 'components/Button';
 
-import {
-  chain,
-  curry,
-  getProp,
-  getPropOr,
-  identity,
-  isArray,
-  isEmpty,
-  map,
-  Maybe,
-  not,
-  objOf,
-  pipe,
-  safe
-} from 'crocks';
-import {alt} from 'crocks/pointfree';
-
-import {TaskEditRoute} from '../routes';
 import {FilterIcon} from '@heroicons/react/solid';
+
+import Listing from 'layout/ListingLayout';
+
+import withPreparedProps from 'hoc/withPreparedProps';
+
+import {useAuth} from 'context/auth';
 import {useFilter} from 'hook/useFilter';
-import {PermissionListRoute} from 'feature/permission/routes';
-import DashboardRoute from 'feature/dashboard/routes';
+import {useTranslation} from 'react-i18next';
+
+import Button from 'components/Button';
 import Innerlinks from 'components/Innerlinks';
+import Breadcrumbs from 'components/Breadcrumbs';
+import DynamicStatus from 'components/atom/Status';
+
+import {useTasks} from 'feature/task/api';
+import {TaskEditRoute} from 'feature/task/routes';
 import {BreachListRoute} from 'feature/breach/routes';
-import {useTasks} from '../api';
+import {DashboardEditRoute} from 'feature/dashboard/routes';
+import {PermissionListRoute} from 'feature/permission/routes';
+import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
 
+import {Maybe, safe, getProp} from 'crocks';
+import {not} from 'crocks/logic';
+import {constant} from 'crocks/combinators';
+import {alt, chain, map, option} from 'crocks/pointfree';
+import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
+import {isArray, isObject, isString, isEmpty, hasProps} from 'crocks/predicates';
 
+import {format} from 'date-fns';
 
+const {Just} = Maybe;
 
-const getColumn = curry((t, Component, key, pred, mapper, status) => ({
+const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
   Component,
   headerText: t(key),
   key,
@@ -47,76 +45,117 @@ const getColumn = curry((t, Component, key, pred, mapper, status) => ({
     map(mapper),
     map(objOf('children')),
     map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
+    alt(Just(item))
   )(item),
+  styles: pipe(
+    safe(isString),
+    option(''),
+  )(styles)
 }));
 
-const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
-
-
-// Tasks List Layout
 const TaskListLayout = withPreparedProps(Listing, props => {
   const {api} = useAuth();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
-  const {t} = useTranslation('task', {keyPrefix: 'list.column'});
-  const {t: tp} = useTranslation('task');
+  const {t: th} = useTranslation('task', {keyPrefix: 'list.header'});
+  const {t: ts} = useTranslation('task', {keyPrefix: 'list.status'});
+  const {t: tc} = useTranslation('task', {keyPrefix: 'list.column'});
 
-  const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
+  const c = useMemo(() => getColumn(tc, props => (
+    <Link className={props?.className} to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
       {props?.children}
     </Link>
-  )), [t]);
+  )), [tc]);
 
+  const cs = useMemo(() => getColumn(tc, props => (
+    <Link to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
+      <DynamicStatus t={'task'} className={'w-20'} status={props?.status}/>
+    </Link>
+  )), [tc]);
+
+  const bullet = '\u2022';
+  const nullToStr = e => !e ? '-' : e;
+  const boolToStr = e => e ? ts`YES` : ts`NO`;
+  const getName = pipe(getProp('name'), option('-'));
+  const concatNameAdress = pipe(
+    safe(hasProps(['name', 'address'])),
+    map(({name, address}) => `${name} ${bullet} ${address}`),
+    option('-')
+  );
+  const formatDate = pipe(
+    safe(not(isEmpty)),
+    map(created_at => format(new Date(created_at), 'Y-MM-d HH:mm')),
+    option('-')
+  );
+
+  const {data: objects} = useObjectsDropdown();
 
   const tableColumns = [
-    c('received', ne, identity, true),
-    c('object_name', ne, identity, true),
-    c('name', ne, identity, true),
-    c('crew', ne, identity, true),
-    c('approximate_time', ne, identity, true),
-    c('response_time', ne, identity, true),
-    c('time_at_object', ne, identity, true),
-    c('status', ne, identity, true),
-    c('reason', ne, identity, true),
+    c('id', constant(true), nullToStr, false, 'text-regent'),
+    c('created_at', constant(true), formatDate, true, 'text-regent'),
+    c('object', constant(true), concatNameAdress, true, 'text-regent'),
+    c('name', constant(true), nullToStr, true, 'text-bluewood'),
+    c('crew', constant(true), getName, true, 'text-regent'),
+    // c('approximate_time', constant(true), boolToStr, true, 'text-regent'),
+    // c('response_time', constant(true), nullToStr, true, 'text-regent'),
+    // c('time_at_object', constant(true), nullToStr, true, 'text-regent'),
+    cs('status', constant(true), nullToStr, true, null),
+    c('reason', constant(true), nullToStr, true, 'text-bluewood')
   ];
 
   const filtersData = [
-    {key: 'received', label: 'Date from-to', filter: 'date'},
-    {key: 'operator', label: 'Operator', filter: 'multiselect', values: []},
-    {key: 'object', label: 'Object', filter: 'multiselect', values: []},
-    {key: 'address', label: 'Object\'s address', filter: 'text'},
-    {key: 'type', label: 'Type', filter: 'multiselect', values: []},
-    {key: 'groups', label: 'Groups (?)', filter: 'multiselect', values: []},
-    {key: 'status', label: 'Status', filter: 'multiselect', values: ['View Obj', 'Cancelled', 'New', 'Completed']},
-    {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
-    {key: 'crew', label: 'Crew', filter: 'multiselect', values: []},
-    {key: 'driver', label: 'Driver', filter: 'multiselect', values: []},
-    {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', values: ['True', 'False']},
-  ]
+    {key: 'created_at', label: tc('created_at'), filter: 'date'},
+    // {key: 'operator', label: 'Operator', filter: 'multiselect', values: []},
+    {
+      key: 'object',
+      label: tc('object'),
+      filter: 'autocomplete',
+      values: pipe(safe(not(isEmpty)), option([]))(objects),
+      displayValue: (v) => objects?.find(c => c.value === v)?.name
+    },
+    // {key: 'address', label: 'Object\'s address', filter: 'text'},
+    // {key: 'type', label: 'Type', filter: 'multiselect', values: []},
+    // {key: 'groups', label: 'Groups (?)', filter: 'multiselect', values: []},
+    {
+      key: 'status',
+      label: tc('status'),
+      filter: 'multiselect',
+      values: [
+        'NEW',
+        'WAIT_FOR_CREW_APPROVAL',
+        'ON_THE_ROAD',
+        'INSPECTION',
+        'INSPECTION_DONE',
+        'FINISHED',
+        'CANCELLED'
+      ]
+    },
+    // {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
+    // {key: 'crew', label: 'Crew', filter: 'multiselect', values: []},
+    // {key: 'driver', label: 'Driver', filter: 'multiselect', values: []},
+    // {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', values: ['True', 'False']},
+  ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
-    'task', 
+    'events',
     tableColumns,
     filtersData,
   );
 
   const list = useTasks({filters: queryParams});
-  
+
   useEffect(() => {
     list.mutate()
   }, [queryParams]);
 
-
   return {
-    list: safe(isArray, list?.data).option([]),
+    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`tasks`}</span></Breadcrumbs.Item>
         <Breadcrumbs.Item>
           <Button.NoBg onClick={toggleFilter}>
-            {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+            {defaultFilter.id ? defaultFilter.name : tb('all_data') }
             <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
           </Button.NoBg>
         </Breadcrumbs.Item>
@@ -124,10 +163,10 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     ),
     innerlinks: (
       <Innerlinks>
-        <Innerlinks.Item to={DashboardRoute.props.path}>{tp('Dashboard')}</Innerlinks.Item>
-        <Innerlinks.Item isCurrent={true}>{tp('Tasks')}</Innerlinks.Item>
-        <Innerlinks.Item to={PermissionListRoute.props.path}>{tp('Permissions')}</Innerlinks.Item>
-        <Innerlinks.Item to={BreachListRoute.props.path}>{tp('Breaches')}</Innerlinks.Item>
+        <Innerlinks.Item to={DashboardEditRoute.props.path}>{th('dashboard')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{th('tasks')}</Innerlinks.Item>
+        <Innerlinks.Item to={PermissionListRoute.props.path}>{th('permissions')}</Innerlinks.Item>
+        <Innerlinks.Item to={BreachListRoute.props.path}>{th('breaches')}</Innerlinks.Item>
       </Innerlinks>
     ),
     filters,
