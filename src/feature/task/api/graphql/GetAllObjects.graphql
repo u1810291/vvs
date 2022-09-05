@@ -1,0 +1,6 @@
+query GetAllObjects {
+    object {
+        id
+        name
+    }
+}
