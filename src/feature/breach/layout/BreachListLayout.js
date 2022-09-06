@@ -84,6 +84,11 @@ const BreachListLayout = withPreparedProps(Listing, props => {
       ), true, null
     ),
     column('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
+    column('driver_user_id', pipe(
+      getProp('driver_user_id'),
+      chain(safe(not(isEmpty))),
+      map(id => driverDropdown?.find(d => d.value === id)?.name)
+    ), true, 'text-steel'),
   ]
 
 

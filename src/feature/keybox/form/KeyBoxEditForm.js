@@ -17,9 +17,10 @@ import {
 } from 'crocks';
 import InputGroup from 'components/atom/input/InputGroup';
 import KeyObjectList from '../components/KeyObjectList';
-import Nullable from 'components/atom/Nullable';
-import {KeyBoxListRoute} from '../routes';
+// import Nullable from 'components/atom/Nullable';
+import {KeyBoxEditRoute, KeyBoxListRoute} from '../routes';
 import ComboBox from 'components/atom/input/ComboBox';
+import {hasLength} from '@s-e/frontend/pred';
 
 
 
@@ -44,23 +45,40 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
   const crews = useCrews({filters: {}});
 
   const {ctrl, result, form, setForm} = useResultForm({
-    set_name: FORM_FIELD.TEXT({label: tf`set_name`}),
-    crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, validator: () => true, props: {      
-      displayValue: displayValue((v) => {
-        const crew = crews?.data?.find(c => c.id === v);
-        return titleCase(crew?.name || crew?.id);
-      }),
-    }}),
+    set_name: FORM_FIELD.TEXT({
+      label: tf`set_name`, 
+      validator: hasLength,
+      message: t`validation.set_name`,
+      showValidationBelow: true,
+      props: {isRequired: constant(true)},
+    }),
+    crew_id: FORM_FIELD.TEXT({
+      label: tf`crew_id`, 
+      validator: hasLength,
+      message: t`validation.crew_id`,
+      showValidationBelow: true,
+      props: {
+        isRequired: constant(true),      
+        displayValue: displayValue((v) => {
+          const crew = crews?.data?.find(c => c.id === v);
+          return titleCase(crew?.name || crew?.id);
+        }),
+      }
+    }),
   });
+
+  // console.log({form});
   
   // save key box
   useKeyBox({
     id,
     formResult: result,
     setForm,
-    successRedirectPath: KeyBoxListRoute.props.path,
+    successRedirectPath: id ? KeyBoxListRoute.props.path : null,
     saveRef,
     removeRef,
+    editRedirectPath: KeyBoxEditRoute.props.path,
+    insertTableName: 'insert_object_key_box_one',
   });
 
 
@@ -92,9 +110,7 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
         </ComboBox>
       </div>
 
-      <Nullable on={id}>
-        <KeyObjectList boxId={id} assignRef={assignRef} removeRef={removeRelRef} />
-      </Nullable>
+      <KeyObjectList boxId={id} assignRef={assignRef} removeRef={removeRelRef} />
     </section>
   );
 }

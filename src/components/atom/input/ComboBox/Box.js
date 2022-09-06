@@ -40,6 +40,8 @@ const Box = ({
   displayValue = identity,
   multiple,
   placeholder,  
+  isRequired,
+  below,
   ...props
 }) => {
   // console.log('initial combobox value', value);
@@ -74,7 +76,12 @@ const Box = ({
 
   return (
     <Combobox as='div' value={value} onChange={onChangeValue} {...props}>
-      <Nullable on={labelText}><Label>{labelText}</Label></Nullable>
+      <Nullable on={labelText}>
+        <Label>
+          {labelText}
+          {isRequired && <span className={'text-red-500'}> * </span>}
+        </Label>
+      </Nullable>
       <InputContainer>
         <div className='flex flex-row relative'>
           <Input
@@ -104,6 +111,10 @@ const Box = ({
           {value?.toString().split(',').map((v) => (
             <Tag key={v.trim()} value={v.trim()} onDelete={onDeselect}>{displayValue(v.trim())}</Tag>
           ))}
+        </Nullable>
+
+        <Nullable on={below}>
+          {below}
         </Nullable>
       </InputContainer>
     </Combobox>

@@ -7,7 +7,7 @@ import {useAsyncEffect} from 'hook/useAsync';
 import {useAuth} from 'context/auth';
 import {useEffect} from 'react';
 import {useMemo} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
 import {useTranslation} from 'react-i18next';
 import {
@@ -38,6 +38,7 @@ import {
   safe,
   identity,
   curry,
+  // tap,
 } from 'crocks';
 
 export const mapToString = ifElse(
@@ -149,6 +150,8 @@ export const createUseOne = ({
   successRedirectPath,
   removeRef,
   errorMapper = identity,
+  insertTableName = null,
+  editRedirectPath = null,
 }) => {
   const nav = useNavigate();
   const {api, ...auth} = useAuth();
@@ -174,16 +177,17 @@ export const createUseOne = ({
   const update = useMemo(() => pipe(
     resultToAsync,
     map(a => ({...a, id})),
-    chain(asyncMapToApi),    
+    chain(asyncMapToApi),  
+    // chain(tap(console.log)),  
     chain(flip(api)(updateGraphQl))
-  ), [api]);
+  ), [api, id]);
 
   const remove = useMemo(() => pipe(
     resultToAsync,
     map(a => ({...a, id})),
     chain(asyncRemoveMapToApi),
     chain(flip(api)(deleteGraphQl))
-  ), [api]);
+  ), [api, id]);
 
   useEffect(() => {
     if (isFunction(setForm)) setForm(getSwr.data);
@@ -191,17 +195,20 @@ export const createUseOne = ({
 
   useEffect(() => {
     if (!(hasProp('current', saveRef) && formResult)) return;
+    
     saveRef.current = (callback) => (id ? update(formResult) : create(formResult)).fork(
-      error => notify(
-        <NotificationSimple
-          Icon={XCircleIcon}
-          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
-          heading={t`apiError`}
-        >
-          {errorToText(errorMapper, error)}
-        </NotificationSimple>
-      ),
-      () => {
+      error => {
+        notify(
+          <NotificationSimple
+            Icon={XCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+            heading={t`apiError`}
+          >
+            {errorToText(errorMapper, error)}
+          </NotificationSimple>
+        )
+      },
+      (pk) => {
         notify(
           <NotificationSimple
             Icon={CheckCircleIcon}
@@ -209,6 +216,9 @@ export const createUseOne = ({
             heading={t`success`}
             />
         );
+
+        if (editRedirectPath) nav(generatePath(editRedirectPath, {id: id ?? pk[insertTableName]['id']}));
+
         if (successRedirectPath) nav(successRedirectPath);
 
         isFunction(callback) && callback();
@@ -241,7 +251,7 @@ export const createUseOne = ({
         );
         
         if (successRedirectPath) nav(successRedirectPath);
-        
+                
         isFunction(callback) && callback();
       }
     );    

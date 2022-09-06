@@ -23,7 +23,7 @@ import {
 } from 'crocks';
 
 export const useObjects = createUseWhereList({
-  graphQl: raw('./graphql/GetObjects.graphql'),
+  graphQl: raw('./graphql/GetAllObjects.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "object" expected but not found.', getProp('object')),
     

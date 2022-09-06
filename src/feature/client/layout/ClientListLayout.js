@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
@@ -30,8 +30,9 @@ import {ClientEditRoute} from '../routes';
 import {useFilter} from 'hook/useFilter';
 import Button from 'components/Button';
 import {FilterIcon} from '@heroicons/react/solid';
-
-
+import {format} from 'date-fns';
+import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
+import {ClientCreateRoute} from '../routes';
 
 
 const ClientListLayout = withPreparedProps(Listing, props => {
@@ -40,7 +41,8 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   const {t: tc} = useTranslation('client', {keyPrefix: 'field'});
   const {t} = useTranslation('client', {keyPrefix: 'list.column'});
   const {t: tp} = useTranslation('client');
-  
+  const nav = useNavigate();
+
   const c = (prop, mapper = identity, status) => ({
     key: prop,
     headerText: tc(prop),
@@ -65,28 +67,19 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   });
 
   const boolCol = useMemo(() => pipe(String, t), [t]);
-  // const dateCol = pipe(
-  //   // getProp('start_time'),
-  //   // chain(safe(not(isEmpty))),
-  //   tap(console.log),
-  //   map(date => format(new Date(date), 'Y-MM-d HH:mm'))
-  // );
-  
+  const dateCol = (d) => format(new Date(d), 'Y-MM-dd HH:mm');
+
+
+  const {data: objectsDropdown} = useObjectsDropdown();
+  // console.log(objectsDropdown);
 
   // TODO: Adjust column names regarding response data
   const tableColumns = [
-    // c('id', identity, false),
-    // c('firstName', identity, true),
-    // c('lastName', identity, true),
     c('fullName', identity, true),
-    c('verified', boolCol, false),
     c('contract_no', identity, true),
     c('mobilePhone', identity, true),
-    c('middleName', identity, false),
     c('username', identity, true),
-    c('email', identity, false),
-    c('birthDate', identity, false),
-    c('last_ping', identity, true),
+    c('last_ping', dateCol, true),
     {
       key: 'status',
       headerText: tc`status`,
@@ -99,7 +92,10 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     {key: 'fullName', label: 'Name Surname', filter: 'autocomplete', values: []},
     {key: 'username', label: 'Email', filter: 'autocomplete', values: []},
     {key: 'phone', label: 'Phone', filter: 'autocomplete', values: []},
-    {key: 'object', label: 'Object', filter: 'autocomplete', values: []},
+    {key: 'object', label: 'Object', filter: 'autocomplete', values: objectsDropdown || [], displayValue: (v) => {
+      const obj = objectsDropdown?.find(o => o.value === v.value);
+      return obj?.name ?? obj?.value;
+    }},
   ]
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
@@ -117,7 +113,7 @@ const ClientListLayout = withPreparedProps(Listing, props => {
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`clients`}</span></Breadcrumbs.Item>
         <Button.NoBg onClick={toggleFilter}>
-          {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+          {defaultFilter.id ? defaultFilter.name : tb('allData') }
           <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
         </Button.NoBg>
       </Breadcrumbs>
@@ -127,6 +123,11 @@ const ClientListLayout = withPreparedProps(Listing, props => {
         <Innerlinks.Item isCurrent={true}>{tp('Clients')}</Innerlinks.Item>
         <Innerlinks.Item to={HelpListRoute.props.path}>{tp('Helps')}</Innerlinks.Item>
       </Innerlinks>
+    ),
+    buttons: (
+      <>
+        <Button onClick={() => nav(ClientCreateRoute.props.path)}>{tp('create')}</Button>
+      </>
     ),
     tableColumns,
     columns,

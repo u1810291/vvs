@@ -113,7 +113,7 @@ export const useObjectsDropdown = createUseList({
   graphQl: raw('./graphql/GetAllObjects.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('object prop was expected', getProp('object')),
-    map(ifElse(isEmpty, () => [], map(a => ({value: a.id, name: a.name})))),
+    map(ifElse(isEmpty, () => [], map(a => ({value: a.id, name: a.name || a.id})))),
     safe(not(isEmpty)),
     option([])
   )
