@@ -95,7 +95,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   }
   
   // assign key + object to box
-  useKeyObjectBox({
+  const useApi = useKeyObjectBox({
     formResult: result,
     setForm,
     saveRef: assignRef,
@@ -103,7 +103,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     successRedirectPath: generatePath(KeyBoxEditRoute.props.path, {id: boxId}),
   })
 
-  // console.log('list', fetcher?.data);
+  console.log(useApi);
 
   return (
     <div className='flex flex-col w-4/6 p-6'>
