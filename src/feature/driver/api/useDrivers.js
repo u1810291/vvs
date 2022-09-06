@@ -34,7 +34,7 @@ export const getUserSettings = curry((
 
 
 export default createUseListWithAuth({
-  graphQl: raw('./graphql/GetDrivers.graphql'),
+  graphQl: raw('./graphql/GetAllDrivers.graphql'),
   asyncMapFromApi: auth => item => (
     getPathAsync(LIST_PROPS, item)
     .chain(augmentUser(getUserSettings(auth)))

@@ -20,7 +20,10 @@
       "navision_id": "NavID",
       "phone": "Phone",
       "provider_id": "Provider ID",
-      "provider_name": "Provider"
+      "provider_name": "Provider",
+      "is_crew_autoasigned": "Is crew autoassigned",
+      "YES": "Yes",
+      "NO": "No"
     },
     "bool": {
       "yes": "yes",

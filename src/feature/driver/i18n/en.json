@@ -3,7 +3,12 @@
     "usernameAleardyExists": "Email already taken"
   },
   "list": {
-    "create": "Create"
+    "create": "Create",
+    "header": {
+      "drivers": "Drivers",
+      "crews": "Crews",
+      "dislocation_zones": "Dislocation zones" 
+    }
   },
   "edit": {
     "newDriver": "New driver",
