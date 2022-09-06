@@ -36,7 +36,7 @@
     "middleName": "Middle name",
     "mobilePhone": "Mobile phone",
     "password": "Password",
-    "username": "Login",
+    "username": "Login or Email",
     "verified": "Verified"
   },
   "validation": {
