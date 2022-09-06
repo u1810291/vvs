@@ -41,7 +41,7 @@
   },
   "validation": {
     "firstName": "First name cannot be empty",
-    "password": "Password must have at least 6 symbols",
+    "password": "Password must have at least 8 symbols",
     "email": "Email must be valid & non-empty",
     "username": "Username must not be empty"
   },

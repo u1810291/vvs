@@ -30,7 +30,7 @@ const DriverEditForm = ({saveRef}) => {
     }),
     password: FORM_FIELD.TEXT({
       label: t`field.password`,
-      validator: id ? or(isEmpty, lengthGt(5)) : lengthGt(5),
+      validator: id ? or(isEmpty, lengthGt(7)) : lengthGt(7),
       message: t`validation.password`,
       showValidationBelow: true,
     }),
