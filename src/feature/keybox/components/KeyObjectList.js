@@ -28,6 +28,7 @@ import {KeyBoxEditRoute} from '../routes';
 import {generatePath} from 'react-router-dom';
 import ComboBox from 'components/atom/input/ComboBox';
 import {caseMap} from '@s-e/frontend/flow-control';
+import {hasLength} from '@s-e/frontend/pred';
 
 
 
@@ -60,8 +61,20 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   
 
   const formData = {
-    set_name: FORM_FIELD.TEXT({label: tf`set_name`, validator: () => true}),
-    object_id: FORM_FIELD.TEXT({label: tf`object_id`, validator: () => true}),
+    set_name: FORM_FIELD.TEXT({
+      label: tf`set_name`, 
+      validator: hasLength,
+      message: t`validation.set_name`,
+      showValidationBelow: true,
+      props: {isRequired: constant(true)},
+    }),
+    object_id: FORM_FIELD.TEXT({
+      label: tf`object_id`, 
+      validator: hasLength,
+      message: t`validation.object_id`,
+      showValidationBelow: true,
+      props: {isRequired: constant(true)},
+    }),
     box_id: FORM_FIELD.TEXT({label: '', initial: boxId, validator: () => true}),
   };
 

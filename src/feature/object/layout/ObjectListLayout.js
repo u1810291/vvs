@@ -34,6 +34,7 @@ import {KeyBoxListRoute} from 'feature/keybox/routes';
 import {ModemListRoute} from 'feature/modem/routes';
 import Innerlinks from 'components/Innerlinks';
 import {useClientDropdown} from 'feature/client/api/useClients';
+import {format} from 'date-fns';
 
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
@@ -73,6 +74,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const ne = not(isEmpty);
   const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.value === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
   const boolToStr = e => e ? t`YES` : t`NO`;
+  const dateCol = (d) => format(new Date(d), 'Y-MM-dd HH:mm');
 
   const tableColumns = [
     c('name', ne, identity, true),
@@ -81,7 +83,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     c('contract_object_no', ne, identity, true),
     c('contract_no', ne, identity, true),
     c('is_crew_autoasigned', constant(true), boolToStr, true),
-    c('created', ne, identity, false),
+    c('created_at', ne, dateCol, false),
     c('users', constant(true), userToStr, false),
   ];
 
