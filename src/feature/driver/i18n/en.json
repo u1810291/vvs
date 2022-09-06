@@ -1,6 +1,7 @@
 {
   "error": {
-    "usernameAleardyExists": "Email already taken"
+    "usernameAleardyExists": "Email already taken",
+    "archived": "Archived"
   },
   "list": {
     "create": "Create",
@@ -35,19 +36,20 @@
     "middleName": "Middle name",
     "mobilePhone": "Mobile phone",
     "password": "Password",
-    "username": "Email",
+    "username": "Login or Email",
     "verified": "Verified"
   },
   "validation": {
     "firstName": "First name cannot be empty",
     "password": "Password must have at least 6 symbols",
     "email": "Email must be valid & non-empty",
-    "username": "Email must be valid & non-empty"
+    "username": "Username must not be empty"
   },
   "onlineStatus": {
     "unknown": "Unknown",
     "inactive": "Inactive",
     "online": "Online",
     "offline": "Offline"
-  }
+  },
+  "archive": "Archive"
 }

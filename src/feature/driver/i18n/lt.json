@@ -30,19 +30,20 @@
     "middleName": "Antras vardas",
     "mobilePhone": "Telefono Nr.",
     "password": "Slaptažodis",
-    "username": "El. paštas",
+    "username": "Prisijunkite arba el",
     "verified": "Patvirtintas"
   },
   "validation": {
     "firstName": "Vardas negali būti tuščias",
     "password": "Slaptažodis turi būti bent 6-ių simbolių",
     "email": "El. paštas turi būti validus ir netuščias",
-    "username": "El. paštas turi būti validus ir netuščias"
+    "username": "Vartotojo vardo laukas negali būti tuščias"
   },
   "onlineStatus": {
     "unknown": "Nežinoma",
     "inactive": "Deaktyvuotas",
     "online": "Prisijungęs",
     "offline": "Neprisijungęs"
-  }
+  },
+  "archive": "Archyvuoti"
 }
