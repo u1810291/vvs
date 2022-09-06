@@ -1,5 +1,5 @@
 import Button from 'components/Button'
-import React, {useState} from 'react'
+import React, {useMemo, useState} from 'react'
 import {useTranslation} from 'react-i18next';
 import {useKeyObjects, useKeyObjectBox} from '../api';
 import {
@@ -64,38 +64,33 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   const {ctrl, result, form, setForm} = useResultForm(formData);
 
 
-  const resetPage = () => {
+  const resetPage = async () => {
     const theForm = {...form};
     theForm['set_name'] = '';
     theForm['object_id'] = '';
     setForm(theForm);
 
-    // console.log('before mutate', list);
-    // console.log(fetcher);
-    fetcher.mutate().then((v) => {
-      // console.log('after mutate', v, list);
-    });
+    fetcher?.mutate();
   }
-
-  // 
-  const assign = () => {
-    console.log('before', list);
-    isFunction(assignRef.current) && assignRef.current();
+  
+  // assign object
+  const assign = async () => {
+    isFunction(assignRef.current) && assignRef.current(() => {
+      resetPage();
+    });
     toggleModal();
-    resetPage();
-
-    // console.log('after', list);
   };
 
   const remove = (e) => { 
     if (!confirm('Are you sure you want to delete?')) return;
     
-    isFunction(removeRef.current) && removeRef.current({box_id: boxId, key_id: e.target.id});
-    resetPage();
+    isFunction(removeRef.current) && removeRef.current({box_id: boxId, key_id: e.target.id}, () => {
+      resetPage();
+    });
   }
   
   // assign key + object to box
-  const useApi = useKeyObjectBox({
+  useKeyObjectBox({
     formResult: result,
     setForm,
     saveRef: assignRef,
@@ -103,42 +98,46 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     successRedirectPath: generatePath(KeyBoxEditRoute.props.path, {id: boxId}),
   })
 
-  console.log(useApi);
+  const table = useMemo(() => (
+    <Table className='mt-2 w-full'>
+      <Table.Head>
+        <Table.Tr>
+          <Table.Th>{t`Nr`}</Table.Th>
+          <Table.Th>{t`Object nr.`}</Table.Th>
+          <Table.Th>{t`Object`}</Table.Th>
+          <Table.Th>{t`Address`}</Table.Th>
+          <Table.Th></Table.Th>
+        </Table.Tr>
+      </Table.Head>
+      <Table.Body>
+        {list.map((r, index) => (
+          <Table.Tr key={r.id}>
+            <Table.Td>{r.key.set_name}</Table.Td>
+            <Table.Td>{r.object.contract_object_no}</Table.Td>
+            <Table.Td>{r.object.name}</Table.Td>
+            <Table.Td>
+              {r.object.address}
+              <Nullable on={r.object.city}>, {titleCase(r.object.city)}</Nullable>  
+            </Table.Td>
+            <Table.Td>
+              <Button.NoBg id={r.key.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
+            </Table.Td>
+          </Table.Tr>
+        ))}
+      </Table.Body>
+    </Table>
+  ), [list]);
+
 
   return (
     <div className='flex flex-col w-4/6 p-6'>
       <div className='flex flex-row justify-between'>
         <h2>{tp`Objects`}</h2>
         <Button.Xs className='w-fit' onClick={toggleModal}>{tp`Assign object`}</Button.Xs>
+        {/* <Button.Xs className='w-fit' onClick={() => fetcher?.mutate()}>{tp`Update`}</Button.Xs> */}
       </div>
 
-      <Table className='mt-2 w-full'>
-        <Table.Head>
-          <Table.Tr>
-            <Table.Th>{t`Nr`}</Table.Th>
-            <Table.Th>{t`Object nr.`}</Table.Th>
-            <Table.Th>{t`Object`}</Table.Th>
-            <Table.Th>{t`Address`}</Table.Th>
-            <Table.Th></Table.Th>
-          </Table.Tr>
-        </Table.Head>
-        <Table.Body>
-          {list.map((r, index) => (
-            <Table.Tr key={r.id}>
-              <Table.Td>{r.key.set_name}</Table.Td>
-              <Table.Td>{r.object.contract_object_no}</Table.Td>
-              <Table.Td>{r.object.name}</Table.Td>
-              <Table.Td>
-                {r.object.address}
-                <Nullable on={r.object.city}>, {titleCase(r.object.city)}</Nullable>  
-              </Table.Td>
-              <Table.Td>
-                <Button.NoBg id={r.key.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
-              </Table.Td>
-            </Table.Tr>
-          ))}
-        </Table.Body>
-      </Table>
+      {table}
 
       <Nullable on={showModal}>
         <Modal 
@@ -177,7 +176,6 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
               <Button.Xs onClick={assign} className={'px-6'}>{tf`Save`}</Button.Xs>
             </div>
           </div>
-
 
         </Modal>
       </Nullable>

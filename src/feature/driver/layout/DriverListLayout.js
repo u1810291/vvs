@@ -99,7 +99,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const api = useDrivers();
   const {data: driverDropdown} = useDriversDropdown();
   
-  console.log(api?.data, driverDropdown);
+  // console.log(api?.data, driverDropdown);
 
   
   const tableColumns = [
@@ -137,7 +137,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   );
 
   useEffect(() => {
-    console.log(queryParams);
+    // console.log(queryParams);
     api.mutate()
   }, [queryParams]);
 

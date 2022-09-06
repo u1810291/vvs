@@ -115,7 +115,7 @@ const ObjectEditForm = ({saveRef}) => {
         </div>
 
         {/* Object photos */}
-        <ObjectInnerPhotos objectId={params.id} form={form} />    
+        <ObjectInnerPhotos objectId={params.id} form={form} mutate={api.mutate} />    
         
         {/* Object settings */}
         <ObjectSettings ctrl={ctrl} />

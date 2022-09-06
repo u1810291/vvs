@@ -11,7 +11,7 @@ import InnerPhoto from './InnerPhoto';
 
 
 
-const ObjectInnerPhotos = ({objectId, form}) => {
+const ObjectInnerPhotos = ({objectId, form, mutate}) => {
   const {t} = useTranslation('object', {keyPrefix: 'edit'});
 
   const auth = useAuth();
@@ -23,10 +23,10 @@ const ObjectInnerPhotos = ({objectId, form}) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
-        cb(reader.result)
+      cb(reader.result)
     };
     reader.onerror = function (error) {
-        console.log('Error: ', error);
+      console.log('Error: ', error);
     };
   }
 
@@ -56,12 +56,13 @@ const ObjectInnerPhotos = ({objectId, form}) => {
             heading={t`success`}
             />
         );
+
+        mutate();
       });
     })
   }
 
   const removeImage = (e) => {
-    console.log('remove img', e.target);
     if (!confirm('Are you sure you want to delete?')) return;
   
     _removeImage({id: e.target.id}).fork((error) => {
@@ -82,6 +83,8 @@ const ObjectInnerPhotos = ({objectId, form}) => {
           heading={t`success`}
           />
       );
+
+      mutate();
     })
   }
 

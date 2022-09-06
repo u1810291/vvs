@@ -191,7 +191,7 @@ export const createUseOne = ({
 
   useEffect(() => {
     if (!(hasProp('current', saveRef) && formResult)) return;
-    saveRef.current = () => (id ? update(formResult) : create(formResult)).fork(
+    saveRef.current = (callback) => (id ? update(formResult) : create(formResult)).fork(
       error => notify(
         <NotificationSimple
           Icon={XCircleIcon}
@@ -210,6 +210,8 @@ export const createUseOne = ({
             />
         );
         if (successRedirectPath) nav(successRedirectPath);
+
+        isFunction(callback) && callback();
       }
     );
   }, [saveRef?.current, formResult, t, nav, notify, successRedirectPath]);
@@ -218,7 +220,7 @@ export const createUseOne = ({
   useEffect(() => {
     if (!hasProp('current', removeRef)) return;
     
-    removeRef.current = (pk) => remove(Result(pk)).fork(
+    removeRef.current = (pk, callback) => remove(Result(pk)).fork(
       error => {
         notify(
         <NotificationSimple
@@ -239,6 +241,8 @@ export const createUseOne = ({
         );
         
         if (successRedirectPath) nav(successRedirectPath);
+        
+        isFunction(callback) && callback();
       }
     );    
   }, [removeRef?.current, t, nav, notify, successRedirectPath]);

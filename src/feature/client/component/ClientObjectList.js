@@ -74,21 +74,24 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
     setForm(resetForm);
     
     // refetch
-    // fetcher.mutate();
+    fetcher.mutate();
   }
 
   // 
   const assign = () => {
-    isFunction(assignRef.current) && assignRef.current();
+    isFunction(assignRef.current) && assignRef.current(() => {
+      resetPage();
+    });
     toggleModal();
-    resetPage();
   };
 
   const remove = (e) => { 
     if (!confirm('Are you sure you want to delete?')) return;
 
-    isFunction(removeRef.current) && removeRef.current({user_id: userId, object_id: e.target.id});
-    resetPage();
+    isFunction(removeRef.current) && removeRef.current({user_id: userId, object_id: e.target.id}, () => {
+      resetPage();
+    });
+    
   }
   
   // assign client + object to box
