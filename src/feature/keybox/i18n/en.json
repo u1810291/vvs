@@ -10,7 +10,10 @@
     "column": {
       "id": "ID",
       "set_name": "Set",
-      "crew_name": "Crew"
+      "crew_name": "Crew",
+      "error": {
+        "keyboxNotWasCreate": "First save a key box"
+      }
     }
   }
 }

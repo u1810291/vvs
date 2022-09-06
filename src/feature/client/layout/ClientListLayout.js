@@ -30,6 +30,8 @@ import {ClientEditRoute} from '../routes';
 import {useFilter} from 'hook/useFilter';
 import Button from 'components/Button';
 import {FilterIcon} from '@heroicons/react/solid';
+import {format} from 'date-fns';
+import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
 
 
 
@@ -65,13 +67,13 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   });
 
   const boolCol = useMemo(() => pipe(String, t), [t]);
-  // const dateCol = pipe(
-  //   // getProp('start_time'),
-  //   // chain(safe(not(isEmpty))),
-  //   tap(console.log),
-  //   map(date => format(new Date(date), 'Y-MM-d HH:mm'))
-  // );
+  const dateCol = (d) => {
+    return format(new Date(d), 'Y-MM-dd HH:mm');
+  }
   
+
+  const {data: objectsDropdown} = useObjectsDropdown();
+  console.log(objectsDropdown);
 
   // TODO: Adjust column names regarding response data
   const tableColumns = [
@@ -79,14 +81,14 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     // c('firstName', identity, true),
     // c('lastName', identity, true),
     c('fullName', identity, true),
-    c('verified', boolCol, false),
+    // c('verified', boolCol, false),
     c('contract_no', identity, true),
     c('mobilePhone', identity, true),
-    c('middleName', identity, false),
+    // c('middleName', identity, false),
     c('username', identity, true),
-    c('email', identity, false),
-    c('birthDate', identity, false),
-    c('last_ping', identity, true),
+    // c('email', identity, false),
+    // c('birthDate', identity, false),
+    c('last_ping', dateCol, true),
     {
       key: 'status',
       headerText: tc`status`,
@@ -99,7 +101,10 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     {key: 'fullName', label: 'Name Surname', filter: 'autocomplete', values: []},
     {key: 'username', label: 'Email', filter: 'autocomplete', values: []},
     {key: 'phone', label: 'Phone', filter: 'autocomplete', values: []},
-    {key: 'object', label: 'Object', filter: 'autocomplete', values: []},
+    {key: 'object', label: 'Object', filter: 'autocomplete', values: objectsDropdown || [], displayValue: (v) => {
+      const obj = objectsDropdown?.find(o => o.value === v.value);
+      return obj?.name ?? obj?.value;
+    }},
   ]
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(

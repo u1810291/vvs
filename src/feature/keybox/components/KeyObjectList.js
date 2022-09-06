@@ -13,6 +13,8 @@ import {
   option,
   constant,
   isFunction,
+  isSame,
+  identity,
 } from 'crocks';
 import Table from 'components/Table';
 import Modal from 'components/atom/Modal';
@@ -25,6 +27,7 @@ import InputGroup from 'components/atom/input/InputGroup';
 import {KeyBoxEditRoute} from '../routes';
 import {generatePath} from 'react-router-dom';
 import ComboBox from 'components/atom/input/ComboBox';
+import {caseMap} from '@s-e/frontend/flow-control';
 
 
 
@@ -54,6 +57,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   const toggleModal = (e) => {
     setShowModal(() => !showModal);
   }
+  
 
   const formData = {
     set_name: FORM_FIELD.TEXT({label: tf`set_name`, validator: () => true}),
@@ -62,7 +66,6 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   };
 
   const {ctrl, result, form, setForm} = useResultForm(formData);
-
 
   const resetPage = async () => {
     const theForm = {...form};
@@ -73,6 +76,14 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     fetcher?.mutate();
   }
   
+  const showObjectModal = () => {
+    const theForm = {...form};
+    theForm['box_id'] = boxId;
+    setForm(theForm);
+
+    toggleModal();
+  }
+
   // assign object
   const assign = async () => {
     isFunction(assignRef.current) && assignRef.current(() => {
@@ -91,11 +102,15 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
   
   // assign key + object to box
   useKeyObjectBox({
+    boxId,
     formResult: result,
     setForm,
     saveRef: assignRef,
     removeRef: removeRef,
-    successRedirectPath: generatePath(KeyBoxEditRoute.props.path, {id: boxId}),
+    successRedirectPath: boxId && generatePath(KeyBoxEditRoute.props.path, {id: boxId}),
+    errorMapper: caseMap(identity, [
+      [isSame('invalid input syntax for type uuid: ""'), constant(t('error.keyboxNotWasCreate'))]
+    ]),
   })
 
   const table = useMemo(() => (
@@ -133,7 +148,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     <div className='flex flex-col w-4/6 p-6'>
       <div className='flex flex-row justify-between'>
         <h2>{tp`Objects`}</h2>
-        <Button.Xs className='w-fit' onClick={toggleModal}>{tp`Assign object`}</Button.Xs>
+        <Button.Xs className='w-fit' onClick={showObjectModal}>{tp`Assign object`}</Button.Xs>
         {/* <Button.Xs className='w-fit' onClick={() => fetcher?.mutate()}>{tp`Update`}</Button.Xs> */}
       </div>
 

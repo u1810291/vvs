@@ -91,7 +91,7 @@ export const useResultForm = (obj) => {
         carry
       ), {})
     )(obj)
-  }), [state, set, isValid, getValid, result]);
+  }), [state, set, isValid, getValid, result, obj]);
 
   return {
     ctrl: control,
