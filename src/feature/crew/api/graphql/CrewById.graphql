@@ -3,6 +3,7 @@ query CrewById ($id: uuid!) {
         id
         name
         status
+        device_id
         driver_user_id
         abbreviation
         phone_number

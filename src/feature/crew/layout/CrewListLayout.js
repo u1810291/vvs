@@ -18,18 +18,16 @@ import Breadcrumbs from 'components/Breadcrumbs';
 
 import {useCrews} from 'feature/crew/api/crewEditApi';
 import {DriverListRoute} from 'feature/driver/routes';
+import DynamicStatus from 'components/atom/Status';
 import {DislocationListRoute} from 'feature/dislocation/routes';
 import {CrewCreateRoute, CrewEditRoute} from 'feature/crew/routes';
-import DynamicStatus from 'feature/crew/component/CrewStatus';
+import {useDislocationZonesDropdown} from 'feature/dislocation/api/dislocationEditApi';
 
 import {Maybe, safe, getProp} from 'crocks';
 import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
 import {isArray, isBoolean, isObject, isString} from 'crocks/predicates';
-import {useDislocationZonesDropdown} from 'feature/dislocation/api/dislocationEditApi';
-
-
 
 const {Just} = Maybe;
 
@@ -128,10 +126,8 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   );
 
   const list = useCrews({filters: queryParams});
-  console.log(list?.data);
 
   useEffect(() => {
-    console.log(queryParams);
     list.mutate();
   }, [queryParams]);
 

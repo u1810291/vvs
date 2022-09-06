@@ -4,16 +4,43 @@
   },
   "breadcrumbs": {
     "tasks": "Užduotys",
-    "allData": "Visi duomenys"
+    "all_data": "Visi duomenys"
+  },
+  "create": {
+    "header": {
+      "button": {
+        "save": "Sukurti užduotį",
+        "cancel": "Atšaukti"
+      }
+    }
   },
   "list": {
+    "header": {
+      "create": "Sukurti užduotį",
+      "dashboard": "Pultas",
+      "tasks": "Užduotys",
+      "permissions": "Leidimai",
+      "breaches": "Pažeidimai"
+    },
+    "status": {
+      "YES": "Taip",
+      "NO": "Ne",
+      "NEW": "Naujas",
+      "WAIT_FOR_CREW_APPROVAL": "Laukiame Patvirtinimo",
+      "ON_THE_ROAD": "Važiuoja",
+      "INSPECTION": "Apžiūri Objektą",
+      "INSPECTION_DONE": "Apžiūrėta",
+      "FINISHED": "Užbaigta",
+      "CANCELLED": "Atšaukta",
+      "-": "-"
+    },
     "column": {
       "id": "ID",
       "name": "Pavadinimas",
       "status": "Būsena",
-      "received": "Gauta",
-      "object_name": "Objektas",
-      "crew_name": "Ekipažas",
+      "created_at": "Gauta",
+      "object": "Objektas",
+      "crew": "Ekipažas",
       "approximate_time": "Spėjo laiku",
       "response_time": "Reagavimo laikas",
       "time_at_object": "Laikas objekte",

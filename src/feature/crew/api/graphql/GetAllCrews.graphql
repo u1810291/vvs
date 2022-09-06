@@ -4,6 +4,7 @@ query Crews($where: crew_bool_exp) {
     is_assigned_automatically
     is_assigned_while_in_breaks
     name
+    device_id
     phone_number
     abbreviation
     status

@@ -1,5 +1,6 @@
 mutation CreateCrew(
   $name: String = null,
+  $device_id: String = null,
   $abbreviation: String = null,
   $phone_number: String = null,
   $to_call_after: String = null,
@@ -9,6 +10,7 @@ mutation CreateCrew(
   ) {
   insert_crew_one(object: {
     name: $name,
+    device_id: $device_id,
     phone_number: $phone_number,
     abbreviation: $abbreviation,
     to_call_after: $to_call_after,
@@ -19,6 +21,7 @@ mutation CreateCrew(
     id
     name
     status
+    device_id
     abbreviation
     phone_number
     to_call_after

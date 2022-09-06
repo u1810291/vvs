@@ -10,7 +10,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import React, {useRef} from 'react';
 import PermissionEditForm from '../form/PermissionEditForm';
-import DynamicStatus from '../../crew/component/CrewStatus';
+import DynamicStatus from '../../../components/atom/Status';
 import {useAuth} from '../../../context/auth';
 import raw from 'raw.macro';
 
