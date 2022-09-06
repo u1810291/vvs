@@ -3,10 +3,11 @@ import useDriver from '../api/useDriver';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {DriverListRoute} from '../routes';
 import {constant, or, isEmpty, getPathOr, identity, isSame} from 'crocks';
-import {hasLength, isEmail} from '@s-e/frontend/pred';
+import {hasLength} from '@s-e/frontend/pred';
 import {lengthGt} from 'util/pred';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import Button from 'components/Button';
 import AsideDisclosure from 'components/Disclosure/AsideDisclosure';
 import {caseMap} from '@s-e/frontend/flow-control';
 
@@ -23,7 +24,7 @@ const DriverEditForm = ({saveRef}) => {
     lastName: FORM_FIELD.TEXT({label: t`field.lastName`, validator: constant(true)}),
     username: FORM_FIELD.TEXT({
       label: t`field.username`,
-      validator: isEmail,
+      validator: hasLength,
       message: t`validation.username`,
       showValidationBelow: true,
     }),
@@ -47,12 +48,17 @@ const DriverEditForm = ({saveRef}) => {
   });
 
   return (
-    <section className='flex-col lg:flex-row flex lg:min-h-full'>
-      <div className='p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 flex-grow'>
-        <InputGroup {...ctrl('firstName')} />
-        <InputGroup {...ctrl('lastName')} />
-        <InputGroup {...ctrl('username')} />
-        <InputGroup {...ctrl('password')} />
+    <section className='flex-col lg:flex-row flex lg:h-screen'>
+      <div className='w-full p-6 flex flex-col justify-between'>
+        <div className='grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 lg:w-1/2'>
+          <InputGroup {...ctrl('firstName')} isRequired placeHolder={t`field.firstName`}/>
+          <InputGroup {...ctrl('lastName')} isRequired placeHolder={t`field.lastName`}/>
+          <InputGroup {...ctrl('username')} isRequired placeHolder={t`field.username`}/>
+          <InputGroup {...ctrl('password')} placeHolder={t`field.password`}/>
+        </div>
+        <div className='w-2'>
+          <Button.Dxl onClick={() => forgotPassword()}>{t`archive`}</Button.Dxl>
+        </div>
       </div>
       <aside className='border-l border-gray-border min-w-fit'>
         <AsideDisclosure title={t`edit.crewDetails`}>
