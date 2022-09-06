@@ -51,10 +51,10 @@ const DriverEditForm = ({saveRef}) => {
     <section className='flex-col lg:flex-row flex lg:h-screen'>
       <div className='w-full p-6 flex flex-col justify-between'>
         <div className='grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 lg:w-1/2'>
-          <InputGroup {...ctrl('firstName')} isRequired placeHolder={t`field.firstName`}/>
-          <InputGroup {...ctrl('lastName')} isRequired placeHolder={t`field.lastName`}/>
-          <InputGroup {...ctrl('username')} isRequired placeHolder={t`field.username`}/>
-          <InputGroup {...ctrl('password')} placeHolder={t`field.password`}/>
+          <InputGroup {...ctrl('firstName')} isRequired placeholder={t`field.firstName`}/>
+          <InputGroup {...ctrl('lastName')} isRequired placeholder={t`field.lastName`}/>
+          <InputGroup {...ctrl('username')} isRequired placeholder={t`field.username`}/>
+          <InputGroup {...ctrl('password')} placeholder={t`field.password`}/>
         </div>
         <div className='w-2'>
           <Button.Dxl onClick={() => forgotPassword()}>{t`archive`}</Button.Dxl>
