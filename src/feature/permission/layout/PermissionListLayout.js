@@ -86,7 +86,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   const {data: driverDropdown} = useDriversDropdown();
 
   const tableColumns = [
-    c('id', pipe(getProp('id')), false, null),
+    // c('id', pipe(getProp('id')), false, null),
     c('created_at', pipe(getProp('created_at'), map(d => format(new Date(d), 'Y-MM-dd HH:mm'))), true, null),
     c('request_id', pipe(getProp('request_id')), true, null),
     cs('status', pipe(getProp('status')), true, null),
@@ -95,7 +95,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   ];
 
   const filtersData = [
-    {key: 'created_at', label: 'Created_at', filter: 'date'},
+    {key: 'created_at', label: 'Created_at', filter: 'daterange'},
     {key: 'request_id', label: 'Reason', filter: 'autocomplete', values: crewRequestDropdown || [], displayValue: (v) => {
       return crewRequestDropdown?.find(c => c.value === v)?.name;
     }},
@@ -117,6 +117,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   const api = usePermissions({filters: queryParams})
 
   useEffect(() => {
+    // console.log(queryParams);
     api.mutate()
   }, [queryParams]);
 

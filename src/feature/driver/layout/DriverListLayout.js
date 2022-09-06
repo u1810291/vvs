@@ -15,12 +15,10 @@ import {
   isString,
   option,
   objOf,
-  // identity, 
-  // and, 
-  // hasProp, 
-  // isTruthy, 
-  // propSatisfies, 
-  // pick, 
+  identity,
+  not,
+  isEmpty,
+  hasProps,
 } from 'crocks';
 import useDrivers from '../api/useDrivers';
 import useDriversDropdown from '../api/useDriversDropdown';
@@ -29,7 +27,10 @@ import {generatePath, Link, useNavigate} from 'react-router-dom';
 import Button from 'components/Button';
 import {FilterIcon} from '@heroicons/react/solid';
 import {useFilter} from 'hook/useFilter';
-// import DriverOnlineTag from '../component/DriverOnlineTag';
+import DriverOnlineTag from '../component/DriverOnlineTag';
+import {CrewListRoute} from 'feature/crew/routes';
+import {DislocationListRoute} from 'feature/dislocation/routes';
+import Innerlinks from 'components/Innerlinks';
 
 
 const getColumn = curry((t, Component, key, mapper, status, styles) => ({
@@ -56,6 +57,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const {t: tc} = useTranslation('driver', {keyPrefix: 'field'});
   const {t: tos} = useTranslation('driver', {keyPrefix: 'onlineStatus'});
   const {t: tb} = useTranslation('driver', {keyPrefix: 'breadcrumbs'});
+  const {t: th} = useTranslation('driver', {keyPrefix: 'list.header'});
   const nav = useNavigate();
 
   // const c = (prop, mapper = identity, status) => ({
@@ -88,10 +90,10 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   )), [t]);
 
   const boolCol = useMemo(() => pipe(String, t), [t]);
-  const getFullName = (v) => {
-    console.log(v);
-    return '-';
-  }
+  const toStringValue = pipe(
+    a => String(a || '').trim(),
+    safe(not(isEmpty)),
+  );
 
   
   const api = useDrivers();
@@ -99,27 +101,30 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   
   console.log(api?.data, driverDropdown);
 
-
-
-
+  
   const tableColumns = [
-    c('id', pipe(getProp('id')), false, null),
-    c('fullName', pipe(getProp('fullName'), map(fn => getFullName(fn))), true, null),
-    c('firstName', pipe(getProp('firstName')), true, null),
-    c('lastName', pipe(getProp('lastName')), true, null),
-    c('username', pipe(getProp('username')), false, null),
-    c('verified', pipe(getProp('verified')), false, null),
-    c('email', pipe(getProp('email')), false, null),
-    // {
-    //   key: 'status',
-    //   headerText: tc`status`,
-    //   itemToProps: Maybe.Just,
-    //   Component: withPreparedProps(DriverOnlineTag, identity),
-    // }
+    c('fullName', pipe(a => getProp('fullName', a)
+      .alt((
+        safe(hasProps(['firstName', 'lastName']), a)
+        .map(({firstName, lastName}) => `${firstName} ${lastName}`)
+        .chain(toStringValue)
+      ))
+      .alt(getProp('firstName', a).chain(toStringValue))
+      .alt(getProp('lastName', a).chain(toStringValue))
+      .alt(getProp('id', a).chain(toStringValue))
+    ), true, null),
+    {
+      key: 'status',
+      headerText: tc`status`,
+      itemToProps: Maybe.Just,
+      Component: withPreparedProps(DriverOnlineTag, identity),
+      status: true,
+      styles: null,
+    }
   ];
 
   const filtersData = [
-    {key: 'fullName', label: 'Name Surname', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
+    {key: 'id', label: 'Name Surname', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
       return driverDropdown?.find(d => d.value === v)?.name;
     }},
     {key: 'status', label: 'Status', filter: 'multiselect', values: ['OFFLINE', 'ONLINE', 'DEACTIVATED']},
@@ -131,10 +136,9 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     filtersData
   );
 
-
-
   useEffect(() => {
-    // api.mutate()
+    console.log(queryParams);
+    api.mutate()
   }, [queryParams]);
 
   return {
@@ -149,6 +153,13 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
           <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
         </Button.NoBg>
       </Breadcrumbs>
+    ),
+    innerlinks: (
+      <Innerlinks>
+        <Innerlinks.Item to={CrewListRoute.props.path}>{th('crews')}</Innerlinks.Item>
+        <Innerlinks.Item isCurrent={true}>{th('drivers')}</Innerlinks.Item>
+        <Innerlinks.Item to={DislocationListRoute.props.path}>{th('dislocation_zones')}</Innerlinks.Item>
+      </Innerlinks>
     ),
     /**
      * @type {Array<import('../../../layout/ListingLayout/index.js').TableColumnComponent>}

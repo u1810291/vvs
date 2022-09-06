@@ -11,6 +11,7 @@ query GetDrivers {
       mobilePhone
       username
       verified
+      fullName
     }
   }
 }

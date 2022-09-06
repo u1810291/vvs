@@ -8,9 +8,9 @@ import useSWR from 'swr';
 const useAsyncSwr = (swrKey, getAsync) => useSWR(
   swrKey,
   (...params) => getAsync(...params).toPromise(),
-  // {
-  //   refreshInterval: 500
-  // }
+  {
+    refreshInterval: 1000
+  }
 );
 
 export default useAsyncSwr;

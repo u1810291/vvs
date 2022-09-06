@@ -47,6 +47,8 @@ const Mode = {
 const updater = (state, action) => {
   const prevState = {...state};
 
+  // console.log('dispatch', action);
+
   switch (action.type) {
     case 'TEXT':
       if (action.value) {
@@ -73,7 +75,25 @@ const updater = (state, action) => {
       }
 
       return {...prevState};
+    
+    case 'DATERANGE':
+        if (action.value) {          
+          const year = action.value.getFullYear();
+          const month = action.value.getMonth();
+          const day = action.value.getDate();
 
+          if (`${action.key}_start` in prevState) {
+            prevState[`${action.key}_end`] = `${format(new Date(year, month, day, 23, 59, 59), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
+          } else {
+
+            prevState[`${action.key}_start`] = `${format(new Date(year, month, day, 0, 0, 0), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
+          }
+        } else {
+          delete prevState[`${action.key}_start`];
+          delete prevState[`${action.key}_end`];
+        }
+
+      return {...prevState};
     case 'RANGE':
       if (action.value) {
         prevState[action.key] = action.value;
@@ -148,7 +168,7 @@ const prepParts = (filters, values) => {
   filters.map(f => {
 
     // if sigle date filter
-    if (f.filter === 'date' || f.filter === 'range') {
+    if (f.filter === 'date' || f.filter === 'range' || f.filter === 'daterange') {
       const keyStart = `${f.key}_start`;
       const keyEnd = `${f.key}_end`;
 
@@ -587,7 +607,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
       <div className={showFilter ? 'visible' : 'hidden'}>
         <div className='w-full flex flex-row columns-3 border-t-2 border-gray-200'>
           {/* saved filters zone */}
-          <div className='w-1/5 min-w-[180px] max-h-[300px] overflow-y-auto '>
+          <div className='w-1/5 min-w-[240px] max-h-[300px] overflow-y-auto '>
             {mode === Mode.Default &&
               <div className='flex flex-col divide-y divide-slate-200'>
                 <div className='flex flex-row  border-gray-300  '>
@@ -635,7 +655,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
               <div className='flex flex-col p-6'>
                 <div className='flex space-x-6'>
                   <InputGroup label={'Title'} onChange={handleUserInput} defaultValue={formState.title ?? null} name='title' inputClassName={'pr-0'} />
-                  <InputGroup label={'Shortcut'} onChange={handleUserInput} defaultValue={formState.shortcut ?? null} name='shortcut' className={'w-24'} maxLength={SHORTCUT_MAXLENGTH} inputClassName={'pr-0'} />
+                  <InputGroup Addon={null} label={'Shortcut'} onChange={handleUserInput} defaultValue={formState.shortcut ?? null} name='shortcut' inputClassName={'pr-0'} className={'w-24'} maxLength={SHORTCUT_MAXLENGTH} />
                 </div>
 
                 <div className='flex flex-col space-y-2 mt-3'>
@@ -643,11 +663,11 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                   <CheckBox label={'Make as default'} onChange={handleUserInput} name='isDefault' isChecked={formState.isDefault} />
                 </div>
 
-                <div className='flex space-x-4 mt-5'>
+                <div className='flex space-x-2 mt-5'>
                   <Nullable on={mode === Mode.Edit}><Button.NoBg onClick={deleteFilter} className={'shadow-none text-gray-400 font-normal py-0'}>Delete</Button.NoBg></Nullable>
                   <div className='flex-grow'></div>
 
-                  <Button.NoBg onClick={onModeCancel} className={'shadow-none text-gray-400 font-normal px-4 py-0'}>Cancel</Button.NoBg>
+                  <Button.NoBg onClick={onModeCancel} className={'shadow-none text-gray-400 font-normal px-2 py-0'}>Cancel</Button.NoBg>
                   <Button.Xs onClick={onFilterSave} className={'bg-oxford text-white px-4 py-0 hover:bg-gray-700'}>Save</Button.Xs>
                 </div>
               </div>
@@ -728,7 +748,18 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
                   />
                 }
 
-                // TODO: Date picker range
+                // date range
+                else if (filter === 'daterange') {
+                  return <DatePicker 
+                    className={'w-full max-h-8'}
+                    key={key} 
+                    label={label} 
+                    defaultValue={state[`${key}`]}
+                    placeholder={'Select period...'} 
+                    onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})} 
+                    range={true}
+                  />
+                }
 
                 // number range
                 else if (filter === 'range') {
@@ -794,14 +825,13 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
-      const filter = filtersData.find(f => f.key === key);
+      const filter = filtersData.find(f => f.key === key.replace('_start', '').replace('_end', ''));
       if (!filter) continue;
-
+      
       if (value === undefined || value === null || value === '') continue;
       if (key.includes('_end')) continue;
 
       // range filters: range, datepicker (single)
-      // console.log(filter.key);
       
       if (key.includes('_start')) {
         const column = key.replace('_start', '');
@@ -837,11 +867,23 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
         // has . -> has inner column key
         else if (filter.key.includes('.')) {
           const columns = filter.key.split('.');
-          console.log(columns);
-          
           for (c of columns) {
             console.log(c);
           }
+        }
+
+        // range filter
+        else if (filter.filter === 'range' || filter.filter === 'daterange') {
+          if (key.includes('_start')) {
+            const column = key.replace('_start', '');
+            
+            if (`${column}_end` in state) {
+              params[column] = {
+                _gte: value, 
+                _lte: state[`${column}_end`]
+              };
+            }
+          } 
         }
 
         // text filter

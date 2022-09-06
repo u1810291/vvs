@@ -23,6 +23,7 @@ import {
   pipe,
   safe,
   constant,
+  // tap,
 } from 'crocks';
 import {useObjects} from '../api';
 import {useFilter} from 'hook/useFilter';
@@ -47,7 +48,6 @@ const getColumn = curry((t, Component, key, pred, mapper, status) => ({
     map(objOf('children')),
     map(a => ({...item, ...a})),
     alt(Maybe.Just(item)),
-    // chain(tap(console.log)),
   )(item),
 }));
 
@@ -72,6 +72,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const nnil = not(isNil);
   const ne = not(isEmpty);
   const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.value === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
+  const boolToStr = e => e ? t`YES` : t`NO`;
 
   const tableColumns = [
     c('name', ne, identity, true),
@@ -79,11 +80,10 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     c('address', ne, identity, true),
     c('contract_object_no', ne, identity, true),
     c('contract_no', ne, identity, true),
-    c('is_crew_autoasigned', ne, identity, true),
+    c('is_crew_autoasigned', constant(true), boolToStr, true),
     c('created', ne, identity, false),
     c('users', constant(true), userToStr, false),
-    c('feedback_sla_time_in_min', ne, identity, true),
-  ]
+  ];
 
   const filtersData = [
     {key: 'name', label: 'Name', filter: 'text'},
@@ -102,8 +102,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
         return clientsDropdown?.find(c => c.value === v)?.name;
       }
     },
-    // {key: 'created_at', label: 'Date', filter: 'date'}, // date filter as example
-  ]
+  ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'object',
@@ -114,9 +113,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const list = useObjects({filters: queryParams})
   
   useEffect(() => {
-    // console.log(query);
     // console.log(queryParams);
-
     list.mutate()
   }, [queryParams]);
 

@@ -6,20 +6,15 @@ import SelectBox from 'components/atom/input/SelectBox';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {ObjectListRoute} from '../routes';
-import {constant, map, getPath, pipe, not, isEmpty, chain, safe, curry, isArray, flip, identity,} from 'crocks';
+import {constant, map, getPath, pipe, not, isEmpty, chain, safe, curry, isArray} from 'crocks';
 import {getName} from 'feature/user/utils';
 import {hasLength} from '@s-e/frontend/pred';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import {useCity, useObject} from '../api';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import Button from 'components/Button';
-import {useAuth} from 'context/auth';
-import {useNotification} from 'feature/ui-notifications/context';
-import raw from 'raw.macro';
-import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
-import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
-import {errorToText} from 'api/buildApiHook';
+import ObjectInnerPhotos from '../components/ObjectInnerPhotos';
+import ObjectSettings from '../components/ObjectSettings';
 
 
 
@@ -80,75 +75,7 @@ const ObjectEditForm = ({saveRef}) => {
   const cities = useCity(true);
 
 
-  const auth = useAuth();
-  const _uploadImage = flip(auth.api)(raw('../api/graphql/UploadImage.graphql'));
-  const _removeImage = flip(auth.api)(raw('../api/graphql/RemoveImage.graphql'));
-  const {notify} = useNotification();
-
-  const getBase64 = (file, cb) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-        cb(reader.result)
-    };
-    reader.onerror = function (error) {
-        console.log('Error: ', error);
-    };
-  }
-
-  const uploadImage = () => {
-    document.getElementById('chooseImage').click();
-  }
-
-  const onFileChoose = (event) => {
-    const file = event.target.files[0];
-
-    getBase64(file, (result) => {
-      _uploadImage({object_id: params.id, src: result}).fork((error) => {
-        notify(
-          <NotificationSimple
-            Icon={XCircleIcon}
-            iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
-            heading={t`apiError`}
-          >
-            {errorToText(identity, error)}
-          </NotificationSimple>
-        )
-      }, () => {
-        notify(
-          <NotificationSimple
-            Icon={CheckCircleIcon}
-            iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
-            heading={t`success`}
-            />
-        );
-      });
-    })
-  }
-
-  const removeImage = (e) => {
-    if (!confirm('Are you sure you want to delete?')) return;
   
-    _removeImage({id: e.target.id}).fork((error) => {
-      notify(
-        <NotificationSimple
-          Icon={XCircleIcon}
-          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
-          heading={t`apiError`}
-        >
-          {errorToText(identity, error)}
-        </NotificationSimple>
-      )
-    }, () => {
-      notify(
-        <NotificationSimple
-          Icon={CheckCircleIcon}
-          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
-          heading={t`success`}
-          />
-      );
-    })
-  }
 
 
 
@@ -188,47 +115,10 @@ const ObjectEditForm = ({saveRef}) => {
         </div>
 
         {/* Object photos */}
-        <div className='p-6 flex flex-col space-y-8 w-1/2'>
-          <h2 className='font-bold text-xl'>{t('object_photos')}</h2>
-
-          <div className='grid grid-cols-4 gap-4'>
-            {form['images']?.map(img => (
-              <div key={img.id} className={'flex flex-col items-end'}>
-                <Button.NoBg id={img.id} onClick={removeImage} className={'w-fit text-red-500 '}>{t('delete')}</Button.NoBg>
-                <img src={img.src} />
-              </div>
-            ))}
-          </div>
-
-          <div className='flex justify-end w-full'>
-            <input
-              id='chooseImage'
-              type='file'
-              name='image'
-              onChange={onFileChoose}
-              hidden={true}
-            />
-            <Button.Nd onClick={uploadImage}>{t('upload_photo')}</Button.Nd>
-          </div>
-        </div>            
+        <ObjectInnerPhotos objectId={params.id} form={form} />    
         
         {/* Object settings */}
-        <div className='p-6 flex flex-col space-y-8'>
-          <h2 className='font-bold text-xl'>{t('feedback_settings')}</h2>
-
-          <div className='flex flex-row w-full space-x-10'>
-            <CheckBox className='items-end' {...ctrl('is_crew_autoasigned')}/>
-            <InputGroup  {...ctrl('feedback_from')}/>
-            <InputGroup {...ctrl('feedback_until')}/>
-            <InputGroup {...ctrl('feedback_sla_time_in_min')} type='number'/>
-          </div>
-          <div>
-            <CheckBox className='items-end' {...ctrl('is_call_after_inspection')} />
-          </div>
-          <div>
-            <CheckBox className='items-end' {...ctrl('is_atm')}/>
-          </div>
-        </div>
+        <ObjectSettings ctrl={ctrl} />
       </div>
 
       <aside className={'border-l border-gray-border'}>

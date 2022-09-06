@@ -7,12 +7,12 @@ import {CalendarIcon} from '@heroicons/react/outline';
 // import InputGroup from 'components/atom/input/InputGroup';
 import Nullable from 'components/atom/Nullable';
 import React, {useState, useMemo, useEffect} from 'react';
-import {addDays, compareAsc, format, isEqual, subDays, isSameDay} from 'date-fns';
+import {addDays, compareAsc, format, isEqual, subDays, isSameDay, isBefore, isAfter} from 'date-fns';
 import Button from './Button';
 
 const DAY = {
   SUNDAY: 0, MONDAY: 1, TUESDAY: 2, WEDNESDAY: 3, THURSDAY: 4, FRIDAY: 5, SATURDAY: 6
-}
+};
 
 const MONTH = {
   0: 'January', 1: 'February', 2: 'March', 3: 'April',
@@ -20,13 +20,17 @@ const MONTH = {
   8: 'September', 9: 'October', 10: 'November', 11: 'December'
 }
 
+const TURN = {
+  START: 0, END: 1
+};
+
 const MONTH_MIN = 0;
 const MONTH_MAX = 11;
 const DAYS_IN_WEEK = 7; // sunday - 0
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
-}
+};
 
 
 const getLastDayOfMonth = (year, month) => {
@@ -36,11 +40,12 @@ const getLastDayOfMonth = (year, month) => {
 
 
 
-const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
+const DatePicker = ({label, defaultValue, onChange, placeholder, range = false}) => {
   const [isPickerShown, setIsPickerShown] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState(defaultValue);
+  const [turn, setTurn] = useState(TURN.START);
 
   useEffect(() => {
     if (defaultValue) {
@@ -67,7 +72,9 @@ const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
         date: format(currentDate, 'Y-MM-dd'),
         isToday: isSameDay(currentDate, new Date()),
         isCurrentMonth: compareAsc(currentDate, firstDay) >= 0 && compareAsc(currentDate, lastDay) <= 0,
-        isSelected: isEqual(currentDate, selectedDate)
+        isDisabled: range && selectedDate && selectedDate.length == 1 ? isBefore(currentDate, selectedDate[0]) : false,
+        isSelected: range ? selectedDate && selectedDate?.find(d => isEqual(currentDate, d)) : isEqual(currentDate, selectedDate), 
+        isBetweenDates: range && selectedDate && selectedDate.length == 2 && isAfter(currentDate, selectedDate[0]) && isBefore(currentDate, selectedDate[1]),
       });
 
       currentDate = addDays(currentDate, 1);
@@ -92,8 +99,16 @@ const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
     }
 
     if (!isPickerShown) {
-      setCurrentYear(selectedDate ? selectedDate.getFullYear() : new Date().getFullYear());
-      setCurrentMonth(selectedDate ? selectedDate.getMonth() : new Date().getMonth());
+      if (selectedDate && !range) {
+        setCurrentYear(selectedDate ? selectedDate.getFullYear() : new Date().getFullYear());
+        setCurrentMonth(selectedDate ? selectedDate.getMonth() : new Date().getMonth());
+      } else if (selectedDate && range) {
+        setCurrentYear(selectedDate ? selectedDate[0].getFullYear() : new Date().getFullYear());
+        setCurrentMonth(selectedDate ? selectedDate[0].getMonth() : new Date().getMonth());
+      } else {
+        setCurrentYear(new Date().getFullYear());
+        setCurrentMonth(new Date().getMonth());
+      }
     }
 
     setIsPickerShown(f => !f);
@@ -128,13 +143,24 @@ const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
   const selectDay = (e) => {
     let selected = new Date(e.currentTarget.dataset.date.split('-'));
 
-    // if we pick same day - clear selectedDate
-    if (selectedDate && isEqual(selectedDate, selected)) {
-      selected = null;
-    }
+    if (!range) {
+      // if we pick same day - clear selectedDate
+      if (selectedDate && isEqual(selectedDate, selected)) {
+        selected = null;
+      }
 
-    setSelectedDate(selected);
-    setIsPickerShown(false);
+      setSelectedDate(selected);
+      setIsPickerShown(false);
+    } else {
+      if (turn === TURN.START) {
+        setSelectedDate([selected]);
+        setTurn(TURN.END);
+      } else if (turn === TURN.END) {
+        setSelectedDate((current) => [...current, selected]);
+        setTurn(TURN.START);
+        setIsPickerShown(false);
+      }
+    }
 
     // call parent's onChange
     onChange(selected);
@@ -147,18 +173,22 @@ const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
       </Nullable>
       <div className={'mt-1 relative'}>
         <Button onClick={onFocus}>
-          {selectedDate && format(selectedDate, 'Y-MM-dd')}
-          <Nullable on={placeholder && !selectedDate}>
+          {!range && selectedDate && format(selectedDate, 'Y-MM-dd')}
+          {range && selectedDate && selectedDate.length == 2 && `${format(selectedDate[0], 'Y-MM-dd')}, ${format(selectedDate[1], 'Y-MM-dd')}`}
+          
+          <Nullable on={placeholder && (!range && !selectedDate || range && (!selectedDate || (selectedDate && selectedDate.length < 2)))}>
             <span className='text-slate-700 pointer-events-none'>{placeholder}</span>
           </Nullable>
-          <Nullable on={selectedDate}>
+          
+          <Nullable on={!range && selectedDate || range && selectedDate && selectedDate.length == 2}>
           <span className={'absolute inset-y-0 right-8 flex items-center pr-2'}>
-            <XIcon className={'h-5 w-5 text-gray-400'} />
+            <XIcon className={'h-5 w-5 text-gray-400 cursor-pointer'} />
           </span>
           </Nullable>
+          
           <span className={'absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none'}>
-          <CalendarIcon className={'h-5 w-5 text-gray-400'} />
-        </span>
+            <CalendarIcon className={'h-5 w-5 text-gray-400'} />
+          </span>
         </Button>
         <Nullable on={isPickerShown}>
           <div className={'absolute origin-top-right mt-1 w-full left-0 z-50 bg-white'}>
@@ -196,27 +226,29 @@ const DatePicker = ({label, defaultValue, onChange, placeholder}) => {
                   key={day.date}
                   type='button'
                   className={classNames(
-                    'py-1.5 hover:bg-gray-100 focus:z-10',
+                    'py-1.5 focus:z-10',
                     day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',
                     (day.isSelected || day.isToday) && 'font-semibold',
-                    day.isSelected && 'text-white',
+                    (day.isSelected || day.isBetweenDates) && 'text-white',
                     !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900',
                     !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-400',
                     day.isToday && !day.isSelected && 'text-steel',
+                    !day.isDisabled ? 'hover:bg-gray-100' : 'bg-gray-50 text-gray-400 cursor-not-allowed',
                     dayIdx === 0 && 'rounded-tl-lg',
                     dayIdx === DAYS_IN_WEEK - 1 && 'rounded-tr-lg',
                     dayIdx === days.length - DAYS_IN_WEEK && 'rounded-bl-lg',
                     dayIdx === days.length - 1 && 'rounded-br-lg'
                   )}
                   data-date={day.date}
-                  onClick={selectDay}
+                  onClick={!day.isDisabled ? selectDay : null}
                 >
                 <span
                   dateTime={day.date}
                   className={classNames(
                     'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
                     day.isSelected && day.isToday && 'bg-steel',
-                    day.isSelected && !day.isToday && 'bg-gray-900'
+                    day.isSelected && !day.isToday && 'bg-gray-900',
+                    day.isBetweenDates && 'bg-gray-400',
                   )}
                 >
                   {day.date.split('-').pop().replace(/^0/, '')}

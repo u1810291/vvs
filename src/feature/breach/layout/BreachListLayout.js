@@ -55,15 +55,17 @@ const BreachListLayout = withPreparedProps(Listing, props => {
       </Link>
   ), [t]);
 
+  
+  const {data: crewDropdown} = useCrewDropdown();
+  const {data: driverDropdown} = useDriversDropdown();
 
   const tableColumns = [
-    // column('id', pipe(getProp('id')), true, null,),
     column(
       'start_time',
       pipe(
         getProp('start_time'),
         chain(safe(not(isEmpty))),
-        map(date => format(new Date(date), 'Y-MM-d HH:mm'))
+        map(date => format(new Date(date), 'Y-MM-dd HH:mm'))
       ),
       true, null,
     ),
@@ -81,25 +83,20 @@ const BreachListLayout = withPreparedProps(Listing, props => {
         )
       ), true, null
     ),
-    // column('crew_id', pipe(getProp('crew_id')), true, 'text-steel'),
     column('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
-    // column('driver_name', pipe(getPath(['crew', 'driver_name'])), true, 'text-steel'),
   ]
 
-  const {data: crewDropdown} = useCrewDropdown();
-  const {data: driverDropdown} = useDriversDropdown();
-  // console.log(crewDropdown, driverDropdown);
 
-  const filtersData = [
-    // {key: 'start_time', label: 'Started At', filter: 'date'},
+  const filtersData = [    
+    {key: 'start_time', label: 'Started at', filter: 'daterange'},
     // {key: 'end_time', label: 'Ended At', filter: 'date'},
     {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || [], displayValue: (v) => {
       return crewDropdown?.find(c => c.value === v)?.name;
     }},
-    {key: 'driver_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
+    {key: 'driver_user_id', label: 'Driver', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
       return driverDropdown?.find(d => d.value === v)?.name;
     }},
-    {key: 'time_outside_the_zone', label: 'Time outside zone', filter: 'range'},
+    {key: 'time_outside_zone', label: 'Time outside zone (seconds)', filter: 'range'},
   ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
