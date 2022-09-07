@@ -18,6 +18,7 @@ import SettingFeature from 'feature/setting/routes';
 import UserFeature from 'feature/user/routes';
 import ClassifierFeature from 'feature/classifier/routes';
 import SelfServiceRoute from 'feature/self-service/routes';
+import AlarmRoute from 'feature/alarm/routes';
 
 import NotFoundLayout from './layout/NotFoundLayout';
 
@@ -40,6 +41,7 @@ const Routes = (
     {SettingFeature}
     {ClassifierFeature}
     {UserFeature}
+    {AlarmRoute}
     <Route isHidden path='*' element={<NotFoundLayout />} />
   </>
 );
