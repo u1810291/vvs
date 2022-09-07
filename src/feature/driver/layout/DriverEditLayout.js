@@ -9,10 +9,18 @@ import {useTranslation} from 'react-i18next';
 import {useRef} from 'react';
 import DriverEditForm from '../form/DriverEditForm';
 import useDriver from 'feature/driver/api/useDriver';
-import {identity, isFunction, Maybe} from 'crocks';
+import {flip, identity, isFunction, Maybe} from 'crocks';
 import {titleCase} from '@s-e/frontend/transformer/string';
 import DriverOnlineTag from '../component/DriverOnlineTag';
 import {getName} from 'feature/user/utils';
+import {useNotification} from 'feature/ui-notifications/context';
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
+import {XCircleIcon} from '@heroicons/react/solid';
+import {errorToText} from 'api/buildApiHook';
+import {useAuth} from 'context/auth';
+import raw from 'raw.macro';
+
+
 
 const DriverEditLayout = () => {
   const saveRef = useRef(identity);
@@ -26,6 +34,29 @@ const DriverEditLayout = () => {
     .alt(Maybe.Just(t`newDriver`).map(titleCase))
     .option(null)
   );
+
+  const auth = useAuth();
+  const _createSettings = flip(auth.api)(raw('../api/graphql/CreateDriverSettings.graphql'));
+  const {notify} = useNotification();
+
+  // save
+  const save = () => {
+    isFunction(saveRef.current) && saveRef.current((pk) => {
+      _createSettings({id: pk['register']['user']['id']}).fork((error) => {
+        notify(
+          <NotificationSimple
+            Icon={XCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+            heading={t`apiError`}
+          >
+            {errorToText(identity, error)}
+          </NotificationSimple>
+        )
+      }, () => {
+        // success
+      })
+    });
+  }
 
   return (
     <SidebarLayout>
@@ -44,7 +75,7 @@ const DriverEditLayout = () => {
           </Breadcrumbs>
           <div className='space-x-4'>
             <Button.Nd onClick={() => nav(DriverListRoute.props.path)}>{t`cancel`}</Button.Nd>
-            <Button onClick={() => isFunction(saveRef.current) && saveRef.current()}>{t`save`}</Button>
+            <Button onClick={save}>{t`save`}</Button>
           </div>
         </>
       </Header>
