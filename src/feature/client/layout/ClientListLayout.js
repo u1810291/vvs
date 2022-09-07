@@ -26,14 +26,13 @@ import Innerlinks from 'components/Innerlinks';
 import {HelpListRoute} from 'feature/help/routes';
 import DriverOnlineTag from 'feature/driver/component/DriverOnlineTag';
 import useClients from '../api/useClients';
-import {ClientEditRoute, ClientCreateRoute} from '../routes';
+import {ClientEditRoute} from '../routes';
 import {useFilter} from 'hook/useFilter';
 import Button from 'components/Button';
 import {FilterIcon} from '@heroicons/react/solid';
 import {format} from 'date-fns';
 import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
-
-
+import {ClientCreateRoute} from '../routes';
 
 
 const ClientListLayout = withPreparedProps(Listing, props => {
@@ -43,7 +42,7 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   const {t} = useTranslation('client', {keyPrefix: 'list.column'});
   const {t: tp} = useTranslation('client');
   const nav = useNavigate();
-  
+
   const c = (prop, mapper = identity, status) => ({
     key: prop,
     headerText: tc(prop),
@@ -69,7 +68,7 @@ const ClientListLayout = withPreparedProps(Listing, props => {
 
   const boolCol = useMemo(() => pipe(String, t), [t]);
   const dateCol = (d) => format(new Date(d), 'Y-MM-dd HH:mm');
-  
+
 
   const {data: objectsDropdown} = useObjectsDropdown();
   // console.log(objectsDropdown);
@@ -114,7 +113,7 @@ const ClientListLayout = withPreparedProps(Listing, props => {
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`clients`}</span></Breadcrumbs.Item>
         <Button.NoBg onClick={toggleFilter}>
-          {defaultFilter.id ? defaultFilter.name : tb('allData') } 
+          {defaultFilter.id ? defaultFilter.name : tb('allData') }
           <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
         </Button.NoBg>
       </Breadcrumbs>

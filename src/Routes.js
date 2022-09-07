@@ -17,7 +17,6 @@ import DislocationFeature from 'feature/dislocation/routes';
 import SettingFeature from 'feature/setting/routes';
 import UserFeature from 'feature/user/routes';
 import ClassifierFeature from 'feature/classifier/routes';
-import SelfServiceRoute from 'feature/self-service/routes';
 
 import NotFoundLayout from './layout/NotFoundLayout';
 
@@ -36,7 +35,6 @@ const Routes = (
     {KeyBoxFeature}
     {ClientFeature}
     {HelpFeature}
-    {SelfServiceRoute}
     {SettingFeature}
     {ClassifierFeature}
     {UserFeature}
