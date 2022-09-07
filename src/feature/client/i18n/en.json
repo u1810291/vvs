@@ -12,7 +12,10 @@
       "full_name": "Full name",
       "contract_number": "Contract no.",
       "phone_number": "Phone number",
-      "email": "Email"
+      "email": "Email",
+      "error": {
+        "clientWasNotCreated": "First save a client"
+      }
     }
   },
   "edit": {

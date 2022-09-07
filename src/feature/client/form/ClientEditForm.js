@@ -1,7 +1,7 @@
 import InputGroup from 'components/atom/input/InputGroup';
 import useClient from '../api/useClient';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-import {ClientListRoute} from '../routes';
+import {ClientEditRoute, ClientListRoute} from '../routes';
 import {constant, getPathOr, identity, isSame, flip, or, isEmpty} from 'crocks';
 import {hasLength, isEmail} from '@s-e/frontend/pred';
 import {lengthGt} from 'util/pred';
@@ -11,7 +11,6 @@ import AsideDisclosure from 'components/Disclosure/AsideDisclosure';
 import {caseMap} from '@s-e/frontend/flow-control';
 import CheckBox from 'components/atom/input/CheckBox';
 import Button from 'components/Button';
-import Nullable from 'components/atom/Nullable';
 import ClientObjectList from '../component/ClientObjectList';
 import {useAuth} from 'context/auth';
 import raw from 'raw.macro';
@@ -19,6 +18,7 @@ import {useNotification} from 'feature/ui-notifications/context';
 import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
 import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
 import {errorToText} from 'api/buildApiHook';
+import Nullable from 'components/atom/Nullable';
 
 
 const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
@@ -78,7 +78,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     }),
     mobilePhone: FORM_FIELD.TEXT({
       label: t`field.mobilePhohe`,
-      validator: id ? or(isEmpty, lengthGt(PHONE_MIN_LENGTH - 1)) : lengthGt(PHONE_MIN_LENGTH - 1),
+      validator: id ? or(isEmpty, lengthGt(PHONE_MIN_LENGTH - 1)) : constant(true),
       message: t`validation.mobilePhohe`,
       showValidationBelow: true,
     }),
@@ -97,17 +97,17 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     })
   });
 
-  console.log(form);
-
   const api = useClient({
     id,
     formResult: result,
     saveRef,
     setForm,
-    successRedirectPath: ClientListRoute.props.path,
+    successRedirectPath: id ? ClientListRoute.props.path : null,
     errorMapper: caseMap(identity, [
       [isSame('the key \'message\' was not present'), constant(t('error.server'))]
     ]),
+    editRedirectPath: ClientEditRoute.props.path,
+    newObjectPath: ['register', 'user', 'id'],
   });
 
   const auth = useAuth();
@@ -146,12 +146,16 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
           <div className='lg:flex lg:space-x-6 lg:space-y-0 items-start'>
             <InputGroup {...ctrl('firstName')} />
             <InputGroup {...ctrl('lastName')} />
-            <CheckBox className={'mt-4'} {...ctrl('is_company_admin')}  />
+            <Nullable on={id}>
+              <CheckBox className={'mt-4'} {...ctrl('is_company_admin')}  />
+            </Nullable>
           </div>
           <div className='lg:flex lg:space-x-6 lg:space-y-0 items-start'>
             <InputGroup {...ctrl('username')} />
             <InputGroup {...ctrl('mobilePhone')} />
-            <CheckBox className='mt-4' {...ctrl('is_send_report')} />
+            <Nullable on={id}>
+              <CheckBox className='mt-4' {...ctrl('is_send_report')} />
+            </Nullable>
           </div>
           <div >
             <Button.Xs onClick={() => forgotPassword()}>{t`restore_password`}</Button.Xs>
@@ -171,10 +175,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
         </aside>
       </section>
 
-      <Nullable on={id}>
-        <ClientObjectList userId={id} assignRef={assignRef} removeRef={removeRelRef} />
-      </Nullable>
-      
+      <ClientObjectList userId={id} assignRef={assignRef} removeRef={removeRelRef} />      
     </section>
   );
 };

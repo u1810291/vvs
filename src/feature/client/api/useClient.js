@@ -1,13 +1,13 @@
 import raw from 'raw.macro';
-import {Async, pipe, branch, merge, bimap, assign, getProp, safe, chain, option, isObject} from 'crocks';
+import {Async, pipe, branch, merge, bimap, assign, getProp, safe, chain, option, isObject, tap, pick} from 'crocks';
 import {createUseOne} from 'api/buildApiHook';
 import {getPathAsync} from 'api/buildUserQuery';
 import {removeFalsyFields} from 'util/obj';
 
 export default createUseOne({
   getGraphQl: raw('./graphql/GetClientInfo.graphql'),
-  updateGraphQl: raw('./graphql/UpdateClientInfo.graphql'),
-  createGraphql: raw('./graphql/CreateNewClient.graphql'),
+  updateGraphQl: raw('./graphql/UpdateClientInfoData.graphql'),
+  createGraphql: raw('./graphql/CreateClientNew.graphql'),
   asyncMapFromApi: pipe(
     branch,
     bimap(
@@ -21,7 +21,19 @@ export default createUseOne({
     merge((l, r) => r.map(assign(l)))
   ),
   asyncMapToApi: pipe(
+    pick([
+      'firstName',
+      'lastName',
+      'username',
+      'id',
+      'password',
+      'mobilePhone',
+      'is_company_admin',
+      'is_send_report',
+      'archived_at',
+    ]),
     removeFalsyFields,
+    tap(console.log),
     Async.Resolved,
   ),
 });

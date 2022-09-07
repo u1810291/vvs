@@ -12,7 +12,7 @@
       "set_name": "Set",
       "crew_name": "Crew",
       "error": {
-        "keyboxNotWasCreate": "First save a key box"
+        "keyboxWasNotCreated": "First save a key box"
       }
     }
   }

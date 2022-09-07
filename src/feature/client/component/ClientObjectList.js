@@ -13,6 +13,8 @@ import {
   option,
   constant,
   isFunction,
+  identity,
+  isSame,
   // maybeToAsync,
 } from 'crocks';
 import Table from 'components/Table';
@@ -25,10 +27,12 @@ import {titleCase} from '@s-e/frontend/transformer/string';
 import {useObjects} from 'feature/object/api';
 // import {ClientEditRoute} from '../routes';
 // import {generatePath} from 'react-router-dom';
-import {useNavigate} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import ComboBox from 'components/atom/input/ComboBox';
 import useClientObjects from '../api/useClientObjects';
 import useClientObject from '../api/useClientObject';
+import {ClientEditRoute} from '../routes';
+import {caseMap} from '@s-e/frontend/flow-control';
 
 
 
@@ -100,15 +104,26 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
     setForm,
     saveRef: assignRef,
     removeRef: removeRef,
-    // successRedirectPath: generatePath(ClientEditRoute.props.path, {id: userId}),
+    successRedirectPath: userId && generatePath(ClientEditRoute.props.path, {id: userId}),
+    errorMapper: caseMap(identity, [
+      [isSame('invalid input syntax for type uuid: ""'), constant(t('error.clientWasNotCreated'))]
+    ]),
   })
+
+  const showObjectModal = () => {
+    const theForm = {...form};
+    theForm['user_id'] = userId;
+    setForm(theForm);
+
+    toggleModal();
+  }
 
 
   return (
     <div className='flex flex-col w-4/6 p-6'>
       <div className='flex flex-row justify-between'>
         <h2>{tp`Objects`}</h2>
-        <Button.Xs className='w-fit' onClick={toggleModal}>{tp`Assign object`}</Button.Xs>
+        <Button.Xs className='w-fit' onClick={showObjectModal}>{tp`Assign object`}</Button.Xs>
       </div>
 
       <Table className='mt-2 w-full'>

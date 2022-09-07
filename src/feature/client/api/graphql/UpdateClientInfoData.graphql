@@ -1,7 +1,6 @@
 mutation (
   $firstName: String, 
   $lastName: String, 
-  $fullName: String,
   $username: String, 
   $password: String, 
   $mobilePhone: String, 
@@ -13,7 +12,7 @@ mutation (
   $last_ping: timestamp = null,
 
   $id: uuid!) {
-    update_user (firstName: $firstName, lastName: $lastName, fullName: $fullName, username: $username, password: $password, mobilePhone: $mobilePhone, id: $id) {
+    update_user (firstName: $firstName, lastName: $lastName, username: $username, password: $password, mobilePhone: $mobilePhone, id: $id) {
       user {
         id
       }

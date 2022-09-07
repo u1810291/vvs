@@ -78,7 +78,7 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     saveRef,
     removeRef,
     editRedirectPath: KeyBoxEditRoute.props.path,
-    insertTableName: 'insert_object_key_box_one',
+    newObjectPath: ['insert_object_key_box_one', 'id'],
   });
 
 
