@@ -77,6 +77,20 @@ export const createUseListWithAuth = ({graphQl, asyncMapFromApi}) => () => {
 /**
  * @param {object} props
  * @param {string} props.graphQl
+ * @param {(auth: import('context/auth').AuthContextValue) => (data) => import('crocks/Async').default} props.asyncMapFromApi
+ */
+ export const createUseListWithAuthQuery = ({graphQl, asyncMapFromApi}) => ({filters}) => {
+  const auth = useAuth();
+
+  return useAsyncSwr([graphQl, filters], (query) => (
+    auth.api(filters, query)
+    .chain(asyncMapFromApi(auth))
+  ));
+}
+
+/**
+ * @param {object} props
+ * @param {string} props.graphQl
  * @param {(data) => import('crocks/Async').default} props.asyncMapFromApi
  */
 export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
@@ -171,6 +185,7 @@ export const createUseOne = ({
   const create = useMemo(() => pipe(
     resultToAsync,
     chain(asyncMapToApi),
+    // chain(tap(console.log)),  
     chain(flip(api)(createGraphql))
   ), [api]);
 

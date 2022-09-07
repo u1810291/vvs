@@ -2,7 +2,7 @@ import InputGroup from 'components/atom/input/InputGroup';
 import useClient from '../api/useClient';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {ClientListRoute} from '../routes';
-import {constant, getPathOr, identity, isSame, flip} from 'crocks';
+import {constant, getPathOr, identity, isSame, flip, or, isEmpty} from 'crocks';
 import {hasLength, isEmail} from '@s-e/frontend/pred';
 import {lengthGt} from 'util/pred';
 import {useParams} from 'react-router-dom';
@@ -33,6 +33,9 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     
     setForm(theForm);
   }
+
+  const PHONE_MIN_LENGTH = 6;
+
 
   const {ctrl, result, form, setForm} = useResultForm({
     firstName: FORM_FIELD.TEXT({
@@ -75,12 +78,9 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     }),
     mobilePhone: FORM_FIELD.TEXT({
       label: t`field.mobilePhohe`,
-      validator: lengthGt(5),
+      validator: id ? or(isEmpty, lengthGt(PHONE_MIN_LENGTH - 1)) : lengthGt(PHONE_MIN_LENGTH - 1),
       message: t`validation.mobilePhohe`,
       showValidationBelow: true,
-      props: {
-        isRequired: constant(true),
-      }
     }),
     is_company_admin: FORM_FIELD.BOOL({
       label: t`field.is_company_admin`,
@@ -89,8 +89,15 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     is_send_report: FORM_FIELD.BOOL({
       label: t`field.is_send_report`,
       validator: constant(true),
+    }),
+    password: FORM_FIELD.TEXT({
+      label: '',      
+      initial: Math.random().toString(36).slice(-8),
+      validator: constant(true),
     })
   });
+
+  console.log(form);
 
   const api = useClient({
     id,
@@ -99,7 +106,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     setForm,
     successRedirectPath: ClientListRoute.props.path,
     errorMapper: caseMap(identity, [
-      [isSame('the key \'message\' was not present'), constant(t('error.usernameAleardyExists'))]
+      [isSame('the key \'message\' was not present'), constant(t('error.server'))]
     ]),
   });
 

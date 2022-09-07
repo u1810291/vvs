@@ -15,6 +15,7 @@ import Filter from 'components/Filter';
 import {
   hasProps,
   isArray,
+  isFunction,
   // isObject,
   map,
   option,
@@ -259,7 +260,7 @@ const getDefaultFilterId = (filters) => {
   return defaultFilter ? defaultFilter.id : null;
 }
 
-export const useFilter = (tableName, tableColumns, filtersData, initialState) => {
+export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
   // console.log('filters initial state', initialState);
 
   const [showFilter, setShowFilter] = useState(true);
@@ -822,6 +823,10 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
+    // if custom filter logic was provided
+    if (isFunction(customFilter)) return customFilter(state, filtersData);
+
+    // standard graphql filtering
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
@@ -903,7 +908,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState) =>
         _and: params
       }
     };
-  }, [state, filtersData]);
+  }, [state, filtersData, customFilter]);
 
   return [
     queryParams,

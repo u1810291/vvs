@@ -1,13 +1,13 @@
 import raw from 'raw.macro';
 import {augmentUser, getPathAsync} from 'api/buildUserQuery';
-import {createUseListWithAuth} from 'api/buildApiHook';
+import {createUseListWithAuthQuery} from 'api/buildApiHook';
 import {mapByMaybe} from 'util/array';
 import {
   getProp, 
   curry, 
 } from 'crocks';
 
-const LIST_PROPS = ['usersByRole', 'users'];
+const LIST_PROPS = ['usersByQuery', 'users'];
 const LIST_SETTINGS_PROPS = ['user_settings'];
 
 /**
@@ -33,8 +33,8 @@ export const getUserSettings = curry((
 
 
 
-export default createUseListWithAuth({
-  graphQl: raw('./graphql/GetAllDrivers.graphql'),
+export default createUseListWithAuthQuery({
+  graphQl: raw('./graphql/GetDriversByQuery.graphql'),
   asyncMapFromApi: auth => item => (
     getPathAsync(LIST_PROPS, item)
     .chain(augmentUser(getUserSettings(auth)))
