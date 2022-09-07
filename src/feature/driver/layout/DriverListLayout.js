@@ -21,7 +21,6 @@ import {
   hasProps,
 } from 'crocks';
 import useDrivers from '../api/useDrivers';
-import useDriversDropdown from '../api/useDriversDropdown';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import Button from 'components/Button';
@@ -96,10 +95,47 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   );
 
   
-  const api = useDrivers();
-  const {data: driverDropdown} = useDriversDropdown();
+  // const {data: driverDropdown} = useDriversDropdown();
   
-  // console.log(api?.data, driverDropdown);
+  // console.log(api?.data);
+
+  // custom filter
+  const driversFilter = (state, filtersData) => {
+    return {'query': JSON.stringify({
+      'bool': {
+        'must': [
+          {
+            'wildcard': {
+              'fullName': {
+                'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
+              }
+            }
+          },
+          {
+            'nested': {
+              'path': 'registrations',
+              'query': {
+                'bool': {
+                  'must': [
+                    {
+                      'match': {
+                        'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+                      }
+                    },
+                    {
+                      'match': {
+                        'registrations.roles': 'crew'
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    })};
+  }
 
   
   const tableColumns = [
@@ -124,22 +160,26 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   ];
 
   const filtersData = [
-    {key: 'id', label: 'Name Surname', filter: 'autocomplete', values: driverDropdown || [], displayValue: (v) => {
-      return driverDropdown?.find(d => d.value === v)?.name;
-    }},
+    {key: 'fullName', label: 'Name Surname', filter: 'text',},
     {key: 'status', label: 'Status', filter: 'multiselect', values: ['OFFLINE', 'ONLINE', 'DEACTIVATED']},
   ]
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'crew_driver',
     tableColumns,
-    filtersData
+    filtersData,
+    [],
+    driversFilter
   );
+
+  const api = useDrivers({filters: queryParams});
 
   useEffect(() => {
     // console.log(queryParams);
     api.mutate()
   }, [queryParams]);
+
+  // console.log(api?.data);
 
   return {
     list: api?.data || [],

@@ -2,7 +2,7 @@ import InputGroup from 'components/atom/input/InputGroup';
 import useClient from '../api/useClient';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {ClientListRoute} from '../routes';
-import {constant, or, isEmpty, getPathOr, identity, isSame, flip} from 'crocks';
+import {constant, getPathOr, identity, isSame, flip, or, isEmpty} from 'crocks';
 import {hasLength, isEmail} from '@s-e/frontend/pred';
 import {lengthGt} from 'util/pred';
 import {useParams} from 'react-router-dom';
@@ -34,6 +34,9 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     setForm(theForm);
   }
 
+  const PHONE_MIN_LENGTH = 6;
+
+
   const {ctrl, result, form, setForm} = useResultForm({
     firstName: FORM_FIELD.TEXT({
       label: t`field.firstName`,
@@ -41,6 +44,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
       message: t`validation.firstName`,
       showValidationBelow: true,
       props: {
+        isRequired: constant(true),
         onChange: ({set}) => ({target: {value}}) => {
           set(value);
           setFullName(value, form['lastName']);
@@ -49,8 +53,11 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     }),
     lastName: FORM_FIELD.TEXT({
       label: t`field.lastName`, 
-      validator: constant(true),
+      validator: hasLength,
+      message: t`validation.firstName`,
+      showValidationBelow: true,
       props: {
+        isRequired: constant(true),
         onChange: ({set}) => ({target: {value}}) => {
           set(value);
           setFullName(form['firstName'], value);
@@ -65,10 +72,13 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
       validator: isEmail,
       message: t`validation.username`,
       showValidationBelow: true,
+      props: {
+        isRequired: constant(true),
+      }
     }),
     mobilePhone: FORM_FIELD.TEXT({
       label: t`field.mobilePhohe`,
-      validator: id ? or(isEmpty, lengthGt(5)) : lengthGt(5),
+      validator: id ? or(isEmpty, lengthGt(PHONE_MIN_LENGTH - 1)) : lengthGt(PHONE_MIN_LENGTH - 1),
       message: t`validation.mobilePhohe`,
       showValidationBelow: true,
     }),
@@ -79,8 +89,15 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     is_send_report: FORM_FIELD.BOOL({
       label: t`field.is_send_report`,
       validator: constant(true),
+    }),
+    password: FORM_FIELD.TEXT({
+      label: '',      
+      initial: Math.random().toString(36).slice(-8),
+      validator: constant(true),
     })
   });
+
+  console.log(form);
 
   const api = useClient({
     id,
@@ -89,7 +106,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     setForm,
     successRedirectPath: ClientListRoute.props.path,
     errorMapper: caseMap(identity, [
-      [isSame('the key \'message\' was not present'), constant(t('error.usernameAleardyExists'))]
+      [isSame('the key \'message\' was not present'), constant(t('error.server'))]
     ]),
   });
 
@@ -126,17 +143,17 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     <section className={'flex flex-col'}>
       <section className='flex-col lg:flex-row flex '>
         <div className='p-6 first-letter:flex-col flex-grow space-y-6'>
-          <div className='lg:flex lg:space-x-6 lg:space-y-0 items-end'>
+          <div className='lg:flex lg:space-x-6 lg:space-y-0 items-start'>
             <InputGroup {...ctrl('firstName')} />
             <InputGroup {...ctrl('lastName')} />
-            <CheckBox {...ctrl('is_company_admin')} className={'align-center'} />
+            <CheckBox className={'mt-4'} {...ctrl('is_company_admin')}  />
           </div>
-          <div className='lg:flex lg:space-x-6 lg:space-y-0 items-end'>
+          <div className='lg:flex lg:space-x-6 lg:space-y-0 items-start'>
             <InputGroup {...ctrl('username')} />
             <InputGroup {...ctrl('mobilePhone')} />
-            <CheckBox {...ctrl('is_send_report')} />
+            <CheckBox className='mt-4' {...ctrl('is_send_report')} />
           </div>
-          <div className=''>
+          <div >
             <Button.Xs onClick={() => forgotPassword()}>{t`restore_password`}</Button.Xs>
           </div>
         </div>

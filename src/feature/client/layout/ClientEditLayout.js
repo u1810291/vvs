@@ -18,6 +18,9 @@ import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
 import {errorToText} from 'api/buildApiHook';
 import {useNotification} from 'feature/ui-notifications/context';
 
+
+
+
 const toBreadcrumbValue = pipe(
   a => String(a || '').trim(),
   safe(not(isEmpty)),
@@ -25,7 +28,6 @@ const toBreadcrumbValue = pipe(
 
 const ClientEditLayout = () => {
   const saveRef = useRef(identity);
-  const archiveRef = useRef(identity);
   const assignRef = useRef(identity);
   const removeRelRef = useRef(identity);
 
