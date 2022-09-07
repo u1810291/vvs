@@ -15,6 +15,7 @@ query Objects($where: object_bool_exp) {
     navision_id
     phone
     provider_id
+    created_at
     users {
       user_id
     }

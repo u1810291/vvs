@@ -7,6 +7,7 @@ import {removeFalsyFields} from 'util/obj';
 export default createUseOne({
   getGraphQl: raw('./graphql/GetClientInfo.graphql'),
   updateGraphQl: raw('./graphql/UpdateClientInfo.graphql'),
+  createGraphql: raw('./graphql/CreateNewClient.graphql'),
   asyncMapFromApi: pipe(
     branch,
     bimap(

@@ -1,6 +1,7 @@
 {
   "error": {
-    "usernameAleardyExists": "El. paštas užimtas, įveskitę kitą"
+    "usernameAleardyExists": "El. paštas užimtas, įveskitę kitą",
+    "server": "Serverio klaida"
   },
   "list": {
     "create": "Naujas"
@@ -30,7 +31,7 @@
     "middleName": "Antras vardas",
     "mobilePhone": "Telefono Nr.",
     "password": "Slaptažodis",
-    "username": "Prisijunkite arba el",
+    "username": "El. paštas",
     "verified": "Patvirtintas"
   },
   "validation": {

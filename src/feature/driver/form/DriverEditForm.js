@@ -3,13 +3,16 @@ import useDriver from '../api/useDriver';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {DriverListRoute} from '../routes';
 import {constant, or, isEmpty, getPathOr, identity, isSame} from 'crocks';
-import {hasLength} from '@s-e/frontend/pred';
+import {hasLength, isEmail} from '@s-e/frontend/pred';
 import {lengthGt} from 'util/pred';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
 import AsideDisclosure from 'components/Disclosure/AsideDisclosure';
 import {caseMap} from '@s-e/frontend/flow-control';
+
+
+const PASSWORD_MIN_LENGTH = 8;
 
 const DriverEditForm = ({saveRef}) => {
   const {id} = useParams();
@@ -21,16 +24,21 @@ const DriverEditForm = ({saveRef}) => {
       message: t`validation.firstName`,
       showValidationBelow: true,
     }),
-    lastName: FORM_FIELD.TEXT({label: t`field.lastName`, validator: constant(true)}),
+    lastName: FORM_FIELD.TEXT({
+      label: t`field.lastName`, 
+      validator: hasLength,
+      message: t`validation.lastName`,
+      showValidationBelow: true,
+    }),
     username: FORM_FIELD.TEXT({
       label: t`field.username`,
-      validator: hasLength,
+      validator: hasLength && isEmail,
       message: t`validation.username`,
       showValidationBelow: true,
     }),
     password: FORM_FIELD.TEXT({
       label: t`field.password`,
-      validator: id ? or(isEmpty, lengthGt(7)) : lengthGt(7),
+      validator: id ? or(isEmpty, lengthGt(PASSWORD_MIN_LENGTH - 1)) : lengthGt(PASSWORD_MIN_LENGTH - 1),
       message: t`validation.password`,
       showValidationBelow: true,
     }),
@@ -43,7 +51,7 @@ const DriverEditForm = ({saveRef}) => {
     setForm,
     successRedirectPath: DriverListRoute.props.path,
     errorMapper: caseMap(identity, [
-      [isSame('the key \'message\' was not present'), constant(t('error.usernameAleardyExists'))]
+      [isSame('the key \'message\' was not present'), constant(t('error.server'))]
     ]),
   });
 

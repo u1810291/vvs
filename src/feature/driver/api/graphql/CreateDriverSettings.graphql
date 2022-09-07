@@ -1,0 +1,5 @@
+mutation CreateDriverSettings($id: uuid!) {
+    insert_user_settings_one(object: {id: $id}) {
+        is_online
+    }
+}

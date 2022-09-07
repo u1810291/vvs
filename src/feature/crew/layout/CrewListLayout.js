@@ -102,6 +102,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       filter: 'autocomplete',
       values: crewZones || [],
       displayValue: (v) => {
+        console.log(v);
         return crewZones?.find(c => c.value === v)?.name;
       }
     },
