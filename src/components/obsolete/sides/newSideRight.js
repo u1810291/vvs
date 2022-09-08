@@ -1,21 +1,29 @@
 import React from 'react';
-import useLanguage from '../../../hook/useLanguage';
-import {Assign2timesCard} from '../cards/assign2times';
-import {AssignNewCard} from '../cards/assignNew';
+import {ATAPI} from '../../../mocks/alarmDispatchApi';
+import {generate} from 'shortid';
 
-const NewSideRight = () => {
-  const {english, lithuanian, t} = useLanguage();
+const {TaskCard} = require('../cards/tasks');
+
+const DashboardSideRight = ({title}) => {
   return (
-    <>
-      <div className='flex flex-col'>
-        <div className='flex flex-col border bg-white border-b-2 justify-between'>
-          <AssignNewCard />
-          <Assign2timesCard />
-        </div>
-        <div className='text-slate-400'></div>
-      </div>
-    </>
+    <div className='flex flex-col scrollbar-gone flex-shrink-1 overflow-y-auto'>
+      {ATAPI.map((data) => (
+        <TaskCard
+          key={data.id}
+          id={generate()}
+          crew={data.crew}
+          name={data.name}
+          status={data.status}
+          inBreak={data.inBreak}
+          inTask={data.inTask}
+          askForBreak={data.askForBreak}
+          connection={data.connection}
+          event={data.event}
+          dislocation='true'
+        />
+      ))}
+    </div>
   );
 };
 
-export default NewSideRight;
+export default DashboardSideRight;

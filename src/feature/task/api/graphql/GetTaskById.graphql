@@ -1,0 +1,30 @@
+query GetTaskById($id: uuid!) {
+  crew_by_pk(id: $id) {
+    id
+    name
+    status
+    device_id
+    driver_user_id
+    abbreviation
+    phone_number
+    to_call_after
+    is_assigned_automatically
+    is_assigned_while_in_breaks
+    zone {
+      nodes
+    }
+    calendars {
+      id
+      crew_id
+      week_day
+      start_time
+      end_time
+      crew_zone {
+        name
+        nodes
+        id
+        crew_id
+      }
+    }
+  }
+}

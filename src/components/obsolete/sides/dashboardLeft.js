@@ -2,13 +2,11 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {DDAPI} from '../../../mocks/dashboardDispatchApi';
 import {generate} from 'shortid';
-const {AlarmCard} = require('../cards/alarm');
 const {DrivingToObjectCard} = require('../cards/drivingToObject');
 const {InspectObjectCard} = require('../cards/inspectObject');
 const {AssignCard} = require('../cards/assign');
 const {WaitingToReturnCard} = require('../cards/waitingToReturn');
 const {CanceledCard} = require('../cards/canceled');
-const {EmptyCard} = require('../cards/empty');
 const {PermissionCard} = require('../cards/permission');
 const {WaitingForConfirmationCard} = require('../cards/waitingForConfirmation');
 
