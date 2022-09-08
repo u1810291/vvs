@@ -9,5 +9,5 @@ export const useTasks = createUseWhereList({
 
 export const useTaskEdit = createUseWhereList({
   graphQl: raw('./graphql/GetTaskById.graphql'),
-  asyncMapFromApi: pipe(maybeToAsync('prop "eventId" expected but not found.', getProp('eventsById')))
+  asyncMapFromApi: pipe(maybeToAsync('prop "events_by_pk" expected but not found.', getProp('events_by_pk')))
 })

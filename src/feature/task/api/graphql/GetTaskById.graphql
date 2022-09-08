@@ -1,29 +1,42 @@
 query GetTaskById($id: uuid!) {
-  crew_by_pk(id: $id) {
+  events_by_pk(id: $id) {
+    created_at
+    crew_id
+    description
     id
     name
+    object_id
+    provider_id
+    provider_name
+    reason
     status
-    device_id
-    driver_user_id
-    abbreviation
-    phone_number
-    to_call_after
-    is_assigned_automatically
-    is_assigned_while_in_breaks
-    zone {
-      nodes
-    }
-    calendars {
+    updated_at
+    crew {
       id
-      crew_id
-      week_day
-      start_time
-      end_time
-      crew_zone {
-        name
+      name
+      status
+      device_id
+      driver_user_id
+      abbreviation
+      phone_number
+      to_call_after
+      is_assigned_automatically
+      is_assigned_while_in_breaks
+      zone {
         nodes
+      }
+      calendars {
         id
         crew_id
+        week_day
+        start_time
+        end_time
+        crew_zone {
+          name
+          nodes
+          id
+          crew_id
+        }
       }
     }
   }
