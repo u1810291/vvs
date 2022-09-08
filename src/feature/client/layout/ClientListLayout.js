@@ -202,16 +202,6 @@ const ClientListLayout = withPreparedProps(Listing, props => {
 
   // TODO: Adjust column names regarding response data
   const tableColumns = [
-    // c('fullName', pipe(a => getProp('fullName', a)
-    //   .alt((
-    //     safe(hasProps(['firstName', 'lastName']), a)
-    //     .map(({firstName, lastName}) => `${firstName} ${lastName}`)
-    //     .chain(toStringValue)
-    //   ))
-    //   .alt(getProp('firstName', a).chain(toStringValue))
-    //   .alt(getProp('lastName', a).chain(toStringValue))
-    //   .alt(getProp('id', a).chain(toStringValue))
-    // ), true),
     c('fullName', identity, true),
     c('contract_no', identity, true),
     c('mobilePhone', identity, true),
@@ -244,8 +234,10 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   );
 
   const api = useClients({filters: queryParams});
-  console.log(api?.data);
+  // console.log(api?.data);
 
+
+  
   return {
     list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
