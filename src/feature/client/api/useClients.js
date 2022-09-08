@@ -1,4 +1,4 @@
-import {createUseListWithAuth} from 'api/buildApiHook';
+import {createUseListWithAuth, createUseListWithAuthQuery} from 'api/buildApiHook';
 import {augmentUser, getPathAsync} from 'api/buildUserQuery';
 import {
   getProp, 
@@ -20,7 +20,7 @@ import raw from 'raw.macro';
 import {mapByMaybe} from 'util/array';
 import {titleCase} from '@s-e/frontend/transformer/string';
 
-const LIST_PROPS = ['usersByRole', 'users'];
+const LIST_PROPS = ['usersByQuery', 'users'];
 const LIST_SETTINGS_PROPS = ['user_settings'];
 
 /**
@@ -44,8 +44,8 @@ const getUserSettings = curry((
   .chain(getPathAsync(LIST_SETTINGS_PROPS))
 ));
 
-export default createUseListWithAuth({
-  graphQl: raw('./graphql/GetClientsData.graphql'),
+export default createUseListWithAuthQuery({
+  graphQl: raw('./graphql/GetClientsByQuery.graphql'),
   asyncMapFromApi: auth => item => (
     getPathAsync(LIST_PROPS, item)
     .chain(augmentUser(getUserSettings(auth)))

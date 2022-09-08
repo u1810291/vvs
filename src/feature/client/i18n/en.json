@@ -6,13 +6,23 @@
     "clients": "Clients",
     "allData": "All Data"
   },
+  "validation": {
+    "firstName": "First name cannot be empty",
+    "lastName": "Last name cannot be empty",
+    "password": "Password must have at least 8 symbols",
+    "email": "Email must be valid & non-empty",
+    "username": "Email must valid & non-empty"
+  },
   "list": {
     "column": {
       "id": "ID",
       "full_name": "Full name",
       "contract_number": "Contract no.",
       "phone_number": "Phone number",
-      "email": "Email"
+      "email": "Email",
+      "error": {
+        "clientWasNotCreated": "First save a client"
+      }
     }
   },
   "edit": {

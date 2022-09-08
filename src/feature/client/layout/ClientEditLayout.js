@@ -58,8 +58,29 @@ const ClientEditLayout = () => {
 
   const auth = useAuth();
   const _archive = flip(auth.api)(raw('../api/graphql/ArchiveClientById.graphql'));
+  const _createSettings = flip(auth.api)(raw('../api/graphql/CreateClientSettings.graphql'));
   const {notify} = useNotification();
 
+  // save
+  const save = () => {
+    isFunction(saveRef.current) && saveRef.current((pk) => {
+      _createSettings({id: pk['register']['user']['id']}).fork((error) => {
+        notify(
+          <NotificationSimple
+            Icon={XCircleIcon}
+            iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+            heading={t`apiError`}
+          >
+            {errorToText(identity, error)}
+          </NotificationSimple>
+        )
+      }, () => {
+        // success
+      })
+    });
+  }
+
+  // archive
   const archive = () => {
     if (!confirm('Are you sure you want to archive the client?')) return;
     _archive({id, archived_at: new Date()}).fork((error) => {
@@ -83,6 +104,7 @@ const ClientEditLayout = () => {
     })
   }
 
+  // unarchive
   const unarchive = () => {
     if (!confirm('Are you sure you want to restore the client?')) return;
     _archive({id, archived_at: null}).fork((error) => {
@@ -120,7 +142,7 @@ const ClientEditLayout = () => {
           </Breadcrumbs>
           <div className='space-x-4'>
             <Button.Nd onClick={() => nav(ClientListRoute.props.path)}>{t`cancel`}</Button.Nd>
-            <Button onClick={() => isFunction(saveRef.current) && saveRef.current()}>{t`save`}</Button>
+            <Button onClick={save}>{t`save`}</Button>
           </div>
         </>
       </Header>

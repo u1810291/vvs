@@ -164,7 +164,7 @@ export const createUseOne = ({
   successRedirectPath,
   removeRef,
   errorMapper = identity,
-  insertTableName = null,
+  newObjectPath = null, // to get id of a created object
   editRedirectPath = null,
 }) => {
   const nav = useNavigate();
@@ -232,11 +232,11 @@ export const createUseOne = ({
             />
         );
 
-        if (editRedirectPath) nav(generatePath(editRedirectPath, {id: id ?? pk[insertTableName]['id']}));
+        if (editRedirectPath) nav(generatePath(editRedirectPath, {id: id ?? pipe(option(''))(getPath(newObjectPath, pk))}));
 
         if (successRedirectPath) nav(successRedirectPath);
 
-        isFunction(callback) && callback();
+        isFunction(callback) && callback(pk);
       }
     );
   }, [saveRef?.current, formResult, t, nav, notify, successRedirectPath]);
