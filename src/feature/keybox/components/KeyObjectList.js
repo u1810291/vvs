@@ -122,7 +122,7 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
     removeRef: removeRef,
     successRedirectPath: boxId && generatePath(KeyBoxEditRoute.props.path, {id: boxId}),
     errorMapper: caseMap(identity, [
-      [isSame('invalid input syntax for type uuid: ""'), constant(t('error.keyboxNotWasCreate'))]
+      [isSame('invalid input syntax for type uuid: ""'), constant(t('error.keyboxWasNotCreated'))]
     ]),
   })
 

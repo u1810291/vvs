@@ -1,12 +1,12 @@
 import raw from 'raw.macro';
-import {Async, pipe, branch, merge, bimap, assign, getProp, safe, chain, option, isObject, pick} from 'crocks';
+import {Async, pipe, branch, merge, bimap, assign, getProp, safe, chain, option, isObject, pick, tap} from 'crocks';
 import {createUseOne} from 'api/buildApiHook';
 import {getPathAsync} from 'api/buildUserQuery';
 import {removeFalsyFields} from 'util/obj';
 
 export default createUseOne({
   getGraphQl: raw('./graphql/GetDriver.graphql'),
-  updateGraphQl: raw('./graphql/UpdateDriver.graphql'),
+  updateGraphQl: raw('./graphql/UpdateDriverInfo.graphql'),
   createGraphql: raw('./graphql/CreateDriver.graphql'),
   asyncMapFromApi: pipe(
     branch,
@@ -29,6 +29,7 @@ export default createUseOne({
       'password',
     ]),
     removeFalsyFields,
+    tap(console.log),
     Async.Resolved,
   ),
 });

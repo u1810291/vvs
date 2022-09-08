@@ -1,7 +1,0 @@
-mutation ($firstName: String, $lastName: String, $username: String, $password: String $id: uuid) {
-  update_user (firstName: $firstName, lastName: $lastName, username: $username, password: $password, id: $id) {
-    user {
-      id
-    }
-  }
-}

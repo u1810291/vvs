@@ -1,6 +1,6 @@
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import ListingLayout from '../../../layout/ListingLayout';
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
 import {DriverCreateRoute, DriverEditRoute} from '../routes';
 import {useTranslation} from 'react-i18next';
@@ -19,6 +19,7 @@ import {
   not,
   isEmpty,
   hasProps,
+  flip,
 } from 'crocks';
 import useDrivers from '../api/useDrivers';
 import {alt} from 'crocks/pointfree';
@@ -30,6 +31,11 @@ import DriverOnlineTag from '../component/DriverOnlineTag';
 import {CrewListRoute} from 'feature/crew/routes';
 import {DislocationListRoute} from 'feature/dislocation/routes';
 import Innerlinks from 'components/Innerlinks';
+import raw from 'raw.macro';
+import {useAuth} from 'context/auth';
+
+
+
 
 
 const getColumn = curry((t, Component, key, mapper, status, styles) => ({
@@ -59,29 +65,6 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const {t: th} = useTranslation('driver', {keyPrefix: 'list.header'});
   const nav = useNavigate();
 
-  // const c = (prop, mapper = identity, status) => ({
-  //   key: prop,
-  //   headerText: tc(prop),
-  //   status,
-  //   itemToProps: item => pipe(
-  //     safe(and(hasProp('id'), propSatisfies(prop, isTruthy))),
-  //     map(item => ({id: item?.id, children: mapper(item?.[prop])})),
-  //     alt(pipe(
-  //       safe(hasProp('id')),
-  //       map(pick(['id'])),
-  //     )(item)),
-  //   )(item),
-  //   Component: ({id, children, fallback = '—'}) => {
-  //     if (!id && !children) return fallback;
-  //     if (!id) return children || fallback;
-  //     return (
-  //       <Link to={generatePath(DriverEditRoute.props.path, {id})}>
-  //         {children || fallback}
-  //       </Link>
-  //     )
-  //   },
-  // });
-
   const c = useMemo(() => getColumn(t, props => (
     props?.id && <Link className={props?.className} to={generatePath(DriverEditRoute.props.path, {id: props?.id})}>
       {props?.children}
@@ -93,15 +76,72 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     a => String(a || '').trim(),
     safe(not(isEmpty)),
   );
-
   
-  // const {data: driverDropdown} = useDriversDropdown();
-  
-  // console.log(api?.data);
+  const auth = useAuth();
+  const _search = flip(auth.api)(raw('../api/graphql/GetUserSettings.graphql'));
+  const _getByQuery = flip(auth.api)(raw('../api/graphql/GetDriversByQuery.graphql'));
 
   // custom filter
-  const driversFilter = (state, filtersData) => {
-    return {'query': JSON.stringify({
+  const driversFilter = useCallback((state, filtersData) => {
+    if ('status' in state) {
+      _search({where: {
+        _and: {
+          is_online: {
+            _in: state['status'].map(s => s === 'OFFLINE' ? 'No' : 'Yes') // only OFFLINE/ONLINE 
+          }
+        }
+      }}).fork(console.error, (users) => {
+        const ids = users.user_settings.map(u => u.id)
+
+        const query = {
+          'bool': {
+            'must': [
+              {
+                'wildcard': {
+                  'fullName': {
+                    'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
+                  }
+                }
+              },
+              {
+                'terms': {
+                  'id': ids || []
+                }
+              },
+              {
+                'nested': {
+                  'path': 'registrations',
+                  'query': {
+                    'bool': {
+                      'must': [
+                        {
+                          'match': {
+                            'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+                          }
+                        },
+                        {
+                          'match': {
+                            'registrations.roles': 'crew'
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+
+        _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
+          api.mutate(data.usersByQuery.users);
+        })
+      });
+
+      return {};
+    }
+
+    return {query: JSON.stringify({
       'bool': {
         'must': [
           {
@@ -135,9 +175,8 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
         ]
       }
     })};
-  }
+  }, []);
 
-  
   const tableColumns = [
     c('fullName', pipe(a => getProp('fullName', a)
       .alt((
@@ -171,12 +210,14 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     [],
     driversFilter
   );
-
+ 
   const api = useDrivers({filters: queryParams});
 
   useEffect(() => {
-    // console.log(queryParams);
-    api.mutate()
+    if (!isEmpty(queryParams)) {
+      console.log('queryParams not empty, re mutate');
+      api.mutate();
+    }
   }, [queryParams]);
 
   // console.log(api?.data);

@@ -9,5 +9,8 @@ mutation RegisterDriver (
   ) {
   register(birthDate: $birthDate, email: $username, firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, password: $password, role: $role) {
     token
+    user {
+      id
+    }
   }
 }

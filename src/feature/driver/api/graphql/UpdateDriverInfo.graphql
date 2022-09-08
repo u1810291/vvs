@@ -1,0 +1,19 @@
+mutation (
+  $firstName: String, 
+  $lastName: String, 
+  $username: String, 
+  $password: String,
+  $mobilePhone: String,  
+  $id: uuid) {
+  update_user (
+    firstName: $firstName, 
+    lastName: $lastName, 
+    username: $username, 
+    password: $password, 
+    mobilePhone: $mobilePhone,
+    id: $id) {
+    user {
+      id
+    }
+  }
+}
