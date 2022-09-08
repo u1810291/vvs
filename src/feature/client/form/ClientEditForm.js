@@ -54,7 +54,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     lastName: FORM_FIELD.TEXT({
       label: t`field.lastName`, 
       validator: hasLength,
-      message: t`validation.firstName`,
+      message: t`validation.lastName`,
       showValidationBelow: true,
       props: {
         isRequired: constant(true),
