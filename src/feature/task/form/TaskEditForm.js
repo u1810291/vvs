@@ -12,6 +12,8 @@ import {generate} from 'shortid';
 import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
 import MarkerTag from '../../../components/atom/icon/MarkerTag';
 import {useGoogleApiContext} from '../../../context/google';
+import {useTaskEdit} from '../api';
+import {useParams} from 'react-router-dom';
 
 const overLayView1 = {
   lat: 55.92,
@@ -65,25 +67,6 @@ const getCrewIcons = (icons) => {
   }
 };
 
-const getDestinationIcons = (icons) => {
-  try {
-    switch (icons) {
-      case 1:
-        icons.destination = 'alert';
-        return require('../../../assets/assets/destination.png');
-        break;
-      case 2:
-        icons.destination = 'alert';
-        return require('../../../assets/assets/destination.png');
-        break;
-      default:
-        return require('../../../assets/assets/destination.png');
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 const randomColor = () => {
   const randomize = Math.floor(Math.random() * 16777215).toString(16);
   const result = '#' + randomize;
@@ -100,6 +83,10 @@ const routesOptions = {
 const AlarmForm = () => {
   const {t} = useLanguage();
   const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
+  const {id} = useParams();
+  const list = useTaskEdit({filters: {id}});
+  
+  console.log(list?.data);
 
   const [directions, setDirections] = useState([]);
   const [clickedPos, setClickedPos] = useState({});

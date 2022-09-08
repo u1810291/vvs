@@ -6,25 +6,11 @@ import {TaskListRoute} from '../routes';
 import Button from 'components/Button';
 
 import {useTranslation} from 'react-i18next';
-// import {pipe} from 'crocks/helpers';
-// import {chain, option} from 'crocks/pointfree';
-// import {safe, getProp} from 'crocks';
-// import {isArray, isObject} from 'crocks/predicates';
-import {useTaskEdit} from '../api';
 
 import TaskEditForm from '../form/TaskEditForm';
-import {useParams} from 'react-router-dom';
 
 const AlarmLayout = () => {
-  const {id} = useParams();
   const {t} = useTranslation('task');
-
-  const list = useTaskEdit({filters: {id}});
-
-  console.log(id);
-  // console.log(pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list));
-  
-  console.log(list?.data);
 
   return (
     <SideBarLayout>

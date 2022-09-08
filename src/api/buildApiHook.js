@@ -108,7 +108,6 @@ export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
  * @param {(data) => import('crocks/Async').default} props.asyncMapFromApi
  */
 export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) => {
-  console.log('filters', filters);
   const {api} = useAuth();
 
   return useAsyncSwr([graphQl, filters], (query) => (
