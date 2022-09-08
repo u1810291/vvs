@@ -7,7 +7,7 @@ const NewSideLeft = () => {
   const {english, lithuanian, t} = useLanguage();
   return (
     <>
-      <div className='flex flex-row items-end border bg-white justify-between'>
+      <div className='flex flex-row items-end border bg-white pb-5'>
         <div className='flex flex-col h-28'>
           <h2 className='text-normal ml-2 font-light mt-4 w-3/4'>
             UAB &quot;Įmonė&quot; Sekretoriatas + direktorius, paradinės pusės 2
@@ -20,9 +20,9 @@ const NewSideLeft = () => {
       </div>
       <div className='text-slate-400'>
         <h4 className='ml-6 py-1'>Atsakingi asmenys</h4>
-        <PhoneCard />
-        <PhoneCard />
-        <PhoneCard />
+        {(new Array(4).fill('')).map((_, index) => (
+          <PhoneCard key={index}/>
+        ))}
       </div>
     </>
   );

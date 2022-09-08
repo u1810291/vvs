@@ -6,6 +6,17 @@
     "tasks": "Užduotys",
     "all_data": "Visi duomenys"
   },
+  "mainForm": {
+    "label": {
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember Me"
+    }
+  },
+  "button": {
+    "archive": "Archive",
+    "assignCrew": "Priskirkite ekipažą"
+  },
   "create": {
     "header": {
       "button": {

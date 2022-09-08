@@ -2,6 +2,17 @@
   "menu": {
     "list": "Tasks"
   },
+  "mainForm": {
+    "label": {
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember Me"
+    }
+  },
+  "button": {
+    "archive": "Archive",
+    "assignCrew": "Assign a crew"
+  },
   "breadcrumbs": {
     "tasks": "Tasks",
     "all_data": "All Data"
