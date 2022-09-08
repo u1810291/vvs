@@ -84,8 +84,6 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   // custom filter
   const driversFilter = useCallback((state, filtersData) => {
     if ('status' in state) {
-      console.log('status exists');
-
       _search({where: {
         _and: {
           is_online: {
@@ -94,7 +92,6 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
         }
       }}).fork(console.error, (users) => {
         const ids = users.user_settings.map(u => u.id)
-        console.log(ids);
 
         const query = {
           'bool': {
@@ -137,16 +134,12 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
         }
 
         _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
-          console.log(data);
-
           api.mutate(data.usersByQuery.users);
         })
       });
 
       return {};
     }
-
-    console.log('no status');
 
     return {query: JSON.stringify({
       'bool': {
@@ -221,8 +214,6 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const api = useDrivers({filters: queryParams});
 
   useEffect(() => {
-    console.log(queryParams);
-
     if (!isEmpty(queryParams)) {
       console.log('queryParams not empty, re mutate');
       api.mutate();

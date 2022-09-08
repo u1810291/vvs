@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Listing from '../../../layout/ListingLayout';
@@ -10,6 +10,8 @@ import {useAuth} from '../../../context/auth';
 
 import {
   getPropOr,
+  // getProp,
+  // hasProps,
   identity,
   map,
   Maybe,
@@ -20,6 +22,8 @@ import {
   propSatisfies,
   isTruthy,
   pick,
+  not,
+  isEmpty,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 import Innerlinks from 'components/Innerlinks';
@@ -68,13 +72,146 @@ const ClientListLayout = withPreparedProps(Listing, props => {
 
   const boolCol = useMemo(() => pipe(String, t), [t]);
   const dateCol = (d) => format(new Date(d), 'Y-MM-dd HH:mm');
+  const toStringValue = pipe(
+    a => String(a || '').trim(),
+    safe(not(isEmpty)),
+  );
 
 
   const {data: objectsDropdown} = useObjectsDropdown();
   // console.log(objectsDropdown);
 
+  // custom filter
+  const clientsFilter = useCallback((state, filtersData) => {
+    // if ('status' in state) {
+    //   _search({where: {
+    //     _and: {
+    //       is_online: {
+    //         _in: state['status'].map(s => s === 'OFFLINE' ? 'No' : 'Yes') // only OFFLINE/ONLINE 
+    //       }
+    //     }
+    //   }}).fork(console.error, (users) => {
+    //     const ids = users.user_settings.map(u => u.id)
+
+    //     const query = {
+    //       'bool': {
+    //         'must': [
+    //           {
+    //             'wildcard': {
+    //               'fullName': {
+    //                 'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
+    //               }
+    //             }
+    //           },
+    //           {
+    //             'terms': {
+    //               'id': ids || []
+    //             }
+    //           },
+    //           {
+    //             'nested': {
+    //               'path': 'registrations',
+    //               'query': {
+    //                 'bool': {
+    //                   'must': [
+    //                     {
+    //                       'match': {
+    //                         'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+    //                       }
+    //                     },
+    //                     {
+    //                       'match': {
+    //                         'registrations.roles': 'crew'
+    //                       }
+    //                     }
+    //                   ]
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         ]
+    //       }
+    //     }
+
+    //     _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
+    //       api.mutate(data.usersByQuery.users);
+    //     })
+    //   });
+
+    //   return {};
+    // }
+    
+    const filterFullName = {
+      'wildcard': {
+        'fullName': {
+          'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
+        }
+      }
+    };
+
+    const filterEmail = {
+      'wildcard': {
+        'username': {
+          'value': `${state['username'] ? `*${state['username'].replaceAll('%', '')}*` : '*'}`
+        }
+      }
+    };
+
+    const filterMobilePhone = {
+      'wildcard': {
+        'mobilePhone': {
+          'value': `${state['mobilePhone'] ? `*${state['mobilePhone'].replaceAll('%', '')}*` : '*'}`
+        }
+      }
+    };
+
+    const mustFilter = [];
+    if (state['fullName']) mustFilter.push(filterFullName);
+    if (state['username']) mustFilter.push(filterEmail);
+    if (state['mobilePhone']) mustFilter.push(filterMobilePhone);
+    
+    // by role 'customer'
+    mustFilter.push({
+      'nested': {
+        'path': 'registrations',
+        'query': {
+          'bool': {
+            'must': [
+              {
+                'match': {
+                  'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+                }
+              },
+              {
+                'match': {
+                  'registrations.roles': 'customer'
+                }
+              }
+            ]
+          }
+        }
+      }
+    })
+
+    return {query: JSON.stringify({
+      'bool': {
+        'must': mustFilter
+      }
+    })};
+  }, []);
+
   // TODO: Adjust column names regarding response data
   const tableColumns = [
+    // c('fullName', pipe(a => getProp('fullName', a)
+    //   .alt((
+    //     safe(hasProps(['firstName', 'lastName']), a)
+    //     .map(({firstName, lastName}) => `${firstName} ${lastName}`)
+    //     .chain(toStringValue)
+    //   ))
+    //   .alt(getProp('firstName', a).chain(toStringValue))
+    //   .alt(getProp('lastName', a).chain(toStringValue))
+    //   .alt(getProp('id', a).chain(toStringValue))
+    // ), true),
     c('fullName', identity, true),
     c('contract_no', identity, true),
     c('mobilePhone', identity, true),
@@ -89,9 +226,9 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   ];
 
   const filtersData = [
-    {key: 'fullName', label: 'Name Surname', filter: 'autocomplete', values: []},
-    {key: 'username', label: 'Email', filter: 'autocomplete', values: []},
-    {key: 'phone', label: 'Phone', filter: 'autocomplete', values: []},
+    {key: 'fullName', label: 'Name Surname', filter: 'text'},
+    {key: 'username', label: 'Email', filter: 'text'},
+    {key: 'mobilePhone', label: 'Phone', filter: 'text'},
     {key: 'object', label: 'Object', filter: 'autocomplete', values: objectsDropdown || [], displayValue: (v) => {
       const obj = objectsDropdown?.find(o => o.value === v.value);
       return obj?.name ?? obj?.value;
@@ -101,10 +238,13 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'client',
     tableColumns,
-    filtersData
+    filtersData,
+    [],
+    clientsFilter
   );
 
-  const api = useClients();
+  const api = useClients({filters: queryParams});
+  console.log(api?.data);
 
   return {
     list: api?.data || [],
