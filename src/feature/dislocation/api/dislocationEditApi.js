@@ -3,8 +3,7 @@ import raw from 'raw.macro';
 import {createUseOne, mapToNullableString, createUseList} from 'api/buildApiHook';
 
 import maybeToAsync from 'crocks/Async/maybeToAsync';
-import {identity} from 'lodash/util';
-import {Async, getProp, mapProps, pick, pipe, map, ifElse, isEmpty, safe, not, option} from 'crocks';
+import {Async, getProp, mapProps, pick, pipe, map, ifElse, isEmpty, safe, not, option, identity} from 'crocks';
 
 export const useDisclocation = createUseOne({
   getGraphQl: raw('./graphql/GetDislocationZoneById.graphql'),

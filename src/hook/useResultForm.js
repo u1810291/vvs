@@ -184,7 +184,7 @@ const FORM_FIELD = {
       setValue: ({set}) => set,
       value: ({value}) => [value],
     }
-  }, obj)
+  }, obj),
 };
 
 export {FORM_FIELD};

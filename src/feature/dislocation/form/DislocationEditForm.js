@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -17,6 +17,7 @@ import GoogleMapTools from 'feature/map/component/GoogleMapTools';
 import {getFlatNodes, getZoneItems} from 'feature/dislocation/ultis';
 import {useDisclocation} from 'feature/dislocation/api/dislocationEditApi';
 import {isFunction} from 'crocks';
+import {useSWRConfig} from 'swr'
 
 const POLYGON_OPTIONS = {
   strokeOpacity: 1,
@@ -39,6 +40,12 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
   const {value: nodes} = ctrl('nodes');
   const zonePath = getZoneItems(nodes);
   const zoneCoordinates = getFlatNodes(nodes);
+
+  const {cache} = useSWRConfig();
+
+  useEffect(() => {
+    cache.clear();
+  }, [nodes]);
 
   useDisclocation({
     id: dislocationZoneId,
