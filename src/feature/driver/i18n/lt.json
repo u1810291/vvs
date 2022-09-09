@@ -36,7 +36,7 @@
   },
   "validation": {
     "firstName": "Vardas negali būti tuščias",
-    "password": "Slaptažodis turi būti bent 6-ių simbolių",
+    "password": "Slaptažodis turi būti bent 8-ių simbolių",
     "email": "El. paštas turi būti validus ir netuščias",
     "username": "Vartotojo vardo laukas negali būti tuščias"
   },

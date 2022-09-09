@@ -3,9 +3,7 @@ import {useEffect, useMemo, useReducer, useState} from 'react';
 import Button from 'components/Button';
 import Nullable from 'components/atom/Nullable';
 import {format} from 'date-fns';
-
 import {generate} from 'shortid';
-// import InputGroup from 'components/atom/input/InputGroup';
 import DatePicker from 'components/DatePicker';
 import {StarIcon} from '@heroicons/react/solid';
 import {useSearchParams} from 'react-router-dom';
@@ -16,12 +14,11 @@ import {
   hasProps,
   isArray,
   isFunction,
-  // isObject,
+  // isFunction,
   map,
   option,
   pipe,
   safe,
-  // identity,
 } from 'crocks';
 import {renderWithProps} from 'util/react';
 import SelectBox from 'components/atom/input/SelectBox';
@@ -48,7 +45,7 @@ const Mode = {
 const updater = (state, action) => {
   const prevState = {...state};
 
-  // console.log('dispatch', action);
+  // console.log('dispatch', state, action);
 
   switch (action.type) {
     case 'TEXT':
@@ -78,21 +75,21 @@ const updater = (state, action) => {
       return {...prevState};
     
     case 'DATERANGE':
-        if (action.value) {          
-          const year = action.value.getFullYear();
-          const month = action.value.getMonth();
-          const day = action.value.getDate();
+      if (action.value) {          
+        const year = action.value.getFullYear();
+        const month = action.value.getMonth();
+        const day = action.value.getDate();
 
-          if (`${action.key}_start` in prevState) {
-            prevState[`${action.key}_end`] = `${format(new Date(year, month, day, 23, 59, 59), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
-          } else {
-
-            prevState[`${action.key}_start`] = `${format(new Date(year, month, day, 0, 0, 0), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
-          }
+        if (`${action.key}_start` in prevState) {
+          prevState[`${action.key}_end`] = `${format(new Date(year, month, day, 23, 59, 59), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
         } else {
-          delete prevState[`${action.key}_start`];
-          delete prevState[`${action.key}_end`];
+
+          prevState[`${action.key}_start`] = `${format(new Date(year, month, day, 0, 0, 0), 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX')}`;
         }
+      } else {
+        delete prevState[`${action.key}_start`];
+        delete prevState[`${action.key}_end`];
+      }
 
       return {...prevState};
     case 'RANGE':
@@ -139,14 +136,11 @@ const updater = (state, action) => {
 
       return {...prevState};    
 
-    // updateSelectFilter = ...
-    // updateRangeFilter = ...
-
     case 'APPLY':
       return {...action.filter};
 
     default:
-      return prevState;
+      return state;
   }
 }
 
@@ -162,72 +156,9 @@ const prepInitials = (filters) => {
   return initials;
 }
 
-const prepParts = (filters, values) => {
-  const params = [];
-  const where = [];
 
-  filters.map(f => {
 
-    // if sigle date filter
-    if (f.filter === 'date' || f.filter === 'range' || f.filter === 'daterange') {
-      const keyStart = `${f.key}_start`;
-      const keyEnd = `${f.key}_end`;
 
-      if (keyStart in values && keyEnd in values && values[keyStart] && values[keyEnd] || f?.initial) {
-        let param = `\$${f.key}_start: ${f.type}, \$${f.key}_end: ${f.type}`;
-        let pred = `{${f.key}: {_gte: $${f.key}_start}}, {${f.key}: {_lte: $${f.key}_end}}`;
-      
-        params.push(param);
-        where.push(pred);
-      }
-    }
-
-    // TODO: check if date range -> _gte && _lte
-
-    // if text, select, multiselect
-    else if (f.key in values && values[f.key] || f?.initial) {
-      let param = `\$${f.key}: ${f.type}`;
-      let pred = '';
-
-      switch (f.filter) {
-        case 'select':
-          pred = `{${f.key}: {_eq: $${f.key}}}`;
-          break;
-        
-        case 'multiselect':
-          pred = `{${f.key}: {_in: $${f.key}}}`;
-          break;
-
-        default:
-          pred = `{${f.key}: {_ilike: $${f.key}}}`; // default is text
-      }
-
-      params.push(param);
-      where.push(pred);
-    }
-
-  });
-
-  return [
-    params.length > 0 ? `(${params.join(', ')})` : '',
-    where.length > 0 ? `(where: {_and: [${where.join(', ')}]})` : '',
-  ];
-}
-
-const prepQuery = (tableName, query, filters, currentValues) => {
-  const [params, where] = prepParts(filters, currentValues);
-
-  let finalQuery = `query ${tableName}${params}{
-    ${tableName}${where} {
-      ${query}
-  }
-}`;
-
-  return finalQuery;
-}
-
-// get saved filters for [tableName] from localStorage
-// structure: listingFilters: {'object': [{}], 'tasks': []}
 
 const getAllFilters = () => {
   return JSON.parse(localStorage.getItem(LS_KEY_NAME)) ?? {};
@@ -266,7 +197,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   const [showFilter, setShowFilter] = useState(true);
 
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
-  // const query = useMemo(() => prepQuery(tableName, q, filtersData, state), [state]);
   const [params] = useSearchParams();
 
   // get saved for 'tableName' from filters
@@ -823,6 +753,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
+    // console.log('state changed');
+
     // if custom filter logic was provided
     if (isFunction(customFilter)) return customFilter(state, filtersData);
 
@@ -873,7 +805,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         else if (filter.key.includes('.')) {
           const columns = filter.key.split('.');
           for (c of columns) {
-            console.log(c);
+            // console.log(c);
           }
         }
 
@@ -908,7 +840,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         _and: params
       }
     };
-  }, [state, filtersData, customFilter]);
+  }, [state]);
 
   return [
     queryParams,

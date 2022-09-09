@@ -9,7 +9,7 @@ import withPreparedProps from 'hoc/withPreparedProps';
 
 import {useAuth} from 'context/auth';
 import {useFilter} from 'hook/useFilter';
-import {useNavigate} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import Button from 'components/Button';
@@ -18,7 +18,7 @@ import Breadcrumbs from 'components/Breadcrumbs';
 import DynamicStatus from 'components/atom/Status';
 
 import {useTasks} from 'feature/task/api';
-import {TaskCreateRoute} from 'feature/task/routes';
+import {TaskCreateRoute, TaskEditRoute} from 'feature/task/routes';
 import {BreachListRoute} from 'feature/breach/routes';
 import {DashboardEditRoute} from 'feature/dashboard/routes';
 import {PermissionListRoute} from 'feature/permission/routes';
@@ -63,10 +63,10 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const {t: tc} = useTranslation('task', {keyPrefix: 'list.column'});
 
   const c = useMemo(() => getColumn(tc, props => (
-    props?.children
-    // <Link className={props?.className} to={generatePath(TaskCreateRoute.props.path, {id: props?.id})}>
-    //
-    // </Link>
+
+    <Link className={props?.className} to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
+        {props?.children}
+    </Link>
   )), [tc]);
 
   const cs = useMemo(() => getColumn(tc, props => (

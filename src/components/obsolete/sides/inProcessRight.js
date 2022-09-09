@@ -6,7 +6,6 @@ import {NewEventCard} from '../cards/newEvent';
 import {NewConfirmCard} from '../cards/newConfirm';
 const {ActiveCard} = require('../cards/active');
 const {RequestCard} = require('../cards/request');
-const {TaskCard} = require('../cards/tasks');
 
 const InProcessRightSide = () => {
   const {english, lithuanian, t} = useLanguage();
