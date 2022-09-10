@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useCallback, useRef} from 'react';
 
 import Map from '../../map/component/Map';
-import AlarmSideLeft from '../../../components/obsolete/sides/newSideLeft';
-import AlarmSideRight from '../../../components/obsolete/sides/newSideRight';
+import TaskEditSideLeft from '../../../components/obsolete/sides/newSideLeft';
+import TaskEditSideRight from '../../../components/obsolete/sides/newSideRight';
 
 
 import useLanguage from '../../../hook/useLanguage';
@@ -12,7 +12,6 @@ import {generate} from 'shortid';
 import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
 import MarkerTag from '../../../components/atom/icon/MarkerTag';
 import {useGoogleApiContext} from '../../../context/google';
-import {useTaskEdit} from '../api';
 import {useParams} from 'react-router-dom';
 
 const overLayView1 = {
@@ -80,13 +79,11 @@ const routesOptions = {
   clickable: true,
 };
 
-const AlarmForm = () => {
+const TaskEditForm = () => {
   const {t} = useLanguage();
   const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
   const {id} = useParams();
-  const list = useTaskEdit({filters: {id}});
-  
-  console.log(list?.data);
+  // const list = useTaskEdit({filters: {id}});
 
   const [directions, setDirections] = useState([]);
   const [clickedPos, setClickedPos] = useState({});
@@ -197,7 +194,7 @@ const AlarmForm = () => {
   return (
     <>
       <div className='flex flex-col h-screen scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>
-        <AlarmSideLeft />
+        <TaskEditSideLeft />
       </div>
       <div className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
       {!isLoaded ? null : (
@@ -283,10 +280,10 @@ const AlarmForm = () => {
       )}
       </div>
       <div className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
-        <AlarmSideRight />
+        <TaskEditSideRight />
       </div>
     </>
   );
 };
 
-export default AlarmForm;
+export default TaskEditForm;

@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 
 import TaskEditForm from '../form/TaskEditForm';
 
-const AlarmLayout = () => {
+const TaskEditLayout = () => {
   const {t} = useTranslation('task');
 
   return (
@@ -36,4 +36,4 @@ const AlarmLayout = () => {
   );
 }
 
-export default AlarmLayout;
+export default TaskEditLayout;

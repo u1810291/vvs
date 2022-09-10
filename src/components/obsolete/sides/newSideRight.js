@@ -1,10 +1,10 @@
 import React from 'react';
-import {ATAPI} from '../../../mocks/alarmDispatchApi';
+import {ATAPI} from '../../../mocks/tasks';
 import {generate} from 'shortid';
 
 const {TaskCard} = require('../cards/tasks');
 
-const DashboardSideRight = ({title}) => {
+const DashboardSideRight = () => {
   return (
     <div className='flex flex-col scrollbar-gone flex-shrink-1 overflow-y-auto'>
       {ATAPI.map((data) => (
@@ -19,7 +19,9 @@ const DashboardSideRight = ({title}) => {
           askForBreak={data.askForBreak}
           connection={data.connection}
           event={data.event}
+          address={data.address}
           dislocation='true'
+          distance={data.distance}
         />
       ))}
     </div>
