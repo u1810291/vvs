@@ -212,15 +212,14 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   );
  
   const api = useDrivers({filters: queryParams});
+  // console.log(api?.data);
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {
-      console.log('queryParams not empty, re mutate');
+      // console.log(queryParams);
       api.mutate();
     }
   }, [queryParams]);
-
-  // console.log(api?.data);
 
   return {
     list: api?.data || [],

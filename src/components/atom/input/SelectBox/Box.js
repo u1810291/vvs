@@ -20,6 +20,7 @@ const Box = ({
   displayValue = identity,
   multiple,
   placeholder,
+  below,
   ...props
 }) => {
   // console.log('selectbox initial value', value);
@@ -58,6 +59,9 @@ const Box = ({
                 )}
               </Transition>
             )}
+            <Nullable on={below}>
+              {below}
+            </Nullable>
           </ContentContainer>
         </div>
       )}

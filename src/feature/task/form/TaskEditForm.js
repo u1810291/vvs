@@ -86,7 +86,7 @@ const AlarmForm = () => {
   const {id} = useParams();
   const list = useTaskEdit({filters: {id}});
   
-  console.log(list?.data);
+  // console.log(list?.data);
 
   const [directions, setDirections] = useState([]);
   const [clickedPos, setClickedPos] = useState({});

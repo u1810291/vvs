@@ -24,9 +24,10 @@ import {
   pipe,
   safe,
   getProp,
-  bimap
-  // tap,
+  bimap,
+  merge,
 } from 'crocks';
+import Button from 'components/Button';
 
 
 
@@ -74,8 +75,8 @@ const Listing = ({
       filter(activeTableColumnPred),
       map(a => pipe(
         b => ({key: b.key, children: b.headerText}),
-        renderWithProps(Table.Th),
-        th => <button className='hover:text-black' onClick={setSortColumn(a.key)}>{th}</button>,
+        renderWithProps(Button.NoBg),
+        btn => <Table.Th className='hover:text-black' key={a.key} onClick={setSortColumn(a.key)}>{btn}</Table.Th>,
       )(a))
     )),
     option([]),
@@ -91,8 +92,7 @@ const Listing = ({
     //sort
     row => row.sort((a, b) => pipe(
       bimap(toComparable, toComparable),
-      // sort()
-      // merge((l, r) => l.localCompare(r)),
+      merge((l, r) => l.localeCompare(r)),
     )(Pair(a, b))),
 
     // filter and render
