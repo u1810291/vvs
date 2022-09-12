@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import TaskCreateForm from '../form/TaskCreateForm';
 import Header from '../../../components/atom/Header';
@@ -14,18 +14,12 @@ import {TaskListRoute} from '../routes';
 
 const TaskCreateLayout = () => {
   const saveRef = useRef(identity);
-  const removeRef = useRef(identity);
-  const {id} = useParams();
   const navigate = useNavigate();
-  // const {data} = useCrew({id});
   const {t} = useTranslation('task', {keyPrefix: 'create.header'});
-  const send = () => { isFunction(saveRef.current) && saveRef.current(); };
 
-  // const breadcrumb = (
-  //   getProp('name', data)
-  //     .alt(getProp('id', data))
-  //     .option(null)
-  // );
+  const save = () => { isFunction(saveRef.current) && saveRef.current(); };
+
+
 
   return (
     <SideBarLayout>
@@ -33,22 +27,20 @@ const TaskCreateLayout = () => {
         <Header>
           <Breadcrumbs>
             <RouteAsBreadcrumb route={TaskListRoute} />
-            {/*<Nullable on={breadcrumb}>*/}
-            {/*  <Breadcrumbs.Item>*/}
-            {/*    <span className='font-semibold'>{breadcrumb}</span>*/}
-            {/*  </Breadcrumbs.Item>*/}
-            {/*</Nullable>*/}
+            <Breadcrumbs.Item>
+              <span className='font-semibold'>{t`newtask`}</span>
+             </Breadcrumbs.Item>
           </Breadcrumbs>
           <div className='space-x-4'>
             <Button.Sxl onClick={() => navigate(TaskListRoute.props.path)}>
               {t`button.cancel`}
             </Button.Sxl>
-            <Button.Pxl onClick={send}>
+            <Button.Pxl onClick={save}>
               {t`button.save`}
             </Button.Pxl>
           </div>
         </Header>
-        <TaskCreateForm />
+        <TaskCreateForm saveRef={saveRef} />
       </div>
     </SideBarLayout>
   );

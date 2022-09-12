@@ -216,7 +216,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {
-      // console.log('queryParams not empty, re mutate');
+      // console.log(queryParams);
       api.mutate();
     }
   }, [queryParams]);

@@ -10,11 +10,8 @@ import {useAuth} from '../../../context/auth';
 
 import {
   getPropOr,
-  // getProp,
-  // hasProps,
   identity,
   map,
-  Maybe,
   pipe,
   safe,
   and,
@@ -28,7 +25,6 @@ import {
 import {alt} from 'crocks/pointfree';
 import Innerlinks from 'components/Innerlinks';
 import {HelpListRoute} from 'feature/help/routes';
-import DriverOnlineTag from 'feature/driver/component/DriverOnlineTag';
 import useClients from '../api/useClients';
 import {ClientEditRoute} from '../routes';
 import {useFilter} from 'hook/useFilter';
@@ -206,13 +202,6 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     c('contract_no', identity, true),
     c('mobilePhone', identity, true),
     c('username', identity, true),
-    c('last_ping', dateCol, true),
-    {
-      key: 'status',
-      headerText: tc`status`,
-      itemToProps: Maybe.Just,
-      Component: withPreparedProps(DriverOnlineTag, identity),
-    }
   ];
 
   const filtersData = [
