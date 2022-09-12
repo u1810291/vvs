@@ -23,6 +23,8 @@ import {
   Pair,
   pipe,
   safe,
+  getProp,
+  bimap
   // tap,
 } from 'crocks';
 
@@ -64,7 +66,7 @@ const Listing = ({
 }) => {
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
-  const [ sortColumnKey, setSortColumn ] = useState(null);
+  const [sortColumnKey, setSortColumn] = useState(null);
 
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
@@ -74,7 +76,7 @@ const Listing = ({
         b => ({key: b.key, children: b.headerText}),
         renderWithProps(Table.Th),
         th => <button className='hover:text-black' onClick={setSortColumn(a.key)}>{th}</button>,
-      ))(a)
+      )(a))
     )),
     option([]),
   )(tableColumns), [tableColumns, activeTableColumnPred]);
@@ -89,7 +91,8 @@ const Listing = ({
     //sort
     row => row.sort((a, b) => pipe(
       bimap(toComparable, toComparable),
-      merge((l, r) => l.localCompare(r)),
+      // sort()
+      // merge((l, r) => l.localCompare(r)),
     )(Pair(a, b))),
 
     // filter and render
