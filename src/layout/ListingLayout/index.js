@@ -20,6 +20,7 @@ import {
   map,
   not,
   option,
+  Pair,
   pipe,
   safe,
   // tap,
@@ -63,33 +64,50 @@ const Listing = ({
 }) => {
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
+  const [ sortColumnKey, setSortColumn ] = useState(null);
 
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
     map(pipe(
       filter(activeTableColumnPred),
-      map(pipe(
-        a => ({key: a.key, children: a.headerText}),
-        renderWithProps(Table.Th)
-      ))
+      map(a => pipe(
+        b => ({key: b.key, children: b.headerText}),
+        renderWithProps(Table.Th),
+        th => <button className='hover:text-black' onClick={setSortColumn(a.key)}>{th}</button>,
+      ))(a)
     )),
     option([]),
   )(tableColumns), [tableColumns, activeTableColumnPred]);
 
-  const rows = useMemo(() => reduce((rs, r) => ifElse(
-    r => tableColumns
-      .map(c => componentToString(c.Component(c.itemToProps(r).option(''))))
-      .some(c => pipe(
-        safe(not(isEmpty)),
-        map(String),
-        // map(c => c.match(new RegExp(asciifyLT(query.replace(/\W+/gm, '')), 'gi'))),
-        map(c => c.match(new RegExp(asciifyLT2(query.replace(/[^\w\d -]/gm, '')), 'gi'))),
-        map(Boolean),
-        option(false),
-      )(c)),
-    item => [...rs, (
-      <Table.Tr key={rowKeyLens(item)}>
-        {
+  const toComparable = pipe(
+    getProp(sortColumnKey),
+    map(String),
+    option(''),
+  );
+
+  const rows = useMemo(() => pipe(
+    //sort
+    row => row.sort((a, b) => pipe(
+      bimap(toComparable, toComparable),
+      merge((l, r) => l.localCompare(r)),
+    )(Pair(a, b))),
+
+    // filter and render
+    reduce((rs, r) => ifElse(
+      r => tableColumns
+        .map(c => componentToString(c.Component(c.itemToProps(r).option(''))))
+        .some(c => pipe(
+          safe(not(isEmpty)),
+          map(String),
+          // map(c => c.match(new RegExp(asciifyLT(query.replace(/\W+/gm, '')), 'gi'))),
+          map(c => c.match(new RegExp(asciifyLT2(query.replace(/[^\w\d -]/gm, '')), 'gi'))),
+          map(Boolean),
+          option(false),
+        )(c)),
+
+      item => [...rs, (
+        <Table.Tr key={rowKeyLens(item)}>
+          {
           reduce((cs, c) => ifElse(
             and(hasProps(['key', 'itemToProps', 'Component']), activeTableColumnPred),
             ({key, itemToProps, Component, styles}) => [...cs, (
@@ -101,11 +119,12 @@ const Listing = ({
             c,
           ), [], tableColumns)
         }
-      </Table.Tr>
-    )],
-    constant(rs),
-    r,
-  ), [], list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
+        </Table.Tr>
+      )],
+      constant(rs),
+      r,
+    ), []),
+  )(list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
 
   return (
     <Index>
