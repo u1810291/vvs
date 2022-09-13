@@ -67,8 +67,7 @@ const Listing = ({
 }) => {
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
-  const [sortColumnKey, setSortColumn] = useState(null);
-
+  const [sortColumnKey, setSortColumn] = useState('name');
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
     map(pipe(
@@ -76,7 +75,7 @@ const Listing = ({
       map(a => pipe(
         b => ({key: b.key, children: b.headerText}),
         renderWithProps(Button.NoBg),
-        btn => <Table.Th className='hover:text-black' key={a.key} onClick={setSortColumn(a.key)}>{btn}</Table.Th>,
+        btn => <Table.Th className='hover:text-black' key={a.key} onClick={() => setSortColumn(a.key)}>{btn}</Table.Th>,
       )(a))
     )),
     option([]),
@@ -87,14 +86,12 @@ const Listing = ({
     map(String),
     option(''),
   );
-
   const rows = useMemo(() => pipe(
     //sort
     row => row.sort((a, b) => pipe(
       bimap(toComparable, toComparable),
       merge((l, r) => l.localeCompare(r)),
     )(Pair(a, b))),
-
     // filter and render
     reduce((rs, r) => ifElse(
       r => tableColumns
