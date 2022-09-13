@@ -22,7 +22,6 @@ import {
   option,
   pipe,
   safe,
-  getProp,
 } from 'crocks';
 import Button from 'components/Button';
 
@@ -77,12 +76,6 @@ const Listing = ({
     )),
     option([]),
   )(tableColumns), [tableColumns, activeTableColumnPred]);
-
-  const toComparable = pipe(
-    getProp(sortColumnKey),
-    map(String),
-    option(''),
-  );
   
   const rows = useMemo(() => pipe(
     //sort
