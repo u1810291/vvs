@@ -139,13 +139,13 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
         <Table.Body>
           {list.map((r, index) => (
             <Table.Tr key={r.object.id}>
-              <Table.Td>{index + 1}</Table.Td>
+              <Table.Td>{r.object.contract_object_no}</Table.Td>
               <Table.Td>{r.object.name}</Table.Td>
               <Table.Td>
                 {r.object.address}
                 <Nullable on={r.object.city}>, {titleCase(r.object.city)}</Nullable>  
               </Table.Td>
-              <Table.Td>{r.object.contract_object_no}</Table.Td>
+              <Table.Td>{r.object.contract_no}</Table.Td>
               <Table.Td>
                 <Button.NoBg id={r.object.id} onClick={remove} className={'text-red-500 text-xs shadow-none'}>{tf`Delete`}</Button.NoBg>
               </Table.Td>

@@ -3,6 +3,7 @@ query ObjectsByUserId($id: uuid!) {
     user_id
     object {
       id
+      contract_no
       contract_object_no
       name
       address
