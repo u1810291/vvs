@@ -7,7 +7,7 @@ import {componentToString} from '@s-e/frontend/react';
 import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
-import {renderWithProps} from '../../util/react';
+import {renderWithProps, dynamicSort} from '../../util/react';
 import {useCallback, useMemo, useState} from 'react';
 import {
   and,
@@ -20,12 +20,9 @@ import {
   map,
   not,
   option,
-  Pair,
   pipe,
   safe,
   getProp,
-  bimap,
-  merge,
 } from 'crocks';
 import Button from 'components/Button';
 
@@ -86,12 +83,10 @@ const Listing = ({
     map(String),
     option(''),
   );
+  
   const rows = useMemo(() => pipe(
     //sort
-    row => row.sort((a, b) => pipe(
-      bimap(toComparable, toComparable),
-      merge((l, r) => l.localeCompare(r)),
-    )(Pair(a, b))),
+    row => row.sort(dynamicSort(sortColumnKey)),
     // filter and render
     reduce((rs, r) => ifElse(
       r => tableColumns
@@ -124,7 +119,7 @@ const Listing = ({
       constant(rs),
       r,
     ), []),
-  )(list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
+  )(list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query, sortColumnKey]);
 
   return (
     <Index>
