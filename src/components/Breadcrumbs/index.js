@@ -26,13 +26,13 @@ const Box = ({Item, ...props}) => (
   </nav>
 )
 
-const Item = ({hasSlash = true, children, props}) => (
+const Item = ({hideSlash = false, children, props}) => (
   <li {...props}>
     <div className='flex items-center'>
       <span className='mr-4 text-lg font-normal text-bluewood'>
         {children}
       </span>
-      {hasSlash && (
+      {!hideSlash && (
         <svg
           className='flex-shrink-0 h-5 w-5 text-regent'
           xmlns='http://www.w3.org/2000/svg'

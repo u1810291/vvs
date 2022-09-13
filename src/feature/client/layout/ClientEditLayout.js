@@ -135,7 +135,7 @@ const ClientEditLayout = () => {
           <Breadcrumbs>
             <RouteAsBreadcrumb route={ClientListRoute}/>
             <Nullable on={breadcrumb}>
-              <Breadcrumbs.Item hasSlash={false}>
+              <Breadcrumbs.Item hideSlash>
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
             </Nullable>
