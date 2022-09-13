@@ -10,11 +10,8 @@ import {useAuth} from '../../../context/auth';
 
 import {
   getPropOr,
-  // getProp,
-  // hasProps,
   identity,
   map,
-  Maybe,
   pipe,
   safe,
   and,
@@ -28,7 +25,6 @@ import {
 import {alt} from 'crocks/pointfree';
 import Innerlinks from 'components/Innerlinks';
 import {HelpListRoute} from 'feature/help/routes';
-import DriverOnlineTag from 'feature/driver/component/DriverOnlineTag';
 import useClients from '../api/useClients';
 import {ClientEditRoute} from '../routes';
 import {useFilter} from 'hook/useFilter';
@@ -202,27 +198,10 @@ const ClientListLayout = withPreparedProps(Listing, props => {
 
   // TODO: Adjust column names regarding response data
   const tableColumns = [
-    // c('fullName', pipe(a => getProp('fullName', a)
-    //   .alt((
-    //     safe(hasProps(['firstName', 'lastName']), a)
-    //     .map(({firstName, lastName}) => `${firstName} ${lastName}`)
-    //     .chain(toStringValue)
-    //   ))
-    //   .alt(getProp('firstName', a).chain(toStringValue))
-    //   .alt(getProp('lastName', a).chain(toStringValue))
-    //   .alt(getProp('id', a).chain(toStringValue))
-    // ), true),
     c('fullName', identity, true),
     c('contract_no', identity, true),
     c('mobilePhone', identity, true),
     c('username', identity, true),
-    c('last_ping', dateCol, true),
-    {
-      key: 'status',
-      headerText: tc`status`,
-      itemToProps: Maybe.Just,
-      Component: withPreparedProps(DriverOnlineTag, identity),
-    }
   ];
 
   const filtersData = [
@@ -244,8 +223,10 @@ const ClientListLayout = withPreparedProps(Listing, props => {
   );
 
   const api = useClients({filters: queryParams});
-  console.log(api?.data);
+  // console.log(api?.data);
 
+
+  
   return {
     list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),

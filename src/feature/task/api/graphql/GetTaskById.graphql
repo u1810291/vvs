@@ -6,6 +6,12 @@ query GetTaskById($id: uuid!) {
     id
     name
     object_id
+    object {
+      id
+      address
+      latitude
+      longitude
+    }
     provider_id
     provider_name
     reason

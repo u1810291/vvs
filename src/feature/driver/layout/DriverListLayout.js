@@ -212,15 +212,14 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   );
  
   const api = useDrivers({filters: queryParams});
+  // console.log(api?.data);
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {
-      console.log('queryParams not empty, re mutate');
+      // console.log(queryParams);
       api.mutate();
     }
   }, [queryParams]);
-
-  // console.log(api?.data);
 
   return {
     list: api?.data || [],
@@ -228,7 +227,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     buttons: <Button onClick={() => nav(DriverCreateRoute.props.path)}>{t`create`}</Button>,
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item hasSlash={false}><span className='font-semibold'>{tb`drivers`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash><span className='font-semibold'>{tb`drivers`}</span></Breadcrumbs.Item>
         <Button.NoBg onClick={toggleFilter}>
           {defaultFilter.id ? defaultFilter.name : tb('allData') } 
           <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
