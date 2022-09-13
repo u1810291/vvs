@@ -65,11 +65,11 @@ const DriverEditLayout = () => {
           <Breadcrumbs>
             <RouteAsBreadcrumb route={DriverRoute}/>
             <Nullable on={breadcrumb}>
-              <Breadcrumbs.Item hasSlash={false}>
+              <Breadcrumbs.Item hideSlash>
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
             </Nullable>
-            <Breadcrumbs.Item hasSlash={false}>
+            <Breadcrumbs.Item hideSlash>
               <DriverOnlineTag {...data} />
             </Breadcrumbs.Item>
           </Breadcrumbs>
