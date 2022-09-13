@@ -25,6 +25,9 @@
       }
     }
   },
+  "edit": {
+    "untitledTask": "Untitled task"
+  },
   "list": {
     "header": {
       "create": "Create Task",
@@ -57,5 +60,15 @@
       "time_at_object": "Time at object",
       "reason": "Reason"
     }
+  },
+  "status": {
+    "new": "New",
+    "canceled": "Canceled",
+    "onRoad": "On road",
+    "inspection": "Inspection",
+    "inspectionDone": "Inspection done",
+    "finished": "Finished",
+    "waitForApproval": "Wait for approval",
+    "unknown": "unknown"
   }
 }
