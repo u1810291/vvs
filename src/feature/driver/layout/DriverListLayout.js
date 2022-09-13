@@ -91,45 +91,53 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
           }
         }
       }}).fork(console.error, (users) => {
-        const ids = users.user_settings.map(u => u.id)
+        const ids = users.user_settings.map(u => u.id);
+
+        const mustFilter = [];
+
+        state['fullName']?.split(' ').forEach(s => {
+          mustFilter.push({
+            'wildcard': {
+              'fullName': {
+                'value': `*${s.replaceAll('%', '')}*`
+              }
+            }
+          });
+        });
+
+        // add ids
+        mustFilter.push({
+          'terms': {
+            'id': ids || []
+          }
+        });
+
+        // by role 'crew'
+        mustFilter.push({
+          'nested': {
+            'path': 'registrations',
+            'query': {
+              'bool': {
+                'must': [
+                  {
+                    'match': {
+                      'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+                    }
+                  },
+                  {
+                    'match': {
+                      'registrations.roles': 'crew'
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        })
 
         const query = {
           'bool': {
-            'must': [
-              {
-                'wildcard': {
-                  'fullName': {
-                    'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
-                  }
-                }
-              },
-              {
-                'terms': {
-                  'id': ids || []
-                }
-              },
-              {
-                'nested': {
-                  'path': 'registrations',
-                  'query': {
-                    'bool': {
-                      'must': [
-                        {
-                          'match': {
-                            'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
-                          }
-                        },
-                        {
-                          'match': {
-                            'registrations.roles': 'crew'
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            ]
+            'must': mustFilter
           }
         }
 
@@ -141,38 +149,44 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
       return {};
     }
 
-    return {query: JSON.stringify({
-      'bool': {
-        'must': [
-          {
-            'wildcard': {
-              'fullName': {
-                'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
-              }
-            }
-          },
-          {
-            'nested': {
-              'path': 'registrations',
-              'query': {
-                'bool': {
-                  'must': [
-                    {
-                      'match': {
-                        'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
-                      }
-                    },
-                    {
-                      'match': {
-                        'registrations.roles': 'crew'
-                      }
-                    }
-                  ]
+    const mustFilter = [];
+
+    state['fullName']?.split(' ').forEach(s => {
+      mustFilter.push({
+        'wildcard': {
+          'fullName': {
+            'value': `*${s.replaceAll('%', '')}*`
+          }
+        }
+      });
+    });
+
+    // by role 'crew'
+    mustFilter.push({
+      'nested': {
+        'path': 'registrations',
+        'query': {
+          'bool': {
+            'must': [
+              {
+                'match': {
+                  'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+                }
+              },
+              {
+                'match': {
+                  'registrations.roles': 'crew'
                 }
               }
-            }
+            ]
           }
-        ]
+        }
+      }
+    })
+
+    return {query: JSON.stringify({
+      'bool': {
+        'must': mustFilter
       }
     })};
   }, []);
