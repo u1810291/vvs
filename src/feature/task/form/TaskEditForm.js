@@ -1,8 +1,8 @@
-import React, {useEffect, useState, useCallback, useRef} from 'react';
+import React, {useEffect, useState, useCallback, useRef, useMemo} from 'react';
 
 import Map from '../../map/component/Map';
-import TaskEditSideLeft from '../../../components/obsolete/sides/newSideLeft';
-import TaskEditSideRight from '../../../components/obsolete/sides/newSideRight';
+import TaskEditSideLeft from '../../../components/obsolete/sides/taskLeftSide';
+import TaskEditSideRight from '../../../components/obsolete/sides/taskRightSide';
 
 
 import useLanguage from '../../../hook/useLanguage';
@@ -13,6 +13,8 @@ import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
 import MarkerTag from '../../../components/atom/icon/MarkerTag';
 import {useGoogleApiContext} from '../../../context/google';
 import {useParams} from 'react-router-dom';
+import {useTaskEdit} from '../api';
+import {ATAPI} from 'mocks/tasks';
 
 const overLayView1 = {
   lat: 55.92,
@@ -84,8 +86,9 @@ const TaskEditForm = () => {
   const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
   const {id} = useParams();
   const list = useTaskEdit({filters: {id}});
-  
-  // console.log(list?.data);
+  console.log(list.data)
+  const phoneNumbers = useMemo(() => list?.data, [])
+  console.log(phoneNumbers)
 
   const [directions, setDirections] = useState([]);
   const [clickedPos, setClickedPos] = useState({});
@@ -282,7 +285,7 @@ const TaskEditForm = () => {
       )}
       </div>
       <div className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
-        <TaskEditSideRight />
+        <TaskEditSideRight tasks={ATAPI} />
       </div>
     </>
   );

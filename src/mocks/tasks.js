@@ -25,5 +25,5 @@ export const ATAPI = new Array(8).fill('').map((_, index) => ({
   dislocationStatus: 'Į degalinę',
   connection: 'Vardenis Pavardenis',
   address: 'Vilnius, A goštauto g. 7',
-  distance: `${Math.trunc(Math.random() * (index + 100))/10}`
+  distance: `${Math.trunc(Math.random() * (index + 100))/10} km`
 }));
