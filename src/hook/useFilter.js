@@ -753,7 +753,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    // console.log('state changed');
+    // console.log('state changed', state);
 
     // if custom filter logic was provided
     if (isFunction(customFilter)) return customFilter(state, filtersData);

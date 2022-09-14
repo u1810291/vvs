@@ -21,6 +21,7 @@ import {
   pick,
   not,
   isEmpty,
+  flip,
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
 import Innerlinks from 'components/Innerlinks';
@@ -31,8 +32,9 @@ import {useFilter} from 'hook/useFilter';
 import Button from 'components/Button';
 import {FilterIcon} from '@heroicons/react/solid';
 import {format} from 'date-fns';
-import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
 import {ClientCreateRoute} from '../routes';
+import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
+import raw from 'raw.macro';
 
 
 const ClientListLayout = withPreparedProps(Listing, props => {
@@ -73,77 +75,96 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     safe(not(isEmpty)),
   );
 
+  
+  const auth = useAuth();
+  const _search = flip(auth.api)(raw('../api/graphql/GetUsersByObjects.graphql'));
+  const _getByQuery = flip(auth.api)(raw('../api/graphql/GetClientsByQuery.graphql'));
 
-  const {data: objectsDropdown} = useObjectsDropdown();
-  // console.log(objectsDropdown);
+  const {data: objectsDropdown} = useObjectsDropdown({filters: {}});
 
   // custom filter
   const clientsFilter = useCallback((state, filtersData) => {
-    // if ('status' in state) {
-    //   _search({where: {
-    //     _and: {
-    //       is_online: {
-    //         _in: state['status'].map(s => s === 'OFFLINE' ? 'No' : 'Yes') // only OFFLINE/ONLINE 
-    //       }
-    //     }
-    //   }}).fork(console.error, (users) => {
-    //     const ids = users.user_settings.map(u => u.id)
+    // console.log(state);
 
-    //     const query = {
-    //       'bool': {
-    //         'must': [
-    //           {
-    //             'wildcard': {
-    //               'fullName': {
-    //                 'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
-    //               }
-    //             }
-    //           },
-    //           {
-    //             'terms': {
-    //               'id': ids || []
-    //             }
-    //           },
-    //           {
-    //             'nested': {
-    //               'path': 'registrations',
-    //               'query': {
-    //                 'bool': {
-    //                   'must': [
-    //                     {
-    //                       'match': {
-    //                         'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
-    //                       }
-    //                     },
-    //                     {
-    //                       'match': {
-    //                         'registrations.roles': 'crew'
-    //                       }
-    //                     }
-    //                   ]
-    //                 }
-    //               }
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     }
-
-    //     _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
-    //       api.mutate(data.usersByQuery.users);
-    //     })
-    //   });
-
-    //   return {};
-    // }
-    
-    const filterFullName = {
-      'wildcard': {
-        'fullName': {
-          'value': `${state['fullName'] ? `*${state['fullName'].replaceAll('%', '')}*` : '*'}`
+    if (state['object_id']) {
+      _search({where: {
+        users: {
+          object_id: {_in: state['object_id']}
         }
-      }
-    };
+      }}).fork(console.error, (users) => {
+        // console.log(users.object[0]?.users);
+
+        const ids = users.object[0]?.users.map(u => u.user_id);
+        // console.log(ids);
+
+        const mustFilter = [];
+
+        state['fullName']?.split(' ').forEach(s => {
+          mustFilter.push({
+            'wildcard': {
+              'fullName': {
+                'value': `*${s.replaceAll('%', '')}*`
+              }
+            }
+          });
+        });
+
+        // add ids
+        mustFilter.push({
+          'terms': {
+            'id': ids || []
+          }
+        });
+
+        // by role 'customer'
+        mustFilter.push({
+          'nested': {
+            'path': 'registrations',
+            'query': {
+              'bool': {
+                'must': [
+                  {
+                    'match': {
+                      'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+                    }
+                  },
+                  {
+                    'match': {
+                      'registrations.roles': 'customer'
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        })
+
+        const query = {
+          'bool': {
+            'must': mustFilter
+          }
+        }
+
+        _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
+          // console.log(data, 'byQuery');
+          api.mutate(data.usersByQuery.users);
+        })
+      });
+
+      return {};
+    }
+    
+    const mustFilter = [];
+    
+    state['fullName']?.split(' ').forEach(s => {
+      mustFilter.push({
+        'wildcard': {
+          'fullName': {
+            'value': `*${s.replaceAll('%', '')}*`
+          }
+        }
+      })
+    })
 
     const filterEmail = {
       'wildcard': {
@@ -161,8 +182,6 @@ const ClientListLayout = withPreparedProps(Listing, props => {
       }
     };
 
-    const mustFilter = [];
-    if (state['fullName']) mustFilter.push(filterFullName);
     if (state['username']) mustFilter.push(filterEmail);
     if (state['mobilePhone']) mustFilter.push(filterMobilePhone);
     
@@ -189,6 +208,8 @@ const ClientListLayout = withPreparedProps(Listing, props => {
       }
     })
 
+    // console.log(mustFilter);
+
     return {query: JSON.stringify({
       'bool': {
         'must': mustFilter
@@ -208,8 +229,8 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     {key: 'fullName', label: 'Name Surname', filter: 'text'},
     {key: 'username', label: 'Email', filter: 'text'},
     {key: 'mobilePhone', label: 'Phone', filter: 'text'},
-    {key: 'object', label: 'Object', filter: 'autocomplete', values: objectsDropdown || [], displayValue: (v) => {
-      const obj = objectsDropdown?.find(o => o.value === v.value);
+    {key: 'object_id', label: 'Object', filter: 'autocomplete', values: objectsDropdown || [], displayValue: (v) => {
+      const obj = objectsDropdown?.find(o => o.value === v);
       return obj?.name ?? obj?.value;
     }},
   ]
@@ -224,7 +245,6 @@ const ClientListLayout = withPreparedProps(Listing, props => {
 
   const api = useClients({filters: queryParams});
   // console.log(api?.data);
-
 
   
   return {

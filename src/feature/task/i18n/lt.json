@@ -25,6 +25,9 @@
       }
     }
   },
+  "edit": {
+    "untitledTask": "Užduatis"
+  },
   "list": {
     "header": {
       "create": "Sukurti užduotį",
@@ -57,5 +60,15 @@
       "time_at_object": "Laikas objekte",
       "reason": "Suveikimo priežastis"
     }
+  },
+  "status": {
+    "new": "Nauja",
+    "canceled": "Atšaukta",
+    "onRoad": "Kelyje",
+    "inspection": "Vykdoma",
+    "inspectionDone": "Peržiūra atlikta",
+    "finished": "Atlikta",
+    "waitForApproval": "Laukiama patvirtinimo",
+    "unknown": "Nežinoma"
   }
 }

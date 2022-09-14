@@ -1,0 +1,7 @@
+query GetUsersByObjects($where: object_bool_exp) {
+  object(where: $where) {
+    users {
+      user_id
+    }
+  }
+}
