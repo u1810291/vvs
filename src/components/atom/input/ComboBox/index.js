@@ -6,8 +6,8 @@ import InputContainer from './InputContainer';
 import Label from './Label';
 import Option from './Option';
 import Options from './Options';
-import {omit} from 'crocks';
-import {withComponentFactory} from 'util/react';
+import {isFoldable, omit, chain, map, option, safe, curry, pipe, branch, merge, bimap} from 'crocks';
+import {renderWithProps, withComponentFactory} from 'util/react';
 import {withMergedClassName} from 'util/react'
 
 const ComboBox = withComponentFactory(Box, {
@@ -21,5 +21,16 @@ const ComboBox = withComponentFactory(Box, {
   Options,
   optionClassNameFn: ({active}) => `relative cursor-default select-none py-2 pl-8 pr-4 ${active ? 'bg-indigo-500 text-white' : 'text-gray-900'}`,
 });
+
+ComboBox.asOptions = curry(([getValue, getText], mFoldable) => pipe(
+  chain(safe(isFoldable)),
+  map(map(pipe(
+    branch,
+    bimap(getValue, getText),
+    merge((value, children) => ({key: value, value, children})),
+    renderWithProps(ComboBox.Option),
+  ))),
+  option([]),
+)(mFoldable))
 
 export default ComboBox;
