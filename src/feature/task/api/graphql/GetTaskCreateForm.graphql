@@ -1,5 +1,5 @@
 query GetTaskCreateForm {
-  types: task_type {
+  types: event_status {
     value
   }
   crews: crew {

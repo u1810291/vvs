@@ -20,23 +20,25 @@ import {
   getPropOr,
   identity,
 } from 'crocks';
+import useTask from '../api/useTask';
+import {TaskListRoute} from '../routes';
 
 const TaskCreateForm = ({saveRef}) => {
   const gc = useGoogleApiContext();
-  const {t} = useTranslation();
+  const {t} = useTranslation('task');
   const api = useCreateTask();
   const getTypeText = useMemo(() => pipe(
     String,
     safe(not(isEmpty)),
     map(pipe(
-      a => a.toLowerCase(),
-      v => `field.type.${v}`,
+      a => a.toUpperCase(),
+      v => `list.status.${v}`,
       t,
     )),
     option(''),
   ), [t]);
 
-  const {ctrl, ...result} = useResultForm({
+  const {ctrl, setForm, result} = useResultForm({
     type: {
       validator: not(isEmpty),
       initial: '',
@@ -110,6 +112,13 @@ const TaskCreateForm = ({saveRef}) => {
         )),
       },
     }
+  });
+
+  useTask({
+    saveRef,
+    formResult: result,
+    setForm,
+    successRedirectPath: TaskListRoute.props.path,
   });
 
   return (
