@@ -9,22 +9,23 @@ import {useGoogleApiContext} from 'context/google';
 import {useTranslation} from 'react-i18next';
 import {
   not,
+  getPath,
   isEmpty,
   constant,
   pipe,
   map,
-  getPathOr,
   safe,
   option,
   tap,
   getPropOr,
+  identity,
 } from 'crocks';
 
 const TaskCreateForm = ({saveRef}) => {
   const gc = useGoogleApiContext();
   const {t} = useTranslation();
   const api = useCreateTask();
-  const typeValueToText = useMemo(() => pipe(
+  const getTypeText = useMemo(() => pipe(
     String,
     safe(not(isEmpty)),
     map(pipe(
@@ -46,13 +47,15 @@ const TaskCreateForm = ({saveRef}) => {
         placeholder: constant(t`field.type.placeholder`),
         value: ({value}) => value,
         onChange: ({set}) => value => {set(value)},
-        displayValue: constant(b => typeValueToText(b)),
+        children: constant(ComboBox.asOptions(
+          [identity, getTypeText], getPath(['data', 'types'], api)
+        )),
       },
     },
     name: {
       validator: not(isEmpty),
       initial: '',
-      messages: t`field.name.validation`,
+      message: t`field.name.validation`,
       props: {
         label: constant(t`field.name.label`),
         isRequired: constant(true),
@@ -63,7 +66,7 @@ const TaskCreateForm = ({saveRef}) => {
     description: {
       validator: not(isEmpty),
       initial: '',
-      messages: t`field.description.validation`,
+      message: t`field.description.validation`,
       props: {
         label: constant(t`field.description.label`),
         isRequired: constant(true),
@@ -74,10 +77,10 @@ const TaskCreateForm = ({saveRef}) => {
     address: {
       validator: not(isEmpty),
       initial: '',
-      messages: t`field.address.validation`,
+      message: t`field.address.validation`,
       props: {
         isRequired: constant(true),
-        label: constant(t`field.address.label`),
+        labelText: constant(t`field.address.label`),
         placeholder: constant(t`field.address.placeholder`),
         value: ({value}) => value,
         onChange: ({set}) => set,
@@ -91,25 +94,33 @@ const TaskCreateForm = ({saveRef}) => {
         )),
       },
     },
+    crew: {
+      opt: true,
+      initial: null,
+      validator: constant(true),
+      message: t`field.crew.validation`,
+      props: {
+        labelText: constant(t`field.crew.label`),
+        placeholder: constant(t`field.crew.placeholder`),
+        value: ({value}) => value,
+        onChange: ({set}) => set,
+        children: constant(ComboBox.asOptions(
+          [getPropOr('', 'value'), getPropOr('', 'text')],
+          getPath(['data', 'crews'], api),
+        )),
+      },
+    }
   });
 
   return (
     <section className='p-4 space-y-4'>
       <div className='flex space-x-4 w-full'>
-        <ComboBox className='flex-grow flex-shrink' {...ctrl('type')}>
-          {pipe(
-            getPathOr([], ['data', 'types']),
-            map(value => (
-              <ComboBox.Option key={value} value={value}>
-                {typeValueToText(value)}
-              </ComboBox.Option>
-            )),
-          )(api)}
-        </ComboBox>
+        <ComboBox className='flex-grow flex-shrink' {...ctrl('type')}/>
         <InputGroup className='flex-grow flex-shrink' {...ctrl('name')} />
       </div>
       <TextAreaInputGroup {...ctrl('description')} />
       <ComboBox.Autocomplete {...ctrl('address')} />
+      <ComboBox className='flex-grow flex-shrink' {...ctrl('crew')} />
     </section>
   );
 };
