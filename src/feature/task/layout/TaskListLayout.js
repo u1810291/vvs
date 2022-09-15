@@ -15,7 +15,6 @@ import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
 import Innerlinks from 'components/Innerlinks';
 import Breadcrumbs from 'components/Breadcrumbs';
-import DynamicStatus from 'components/atom/Status';
 
 import {useTasks} from 'feature/task/api';
 import {TaskCreateRoute, TaskEditRoute} from 'feature/task/routes';
@@ -32,6 +31,7 @@ import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
 import {isArray, isObject, isString, isEmpty, hasProps} from 'crocks/predicates';
 
 import {format} from 'date-fns';
+import TaskStatusTag from '../component/TaskStatusTag';
 
 const {Just} = Maybe;
 
@@ -59,7 +59,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const nav = useNavigate();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('task', {keyPrefix: 'list.header'});
-  const {t: ts} = useTranslation('task', {keyPrefix: 'list.status'});
+  const {t: ts} = useTranslation('task', {keyPrefix: 'status'});
   const {t: tc} = useTranslation('task', {keyPrefix: 'list.column'});
 
   const c = useMemo(() => getColumn(tc, props => (
@@ -67,13 +67,6 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     <Link className={props?.className} to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
         {props?.children}
     </Link>
-  )), [tc]);
-
-  const cs = useMemo(() => getColumn(tc, props => (
-    <DynamicStatus t={'task'} className={'w-20'} status={props?.status}/>
-    // <Link to={generatePath(TaskCreateRoute.props.path, {id: props?.id})}>
-    //
-    // </Link>
   )), [tc]);
 
   const bullet = '\u2022';
@@ -99,10 +92,15 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     c('object', constant(true), concatNameAdress, true, 'text-regent'),
     c('name', constant(true), nullToStr, true, 'text-bluewood'),
     c('crew', constant(true), getName, true, 'text-regent'),
-    // c('approximate_time', constant(true), boolToStr, true, 'text-regent'),
-    // c('response_time', constant(true), nullToStr, true, 'text-regent'),
-    // c('time_at_object', constant(true), nullToStr, true, 'text-regent'),
-    cs('status', constant(true), nullToStr, true, null),
+    getColumn(
+      tc,
+      props => <TaskStatusTag {...props}/>,
+      'status',
+      constant(true),
+      nullToStr,
+      true,
+      null
+    ),
     c('reason', constant(true), nullToStr, true, 'text-bluewood')
   ];
 

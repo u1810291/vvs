@@ -19,9 +19,12 @@ import {
   tap,
   getPropOr,
   identity,
+  isSame,
 } from 'crocks';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
+import {getObjectName} from 'feature/object/utils';
+import {caseMap} from '@s-e/frontend/flow-control';
 
 const TaskCreateForm = ({saveRef}) => {
   const gc = useGoogleApiContext();
@@ -32,21 +35,30 @@ const TaskCreateForm = ({saveRef}) => {
     safe(not(isEmpty)),
     map(pipe(
       a => a.toUpperCase(),
-      v => `list.status.${v}`,
+      caseMap(constant('unknown'), [
+        [isSame('NEW'), constant('new')],
+        [isSame('CANCELED'), constant('canceled')],
+        [isSame('ON_ROAD'), constant('onRoad')],
+        [isSame('INSPECTION'), constant('inspection')],
+        [isSame('INSPECTION_DONE'), constant('inspectionDone')],
+        [isSame('FINISHED'), constant('finished')],
+        [isSame('WAIT_FOR_APPROVAL'), constant('waitForApproval')],
+      ]),
+      v => `status.${v}`,
       t,
     )),
     option(''),
   ), [t]);
 
   const {ctrl, setForm, result} = useResultForm({
-    type: {
+    status: {
       validator: not(isEmpty),
       initial: '',
-      message: t`field.type.validation`,
+      message: t`field.status.validation`,
       props: {
-        labelText: constant(t`field.type.label`),
+        labelText: constant(t`field.status.label`),
         isRequired: constant(true),
-        placeholder: constant(t`field.type.placeholder`),
+        placeholder: constant(t`field.status.placeholder`),
         value: ({value}) => value,
         onChange: ({set}) => value => {set(value)},
         children: constant(ComboBox.asOptions(
@@ -76,6 +88,22 @@ const TaskCreateForm = ({saveRef}) => {
         onChange: ({set}) => onInputEventOrEmpty(set),
       },
     },
+    object_id: {
+      opt: true,
+      initial: null,
+      validator: constant(true),
+      message: t`field.object.validation`,
+      props: {
+        labelText: constant(t`field.object.label`),
+        placeholder: constant(t`field.object.placeholder`),
+        value: ({value}) => value,
+        onChange: ({set}) => set,
+        children: constant(ComboBox.asOptions(
+          [getPropOr('', 'id'), getObjectName(t`untitledObject`)],
+          getPath(['data', 'objects'], api),
+        )),
+      },
+    },
     address: {
       validator: not(isEmpty),
       initial: '',
@@ -96,7 +124,7 @@ const TaskCreateForm = ({saveRef}) => {
         )),
       },
     },
-    crew: {
+    crew_id: {
       opt: true,
       initial: null,
       validator: constant(true),
@@ -124,12 +152,13 @@ const TaskCreateForm = ({saveRef}) => {
   return (
     <section className='p-4 space-y-4'>
       <div className='flex space-x-4 w-full'>
-        <ComboBox className='flex-grow flex-shrink' {...ctrl('type')}/>
+        <ComboBox className='flex-grow flex-shrink' {...ctrl('status')}/>
         <InputGroup className='flex-grow flex-shrink' {...ctrl('name')} />
       </div>
       <TextAreaInputGroup {...ctrl('description')} />
+      <ComboBox className='flex-grow flex-shrink' {...ctrl('object_id')}/>
       <ComboBox.Autocomplete {...ctrl('address')} />
-      <ComboBox className='flex-grow flex-shrink' {...ctrl('crew')} />
+      <ComboBox className='flex-grow flex-shrink' {...ctrl('crew_id')} />
     </section>
   );
 };

@@ -6,4 +6,9 @@ query GetTaskCreateForm {
     id
     name
   }
+  objects: object {
+    id
+    name
+    address
+  }
 }

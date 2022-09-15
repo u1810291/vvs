@@ -36,18 +36,6 @@
       "permissions": "Leidimai",
       "breaches": "Pažeidimai"
     },
-    "status": {
-      "YES": "Taip",
-      "NO": "Ne",
-      "NEW": "Naujas",
-      "WAIT_FOR_APPROVAL": "Laukiame Patvirtinimo",
-      "ON_THE_ROAD": "Važiuoja",
-      "INSPECTION": "Apžiūri Objektą",
-      "INSPECTION_DONE": "Apžiūrėta",
-      "FINISHED": "Užbaigta",
-      "CANCELLED": "Atšaukta",
-      "-": "-"
-    },
     "column": {
       "id": "ID",
       "name": "Pavadinimas",
