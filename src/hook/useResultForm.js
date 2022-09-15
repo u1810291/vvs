@@ -99,6 +99,7 @@ export const useResultForm = (obj) => {
     getValid,
     form: state,
     setForm: setState,
+    set,
     result,
     isComplete,
     isFullyComplete,
