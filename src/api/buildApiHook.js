@@ -93,7 +93,7 @@ export const createUseListWithAuth = ({graphQl, asyncMapFromApi}) => () => {
  * @param {string} props.graphQl
  * @param {(data) => import('crocks/Async').default} props.asyncMapFromApi
  */
-export const createUseList = ({graphQl, asyncMapFromApi}) => () => {
+export const createUseList = ({graphQl, asyncMapFromApi = Async.Resolved}) => () => {
   const {apiQuery} = useAuth();
 
   return useAsyncSwr([graphQl], (query) => (

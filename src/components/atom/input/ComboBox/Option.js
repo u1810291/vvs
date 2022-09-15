@@ -7,7 +7,7 @@ function classNames(...classes) {
 }
 
 const Option = ({selected, ...props}) => (
-  <Combobox.Option{...props}>
+  <Combobox.Option {...props}>
     {({active}) => (
       <>
         <span className={classNames('block truncate', selected && 'font-semibold')}>{props.children}</span>
