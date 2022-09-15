@@ -1,18 +1,20 @@
-import React, {useMemo, useState} from 'react';
-import {putIntoArray} from '../../../../util/array';
-import {Combobox} from '@headlessui/react';
 import Nullable from '../../Nullable'
+import React, {useMemo, useState} from 'react';
+import Tag from './Tag';
+import {Combobox} from '@headlessui/react';
+import {caseMap} from '@s-e/frontend/flow-control';
 import {componentToString} from '@s-e/frontend/react';
+import {putIntoArray} from '../../../../util/array';
 import {
+  constant,
   filter,
   identity,
   ifElse,
   isEmpty,
   isTruthy,
+  not,
   pipe,
 } from 'crocks';
-import Tag from './Tag';
-
 
 const asciifyLT2 = string => string
   .replace(/a/gi, '(a|ą)')
@@ -23,31 +25,27 @@ const asciifyLT2 = string => string
   .replace(/u/gi, '(u|ų|ū)')
   .replace(/z/gi, '(z|ž)');
 
-
-
 const Box = ({
-  Label,
-  InputContainer,
-  labelText = '',
-  Input,
   Button,
-  Options,
+  Input,
+  InputContainer,
+  Label,
   Option,
-  children,
-  optionClassNameFn = ({active}) => `relative cursor-default select-none py-2 pl-3 pr-9 ${active ? 'bg-indigo-600 text-white' : 'text-gray-900'}`,
-  onChange,
-  value, 
-  displayValue = identity,
-  multiple,
-  placeholder,  
-  isRequired,
+  Options,
   below,
+  children,
+  displayValue = identity,
+  isRequired,
+  labelText = '',
+  multiple,
+  onChange,
+  optionClassNameFn = ({active}) => `relative cursor-default select-none py-2 pl-3 pr-9 ${active ? 'bg-indigo-600 text-white' : 'text-gray-900'}`,
+  placeholder,  
+  showAllOptions = false,
+  value, 
   ...props
 }) => {
-  // console.log('initial combobox value', value);
-
   const [query, setQuery] = useState('');
-
   const filteredChildren = useMemo(() => pipe(
     putIntoArray,
     filter(isTruthy),
@@ -84,26 +82,39 @@ const Box = ({
           />
           <Button />
         </div>
-        <Nullable on={filteredChildren.length}>
-          <Options>
-            {filteredChildren.map((component) => (
-              <Option 
-                {...component.props} 
-                className={optionClassNameFn} 
-                value={component}              
-                key={component?.key || component?.props?.key || component.props.children}
-                selected={multiple && value ? value?.toString().includes(component?.key) : value === component?.key}
-              />
-            ))}
-          </Options>
-        </Nullable>
-        
+        {caseMap(constant(null), [
+          [constant(isTruthy(showAllOptions)), constant(
+            <Options>
+              {children.map((component) => (
+                <Option 
+                  {...component.props} 
+                  className={optionClassNameFn} 
+                  value={component}              
+                  key={component?.key || component?.props?.key || component.props.children}
+                  selected={multiple && value ? value?.toString().includes(component?.key) : value === component?.key}
+                  />
+              ))}
+            </Options>
+          )],
+          [constant(not(isEmpty, filteredChildren)), constant(
+            <Options>
+              {filteredChildren.map((component) => (
+                <Option 
+                  {...component.props} 
+                  className={optionClassNameFn} 
+                  value={component}              
+                  key={component?.key || component?.props?.key || component.props.children}
+                  selected={multiple && value ? value?.toString().includes(component?.key) : value === component?.key}
+                  />
+              ))}
+            </Options>
+          )],
+        ], null)}
         <Nullable on={value?.length > 0 && multiple === true}>
           {value?.toString().split(',').map((v) => (
             <Tag key={v.trim()} value={v.trim()} onDelete={onDeselect}>{displayValue(v.trim())}</Tag>
           ))}
         </Nullable>
-
         <Nullable on={below}>
           {below}
         </Nullable>
