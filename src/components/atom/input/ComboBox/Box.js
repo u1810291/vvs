@@ -9,12 +9,30 @@ import {
   constant,
   filter,
   identity,
+  chain,
+  isSame,
   ifElse,
   isEmpty,
   isTruthy,
   not,
   pipe,
+  getPath,
+  option,
+  safe,
+  find,
 } from 'crocks';
+
+const DEFAULTS = {
+  displayValue: (value, all) => pipe(
+    find(pipe(
+      getPath(['props', 'value']),
+      chain(safe(isSame(value))),
+      option(null),
+    )),
+    chain(getPath(['props', 'children'])),
+    option(all)
+  )(all)
+}
 
 const asciifyLT2 = string => string
   .replace(/a/gi, '(a|ą)')
@@ -31,11 +49,11 @@ const Box = ({
   InputContainer,
   Label,
   Option,
+  isRequired,
   Options,
   below,
   children,
-  displayValue = identity,
-  isRequired,
+  displayValue = DEFAULTS.displayValue,
   labelText = '',
   multiple,
   onChange,
@@ -75,7 +93,7 @@ const Box = ({
         <div className='flex flex-row relative'>
           <Input
             onChange={onInputChange}
-            displayValue={(v) => multiple ? '' : displayValue(v)}
+            displayValue={(v, b, c, d) => multiple ? '' : displayValue(v, children)}
             placeholder={placeholder}
             {...props}
             className={'w-full'}
@@ -112,7 +130,7 @@ const Box = ({
         ], null)}
         <Nullable on={value?.length > 0 && multiple === true}>
           {value?.toString().split(',').map((v) => (
-            <Tag key={v.trim()} value={v.trim()} onDelete={onDeselect}>{displayValue(v.trim())}</Tag>
+            <Tag key={v.trim()} value={v.trim()} onDelete={onDeselect}>{displayValue(v.trim(), children)}</Tag>
           ))}
         </Nullable>
         <Nullable on={below}>
