@@ -16,10 +16,7 @@ const TaskCreateLayout = () => {
   const saveRef = useRef(identity);
   const navigate = useNavigate();
   const {t} = useTranslation('task', {keyPrefix: 'create.header'});
-
   const save = () => { isFunction(saveRef.current) && saveRef.current(); };
-
-
 
   return (
     <SideBarLayout>
@@ -27,7 +24,7 @@ const TaskCreateLayout = () => {
         <Header>
           <Breadcrumbs>
             <RouteAsBreadcrumb route={TaskListRoute} />
-            <Breadcrumbs.Item>
+            <Breadcrumbs.Item hideSlash>
               <span className='font-semibold'>{t`newtask`}</span>
              </Breadcrumbs.Item>
           </Breadcrumbs>
