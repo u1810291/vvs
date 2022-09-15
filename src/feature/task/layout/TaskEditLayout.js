@@ -5,16 +5,21 @@ import React from 'react';
 import SideBarLayout from 'layout/SideBarLayout';
 import TaskEditForm from '../form/TaskEditForm';
 import TaskStatusTag from '../component/TaskStatusTag';
+import {useTaskEdit} from '../api';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getPropOr} from 'crocks';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
+
 const TaskEditLayout = () => {
   const {t} = useTranslation('task');
   const {id} = useParams();
-  const {data} = useTask({id})
+  const {data} = useTask({id});
+  const list = useTaskEdit({filters: {id}});
+
+  console.log('data1: ', list.data)
 
   return (
     <SideBarLayout>
@@ -33,7 +38,9 @@ const TaskEditLayout = () => {
           </div>
         </Header>
         <div className='flex flex-row w-full justify-between'>
-          <TaskEditForm/>
+          {list?.data ?
+              <TaskEditForm data={list?.data}/>
+            : null}
         </div>
       </div>
     </SideBarLayout>

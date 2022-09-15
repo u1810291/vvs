@@ -1,49 +1,45 @@
 query GetTaskById($id: uuid!) {
   events_by_pk(id: $id) {
-    created_at
-    crew_id
+    address
     description
-    id
-    name
-    object_id
-    object {
-      id
-      address
-      latitude
-      longitude
-    }
-    provider_id
+    event_type
+    latitude
+    longitude
     provider_name
     reason
     status
     updated_at
-    crew {
-      id
+    object {
+      address
+      city
+      contract_no
+      description
+      contract_object_no
+      feedback_from
+      feedback_sla_time_in_min
+      feedback_until
+      is_atm
+      is_call_after_inspection
+      is_crew_autoasigned
+      latitude
+      longitude
       name
-      status
-      device_id
-      driver_user_id
-      abbreviation
-      phone_number
-      to_call_after
-      is_assigned_automatically
-      is_assigned_while_in_breaks
-      zone {
-        nodes
-      }
-      calendars {
-        id
-        crew_id
-        week_day
-        start_time
-        end_time
-        crew_zone {
+      phone
+      provider_object {
+        phone
+        monas_city {
           name
-          nodes
-          id
+        }
+      }
+      keys {
+        key {
           crew_id
         }
       }
+      modems {
+        area_no
+      }
+      provider_name
     }
   }
 }

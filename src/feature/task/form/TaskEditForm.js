@@ -12,8 +12,6 @@ import {generate} from 'shortid';
 import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
 import MarkerTag from '../../../components/atom/icon/MarkerTag';
 import {useGoogleApiContext} from '../../../context/google';
-import {useParams} from 'react-router-dom';
-import {useTaskEdit} from '../api';
 import {ATAPI} from 'mocks/tasks';
 
 const overLayView1 = {
@@ -81,13 +79,10 @@ const routesOptions = {
   clickable: true,
 };
 
-const TaskEditForm = () => {
+const TaskEditForm = ({data}) => {
   const {t} = useLanguage();
   const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
-  const {id} = useParams();
-  const list = useTaskEdit({filters: {id}});
-  console.log(list.data)
-  const phoneNumbers = useMemo(() => list?.data, [])
+  const phoneNumbers = useMemo(() => data, [])
   console.log(phoneNumbers)
 
   const [directions, setDirections] = useState([]);
