@@ -1,0 +1,9 @@
+query GetTaskCreateForm {
+  types: task_type {
+    value
+  }
+  crews: crew {
+    id
+    name
+  }
+}

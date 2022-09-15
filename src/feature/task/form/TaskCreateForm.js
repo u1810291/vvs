@@ -1,59 +1,29 @@
-import useResultForm from '../../../hook/useResultForm';
-import {useTranslation} from 'react-i18next';
 import ComboBox from 'components/atom/input/ComboBox';
-import {createUseList} from 'api/buildApiHook';
-import {useEffect, useMemo} from 'react';
 import InputGroup from 'components/atom/input/InputGroup';
-import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
+import useResultForm from '../../../hook/useResultForm';
+import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
+import {useCreateTask} from '../api/useTaskCreateForm';
+import {useMemo} from 'react';
 import {useGoogleApiContext} from 'context/google';
-import {hasLength} from '@s-e/frontend/pred';
+import {useTranslation} from 'react-i18next';
 import {
   not,
   isEmpty,
-  chain,
   constant,
-  getProp,
-  head,
   pipe,
-  identity,
-  Async,
-  mapProps,
   map,
   getPathOr,
   safe,
   option,
-  propEq,
-  ifElse,
+  tap,
+  getPropOr,
 } from 'crocks';
 
-const gql = identity;
-const useCreateTask = createUseList({
-  graphQl: gql`
-    query {
-      types: task_type {
-        value
-      }
-      crews: crew {
-        id
-        name
-      }
-    }
-  `,
-  asyncMapFromApi: pipe(
-    mapProps({
-      crews: map(({id, name}) => ({value: id, text: name})),
-      types: map(({value}) => value)
-    }),
-    Async.Resolved,
-  ),
-});
-
-let addressTimeout = null;
 const TaskCreateForm = ({saveRef}) => {
+  const gc = useGoogleApiContext();
   const {t} = useTranslation();
   const api = useCreateTask();
-
   const typeValueToText = useMemo(() => pipe(
     String,
     safe(not(isEmpty)),
@@ -65,7 +35,6 @@ const TaskCreateForm = ({saveRef}) => {
     option(''),
   ), [t]);
 
-  const gc = useGoogleApiContext();
   const {ctrl, ...result} = useResultForm({
     type: {
       validator: not(isEmpty),
@@ -107,80 +76,22 @@ const TaskCreateForm = ({saveRef}) => {
       initial: '',
       messages: t`field.address.validation`,
       props: {
-        label: constant(t`field.address.label`),
         isRequired: constant(true),
+        label: constant(t`field.address.label`),
+        placeholder: constant(t`field.address.placeholder`),
         value: ({value}) => value,
-        onChange: ({set}) => onInputEventOrEmpty(set),
+        onChange: ({set}) => set,
+        resultToOptionProps: constant(text => ({key: text, children: text, value: text})),
+        onQuery: constant((query, setResult) => gc.geocode({address: query}).fork(
+          constant(setResult([])),
+          pipe(
+            map(getPropOr('', 'formatted_address')),
+            tap(setResult),
+          )
+        )),
       },
     },
-
-    // name: FORM_FIELD.TEXT({
-    //   label: t`field.name`, 
-    //   validator: lengthGt(4),
-    //   message: t`validation.name`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),
-    //   }
-    // }),
-    // description: FORM_FIELD.TEXT({
-    //   label: t`field.description`,
-    //   validator: hasLength,
-    //   message: t`validation.description`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),
-    //   }
-    // }),
-    // object: FORM_FIELD.TEXT({
-    //   label: t`field.to_call_after`, 
-    //   validator: constant(true)
-    // }),
-    // address: FORM_FIELD.TEXT({
-    //   label: t`field.address`, 
-    //   validator: hasLength,
-    //   message: t`validation.address`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),
-    //   }
-    // }),
-    // crew_id: FORM_FIELD.TEXT({
-    //   label: t`crew_id`, 
-    //   validator: hasLength,
-    //   message: t`validation.crew_id`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),      
-    //     displayValue: displayValue((v) => {
-    //       const crew = crews?.data?.find(c => c.id === v);
-    //       return titleCase(crew?.name || crew?.id);
-    //     }),
-    //   }
-    // }),
-
   });
-
-  useEffect(() => {
-    const address = result?.form?.address;
-    clearTimeout(addressTimeout);
-    addressTimeout = setTimeout(() => {
-      if (!address) return;
-      gc.geocode({address})
-        .fork(console.error, pipe(
-          safe(hasLength),
-          map(ifElse(
-            propEq('length', 1),
-            pipe(
-              head,
-              chain(getProp('formatted_address')),
-              map(result.set('address')),
-            ),
-            identity,
-          )),
-        ));
-    }, 500);
-  }, [result.form.address, result.set])
 
   return (
     <section className='p-4 space-y-4'>
@@ -198,7 +109,7 @@ const TaskCreateForm = ({saveRef}) => {
         <InputGroup className='flex-grow flex-shrink' {...ctrl('name')} />
       </div>
       <TextAreaInputGroup {...ctrl('description')} />
-      <InputGroup {...ctrl('address')} />
+      <ComboBox.Autocomplete {...ctrl('address')} />
     </section>
   );
 };
