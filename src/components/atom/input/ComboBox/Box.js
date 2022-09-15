@@ -24,13 +24,14 @@ import {
 
 const DEFAULTS = {
   displayValue: (value, all) => pipe(
-    find(pipe(
+    safe(constant(isTruthy(value))),
+    chain(find(pipe(
       getPath(['props', 'value']),
       chain(safe(isSame(value))),
       option(null),
-    )),
+    ))),
     chain(getPath(['props', 'children'])),
-    option(all)
+    option(value)
   )(all)
 }
 
@@ -93,7 +94,7 @@ const Box = ({
         <div className='flex flex-row relative'>
           <Input
             onChange={onInputChange}
-            displayValue={(v, b, c, d) => multiple ? '' : displayValue(v, children)}
+            displayValue={(v) => multiple ? '' : displayValue(v, children)}
             placeholder={placeholder}
             {...props}
             className={'w-full'}
