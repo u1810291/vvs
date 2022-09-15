@@ -61,18 +61,9 @@ const Box = ({
     )
   )(children), [children, query]);
   
-  const onInputChange = (e) => {
-    setQuery(e.target.value)
-  };
-
-  const onChangeValue = (e) => {
-    onChange(e.props.value)
-  }
-
-  const onDeselect = (e) => {
-    onChange(e.target.dataset.value)
-  }
-  
+  const onInputChange = (e) => setQuery(e.target.value);
+  const onChangeValue = (e) => onChange(e.props.value);
+  const onDeselect = (e) => onChange(e.target.dataset.value);
 
   return (
     <Combobox as='div' value={value} onChange={onChangeValue} {...props}>
