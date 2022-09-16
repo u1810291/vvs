@@ -51,7 +51,7 @@
   },
   "status": {
     "new": "Nauja",
-    "canceled": "Atšaukta",
+    "cancelled": "Atšaukta",
     "onRoad": "Kelyje",
     "inspection": "Vykdoma",
     "inspectionDone": "Peržiūra atlikta",

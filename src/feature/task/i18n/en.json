@@ -51,7 +51,7 @@
   },
   "status": {
     "new": "New",
-    "canceled": "Canceled",
+    "cancelled": "Cancelled",
     "onRoad": "On road",
     "inspection": "Inspection",
     "inspectionDone": "Inspection done",
