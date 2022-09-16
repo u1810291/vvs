@@ -87,6 +87,7 @@ export const useResultForm = (obj) => {
           message: getValid(key),
           value: getPropOr(undefined, key, state),
           set: set(key),
+          setForm: setState,
         }),
         carry
       ), {})

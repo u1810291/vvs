@@ -13,13 +13,22 @@ import {
   isEmpty,
   constant,
   pipe,
+  or,
   map,
+  either,
   safe,
   option,
   tap,
+  find,
   getPropOr,
   identity,
   isSame,
+  chain,
+  propEq,
+  hasProps,
+  and,
+  isNumber,
+  Maybe,
 } from 'crocks';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
@@ -35,14 +44,15 @@ const TaskCreateForm = ({saveRef}) => {
     safe(not(isEmpty)),
     map(pipe(
       a => a.toUpperCase(),
-      caseMap(constant('unknown'), [
+      caseMap(identity, [
         [isSame('NEW'), constant('new')],
-        [isSame('CANCELED'), constant('canceled')],
+        [isSame('CANCELLED'), constant('cancelled')],
         [isSame('ON_ROAD'), constant('onRoad')],
         [isSame('INSPECTION'), constant('inspection')],
         [isSame('INSPECTION_DONE'), constant('inspectionDone')],
         [isSame('FINISHED'), constant('finished')],
         [isSame('WAIT_FOR_APPROVAL'), constant('waitForApproval')],
+        [isSame('ON_THE_ROAD'), constant('onRoad')],
       ]),
       v => `status.${v}`,
       t,
@@ -53,16 +63,17 @@ const TaskCreateForm = ({saveRef}) => {
   const {ctrl, setForm, result} = useResultForm({
     status: {
       validator: not(isEmpty),
-      initial: '',
+      initial: 'NEW',
       message: t`field.status.validation`,
       props: {
         labelText: constant(t`field.status.label`),
         isRequired: constant(true),
         placeholder: constant(t`field.status.placeholder`),
         value: ({value}) => value,
-        onChange: ({set}) => value => {set(value)},
+        onChange: ({set}) => set,
         children: constant(ComboBox.asOptions(
-          [identity, getTypeText], getPath(['data', 'types'], api)
+          [identity, getTypeText],
+          getPath(['data', 'types'], api).alt(Maybe.Just(['NEW']))
         )),
       },
     },
@@ -97,7 +108,17 @@ const TaskCreateForm = ({saveRef}) => {
         labelText: constant(t`field.object.label`),
         placeholder: constant(t`field.object.placeholder`),
         value: ({value}) => value,
-        onChange: ({set}) => set,
+        onChange: ({setForm}) => object_id => {
+          pipe(
+            getPath(['data', 'objects']),
+            chain(find(propEq('id', object_id))),
+            chain(safe(hasProps(['address', 'latitude', 'longitude']))),
+            either(
+              constant(setForm({object_id})), 
+              ({address, longitude, latitude}) => setForm({object_id, address, longitude, latitude}),
+            ),
+          )(api)
+        },
         children: constant(ComboBox.asOptions(
           [getPropOr('', 'id'), getObjectName(t`untitledObject`)],
           getPath(['data', 'objects'], api),
@@ -108,6 +129,7 @@ const TaskCreateForm = ({saveRef}) => {
       validator: not(isEmpty),
       initial: '',
       message: t`field.address.validation`,
+      opt: true,
       props: {
         isRequired: constant(true),
         labelText: constant(t`field.address.label`),
@@ -139,6 +161,15 @@ const TaskCreateForm = ({saveRef}) => {
           getPath(['data', 'crews'], api),
         )),
       },
+    },
+    latitude: {
+      initial: null,
+      validator: or(isSame(null), and(isNumber, isFinite)), message: t`field.latitude.validation`,
+    },
+    longitude: {
+      initial: null,
+      validator: or(isSame(null), and(isNumber, isFinite)),
+      message: t`field.longitude.validation`,
     }
   });
 
