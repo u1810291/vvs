@@ -1,5 +1,5 @@
 import {hasLength} from '@s-e/frontend/pred';
-import {hasProps, propSatisfies, curry, getProp, safe, isString, isTruthy} from 'crocks';
+import {hasProps, propSatisfies, curry, getProp, safe, isString, isTruthy, isNumber, and} from 'crocks';
 
 export const getObjectName = curry((fallback, item) => (
   safe(hasProps(['name', 'address']), item)
@@ -12,8 +12,8 @@ export const getObjectName = curry((fallback, item) => (
   .alt(getProp('address', item).chain(safe(isString)).map(a => a.trim()).chain(safe(hasLength)))
   .alt(
     safe(hasProps(['latitude', 'longitude']), item)
-    .chain(safe(propSatisfies('latitude', isFinite)))
-    .chain(safe(propSatisfies('longitude', isFinite)))
+    .chain(safe(propSatisfies('latitude', and(isNumber, isFinite))))
+    .chain(safe(propSatisfies('longitude', and(isNumber, isFinite))))
     .map(({latitude, longitude}) => `${latitude} ${longitude}`.trim())
     .chain(safe(hasLength))
   )
