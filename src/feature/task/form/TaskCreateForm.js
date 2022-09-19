@@ -34,6 +34,7 @@ import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getObjectName} from 'feature/object/utils';
 import {caseMap} from '@s-e/frontend/flow-control';
+import {titleCase} from '@s-e/frontend/transformer/string';
 
 const TaskCreateForm = ({saveRef}) => {
   const gc = useGoogleApiContext();
@@ -61,6 +62,22 @@ const TaskCreateForm = ({saveRef}) => {
   ), [t]);
 
   const {ctrl, setForm, result} = useResultForm({
+    type: {
+      validator: not(isEmpty),
+      initial: null,
+      message: t`field.type.validation`,
+      props: {
+        labelText: constant(t`field.type.label`),
+        isRequired: constant(true),
+        placeholder: constant(t`field.type.placeholder`),
+        value: ({value}) => value,
+        onChange: ({set}) => set,
+        children: constant(ComboBox.asOptions(
+          [identity, titleCase],
+          getPath(['data', 'types'], api).alt(Maybe.Just([]))
+        )),
+      },
+    },
     status: {
       validator: not(isEmpty),
       initial: 'NEW',
@@ -73,7 +90,7 @@ const TaskCreateForm = ({saveRef}) => {
         onChange: ({set}) => set,
         children: constant(ComboBox.asOptions(
           [identity, getTypeText],
-          getPath(['data', 'types'], api).alt(Maybe.Just(['NEW']))
+          getPath(['data', 'statuses'], api).alt(Maybe.Just(['NEW']))
         )),
       },
     },
@@ -183,7 +200,7 @@ const TaskCreateForm = ({saveRef}) => {
   return (
     <section className='p-4 space-y-4'>
       <div className='flex space-x-4 w-full'>
-        <ComboBox className='flex-grow flex-shrink' {...ctrl('status')}/>
+        <ComboBox className='flex-grow flex-shrink' {...ctrl('type')}/>
         <InputGroup className='flex-grow flex-shrink' {...ctrl('name')} />
       </div>
       <TextAreaInputGroup {...ctrl('description')} />

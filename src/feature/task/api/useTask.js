@@ -10,7 +10,7 @@ export default createUseOne({
   ),
   asyncMapToApi: pipe(
     pick([
-      'event_type',
+      'type',
       'name',
       'description',
       'object_id',

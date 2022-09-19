@@ -1,20 +1,20 @@
 mutation MyMutation(
   $crew_id: uuid = null,
   $object_id: uuid = null,
-  $event_type: String = null,
   $description: String = null,
   $name: String = null,
   $status: event_status_enum = NEW,
   $address: String = null,
   $latitude: numeric = null,
   $longitude: numeric = null,
+  $type: String = null
 ) {
   insert_events_one(object: {
     crew_id: $crew_id,
     description: $description,
     name: $name, 
     object_id: $object_id, 
-    event_type: $event_type,
+    event_type: $type,
     status: $status,
     address: $address,
     latitude: $latitude,
