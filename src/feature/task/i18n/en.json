@@ -36,18 +36,6 @@
       "permissions": "Permissions",
       "breaches": "Breaches"
     },
-    "status": {
-      "YES": "Yes",
-      "NO": "No",
-      "NEW": "New",
-      "WAIT_FOR_CREW_APPROVAL": "Wait for crew Approval",
-      "ON_THE_ROAD": "On the road",
-      "INSPECTION": "Inspection",
-      "INSPECTION_DONE": "Inspection Done",
-      "FINISHED": "Finished",
-      "CANCELLED": "Cancelled",
-      "-": "-"
-    },
     "column": {
       "id": "ID",
       "name": "Name",
@@ -63,12 +51,53 @@
   },
   "status": {
     "new": "New",
-    "canceled": "Canceled",
+    "cancelled": "Cancelled",
     "onRoad": "On road",
     "inspection": "Inspection",
     "inspectionDone": "Inspection done",
     "finished": "Finished",
     "waitForApproval": "Wait for approval",
     "unknown": "unknown"
+  },
+  "field": {
+    "id": {
+      "label": "ID"
+    },
+    "name": {
+      "label": "Name"
+    },
+    "status": {
+      "label": "Status",
+      "placeholder": "Set task status"
+    },
+    "created_at": {
+      "label": "Received"
+    },
+    "object": {
+      "label": "Object"
+    },
+    "crew": {
+      "label": "Crew",
+      "placeholder": "Select automatically"
+    },
+    "approximate_time": {
+      "label": "The approximate time"
+    },
+    "response_time": {
+      "label": "Response time"
+    },
+    "time_at_object": {
+      "label": "Time at object"
+    },
+    "reason": {
+      "label": "Reason"
+    },
+    "description": {
+      "label": "Description"
+    },
+    "address": {
+      "label": "Address",
+      "placeholder": "Use other than object's address"
+    }
   }
 }

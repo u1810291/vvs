@@ -1,0 +1,16 @@
+query GetTaskCreateForm {
+  types: event_status {
+    value
+  }
+  crews: crew {
+    id
+    name
+  }
+  objects: object {
+    id
+    name
+    address
+    latitude
+    longitude
+  }
+}

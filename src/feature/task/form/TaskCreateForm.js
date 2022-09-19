@@ -1,89 +1,86 @@
-import useResultForm from '../../../hook/useResultForm';
-import {useTranslation} from 'react-i18next';
 import ComboBox from 'components/atom/input/ComboBox';
-import {createUseList} from 'api/buildApiHook';
-import {useEffect, useMemo} from 'react';
 import InputGroup from 'components/atom/input/InputGroup';
-import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import TextAreaInputGroup from 'components/atom/input/InputGroup/TextAreaInputGroup';
+import useResultForm from '../../../hook/useResultForm';
+import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
+import {useCreateTask} from '../api/useTaskCreateForm';
+import {useMemo} from 'react';
 import {useGoogleApiContext} from 'context/google';
-import {hasLength} from '@s-e/frontend/pred';
+import {useTranslation} from 'react-i18next';
 import {
   not,
+  getPath,
   isEmpty,
-  chain,
   constant,
-  getProp,
-  head,
   pipe,
-  identity,
-  Async,
-  mapProps,
+  or,
   map,
-  getPathOr,
+  either,
   safe,
   option,
+  tap,
+  find,
+  getPropOr,
+  identity,
+  isSame,
+  chain,
   propEq,
-  ifElse,
+  hasProps,
+  and,
+  isNumber,
+  Maybe,
 } from 'crocks';
+import useTask from '../api/useTask';
+import {TaskListRoute} from '../routes';
+import {getObjectName} from 'feature/object/utils';
+import {caseMap} from '@s-e/frontend/flow-control';
 
-const gql = identity;
-const useCreateTask = createUseList({
-  graphQl: gql`
-    query {
-      types: task_type {
-        value
-      }
-      crews: crew {
-        id
-        name
-      }
-    }
-  `,
-  asyncMapFromApi: pipe(
-    mapProps({
-      crews: map(({id, name}) => ({value: id, text: name})),
-      types: map(({value}) => value)
-    }),
-    Async.Resolved,
-  ),
-});
-
-let addressTimeout = null;
 const TaskCreateForm = ({saveRef}) => {
-  const {t} = useTranslation();
+  const gc = useGoogleApiContext();
+  const {t} = useTranslation('task');
   const api = useCreateTask();
-
-  const typeValueToText = useMemo(() => pipe(
+  const getTypeText = useMemo(() => pipe(
     String,
     safe(not(isEmpty)),
     map(pipe(
-      a => a.toLowerCase(),
-      v => `field.type.${v}`,
+      a => a.toUpperCase(),
+      caseMap(identity, [
+        [isSame('NEW'), constant('new')],
+        [isSame('CANCELLED'), constant('cancelled')],
+        [isSame('ON_ROAD'), constant('onRoad')],
+        [isSame('INSPECTION'), constant('inspection')],
+        [isSame('INSPECTION_DONE'), constant('inspectionDone')],
+        [isSame('FINISHED'), constant('finished')],
+        [isSame('WAIT_FOR_APPROVAL'), constant('waitForApproval')],
+        [isSame('ON_THE_ROAD'), constant('onRoad')],
+      ]),
+      v => `status.${v}`,
       t,
     )),
     option(''),
   ), [t]);
 
-  const gc = useGoogleApiContext();
-  const {ctrl, ...result} = useResultForm({
-    type: {
+  const {ctrl, setForm, result} = useResultForm({
+    status: {
       validator: not(isEmpty),
-      initial: '',
-      message: t`field.type.validation`,
+      initial: 'NEW',
+      message: t`field.status.validation`,
       props: {
-        labelText: constant(t`field.type.label`),
+        labelText: constant(t`field.status.label`),
         isRequired: constant(true),
-        placeholder: constant(t`field.type.placeholder`),
+        placeholder: constant(t`field.status.placeholder`),
         value: ({value}) => value,
-        onChange: ({set}) => value => {set(value)},
-        displayValue: constant(b => typeValueToText(b)),
+        onChange: ({set}) => set,
+        children: constant(ComboBox.asOptions(
+          [identity, getTypeText],
+          getPath(['data', 'types'], api).alt(Maybe.Just(['NEW']))
+        )),
       },
     },
     name: {
       validator: not(isEmpty),
       initial: '',
-      messages: t`field.name.validation`,
+      message: t`field.name.validation`,
       props: {
         label: constant(t`field.name.label`),
         isRequired: constant(true),
@@ -94,7 +91,7 @@ const TaskCreateForm = ({saveRef}) => {
     description: {
       validator: not(isEmpty),
       initial: '',
-      messages: t`field.description.validation`,
+      message: t`field.description.validation`,
       props: {
         label: constant(t`field.description.label`),
         isRequired: constant(true),
@@ -102,103 +99,97 @@ const TaskCreateForm = ({saveRef}) => {
         onChange: ({set}) => onInputEventOrEmpty(set),
       },
     },
+    object_id: {
+      opt: true,
+      initial: null,
+      validator: constant(true),
+      message: t`field.object.validation`,
+      props: {
+        labelText: constant(t`field.object.label`),
+        placeholder: constant(t`field.object.placeholder`),
+        value: ({value}) => value,
+        onChange: ({setForm}) => object_id => {
+          pipe(
+            getPath(['data', 'objects']),
+            chain(find(propEq('id', object_id))),
+            chain(safe(hasProps(['address', 'latitude', 'longitude']))),
+            either(
+              constant(setForm({object_id})), 
+              ({address, longitude, latitude}) => setForm({object_id, address, longitude, latitude}),
+            ),
+          )(api)
+        },
+        children: constant(ComboBox.asOptions(
+          [getPropOr('', 'id'), getObjectName(t`untitledObject`)],
+          getPath(['data', 'objects'], api),
+        )),
+      },
+    },
     address: {
       validator: not(isEmpty),
       initial: '',
-      messages: t`field.address.validation`,
+      message: t`field.address.validation`,
+      opt: true,
       props: {
-        label: constant(t`field.address.label`),
         isRequired: constant(true),
+        labelText: constant(t`field.address.label`),
+        placeholder: constant(t`field.address.placeholder`),
         value: ({value}) => value,
-        onChange: ({set}) => onInputEventOrEmpty(set),
+        onChange: ({set}) => set,
+        resultToOptionProps: constant(text => ({key: text, children: text, value: text})),
+        onQuery: constant((query, setResult) => gc.geocode({address: query}).fork(
+          constant(setResult([])),
+          pipe(
+            map(getPropOr('', 'formatted_address')),
+            tap(setResult),
+          )
+        )),
       },
     },
-
-    // name: FORM_FIELD.TEXT({
-    //   label: t`field.name`, 
-    //   validator: lengthGt(4),
-    //   message: t`validation.name`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),
-    //   }
-    // }),
-    // description: FORM_FIELD.TEXT({
-    //   label: t`field.description`,
-    //   validator: hasLength,
-    //   message: t`validation.description`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),
-    //   }
-    // }),
-    // object: FORM_FIELD.TEXT({
-    //   label: t`field.to_call_after`, 
-    //   validator: constant(true)
-    // }),
-    // address: FORM_FIELD.TEXT({
-    //   label: t`field.address`, 
-    //   validator: hasLength,
-    //   message: t`validation.address`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),
-    //   }
-    // }),
-    // crew_id: FORM_FIELD.TEXT({
-    //   label: t`crew_id`, 
-    //   validator: hasLength,
-    //   message: t`validation.crew_id`,
-    //   showValidationBelow: true,
-    //   props: {
-    //     isRequired: constant(true),      
-    //     displayValue: displayValue((v) => {
-    //       const crew = crews?.data?.find(c => c.id === v);
-    //       return titleCase(crew?.name || crew?.id);
-    //     }),
-    //   }
-    // }),
-
+    crew_id: {
+      opt: true,
+      initial: null,
+      validator: constant(true),
+      message: t`field.crew.validation`,
+      props: {
+        labelText: constant(t`field.crew.label`),
+        placeholder: constant(t`field.crew.placeholder`),
+        value: ({value}) => value,
+        onChange: ({set}) => set,
+        children: constant(ComboBox.asOptions(
+          [getPropOr('', 'value'), getPropOr('', 'text')],
+          getPath(['data', 'crews'], api),
+        )),
+      },
+    },
+    latitude: {
+      initial: null,
+      validator: or(isSame(null), and(isNumber, isFinite)), message: t`field.latitude.validation`,
+    },
+    longitude: {
+      initial: null,
+      validator: or(isSame(null), and(isNumber, isFinite)),
+      message: t`field.longitude.validation`,
+    }
   });
 
-  useEffect(() => {
-    const address = result?.form?.address;
-    clearTimeout(addressTimeout);
-    addressTimeout = setTimeout(() => {
-      if (!address) return;
-      gc.geocode({address})
-        .fork(console.error, pipe(
-          safe(hasLength),
-          map(ifElse(
-            propEq('length', 1),
-            pipe(
-              head,
-              chain(getProp('formatted_address')),
-              map(result.set('address')),
-            ),
-            identity,
-          )),
-        ));
-    }, 500);
-  }, [result.form.address, result.set])
+  useTask({
+    saveRef,
+    formResult: result,
+    setForm,
+    successRedirectPath: TaskListRoute.props.path,
+  });
 
   return (
     <section className='p-4 space-y-4'>
       <div className='flex space-x-4 w-full'>
-        <ComboBox className='flex-grow flex-shrink' {...ctrl('type')}>
-          {pipe(
-            getPathOr([], ['data', 'types']),
-            map(value => (
-              <ComboBox.Option key={value} value={value}>
-                {typeValueToText(value)}
-              </ComboBox.Option>
-            )),
-          )(api)}
-        </ComboBox>
+        <ComboBox className='flex-grow flex-shrink' {...ctrl('status')}/>
         <InputGroup className='flex-grow flex-shrink' {...ctrl('name')} />
       </div>
       <TextAreaInputGroup {...ctrl('description')} />
-      <InputGroup {...ctrl('address')} />
+      <ComboBox className='flex-grow flex-shrink' {...ctrl('object_id')}/>
+      <ComboBox.Autocomplete {...ctrl('address')} />
+      <ComboBox className='flex-grow flex-shrink' {...ctrl('crew_id')} />
     </section>
   );
 };
