@@ -58,5 +58,51 @@
     "finished": "Atlikta",
     "waitForApproval": "Laukiama patvirtinimo",
     "unknown": "Nežinoma"
+  },
+  "field": {
+    "id": {
+      "label": "ID"
+    },
+    "name": {
+      "label": "Pavadinimas"
+    },
+    "type": {
+      "label": "Tipas",
+      "placeholder": "Pasirinkite tipą"
+    },
+    "status": {
+      "label": "Būsena",
+      "placeholder": "Pasirinkite būseną"
+    },
+    "created_at": {
+      "label": "Sukurta"
+    },
+    "object": {
+      "label": "Objektas",
+      "placeholder": "Pasirinkite susijusį objeką"
+    },
+    "crew": {
+      "label": "Ekipažas",
+      "placeholder": "Pasirinkti automatiškai"
+    },
+    "approximate_time": {
+      "label": "Numatytas laikas"
+    },
+    "response_time": {
+      "label": "Reakcijos laikas"
+    },
+    "time_at_object": {
+      "label": "Trukmė objekte"
+    },
+    "reason": {
+      "label": "Priežastis"
+    },
+    "description": {
+      "label": "Aprašymas"
+    },
+    "address": {
+      "label": "Adresas",
+      "placeholder": "Pasirinkite specifišką adresą"
+    }
   }
 }
