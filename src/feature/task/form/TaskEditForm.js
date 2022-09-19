@@ -13,6 +13,8 @@ import {and, isArray, map, pipe, safe, getPathOr} from 'crocks';
 import MarkerTag from '../../../components/atom/icon/MarkerTag';
 import {useGoogleApiContext} from '../../../context/google';
 import {ATAPI} from 'mocks/tasks';
+import {useTaskEdit} from '../api';
+import {useParams} from 'react-router-dom';
 
 const overLayView1 = {
   lat: 55.92,
@@ -79,11 +81,13 @@ const routesOptions = {
   clickable: true,
 };
 
-const TaskEditForm = ({data}) => {
+const TaskEditForm = () => {
   const {t} = useLanguage();
+  const {id} = useParams();
+  const list = useTaskEdit({filters: {id}});
+
   const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
-  const phoneNumbers = useMemo(() => data, [])
-  console.log(phoneNumbers)
+  const phoneNumbers = useMemo(() => list.data, [])
 
   const [directions, setDirections] = useState([]);
   const [clickedPos, setClickedPos] = useState({});
@@ -191,10 +195,28 @@ const TaskEditForm = ({data}) => {
   }, []);
 
   const google = window.google;
+  const onLoad = React.useCallback((map) => {
+    const directionsService = new google.maps.DirectionsService();
+    directionsService.route(
+      {
+        origin: '55.92,23.46',
+        destination: '55.9,23.42',
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          console.log(result);
+        } else {
+          console.error('error fetching directions', result, status);
+        }
+      }
+    );
+  }, []);
+  
   return (
     <>
       <div className='flex flex-col h-screen scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>
-        <TaskEditSideLeft />
+        <TaskEditSideLeft data={list?.data?.object} />
       </div>
       <div className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
       {!isLoaded ? null : (
@@ -275,7 +297,7 @@ const TaskEditForm = ({data}) => {
             onLoad={onLoadPolygon}
             onUnmount={onUnmountPolygon}
           />
-          <Polygon path={polygon} options={polygonSetup} />
+          <Polygon path={polygon} options={polygonSetup}/>
         </Map>
       )}
       </div>
