@@ -19,7 +19,7 @@ const CrewIcon = withMergedClassName(`${CLASS_NAME} border-black`, CrewIconBase)
 CrewIcon.Busy = withMergedClassName(`${CLASS_NAME} border-brick`, CrewIconBase);
 CrewIcon.Break = withMergedClassName(`${CLASS_NAME} border-tango`, CrewIconBase);
 CrewIcon.Ready = withMergedClassName(`${CLASS_NAME} border-forest`, CrewIconBase);
-CrewIcon.Offline = withMergedClassName(`${CLASS_NAME} border-loblolly`, CrewIconBase);
+CrewIcon.Offline = withMergedClassName(`${CLASS_NAME} border-brick`, CrewIconBase);
 CrewIcon.DriveBack = withMergedClassName(`${CLASS_NAME} border-mantis`, CrewIconBase);
 
 const DynamicIcon = caseMap(CrewIcon, [

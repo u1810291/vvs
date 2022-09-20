@@ -24,6 +24,7 @@ import {lengthGt} from 'util/pred';
 import {getProp} from 'crocks';
 import {isFunction} from 'crocks/predicates';
 import {mapProps, pipe} from 'crocks/helpers';
+import {differenceInMinutes} from 'date-fns';
 
 const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
@@ -76,6 +77,8 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
 
   const {firstName} = driver;
   const {lastName} = driver;
+
+  console.log(new Date(driver.lastLoginInstant).toLocaleString(), 'driver');
 
   const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
 
@@ -147,7 +150,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
           <div className='flex flex-row items-center w-full'>
             <DynamicIcon
               className={'mr-4'}
-              status={status || 'OFFLINE'}
+              status={differenceInMinutes(new Date(), new Date(driver.lastLoginInstant)) <= 60 ? 'ONLINE' : 'OFFLINE'}
               name={name}
             />
             <div className={'flex flex-col'}>
