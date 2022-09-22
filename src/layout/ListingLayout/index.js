@@ -5,6 +5,7 @@ import Table from '../../components/Table';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {componentToString} from '@s-e/frontend/react';
 import {every} from '../../util/array';
+import {exportTableToExcel} from '../../util/utils';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
 import {renderWithProps, dynamicSort} from '../../util/react';
@@ -64,6 +65,7 @@ const Listing = ({
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
   const [sortColumnKey, setSortColumn] = useState('name');
+  const handleExport = useCallback(() => exportTableToExcel(list, new Date()), [list]);
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
     map(pipe(
@@ -113,7 +115,6 @@ const Listing = ({
       r,
     ), []),
   )(list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query, sortColumnKey]);
-
   return (
     <Index>
       <TitleBar>
@@ -132,6 +133,9 @@ const Listing = ({
               {innerlinks}
             </div>
           </div>
+          <div>
+            <Button.Sm onClick={handleExport}>Download</Button.Sm>
+          </div>
         </div>
       </TitleBar>
       <Nullable on={filters}>
@@ -139,7 +143,7 @@ const Listing = ({
           {filters}
         </div>
       </Nullable>
-      <Table>
+      <Table id='tableId'>
         <Table.Head>
           <Table.Tr>
             {headerColumns}
