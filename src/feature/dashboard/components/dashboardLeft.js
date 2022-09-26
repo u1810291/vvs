@@ -1,15 +1,15 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {DDAPI} from '../../../mocks/dashboardDispatchApi';
+import {DDAPI} from 'mocks/dashboardDispatchApi';
 import {generate} from 'shortid';
 import useLanguage from 'hook/useLanguage';
-const {DrivingToObjectCard} = require('../cards/drivingToObject');
-const {InspectObjectCard} = require('../cards/inspectObject');
-const {AssignCard} = require('../cards/assign');
-const {WaitingToReturnCard} = require('../cards/waitingToReturn');
-const {CanceledCard} = require('../cards/canceled');
-const {PermissionCard} = require('../cards/permission');
-const {WaitingForConfirmationCard} = require('../cards/waitingForConfirmation');
+import {DrivingToObjectCard} from './drivingToObject';
+import {InspectObjectCard} from './inspectObject';
+import {AssignCard} from './assign';
+import {WaitingToReturnCard} from './waitingToReturn';
+import {CanceledCard} from './canceled';
+import {PermissionCard} from './permission';
+import {WaitingForConfirmationCard} from './waitingForConfirmation';
 
 const DashboardSideLeft = () => {
   const {t} = useLanguage();

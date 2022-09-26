@@ -244,5 +244,8 @@
       "saturday": "Šeštadienis",
       "sunday": "Sekmadienis"
     }
+  },
+  "dashboard": {
+    "create_task": "Sukurti užduoti"
   }
 }

@@ -242,5 +242,8 @@
       "saturday": "Saturday",
       "sunday": "Sunday"
     }
+  },
+  "dashboard": {
+    "create_task": "Create a task"
   }
 }

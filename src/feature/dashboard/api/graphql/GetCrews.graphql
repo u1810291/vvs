@@ -1,0 +1,25 @@
+query GetCrews {
+  crew {
+    driver_user_id
+    is_assigned_automatically
+    is_assigned_while_in_breaks
+    name
+    status
+    user_settings {
+      is_online
+      last_ping
+      id
+    }
+    permissions(where: { _and: { status: { _eq: ALLOWED } } }) {
+      comment
+      status
+      task_can_be_assigned
+      request {
+        duration
+        is_assigned_while_in_breaks
+        value
+      }
+      updated_at
+    }
+  }
+}

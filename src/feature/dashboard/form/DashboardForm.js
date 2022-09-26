@@ -2,8 +2,8 @@ import React, {useEffect, useState, useCallback, useRef} from 'react';
 
 import Map from '../../map/component/Map';
 import Details from '../../../components/atom/Details';
-import DashboardSideLeft from '../../../components/obsolete/sides/dashboardLeft';
-import DashboardSideRight from '../../../components/obsolete/sides/dashboardRight';
+import DashboardSideLeft from '../components/dashboardLeft';
+import DashboardSideRight from '../components/dashboardRight';
 
 import {OffCard} from '../../../components/obsolete/cards/off';
 import {DDAPI} from '../../../mocks/dashboardDispatchApi';
