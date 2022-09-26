@@ -15,25 +15,25 @@ const lensCase = (lens, pred) => pipe(
 );
 
 /**
- * @type {(
- *   statusLens: object => any, 
+* @type {(
+*   statusLens: object => any, 
 *   ) => (
- *   onNew: (obj: object) => any,
- *   onCanceled: (obj: object) => any,
- *   onOnRoad: (obj: object) => any,
- *   onInspection: (obj: object) => any,
- *   onInspectionDone: (obj: object) => any,
- *   onFinished: (obj: object) => any,
- *   onWaitForApproval: (obj: object) => any,
- *   onUnknown: (obj: object) => any,
- *   props: (obj: object),
- * ) => any}
- */
+*   onNew: (obj: object) => any,
+*   oncancelled: (obj: object) => any,
+*   onOnRoad: (obj: object) => any,
+*   onInspection: (obj: object) => any,
+*   onInspectionDone: (obj: object) => any,
+*   onFinished: (obj: object) => any,
+*   onWaitForApproval: (obj: object) => any,
+*   onUnknown: (obj: object) => any,
+*   props: (obj: object),
+* ) => any}
+*/
 const getStatus = curry(
   (
     statusLens,
     onNew,
-    onCanceled,
+    oncancelled,
     onOnRoad,
     onInspection,
     onInspectionDone,
@@ -43,8 +43,8 @@ const getStatus = curry(
     props
   ) => caseMap(onUnknown, [
       [lensCase(statusLens, isSame('NEW')), onNew],
-      [lensCase(statusLens, isSame('CANCELED')), onCanceled],
-      [lensCase(statusLens, isSame('ON_ROAD')), onOnRoad],
+      [lensCase(statusLens, isSame('CANCELLED')), oncancelled],
+      [lensCase(statusLens, isSame('ON_THE_ROAD')), onOnRoad],
       [lensCase(statusLens, isSame('INSPECTION')), onInspection],
       [lensCase(statusLens, isSame('INSPECTION_DONE')), onInspectionDone],
       [lensCase(statusLens, isSame('FINISHED')), onFinished],
@@ -63,7 +63,7 @@ const UntranslatedTaskStatusTag = ({
     new: 'bg-curious',
     finished: 'bg-mantis',
     onRoad: 'bg-brick',
-    canceled: 'bg-oxford',
+    cancelled: 'bg-oxford',
     inspection: 'bg-brick',
     inspectionDone: 'bg-tango',
     waitForApproval: 'bg-tango',
@@ -71,7 +71,7 @@ const UntranslatedTaskStatusTag = ({
   },
   getText = {
     new: constant('new'),
-    canceled: constant('canceled'),
+    cancelled: constant('cancelled'),
     onRoad: constant('on road'),
     inspection: constant('inspection'),
     inspectionDone: constant('inspection done'),
@@ -89,7 +89,7 @@ const UntranslatedTaskStatusTag = ({
       pipe(
         _getStatus(
           constant(classNames.new),
-          constant(classNames.canceled),
+          constant(classNames.cancelled),
           constant(classNames.onRoad),
           constant(classNames.inspection),
           constant(classNames.inspectionDone),
@@ -102,7 +102,7 @@ const UntranslatedTaskStatusTag = ({
     }>
       {pipe(_getStatus(
         getText.new,
-        getText.canceled,
+        getText.cancelled,
         getText.onRoad,
         getText.inspection,
         getText.inspectionDone,
@@ -120,7 +120,7 @@ const TaskStatusTag = withPreparedProps(UntranslatedTaskStatusTag, () => {
   return {
     getText: {
       new: constant(t('new')),
-      canceled: constant(t('canceled')),
+      cancelled: constant(t('cancelled')),
       onRoad: constant(t('onRoad')),
       inspection: constant(t('inspection')),
       inspectionDone: constant(t('inspectionDone')),
