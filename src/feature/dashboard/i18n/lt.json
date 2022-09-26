@@ -11,5 +11,22 @@
     "button": {
       "submit": "Sign in"
     }
+  },
+  "left": {
+    "assign":"Priskirti",
+    "not_assigned": "Nepriskirtos",
+    "create_task": "Sukurti užduoti",
+    "console": "Pultas",
+    "requests": "Prašymai",
+    "not_allowed": "Neleisti",
+    "allow": "Leisti",
+    "lost_connection": "Prarastas rišys",
+    "wait_confirmation": "Laukiama patvirtinimo",
+    "drives_facility": "Važiuoja į objektą",
+    "object_inspect": "Apžiūri objektą",
+    "permission_to_return": "Laukiama leidimo grįžti",
+    "regurgitate": "Gryžti",
+    "canceled_by_responsible": "Atšauktos atsakingo",
+    "close": "Uždaryti"
   }
 }

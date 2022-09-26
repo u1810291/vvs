@@ -1,21 +1,12 @@
+import {useTranslation} from 'react-i18next';
 import React from 'react';
 
 export function AssignCard({
-  id,
-  crew,
-  name,
-  status,
-  inBreak,
-  inTask,
-  askForBreak,
-  dislocation,
-  dislocationStatus,
-  connection,
   event,
-  address,
   newEvent,
   type
 }) {
+  const {t} = useTranslation('dashboard');
   return (
     <>
       {newEvent ? (
@@ -36,7 +27,7 @@ export function AssignCard({
               // onClick={addTask}
               className='flex justify-center py-1 mr-2 rounded-sm px-4 border border-transparent text-xs font-normal text-white font-montserrat bg-slate-600 hover:bg-slate-500 focus:outline-none'
             >
-              Priskirti
+              {t`left.assign`}
             </button>
           </div>
         </div>
