@@ -28,5 +28,8 @@
     "regurgitate": "Regurgitate",
     "canceled_by_responsible": "Canceled by the responsible",
     "close": "Close"
+  },
+  "right": {
+    "active": "Active"
   }
 }
