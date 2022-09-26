@@ -70,17 +70,14 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
   };
 
   const {ctrl, result, form, setForm} = useResultForm(formData);
-
   const resetPage = () => {
     // reset form
     const resetForm = {...form};
     resetForm['object_id'] = '';
     setForm(resetForm);
-    
     // refetch
     fetcher.mutate();
   }
-
   // 
   const assign = () => {
     isFunction(assignRef.current) && assignRef.current(() => {
@@ -91,7 +88,6 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
 
   const remove = (e) => { 
     if (!confirm('Are you sure you want to delete?')) return;
-
     isFunction(removeRef.current) && removeRef.current({user_id: userId, object_id: e.target.id}, () => {
       resetPage();
     });
@@ -109,16 +105,12 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
       [isSame('invalid input syntax for type uuid: ""'), constant(t('error.clientWasNotCreated'))]
     ]),
   })
-
   const showObjectModal = () => {
     const theForm = {...form};
     theForm['user_id'] = userId;
     setForm(theForm);
-
     toggleModal();
   }
-
-
   return (
     <div className='flex flex-col w-4/6 p-6'>
       <div className='flex flex-row justify-between'>
@@ -161,7 +153,6 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
         >
           <div className='flex flex-col'>
             {/* <h3>Assign an Object</h3> */}
-            
             <div className='w-full flex flex-row space-x-2'>
               <ComboBox 
                 className={'w-1/2'} 
@@ -185,14 +176,11 @@ const ClientObjectList = ({userId, assignRef, removeRef}) => {
                 ), (objects?.data || []))}
               </ComboBox>
             </div>
-
             <div className={'flex justify-end mt-10 space-x-4'}>
               <Button.NoBg onClick={toggleModal} className={'text-gray-300'}>{tf`Cancel`}</Button.NoBg>
               <Button.Xs onClick={assign} className={'px-6'}>{tf`Save`}</Button.Xs>
             </div>
           </div>
-
-
         </Modal>
       </Nullable>
     </div>
