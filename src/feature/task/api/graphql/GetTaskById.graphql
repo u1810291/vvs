@@ -20,6 +20,14 @@ query GetTaskById($id: uuid!) {
       feedback_until
       is_atm
       is_call_after_inspection
+      users (order_by: {priority: asc_nulls_last}) {
+        first_name
+        last_name
+        middle_name
+        phone
+        priority
+        user_id
+      }
       is_crew_autoasigned
       latitude
       longitude
