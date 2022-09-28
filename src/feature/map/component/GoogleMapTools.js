@@ -1,4 +1,5 @@
 import React, {useCallback, useState, useRef, useEffect} from 'react';
+import {equals} from 'crocks';
 
 import {useTranslation} from 'react-i18next';
 import {DrawingManager} from '@react-google-maps/api';
@@ -6,8 +7,6 @@ import {DrawingManager} from '@react-google-maps/api';
 import {useGoogleApiContext} from 'context/google';
 
 import {getZoneItems} from 'feature/dislocation/ultis';
-
-import _ from 'lodash';
 
 const GoogleMapTools = ({
   value,
@@ -24,7 +23,7 @@ const GoogleMapTools = ({
   const [mode, setMode] = useState('');
   const [modes, setModes] = useState([]);
 
-  const isArrayEqual = (x, y) => _(x).xorWith(y, _.isEqual).isEmpty();
+  const isArrayEqual = (x, y) => equals(x, y)
 
   const dragPolygonHandler = polygon => {
     polygon.addListener('dragend', () => setRawPolygons([polygon]))
