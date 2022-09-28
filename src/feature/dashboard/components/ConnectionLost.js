@@ -15,6 +15,7 @@ export const ConnectionLost = ({duration}) => {
           <Timer active duration={duration}>
             <Timecode />
           </Timer>
+          s
         </a>
       </div>
     </div>

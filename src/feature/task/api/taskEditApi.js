@@ -81,7 +81,7 @@ const responseHandling = {
 
 export const asyncGetCrews = token => {
   return fetchGql(
-    env.API_ENDPOINT,
+    `${ENV.QUERY_PROTOCOL}${ENV.API_ENDPOINT}`,
     {'x-hasura-admin-secret': env.API_SECRET, 'authorization': token},
     getCrewsQuery,
     null
@@ -90,7 +90,7 @@ export const asyncGetCrews = token => {
 
 export const asyncGetObjects = token => {
   return fetchGql(
-    env.API_ENDPOINT,
+    `${ENV.QUERY_PROTOCOL}${ENV.API_ENDPOINT}`,
     {'x-hasura-admin-secret': env.API_SECRET, 'authorization': token},
     getObjectsQuery,
     null
@@ -99,7 +99,7 @@ export const asyncGetObjects = token => {
 
 export const asyncCreateEvent = ({token, name, description, status, crewID, objectID}) => {
   return fetchGql(
-    env.API_ENDPOINT,
+    `${ENV.QUERY_PROTOCOL}${ENV.API_ENDPOINT}`,
     {'x-hasura-admin-secret': env.API_SECRET, 'authorization': token},
     createEventQuery,
     {name, description, status, crewID, objectID}

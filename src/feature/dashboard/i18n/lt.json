@@ -30,6 +30,9 @@
     "close": "Uždaryti"
   },
   "right": {
-    "active": "Aktyvūs"
+    "active": "Aktyvūs",
+    "cancel": "Atšaukti",
+    "in_task": "Užduotyse",
+    "offline": "Neveikia"
   }
 }

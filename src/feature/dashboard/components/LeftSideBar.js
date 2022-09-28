@@ -44,9 +44,7 @@ const DashboardSideLeft = () => {
             connection={data.connection}
           />
         ))}
-        <h4 className='ml-6 py-2 text-slate-400 text-sm'>
-          {t`left.wait_confirmation`}
-        </h4>
+        <h4 className='ml-6 py-2 text-slate-400 text-sm'>{t`left.wait_confirmation`}</h4>
         {DDAPI?.map((data) => (
           <WaitingForConfirmationCard
             key={data.id}
@@ -79,9 +77,7 @@ const DashboardSideLeft = () => {
             inspect={data.inspect}
           />
         ))}
-        <h4 className='ml-6 py-2 text-slate-400 text-sm'>
-          {t`left.permission_to_return`}
-        </h4>
+        <h4 className='ml-6 py-2 text-slate-400 text-sm'>{t`left.permission_to_return`}</h4>
         {DDAPI?.map((data) => (
           <WaitingToReturnCard
             key={data.id}
@@ -92,9 +88,7 @@ const DashboardSideLeft = () => {
             address={data.address}
           />
         ))}
-        <h4 className='ml-6 py-2 text-slate-400 text-sm'>
-          {t`left.canceled_by_responsible`}
-        </h4>
+        <h4 className='ml-6 py-2 text-slate-400 text-sm'>{t`left.canceled_by_responsible`}</h4>
         {DDAPI?.map((data) => (
           <CanceledCard
             key={data.id}

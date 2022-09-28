@@ -67,7 +67,7 @@ export const updatePermissionRequestQueryById = `
 // NOTE: Temporary solution on how to allow and reject permission requests
 export const asyncUpdatePermissionRequestById = ({token, id, status}) =>
   fetchGql(
-    ENV.API_ENDPOINT,
+    `${ENV.QUERY_PROTOCOL}${ENV.API_ENDPOINT}`,
     {
       'x-hasura-admin-secret': ENV.API_SECRET,
       authorization: token,

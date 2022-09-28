@@ -3,13 +3,13 @@ import React from 'react';
 
 export function AssignCard({
   event,
-  newEvent,
+  status,
   type
 }) {
   const {t} = useTranslation('dashboard');
   return (
     <>
-      {newEvent ? (
+      {status ? (
         <div className='flex flex-row border-b w-full h-16 bg-white justify-between items-center'>
           <div className='flex flex-row items-center'>
             <div className='flex rounded-full border-4 border-red-600 bg-white w-8 h-8 ml-4 text-black text-sm font-normal justify-center items-center'>
@@ -19,7 +19,7 @@ export function AssignCard({
               <p className='text-xs text-black'>
                 {type}: {event}
               </p>
-              <p className='text-xs'>{newEvent}</p>
+              <p className='text-xs'>{status}</p>
             </div>
           </div>
           <div className='flex'>

@@ -1,16 +1,13 @@
 import React from 'react';
 import {DDAPI} from 'mocks/dashboardDispatchApi';
-import {generate} from 'shortid';
 import Details from '../../../components/atom/Details';
-import {OffCard} from '../../../components/obsolete/cards/off';
-
 import {ActiveCard} from './active';
 import {RequestCard} from './request';
 import {TaskCard} from './tasks';
 import {useTranslation} from 'react-i18next';
 
-const DashboardSideRight = ({title}) => {
-  const {t} = useTranslation('dashboard')
+const DashboardSideRight = ({crews, title}) => {
+  const {t} = useTranslation('dashboard');
   return (
     <div className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
       <div className='flex flex-col scrollbar-gone flex-shrink-1 overflow-y-auto'>
@@ -21,68 +18,52 @@ const DashboardSideRight = ({title}) => {
         </div>
         <div className='text-slate-400'>
           <h4 className='ml-6 py-2 text-sm'>{t`right.active`}</h4>
-          {DDAPI.map((data) => (
+          {crews?.map((data) => (
             <ActiveCard
-              key={generate()}
-              id={data.id}
-              crew={data.crew}
-              name={data.name}
-              status={data.status}
-              inBreak={data.inBreak}
-              inTask={data.inTask}
-              askForBreak={data.askForBreak}
-              connection={data.connection}
-              event={data.event}
-            />
-          ))}
-          {DDAPI.map((data) => (
-            <RequestCard
-              id={generate()}
               key={data.id}
               crew={data.crew}
               name={data.name}
               status={data.status}
-              inBreak={data.inBreak}
-              inTask={data.inTask}
-              askForBreak={data.askForBreak}
+              connection={data.connection}
+            />
+          ))}
+          {DDAPI.map((data) => (
+            <RequestCard
+              key={data.id}
+              crew={data.crew}
+              name={data.name}
               dislocation={data.dislocation}
               dislocationStatus={data.dislocationStatus}
               connection={data.connection}
-              event={data.event}
             />
           ))}
         </div>
-        <h4 className='ml-6 py-2 text-slate-400 text-sm'>Užduotyse</h4>
+        <h4 className='ml-6 py-2 text-slate-400 text-sm'>{t`right.in_task`}</h4>
         {DDAPI.map((data) => (
           <TaskCard
-            id={generate()}
             key={data.id}
             crew={data.crew}
             name={data.name}
-            status={data.status}
-            inBreak={data.inBreak}
-            inTask={data.inTask}
-            askForBreak={data.askForBreak}
+            distance={data.distance}
             connection={data.connection}
-            event={data.event}
+            hasKey={data.inTask}
           />
         ))}
       </div>
-      <Details title={t('crew.status.offline')}>
-        {DDAPI?.map((data) => (
-          <OffCard
-            id={data.id}
-            key={generate()}
-            crew={data.crew}
-            name={data.name}
-            event={data.event}
-            status={data.status}
-            inTask={data.inTask}
-            inBreak={data.inBreak}
-            askForBreak={data.askForBreak}
-            connection={data.connection}
-          />
-        ))}
+      <Details title={t('right.offline')}>
+        {DDAPI?.map(({id, name, status, crew}) => status === 'offline' && (
+          <div key={id} className='flex flex-row border-b w-full h-14 bg-white justify-between items-center'>
+            <div className='flex flex-row items-center'>
+              <div className='flex rounded-full border-4 border-gray-200 bg-white w-8 h-8 ml-6 text-black text-xs font-normal justify-center items-center'>
+                <p className='flex'>{crew}</p>
+              </div>
+              <div className='flex flex-col ml-4'>
+                <p className='text-xs text-black'>{name} {t`right.offline`}</p>
+              </div>
+            </div>
+          </div>
+          )
+        )}
       </Details>
     </div>
   );

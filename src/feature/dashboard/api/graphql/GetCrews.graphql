@@ -1,16 +1,20 @@
 query GetCrews {
-  crew {
+  crew(order_by: { status: desc }) {
     driver_user_id
     is_assigned_automatically
     is_assigned_while_in_breaks
     name
     status
+    abbreviation
+    phone_number
+    id
     user_settings {
       is_online
+      is_send_report
       last_ping
       id
     }
-    permissions(where: { _and: { status: { _eq: ALLOWED } } }) {
+    permissions(where: { _and: { task_can_be_assigned: { _eq: true } } }) {
       comment
       status
       task_can_be_assigned
@@ -20,6 +24,48 @@ query GetCrews {
         value
       }
       updated_at
+      id
+      time_left
+      created_at
+    }
+    object_key_boxes {
+      set_name
+      id
+      crew_id
+    }
+    calendars {
+      dislocation_zone_id
+      start_time
+      end_time
+      updated_at
+      week_day
+      crew_zone {
+        name
+        nodes
+      }
+    }
+    event {
+      address
+      description
+      event_type
+      id
+      latitude
+      longitude
+      name
+      reason
+      status
+      provider_name
+      object {
+        address
+        city
+        description
+        is_atm
+        latitude
+        longitude
+        name
+        phone
+        provider_name
+      }
     }
   }
 }

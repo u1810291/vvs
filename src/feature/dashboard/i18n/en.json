@@ -30,6 +30,9 @@
     "close": "Close"
   },
   "right": {
-    "active": "Active"
+    "active": "Active",
+    "cancel": "Cancel",
+    "in_task": "In task",
+    "offline": "Offline" 
   }
 }
