@@ -7,7 +7,6 @@ export function ActiveCard({
   status,
   connection
 }) {
-  console.log(connection, status);
   return (
     <>
       {status && connection ? (

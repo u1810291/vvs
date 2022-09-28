@@ -33,6 +33,7 @@
     "active": "Active",
     "cancel": "Cancel",
     "in_task": "In task",
-    "offline": "Offline" 
+    "offline": "Offline",
+    "title": "Crews"
   }
 }

@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 const DashboardSideRight = ({crews, title}) => {
   const {t} = useTranslation('dashboard');
   return (
-    <div className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
+    <>
       <div className='flex flex-col scrollbar-gone flex-shrink-1 overflow-y-auto'>
         <div className='flex flex-row py-4 bg-white items-center justify-between border-b'>
           <h4 className='ml-4 self-center text-md font-normal'>
@@ -65,7 +65,7 @@ const DashboardSideRight = ({crews, title}) => {
           )
         )}
       </Details>
-    </div>
+    </>
   );
 };
 
