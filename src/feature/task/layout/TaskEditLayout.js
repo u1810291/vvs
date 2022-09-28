@@ -16,6 +16,9 @@ const TaskEditLayout = () => {
   const {t} = useTranslation('task');
   const {id} = useParams();
   const {data} = useTask({id});
+
+  console.log(data);
+
   return (
     <SideBarLayout>
       <div className='flex flex-col min-h-screen overflow-hidden'>
