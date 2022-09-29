@@ -1,14 +1,14 @@
 import React from 'react';
-import DynamicIcon from 'feature/crew/component/CrewIcon';
+import DynamicIcon from './CrewIcon';
 
-export default function Item({status, name, description, isOnline}) {
+export default function Item({abbreviation, status, name, description, isOnline}) {
   return (
     <div className='flex flex-row justify-between w-full'>
       <div className='flex'>
-        <DynamicIcon status={status} name={name} />
+        <DynamicIcon status={status} name={abbreviation} />
         <div className='flex flex-col text-black font-normal text-sm ml-2'>
-          <span>{description}</span>
-          <span className='text-xs text-stone-600'>{status}</span>
+          <span>{name}</span>
+          <span className='text-xs text-stone-600'>{description}</span>
         </div>
       </div>
       <div className='flex flex-col'>

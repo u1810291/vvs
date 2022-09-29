@@ -1,20 +1,24 @@
 query GetCrews {
-  crew(order_by: { status: desc }) {
+  crew(
+    where: { user_settings: { id: { _is_null: false } } }
+    order_by: { status: desc }
+  ) {
     name
     status
     abbreviation
     id
-    user_settings {
+    user_settings(order_by: { is_online: asc_nulls_last }) {
       is_online
       last_ping
     }
-    permissions {
+    permissions(limit: 1, order_by: { updated_at: desc }) {
       comment
       status
       task_can_be_assigned
       updated_at
       id
       created_at
+      request_id
     }
   }
 }

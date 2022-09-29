@@ -21,11 +21,13 @@ const detailsOf = curry((
   map(listOfContacts => <AsideDisclosure {...detailsProps}>{listOfContacts}</AsideDisclosure>),
 )(items));
 
+const timeLeft = (permission) => permission.created_at + permission.request.duration - new Date();
+
 const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
 
   const tasks = useTasks();
-  const crews = useCrews(); 
+  const crews = useCrews();
   // const dashboardSubscription = useSubscription()
   // console.log(dashboardSubscription);
   useEffect(() => {
@@ -57,12 +59,30 @@ const DashboardForm = () => {
         <aside className='border-l border-gray-border min-w-fit'>
           <AsideDisclosure title={t`right.title`}>
           {getPath(['data'], crews)
-            .chain(detailsOf({title: t``}, crew => crew.status !== 'OFFLINE' && (
+            .chain(detailsOf({title: t``}, crew => crew.status !== 'OFFLINE' && crew.user_settings[0].is_online && (
               <AsideDisclosure.Item key={crew?.id}>
                 <Item 
                   status={crew.status}
-                  name={crew.name}
-                  description={`${crew.abbreviation} ${crew.name}`}
+                  abbreviation={crew.abbreviation}
+                  name={`${crew.abbreviation} ${crew.name}`}
+                  description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
+                  isOnline={crew.user_settings?.some((el) => el.is_online === true)}
+                  duration={crew}
+                />
+              </AsideDisclosure.Item>
+            )))
+            .option(null)
+          }
+          </AsideDisclosure>
+          <AsideDisclosure title={t`right.offline`}>
+          {getPath(['data'], crews)
+            .chain(detailsOf({title: t``}, crew => crew.user_settings[0].is_online && (
+              <AsideDisclosure.Item key={crew?.id}>
+                <Item 
+                  status={crew.status}
+                  abbreviation={crew.abbreviation}
+                  name={`${crew.abbreviation} ${crew.name}`}
+                  description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                   isOnline={crew.user_settings?.some((el) => el.is_online === true)}
                   duration={crew}
                 />
