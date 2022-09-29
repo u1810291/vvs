@@ -1,11 +1,8 @@
 import {hasLength} from '@s-e/frontend/pred';
-import {hasProps, propSatisfies, curry, getProp, safe, isString, isTruthy, isNumber, and} from 'crocks';
+import {hasProps, propSatisfies, getProp, safe, isString, isTruthy, isNumber, and} from 'crocks';
 
-export const getObjectName = curry((fallback, item) => (
-  safe(hasProps(['name', 'address']), item)
-  .chain(safe(propSatisfies('name', isTruthy)))
-  .chain(safe(propSatisfies('address', isTruthy)))
-  .map(({name, address}) => `${name} - ${address}`)
+export const getObjectName = item => (
+  getProp('name', item)
   .alt(getProp('name', item).chain(safe(isString)).map(a => a.trim()).chain(safe(hasLength)))
   .alt(getProp('address', item).chain(safe(isString)).map(a => a.trim()).chain(safe(hasLength)))
   .alt(getProp('name', item).chain(safe(isString)).map(a => a.trim()).chain(safe(hasLength)))
@@ -18,5 +15,25 @@ export const getObjectName = curry((fallback, item) => (
     .chain(safe(hasLength))
   )
   .alt(getProp('id', item).map(a => a.trim()).chain(safe(hasLength)))
-  .option(fallback)
-));
+);
+
+/**
+ * getAddress :: object -> Maybe<string>
+ *
+ * Get address or at least longitude & latitude from the object.
+ *
+ * @param {object} item
+ * @returns {import('crocks/Maybe').default}
+ */
+export const getAddress = item => (
+  getProp('address', item)
+  .chain(safe(isTruthy))
+  .alt(
+    safe(
+      and(
+        propSatisfies('latitude', isNumber),
+        propSatisfies('longitude', isNumber)),
+      item
+    ).map(obj => `${obj.longitude}, ${obj.latitude}`)
+  )
+)

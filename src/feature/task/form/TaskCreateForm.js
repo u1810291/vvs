@@ -137,7 +137,7 @@ const TaskCreateForm = ({saveRef}) => {
           )(api)
         },
         children: constant(ComboBox.asOptions(
-          [getPropOr('', 'id'), getObjectName(t`untitledObject`)],
+          [getPropOr('', 'id'), item => getObjectName(item).option(t`untitledObject`)],
           getPath(['data', 'objects'], api),
         )),
       },
