@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import Map from '../components/Map';
 import {useTasks} from '../api/useTasks';
@@ -7,6 +7,7 @@ import AsideDisclosure from 'components/Disclosure/AsideDisclosure';
 import {curry, pipe, safe, map, chain, not, isEmpty, isArray, getPath} from 'crocks';
 import {useTranslation} from 'react-i18next';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
+import Item from '../components/Item';
 // import useSubscription from 'hook/useSubscription';
 
 const detailsOf = curry((
@@ -27,6 +28,9 @@ const DashboardForm = () => {
   const crews = useCrews(); 
   // const dashboardSubscription = useSubscription()
   // console.log(dashboardSubscription);
+  useEffect(() => {
+    console.log(tasks.data, crews.data);
+  }, [tasks?.data, crews?.data])
  
   return (
     <>
@@ -54,19 +58,15 @@ const DashboardForm = () => {
           <AsideDisclosure title={t`right.title`}>
           {getPath(['data'], crews)
             .chain(detailsOf({title: t``}, crew => crew.status !== 'OFFLINE' && (
-              <AsideDisclosure.Item
-                key={crew?.id}
-                left={
-                  <div className='flex'>
-                    <DynamicIcon status={crew.status} name={crew.abbreviation} />
-                    <div className='flex flex-col text-black font-normal text-sm'>
-                      <span>{crew.name} {crew.abbreviation}</span>
-                      <span className='text-xs text-stone-600'>{crew.status}</span>
-                    </div>
-                  </div>
-                }
-                right={<span>{crew?.phone_number || crew?.email || '—'}</span>}
-              />
+              <AsideDisclosure.Item key={crew?.id}>
+                <Item 
+                  status={crew.status}
+                  name={crew.name}
+                  description={`${crew.abbreviation} ${crew.name}`}
+                  isOnline={crew.user_settings?.some((el) => el.is_online === true)}
+                  duration={crew}
+                />
+              </AsideDisclosure.Item>
             )))
             .option(null)
           }
