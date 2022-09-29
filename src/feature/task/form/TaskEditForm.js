@@ -1,20 +1,29 @@
 import {joinString} from '@s-e/frontend/transformer/array';
 import Detail from 'components/Disclosure/AsideDisclosure';
 import {getPath, getProp, merge, pipe, branch, map, chain, safe, and, isString, isTruthy, option, isArray, bimap, extend, curry, constant, alt, setProp, reduce} from 'crocks';
+import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import {getAddress, getObjectName} from 'feature/object/utils';
+import useSubscription from 'hook/useSubscription';
+import {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 
+/**
+ * @TODO: Use the crews subscription to draw the right panel
+ */
 const TaskEditForm = () => {
   const {id} = useParams();
-  const {t} = useTranslation();
   const {t: to} = useTranslation('object');
   const task = useTask({id});
+  const query = useMemo(() => GQL, []);
+  const crews = useSubscription(query);
+  
+  console.log(crews);
 
   return (
-    <section className='min-h-screen h-full'>
+    <section className='min-h-screen h-full flex'>
       <aside className={'border-r border-gray-border h-full'}>
         <div className='p-5 border-b border-gray-300 space-y-2'>
           <ObjectName {...task} />
@@ -23,6 +32,8 @@ const TaskEditForm = () => {
         <Detail title={to`edit.responsiblePeople`}>
           <RelatedUsers {...task} />
         </Detail>
+      </aside>
+      <aside className={'border-r border-gray-border h-full'}>
       </aside>
     </section>
   );

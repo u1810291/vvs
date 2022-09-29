@@ -1,6 +1,12 @@
 import {hasLength} from '@s-e/frontend/pred';
 import {hasProps, propSatisfies, getProp, safe, isString, isTruthy, isNumber, and} from 'crocks';
 
+/**
+ * getObjectName :: object -> Maybe<string>
+ *
+ * @param {object} item
+ * @returns {import('crocks/Maybe').default}
+ */
 export const getObjectName = item => (
   getProp('name', item)
   .alt(getProp('name', item).chain(safe(isString)).map(a => a.trim()).chain(safe(hasLength)))
