@@ -1,98 +1,47 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import Map from '../components/Map';
 import {useTasks} from '../api/useTasks';
 import {useCrews} from '../api/userCrews';
-import AsideDisclosure from 'components/Disclosure/AsideDisclosure';
-import {curry, pipe, safe, map, chain, not, isEmpty, isArray, getPath} from 'crocks';
-import {useTranslation} from 'react-i18next';
-import DynamicIcon from 'feature/crew/component/CrewIcon';
-import Item from '../components/Item';
+import {permissionStatus as status} from 'constants/statuses';
+import SidebarRight from '../components/SidebarRight';
 // import useSubscription from 'hook/useSubscription';
 
-const detailsOf = curry((
-  detailsProps,
-  itemToProps,
-  items
-) => pipe(
-  safe(isArray),
-  map(map(itemToProps)),
-  chain(safe(not(isEmpty))),
-  map(listOfContacts => <AsideDisclosure {...detailsProps}>{listOfContacts}</AsideDisclosure>),
-)(items));
-
-const timeLeft = (permission) => permission.created_at + permission.request.duration - new Date();
+// updated_at + duration - new Date()
+const timeLeft = (permission) => {
+  const temp = permission?.request?.duration.split(':');
+  const date = new Date();
+  const a = permission.status === status.PERMISSION_ALLOWED ? (permission?.updated_at): null
+  return a
+}
 
 const DashboardForm = () => {
-  const {t} = useTranslation('dashboard');
 
   const tasks = useTasks();
   const crews = useCrews();
+  const temp = useMemo(() => crews?.data?.map((el) => ({
+    timeLeft: el.permissions.length ? timeLeft(el.permissions[0]): null,
+    ...el
+  })), [crews.data]);
   // const dashboardSubscription = useSubscription()
   // console.log(dashboardSubscription);
   useEffect(() => {
     console.log(tasks.data, crews.data);
-  }, [tasks?.data, crews?.data])
+  }, [tasks?.data, crews?.data]);
  
   return (
     <>
       <div className='flex flex-col h-screen justify-between scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>
-        <aside className='border-l border-gray-border min-w-fit'>
-          <AsideDisclosure title={t`right.title`}>
-          {getPath(['data'], crews)
-            .chain(detailsOf({title: t``}, crew => crew.status !== 'OFFLINE' && (
-              <AsideDisclosure.Item
-                key={crew?.id}
-                left={<DynamicIcon status={crew.status} name={crew.name} />}
-                right={<span>{crew?.phone_number || crew?.email || '—'}</span>}
-              />
-            )))
-            .option(null)
-          }
-          </AsideDisclosure>
-        </aside>
+        <SidebarRight crews={crews} />
       </div>
       <div className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
         <Map />
       </div>
-      <div className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
+      <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>
-          <AsideDisclosure title={t`right.title`}>
-          {getPath(['data'], crews)
-            .chain(detailsOf({title: t``}, crew => crew.status !== 'OFFLINE' && crew.user_settings[0].is_online && (
-              <AsideDisclosure.Item key={crew?.id}>
-                <Item 
-                  status={crew.status}
-                  abbreviation={crew.abbreviation}
-                  name={`${crew.abbreviation} ${crew.name}`}
-                  description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
-                  isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                  duration={crew}
-                />
-              </AsideDisclosure.Item>
-            )))
-            .option(null)
-          }
-          </AsideDisclosure>
-          <AsideDisclosure title={t`right.offline`}>
-          {getPath(['data'], crews)
-            .chain(detailsOf({title: t``}, crew => crew.user_settings[0].is_online && (
-              <AsideDisclosure.Item key={crew?.id}>
-                <Item 
-                  status={crew.status}
-                  abbreviation={crew.abbreviation}
-                  name={`${crew.abbreviation} ${crew.name}`}
-                  description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
-                  isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                  duration={crew}
-                />
-              </AsideDisclosure.Item>
-            )))
-            .option(null)
-          }
-          </AsideDisclosure>
+          <SidebarRight crews={crews} />
         </aside>
-      </div>
+      </section>
     </>
   );
 };

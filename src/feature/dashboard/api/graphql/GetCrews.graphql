@@ -7,18 +7,20 @@ query GetCrews {
     status
     abbreviation
     id
-    user_settings(order_by: { is_online: asc_nulls_last }) {
+    user_settings(order_by: { last_ping: desc }, limit: 1) {
       is_online
       last_ping
     }
     permissions(limit: 1, order_by: { updated_at: desc }) {
       comment
       status
-      task_can_be_assigned
       updated_at
       id
       created_at
       request_id
+      request {
+        duration
+      }
     }
   }
 }
