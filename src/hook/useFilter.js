@@ -1,5 +1,5 @@
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
-import {useEffect, useMemo, useReducer, useState} from 'react';
+import {useEffect, useMemo, useReducer, useState, useCallback} from 'react';
 import Button from 'components/Button';
 import Nullable from 'components/atom/Nullable';
 import {format} from 'date-fns';
@@ -24,6 +24,7 @@ import {renderWithProps} from 'util/react';
 import SelectBox from 'components/atom/input/SelectBox';
 import ComboBox from 'components/atom/input/ComboBox';
 import {unflatten} from 'util/obj';
+import {exportTableToExcel} from 'util/utils';
 
 
 
@@ -191,10 +192,11 @@ const getDefaultFilterId = (filters) => {
   return defaultFilter ? defaultFilter.id : null;
 }
 
-export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
+export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter, downloadBtn) => {
   // console.log('filters initial state', initialState);
 
   const [showFilter, setShowFilter] = useState(true);
+  const handleExport = useCallback(() => exportTableToExcel('list', new Date()), ['list']);
 
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const [params] = useSearchParams();
@@ -736,14 +738,17 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
               <span className='text-sm'>Column order</span>
               <Filter onValues={setColumns}>{pickedColumns}</Filter>
             </div>
-
             <div className='mt-4'>
               <Nullable on={defaultFilterId}>
                 <Button.Xs id={defaultFilterId} className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={onSaveFilterShortcut}>Save Filter</Button.Xs>
               </Nullable>
+              <Nullable on={downloadBtn}>
+                <div>
+                  {downloadBtn()}
+                </div>
+              </Nullable>
             </div>
           </div>
-          
           <div className='w-1/5 md:none'></div>
         </div>
       </div>

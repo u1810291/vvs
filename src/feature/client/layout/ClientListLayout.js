@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Listing from '../../../layout/ListingLayout';
@@ -30,14 +30,16 @@ import useClients from '../api/useClients';
 import {ClientEditRoute} from '../routes';
 import {useFilter} from 'hook/useFilter';
 import Button from 'components/Button';
-import {FilterIcon} from '@heroicons/react/solid';
+import {DocumentDownloadIcon, FilterIcon} from '@heroicons/react/solid';
 import {format} from 'date-fns';
 import {ClientCreateRoute} from '../routes';
 import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
 import raw from 'raw.macro';
+import {exportTableToExcel} from 'util/utils';
 
 
 const ClientListLayout = withPreparedProps(Listing, props => {
+  const [data, setData] = useState();
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('client', {keyPrefix: 'breadcrumbs'});
   const {t: tc} = useTranslation('client', {keyPrefix: 'field'});
@@ -234,17 +236,25 @@ const ClientListLayout = withPreparedProps(Listing, props => {
       return obj?.name ?? obj?.value;
     }},
   ]
+  const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
+
+  const downloadBtn = () => <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'client',
     tableColumns,
     filtersData,
     [],
-    clientsFilter
+    clientsFilter,
+    downloadBtn
   );
 
   const api = useClients({filters: queryParams});
   // console.log(api?.data);
+
+  useEffect(() => {
+    setData(api.data);
+  }, [api.data]);
 
   
   return {

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {generatePath, Link} from 'react-router-dom';
 import Listing from 'layout/ListingLayout';
 import Breadcrumbs from 'components/Breadcrumbs';
@@ -13,7 +13,7 @@ import {Maybe, map, safe, curry, getProp, getPath, option} from 'crocks';
 import {useTranslation} from 'react-i18next';
 import {format, intervalToDuration, formatDuration} from 'date-fns';
 import {useFilter} from 'hook/useFilter';
-import {FilterIcon} from '@heroicons/react/solid';
+import {DocumentDownloadIcon, FilterIcon} from '@heroicons/react/solid';
 import Button from 'components/Button';
 import {TaskListRoute} from 'feature/task/routes';
 import Innerlinks from 'components/Innerlinks';
@@ -22,6 +22,7 @@ import DashboardRoute from 'feature/dashboard/routes';
 import {useBreaches} from '../api/breachEditApi';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
 import useDriversDropdown from 'feature/driver/api/useDriversDropdown';
+import {exportTableToExcel} from 'util/utils';
 
 
 
@@ -43,6 +44,7 @@ const getColumn = curry((t, Component, key, mapper, status, styles) => ({
 }));
 
 const BreachListLayout = withPreparedProps(Listing, props => {
+  const [data, setData] = useState();
   const {api} = useAuth();
   const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
@@ -104,13 +106,24 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     {key: 'time_outside_zone', label: 'Time outside zone (seconds)', filter: 'range'},
   ];
 
+  const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
+
+  const downloadBtn = () => <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'crew_breach',
     tableColumns,
-    filtersData
+    filtersData,
+    null,
+    null,
+    downloadBtn
   );
 
   const list = useBreaches({filters: queryParams})
+
+  useEffect(()=>{
+    setData(list.data);
+  }, [list.data]);
 
   useEffect(() => {
     // console.log(queryParams);

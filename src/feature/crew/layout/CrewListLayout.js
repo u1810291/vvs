@@ -1,8 +1,8 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
-import {FilterIcon} from '@heroicons/react/solid';
+import {DocumentDownloadIcon, FilterIcon} from '@heroicons/react/solid';
 
 import {useAuth} from 'context/auth';
 
@@ -28,6 +28,7 @@ import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
 import {isArray, isBoolean, isObject, isString} from 'crocks/predicates';
+import {exportTableToExcel} from 'util/utils';
 
 const {Just} = Maybe;
 
@@ -51,6 +52,7 @@ const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
 }));
 
 const CrewListLayout = withPreparedProps(Listing, () => {
+  const [data, setData] = useState();
   const {api} = useAuth();
   const nav = useNavigate();
   const {t: tb} = useTranslation('crew', {keyPrefix: 'breadcrumbs'});
@@ -119,14 +121,24 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       values: ['ANY', 'YES', 'NO']
     }
   ];
+  const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
+
+  const downloadBtn = () => <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'crew',
     tableColumns,
-    filtersData
+    filtersData,
+    null,
+    null,
+    downloadBtn
   );
 
   const list = useCrews({filters: queryParams});
+
+  useEffect(() => {
+    setData(list.data);
+  }, [list.data]);
 
   useEffect(() => {
     list.mutate();
