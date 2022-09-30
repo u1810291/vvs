@@ -109,7 +109,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   ];
   const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
 
-  const downloadBtn = () => <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+  const downloadBtn =  <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'object',
