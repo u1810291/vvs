@@ -2,7 +2,7 @@ const {withMergedClassName} = require('util/react');
 
 const BlackTag = props => <span className='bg-black py-1 px-2 rounded-md text-white leading-none' {...props}/>;
 
-export const CLASS_NAME = 'rounded-lg text-white leading-none';
+export const CLASS_NAME = 'rounded-lg text-white leading-none h-fit';
 
 const Tag = withMergedClassName(`${CLASS_NAME} px-3 py-1 text-base`, BlackTag);
 
