@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useAuth} from 'context/auth';
-import ENV from '../env';
+import ENV from 'env';
 import {createClient} from 'graphql-ws';
 import {identity, getPropOr} from 'crocks';
 
@@ -13,8 +13,9 @@ const useSubscription = (query, variables) => {
     if (!token) {
       return;
     }
+
     const gqlClient = createClient({
-      url:`${ENV.QUERY_PROTOCOL}${ENV.API_ENDPOINT}`,
+      url: `${ENV.API_SUBSCRIPTION_PROTOCOL}${ENV.API_ENDPOINT}`,
       connectionParams: {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -27,7 +27,7 @@ export const parseHasuraOutput = pipe(
  */
 export const api = curry((headers, variables, query) => (
   fetchGql(
-    `${ENV.QUERY_PROTOCOL}${ENV.API_ENDPOINT}`,
+    `${ENV.API_QUERY_PROTOCOL}${ENV.API_ENDPOINT}`,
     headers,
     ifElse(isArray, arr => arr.join(' '), identity, query),
     variables
