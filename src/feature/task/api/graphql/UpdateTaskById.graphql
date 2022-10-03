@@ -1,0 +1,9 @@
+mutation (
+  $id: uuid!
+  $event: events_set_input,
+  ){
+  update_events_by_pk(
+    _set: $event, pk_columns: {id: $id}) {
+    id
+  }
+}

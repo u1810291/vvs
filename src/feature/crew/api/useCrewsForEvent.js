@@ -2,9 +2,17 @@ const gql = a => a[0];
 
 export const GQL = gql`
   subscription crewsForEvent($objectId: [uuid!] = [""]) {
-    crew {
+  crew(order_by: [
+      {permissions_aggregate: {count: asc_nulls_first}},
+      {event_aggregate: {count: asc_nulls_first}},
+      {name: asc_nulls_last},
+      {abbreviation: asc_nulls_last}
+    ]) {
       id
+      status
       name
+      latitude
+      longitude
       driver_user_id
       device_id
       abbreviation
@@ -15,7 +23,9 @@ export const GQL = gql`
       }
       permissions(where: {status: {_in: ALLOWED}, request: {is_assigned_while_in_breaks: {_eq: true}}, time_left: {_gte: "0"}}) {
         status
+        expires_at
         request {
+          duration
           value
         }
       }

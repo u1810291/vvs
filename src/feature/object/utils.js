@@ -1,5 +1,5 @@
 import {hasLength} from '@s-e/frontend/pred';
-import {hasProps, propSatisfies, getProp, safe, isString, isTruthy, isNumber, and} from 'crocks';
+import {hasProps, propSatisfies, getProp, safe, isString, isTruthy, isNumber, and, pick} from 'crocks';
 
 /**
  * getObjectName :: object -> Maybe<string>
@@ -43,3 +43,22 @@ export const getAddress = item => (
     ).map(obj => `${obj.longitude}, ${obj.latitude}`)
   )
 )
+
+/**
+ * getCoordinates :: object -> Maybe<Object>
+ *
+ * Get coordinates from the object.
+ *
+ * @param {object} object
+ * @returns {import('crocks/Maybe').default}
+ */
+export const getCoordinates = object => (
+  safe(
+    and(
+      propSatisfies('latitude', and(isNumber, isFinite)),
+      propSatisfies('longitude', and(isNumber, isFinite)),
+    ),
+    object,
+  )
+  .map(pick(['latitude', 'longitude']))
+);
