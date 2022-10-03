@@ -138,7 +138,12 @@ export const dynamicSort = (property) => {
       property = property.substr(1);
   }
   return (a,b) => {
-    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+    var result;
+    if(typeof a[property] === 'object' || typeof b[property] === 'object'){
+      result = (a[property]?.name < b[property]?.name) ? -1 : (a[property]?.name > b[property]?.name) ? 1 : 0;
+    }else {
+      result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+    }
     return result * sortOrder;
   }
 }

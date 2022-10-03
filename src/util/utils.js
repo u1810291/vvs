@@ -26,6 +26,7 @@ export function sortToggle(arr, key, order) {
 
 
 export const exportTableToExcel = (apiData, fileName) => {
+  if(!apiData?.length) return null;
   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
   const fileExtension = '.xlsx';
   const ws = XLSX.utils.json_to_sheet(apiData);

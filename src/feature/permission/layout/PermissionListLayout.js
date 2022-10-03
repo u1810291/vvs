@@ -1,4 +1,4 @@
-import React, {useMemo, useEffect} from 'react';
+import React, {useMemo, useEffect, useCallback, useState} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 
 import Listing from 'layout/ListingLayout';
@@ -32,13 +32,14 @@ import DashboardRoute from 'feature/dashboard/routes';
 import {TaskListRoute} from 'feature/task/routes';
 import Innerlinks from 'components/Innerlinks';
 import {BreachListRoute} from 'feature/breach/routes';
-import {FilterIcon} from '@heroicons/react/solid';
+import {DocumentDownloadIcon, FilterIcon} from '@heroicons/react/solid';
 import Button from 'components/Button';
 import {useFilter} from 'hook/useFilter';
 import DynamicStatus from 'feature/permission/component/PermissionStatus';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
 import useDriversDropdown from 'feature/driver/api/useDriversDropdown';
 import {format} from 'date-fns';
+import {exportTableToExcel} from 'util/utils';
 
 
 const getColumn = curry((t, Component, key, mapper, status, styles) => ({
@@ -62,6 +63,7 @@ const ne = not(isEmpty);
 const nullToStr = e => !e ? '-' : e;
 
 const PermissionListLayout = withPreparedProps(Listing, () => {
+  const [data, setData] = useState();
   const {t: tb} = useTranslation('permission', {keyPrefix: 'breadcrumbs'});
   const {t: tp} = useTranslation('permission');
   const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
@@ -107,14 +109,24 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
       return driverDropdown?.find(d => d.value === v)?.name;
     }},
   ];
+  const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
+
+  const downloadBtn = <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'crew_permission',
     tableColumns,
-    filtersData
+    filtersData,
+    null,
+    null,
+    downloadBtn
   );
 
   const api = usePermissions({filters: queryParams})
+
+  useEffect(() => {
+    setData(api.data);
+  }, [api.data]);
 
   useEffect(() => {
     // console.log(queryParams);

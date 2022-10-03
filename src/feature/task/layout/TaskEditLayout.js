@@ -7,15 +7,35 @@ import TaskEditForm from '../form/TaskEditForm';
 import TaskStatusTag from '../component/TaskStatusTag';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
-import {getPropOr} from 'crocks';
-import {useParams} from 'react-router-dom';
+import {getPropOr, identity, Result, pipe, tap,} from 'crocks';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import {errorToText} from 'api/buildApiHook';
+import {useNotification} from 'feature/ui-notifications/context';
+import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
+import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
 
 
 const TaskEditLayout = () => {
   const {t} = useTranslation('task');
   const {id} = useParams();
-  const {data} = useTask({id});
+  const navigate = useNavigate();
+  const {data, remove} = useTask({id});
+  const {notify} = useNotification();
+
+  const archive = () => {
+    remove(Result.of({id})).fork(
+      e => notify(
+        <ErrorNotification>
+          {errorToText(identity, e)}
+        </ErrorNotification>
+      ),
+      pipe(
+        tap(() => notify(<SuccessNotification />)),
+        tap(() => navigate(TaskListRoute.props.path)),
+      )
+    )
+  };
 
   return (
     <SideBarLayout>
@@ -29,7 +49,7 @@ const TaskEditLayout = () => {
             </Breadcrumbs.Item>
           </Breadcrumbs>
           <div className='space-x-4'>
-            <Button.Dxl>{t`button.archive`}</Button.Dxl>
+            <Button.Dxl onClick={archive}>{t`button.archive`}</Button.Dxl>
             <span className='text-slate-400 py-1 p-6'>{t`button.assignCrew`}</span>
           </div>
         </Header>

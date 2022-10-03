@@ -5,7 +5,7 @@ import {ObjectCreateRoute, ObjectEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {titleCase} from '@s-e/frontend/transformer/string';
-import {useMemo, useEffect} from 'react';
+import {useMemo, useEffect, useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   Maybe,
@@ -28,13 +28,14 @@ import {
 import {useObjects} from '../api';
 import {useFilter} from 'hook/useFilter';
 import {useAuth} from 'context/auth';
-import {FilterIcon} from '@heroicons/react/solid';
+import {DocumentDownloadIcon, FilterIcon} from '@heroicons/react/solid';
 import Button from 'components/Button';
 import {KeyBoxListRoute} from 'feature/keybox/routes';
 import {ModemListRoute} from 'feature/modem/routes';
 import Innerlinks from 'components/Innerlinks';
 import {useClientDropdown} from 'feature/client/api/useClients';
 import {format} from 'date-fns';
+import {exportTableToExcel} from 'util/utils';
 
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
@@ -54,6 +55,7 @@ const getColumn = curry((t, Component, key, pred, mapper, status) => ({
 
 
 const ObjectList = withPreparedProps(Listing, (props) => {
+  const [data, setData] = useState();
   const nav = useNavigate();
   const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
@@ -105,15 +107,25 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       }
     },
   ];
+  const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
+
+  const downloadBtn =  <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
     'object',
     tableColumns,
-    filtersData
+    filtersData,
+    null,
+    null,
+    downloadBtn
   );
   
   const list = useObjects({filters: queryParams})
   
+  useEffect(() => {
+    setData(list.data);
+  }, [list.data]);
+
   useEffect(() => {
     // console.log(queryParams);
     list.mutate()

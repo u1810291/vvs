@@ -5,11 +5,11 @@ import Table from '../../components/Table';
 // import {asciifyLT} from '@s-e/frontend/transformer/string';
 import {componentToString} from '@s-e/frontend/react';
 import {every} from '../../util/array';
-import {exportTableToExcel} from '../../util/utils';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
 import {renderWithProps, dynamicSort} from '../../util/react';
 import {useCallback, useMemo, useState} from 'react';
+
 import {
   and,
   constant,
@@ -65,7 +65,6 @@ const Listing = ({
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
   const [sortColumnKey, setSortColumn] = useState('name');
-  const handleExport = useCallback(() => exportTableToExcel(list, new Date()), [list]);
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
     map(pipe(
@@ -133,13 +132,10 @@ const Listing = ({
               {innerlinks}
             </div>
           </div>
-          <div>
-            <Button.Sm onClick={handleExport}>Download</Button.Sm>
-          </div>
         </div>
       </TitleBar>
       <Nullable on={filters}>
-        <div className='w-full'>
+        <div className='w-full flex'>
           {filters}
         </div>
       </Nullable>
