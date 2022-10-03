@@ -33,7 +33,7 @@ export default function SidebarRight({tasks}) {
                 description={task.address || task.object.address}
                 name={task.name}
                 status={task.status}
-                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>{t`left.assign`}</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
@@ -47,7 +47,6 @@ export default function SidebarRight({tasks}) {
                 description={task.address || task.object.address}
                 name={task.name}
                 status={task.status}
-                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
@@ -61,7 +60,6 @@ export default function SidebarRight({tasks}) {
                 description={task.address || task.object.address}
                 name={task.name}
                 status={task.status}
-                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
@@ -75,7 +73,6 @@ export default function SidebarRight({tasks}) {
                 description={task.address || task.object.address}
                 name={task.name}
                 status={task.status}
-                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
@@ -89,7 +86,6 @@ export default function SidebarRight({tasks}) {
                 description={task.address || task.object.address}
                 name={task.name}
                 status={task.status}
-                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
@@ -103,7 +99,7 @@ export default function SidebarRight({tasks}) {
                 description={task.address || task.object.address}
                 name={task.name}
                 status={task.status}
-                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>{t`left.regurgitate`}</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
@@ -117,7 +113,7 @@ export default function SidebarRight({tasks}) {
                 description={task.address || task.object.address}
                 name={task.name}
                 status={task.status}
-                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>{t`left.close`}</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
