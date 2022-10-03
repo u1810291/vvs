@@ -30,8 +30,9 @@ export default function SidebarRight({crews}) {
                 name={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping).getMinutes()}
+                connectionLost={new Date(crew.user_settings[0]?.last_ping)}
                 duration={crew}
+                timeLeft={crew.timeLeft}
               />
             </AsideDisclosure.Item>
           )))
@@ -46,8 +47,9 @@ export default function SidebarRight({crews}) {
                   name={`${crew.abbreviation} ${crew.name}`}
                   description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                   isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                  connectionLost={new Date(crew.user_settings[0]?.last_ping).getMinutes()}
-                  duration={crew}
+                  connectionLost={new Date(crew.user_settings[0]?.last_ping)}
+                  duration={crew.timeLeft}
+                timeLeft={crew.timeLeft}
                 />
               </AsideDisclosure.Item>
             )))
@@ -62,8 +64,9 @@ export default function SidebarRight({crews}) {
                 name={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping).getMinutes()}
-                duration={crew}
+                connectionLost={new Date(crew.user_settings[0]?.last_ping)}
+                duration={crew.timeLeft}
+                timeLeft={crew.timeLeft}
               />
             </AsideDisclosure.Item>
           )))
@@ -72,14 +75,16 @@ export default function SidebarRight({crews}) {
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.offline`}, (crew) => crew.status === crewStatus.CREW_OFFLINE && (
             <AsideDisclosure.Item key={crew?.id}>
+            {console.log(crew.id)}
               <Item 
                 status={crew.status}
                 abbreviation={crew.abbreviation}
                 name={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping).getMinutes()}
+                connectionLost={new Date(crew.user_settings[0]?.last_ping)}
                 durationTime={crew.timeLeft}
+                timeLeft={crew.timeLeft}
               />
             </AsideDisclosure.Item>
           )))

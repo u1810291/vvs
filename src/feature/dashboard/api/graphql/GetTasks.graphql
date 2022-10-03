@@ -1,22 +1,24 @@
 query GetTasks {
-  events {
-    created_at
-    crew_id
+  events(order_by: { status: asc }) {
+    address
     description
-    id
+    event_type
+    latitude
+    longitude
     name
-    object_id
-    provider_id
-    provider_name
-    status
     reason
-    updated_at
-    crew {
-      name
-    }
+    status
+    provider_name
     object {
       address
+      city
+      description
+      latitude
+      longitude
       name
+      phone
     }
+    updated_at
+    provider_id
   }
 }

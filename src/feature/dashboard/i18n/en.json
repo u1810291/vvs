@@ -27,7 +27,8 @@
     "permission_to_return": "Awaiting permission to return",
     "regurgitate": "Regurgitate",
     "canceled_by_responsible": "Canceled by the responsible",
-    "close": "Close"
+    "close": "Close",
+    "no_events_found": "No events found"
   },
   "right": {
     "active": "Active",

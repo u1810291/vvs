@@ -27,7 +27,8 @@
     "permission_to_return": "Laukiama leidimo grįžti",
     "regurgitate": "Gryžti",
     "canceled_by_responsible": "Atšauktos atsakingo",
-    "close": "Uždaryti"
+    "close": "Uždaryti",
+    "no_events_found": "Įvykiai nerasta"
   },
   "right": {
     "active": "Aktyvūs",

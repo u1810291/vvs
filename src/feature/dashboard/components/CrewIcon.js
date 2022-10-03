@@ -4,7 +4,7 @@ import {getProp, safe} from 'crocks';
 import {withMergedClassName} from 'util/react';
 import {isString, propEq} from 'crocks/predicates';
 import {caseMap} from '@s-e/frontend/flow-control';
-import {crewStatus as status} from 'constants/statuses';
+import {crewStatus as status, eventStatus} from 'constants/statuses';
 
 const is = propEq('status');
 
@@ -24,11 +24,21 @@ CrewIcon.Offline = withMergedClassName(`${CLASS_NAME} border-gray`, CrewIconBase
 CrewIcon.DriveBack = withMergedClassName(`${CLASS_NAME} border-tango`, CrewIconBase);
 
 const DynamicIcon = caseMap(CrewIcon, [
+  // Crews
   [is(status.CREW_BUSY), CrewIcon.Busy],
   [is(status.CREW_BREAK), CrewIcon.Break],
   [is(status.CREW_READY), CrewIcon.Ready],
   [is(status.CREW_OFFLINE), CrewIcon.Offline],
-  [is(status.CREW_DRIVE_BACK), CrewIcon.DriveBack]
+  [is(status.CREW_DRIVE_BACK), CrewIcon.DriveBack],
+  // Events
+  [is(eventStatus.EVENT_NEW), CrewIcon.Busy],
+  [is(eventStatus.EVENT_INSPECTION), CrewIcon.Busy],
+  [is(eventStatus.EVENT_ON_THE_ROAD), CrewIcon.Busy],
+  [is(eventStatus.EVENT_FINISHED), CrewIcon.Busy],
+  [is(eventStatus.EVENT_INSPECTION_DONE), CrewIcon.Busy],
+  [is(eventStatus.EVENT_CANCELLED), CrewIcon.Busy],
+  [is(eventStatus.EVENT_WAIT_FOR_CREW_APPROVAL), CrewIcon.Busy],
+  
 ])
 
 export default DynamicIcon;
