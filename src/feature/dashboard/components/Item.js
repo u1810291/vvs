@@ -5,7 +5,7 @@ import Timecode from 'react-timecode';
 import {useTranslation} from 'react-i18next';
 import Nullable from 'components/atom/Nullable';
 
-export default function Item({title, status, name, description, connectionLost, durationTime, component}) {
+export default function Item({title, status, name, description, connectionLost, durationTime, component, distance, waiting}) {
   const {t} = useTranslation('dashboard');
   const [duration, setDuration] = useState(durationTime)
   const [time, setTime] = useState(connectionLost)
@@ -19,16 +19,28 @@ export default function Item({title, status, name, description, connectionLost, 
         <DynamicIcon status={status} name={name} />
         <div className='flex flex-col text-black font-normal text-sm ml-2'>
           <span>{title}</span>
-          <span className='text-xs text-stone-600'>{connectionLost ? t`left.lost_connection`: description}</span>
+          <span className='text-xs text-gray-400'>{connectionLost ? t`left.lost_connection`: description}</span>
         </div>
       </div>
       <div className='grid grid-rows-2	gap-1'>
-        <div className='min-w-4'>
-          <Nullable on={component}>
-            {component}
-          </Nullable>
-        </div>
-        {connectionLost ?
+        <Nullable on={component} nullish={<div/>}>
+          <div className='min-w-4'>{component}</div>
+        </Nullable>
+        <Nullable on={waiting}>
+          <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
+            <a className='flex flex-row text-xs'>
+              <Timer active duration={null} onTimerUpdate={onTimerUpdate}>
+                <Timecode time={waiting} />
+              </Timer>
+            </a>
+          </div>
+        </Nullable>
+        <Nullable on={distance}>
+          <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
+            <a className='flex flex-row text-xs'>{distance}</a>
+          </div>
+        </Nullable>
+        <Nullable on={connectionLost}>
           <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
             <a className='flex flex-row text-xs'>
               <Timer active duration={duration * 60 * 1000} onTimerUpdate={onTimerUpdate}>
@@ -36,7 +48,7 @@ export default function Item({title, status, name, description, connectionLost, 
               </Timer>
             </a>
           </div>
-        : null}
+        </Nullable>
       </div>
     </div>
   )

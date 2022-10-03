@@ -148,9 +148,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   useEffect(() => {
     list.mutate();
   }, [queryParams]);
-
   
-
   return {
     list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
     rowKeyLens: getPropOr(0, 'id'),

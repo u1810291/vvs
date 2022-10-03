@@ -25,7 +25,7 @@
     "drives_facility": "Drives to the facility",
     "object_inspect": "Inspects the object",
     "permission_to_return": "Awaiting permission to return",
-    "regurgitate": "Regurgitate",
+    "return": "Return",
     "canceled_by_responsible": "Canceled by the responsible",
     "close": "Close",
     "no_events_found": "No events found"

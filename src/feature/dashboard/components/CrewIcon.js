@@ -37,7 +37,7 @@ const DynamicIcon = caseMap(CrewIcon, [
   [is(eventStatus.EVENT_FINISHED), CrewIcon.Busy],
   [is(eventStatus.EVENT_INSPECTION_DONE), CrewIcon.Busy],
   [is(eventStatus.EVENT_CANCELLED), CrewIcon.Busy],
-  [is(eventStatus.EVENT_WAIT_FOR_CREW_APPROVAL), CrewIcon.Busy],
+  [is(eventStatus.EVENT_WAIT_FOR_APPROVAL), CrewIcon.Busy],
   
 ])
 

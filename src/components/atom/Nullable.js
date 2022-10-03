@@ -1,3 +1,3 @@
-const Nullable = ({children, on}) => (on ? children : null);
+const Nullable = ({children, on, nullish=null}) => (on ? children : nullish);
 
 export default Nullable;

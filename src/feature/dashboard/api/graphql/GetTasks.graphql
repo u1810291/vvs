@@ -1,5 +1,6 @@
 query GetTasks {
   events(order_by: { status: asc }) {
+    id
     address
     description
     event_type

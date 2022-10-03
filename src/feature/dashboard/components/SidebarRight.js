@@ -23,7 +23,7 @@ export default function SidebarRight({crews}) {
       <div>
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.active`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_READY && crew.user_settings?.some((el) => el.is_online) && (
-            <AsideDisclosure.Item key={crew?.id}>
+            <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>
               <Item
                 name={crew.abbreviation}
                 title={`${crew.abbreviation} ${crew.name}`}
@@ -39,7 +39,7 @@ export default function SidebarRight({crews}) {
         }
         {getPath(['data'], crews)
             .chain(detailsOf({title: t`right.in_break`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BREAK && (
-              <AsideDisclosure.Item key={crew?.id}>
+              <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>
                 <Item 
                 name={crew.abbreviation}
                 title={`${crew.abbreviation} ${crew.name}`}
@@ -55,7 +55,7 @@ export default function SidebarRight({crews}) {
         }
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.in_task`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BUSY && (
-            <AsideDisclosure.Item key={crew?.id}>
+            <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>
               <Item
                 name={crew.abbreviation}
                 title={`${crew.abbreviation} ${crew.name}`}
@@ -71,7 +71,7 @@ export default function SidebarRight({crews}) {
         }
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.offline`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_OFFLINE && (
-            <AsideDisclosure.Item key={crew?.id}>
+            <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>
               <Item
                 name={crew.abbreviation}
                 title={`${crew.abbreviation} ${crew.name}`}
