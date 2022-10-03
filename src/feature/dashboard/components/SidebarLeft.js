@@ -4,6 +4,7 @@ import Item from './Item';
 import {curry, pipe, safe, map, chain, not, isEmpty, isArray, getPath} from 'crocks';
 import {useTranslation} from 'react-i18next';
 import {eventStatus as status} from 'constants/statuses';
+import Button from 'components/Button';
 
 const detailsOf = curry((
   detailsProps,
@@ -20,104 +21,107 @@ export default function SidebarRight({tasks}) {
   const {t} = useTranslation('dashboard');
   return (
     <>
+      <div className=''>
+
+      </div>
       <div>
         {getPath(['data'], tasks)
-          .chain(detailsOf({title: t`left.not_assigned`}, (task) => task.status === status.EVENT_NEW && (
+          .chain(detailsOf({title: t`left.not_assigned`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_NEW && (
             <AsideDisclosure.Item key={task.id}>
               <Item
-                status={task.status}
+                title={task.name}
+                description={task.address || task.object.address}
                 name={task.name}
-                description={task.address || task?.object?.address}
-                address={task.address}
-                abbreviation={task.provider_id}
+                status={task.status}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
-          .option(t`left.no_events_found`)
+          .option(null)
         }
         {getPath(['data'], tasks)
-          .chain(detailsOf({title: t`left.requests`}, (task) => task.status === status.EVENT_REQUESTS && (
+          .chain(detailsOf({title: t`left.requests`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_REQUESTS && (
             <AsideDisclosure.Item key={task.id}>
               <Item
-                status={task.status}
+                title={task.name}
+                description={task.address || task.object.address}
                 name={task.name}
-                description={task.address || task?.object?.address}
-                address={task.address}
-                abbreviation={task.provider_id}
+                status={task.status}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
-          .option(t`left.no_events_found`)
+          .option(null)
         }
         {getPath(['data'], tasks)
-          .chain(detailsOf({title: t`left.wait_confirmation`}, (task) => task.status === status.EVENT_WAIT_FOR_CREW_APPROVAL && (
+          .chain(detailsOf({title: t`left.wait_confirmation`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_WAIT_FOR_CREW_APPROVAL && (
             <AsideDisclosure.Item key={task.id}>
               <Item
-                status={task.status}
+                title={task.name}
+                description={task.address || task.object.address}
                 name={task.name}
-                description={task.address || task?.object?.address}
-                address={task.address}
-                abbreviation={task.provider_id}
+                status={task.status}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
-          .option(t`left.no_events_found`)
+          .option(null)
         }
         {getPath(['data'], tasks)
-          .chain(detailsOf({title: t`left.drives_facility`}, (task) => task.status === status.EVENT_ON_THE_ROAD && (
+          .chain(detailsOf({title: t`left.drives_facility`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_ON_THE_ROAD && (
             <AsideDisclosure.Item key={task.id}>
               <Item
-                status={task.status}
+                title={task.name}
+                description={task.address || task.object.address}
                 name={task.name}
-                description={task.address || task?.object?.address}
-                address={task.address}
-                abbreviation={task.provider_id}
+                status={task.status}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
-          .option(t`left.no_events_found`)
+          .option(null)
         }
         {getPath(['data'], tasks)
-          .chain(detailsOf({title: t`left.object_inspect`}, (task) => task.status === status.EVENT_INSPECTION && (
+          .chain(detailsOf({title: t`left.object_inspect`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_INSPECTION && (
             <AsideDisclosure.Item key={task.id}>
               <Item
-                status={task.status}
+                title={task.name}
+                description={task.address || task.object.address}
                 name={task.name}
-                description={task.address || task?.object?.address}
-                address={task.address}
-                abbreviation={task.provider_id}
+                status={task.status}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
-          .option(t`left.no_events_found`)
+          .option(null)
         }
         {getPath(['data'], tasks)
-          .chain(detailsOf({title: t`left.permission_to_return`}, (task) => task.status === status.EVENT_INSPECTION_DONE && (
+          .chain(detailsOf({title: t`left.permission_to_return`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_INSPECTION_DONE && (
             <AsideDisclosure.Item key={task.id}>
               <Item
-                status={task.status}
+                title={task.name}
+                description={task.address || task.object.address}
                 name={task.name}
-                description={task.address || task?.object?.address}
-                address={task.address}
-                abbreviation={task.provider_id}
+                status={task.status}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
-          .option(t`left.no_events_found`)
+          .option(null)
         }
         {getPath(['data'], tasks)
-          .chain(detailsOf({title: t`left.canceled_by_responsible`}, (task) => task.status === status.EVENT_CANCELLED && (
+          .chain(detailsOf({title: t`left.canceled_by_responsible`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_CANCELLED && (
             <AsideDisclosure.Item key={task.id}>
               <Item
-                status={task.status}
+                title={task.name}
+                description={task.address || task.object.address}
                 name={task.name}
-                description={task.address || task?.object?.address}
-                address={task.address}
-                abbreviation={task.provider_id}
+                status={task.status}
+                component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>Assign</Button.Sm>}
               />
             </AsideDisclosure.Item>
           )))
-          .option(t`left.no_events_found`)
+          .option(null)
         }
       </div>
     </>

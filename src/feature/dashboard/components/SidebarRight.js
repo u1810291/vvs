@@ -22,69 +22,64 @@ export default function SidebarRight({crews}) {
     <>
       <div>
         {getPath(['data'], crews)
-          .chain(detailsOf({title: t`right.active`}, (crew) => crew.status === crewStatus.CREW_READY && crew.user_settings?.some((el) => el.is_online) && (
+          .chain(detailsOf({title: t`right.active`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_READY && crew.user_settings?.some((el) => el.is_online) && (
             <AsideDisclosure.Item key={crew?.id}>
               <Item
-                status={crew.status}
-                abbreviation={crew.abbreviation}
-                name={`${crew.abbreviation} ${crew.name}`}
+                name={crew.abbreviation}
+                title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping)}
-                duration={crew}
-                timeLeft={crew.timeLeft}
+                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
+                durationTime={crew.timeLeft}
+                status={crew.status}
               />
             </AsideDisclosure.Item>
           )))
-          .option(null)
+          .option()
         }
         {getPath(['data'], crews)
-            .chain(detailsOf({title: t`right.in_break`}, (crew) => crew.status === crewStatus.CREW_BREAK && (
+            .chain(detailsOf({title: t`right.in_break`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BREAK && (
               <AsideDisclosure.Item key={crew?.id}>
                 <Item 
-                  status={crew.status}
-                  abbreviation={crew.abbreviation}
-                  name={`${crew.abbreviation} ${crew.name}`}
-                  description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
-                  isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                  connectionLost={new Date(crew.user_settings[0]?.last_ping)}
-                  duration={crew.timeLeft}
-                timeLeft={crew.timeLeft}
+                name={crew.abbreviation}
+                title={`${crew.abbreviation} ${crew.name}`}
+                description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
+                isOnline={crew.user_settings?.some((el) => el.is_online === true)}
+                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
+                durationTime={crew.timeLeft}
+                status={crew.status}
                 />
               </AsideDisclosure.Item>
             )))
             .option(null)
         }
         {getPath(['data'], crews)
-          .chain(detailsOf({title: t`right.in_task`}, (crew) => crew.status === crewStatus.CREW_BUSY && (
+          .chain(detailsOf({title: t`right.in_task`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BUSY && (
             <AsideDisclosure.Item key={crew?.id}>
-              <Item 
-                status={crew.status}
-                abbreviation={crew.abbreviation}
-                name={`${crew.abbreviation} ${crew.name}`}
+              <Item
+                name={crew.abbreviation}
+                title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping)}
-                duration={crew.timeLeft}
-                timeLeft={crew.timeLeft}
+                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
+                durationTime={crew.timeLeft}
+                status={crew.status}
               />
             </AsideDisclosure.Item>
           )))
           .option(null)
         }
         {getPath(['data'], crews)
-          .chain(detailsOf({title: t`right.offline`}, (crew) => crew.status === crewStatus.CREW_OFFLINE && (
+          .chain(detailsOf({title: t`right.offline`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_OFFLINE && (
             <AsideDisclosure.Item key={crew?.id}>
-            {console.log(crew.id)}
-              <Item 
-                status={crew.status}
-                abbreviation={crew.abbreviation}
-                name={`${crew.abbreviation} ${crew.name}`}
+              <Item
+                name={crew.abbreviation}
+                title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping)}
+                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
                 durationTime={crew.timeLeft}
-                timeLeft={crew.timeLeft}
+                status={crew.status}
               />
             </AsideDisclosure.Item>
           )))
