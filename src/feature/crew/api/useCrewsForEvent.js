@@ -8,6 +8,7 @@ export const GQL = gql`
       driver_user_id
       device_id
       abbreviation
+      status
       user_settings {
         is_online
         id
@@ -16,6 +17,7 @@ export const GQL = gql`
       permissions(where: {status: {_in: ALLOWED}, request: {is_assigned_while_in_breaks: {_eq: true}}, time_left: {_gte: "0"}}) {
         status
         request {
+          duration
           value
         }
       }
