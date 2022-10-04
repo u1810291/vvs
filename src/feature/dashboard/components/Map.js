@@ -59,24 +59,6 @@ const getCrewIcons = (icons) => {
   }
 };
 
-const getDestinationIcons = (icons) => {
-  try {
-    switch (icons) {
-      case 1:
-        icons.destination = 'alert';
-        return require('../../../assets/assets/destination.png');
-        break;
-      case 2:
-        icons.destination = 'alert';
-        return require('../../../assets/assets/destination.png');
-        break;
-      default:
-        return require('../../../assets/assets/destination.png');
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const randomColor = () => {
   const randomize = Math.floor(Math.random() * 16777215).toString(16);

@@ -34,7 +34,8 @@
     "active": "Aktyvūs",
     "cancel": "Atšaukti",
     "in_task": "Užduotyse",
-    "offline": "Neveikia",
-    "title": "Įgula"
+    "offline": "Neprisijungę",
+    "title": "Įgula",
+    "in_break": "Pertraukoje"
   }
 }
