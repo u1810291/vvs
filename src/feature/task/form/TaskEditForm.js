@@ -15,6 +15,7 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
+import Map from 'feature/dashboard/components/Map';
 
 /**
  * @TODO: Use the crews subscription to draw the right panel
@@ -48,8 +49,8 @@ const TaskEditForm = () => {
   );
 
   return (
-    <section className='min-h-screen h-full flex'>
-      <aside className={'border-r border-gray-border h-full'}>
+    <section className='min-h-screen h-full flex w-screen'>
+      <aside className='border-r border-gray-border h-full'>
         <div className='p-5 border-b border-gray-300 space-y-2'>
           <ObjectName {...task} />
           <Address {...task} />
@@ -58,7 +59,10 @@ const TaskEditForm = () => {
           <RelatedUsers {...task} />
         </Detail>
       </aside>
-      <aside className={'border-r border-gray-border h-full'}>
+      <div className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
+        <Map {...task} {...crews} />
+      </div>
+      <aside className='border-r border-gray-border h-full'>
       {
         pipe(
           getPath(['data', 'crew']),

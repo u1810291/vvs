@@ -32,6 +32,7 @@ export default function Item({title, status, name, description, connectionLost, 
               <Timer active duration={null} onTimerUpdate={onTimerUpdate}>
                 <Timecode time={waiting} />
               </Timer>
+              <span className='pl-0.5'>s</span>
             </a>
           </div>
         </Nullable>
@@ -46,6 +47,7 @@ export default function Item({title, status, name, description, connectionLost, 
               <Timer active duration={duration * 60 * 1000} onTimerUpdate={onTimerUpdate}>
                 <Timecode time={new Date() - duration} />
               </Timer>
+              <span className='pl-0.5'>s</span>
             </a>
           </div>
         </Nullable>

@@ -1,10 +1,11 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import AsideDisclosure from 'components/Disclosure/AsideDisclosure'
 import Item from './Item';
 import {curry, pipe, safe, map, chain, not, isEmpty, isArray, getPath} from 'crocks';
 import {useTranslation} from 'react-i18next';
 import {eventStatus as status} from 'constants/statuses';
 import Button from 'components/Button';
+import {useNavigate} from 'react-router-dom';
 
 const detailsOf = curry((
   detailsProps,
@@ -19,9 +20,7 @@ const detailsOf = curry((
 
 export default function SidebarRight({tasks}) {
   const {t} = useTranslation('dashboard');
-  const assignTask = useCallback((id) => () => {
-    console.log(id);
-  }, [tasks.data]);
+  const nav = useNavigate();
   return (
     <>
       {getPath(['data'], tasks)
@@ -29,10 +28,10 @@ export default function SidebarRight({tasks}) {
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
               title={task.name}
-              description={task.address || task.object.address}
+              description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
-              component={<Button.Sm className='max-h-1' onClick={assignTask(task?.id)}>{t`left.assign`}</Button.Sm>}
+              component={<Button.Sm className='max-h-1' onClick={() => nav(`/task/edit/${task.id}`)}>{t`left.assign`}</Button.Sm>}
             />
           </AsideDisclosure.Item>
         )))
@@ -42,9 +41,15 @@ export default function SidebarRight({tasks}) {
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
               title={task.name}
-              description={task.address || task.object.address}
+              description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
+              component={
+                <div>
+                  <Button.Sm className='max-h-1 bg-gray-200 mr-1 text-gray-600'>Some</Button.Sm>
+                  <Button.Sm className='max-h-1' onClick={assignTask(task?.id)}>{t`left.assign`}</Button.Sm>
+                </div>
+              }
             />
           </AsideDisclosure.Item>
         )))
@@ -54,10 +59,10 @@ export default function SidebarRight({tasks}) {
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
               title={task.name}
-              description={task.address || task.object.address}
+              description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
-              distance='1.2 km'
+              waiting={12000}
             />
           </AsideDisclosure.Item>
         )))
@@ -67,9 +72,10 @@ export default function SidebarRight({tasks}) {
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
               title={task.name}
-              description={task.address || task.object.address}
+              description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
+              distance='2.4 km'
             />
           </AsideDisclosure.Item>
         )))
@@ -79,10 +85,10 @@ export default function SidebarRight({tasks}) {
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
               title={task.name}
-              description={task.address || task.object.address}
+              description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
-              distance='1.2 km'
+              waiting={36000}
             />
           </AsideDisclosure.Item>
         )))
@@ -92,7 +98,7 @@ export default function SidebarRight({tasks}) {
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
               title={task.name}
-              description={task.address || task.object.address}
+              description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
               waiting={1200}
@@ -106,7 +112,7 @@ export default function SidebarRight({tasks}) {
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
               title={task.name}
-              description={task.address || task.object.address}
+              description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
               component={<Button.Sm className='max-h-1' onClick={() => console.log('logged')}>{t`left.close`}</Button.Sm>}
