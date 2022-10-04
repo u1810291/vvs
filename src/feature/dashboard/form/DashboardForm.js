@@ -9,7 +9,8 @@ import Button from 'components/Button';
 import {GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
 import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
 import useSubscription from 'hook/useSubscription';
-// import MapV2 from '../components/MapV2';
+import MapV2 from '../components/MapV2';
+import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
 // import useSubscription from 'hook/useSubscription';
 
 // updated_at + duration - new Date()
@@ -34,7 +35,9 @@ const DashboardForm = () => {
   const crewsQuery = useMemo(() => CREW_GQL, []);
   const crews = useSubscription(crewsQuery);
   const tasks = useSubscription(tasksQuery);
-  
+  const crewsZonePaths = useMemo(() => crews.data?.crew?.map((el) => getZoneItemsThroughCalendar(el)), [crews?.data?.crew]);
+  const crewsZoneCoordinates = useMemo(() => crews.data?.crew?.map((el) => getFlatNodesThroughCalendar(el)), [crews?.data?.crew[0]]);
+
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       timeLeft: el.permissions.length ? timeLeft(el.permissions[0]): null,
@@ -45,9 +48,10 @@ const DashboardForm = () => {
   // const dashboardSubscription = useSubscription()
   // console.log(dashboardSubscription);
   useEffect(() => {
-    console.log(tasks.data, crews.data);
-  }, [tasks.data]);
+    console.log(crewsZonePaths, crewsZoneCoordinates);
+  }, [crews.data?.crew]);
  
+  
   return (
     <>
       <section className='flex flex-col h-screen scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>
@@ -63,7 +67,7 @@ const DashboardForm = () => {
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
-        {/* <MapV2 crew={crews} zonePath={crews} zoneCoordinates={tasks} /> */}
+        <MapV2 crew={crews} zonePaths={crewsZonePaths} zoneCoordinates={crewsZoneCoordinates} />
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>

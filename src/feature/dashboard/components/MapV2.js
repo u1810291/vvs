@@ -4,17 +4,20 @@ import Map from 'feature/map/component/Map';
 import Polygon from 'feature/map/component/Polygon';
 
 
-export default function MapV2({zonePath, crewId, zoneCoordinates}) {
+export default function MapV2({zonePaths, crewId, zoneCoordinates}) {
+  console.log(zonePaths);
   return (
-    <Map
-      zoom={12}
-      path={zonePath}
-      id={`crew-map-${crewId}`}
-      coordinates={zoneCoordinates}
-    >
-      <Nullable on={zonePath}>
-        <Polygon path={zonePath} />
+      <Nullable on={zonePaths}>
+        <Map
+          zoom={12}
+          path={zonePaths && zonePaths[0]}
+          id={`crew-map-${crewId}`}
+          coordinates={zoneCoordinates && zoneCoordinates[4]}
+        >
+          {zonePaths?.map((el)=>(
+            <Polygon key={el.lat} path={el} />
+          ))}
+        </Map>
       </Nullable>
-    </Map>
   )
 }
