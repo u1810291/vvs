@@ -18,11 +18,12 @@ const detailsOf = curry((
 
 export default function SidebarRight({crews}) {
   const {t} = useTranslation('dashboard');
+  const activeCrew = (crew) => (crew.status === crewStatus.CREW_READY && crew.user_settings?.some((el) => el.is_online)) || crew.status === crewStatus.CREW_BREAK;
   return (
     <>
       <div>
         {getPath(['data'], crews)
-          .chain(detailsOf({title: t`right.active`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_READY && crew.user_settings?.some((el) => el.is_online) && (
+          .chain(detailsOf({title: t`right.active`, className: 'text-gray-400'}, (crew) => activeCrew(crew) && (
             <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>
               <Item
                 name={crew.abbreviation}
@@ -36,22 +37,6 @@ export default function SidebarRight({crews}) {
             </AsideDisclosure.Item>
           )))
           .option()
-        }
-        {getPath(['data'], crews)
-            .chain(detailsOf({title: t`right.in_break`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BREAK && (
-              <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>
-                <Item 
-                name={crew.abbreviation}
-                title={`${crew.abbreviation} ${crew.name}`}
-                description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
-                isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
-                durationTime={crew.timeLeft}
-                status={crew.status}
-                />
-              </AsideDisclosure.Item>
-            )))
-            .option(null)
         }
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.in_task`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BUSY && (
