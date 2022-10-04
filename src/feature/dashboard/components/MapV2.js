@@ -1,69 +1,58 @@
-import React, {useEffect} from 'react';
-
-import {useTranslation} from 'react-i18next';
-
-import {useGoogleApiContext} from 'context/google';
-
-import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-
-import Nullable from 'components/atom/Nullable';
-
+import React, {useState, useRef, useCallback} from 'react';
+import {Polygon} from '@react-google-maps/api';
 import Map from 'feature/map/component/Map';
-import GoogleMapTools from 'feature/map/component/GoogleMapTools';
-import {getFlatNodes, getZoneItems} from 'feature/dislocation/ultis';
-import {useDisclocation} from 'feature/dislocation/api/dislocationEditApi';
-import {useSWRConfig} from 'swr'
-import {POLYGON_OPTIONS_DISPLAY} from 'feature/map/polygon';
 
-const POLYGON_OPTIONS = {
-  strokeOpacity: 1,
-  fillOpacity: 0.4,
-  strokeWeight: 0.8,
-  fillColor: '#F37E16',
-  strokeColor: '#F37E16',
-  draggable: false
-};
-
-const DislocationEditForm = ({saveRef, removeRef}) => {
-  const dislocationZoneId = '1fddbd2b-cece-4737-b7ac-fb230aae6a4d';
-  const {isLoaded, googleMap} = useGoogleApiContext();
-  const {t} = useTranslation('dislocation', {keyPrefix: 'edit'});
-  const {ctrl, result, setForm} = useResultForm({
-    name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
-    nodes: FORM_FIELD.ARRAY({label: null, validator: () => true})
-  });
-
-  const {value: nodes} = ctrl('nodes');
-  const zonePath = getZoneItems(nodes);
-  const zoneCoordinates = getFlatNodes(nodes);
-
-  const {cache} = useSWRConfig();
-
-  useEffect(() => {
-    cache.clear();
-  }, [nodes]);
-
-  useDisclocation({
-    id: dislocationZoneId,
-    formResult: result,
-    saveRef,
-    setForm,
-    removeRef,
-    successRedirectPath: null,
-  });
-
+function _Map() {
+  const [path, setPath] = useState([
+    {lat: 55.95800510073128, lng: 23.329684891587142},
+    {lat: 55.957470022686266, lng: 23.33251414995183},
+    {lat: 55.957063358425174, lng: 23.334961076105078}
+  ]);
+  const polygonRef = useRef(null);
+  const listenersRef = useRef([]);
+  const onEdit = useCallback(() => {
+    if (polygonRef.current) {
+      const nextPath = polygonRef.current
+        .getPath()
+        .getArray()
+        .map(latLng => {
+          return {lat: latLng.lat(), lng: latLng.lng()};
+        });
+      setPath(nextPath);
+    }
+  }, [setPath]);
+  const onLoad = useCallback(
+    polygon => {
+      polygonRef.current = polygon;
+      const path = polygon.getPath();
+      listenersRef.current.push(
+        path.addListener('set_at', onEdit),
+        path.addListener('insert_at', onEdit),
+        path.addListener('remove_at', onEdit)
+      );
+    },
+    [onEdit]
+  );
+  const onUnmount = useCallback(() => {
+    listenersRef.current.forEach(lis => lis.remove());
+    polygonRef.current = null;
+  }, []);
+  console.log('The path state is', path);
   return (
-    <Map
-      zoom={14}
-      path={zonePath}
-      coordinates={zoneCoordinates}
-      id={`dislocation-map-${dislocationZoneId}`}
-    >
-      <Nullable on={isLoaded}>
-        <GoogleMapTools polygonsOptions={POLYGON_OPTIONS_DISPLAY} {...ctrl('nodes')} drawingMode={'polygon'}/>
-      </Nullable>
+    <Map coordinates={{lat: 52.52047739093263, lng: 13.36653284549709}} zoom={12}>
+      <Polygon
+        // Make the Polygon editable / draggable
+        editable
+        draggable
+        path={path}
+        // Event used when manipulating and adding points
+        onMouseUp={onEdit}
+        // Event used when dragging the whole Polygon
+        onDragEnd={onEdit}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+      />
     </Map>
   );
-};
-
-export default DislocationEditForm;
+}
+export default _Map;
