@@ -83,7 +83,7 @@ const TaskEditForm = () => {
   const crews = useSubscription(query, variables);
 
   return (
-    <section className='min-h-screen h-full flex'>
+    <section className='min-h-screen h-full flex w-full'>
       <aside className={'border-r border-gray-border h-full'}>
         <div className='p-5 border-b border-gray-300 space-y-2'>
           <ObjectName {...task} />
