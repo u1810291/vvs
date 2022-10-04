@@ -42,8 +42,8 @@ function _Map() {
     <Map coordinates={{lat: 52.52047739093263, lng: 13.36653284549709}} zoom={12}>
       <Polygon
         // Make the Polygon editable / draggable
-        editable
-        draggable
+        editable={false}
+        draggable={false}
         path={path}
         // Event used when manipulating and adding points
         onMouseUp={onEdit}
