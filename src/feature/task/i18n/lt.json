@@ -14,8 +14,9 @@
     }
   },
   "button": {
-    "archive": "Archive",
-    "assignCrew": "Priskirkite ekipažą"
+    "cancel": "Atšaukti",
+    "assignCrew": "Priskirkite ekipažą",
+    "allowToReturn": "Leisti grįžti"
   },
   "create": {
     "header": {

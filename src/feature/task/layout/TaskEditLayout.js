@@ -7,24 +7,40 @@ import TaskEditForm from '../form/TaskEditForm';
 import TaskStatusTag from '../component/TaskStatusTag';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
-import {getPropOr, identity, Result, pipe, tap,} from 'crocks';
+import {getPropOr, identity, Result, pipe, tap, pathSatisfies, and, propEq} from 'crocks';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {errorToText} from 'api/buildApiHook';
 import {useNotification} from 'feature/ui-notifications/context';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
 import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
+import {caseMap} from '@s-e/frontend/flow-control';
+import {STATUS} from '../consts';
 
 
 const TaskEditLayout = () => {
   const {t} = useTranslation('task');
   const {id} = useParams();
   const navigate = useNavigate();
-  const {data, remove} = useTask({id});
+  const {data, remove, update} = useTask({id});
   const {notify} = useNotification();
 
   const archive = () => {
     remove(Result.of({id})).fork(
+      e => notify(
+        <ErrorNotification>
+          {errorToText(identity, e)}
+        </ErrorNotification>
+      ),
+      pipe(
+        tap(() => notify(<SuccessNotification />)),
+        tap(() => navigate(TaskListRoute.props.path)),
+      )
+    )
+  };
+
+  const allowToReturn = () => {
+    update(Result.of({id, crew_id: data?.crew?.id, status: 'FINISHED'})).fork(
       e => notify(
         <ErrorNotification>
           {errorToText(identity, e)}
@@ -48,10 +64,28 @@ const TaskEditLayout = () => {
               <TaskStatusTag.Lg className='ml-4 uppercase' {...data}/>
             </Breadcrumbs.Item>
           </Breadcrumbs>
-          <div className='space-x-4'>
-            <Button.Dxl onClick={archive}>{t`button.archive`}</Button.Dxl>
-            <span className='text-slate-400 py-1 p-6'>{t`button.assignCrew`}</span>
-          </div>
+          {
+            caseMap(
+              () => (
+                <div className='space-x-4'> 
+                  <Button.Dxl onClick={archive}>{t`button.cancel`}</Button.Dxl>
+                  <span className='text-slate-400 py-1 p-6'>{t`button.assignCrew`}</span>
+                </div>
+              ),
+              [
+                [
+                  and(propEq('status', STATUS.INSPECTION_DONE), pathSatisfies(['crew', 'id'])),
+                  () => (
+                    <div className='space-x-4'> 
+                      <Button.Pxl onClick={allowToReturn}>{t`button.allowToReturn`}</Button.Pxl>
+                    </div>
+                  )
+                ],
+                [propEq('status', STATUS.FINISHED), () => null],
+              ],
+              data
+            )
+          }
         </Header>
         <div className='flex flex-row w-full justify-between'>
           <TaskEditForm />
