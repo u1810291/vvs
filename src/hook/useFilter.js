@@ -743,12 +743,10 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
               <Nullable on={defaultFilterId}>
                 <Button.Xs id={defaultFilterId} className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={onSaveFilterShortcut}>Save Filter</Button.Xs>
               </Nullable>
-              <Nullable on={exportData}>
-                <div className='flex justify-end gap-8 align-center'>
-                  <span className='flex align-center text-gray-500'><DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' /> Eksportuoti</span>
-                  <Button.Sm id='search_Ieškoti' className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={()=>{}}>Search</Button.Sm>
-                </div>
-              </Nullable>
+              <div className='flex justify-end gap-8 align-center'>
+                <span className='flex align-center text-gray-500'><DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' /> Eksportuoti</span>
+                <Button.Sm id='search_Ieškoti' className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={()=>{}}>Search</Button.Sm>
+              </div>
             </div>
           </div>
           <div className='w-1/5 md:none'></div>
