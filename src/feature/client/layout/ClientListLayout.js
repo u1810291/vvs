@@ -235,11 +235,12 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     }},
   ]
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
     'client',
     tableColumns,
     filtersData,
     [],
+    clientsFilter,
   );
 
   const api = useClients({filters: queryParams});

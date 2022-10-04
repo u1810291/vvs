@@ -1,19 +1,17 @@
-query GetClient ($id: uuid!) {
-  userById (id: $id) {
-    user {
-      id
+query GetClients {
+  usersByRole(role: "customer") {
+    users {
+      active
+      birthDate
+      email
       firstName
+      id
       lastName
       fullName
-      username
+      middleName
       mobilePhone
+      username
+      verified
     }
-  }
-  user_settings_by_pk (id: $id) {
-    is_online
-    last_ping
-    is_company_admin
-    is_send_report
-    archived_at
   }
 }

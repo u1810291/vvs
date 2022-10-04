@@ -1,29 +1,27 @@
-mutation (
-  $firstName: String, 
-  $lastName: String, 
-  $username: String, 
-  $password: String, 
-  $mobilePhone: String, 
-
+mutation UpdateClientInfoData(
+  $firstName: String,
+  $lastName: String,
+  $username: String,
+  $password: String,
+  $mobilePhone: String,
   $is_company_admin: Boolean = false,
   $is_send_report: Boolean = false,
   $archived_at: timestamptz = null,
-
   $last_ping: timestamp = null,
-
   $id: uuid!) {
-    update_user (firstName: $firstName, lastName: $lastName, username: $username, password: $password, mobilePhone: $mobilePhone, id: $id) {
-      user {
-        id
-      }
-    }
 
-    update_user_settings_by_pk (_set: {
-      is_company_admin: $is_company_admin,
-      is_send_report: $is_send_report,
-      archived_at: $archived_at,
-      last_ping: $last_ping,
-    }, pk_columns: {id: $id}) {
-      id
+  update_user (firstName: $firstName, lastName: $lastName, username: $username, password: $password, mobilePhone: $mobilePhone, id: $id) {
+    user {
+    id
     }
+  }
+
+  update_user_settings_by_pk (_set: {
+    is_company_admin: $is_company_admin,
+    is_send_report: $is_send_report,
+    archived_at: $archived_at,
+    last_ping: $last_ping,
+  }, pk_columns: {id: $id}) {
+    id
+  }
 }

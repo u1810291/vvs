@@ -61,15 +61,15 @@ const PermissionEditLayout = () => {
             </Nullable>
           </Breadcrumbs>
           <div className='space-x-4'>
-            <Button.Dxl onClick={() => _do({id, status: 'REJECTED'}).fork(console.error, console.log)}>
+            <Button onClick={() => _do({id, status: 'REJECTED'}).fork(console.error, console.log)}>
               {t`button.reject`}
-            </Button.Dxl>
-            <Button.Pxl onClick={() => _do({id, status: 'ALLOWED'}).fork(console.error, console.log)}>
+            </Button>
+            <Button onClick={() => _do({id, status: 'ALLOWED'}).fork(console.error, console.log)}>
               {t`button.approve`}
-            </Button.Pxl>
-              <Button onClick={saveRef.current}>
-              send
-              </Button>
+            </Button>
+            {/* <Button onClick={saveRef.current}>
+            send
+            </Button> */}
           </div>
         </>
       </Header>

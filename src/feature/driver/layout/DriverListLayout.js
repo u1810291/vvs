@@ -222,6 +222,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     tableColumns,
     filtersData,
     [],
+    driversFilter
   );
  
   const api = useDrivers({filters: queryParams});
