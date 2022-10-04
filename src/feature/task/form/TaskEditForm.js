@@ -94,7 +94,7 @@ const TaskEditForm = () => {
         </Detail>
       </aside>
       <div className='flex flex-col h-screen justify-between w-full bg-gray-100'>
-        <Map {...task} {...crews} />
+        <Map event={task} crews={crews} />
       </div>
       <aside className='border-r border-gray-border h-full'>
       {

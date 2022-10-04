@@ -73,10 +73,11 @@ const routesOptions = {
   clickable: true,
 };
 
-export default function _Map() {
-  const {t} = useLanguage();
-  const {isLoaded, onMapLoad, onMapUnmount} = useGoogleApiContext();
 
+
+export default function _Map({distanceCrew}) {
+  const {t} = useLanguage();
+  const {isLoaded, onMapLoad, onMapUnmount, route, mGoogleMaps} = useGoogleApiContext();
   const [directions, setDirections] = useState([]);
   const mapRef = useRef(null);
   const [_map, setMap] = useState(null);
@@ -188,6 +189,10 @@ export default function _Map() {
     polygonRef.current = null;
   }, []);
   const google = window.google;
+
+  useEffect(()=>{
+    console.log(distanceCrew)
+  },[])
   return !isLoaded ? null : (
     <Map>
       {clickedPos.lat ? (

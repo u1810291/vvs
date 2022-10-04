@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
 
-import Map from '../components/Map';
 import {useTasks} from '../api/useTasks';
 import {permissionStatus as status} from 'constants/statuses';
 import SidebarRight from '../components/SidebarRight';
@@ -10,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import useSubscription from 'hook/useSubscription';
-import {useCrews} from '../api/userCrews';
+import MapV2 from '../components/MapV2';
 // import useSubscription from 'hook/useSubscription';
 
 // updated_at + duration - new Date()
@@ -31,10 +30,10 @@ const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
   const nav = useNavigate();
   const tasks = useTasks();
-  const query = useMemo(() => GQL, []);
-  const crews = useSubscription(query);
-  const api = useCrews();
-
+  const tasksQuery = useMemo(() => GQL, []);
+  const crewsQuery = useMemo(() => GQL, []);
+  const crews = useSubscription(crewsQuery);
+  
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       timeLeft: el.permissions.length ? timeLeft(el.permissions[0]): null,
@@ -45,8 +44,8 @@ const DashboardForm = () => {
   // const dashboardSubscription = useSubscription()
   // console.log(dashboardSubscription);
   useEffect(() => {
-    console.log(crews?.data?.crew, temp, api.data);
-  }, [crews?.data?.crew]);
+    console.log(tasks.data);
+  }, [tasks.data]);
  
   return (
     <>
@@ -63,7 +62,7 @@ const DashboardForm = () => {
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
-        <Map />
+        <MapV2 />
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>
