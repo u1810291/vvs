@@ -23,7 +23,7 @@ export default function SidebarRight({tasks}) {
   const nav = useNavigate();
   return (
     <>
-      {getPath(['data'], tasks)
+      {getPath(['data','events'], tasks)
         .chain(detailsOf({title: t`left.not_assigned`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_NEW && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
@@ -36,7 +36,7 @@ export default function SidebarRight({tasks}) {
           </AsideDisclosure.Item>
         )))
         .option(null)}
-      {getPath(['data'], tasks)
+      {getPath(['data','events'], tasks)
         .chain(detailsOf({title: t`left.requests`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_REQUESTS && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
@@ -54,7 +54,7 @@ export default function SidebarRight({tasks}) {
           </AsideDisclosure.Item>
         )))
         .option(null)}
-      {getPath(['data'], tasks)
+      {getPath(['data','events'], tasks)
         .chain(detailsOf({title: t`left.wait_confirmation`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_WAIT_FOR_APPROVAL && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
@@ -67,7 +67,7 @@ export default function SidebarRight({tasks}) {
           </AsideDisclosure.Item>
         )))
         .option(null)}
-      {getPath(['data'], tasks)
+      {getPath(['data','events'], tasks)
         .chain(detailsOf({title: t`left.drives_facility`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_ON_THE_ROAD && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
@@ -80,7 +80,7 @@ export default function SidebarRight({tasks}) {
           </AsideDisclosure.Item>
         )))
         .option(null)}
-      {getPath(['data'], tasks)
+      {getPath(['data','events'], tasks)
         .chain(detailsOf({title: t`left.object_inspect`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_INSPECTION && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
@@ -93,7 +93,7 @@ export default function SidebarRight({tasks}) {
           </AsideDisclosure.Item>
         )))
         .option(null)}
-      {getPath(['data'], tasks)
+      {getPath(['data','events'], tasks)
         .chain(detailsOf({title: t`left.permission_to_return`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_INSPECTION_DONE && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item
@@ -107,7 +107,7 @@ export default function SidebarRight({tasks}) {
           </AsideDisclosure.Item>
         )))
         .option(null)}
-      {getPath(['data'], tasks)
+      {getPath(['data','events'], tasks)
         .chain(detailsOf({title: t`left.canceled_by_responsible`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_CANCELLED && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <Item

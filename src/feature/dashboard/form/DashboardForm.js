@@ -1,16 +1,16 @@
 import React, {useEffect, useMemo} from 'react';
 
-import Map from '../components/Map';
-import {useTasks} from '../api/useTasks';
 import {permissionStatus as status} from 'constants/statuses';
 import SidebarRight from '../components/SidebarRight';
 import SidebarLeft from '../components/SidebarLeft';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
-import {GQL} from 'feature/crew/api/useCrewsForEvent';
+import {GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
+import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
 import useSubscription from 'hook/useSubscription';
-import {useCrews} from '../api/userCrews';
+import MapV2 from '../components/MapV2';
+import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
 // import useSubscription from 'hook/useSubscription';
 
 // updated_at + duration - new Date()
@@ -30,10 +30,13 @@ const lostConnection = (time) => {
 const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
   const nav = useNavigate();
-  const tasks = useTasks();
-  const query = useMemo(() => GQL, []);
-  const crews = useSubscription(query);
-  const api = useCrews();
+  // const tasks = useTasks();
+  const tasksQuery = useMemo(() => TASK_GQL, []);
+  const crewsQuery = useMemo(() => CREW_GQL, []);
+  const crews = useSubscription(crewsQuery);
+  const tasks = useSubscription(tasksQuery);
+  const crewsZonePaths = useMemo(() => crews.data?.crew?.map((el) => getZoneItemsThroughCalendar(el)), [crews?.data?.crew]);
+  const crewsZoneCoordinates = useMemo(() => crews.data?.crew?.map((el) => getFlatNodesThroughCalendar(el)), [crews?.data?.crew[0]]);
 
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
@@ -45,9 +48,10 @@ const DashboardForm = () => {
   // const dashboardSubscription = useSubscription()
   // console.log(dashboardSubscription);
   useEffect(() => {
-    console.log(crews?.data?.crew, temp, api.data);
-  }, [crews?.data?.crew]);
+    console.log(crewsZonePaths, crewsZoneCoordinates);
+  }, [crews.data?.crew]);
  
+  
   return (
     <>
       <section className='flex flex-col h-screen scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>
@@ -63,7 +67,7 @@ const DashboardForm = () => {
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
-        <Map />
+        <MapV2 crew={crews} zonePaths={crewsZonePaths} zoneCoordinates={crewsZoneCoordinates} />
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>

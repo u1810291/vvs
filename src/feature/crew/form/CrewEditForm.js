@@ -77,9 +77,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
 
   const {firstName} = driver;
   const {lastName} = driver;
-
-  console.log(new Date(driver.lastLoginInstant).toLocaleString(), 'driver');
-
+  console.log(crew);
   const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
 
   useEffect(() => {

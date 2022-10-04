@@ -18,7 +18,7 @@ const detailsOf = curry((
 
 export default function SidebarRight({crews}) {
   const {t} = useTranslation('dashboard');
-  const activeCrew = (crew) => (crew.status === crewStatus.CREW_READY && crew.user_settings?.some((el) => el.is_online)) || crew.status === crewStatus.CREW_BREAK;
+  const activeCrew = (crew) => crew.status === crewStatus.CREW_READY || crew.status === crewStatus.CREW_BREAK;
   return (
     <>
       <div>
@@ -30,7 +30,7 @@ export default function SidebarRight({crews}) {
                 title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
+                connectionLost={new Date() - new Date(crew.user_settings[0]?.last_ping) > 60000}
                 durationTime={crew.timeLeft}
                 status={crew.status}
               />
@@ -46,7 +46,7 @@ export default function SidebarRight({crews}) {
                 title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
+                connectionLost={new Date() - new Date(crew.user_settings[0]?.last_ping) > 60000}
                 durationTime={crew.timeLeft}
                 status={crew.status}
               />
@@ -62,7 +62,7 @@ export default function SidebarRight({crews}) {
                 title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date(crew.user_settings[0]?.last_ping - new Date() > 60000)}
+                connectionLost={new Date() - new Date(crew.user_settings[0]?.last_ping) > 60000}
                 durationTime={crew.timeLeft}
                 status={crew.status}
               />
