@@ -1,0 +1,13 @@
+mutation (
+  $id: uuid!
+  $status: event_status_enum,
+  $crew_id: uuid,
+  ){
+  update_events_by_pk(
+    _set: {
+    status: $status,
+    crew_id: $crew_id,
+  }, pk_columns: {id: $id}) {
+    id
+  }
+}

@@ -1,20 +1,36 @@
-import React from 'react';
-
-import {getProp, safe} from 'crocks';
-import {withMergedClassName} from 'util/react';
-import {isString, propEq} from 'crocks/predicates';
 import {caseMap} from '@s-e/frontend/flow-control';
-import {crewStatus as status} from 'constants/statuses';
+import {withMergedClassName} from 'util/react';
+import {
+  chain,
+  curry,
+  getProp,
+  isObject,
+  isSame,
+  isString,
+  isTruthy,
+  map,
+  option,
+  or,
+  pathSatisfies,
+  pipe,
+  safe,
+} from 'crocks';
 
-const is = propEq('status');
+const isStatus = curry((value, obj) => pipe(
+  safe(isObject),
+  chain(getProp('status')),
+  chain(safe(isString)),
+  map(a => isSame(a.toUpperCase(), value.toUpperCase())),
+  option(false),
+)(obj));
 
-const CrewIconBase = props => (
-  <div className={'flex flex-col items-center justify-center rounded-full border-4 bg-white w-8 h-8 text-black text-xs font-normal'} {...props}>
-    {getProp('name', props).chain(safe(isString)).map(e => e.slice(0, 1)).option('?')}
+const CrewIconBase = crew => (
+  <div className='w-10 h-10 rounded-full border-4 truncate text-xs flex items-center justify-center bg-red-500' {...crew}>
+    {(crew?.abbreviation || crew?.name || '?').slice(0, 3)}
   </div>
 );
 
-const CLASS_NAME = 'flex flex-col items-center justify-center rounded-full border-4 bg-white w-8 h-8 text-black text-xs font-normal';
+const CLASS_NAME = 'w-10 h-10 rounded-full border-4 truncate text-xs flex items-center justify-center';
 
 const CrewIcon = withMergedClassName(`${CLASS_NAME} border-black`, CrewIconBase);
 CrewIcon.Busy = withMergedClassName(`${CLASS_NAME} border-brick`, CrewIconBase);
@@ -23,12 +39,16 @@ CrewIcon.Ready = withMergedClassName(`${CLASS_NAME} border-forest`, CrewIconBase
 CrewIcon.Offline = withMergedClassName(`${CLASS_NAME} border-brick`, CrewIconBase);
 CrewIcon.DriveBack = withMergedClassName(`${CLASS_NAME} border-mantis`, CrewIconBase);
 
-const DynamicIcon = caseMap(CrewIcon, [
-  [is(status.CREW_BUSY), CrewIcon.Busy],
-  [is(status.CREW_BREAK), CrewIcon.Break],
-  [is(status.CREW_READY), CrewIcon.Ready],
-  [is(status.CREW_OFFLINE), CrewIcon.Offline],
-  [is(status.CREW_DRIVE_BACK), CrewIcon.DriveBack]
-])
-
-export default DynamicIcon;
+export default caseMap(CrewIcon, [
+  [isStatus('BUSY'), CrewIcon.Busy],
+  [
+    or(
+      isStatus('BREAK'),
+      pathSatisfies(['permissions', 0, 'expires_at'], isTruthy),
+    ),
+    CrewIcon.Break
+  ],
+  [isStatus('READY'), CrewIcon.Ready],
+  [isStatus('OFFLINE'), CrewIcon.Offline],
+  [isStatus('DRIVE_BACK'), CrewIcon.DriveBack]
+]);

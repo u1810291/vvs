@@ -1,8 +1,8 @@
-import React, {createContext, useContext, useCallback, useState} from 'react';
+import React, {createContext, useContext, useCallback, useState, useMemo} from 'react';
 import env from 'env';
 import {useLoadScript} from '@react-google-maps/api';
 import useMergeReducer from 'hook/useMergeReducer';
-import {Maybe, maybeToAsync, pipe, chain, map, Async, getProp} from 'crocks';
+import {Maybe, maybeToAsync, pipe, chain, map, Async, getProp, curry} from 'crocks';
 
 const Google = createContext(null);
 
@@ -31,6 +31,18 @@ const GoogleContextProvider = ({children}) => {
 
   const mGoogleMaps = isLoaded ? Maybe.Just(google.maps) : Maybe.Nothing();
 
+  const route = useMemo(() => curry((origin, destination) => (
+    isLoaded ? 
+    Async.fromPromise(() => new google.maps.DirectionsService().route({
+      origin,
+      destination,
+      travelMode: google.maps.TravelMode.DRIVING,
+      provideRouteAlternatives: false,
+      optimizeWaypoints: true,
+    }))()
+    : Async.Rejected('google not initialized yet')
+  )), [isLoaded]);
+
   /**
    * @type {AsyncGeocode}
    */
@@ -57,7 +69,18 @@ const GoogleContextProvider = ({children}) => {
         ...options,
         setOptions,
         onMapUnmount,
+
+        /**
+         * @type {google.maps}
+         */
         mGoogleMaps,
+
+        /**
+         * route :: LatLng -> LatLng -> Async<DirectionsResult>
+         *
+         * @type {(origin: google.maps.LatLng, destination: google.maps.LatLng) => Async<google.maps.DirectionsResult>}
+         */
+        route,
         geocode,
       }}
     >

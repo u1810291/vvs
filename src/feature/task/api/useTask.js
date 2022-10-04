@@ -5,8 +5,10 @@ import raw from 'raw.macro';
 
 export default createUseOne({
   getGraphQl: raw('./graphql/GetTaskById.graphql'),
+  deleteGraphQl: raw('./graphql/DeleteTaskById.graphql'),
   createGraphql: raw('./graphql/CreateTask.graphql'),
   mapFromApiUsingAuth: true,
+  updateGraphQl: raw('./graphql/UpdateTaskById.graphql'),
   asyncMapFromApi: auth => response => pipe(
     getProp('events_by_pk'),
     alt(getProp('events', response)),
@@ -23,6 +25,7 @@ export default createUseOne({
   )(response),
   asyncMapToApi: pipe(
     pick([
+      'id',
       'type',
       'name',
       'description',
@@ -30,7 +33,8 @@ export default createUseOne({
       'address',
       'latitude',
       'longitude',
-      'crew_id'
+      'crew_id',
+      'status',
     ]),
     ifElse(
       propSatisfies('crew_id', isTruthy),

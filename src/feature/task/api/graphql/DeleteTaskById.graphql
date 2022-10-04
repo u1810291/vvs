@@ -1,0 +1,10 @@
+mutation ($id: uuid!) {
+  update_events_by_pk (
+    pk_columns: {id: $id},
+    _set: {
+      status: CANCELLED,
+    }
+  ) {
+    id
+  }
+}

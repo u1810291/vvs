@@ -1,15 +1,18 @@
 query GetTaskById($id: uuid!) {
   events_by_pk(id: $id) {
+    id
     address
     description
     event_type
     latitude
     longitude
     provider_name
+    name
     reason
     status
     updated_at
     object {
+      id
       address
       city
       contract_no
