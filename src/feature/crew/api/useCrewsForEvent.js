@@ -34,6 +34,12 @@ export const GQL = gql`
       object_key_boxes(where: {keys: {object: {id: {_in: $objectId}}}}) {
         id
       }
+      calendars {
+        dislocation_zone_id
+        crew_zone {
+          nodes
+        }
+      }
     }
   }
 `;

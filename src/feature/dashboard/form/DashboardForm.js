@@ -9,7 +9,7 @@ import Button from 'components/Button';
 import {GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
 import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
 import useSubscription from 'hook/useSubscription';
-import MapV2 from '../components/MapV2';
+// import MapV2 from '../components/MapV2';
 // import useSubscription from 'hook/useSubscription';
 
 // updated_at + duration - new Date()
@@ -45,7 +45,7 @@ const DashboardForm = () => {
   // const dashboardSubscription = useSubscription()
   // console.log(dashboardSubscription);
   useEffect(() => {
-    console.log(tasks.data);
+    console.log(tasks.data, crews.data);
   }, [tasks.data]);
  
   return (
@@ -63,7 +63,7 @@ const DashboardForm = () => {
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
-        <MapV2 />
+        {/* <MapV2 crew={crews} zonePath={crews} zoneCoordinates={tasks} /> */}
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>
