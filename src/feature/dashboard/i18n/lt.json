@@ -11,5 +11,30 @@
     "button": {
       "submit": "Sign in"
     }
+  },
+  "left": {
+    "assign":"Priskirti",
+    "not_assigned": "Nepriskirtos",
+    "create_task": "Sukurti užduoti",
+    "console": "Pultas",
+    "requests": "Prašymai",
+    "not_allowed": "Neleisti",
+    "allow": "Leisti",
+    "lost_connection": "Prarastas rišys",
+    "wait_confirmation": "Laukiama patvirtinimo",
+    "drives_facility": "Važiuoja į objektą",
+    "object_inspect": "Apžiūri objektą",
+    "permission_to_return": "Laukiama leidimo grįžti",
+    "return": "Gryžti",
+    "canceled_by_responsible": "Atšauktos atsakingo",
+    "close": "Uždaryti",
+    "no_events_found": "Įvykiai nerasta"
+  },
+  "right": {
+    "active": "Aktyvūs",
+    "cancel": "Atšaukti",
+    "in_task": "Užduotyse",
+    "offline": "Neveikia",
+    "title": "Įgula"
   }
 }

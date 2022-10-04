@@ -25,6 +25,7 @@ import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getTaskAddress, getTaskCoordinates} from '../util';
+import Map from 'feature/dashboard/components/Map';
 
 export const CrewName = ({crew}) => (
   getProp('name', crew)
@@ -92,7 +93,10 @@ const TaskEditForm = () => {
           <RelatedUsers {...task} />
         </Detail>
       </aside>
-      <aside className={'border-r border-gray-border h-full'}>
+      <div className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
+        <Map {...task} {...crews} />
+      </div>
+      <aside className='border-r border-gray-border h-full'>
       {
         pipe(
           getPath(['data', 'crew']),

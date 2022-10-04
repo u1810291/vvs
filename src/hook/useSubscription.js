@@ -22,7 +22,6 @@ const useSubscription = (query, variables) => {
         },
       },
     });
-
     gqlClient.subscribe(
       {
         query,
@@ -39,7 +38,6 @@ const useSubscription = (query, variables) => {
       gqlClient.dispose();
     };
   }, [query, token, variables]);
-
 
   return {
     data: getPropOr(data, 'data', data),

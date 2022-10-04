@@ -11,7 +11,8 @@ export const DDAPI = [
     'dislocationStatus': 'Į degalinę',
     'connection': 'Prarastas rišys',
     'address': 'Vilnius, A goštauto g. 7',
-    'event': 'Įvykis: spindulio nr N sabotažas'
+    'event': 'Įvykis: spindulio nr N sabotažas',
+    'distance': '13km'
   },
   {
     'id': '2',
@@ -25,7 +26,8 @@ export const DDAPI = [
     'dislocationStatus': 'gryžta',
     'connection': 'good',
     'address': 'Vilnius, A goštauto g. 7',
-    'event': 'Užpuolimas: spindulio nr X sabotažas'
+    'event': 'Užpuolimas: spindulio nr X sabotažas',
+    'distance': '23km'
   },
   {
     'id': '3',

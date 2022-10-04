@@ -16,6 +16,7 @@ export const GQL = gql`
       driver_user_id
       device_id
       abbreviation
+      status
       user_settings {
         is_online
         id
