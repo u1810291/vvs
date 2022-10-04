@@ -5,7 +5,7 @@ import Nullable from 'components/atom/Nullable';
 import {format} from 'date-fns';
 import {generate} from 'shortid';
 import DatePicker from 'components/DatePicker';
-import {StarIcon} from '@heroicons/react/solid';
+import {DocumentDownloadIcon, StarIcon} from '@heroicons/react/solid';
 import {useSearchParams} from 'react-router-dom';
 import InputGroup from 'components/atom/input/InputGroup';
 import CheckBox from 'components/atom/input/CheckBox';
@@ -192,12 +192,13 @@ const getDefaultFilterId = (filters) => {
   return defaultFilter ? defaultFilter.id : null;
 }
 
-export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter, downloadBtn) => {
+export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
   // console.log('filters initial state', initialState);
+  // TODO: Needs to be updated to callback
+  const [exportData, setExportData] = useState();
+  const handleExport = useCallback(() => exportTableToExcel(exportData, new Date()), [exportData]);
 
   const [showFilter, setShowFilter] = useState(true);
-  const handleExport = useCallback(() => exportTableToExcel('list', new Date()), ['list']);
-
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const [params] = useSearchParams();
 
@@ -742,9 +743,9 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
               <Nullable on={defaultFilterId}>
                 <Button.Xs id={defaultFilterId} className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={onSaveFilterShortcut}>Save Filter</Button.Xs>
               </Nullable>
-              <Nullable on={downloadBtn}>
+              <Nullable on={exportData}>
                 <div className='flex justify-end gap-8 align-center'>
-                  <span className='flex align-center text-gray-500'>{downloadBtn} Eksportuoti</span>
+                  <span className='flex align-center text-gray-500'><DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' /> Eksportuoti</span>
                   <Button.Sm id='search_Ieškoti' className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={()=>{}}>Search</Button.Sm>
                 </div>
               </Nullable>
@@ -853,7 +854,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     filters,
     columns,
     getFilter(defaultFilterId),
-    toggleFilter
+    toggleFilter,
+    setExportData
   ]
 }
 

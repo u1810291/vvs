@@ -11,5 +11,31 @@
     "button": {
       "submit": "Sign in"
     }
+  },
+  "left": {
+    "assign": "Assign",
+    "create_task": "Create a task",
+    "not_assigned": "Not assigned",
+    "console": "Console",
+    "requests": "Requests",
+    "not_allowed": "Do not allow",
+    "allow": "Allow",
+    "lost_connection": "Lost connection",
+    "wait_confirmation": "Awaiting confirmation",
+    "drives_facility": "Drives to the facility",
+    "object_inspect": "Inspects the object",
+    "permission_to_return": "Awaiting permission to return",
+    "return": "Return",
+    "canceled_by_responsible": "Canceled by the responsible",
+    "close": "Close",
+    "no_events_found": "No events found"
+  },
+  "right": {
+    "active": "Active",
+    "cancel": "Cancel",
+    "in_task": "In task",
+    "offline": "Offline",
+    "title": "Crews",
+    "in_break": "In break"
   }
 }

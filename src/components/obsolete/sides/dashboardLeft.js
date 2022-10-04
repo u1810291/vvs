@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {DDAPI} from '../../../mocks/dashboardDispatchApi';
 import {generate} from 'shortid';
+import useLanguage from 'hook/useLanguage';
 const {DrivingToObjectCard} = require('../cards/drivingToObject');
 const {InspectObjectCard} = require('../cards/inspectObject');
 const {AssignCard} = require('../cards/assign');
@@ -11,6 +12,7 @@ const {PermissionCard} = require('../cards/permission');
 const {WaitingForConfirmationCard} = require('../cards/waitingForConfirmation');
 
 const DashboardSideLeft = () => {
+  const {t} = useLanguage();
   return (
     <>
       <div className='flex flex-row items-center border-b bg-white justify-between'>
@@ -19,7 +21,7 @@ const DashboardSideLeft = () => {
           to='/create'
           className='w-36 h-10 flex mr-2 justify-center items-center rounded-sm px-4 border-transparent drop-shadow shadow text-sm font-light text-white font-montserrat hover:shadow-none bg-slate-600 hover:bg-slate-500 focus:outline-none'
         >
-          Sukurti užduoti
+          {t('dashboard.create_task')}
         </Link>
       </div>
       <div className='text-slate-400'>

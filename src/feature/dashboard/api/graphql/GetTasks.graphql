@@ -1,0 +1,25 @@
+query GetTasks {
+  events(order_by: { status: asc }) {
+    id
+    address
+    description
+    event_type
+    latitude
+    longitude
+    name
+    reason
+    status
+    provider_name
+    object {
+      address
+      city
+      description
+      latitude
+      longitude
+      name
+      phone
+    }
+    updated_at
+    provider_id
+  }
+}

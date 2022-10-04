@@ -12,6 +12,7 @@ import {safe, getProp, propEq} from 'crocks';
 import {pipe} from 'crocks/helpers';
 import {isString} from 'crocks/predicates';
 import {chain, option} from 'crocks/pointfree';
+import {crewStatus as status, eventStatus} from 'constants/statuses';
 
 const is = propEq('status');
 
@@ -48,20 +49,20 @@ Status.WaitForCrewApproval = withMergedClassName(`${CLASS_NAME} bg-tango`, Statu
 
 const DynamicStatus = caseMap(Status, [
   // Crew
-  [is('BUSY'), Status.Busy],
-  [is('BREAK'), Status.Break],
-  [is('READY'), Status.Ready],
-  [is('OFFLINE'), Status.Offline],
-  [is('ASKED'), Status.Offline],
-  [is('DRIVE_BACK'), Status.DriveBack],
+  [is(status.CREW_BUSY), Status.Busy],
+  [is(status.CREW_BREAK), Status.Break],
+  [is(status.CREW_READY), Status.Ready],
+  [is(status.CREW_OFFLINE), Status.Offline],
+  [is(status.CREW_ASKED), Status.Offline],
+  [is(status.CREW_DRIVE_BACK), Status.DriveBack],
   // Task (Event)
-  [is('NEW'), Status.New],
-  [is('INSPECTION'), Status.OnTheRoad],
-  [is('ON_THE_ROAD'), Status.Cancelled],
-  [is('FINISHED'), Status.InspectionDone],
-  [is('INSPECTION_DONE'), Status.Inspection],
-  [is('CANCELLED'), Status.WaitForCrewApproval],
-  [is('WAIT_FOR_CREW_APPROVAL'), Status.Finished]
+  [is(eventStatus.EVENT_NEW), Status.New],
+  [is(eventStatus.EVENT_INSPECTION), Status.OnTheRoad],
+  [is(eventStatus.EVENT_ON_THE_ROAD), Status.Cancelled],
+  [is(eventStatus.EVENT_FINISHED), Status.InspectionDone],
+  [is(eventStatus.EVENT_INSPECTION_DONE), Status.Inspection],
+  [is(eventStatus.EVENT_CANCELLED), Status.WaitForCrewApproval],
+  [is(eventStatus.EVENT_WAIT_FOR_CREW_APPROVAL), Status.Finished]
 ]);
 
 export default DynamicStatus;

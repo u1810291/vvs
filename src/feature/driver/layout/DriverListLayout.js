@@ -1,6 +1,6 @@
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import ListingLayout from '../../../layout/ListingLayout';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
 import {DriverCreateRoute, DriverEditRoute} from '../routes';
 import {useTranslation} from 'react-i18next';
@@ -25,7 +25,7 @@ import useDrivers from '../api/useDrivers';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import Button from 'components/Button';
-import {DocumentDownloadIcon, FilterIcon} from '@heroicons/react/solid';
+import {FilterIcon} from '@heroicons/react/solid';
 import {useFilter} from 'hook/useFilter';
 import DriverOnlineTag from '../component/DriverOnlineTag';
 import {CrewListRoute} from 'feature/crew/routes';
@@ -33,7 +33,6 @@ import {DislocationListRoute} from 'feature/dislocation/routes';
 import Innerlinks from 'components/Innerlinks';
 import raw from 'raw.macro';
 import {useAuth} from 'context/auth';
-import {exportTableToExcel} from 'util/utils';
 
 
 
@@ -59,7 +58,6 @@ const getColumn = curry((t, Component, key, mapper, status, styles) => ({
 
 
 const DriverListLayout = withPreparedProps(ListingLayout, () => {
-  const [data, setData] = useState();
   const {t} = useTranslation('driver', {keyPrefix: 'list'});
   const {t: tc} = useTranslation('driver', {keyPrefix: 'field'});
   const {t: tos} = useTranslation('driver', {keyPrefix: 'onlineStatus'});
@@ -219,31 +217,22 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     {key: 'status', label: 'Status', filter: 'multiselect', values: ['OFFLINE', 'ONLINE', 'DEACTIVATED']},
   ]
 
-  const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
-
-  const downloadBtn =  <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
-
-  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
     'crew_driver',
     tableColumns,
     filtersData,
     [],
-    driversFilter,
-    downloadBtn
   );
  
   const api = useDrivers({filters: queryParams});
   // console.log(api?.data);
 
   useEffect(() => {
-    setData(api.data);
-  }, [api.data]);
-
-  useEffect(() => {
     if (!isEmpty(queryParams)) {
       // console.log(queryParams);
       api.mutate();
     }
+    setExportData(api.data);
   }, [queryParams]);
 
   return {

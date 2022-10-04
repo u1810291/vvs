@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 // import {generatePath, Link} from 'react-router-dom';
 
-import {DocumentDownloadIcon, FilterIcon} from '@heroicons/react/solid';
+import {FilterIcon} from '@heroicons/react/solid';
 
 import Listing from 'layout/ListingLayout';
 
@@ -32,7 +32,6 @@ import {isArray, isObject, isString, isEmpty, hasProps} from 'crocks/predicates'
 
 import {format} from 'date-fns';
 import TaskStatusTag from '../component/TaskStatusTag';
-import {exportTableToExcel} from 'util/utils';
 
 const {Just} = Maybe;
 
@@ -56,7 +55,6 @@ const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
 }));
 
 const TaskListLayout = withPreparedProps(Listing, props => {
-  const [data, setData] = useState();
   const {api} = useAuth();
   const nav = useNavigate();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
@@ -138,31 +136,19 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     // {key: 'driver', label: 'Driver', filter: 'multiselect', values: []},
     // {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', values: ['True', 'False']},
   ];
-  const handleExport = useCallback(() => exportTableToExcel(data, new Date()), [data]);
 
-  const downloadBtn =  <DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
-
-  const [queryParams, filters, columns, defaultFilter, toggleFilter] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
     'events',
     tableColumns,
     filtersData,
-    null,
-    null,
-    downloadBtn
   );
 
   const list = useTasks({filters: queryParams});
 
-  useEffect(()=>{
-    setData(list.data);
-  }, [list.data]);
-
   useEffect(() => {
     list.mutate();
   }, [queryParams]);
-
   
-
   return {
     list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
     rowKeyLens: getPropOr(0, 'id'),
