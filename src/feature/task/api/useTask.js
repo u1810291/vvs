@@ -1,7 +1,21 @@
 import {createUseOne} from 'api/buildApiHook';
 import {augmentsToUsers} from 'api/buildUserQuery';
-import {pipe, maybeToAsync, getProp, pick, Async, ifElse, isTruthy, propSatisfies, assign, alt, chain, getPathOr, setPath} from 'crocks';
 import raw from 'raw.macro';
+import {
+  Async,
+  alt,
+  assign,
+  chain,
+  getPathOr,
+  getProp,
+  ifElse,
+  isTruthy,
+  maybeToAsync,
+  pick,
+  pipe,
+  propSatisfies,
+  setPath,
+} from 'crocks';
 
 export default createUseOne({
   getGraphQl: raw('./graphql/GetTaskById.graphql'),
@@ -38,7 +52,7 @@ export default createUseOne({
     ]),
     ifElse(
       propSatisfies('crew_id', isTruthy),
-      assign({status: 'WAIT_FOR_APPROVAL'}),
+      task => task.status ? task : assign({status: 'WAIT_FOR_APPROVAL'}, task),
       assign({status: 'NEW'}),
     ),
     Async.Resolved

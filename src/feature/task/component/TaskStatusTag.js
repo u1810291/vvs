@@ -42,13 +42,13 @@ const getStatus = curry(
     onUnknown,
     props
   ) => caseMap(onUnknown, [
-      [lensCase(statusLens, isSame('NEW')), onNew],
       [lensCase(statusLens, isSame('CANCELLED')), oncancelled],
+      [lensCase(statusLens, isSame('NEW')), onNew],
+      [lensCase(statusLens, isSame('WAIT_FOR_APPROVAL')), onWaitForApproval],
       [lensCase(statusLens, isSame('ON_THE_ROAD')), onOnRoad],
       [lensCase(statusLens, isSame('INSPECTION')), onInspection],
       [lensCase(statusLens, isSame('INSPECTION_DONE')), onInspectionDone],
       [lensCase(statusLens, isSame('FINISHED')), onFinished],
-      [lensCase(statusLens, isSame('WAIT_FOR_APPROVAL')), onWaitForApproval],
     ], props)
 );
 

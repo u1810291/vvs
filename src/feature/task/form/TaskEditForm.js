@@ -1,4 +1,5 @@
 import {KeyIcon} from '@heroicons/react/solid';
+import {caseMap} from '@s-e/frontend/flow-control';
 import {errorToText} from 'api/buildApiHook';
 import {augmentsToUsers} from 'api/buildUserQuery';
 import Tag from 'components/atom/Tag';
@@ -8,6 +9,7 @@ import {useAuth} from 'context/auth';
 import {useGoogleApiContext} from 'context/google';
 import {getPath, getProp, merge, pipe, branch, map, chain, safe, isTruthy, option, isArray, bimap, setProp, reduce, getPathOr, getPropOr, flip, objOf, propSatisfies, not, isEmpty, ifElse, constant, identity, Async, Result, tap} from 'crocks';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
+import {equals} from 'crocks/pointfree';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import CrewIcon from 'feature/crew/component/CrewIcon';
 import {getCrewCoordinates} from 'feature/crew/utils';
@@ -18,6 +20,7 @@ import {useNotification} from 'feature/ui-notifications/context';
 import {getEmail, getName, getPhone} from 'feature/user/utils';
 import useAsyncSwr from 'hook/useAsyncSwr';
 import useSubscription from 'hook/useSubscription';
+import raw from 'raw.macro';
 import {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -25,7 +28,6 @@ import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getTaskAddress, getTaskCoordinates} from '../util';
-import Map from 'feature/dashboard/components/Map';
 
 export const CrewName = ({crew}) => (
   getProp('name', crew)
@@ -50,20 +52,79 @@ export const CrewDriverName = ({crew, crews}) => {
   )
 };
 
+const TASK_GQL = raw('../api/graphql/GetTaskById.graphql');
+
 const TaskEditForm = () => {
+  const UNINITIALIZED_SUBSCRIPTION = 'uninitialized';
   const {id} = useParams();
   const {t: to} = useTranslation('object');
-  const {data: task, update} = useTask({id});
-  const {t} = useTranslation();
-  const navigate = useNavigate();
-  const query = useMemo(() => GQL, []);
-  const variables = useMemo(() => (
-    getPath(['object', 'id'], task)
-    .map(objOf('objectId'))
-    .option(undefined)
-  ), [task]);
+  const {data: task} = useTask({id});
+  const taskSubscription = useSubscription(
+    'query GetTaskById($id: uuid!) {events_by_pk(id: $id) {crew_id}}',
+    useMemo(() => ({id}), [id])
+  );
 
+  const subscribedEvent = useMemo(() => getPathOr(UNINITIALIZED_SUBSCRIPTION, ['data', 'events_by_pk'], taskSubscription), [taskSubscription])
+
+  return (
+    <section className='min-h-screen h-full flex'>
+      <aside className={'border-r border-gray-border h-full'}>
+        <div className='p-5 border-b border-gray-300 space-y-2'>
+          <ObjectName {...task} />
+          <Address {...task} />
+        </div>
+        <Detail title={to`edit.responsiblePeople`}>
+          <RelatedUsers {...task} />
+        </Detail>
+      </aside>
+      {caseMap(() => <AsideSelectCrew />, [
+        [equals(UNINITIALIZED_SUBSCRIPTION), () => null],
+        [propSatisfies('crew_id', isTruthy), () => <AsideCancalableCrew />],
+      ], subscribedEvent)}
+    </section>
+  );
+};
+
+const AsideCancalableCrew = () => {
+  const {id} = useParams();
+  const sub = useSubscription(
+    useMemo(() => TASK_GQL, []),
+    useMemo(() => ({id}), [id]),
+  );
+
+  const task = useMemo(() => getPathOr(null, ['data', 'events_by_pk'], sub));
+
+  const Crew = useMemo(() => () => pipe(
+    getPath(['data', 'events_by_pk', 'crew']),
+    map(crew => (
+      <div className='flex items-start space-x-4 w-full'>
+        <CrewIcon {...crew} />
+        <div className='flex-1'>
+          <CrewName crew={crew}/>
+          <CrewDriverName crew={crew} crews={[crew]} />
+        </div>
+        <div className='flex-col md:flex-row flex items-end md:items-start md:space-y-0 space-y-2 md:space-x-2'>
+          <CrewKeyIcon {...crew} />
+          <CrewDistanceDetails crew={crew} event={task} />
+        </div>
+      </div>
+    )),
+    option(null)
+  )(sub));
+
+  return (
+    <aside className={'border-r border-gray-border h-full'}>
+      <Crew />
+    </aside>
+  );
+};
+
+const AsideSelectCrew = () => {
+  const navigate = useNavigate();
+  const {id} = useParams();
   const {notify} = useNotification();
+  const {t} = useTranslation();
+  const {data: task, update} = useTask({id});
 
   const assign = crewId => () => (
     update(Result.of({id: task.id, crew_id: crewId}))
@@ -80,60 +141,53 @@ const TaskEditForm = () => {
     )
   );
 
-  const crews = useSubscription(query, variables);
+  const crews = useSubscription(
+    useMemo(() => GQL, []),
+    useMemo(() => (
+      getPath(['object', 'id'], task)
+      .map(objOf('objectId'))
+      .option(undefined)
+    ), [task])
+  );
 
   return (
-    <section className='min-h-screen h-full flex w-screen'>
-      <aside className={'border-r border-gray-border h-full'}>
-        <div className='p-5 border-b border-gray-300 space-y-2'>
-          <ObjectName {...task} />
-          <Address {...task} />
-        </div>
-        <Detail title={to`edit.responsiblePeople`}>
-          <RelatedUsers {...task} />
-        </Detail>
-      </aside>
-      <div className='flex flex-col h-screen justify-between w-full bg-gray-100'>
-        <Map event={task} crews={crews} />
-      </div>
-      <aside className='border-r border-gray-border h-full'>
+    <aside className={'border-r border-gray-border h-full'}>
       {
-        pipe(
-          getPath(['data', 'crew']),
-          chain(safe(isArray)),
-          map(map(pipe(
-            crew => ({
-              key: crew.id,
-              children: (
-                <div className='flex items-start space-x-4 w-full'>
-                  <CrewIcon {...crew} />
-                  <div className='flex-1'>
-                    <CrewName crew={crew}/>
-                    <CrewDriverName crew={crew} crews={crews} />
-                  </div>
-                  <div className='flex-col md:flex-row flex items-end md:items-start md:space-y-0 space-y-2 md:space-x-2'>
-                    <CrewKeyIcon {...crew} />
-                    <CrewDistanceDetails crew={crew} event={task} />
-                    <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>{t`assignTask`}</Button.Sm>
-                  </div>
+      pipe(
+        getPath(['data', 'crew']),
+        chain(safe(isArray)),
+        map(map(pipe(
+          crew => ({
+            key: crew.id,
+            children: (
+              <div className='flex items-start space-x-4 w-full'>
+                <CrewIcon {...crew} />
+                <div className='flex-1'>
+                  <CrewName crew={crew}/>
+                  <CrewDriverName crew={crew} crews={crews} />
                 </div>
-              ),
-              title: JSON.stringify(crew, null, '  '), 
-            }),
-            renderWithProps(Detail.Item),
-          ))),
-          map(list => ({
-            title: t`availableCrews`,
-            children: list
-          })),
-          map(renderWithProps(Detail)),
-          option(null),
-        )(crews)
-      }
-      </aside>
-    </section>
+                <div className='flex-col md:flex-row flex items-end md:items-start md:space-y-0 space-y-2 md:space-x-2'>
+                  <CrewKeyIcon {...crew} />
+                  <CrewDistanceDetails crew={crew} event={task} />
+                  <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>{t`assignTask`}</Button.Sm>
+                </div>
+              </div>
+            ),
+            title: JSON.stringify(crew, null, '  '), 
+          }),
+          renderWithProps(Detail.Item),
+        ))),
+        map(list => ({
+          title: t`availableCrews`,
+          children: list
+        })),
+        map(renderWithProps(Detail)),
+        option(null),
+      )(crews)
+    }
+    </aside>
   );
-};
+}
 
 /**
  * RelatedUsers :: useTask() -> Array<Detal.Item>

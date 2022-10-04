@@ -10,8 +10,9 @@
     }
   },
   "button": {
-    "archive": "Archive",
-    "assignCrew": "Assign a crew"
+    "cancel": "Cancel",
+    "assignCrew": "Assign a crew",
+    "allowToReturn": "Allow to return"
   },
   "breadcrumbs": {
     "tasks": "Tasks",

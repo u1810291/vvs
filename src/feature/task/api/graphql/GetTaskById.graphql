@@ -7,6 +7,29 @@ query GetTaskById($id: uuid!) {
     latitude
     longitude
     provider_name
+    crew {
+      id
+      status
+      name
+      latitude
+      longitude
+      driver_user_id
+      device_id
+      abbreviation
+      user_settings {
+        is_online
+        id
+        last_ping
+      }
+      permissions(where: {status: {_in: ALLOWED}, request: {is_assigned_while_in_breaks: {_eq: true}}, time_left: {_gte: "0"}}) {
+        status
+        expires_at
+        request {
+          duration
+          value
+        }
+      }
+    }
     name
     reason
     status
