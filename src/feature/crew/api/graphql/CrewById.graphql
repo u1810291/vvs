@@ -10,9 +10,7 @@ query CrewById ($id: uuid!) {
         to_call_after
         is_assigned_automatically
         is_assigned_while_in_breaks
-        zone {
-            nodes
-        }
+        
         calendars {
             id
             crew_id
@@ -23,7 +21,6 @@ query CrewById ($id: uuid!) {
                 name
                 nodes
                 id
-                crew_id
             }
         }
     }

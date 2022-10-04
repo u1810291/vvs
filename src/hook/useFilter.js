@@ -538,7 +538,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   // TODO: move out into separate Component
   const filters = useMemo(() => {
     return (
-      <div className={showFilter ? 'visible' : 'hidden'}>
+      <div className={showFilter ? 'visible w-full' : 'hidden'}>
         <div className='w-full flex flex-row columns-3 border-t-2 border-gray-200'>
           {/* saved filters zone */}
           <div className='w-1/5 min-w-[240px] max-h-[300px] overflow-y-auto '>
