@@ -13,6 +13,7 @@ import GoogleMapTools from 'feature/map/component/GoogleMapTools';
 import {getFlatNodes, getZoneItems} from 'feature/dislocation/ultis';
 import {useDisclocation} from 'feature/dislocation/api/dislocationEditApi';
 import {useSWRConfig} from 'swr'
+import {POLYGON_OPTIONS_DISPLAY} from 'feature/map/polygon';
 
 const POLYGON_OPTIONS = {
   strokeOpacity: 1,
@@ -42,7 +43,6 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
     cache.clear();
   }, [nodes]);
 
-  console.log(ctrl('nodes'));
   useDisclocation({
     id: dislocationZoneId,
     formResult: result,
@@ -60,7 +60,7 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
       id={`dislocation-map-${dislocationZoneId}`}
     >
       <Nullable on={isLoaded}>
-        <GoogleMapTools polygonsOptions={POLYGON_OPTIONS} {...ctrl('nodes')} drawingMode={'polygon'}/>
+        <GoogleMapTools polygonsOptions={POLYGON_OPTIONS_DISPLAY} {...ctrl('nodes')} drawingMode={'polygon'}/>
       </Nullable>
     </Map>
   );
