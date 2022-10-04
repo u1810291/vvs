@@ -28,7 +28,6 @@ import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getTaskAddress, getTaskCoordinates} from '../util';
-import Map from 'feature/dashboard/components/Map';
 
 export const CrewName = ({crew}) => (
   getProp('name', crew)
