@@ -1,14 +1,16 @@
-import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
-
-import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import withPreparedProps from '../../../hoc/withPreparedProps';
-
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
+import Innerlinks from 'components/Innerlinks';
+import Listing from '../../../layout/ListingLayout';
+import React, {useEffect, useMemo} from 'react';
+import maybeToAsync from 'crocks/Async/maybeToAsync';
 import useAsync from '../../../hook/useAsync';
-
+import withPreparedProps from '../../../hoc/withPreparedProps';
+import {ClientListRoute} from 'feature/client/routes';
+import {HelpEditRoute} from '../routes';
+import {alt} from 'crocks/pointfree';
+import {generatePath, Link} from 'react-router-dom';
+import {useAuth} from '../../../context/auth';
+import {useTranslation} from 'react-i18next';
 import {
   chain,
   curry,
@@ -24,12 +26,6 @@ import {
   pipe,
   safe
 } from 'crocks';
-import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-
-import {HelpEditRoute} from '../routes';
-import Innerlinks from 'components/Innerlinks';
-import {ClientListRoute} from 'feature/client/routes';
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -46,7 +42,6 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 }));
 
 const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
 
 const HelpListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
@@ -80,7 +75,7 @@ const HelpListLayout = withPreparedProps(Listing, props => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`helps`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     innerlinks: (

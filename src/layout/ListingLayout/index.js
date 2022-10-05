@@ -7,7 +7,7 @@ import {componentToString} from '@s-e/frontend/react';
 import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
-import {renderWithProps, dynamicSort} from '../../util/react';
+import {renderWithProps, dynamicSort, withMergedClassName} from '../../util/react';
 import {useCallback, useMemo, useState} from 'react';
 
 import {
@@ -25,8 +25,6 @@ import {
   safe,
 } from 'crocks';
 import Button from 'components/Button';
-
-
 
 export const asciifyLT2 = string => string
   .replace(/a/gi, '(a|ą)')
@@ -117,20 +115,16 @@ const Listing = ({
   return (
     <Index>
       <TitleBar>
-        <div className='md:flex md:space-x-4 md:space-y-0 space-y-4 w-full items-center'>
-          <div className=''>
+        <div className='xl:flex xl:items-center xl:space-between pt-5 xl:pb-5 space-y-4 xl:space-y-0 xl:space-x-4 grow shrink'>
           {breadcrumbs}
+          <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} className='grow shrink' />
+        </div>
+        <div className='xl:justify-end justify-between flex items-center space-x-4'>
+          <div className='flex flex-row md:space-x-4'>
+            {buttons}
           </div>
-          <div className='w-96'>
-            <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} />
-          </div>
-          <div className='flex-grow flex-shrink justify-end flex items-center space-x-4'>
-            <div className='flex flex-row md:space-x-4'>
-              {buttons}
-            </div>
-            <div>
-              {innerlinks}
-            </div>
+          <div>
+            {innerlinks}
           </div>
         </div>
       </TitleBar>
@@ -151,10 +145,11 @@ const Listing = ({
   );
 }
 
-const TitleBar = props => (
-  <header className='flex w-full justify-between p-5 h-20'>
-    {props?.children}
-  </header>
+const TitleBar = withMergedClassName(
+  'xl:flex w-full xl:justify-between items-center px-5 space-y-4 xl:space-y-0 space-x-0 xl:space-x-4',
+  props => (
+    <header {...props} />
+  )
 );
 
 export default Listing;

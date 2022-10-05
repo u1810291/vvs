@@ -28,7 +28,7 @@ const Box = ({Item, ...props}) => (
 
 const Item = ({isCurrent = false, to = '#', children, props}) => (
   <li {...props}>
-    <NavLink to={to} className={`${isCurrent ? 'border-blue-400' : 'border-transparent hover:border-blue-400'} px-6 py-6 border-b-4 `}>
+    <NavLink to={to} className={`${isCurrent ? 'border-blue-400' : 'border-transparent hover:border-blue-400'} block px-6 py-6 border-b-4`}>
       {children}
     </NavLink>
   </li>

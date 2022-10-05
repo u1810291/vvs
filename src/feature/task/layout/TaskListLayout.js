@@ -155,7 +155,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`tasks`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>
           <Button.NoBg onClick={toggleFilter}>
             {defaultFilter.id ? defaultFilter.name : tb('all_data') }
             <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />

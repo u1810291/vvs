@@ -1,12 +1,14 @@
-import React, {useMemo} from 'react';
-import {generatePath, Link, useNavigate} from 'react-router-dom';
-
-import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
+import Button from 'components/Button';
+import Innerlinks from 'components/Innerlinks';
+import Listing from '../../../layout/ListingLayout';
+import React, {useMemo} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
-
+import {PermissionRequestListRoute, TaskTypeEditRoute, TaskTypeCreateRoute, TaskCancellationListRoute} from '../routes';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
+import {titleCase} from '@s-e/frontend/transformer/string';
+import {useTaskTypes} from '../api';
 import {useTranslation} from 'react-i18next';
-
 import {
   chain,
   curry,
@@ -20,21 +22,8 @@ import {
   objOf,
   pipe,
   safe,
-  // hasProps
 } from 'crocks';
-// import {pick} from 'crocks/helpers';
 import {alt} from 'crocks/pointfree';
-
-import {PermissionRequestListRoute, TaskTypeEditRoute, TaskTypeCreateRoute, TaskCancellationListRoute} from '../routes';
-import Button from 'components/Button';
-import Innerlinks from 'components/Innerlinks';
-import {useTaskTypes} from '../api';
-import {titleCase} from '@s-e/frontend/transformer/string';
-
-
-
-
-
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -74,7 +63,7 @@ const TaskTypeListLayout = withPreparedProps(Listing, props => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`classifiers`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tp`task_types`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item> hideSlash{tp`task_types`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (

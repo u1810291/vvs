@@ -1,14 +1,17 @@
-import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
-
-import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import withPreparedProps from '../../../hoc/withPreparedProps';
-
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
+import Innerlinks from 'components/Innerlinks';
+import Listing from '../../../layout/ListingLayout';
+import React, {useEffect, useMemo} from 'react';
+import maybeToAsync from 'crocks/Async/maybeToAsync';
 import useAsync from '../../../hook/useAsync';
-
+import withPreparedProps from '../../../hoc/withPreparedProps';
+import {KeyBoxListRoute} from 'feature/keybox/routes';
+import {ModemEditRoute} from '../routes';
+import {ObjectListRoute} from 'feature/object/routes';
+import {alt} from 'crocks/pointfree';
+import {generatePath, Link} from 'react-router-dom';
+import {useAuth} from '../../../context/auth';
+import {useTranslation} from 'react-i18next';
 import {
   chain,
   curry,
@@ -24,15 +27,6 @@ import {
   pipe,
   safe
 } from 'crocks';
-import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-
-import {ModemEditRoute} from '../routes';
-import {ObjectListRoute} from 'feature/object/routes';
-import {KeyBoxListRoute} from 'feature/keybox/routes';
-import Innerlinks from 'components/Innerlinks';
-
-
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -49,9 +43,8 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 }));
 
 const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
 
-const ModemListLayout = withPreparedProps(Listing, props => {
+const ModemListLayout = withPreparedProps(Listing, () => {
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('modem', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('modem', {keyPrefix: 'list.column'});
@@ -83,7 +76,7 @@ const ModemListLayout = withPreparedProps(Listing, props => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`modems`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     innerlinks: (

@@ -29,7 +29,7 @@ const Box = ({Item, ...props}) => (
 const Item = ({hideSlash = false, children, props}) => (
   <li {...props}>
     <div className='flex items-center'>
-      <span className='mr-4 text-lg font-normal text-bluewood'>
+      <span className='mr-4 text-lg font-normal text-bluewood whitespace-nowrap'>
         {children}
       </span>
       {!hideSlash && (

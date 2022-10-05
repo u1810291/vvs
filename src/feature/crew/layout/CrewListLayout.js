@@ -1,33 +1,24 @@
-import React, {useEffect, useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
-import {generatePath, Link, useNavigate} from 'react-router-dom';
-
-import {FilterIcon} from '@heroicons/react/solid';
-
-import {useAuth} from 'context/auth';
-
-import {useFilter} from 'hook/useFilter';
-
-import Listing from 'layout/ListingLayout';
-
-import withPreparedProps from 'hoc/withPreparedProps';
-
-import Button from 'components/Button';
-import Innerlinks from 'components/Innerlinks';
 import Breadcrumbs from 'components/Breadcrumbs';
-
-import {useCrews} from 'feature/crew/api/crewEditApi';
-import {DriverListRoute} from 'feature/driver/routes';
+import Button from 'components/Button';
 import DynamicStatus from 'components/atom/Status';
-import {DislocationListRoute} from 'feature/dislocation/routes';
+import Innerlinks from 'components/Innerlinks';
+import Listing from 'layout/ListingLayout';
+import React, {useEffect, useMemo} from 'react';
+import withPreparedProps from 'hoc/withPreparedProps';
 import {CrewCreateRoute, CrewEditRoute} from 'feature/crew/routes';
-import {useDislocationZonesDropdown} from 'feature/dislocation/api/dislocationEditApi';
-
+import {DislocationListRoute} from 'feature/dislocation/routes';
+import {DriverListRoute} from 'feature/driver/routes';
+import {FilterIcon} from '@heroicons/react/solid';
 import {Maybe, safe, getProp} from 'crocks';
-import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
+import {constant} from 'crocks/combinators';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {isArray, isBoolean, isObject, isString} from 'crocks/predicates';
+import {useCrews} from 'feature/crew/api/crewEditApi';
+import {useDislocationZonesDropdown} from 'feature/dislocation/api/dislocationEditApi';
+import {useFilter} from 'hook/useFilter';
+import {useTranslation} from 'react-i18next';
 
 const {Just} = Maybe;
 
@@ -51,7 +42,6 @@ const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
 }));
 
 const CrewListLayout = withPreparedProps(Listing, () => {
-  const {api} = useAuth();
   const nav = useNavigate();
   const {t: tb} = useTranslation('crew', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('crew', {keyPrefix: 'list.header'});
@@ -139,7 +129,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb('crews')}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>
           <Button.NoBg onClick={toggleFilter}>
             {defaultFilter.id ? defaultFilter.name : tb('all_data') }
             <FilterIcon className='w-6 h-6 ml-2 inline-block cursor-pointer text-geyser' />

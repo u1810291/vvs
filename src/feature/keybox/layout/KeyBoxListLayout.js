@@ -1,35 +1,27 @@
-import React, {useMemo} from 'react';
-import {generatePath, Link, useNavigate} from 'react-router-dom';
-
-import Button from 'components/Button';
-import Listing from 'layout/ListingLayout';
 import Breadcrumbs from 'components/Breadcrumbs';
+import Button from 'components/Button';
+import Innerlinks from 'components/Innerlinks';
+import Listing from 'layout/ListingLayout';
+import React, {useMemo} from 'react';
 import withPreparedProps from 'hoc/withPreparedProps';
-
+import {KeyBoxEditRoute, KeyBoxCreateRoute} from '../routes';
+import {ModemListRoute} from 'feature/modem/routes';
+import {ObjectListRoute} from 'feature/object/routes';
+import {alt} from 'crocks/pointfree';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
+import {titleCase} from '@s-e/frontend/transformer/string';
+import {useKeyBoxes} from '../api';
 import {useTranslation} from 'react-i18next';
-
 import {
   curry,
   getProp,
   getPropOr,
-  isEmpty,
   map,
   Maybe,
-  not,
   objOf,
   pipe,
   getPath,
 } from 'crocks';
-import {alt} from 'crocks/pointfree';
-
-import {KeyBoxEditRoute, KeyBoxCreateRoute} from '../routes';
-import {titleCase} from '@s-e/frontend/transformer/string';
-import {useKeyBoxes} from '../api';
-import {ModemListRoute} from 'feature/modem/routes';
-import {ObjectListRoute} from 'feature/object/routes';
-import Innerlinks from 'components/Innerlinks';
-
-
 
 const getColumn = curry((t, Component, key, mapper) => ({
   Component,
@@ -43,10 +35,7 @@ const getColumn = curry((t, Component, key, mapper) => ({
   )(item),
 }));
 
-const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
-
-const KeyBoxListLayout = withPreparedProps(Listing, props => {
+const KeyBoxListLayout = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('keybox', {keyPrefix: 'breadcrumbs'});
   const {t: tp} = useTranslation('keybox');
   const {t: ts} = useTranslation('keybox', {keyPrefix: 'status'});
@@ -64,7 +53,7 @@ const KeyBoxListLayout = withPreparedProps(Listing, props => {
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`key_boxes`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash><span className='font-semibold'>{tb`key_boxes`}</span></Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (

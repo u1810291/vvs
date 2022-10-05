@@ -1,14 +1,15 @@
-import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
-
-import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import withPreparedProps from '../../../hoc/withPreparedProps';
-
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../../context/auth';
+import Innerlinks from 'components/Innerlinks';
+import Listing from '../../../layout/ListingLayout';
+import React, {useEffect, useMemo} from 'react';
 import useAsync from '../../../hook/useAsync';
-
+import withPreparedProps from '../../../hoc/withPreparedProps';
+import {SettingEditRoute} from '../routes';
+import {TaskCancellationListRoute} from 'feature/classifier/routes';
+import {UserListRoute} from 'feature/user/routes';
+import {generatePath, Link} from 'react-router-dom';
+import {useAuth} from '../../../context/auth';
+import {useTranslation} from 'react-i18next';
 import {
   chain,
   curry,
@@ -27,17 +28,6 @@ import {
 import {alt} from 'crocks/pointfree';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
-import {SettingEditRoute} from '../routes';
-import Innerlinks from 'components/Innerlinks';
-import {UserListRoute} from 'feature/user/routes';
-import {TaskCancellationListRoute} from 'feature/classifier/routes';
-
-
-
-
-
-
-
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
   headerText: t(key),
@@ -53,14 +43,12 @@ const getColumn = curry((t, Component, key, pred, mapper) => ({
 }));
 
 const ne = not(isEmpty);
-const Span = props => <span {...props}/>;
 
 const SettingListLayout = withPreparedProps(Listing, props => {
   const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('setting', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('setting', {keyPrefix: 'list.column'});
   const {t: tp} = useTranslation('setting');
-  // TODO: Prepare 'settings' data in Hasura to be fetched
   const [state, fork] = useAsync(chain(maybeToAsync('"setting" prop is expected in the response', getProp('setting')),
     apiQuery(
       `
@@ -87,7 +75,7 @@ const SettingListLayout = withPreparedProps(Listing, props => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`settings`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tb`allData`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>{tb`allData`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     innerlinks: (

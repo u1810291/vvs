@@ -130,7 +130,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`permissions`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>
           <Button.NoBg onClick={toggleFilter}>
             {defaultFilter.id ? defaultFilter.name : tb('allData') }
             <FilterIcon className='w-6 h-6 ml-2 text-geyser cursor-pointer inline-block focus:ring-0' />
