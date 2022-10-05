@@ -65,7 +65,8 @@ const AsideCancelableCrew = () => {
 
   const Crew = useMemo(() => () => pipe(
     getPath(['data', 'events_by_pk', 'crew']),
-    map(crew => <CrewDetail {...{crew, task}}/>),
+    map(crew => ({crew, task})),
+    map(renderWithProps(CrewDetail)),
     option(null)
   )(sub));
 

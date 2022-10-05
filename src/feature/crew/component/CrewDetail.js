@@ -6,6 +6,8 @@ import Nullable from 'components/atom/Nullable';
 import Tag from 'components/atom/Tag';
 import useAsyncSwr from 'hook/useAsyncSwr';
 import {KeyIcon} from '@heroicons/react/solid';
+import {getCrewCoordinates} from '../utils';
+import {getTaskCoordinates} from 'feature/task/util';
 import {intervalToDuration, isFuture, parseISO} from 'date-fns';
 import {joinString} from '@s-e/frontend/transformer/array';
 import {renderWithChildren, renderWithProps} from 'util/react';
@@ -13,10 +15,11 @@ import {titleCaseWord} from '@s-e/frontend/transformer/string';
 import {useEffect, useMemo, useRef, useState} from 'react';
 import {useGoogleApiContext} from 'context/google';
 import {
+  Async,
+  Maybe,
+  chain,
   constant,
   find,
-  chain,
-  safe,
   getPath,
   getProp,
   identity,
@@ -26,12 +29,13 @@ import {
   isNil,
   isTruthy,
   map,
+  maybeToAsync,
   not,
   objOf,
   option,
   pipe,
   propSatisfies,
-  Maybe,
+  safe,
 } from 'crocks';
 
 /**
@@ -49,7 +53,7 @@ const CrewDetail = ({crew, crews, task, children}) => (
         <CrewPermission {...crew} />
         <Nullable on={isTruthy(crew) && isTruthy(task)}>
           <CrewKeyIcon {...crew} />
-          <CrewDistanceDetails crew={crew} event={task} />
+          <CrewDistanceDetails crew={crew} task={task} />
         </Nullable>
         {children}
       </div>
@@ -97,7 +101,7 @@ export const DirectionsTag = props => <Tag.Sm className='bg-gray-300 text-black 
 /**
  * @type {(directionsResponse: google.maps.DirectionsResult) => import('react').ReactNode}
  */
-export const CrewToEventDistance = pipe(
+export const CrewToTaskDistance = pipe(
   getPath(['routes', 0, 'legs', 0, 'distance', 'text']),
   map(objOf('children')),
   map(renderWithProps(DirectionsTag)),
@@ -107,7 +111,7 @@ export const CrewToEventDistance = pipe(
 /**
  * @type {(directionsResponse: google.maps.DirectionsResult) => import('react').ReactNode}
  */
-export const CrewToEventETA = pipe(
+export const CrewToTaskETA = pipe(
   getPath(['routes', 0, 'legs', 0, 'duration', 'text']),
   map(objOf('children')),
   map(renderWithProps(DirectionsTag)),
@@ -115,25 +119,25 @@ export const CrewToEventETA = pipe(
 );
 
 /**
- * @type {(crew: Object, event: object) => import('react').ReactNode}
+ * @type {(crew: Object, task: object) => import('react').ReactNode}
  */
-export const CrewDistanceDetails = ({crew, event}) => {
+export const CrewDistanceDetails = ({crew, task}) => {
   const {route, mGoogleMaps} = useGoogleApiContext();
   const toLatLng = mGoogleMaps
   .map(maps => a => new maps.LatLng(a.latitude, a.longitude))
   .option(identity);
 
-  const {data: distanceResponse} = useAsyncSwr({distanceToObject: 'yup', crew, event}, () => (
+  const {data: distanceResponse, ...and} = useAsyncSwr({distanceToObject: 'yup', crew, task}, () => (
     Async.of(origin => destination => route(origin, destination))
     .ap(maybeToAsync('no crew coordinates', getCrewCoordinates(crew).map(toLatLng)))
-    .ap(maybeToAsync('no task coordinates', getTaskCoordinates(event).map(toLatLng)))
+    .ap(maybeToAsync('no task coordinates', getTaskCoordinates(task).map(toLatLng)))
     .chain(identity)
   ));
 
   return (
   <>
-    <CrewToEventETA {...distanceResponse} />
-    <CrewToEventDistance {...distanceResponse} />
+    <CrewToTaskETA {...distanceResponse} />
+    <CrewToTaskDistance {...distanceResponse} />
   </>
   );
 };
