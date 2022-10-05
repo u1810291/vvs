@@ -48,13 +48,13 @@ const TaskEditForm = () => {
       </aside>
       {caseMap(() => <AsideSelectCrew />, [
         [equals(UNINITIALIZED_SUBSCRIPTION), () => null],
-        [propSatisfies('crew_id', isTruthy), () => <AsideCancalableCrew />],
+        [propSatisfies('crew_id', isTruthy), () => <AsideCancelableCrew />],
       ], subscribedEvent)}
     </section>
   );
 };
 
-const AsideCancalableCrew = () => {
+const AsideCancelableCrew = () => {
   const {id} = useParams();
   const sub = useSubscription(
     useMemo(() => TASK_GQL, []),
