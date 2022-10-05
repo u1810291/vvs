@@ -3,6 +3,12 @@ query GetTaskById($id: uuid!) {
     id
     address
     description
+    logs {
+      id
+      created_at
+      content
+      type
+    }
     event_type
     latitude
     longitude

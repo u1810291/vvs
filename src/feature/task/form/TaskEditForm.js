@@ -20,6 +20,7 @@ import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getTaskAddress} from '../util';
+import TaskLogDetail from '../component/TaskLogDetail';
 
 const TASK_GQL = raw('../api/graphql/GetTaskById.graphql');
 
@@ -55,6 +56,7 @@ const TaskEditForm = () => {
 };
 
 const AsideCancelableCrew = () => {
+  const {t} = useTranslation();
   const {id} = useParams();
   const sub = useSubscription(
     useMemo(() => TASK_GQL, []),
@@ -73,6 +75,7 @@ const AsideCancelableCrew = () => {
   return (
     <aside className={'border-r border-gray-border h-full'}>
       <Crew />
+      <TaskLogDetail {...task} />
     </aside>
   );
 };
