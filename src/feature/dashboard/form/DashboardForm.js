@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import {permissionStatus as status} from 'constants/statuses';
 import SidebarRight from '../components/SidebarRight';
@@ -24,7 +24,7 @@ const timeLeft = (permission) => {
 }
 // TODO: calculate lost connection
 const lostConnection = (time) => {
-  return new Date(time)
+  return new Date() - new Date(time) > 60000
 }
 
 const DashboardForm = () => {
@@ -37,19 +37,18 @@ const DashboardForm = () => {
   const groupedCrews = useMemo(() => groupBy(crews?.data?.crew, 'status'), [crews.data?.crew])
   const crewsZonePaths = useMemo(() => crews.data?.crew?.map((el) => getZoneItemsThroughCalendar(el)), [crews?.data?.crew]);
   const crewsZoneCoordinates = useMemo(() => crews.data?.crew?.map((el) => getFlatNodesThroughCalendar(el)), [crews?.data?.crew[0]]);
-
+  const destinations = useMemo(() => crews?.data?.crew?.map((el) => ({id: el.id, lat: el.latitude, lng: el.longitude})), [crews?.data?.crew]);
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       timeLeft: el.permissions.length ? timeLeft(el.permissions[0]): null,
-      connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): null,
+      connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): false,
       ...el
     })
   )}), [crews?.data?.crew]);
   
-  // useEffect(() => {
-  //   console.log(groupedCrews)
-  //   console.log(crewsZonePaths, crewsZoneCoordinates);
-  // }, [crews.data?.crew]);
+  useEffect(() => {
+    console.log(groupedCrews)
+  }, [crews.data?.crew]);
  
   
   return (
@@ -67,7 +66,7 @@ const DashboardForm = () => {
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
-        <MapV2 crew={crews} zonePaths={crewsZonePaths} zoneCoordinates={crewsZoneCoordinates} />
+        <MapV2 crew={crews} zonePaths={crewsZonePaths} zoneCoordinates={crewsZoneCoordinates} destinations={destinations} />
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>

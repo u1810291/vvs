@@ -4,6 +4,7 @@ import Item from './Item';
 import {curry, pipe, safe, map, chain, not, isEmpty, isArray, getPath} from 'crocks';
 import {useTranslation} from 'react-i18next';
 import {crewStatus} from 'constants/statuses';
+import {Test} from './test';
 
 const detailsOf = curry((
   detailsProps,
@@ -21,6 +22,7 @@ export default function SidebarRight({crews}) {
   const activeCrew = (crew) => crew.status === crewStatus.CREW_READY || crew.status === crewStatus.CREW_BREAK;
   return (
     <>
+    <Test reason='Gas station' timer={32000} />
       <div>
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.active`, className: 'text-gray-400'}, (crew) => activeCrew(crew) && (
@@ -30,7 +32,7 @@ export default function SidebarRight({crews}) {
                 title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date() - new Date(crew.user_settings[0]?.last_ping) > 60000}
+                connectionLost={crew.connectionLost}
                 durationTime={crew.timeLeft}
                 status={crew.status}
               />
