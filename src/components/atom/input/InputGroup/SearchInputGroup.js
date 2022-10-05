@@ -7,6 +7,7 @@ import useLanguage from 'hook/useLanguage';
 import {SearchIcon} from '@heroicons/react/solid';
 
 import {defaultProps} from 'crocks';
+import {withMergedClassName} from 'util/react';
 
 const SearchInputGroup = props => {
   const {t} = useLanguage();
@@ -19,9 +20,9 @@ const SearchInputGroup = props => {
   return (
     <InputGroup
       inputwrapperClassName='relative'
-      inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-full' {...p}
+      inputClassName='focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-full' {...p}
     />
   );
 };
 
-export default SearchInputGroup;
+export default withMergedClassName('focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-full', SearchInputGroup);
