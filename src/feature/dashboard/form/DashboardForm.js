@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 
 import {permissionStatus as status} from 'constants/statuses';
 import SidebarRight from '../components/SidebarRight';
@@ -11,7 +11,7 @@ import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
 import useSubscription from 'hook/useSubscription';
 import MapV2 from '../components/MapV2';
 import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
-// import useSubscription from 'hook/useSubscription';
+import {groupBy} from 'util/utils';
 
 // updated_at + duration - new Date()
 const timeLeft = (permission) => {
@@ -24,17 +24,17 @@ const timeLeft = (permission) => {
 }
 // TODO: calculate lost connection
 const lostConnection = (time) => {
-  return time
+  return new Date(time)
 }
 
 const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
   const nav = useNavigate();
-  // const tasks = useTasks();
   const tasksQuery = useMemo(() => TASK_GQL, []);
   const crewsQuery = useMemo(() => CREW_GQL, []);
   const crews = useSubscription(crewsQuery);
   const tasks = useSubscription(tasksQuery);
+  const groupedCrews = useMemo(() => groupBy(crews?.data?.crew, 'status'), [crews.data?.crew])
   const crewsZonePaths = useMemo(() => crews.data?.crew?.map((el) => getZoneItemsThroughCalendar(el)), [crews?.data?.crew]);
   const crewsZoneCoordinates = useMemo(() => crews.data?.crew?.map((el) => getFlatNodesThroughCalendar(el)), [crews?.data?.crew[0]]);
 
@@ -45,11 +45,11 @@ const DashboardForm = () => {
       ...el
     })
   )}), [crews?.data?.crew]);
-  // const dashboardSubscription = useSubscription()
-  // console.log(dashboardSubscription);
-  useEffect(() => {
-    console.log(crewsZonePaths, crewsZoneCoordinates);
-  }, [crews.data?.crew]);
+  
+  // useEffect(() => {
+  //   console.log(groupedCrews)
+  //   console.log(crewsZonePaths, crewsZoneCoordinates);
+  // }, [crews.data?.crew]);
  
   
   return (

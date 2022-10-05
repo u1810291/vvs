@@ -5,7 +5,6 @@ import Polygon from 'feature/map/component/Polygon';
 
 
 export default function MapV2({zonePaths, crewId, zoneCoordinates}) {
-  console.log(zonePaths);
   return (
       <Nullable on={zonePaths}>
         <Map
