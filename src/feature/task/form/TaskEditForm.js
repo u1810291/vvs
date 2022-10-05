@@ -110,33 +110,32 @@ const AsideSelectCrew = () => {
   return (
     <aside className={'border-r border-gray-border h-full'}>
       {
-      pipe(
-        map(tap(console.log)),
-        getPath(['data', 'crew']),
-        chain(safe(isArray)),
-        map(map(pipe(
-          crew => ({
-            key: crew.id,
-            crew,
-            crews,
-            task,
-            children: (
-              <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>
-                {t`assignTask`}
-              </Button.Sm>
-            ),
-            title: JSON.stringify(crew, null, '  '), 
-          }),
-          renderWithProps(CrewDetail),
-        ))),
-        map(list => ({
-          title: t`availableCrews`,
-          children: list
-        })),
-        map(renderWithProps(Detail)),
-        option(null),
-      )(crews)
-    }
+        pipe(
+          getPath(['data', 'crew']),
+          chain(safe(isArray)),
+          map(map(pipe(
+            crew => ({
+              key: crew.id,
+              crew,
+              crews,
+              task,
+              children: (
+                <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>
+                  {t`assignTask`}
+                </Button.Sm>
+              ),
+              title: JSON.stringify(crew, null, '  '), 
+            }),
+            renderWithProps(CrewDetail),
+          ))),
+          map(list => ({
+            title: t`availableCrews`,
+            children: list
+          })),
+          map(renderWithProps(Detail)),
+          option(null),
+        )(crews)
+      }
     </aside>
   );
 }
