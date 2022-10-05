@@ -189,10 +189,17 @@ const CrewPermissionTimer = permissionM => {
     timer.current = setTimeout(() => {
       permissionM
         .chain(getExpirationM)
-        .map(pipe(
-          Maybe.of,
-          setDuration,
-        ))
+        .either(
+          () => {
+            const n = Maybe.Nothing();
+            if(duration.equals(n)) return;
+            setDuration(n)
+          },
+          pipe(
+            Maybe.of,
+            setDuration,
+          )
+        )
     }, 1000);
 
     return () => clearTimeout(timer.current);
