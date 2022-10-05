@@ -22,6 +22,9 @@ const ComboBox = withComponentFactory(Box, {
   optionClassNameFn: ({active}) => `relative cursor-default select-none py-2 pl-8 pr-4 ${active ? 'bg-indigo-500 text-white' : 'text-gray-900'}`,
 });
 
+/**
+ * asOptions :: [getValue -> any, getText -> string] -> Maybe -> Array<ComboBox.Option>
+ */
 ComboBox.asOptions = curry(([getValue, getText], mFoldable) => pipe(
   chain(safe(isFoldable)),
   map(map(pipe(

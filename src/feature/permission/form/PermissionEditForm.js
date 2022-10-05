@@ -10,16 +10,17 @@ import {useCrews} from 'feature/crew/api/crewEditApi';
 import {
   constant,
   chain,
+  find,
   getProp,
   isEmpty,
   map,
-  isTruthy,
   not,
   option,
   pipe,
   safe,
   identity,
-  // tap,
+  getPropOr,
+  propEq,
 } from 'crocks';
 
 const displayValue = mapper => pipe(
@@ -37,6 +38,7 @@ const PermissionEditForm = ({saveRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('permission', {keyPrefix: 'edit.field'});
+  const {t: tp} = useTranslation('permission', {keyPrefix: 'edit.fieldPlaceholder'});
   const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
   const requests = useCrewRequest();
   const statuses = useCrewRequestStatus(true);
@@ -47,15 +49,22 @@ const PermissionEditForm = ({saveRef}) => {
   const {ctrl, result, form, setForm} = useResultForm({
     crew_id: FORM_FIELD.TEXT({label: tf`crew_id`, props: {
       displayValue: displayValue(identity),
-      // onChange,
-      disabled: ({value}) => isTruthy(value),
+      onChange: ({set}) => set,
+      labelText: constant(tf`crew_id`),
+      displayValue: ({value}) => () => pipe(
+        getProp('data'),
+        chain(find(propEq('id', value))),
+        chain(getProp('name')),
+        option(''),
+      )(crews),
     }}),
     request_id: FORM_FIELD.TEXT({label: tf`request_id`, validator: () => true, props: {
       displayValue: displayValue(titleCase),
-      value: a => {
-        // console.log({a});
-      },
-      // onChange,
+      labelText: constant(tf`request_id`),
+      multiple: constant(false),
+      placeholder: constant(tp`request_id`),
+      value: ({value}) => value,
+      onChange: ({set}) => set,
     }}),
     status: FORM_FIELD.TEXT({label: tf`status`, validator: () => true, props: {
       displayValue: displayValue(titleCase),
@@ -90,47 +99,21 @@ const PermissionEditForm = ({saveRef}) => {
           ), statuses)}
         </SelectBox>
 
-        <ComboBox 
-          className={'w-1/4'} 
-          labelText={tf('request_id')}
-          multiple={false}
-          placeholder={'Search [Single choice]'}
-          {...ctrl('request_id')} 
-          value={form['request_id']}
-          data-id={form['request_id']}
-          onChange={(v) => {
-            const theForm = {...form};
-            theForm['request_id'] = v;
-            setForm(theForm);
-          }}
-        >
-          {map(request => (
-            <ComboBox.Option key={request.value} value={request.value}>
-              {titleCase(request.value)}
-            </ComboBox.Option>
-          ), (requests?.data || []))}
+        <ComboBox className={'w-1/4'} {...ctrl('request_id')}>
+          {ComboBox.asOptions(
+            [
+              getPropOr(null, 'value'),
+              ({value}) => titleCase(value || t`untitledRequest`),
+            ],
+            getProp('data', requests)
+          )}
         </ComboBox>
 
-        <ComboBox 
-          className={'w-1/4'} 
-          labelText={tf('crew')}
-          multiple={false}
-          placeholder={'Search [Single choice]'}
-          {...ctrl('crew_id')} 
-          value={form['crew_id']}
-          data-id={form['crew_id']}
-          displayValue={v => crews?.data?.find(o => o.id === v)?.name}
-          onChange={(v) => {
-            const theForm = {...form};
-            theForm['crew_id'] = v;
-            setForm(theForm);
-          }}
-        >
-          {map(crew => (
-            <ComboBox.Option key={crew.id} value={crew.id}>
-              {titleCase(crew.name || crew.id)}
-            </ComboBox.Option>
-          ), (crews?.data || []))}
+        <ComboBox className={'w-1/4'} {...ctrl('crew_id')}>
+          {ComboBox.asOptions(
+            [getPropOr(null, 'id'), ({name, id}) => titleCase(name || id)],
+            getProp('data', crews)
+          )}
         </ComboBox>
       </div>
     </section>
