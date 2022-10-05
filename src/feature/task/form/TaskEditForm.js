@@ -164,16 +164,17 @@ const AsideSelectCrew = () => {
         map(map(pipe(
           crew => ({
             key: crew.id,
+            crew,
+            crews,
+            task,
             children: (
-              <CrewDetail {...{crew, crews, task}}>
                 <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>
                   {t`assignTask`}
                 </Button.Sm>
-              </CrewDetail>
             ),
             title: JSON.stringify(crew, null, '  '), 
           }),
-          renderWithProps(Detail.Item),
+          renderWithProps(CrewDetail),
         ))),
         map(list => ({
           title: t`availableCrews`,
