@@ -1,11 +1,20 @@
 import Breadcrumbs from 'components/Breadcrumbs';
+import Button from 'components/Button';
+import Innerlinks from 'components/Innerlinks';
 import Listing from 'layout/ListingLayout';
 import withPreparedProps from 'hoc/withPreparedProps';
+import {FilterIcon} from '@heroicons/react/solid';
+import {KeyBoxListRoute} from 'feature/keybox/routes';
+import {ModemListRoute} from 'feature/modem/routes';
 import {ObjectCreateRoute, ObjectEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
+import {format} from 'date-fns';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {titleCase} from '@s-e/frontend/transformer/string';
+import {useClientDropdown} from 'feature/client/api/useClients';
+import {useFilter} from 'hook/useFilter';
 import {useMemo, useEffect} from 'react';
+import {useObjects} from '../api';
 import {useTranslation} from 'react-i18next';
 import {
   Maybe,
@@ -16,26 +25,13 @@ import {
   identity,
   isArray,
   isEmpty,
-  isNil,
   map,
   not,
   objOf,
   pipe,
   safe,
   constant,
-  // tap,
 } from 'crocks';
-import {useObjects} from '../api';
-import {useFilter} from 'hook/useFilter';
-import {useAuth} from 'context/auth';
-import {FilterIcon} from '@heroicons/react/solid';
-import Button from 'components/Button';
-import {KeyBoxListRoute} from 'feature/keybox/routes';
-import {ModemListRoute} from 'feature/modem/routes';
-import Innerlinks from 'components/Innerlinks';
-import {useClientDropdown} from 'feature/client/api/useClients';
-import {format} from 'date-fns';
-
 
 const getColumn = curry((t, Component, key, pred, mapper, status) => ({
   Component,
@@ -52,15 +48,11 @@ const getColumn = curry((t, Component, key, pred, mapper, status) => ({
   )(item),
 }));
 
-
 const ObjectList = withPreparedProps(Listing, (props) => {
   const nav = useNavigate();
-  const {api} = useAuth();
   const {t: tb} = useTranslation('object', {keyPrefix: 'breadcrumbs'});
   const {t: tp} = useTranslation('object');
   const {t} = useTranslation('object', {keyPrefix: 'list.column'});
-
-  
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(ObjectEditRoute.props.path, {id: props?.id})}>
       {props?.children}
@@ -68,9 +60,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   const {data: clientsDropdown} = useClientDropdown();
-  // console.log(clientsDropdown);
-
-  const nnil = not(isNil);
   const ne = not(isEmpty);
   const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.value === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
   const boolToStr = e => e ? t`YES` : t`NO`;
@@ -127,7 +116,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`objects`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>
           <Button.NoBg onClick={toggleFilter}>
             {defaultFilter.id ? defaultFilter.name : tb('allData') } 
             <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />

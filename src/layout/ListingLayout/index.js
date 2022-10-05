@@ -115,11 +115,11 @@ const Listing = ({
   return (
     <Index>
       <TitleBar>
-        <div className='lg:flex lg:items-center lg:space-between pt-5 lg:pb-5 space-y-4 lg:space-y-0 lg:space-x-4 grow shrink'>
+        <div className='xl:flex xl:items-center xl:space-between pt-5 xl:pb-5 space-y-4 xl:space-y-0 xl:space-x-4 grow shrink'>
           {breadcrumbs}
           <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} className='grow shrink' />
         </div>
-        <div className='lg:justify-end justify-between flex items-center space-x-4'>
+        <div className='xl:justify-end justify-between flex items-center space-x-4'>
           <div className='flex flex-row md:space-x-4'>
             {buttons}
           </div>
@@ -146,7 +146,7 @@ const Listing = ({
 }
 
 const TitleBar = withMergedClassName(
-  'lg:flex w-full lg:justify-between items-center px-5 space-y-4 lg:space-y-0',
+  'xl:flex w-full xl:justify-between items-center px-5 space-y-4 xl:space-y-0 space-x-0 xl:space-x-4',
   props => (
     <header {...props} />
   )

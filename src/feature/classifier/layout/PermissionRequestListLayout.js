@@ -70,7 +70,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`classifiers`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tp`permission_requests`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>{tp`permission_requests`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (

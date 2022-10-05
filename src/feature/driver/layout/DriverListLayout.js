@@ -1,8 +1,20 @@
 import Breadcrumbs from '../../../components/Breadcrumbs';
+import Button from 'components/Button';
+import DriverOnlineTag from '../component/DriverOnlineTag';
+import Innerlinks from 'components/Innerlinks';
 import ListingLayout from '../../../layout/ListingLayout';
 import React, {useCallback, useEffect, useMemo} from 'react';
+import raw from 'raw.macro';
+import useDrivers from '../api/useDrivers';
 import withPreparedProps from '../../../hoc/withPreparedProps';
+import {CrewListRoute} from 'feature/crew/routes';
+import {DislocationListRoute} from 'feature/dislocation/routes';
 import {DriverCreateRoute, DriverEditRoute} from '../routes';
+import {FilterIcon} from '@heroicons/react/solid';
+import {alt} from 'crocks/pointfree';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
+import {useAuth} from 'context/auth';
+import {useFilter} from 'hook/useFilter';
 import {useTranslation} from 'react-i18next';
 import {
   getPropOr, 
@@ -21,22 +33,6 @@ import {
   hasProps,
   flip,
 } from 'crocks';
-import useDrivers from '../api/useDrivers';
-import {alt} from 'crocks/pointfree';
-import {generatePath, Link, useNavigate} from 'react-router-dom';
-import Button from 'components/Button';
-import {FilterIcon} from '@heroicons/react/solid';
-import {useFilter} from 'hook/useFilter';
-import DriverOnlineTag from '../component/DriverOnlineTag';
-import {CrewListRoute} from 'feature/crew/routes';
-import {DislocationListRoute} from 'feature/dislocation/routes';
-import Innerlinks from 'components/Innerlinks';
-import raw from 'raw.macro';
-import {useAuth} from 'context/auth';
-
-
-
-
 
 const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   Component,
@@ -55,12 +51,9 @@ const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   )(styles)
 }));
 
-
-
 const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const {t} = useTranslation('driver', {keyPrefix: 'list'});
   const {t: tc} = useTranslation('driver', {keyPrefix: 'field'});
-  const {t: tos} = useTranslation('driver', {keyPrefix: 'onlineStatus'});
   const {t: tb} = useTranslation('driver', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('driver', {keyPrefix: 'list.header'});
   const nav = useNavigate();
@@ -71,7 +64,6 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     </Link>
   )), [t]);
 
-  const boolCol = useMemo(() => pipe(String, t), [t]);
   const toStringValue = pipe(
     a => String(a || '').trim(),
     safe(not(isEmpty)),
@@ -81,8 +73,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   const _search = flip(auth.api)(raw('../api/graphql/GetUserSettings.graphql'));
   const _getByQuery = flip(auth.api)(raw('../api/graphql/GetDriversByQuery.graphql'));
 
-  // custom filter
-  const driversFilter = useCallback((state, filtersData) => {
+  const driversFilter = useCallback(state => {
     if ('status' in state) {
       _search({where: {
         _and: {

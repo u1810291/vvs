@@ -1,29 +1,26 @@
-import React, {useEffect, useMemo} from 'react';
-import {generatePath, Link} from 'react-router-dom';
-import Listing from 'layout/ListingLayout';
 import Breadcrumbs from 'components/Breadcrumbs';
+import Button from 'components/Button';
+import DashboardRoute from 'feature/dashboard/routes';
+import Innerlinks from 'components/Innerlinks';
+import Listing from 'layout/ListingLayout';
+import React, {useEffect, useMemo} from 'react';
+import useDriversDropdown from 'feature/driver/api/useDriversDropdown';
 import withPreparedProps from 'hoc/withPreparedProps';
 import {BreachEditRoute} from 'feature/breach/routes';
-import {useAuth} from 'context/auth';
-import {not} from 'crocks/logic';
+import {FilterIcon} from '@heroicons/react/solid';
+import {Maybe, map, safe, curry, getProp, getPath, option} from 'crocks';
+import {PermissionListRoute} from 'feature/permission/routes';
+import {TaskListRoute} from 'feature/task/routes';
 import {alt, chain} from 'crocks/pointfree';
+import {format, intervalToDuration, formatDuration} from 'date-fns';
+import {generatePath, Link} from 'react-router-dom';
 import {getPropOr, objOf, pipe} from 'crocks/helpers';
 import {isEmpty, hasProps, isArray, isString} from 'crocks/predicates';
-import {Maybe, map, safe, curry, getProp, getPath, option} from 'crocks';
-import {useTranslation} from 'react-i18next';
-import {format, intervalToDuration, formatDuration} from 'date-fns';
-import {useFilter} from 'hook/useFilter';
-import {FilterIcon} from '@heroicons/react/solid';
-import Button from 'components/Button';
-import {TaskListRoute} from 'feature/task/routes';
-import Innerlinks from 'components/Innerlinks';
-import {PermissionListRoute} from 'feature/permission/routes';
-import DashboardRoute from 'feature/dashboard/routes';
+import {not} from 'crocks/logic';
 import {useBreaches} from '../api/breachEditApi';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
-import useDriversDropdown from 'feature/driver/api/useDriversDropdown';
-
-
+import {useFilter} from 'hook/useFilter';
+import {useTranslation} from 'react-i18next';
 
 const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   Component,
@@ -42,8 +39,7 @@ const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   )(styles)
 }));
 
-const BreachListLayout = withPreparedProps(Listing, props => {
-  const {api} = useAuth();
+const BreachListLayout = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('breach', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('breach', {keyPrefix: 'list.column'});
   const {t: tp} = useTranslation('breach');
@@ -54,7 +50,6 @@ const BreachListLayout = withPreparedProps(Listing, props => {
         {props?.children}
       </Link>
   ), [t]);
-
   
   const {data: crewDropdown} = useCrewDropdown();
   const {data: driverDropdown} = useDriversDropdown();
@@ -91,10 +86,8 @@ const BreachListLayout = withPreparedProps(Listing, props => {
     ), true, 'text-steel'),
   ]
 
-
   const filtersData = [    
     {key: 'start_time', label: 'Started at', filter: 'daterange'},
-    // {key: 'end_time', label: 'Ended At', filter: 'date'},
     {key: 'crew_id', label: 'Crew', filter: 'autocomplete', values: crewDropdown || [], displayValue: (v) => {
       return crewDropdown?.find(c => c.value === v)?.name;
     }},
@@ -113,12 +106,9 @@ const BreachListLayout = withPreparedProps(Listing, props => {
   const list = useBreaches({filters: queryParams})
 
   useEffect(() => {
-    // console.log(queryParams);
     setExportData(list.data)
     list.mutate();
   }, [queryParams]);
-
-  
 
   return {
     list: safe(isArray, list?.data).option([]),
@@ -130,7 +120,7 @@ const BreachListLayout = withPreparedProps(Listing, props => {
             {tb`breach`}
           </span>
         </Breadcrumbs.Item>
-        <Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>
           <Button.NoBg onClick={toggleFilter}>
             {defaultFilter.id ? defaultFilter.name : tb('allData') } 
             <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />

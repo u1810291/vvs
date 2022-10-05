@@ -1,13 +1,22 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
-import {generatePath, Link, useNavigate} from 'react-router-dom';
-
-import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
+import Button from 'components/Button';
+import Innerlinks from 'components/Innerlinks';
+import Listing from '../../../layout/ListingLayout';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import raw from 'raw.macro';
+import useClients from '../api/useClients';
 import withPreparedProps from '../../../hoc/withPreparedProps';
-
-import {useTranslation} from 'react-i18next';
+import {ClientCreateRoute} from '../routes';
+import {ClientEditRoute} from '../routes';
+import {FilterIcon} from '@heroicons/react/solid';
+import {HelpListRoute} from 'feature/help/routes';
+import {alt} from 'crocks/pointfree';
+import {format} from 'date-fns';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {useAuth} from '../../../context/auth';
-
+import {useFilter} from 'hook/useFilter';
+import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
+import {useTranslation} from 'react-i18next';
 import {
   getPropOr,
   identity,
@@ -23,22 +32,8 @@ import {
   isEmpty,
   flip,
 } from 'crocks';
-import {alt} from 'crocks/pointfree';
-import Innerlinks from 'components/Innerlinks';
-import {HelpListRoute} from 'feature/help/routes';
-import useClients from '../api/useClients';
-import {ClientEditRoute} from '../routes';
-import {useFilter} from 'hook/useFilter';
-import Button from 'components/Button';
-import {FilterIcon} from '@heroicons/react/solid';
-import {format} from 'date-fns';
-import {ClientCreateRoute} from '../routes';
-import {useObjectsDropdown} from 'feature/task/api/taskEditApi';
-import raw from 'raw.macro';
 
-
-const ClientListLayout = withPreparedProps(Listing, props => {
-  const {apiQuery} = useAuth();
+const ClientListLayout = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('client', {keyPrefix: 'breadcrumbs'});
   const {t: tc} = useTranslation('client', {keyPrefix: 'field'});
   const {t} = useTranslation('client', {keyPrefix: 'list.column'});
@@ -257,7 +252,7 @@ const ClientListLayout = withPreparedProps(Listing, props => {
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`clients`}</span></Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash><span className='font-semibold'>{tb`clients`}</span></Breadcrumbs.Item>
         <Button.NoBg onClick={toggleFilter}>
           {defaultFilter.id ? defaultFilter.name : tb('allData') }
           <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />

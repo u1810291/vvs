@@ -20,9 +20,7 @@ import {
   objOf,
   pipe,
   safe,
-  // hasProps
 } from 'crocks';
-// import {pick} from 'crocks/helpers';
 import {alt} from 'crocks/pointfree';
 
 import {PermissionRequestListRoute, TaskCancellationEditRoute, TaskCancellationCreateRoute, TaskTypeListRoute} from '../routes';
@@ -30,11 +28,6 @@ import Button from 'components/Button';
 import Innerlinks from 'components/Innerlinks';
 import {useTaskCancellations} from '../api';
 import {titleCase} from '@s-e/frontend/transformer/string';
-
-
-
-
-
 
 const getColumn = curry((t, Component, key, pred, mapper) => ({
   Component,
@@ -74,7 +67,7 @@ const TaskCancellationListLayout = withPreparedProps(Listing, props => {
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`classifiers`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item>{tp`task_cancellations`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash>{tp`task_cancellations`}</Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     buttons: (
