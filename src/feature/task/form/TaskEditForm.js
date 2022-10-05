@@ -52,6 +52,23 @@ export const CrewDriverName = ({crew, crews}) => {
   )
 };
 
+export const CrewDetail = ({crew, crews, task, children}) => (
+  <Detail.Item>
+    <div className='flex items-start space-x-4 w-full'>
+      <CrewIcon {...crew} />
+      <div className='flex-1'>
+        <CrewName crew={crew}/>
+        <CrewDriverName crew={crew} crews={crews || [crew]} />
+      </div>
+      <div className='flex-col md:flex-row flex items-end md:items-start md:space-y-0 space-y-2 md:space-x-2'>
+        <CrewKeyIcon {...crew} />
+        <CrewDistanceDetails crew={crew} event={task} />
+        {children}
+      </div>
+    </div>
+  </Detail.Item>
+);
+
 const TASK_GQL = raw('../api/graphql/GetTaskById.graphql');
 
 const TaskEditForm = () => {
@@ -96,19 +113,7 @@ const AsideCancalableCrew = () => {
 
   const Crew = useMemo(() => () => pipe(
     getPath(['data', 'events_by_pk', 'crew']),
-    map(crew => (
-      <div className='flex items-start space-x-4 w-full'>
-        <CrewIcon {...crew} />
-        <div className='flex-1'>
-          <CrewName crew={crew}/>
-          <CrewDriverName crew={crew} crews={[crew]} />
-        </div>
-        <div className='flex-col md:flex-row flex items-end md:items-start md:space-y-0 space-y-2 md:space-x-2'>
-          <CrewKeyIcon {...crew} />
-          <CrewDistanceDetails crew={crew} event={task} />
-        </div>
-      </div>
-    )),
+    map(crew => <CrewDetail {...{crew, task}}/>),
     option(null)
   )(sub));
 
@@ -160,18 +165,11 @@ const AsideSelectCrew = () => {
           crew => ({
             key: crew.id,
             children: (
-              <div className='flex items-start space-x-4 w-full'>
-                <CrewIcon {...crew} />
-                <div className='flex-1'>
-                  <CrewName crew={crew}/>
-                  <CrewDriverName crew={crew} crews={crews} />
-                </div>
-                <div className='flex-col md:flex-row flex items-end md:items-start md:space-y-0 space-y-2 md:space-x-2'>
-                  <CrewKeyIcon {...crew} />
-                  <CrewDistanceDetails crew={crew} event={task} />
-                  <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>{t`assignTask`}</Button.Sm>
-                </div>
-              </div>
+              <CrewDetail {...{crew, crews, task}}>
+                <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>
+                  {t`assignTask`}
+                </Button.Sm>
+              </CrewDetail>
             ),
             title: JSON.stringify(crew, null, '  '), 
           }),
