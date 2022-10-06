@@ -1,28 +1,28 @@
 import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import Button from 'components/Button';
+import DynamicStatus from '../../../components/atom/Status';
+import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
-import {PermissionListRoute} from '../routes';
-import SidebarLayout from 'layout/SideBarLayout';
-import {flip, getProp, identity, isFunction} from 'crocks';
-import {usePermission} from '../api';
-import {useNavigate, useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-import React, {useRef} from 'react';
 import PermissionEditForm from '../form/PermissionEditForm';
-import DynamicStatus from '../../../components/atom/Status';
-import {useAuth} from '../../../context/auth';
+import React, {useMemo, useRef} from 'react';
+import SidebarLayout from 'layout/SideBarLayout';
+import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
 import raw from 'raw.macro';
+import {PermissionListRoute} from '../routes';
+import {errorToText} from 'api/buildApiHook';
+import {getProp, identity, isFunction, pipe, tap} from 'crocks';
+import {useAuth} from '../../../context/auth';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useNotification} from 'feature/ui-notifications/context';
+import {usePermission} from '../api';
+import {useTranslation} from 'react-i18next';
 
 const PermissionEditLayout = () => {
   const saveRef = useRef(identity);
   const {id} = useParams();
   const {data} = usePermission({id});
-
-  const {token} = useAuth();
-
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});
-  const nav = useNavigate();
   const send = () => {
     isFunction(saveRef.current) && saveRef.current();
   };
@@ -33,13 +33,23 @@ const PermissionEditLayout = () => {
     .option(null)
   );
 
-  const status = (
-    getProp('status', data)
-      .option(null)
-  );
-
-  const auth = useAuth();
-  const _do = flip(auth.api)(raw('../api/graphql/UpdatePermissionById.graphql'));
+  const {notify} = useNotification();
+  const navigate = useNavigate();
+  const status = getProp('status', data).option(null);
+  const {api} = useAuth();
+  const update = useMemo(() => status => () => (
+    api({id, status}, raw('../api/graphql/UpdatePermissionStatusById.graphql')).fork(
+      error => notify(
+        <ErrorNotification>
+          {errorToText(identity, error)}
+        </ErrorNotification>
+      ),
+      pipe(
+        () => notify(<SuccessNotification/>),
+        tap(() => navigate(PermissionListRoute.props.path)),
+      ),
+    )
+  ), [notify, api, navigate]);
 
   return (
     <SidebarLayout>
@@ -61,15 +71,16 @@ const PermissionEditLayout = () => {
             </Nullable>
           </Breadcrumbs>
           <div className='space-x-4'>
-            <Button onClick={() => _do({id, status: 'REJECTED'}).fork(console.error, console.log)}>
-              {t`button.reject`}
-            </Button>
-            <Button onClick={() => _do({id, status: 'ALLOWED'}).fork(console.error, console.log)}>
-              {t`button.approve`}
-            </Button>
-            {/* <Button onClick={saveRef.current}>
-            send
-            </Button> */}
+            {
+              id ? (
+                <>
+                  <Button onClick={update('REJECTED')}>{t`button.reject`}</Button>
+                  <Button onClick={update('ALLOWED')}>{t`button.approve`}</Button>
+                </>
+              ) : (
+                <Button onClick={send}>send</Button>
+              )
+            }
           </div>
         </>
       </Header>

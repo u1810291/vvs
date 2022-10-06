@@ -1,10 +1,11 @@
 import {augmentsToUsers} from 'api/buildUserQuery';
 import {useAuth} from 'context/auth';
-import {getProp, getPropOr, safe, flip, isTruthy, setProp, reduce} from 'crocks';
+import {getProp, getPropOr, safe, flip, isTruthy, setProp, reduce, getPathOr} from 'crocks';
 import {getName} from 'feature/user/utils';
 import useAsyncSwr from 'hook/useAsyncSwr';
 
-const CrewDriverName = ({crews = {crewDriverName: 'use crews prop to get specific users-data'}, ...crew}) => {
+const CrewDriverName = ({crews = {crewDriverName: 'use crews prop to get specific users-data'}, crew}) => {
+  if (!crews) crews = [crew];
   const auth = useAuth();
   const driverUsers = useAsyncSwr(crews, params => 
     augmentsToUsers(auth, getProp('driver_user_id'), getPathOr([], ['data', 'crew'], params))

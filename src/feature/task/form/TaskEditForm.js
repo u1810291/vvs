@@ -1,24 +1,16 @@
-import {KeyIcon} from '@heroicons/react/solid';
 import {caseMap} from '@s-e/frontend/flow-control';
+import CrewDetail from 'feature/crew/component/CrewDetail';
 import {errorToText} from 'api/buildApiHook';
-import {augmentsToUsers} from 'api/buildUserQuery';
-import Tag from 'components/atom/Tag';
 import Button from 'components/Button';
 import Detail from 'components/Disclosure/AsideDisclosure';
-import {useAuth} from 'context/auth';
-import {useGoogleApiContext} from 'context/google';
-import {getPath, getProp, merge, pipe, branch, map, chain, safe, isTruthy, option, isArray, bimap, setProp, reduce, getPathOr, getPropOr, flip, objOf, propSatisfies, not, isEmpty, ifElse, constant, identity, Async, Result, tap} from 'crocks';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
+import {getPath, getProp, merge, pipe, branch, map, chain, safe, isTruthy, option, isArray, bimap, setProp, reduce, getPathOr, objOf, propSatisfies, identity, Result, tap} from 'crocks';
 import {equals} from 'crocks/pointfree';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
-import CrewIcon from 'feature/crew/component/CrewIcon';
-import {getCrewCoordinates} from 'feature/crew/utils';
 import {getObjectName} from 'feature/object/utils';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
 import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
 import {useNotification} from 'feature/ui-notifications/context';
 import {getEmail, getName, getPhone} from 'feature/user/utils';
-import useAsyncSwr from 'hook/useAsyncSwr';
 import useSubscription from 'hook/useSubscription';
 import raw from 'raw.macro';
 import {useMemo} from 'react';
@@ -27,47 +19,8 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
-import {getTaskAddress, getTaskCoordinates} from '../util';
-
-export const CrewName = ({crew}) => (
-  getProp('name', crew)
-  .map(value => <p key={value} className='text-black'>{value}</p>)
-  .option(null)
-)
-
-export const CrewDriverName = ({crew, crews}) => {
-  const auth = useAuth();
-  const driverUsers = useAsyncSwr(crews, params => 
-    augmentsToUsers(auth, getProp('driver_user_id'), getPathOr([], ['data', 'crew'], params))
-    .map(reduce((carry, item) => setProp(item.id, item, carry), {}))
-  );
-
-  return (
-    getProp('driver_user_id', crew)
-    .chain(safe(isTruthy))
-    .chain(flip(getProp)(getPropOr({}, 'data', driverUsers)))
-    .chain(getName)
-    .map(value => <p key={value} className='text-steel'>{value}</p>)
-    .option(null)
-  )
-};
-
-export const CrewDetail = ({crew, crews, task, children}) => (
-  <Detail.Item>
-    <div className='flex items-start space-x-4 w-full'>
-      <CrewIcon {...crew} />
-      <div className='flex-1'>
-        <CrewName crew={crew}/>
-        <CrewDriverName crew={crew} crews={crews || [crew]} />
-      </div>
-      <div className='flex-col md:flex-row flex items-end md:items-start md:space-y-0 space-y-2 md:space-x-2'>
-        <CrewKeyIcon {...crew} />
-        <CrewDistanceDetails crew={crew} event={task} />
-        {children}
-      </div>
-    </div>
-  </Detail.Item>
-);
+import {getTaskAddress} from '../util';
+import TaskLogDetail from '../component/TaskLogDetail';
 
 const TASK_GQL = raw('../api/graphql/GetTaskById.graphql');
 
@@ -96,13 +49,14 @@ const TaskEditForm = () => {
       </aside>
       {caseMap(() => <AsideSelectCrew />, [
         [equals(UNINITIALIZED_SUBSCRIPTION), () => null],
-        [propSatisfies('crew_id', isTruthy), () => <AsideCancalableCrew />],
+        [propSatisfies('crew_id', isTruthy), () => <AsideCancelableCrew />],
       ], subscribedEvent)}
     </section>
   );
 };
 
-const AsideCancalableCrew = () => {
+const AsideCancelableCrew = () => {
+  const {t} = useTranslation();
   const {id} = useParams();
   const sub = useSubscription(
     useMemo(() => TASK_GQL, []),
@@ -113,13 +67,15 @@ const AsideCancalableCrew = () => {
 
   const Crew = useMemo(() => () => pipe(
     getPath(['data', 'events_by_pk', 'crew']),
-    map(crew => <CrewDetail {...{crew, task}}/>),
+    map(crew => ({crew, task})),
+    map(renderWithProps(CrewDetail)),
     option(null)
   )(sub));
 
   return (
     <aside className={'border-r border-gray-border h-full'}>
       <Crew />
+      <TaskLogDetail {...task} />
     </aside>
   );
 };
@@ -158,32 +114,32 @@ const AsideSelectCrew = () => {
   return (
     <aside className={'border-r border-gray-border h-full'}>
       {
-      pipe(
-        getPath(['data', 'crew']),
-        chain(safe(isArray)),
-        map(map(pipe(
-          crew => ({
-            key: crew.id,
-            crew,
-            crews,
-            task,
-            children: (
+        pipe(
+          getPath(['data', 'crew']),
+          chain(safe(isArray)),
+          map(map(pipe(
+            crew => ({
+              key: crew.id,
+              crew,
+              crews,
+              task,
+              children: (
                 <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>
                   {t`assignTask`}
                 </Button.Sm>
-            ),
-            title: JSON.stringify(crew, null, '  '), 
-          }),
-          renderWithProps(CrewDetail),
-        ))),
-        map(list => ({
-          title: t`availableCrews`,
-          children: list
-        })),
-        map(renderWithProps(Detail)),
-        option(null),
-      )(crews)
-    }
+              ),
+              title: JSON.stringify(crew, null, '  '), 
+            }),
+            renderWithProps(CrewDetail),
+          ))),
+          map(list => ({
+            title: t`availableCrews`,
+            children: list
+          })),
+          map(renderWithProps(Detail)),
+          option(null),
+        )(crews)
+      }
     </aside>
   );
 }
@@ -222,51 +178,6 @@ const ObjectName = pipe(
   chain(getObjectName),
   map(str => <p key={str} className='text-lg text-black'>{str}</p>),
   option(null),
-);
-
-const CrewKeyIcon = ifElse(
-  propSatisfies(
-    'object_key_boxes',
-    not(isEmpty),
-  ),
-  constant(<KeyIcon className='w-5 h-5 text-gray-300' />),
-  constant(null),
-);
-
-const DirectionsTag = props => <Tag.Sm className='bg-gray-300 text-black whitespace-nowrap' {...props} />
-
-const CrewDistanceDetails = ({crew, event}) => {
-  const {route, mGoogleMaps} = useGoogleApiContext();
-  const toLatLng = mGoogleMaps
-  .map(maps => a => new maps.LatLng(a.latitude, a.longitude))
-  .option(identity);
-
-  const {data: distanceResponse} = useAsyncSwr({distanceToObject: 'yup', crew, event}, () => (
-    Async.of(origin => destination => route(origin, destination))
-    .ap(maybeToAsync('no crew coordinates', getCrewCoordinates(crew).map(toLatLng)))
-    .ap(maybeToAsync('no task coordinates', getTaskCoordinates(event).map(toLatLng)))
-    .chain(identity)
-  ));
-
-  return (
-  <>
-    <CrewToEventETA {...distanceResponse} />
-    <CrewToEventDistance {...distanceResponse} />
-  </>
-  );
-};
-
-const CrewToEventDistance = pipe(
-  getPath(['routes', 0, 'legs', 0, 'distance', 'text']),
-  map(objOf('children')),
-  map(renderWithProps(DirectionsTag)),
-  option(null)
-);
-const CrewToEventETA = pipe(
-  getPath(['routes', 0, 'legs', 0, 'duration', 'text']),
-  map(objOf('children')),
-  map(renderWithProps(DirectionsTag)),
-  option(null)
 );
 
 export default TaskEditForm;

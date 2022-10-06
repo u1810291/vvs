@@ -12,7 +12,7 @@ import {
 import {mapProps} from 'crocks/helpers';
 import {isTrue} from 'crocks/predicates';
 import {equals} from 'crocks/pointfree';
-import React, {Suspense} from 'react';
+import React, {cloneElement, Suspense} from 'react';
 import {Route} from 'react-router-dom';
 
 const strToArray = ifElse(isString, str => str.split(' '), identity)
@@ -93,6 +93,7 @@ export const withComponentFactory = (Component, {mapSetupInComponent = identity,
 };
 
 export const renderWithProps = curry((Component, props) => <Component {...props} />);
+export const renderWithChildren = curry((element, children) => cloneElement(element, element?.props, children));
 
 /**
  * @type {(exact: bool, isHidden: bool, translationNs: string, translationKey: string, path: string, Component: import('react').ComponentType, children: import('react').ComponentType) => Route}
