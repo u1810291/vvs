@@ -1,4 +1,5 @@
 import Nullable from 'components/atom/Nullable';
+import {withMergedClassName} from 'util/react';
 import Disclosure from '.';
 
 export const AsideDisclosure = ({title,  ...props}) => (
@@ -11,8 +12,10 @@ export const AsideDisclosure = ({title,  ...props}) => (
   />
 );
 
+const ITEM_CLASSNAME = 'mx-4 py-4 flex justify-between items-center border-t border-gray-200';
+
 export const AsideDisclosureItem = ({left, right, children, ...props}) => (
-  <div className='mx-4 py-4 flex justify-between items-center border-t border-gray-200' {...props}>
+  <div className={ITEM_CLASSNAME} {...props}>
     <Nullable on={left}>
       <div className='text-steel mr-8'>{left}</div>
     </Nullable>
@@ -23,7 +26,8 @@ export const AsideDisclosureItem = ({left, right, children, ...props}) => (
   </div>
 );
 
-AsideDisclosure.Item = AsideDisclosureItem
+AsideDisclosure.ExtItem = withMergedClassName(ITEM_CLASSNAME, AsideDisclosureItem);
+AsideDisclosure.Item = AsideDisclosureItem;
 
 
 export default AsideDisclosure;
