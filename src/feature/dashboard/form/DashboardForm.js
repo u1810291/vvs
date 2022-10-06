@@ -11,7 +11,7 @@ import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
 import useSubscription from 'hook/useSubscription';
 import MapV2 from '../components/MapV2';
 import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
-// import useSubscription from 'hook/useSubscription';
+import {groupBy} from 'util/utils';
 
 // updated_at + duration - new Date()
 const timeLeft = (permission) => {
@@ -24,31 +24,30 @@ const timeLeft = (permission) => {
 }
 // TODO: calculate lost connection
 const lostConnection = (time) => {
-  return time
+  return new Date() - new Date(time) > 60000
 }
 
 const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
   const nav = useNavigate();
-  // const tasks = useTasks();
   const tasksQuery = useMemo(() => TASK_GQL, []);
   const crewsQuery = useMemo(() => CREW_GQL, []);
   const crews = useSubscription(crewsQuery);
   const tasks = useSubscription(tasksQuery);
+  const groupedCrews = useMemo(() => groupBy(crews?.data?.crew, 'status'), [crews.data?.crew])
   const crewsZonePaths = useMemo(() => crews.data?.crew?.map((el) => getZoneItemsThroughCalendar(el)), [crews?.data?.crew]);
   const crewsZoneCoordinates = useMemo(() => crews.data?.crew?.map((el) => getFlatNodesThroughCalendar(el)), [crews?.data?.crew[0]]);
-
+  const destinations = useMemo(() => crews?.data?.crew?.map((el) => ({id: el.id, crew: `${el.abbreviation} ${el.name}`, lat: el.latitude, lng: el.longitude})), [crews?.data?.crew]);
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       timeLeft: el.permissions.length ? timeLeft(el.permissions[0]): null,
-      connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): null,
+      connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): false,
       ...el
     })
   )}), [crews?.data?.crew]);
-  // const dashboardSubscription = useSubscription()
-  // console.log(dashboardSubscription);
+  
   useEffect(() => {
-    console.log(crewsZonePaths, crewsZoneCoordinates);
+    console.log(crews)
   }, [crews.data?.crew]);
  
   
@@ -67,7 +66,7 @@ const DashboardForm = () => {
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
-        <MapV2 crew={crews} zonePaths={crewsZonePaths} zoneCoordinates={crewsZoneCoordinates} />
+        <MapV2 crew={crews} zonePaths={crewsZonePaths} zoneCoordinates={crewsZoneCoordinates} destinations={destinations} />
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>

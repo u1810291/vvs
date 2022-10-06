@@ -35,3 +35,8 @@ export const exportTableToExcel = (apiData, fileName) => {
   const data = new Blob([excelBuffer], {type: fileType});
   FileSaver.saveAs(data, fileName + fileExtension);
 }
+
+export const groupBy = (xs = [], key) => xs.reduce((rv, x) => {
+  (rv[x[key]] = rv[x[key]] || []).push(x);
+  return rv;
+}, {});

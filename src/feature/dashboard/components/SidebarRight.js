@@ -30,7 +30,7 @@ export default function SidebarRight({crews}) {
                 title={`${crew.abbreviation} ${crew.name}`}
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={new Date() - new Date(crew.user_settings[0]?.last_ping) > 60000}
+                connectionLost={crew.connectionLost}
                 durationTime={crew.timeLeft}
                 status={crew.status}
               />
