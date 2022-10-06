@@ -8,7 +8,7 @@ export default function MapV2({zonePaths, crewId, zoneCoordinates, destinations 
   return (
       <Nullable on={zonePaths}>
         <Map
-          zoom={12}
+          zoom={8}
           path={zonePaths && zonePaths[0]}
           id={`crew-map-${crewId}`}
           coordinates={zoneCoordinates && zoneCoordinates[4]}
