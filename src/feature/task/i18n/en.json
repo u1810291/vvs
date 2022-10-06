@@ -105,5 +105,8 @@
       "label": "Address",
       "placeholder": "Use other than object's address"
     }
+  },
+  "eventLogMessage": {
+    "received event {{event.name}}": "Reiceved an event {{event.name}}"
   }
 }

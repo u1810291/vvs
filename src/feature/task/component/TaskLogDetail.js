@@ -1,10 +1,9 @@
-import Detail from 'components/Disclosure/AsideDisclosure';
 import {format, isPast, isToday} from 'date-fns';
 import {useTranslation} from 'react-i18next';
 import {
   pipe,
-  bimap,
   getProp,
+  getPath,
   map,
   chain,
   safe,
@@ -13,44 +12,56 @@ import {
   merge,
   ifElse,
   Maybe,
+  isObject,
 } from 'crocks';
 import {always} from 'util/func';
 import {renderWithChildren, renderWithProps} from 'util/react';
+import Detail from 'components/Disclosure/AsideDisclosure';
+import TaskStatusTag from './TaskStatusTag';
 
-const LogDate = log => pipe(
-  branch,
-  bimap(
-    getProp('id'),
-    pipe(
-      getProp('created_at'),
-      map(dt => new Date(dt)),
-      chain(safe(isPast)),
-      map(pipe(
-        branch,
-        map(ifElse(isToday, always('HH:mm:ss'), always('Y-MM-dd HH:mm:ss'))),
-        merge((dt, fmt) => format(dt, fmt)),
-      )),
-      map(renderWithChildren(<p className='text-steel'/>)),
+const LogDate = pipe(
+  getProp('created_at'),
+  map(dt => new Date(dt)),
+  chain(safe(isPast)),
+  map(pipe(
+    branch,
+    map(ifElse(isToday, always('HH:mm:ss'), always('Y-MM-dd HH:mm:ss'))),
+    merge((dt, fmt) => format(dt, fmt)),
+  )),
+  map(renderWithChildren(<p className='text-steel'/>)),
+  option(null),
+);
+
+const LogContent = pipe(
+  getProp('content'),
+  chain(r => {
+    const {t} = useTranslation();
+    return (
+      Maybe.of(message => params => t(message, params))
+      .ap(getProp('message', r))
+      .ap(safe(isObject, r))
+      .map(renderWithChildren(<p className='text-black' />))
     )
-  ),
-  merge((mId, mChildren) => 
-    Maybe.of(key => children => ({key, children}))
-    .ap(mId)
-    .ap(mChildren)
-    .map(renderWithProps(Detail.Item))
-    .option(null)
-  ),
-)(log);
+  }),
+  option(null)
+);
 
-const TaskLogDetail = task => {
-  const {t} = useTranslation();
+const LogTag = pipe(
+  getPath(['content', 'event']),
+  map(renderWithProps(TaskStatusTag.Xs)),
+  option(null)
+);
 
-  return pipe(
-    getProp('logs'),
-    map(map(LogDate)),
-    map(renderWithChildren(<Detail title={t`logs`} />)),
-    option(null),
-  )(task);
-};
+const TaskLog = log => (
+  <Detail.ExtItem className='space-x-2'>
+    {renderWithProps([LogDate, LogContent, LogTag], log)}
+  </Detail.ExtItem>
+);
 
-export default TaskLogDetail;
+const TaskLogs = pipe(
+  getProp('logs'),
+  map(map(renderWithProps(TaskLog))),
+  option(null),
+);
+
+export default TaskLogs;

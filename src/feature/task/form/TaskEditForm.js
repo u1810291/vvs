@@ -3,8 +3,7 @@ import CrewDetail from 'feature/crew/component/CrewDetail';
 import {errorToText} from 'api/buildApiHook';
 import Button from 'components/Button';
 import Detail from 'components/Disclosure/AsideDisclosure';
-import {getPath, getProp, merge, pipe, branch, map, chain, safe, isTruthy, option, isArray, bimap, setProp, reduce, getPathOr, objOf, propSatisfies, identity, Result, tap} from 'crocks';
-import {equals} from 'crocks/pointfree';
+import {getPath, getProp, merge, pipe, branch, map, chain, safe, isTruthy, option, isArray, bimap, setProp, reduce, objOf, identity, Result, tap, pathSatisfies} from 'crocks';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import {getObjectName} from 'feature/object/utils';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
@@ -12,7 +11,6 @@ import SuccessNotification from 'feature/ui-notifications/components/SuccessNoti
 import {useNotification} from 'feature/ui-notifications/context';
 import {getEmail, getName, getPhone} from 'feature/user/utils';
 import useSubscription from 'hook/useSubscription';
-import raw from 'raw.macro';
 import {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -20,62 +18,40 @@ import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getTaskAddress} from '../util';
-import TaskLogDetail from '../component/TaskLogDetail';
+import TaskLogs from '../component/TaskLogDetail';
 
-const TASK_GQL = raw('../api/graphql/GetTaskById.graphql');
-
-const TaskEditForm = () => {
-  const UNINITIALIZED_SUBSCRIPTION = 'uninitialized';
-  const {id} = useParams();
+const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
-  const {data: task} = useTask({id});
-  const taskSubscription = useSubscription(
-    'query GetTaskById($id: uuid!) {events_by_pk(id: $id) {crew_id}}',
-    useMemo(() => ({id}), [id])
-  );
-
-  const subscribedEvent = useMemo(() => getPathOr(UNINITIALIZED_SUBSCRIPTION, ['data', 'events_by_pk'], taskSubscription), [taskSubscription])
 
   return (
-    <section className='min-h-screen h-full flex'>
-      <aside className={'border-r border-gray-border h-full'}>
+    <section className='flex'>
+      <aside className={'border-r border-gray-border h-full overflow-auto'}>
         <div className='p-5 border-b border-gray-300 space-y-2'>
-          <ObjectName {...task} />
-          <Address {...task} />
+          <ObjectName {...taskQuery} />
+          <Address {...taskQuery} />
         </div>
         <Detail title={to`edit.responsiblePeople`}>
-          <RelatedUsers {...task} />
+          <RelatedUsers {...taskQuery} />
         </Detail>
       </aside>
       {caseMap(() => <AsideSelectCrew />, [
-        [equals(UNINITIALIZED_SUBSCRIPTION), () => null],
-        [propSatisfies('crew_id', isTruthy), () => <AsideCancelableCrew />],
-      ], subscribedEvent)}
+        [pathSatisfies(['crew', 'id'], isTruthy), () => <AsideCancelableCrew {...task}/>],
+      ], task)}
     </section>
   );
 };
 
-const AsideCancelableCrew = () => {
-  const {t} = useTranslation();
-  const {id} = useParams();
-  const sub = useSubscription(
-    useMemo(() => TASK_GQL, []),
-    useMemo(() => ({id}), [id]),
-  );
+const Crew = task => pipe(
+  getProp('crew'),
+  map(crew => ({crew, task})),
+  map(renderWithProps(CrewDetail)),
+  option(null)
+)(task);
 
-  const task = useMemo(() => getPathOr(null, ['data', 'events_by_pk'], sub));
-
-  const Crew = useMemo(() => () => pipe(
-    getPath(['data', 'events_by_pk', 'crew']),
-    map(crew => ({crew, task})),
-    map(renderWithProps(CrewDetail)),
-    option(null)
-  )(sub));
-
+const AsideCancelableCrew = task => {
   return (
-    <aside className={'border-r border-gray-border h-full'}>
-      <Crew />
-      <TaskLogDetail {...task} />
+    <aside className={'border-r border-gray-border h-full overflow-auto'}>
+      {renderWithProps([Crew, TaskLogs], task)}
     </aside>
   );
 };
@@ -112,7 +88,7 @@ const AsideSelectCrew = () => {
   );
 
   return (
-    <aside className={'border-r border-gray-border h-full'}>
+    <aside className={'border-r border-gray-border h-full overflow-auto'}>
       {
         pipe(
           getPath(['data', 'crew']),

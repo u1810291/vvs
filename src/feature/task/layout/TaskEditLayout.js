@@ -1,7 +1,7 @@
 import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import Button from 'components/Button';
 import Header from 'components/atom/Header';
-import React from 'react';
+import React, {useMemo} from 'react';
 import SideBarLayout from 'layout/SideBarLayout';
 import TaskEditForm from '../form/TaskEditForm';
 import TaskStatusTag from '../component/TaskStatusTag';
@@ -16,13 +16,17 @@ import ErrorNotification from 'feature/ui-notifications/components/ErrorNotifica
 import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
 import {caseMap} from '@s-e/frontend/flow-control';
 import {STATUS} from '../consts';
+import raw from 'raw.macro';
+import useSubscription from 'hook/useSubscription';
 
+const TASK_GQL = raw('../api/graphql/SubscribeTaskById.graphql');
 
 const TaskEditLayout = () => {
   const {t} = useTranslation('task');
   const {id} = useParams();
   const navigate = useNavigate();
-  const {data, remove, update} = useTask({id});
+  const {data: queryData, remove, update, mutate} = useTask({id});
+  const {data: {events_by_pk: data} = {}} = useSubscription(TASK_GQL, useMemo(() => ({id}), [id]));
   const {notify} = useNotification();
 
   const archive = () => {
@@ -55,7 +59,7 @@ const TaskEditLayout = () => {
 
   return (
     <SideBarLayout>
-      <div className='flex flex-col min-h-screen overflow-hidden'>
+      <div className='flex flex-col h-screen overflow-hidden'>
         <Header>
           <Breadcrumbs>
             <RouteAsBreadcrumb route={TaskListRoute} />
@@ -87,8 +91,8 @@ const TaskEditLayout = () => {
             )
           }
         </Header>
-        <div className='flex flex-row w-full justify-between'>
-          <TaskEditForm />
+        <div className='flex flex-row w-full justify-between h-full overflow-hidden'>
+          <TaskEditForm taskQuery={queryData} task={data} />
         </div>
       </div>
     </SideBarLayout>
