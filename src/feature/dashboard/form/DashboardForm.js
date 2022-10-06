@@ -37,7 +37,7 @@ const DashboardForm = () => {
   const groupedCrews = useMemo(() => groupBy(crews?.data?.crew, 'status'), [crews.data?.crew])
   const crewsZonePaths = useMemo(() => crews.data?.crew?.map((el) => getZoneItemsThroughCalendar(el)), [crews?.data?.crew]);
   const crewsZoneCoordinates = useMemo(() => crews.data?.crew?.map((el) => getFlatNodesThroughCalendar(el)), [crews?.data?.crew[0]]);
-  const destinations = useMemo(() => crews?.data?.crew?.map((el) => ({id: el.id, lat: el.latitude, lng: el.longitude})), [crews?.data?.crew]);
+  const destinations = useMemo(() => crews?.data?.crew?.map((el) => ({id: el.id, crew: `${el.abbreviation} ${el.name}`, lat: el.latitude, lng: el.longitude})), [crews?.data?.crew]);
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       timeLeft: el.permissions.length ? timeLeft(el.permissions[0]): null,
@@ -47,7 +47,7 @@ const DashboardForm = () => {
   )}), [crews?.data?.crew]);
   
   useEffect(() => {
-    console.log(groupedCrews)
+    console.log(crews)
   }, [crews.data?.crew]);
  
   

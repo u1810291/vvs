@@ -2,8 +2,7 @@ import React from 'react';
 import Nullable from 'components/atom/Nullable';
 import Map from 'feature/map/component/Map';
 import Polygon from 'feature/map/component/Polygon';
-import {OverlayView} from '@react-google-maps/api';
-import MarkerTag from 'components/atom/icon/MarkerTag';
+import {Marker, OverlayView} from '@react-google-maps/api';
 
 export default function MapV2({zonePaths, crewId, zoneCoordinates, destinations = []}) {
   return (
@@ -27,10 +26,16 @@ export default function MapV2({zonePaths, crewId, zoneCoordinates, destinations 
                 y: -(height / 2),
               })}
             >
-              <MarkerTag
-                label={'some object'}
-                labelBodyTw={'bg-red-600'}
-              />
+            <Marker
+              icon={{
+                path: window.google.maps.SymbolPath.CIRCLE,
+                scale: 10,
+                fillColor: '#f37e17',
+                fillOpacity: 1,
+                strokeWeight: 1
+              }}
+              position={el}
+            />
             </OverlayView>
           ))}
         </Map>

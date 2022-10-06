@@ -23,7 +23,7 @@ export const GQL = gql`
         id
         last_ping
       }
-      permissions(where: {status: {_in: ALLOWED}, request: {is_assigned_while_in_breaks: {_eq: true}}, time_left: {_gte: "0"}}) {
+      permissions(where: {status: {_in: ALLOWED}, request: {is_assigned_while_in_breaks: {_eq: true}}}) {
         status
         expires_at
         request {
