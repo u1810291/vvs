@@ -3,7 +3,6 @@ import CrewDetail from 'feature/crew/component/CrewDetail';
 import {errorToText} from 'api/buildApiHook';
 import Button from 'components/Button';
 import Detail from 'components/Disclosure/AsideDisclosure';
-import {getPath, getProp, merge, pipe, branch, map, chain, safe, isTruthy, option, isArray, bimap, setProp, reduce, objOf, identity, Result, tap, pathSatisfies} from 'crocks';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import {getObjectName} from 'feature/object/utils';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
@@ -11,7 +10,7 @@ import SuccessNotification from 'feature/ui-notifications/components/SuccessNoti
 import {useNotification} from 'feature/ui-notifications/context';
 import {getEmail, getName, getPhone} from 'feature/user/utils';
 import useSubscription from 'hook/useSubscription';
-import {useMemo} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import {renderWithProps} from 'util/react';
@@ -19,13 +18,66 @@ import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getTaskAddress} from '../util';
 import TaskLogs from '../component/TaskLogDetail';
+import {GoogleMap} from '@react-google-maps/api';
+import {useGoogleApiContext} from 'context/google';
+import {
+  Maybe,
+  Result,
+  and,
+  bimap,
+  branch,
+  chain,
+  getPath,
+  flip,
+  getProp,
+  identity,
+  isArray,
+  isTruthy,
+  map,
+  merge,
+  objOf,
+  option,
+  pathSatisfies,
+  pipe,
+  propSatisfies,
+  reduce,
+  safe,
+  setProp,
+  tap,
+  isNumber
+} from 'crocks';
 
+const isPropNum = flip(propSatisfies)(isNumber);
 const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
+  const {isLoaded, onMapLoad, onMapUnload, mGoogleMaps} = useGoogleApiContext();
+  const mapRef = useRef();
+
+  const mMap = useMemo(() => (
+    isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
+  ), [isLoaded, mapRef.current])
+
+  const mEventCoordinates = useMemo(() => (
+    safe(and(isPropNum('latitude'), isPropNum('longitude')), task)
+    .map(a => ({
+      lat: a.latitude,
+      lng: a.longitude,
+    }))
+  ), [task]);
+
+  useEffect(() => {
+    Maybe.of(map => m => coordinates => {
+      map.fitBounds(new m.LatLngBounds(coordinates));
+      map.setZoom(17);
+    })
+    .ap(mMap)
+    .ap(mGoogleMaps)
+    .ap(mEventCoordinates)
+  }, [mEventCoordinates, mGoogleMaps]);
 
   return (
-    <section className='flex'>
-      <aside className={'border-r border-gray-border h-full overflow-auto'}>
+    <section className='flex w-full'>
+      <aside className='border-r border-gray-border h-full overflow-auto'>
         <div className='p-5 border-b border-gray-300 space-y-2'>
           <ObjectName {...taskQuery} />
           <Address {...taskQuery} />
@@ -34,9 +86,17 @@ const TaskEditForm = ({taskQuery, task}) => {
           <RelatedUsers {...taskQuery} />
         </Detail>
       </aside>
-      {caseMap(() => <AsideSelectCrew />, [
-        [pathSatisfies(['crew', 'id'], isTruthy), () => <AsideCancelableCrew {...task}/>],
-      ], task)}
+      <div className='grow'>
+        {isLoaded ? <GoogleMap
+          mapContainerStyle={useMemo(() => ({width: '100%', height: '100%'}), [])}
+          onLoad={useCallback(map => {mapRef.current = map}, [])}
+          /> : null}
+      </div>
+      <div className='max-w-lg'>
+        {caseMap(() => <AsideSelectCrew />, [
+          [pathSatisfies(['crew', 'id'], isTruthy), () => <AsideCancelableCrew {...task}/>],
+        ], task)}
+      </div>
     </section>
   );
 };

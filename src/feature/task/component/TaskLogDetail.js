@@ -34,7 +34,7 @@ const LogDate = pipe(
     map(ifElse(isToday, always('HH:mm:ss'), always('Y-MM-dd HH:mm:ss'))),
     merge((dt, fmt) => format(dt, fmt)),
   )),
-  map(renderWithChildren(<p className='text-steel'/>)),
+  map(renderWithChildren(<p className='whitespace-nowrap text-steel'/>)),
   option(null),
 );
 
@@ -109,7 +109,7 @@ const LogContent = pipe(
 
 const LogTag = pipe(
   getPath(['content', 'event']),
-  map(renderWithProps(TaskStatusTag.Xs)),
+  map(renderWithProps(<TaskStatusTag.Xs className='whitespace-nowrap' />)),
   option(null)
 );
 
