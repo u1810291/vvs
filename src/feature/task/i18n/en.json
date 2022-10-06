@@ -107,6 +107,12 @@
     }
   },
   "eventLogMessage": {
-    "received event {{event.name}}": "Reiceved an event {{event.name}}"
+    "received event {{event.name}}": "received event **{{event.name}}**",
+    "{{event.changed_by_user_id}} has assigned the crew {{event.crew_id}}": "**user_id_to_name({{event.changed_by_user_id}})** has assigned the crew **crew_id_to_name({{event.crew_id}})**",
+    "{{event.crew_id}} is heading to the event": "**crew_id_to_name({{event.crew_id}})** is heading to the event",
+    "{{event.crew_id}} is inspecting": "**crew_id_to_name({{event.crew_id}})** is inspecting",
+    "{{event.crew_id}} has completed the inspection": "**crew_id_to_name({{event.crew_id}})** has completed the inspection",
+    "{{event.changed_by_user_id}} has marked the task as finished": "**user_id_to_name({{event.changed_by_user_id}})** has marked the task as finished",
+    "{{event.changed_by_user_id}} has marked the task as cancelled": "**user_id_to_name({{event.changed_by_user_id}})** has marked the task as cancelled"
   }
 }

@@ -12,7 +12,7 @@ export const AsideDisclosure = ({title,  ...props}) => (
   />
 );
 
-const ITEM_CLASSNAME = 'mx-4 py-4 flex justify-between items-center border-t border-gray-200';
+export const ITEM_CLASSNAME = 'mx-4 py-4 flex justify-between items-center border-t border-gray-200';
 
 export const AsideDisclosureItem = ({left, right, children, ...props}) => (
   <div className={ITEM_CLASSNAME} {...props}>

@@ -191,3 +191,26 @@ export const renderWithProps = curry((Component, props) => {
 })
 
 export const RenderWithProps = ({props, children}) => renderWithProps(children, props);
+
+export const interpolateTextToComponent = curry((fullTokenRegex, valueExtractionRegex, map, text) => {
+  if (!isString(text)) return text;
+
+  const tokens = text.match(fullTokenRegex)
+
+  if (!isArray(tokens)) return text;
+
+  return tokens.reduce((c, token) => {
+    const match = token.match(valueExtractionRegex);
+    const last = c[c.length - 1];
+    const update = [
+      ...c.slice(0, -1),
+      [
+        last.slice(0, last.indexOf(token)),
+        match?.length ? map(match) : '',
+        last.slice(last.indexOf(token) + token.length)
+      ].flat()
+    ].flat();
+
+    return update.every(isString) ? update.join(' ') : update;
+  }, [text]);
+})
