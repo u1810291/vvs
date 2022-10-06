@@ -31,7 +31,6 @@ export default function SidebarRight({crews}) {
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
                 connectionLost={crew.connectionLost}
-                durationTime={crew.timeLeft}
                 status={crew.status}
               />
             </AsideDisclosure.Item>
@@ -47,7 +46,6 @@ export default function SidebarRight({crews}) {
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
                 connectionLost={new Date() - new Date(crew.user_settings[0]?.last_ping) > 60000}
-                durationTime={crew.timeLeft}
                 status={crew.status}
               />
             </AsideDisclosure.Item>
@@ -63,7 +61,6 @@ export default function SidebarRight({crews}) {
                 description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
                 isOnline={crew.user_settings?.some((el) => el.is_online === true)}
                 connectionLost={new Date() - new Date(crew.user_settings[0]?.last_ping) > 60000}
-                durationTime={crew.timeLeft}
                 status={crew.status}
               />
             </AsideDisclosure.Item>
