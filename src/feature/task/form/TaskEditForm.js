@@ -13,18 +13,17 @@ import useSubscription from 'hook/useSubscription';
 import {useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
-import {renderWithChildren, renderWithProps} from 'util/react';
+import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
 import {getTaskAddress, getTaskLatLngLiteral} from '../util';
 import TaskLogs from '../component/TaskLogDetail';
-import {GoogleMap, OverlayView} from '@react-google-maps/api';
+import {GoogleMap} from '@react-google-maps/api';
 import {useGoogleApiContext} from 'context/google';
 import {
   Maybe,
   Result,
   alt,
-  and,
   bimap,
   branch,
   chain,
@@ -42,38 +41,52 @@ import {
   reduce,
   safe,
   setProp,
-  tap,
-  isString
+  tap
 } from 'crocks';
-import {isPropNum} from 'util/pred';
+import {getCrewLatLngLiteral} from 'feature/crew/utils';
+import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
+import MapTaskMarker from '../component/MapTaskMarker';
 
 const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
-  const {isLoaded, onMapLoad, onMapUnload, mGoogleMaps} = useGoogleApiContext();
+  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   const mapRef = useRef();
 
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])
 
-  const mEventCoordinates = useMemo(() => (
-    safe(and(isPropNum('latitude'), isPropNum('longitude')), task)
-    .map(a => ({
-      lat: a.latitude,
-      lng: a.longitude,
-    }))
-  ), [task]);
-
+  const crews = useSubscription(
+    useMemo(() => GQL, []),
+    useMemo(() => (
+      getPath(['object', 'id'], task)
+      .map(objOf('objectId'))
+      .option(undefined)
+    ), [task])
+  );
 
   useEffect(() => {
-    Maybe.of(map => m => coordinates => {
-      map.fitBounds(new m.LatLngBounds(coordinates));
-      setTimeout(() => map.setZoom(17), 500)
+    Maybe.of(map => m => taskLatLng => crewsLatLngs => {
+      const bounds = new m.LatLngBounds();
+      [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
+      map.fitBounds(bounds);
     })
     .ap(mMap)
     .ap(mGoogleMaps)
-    .ap(mEventCoordinates)
-  }, [mEventCoordinates, mGoogleMaps]);
+    .ap(getTaskLatLngLiteral(task))
+      .ap(
+        pipe(
+          getPath(['data', 'crew']),
+          chain(safe(isArray)),
+          map(reduce((carry, item) => (
+            getCrewLatLngLiteral(item)
+            .map(latLng => [...carry, latLng])
+            .option(carry)
+          ), [])),
+          alt(Maybe.Just([]))
+        )(crews)
+      )
+  }, [task, mGoogleMaps, crews]);
 
   return (
     <section className='flex w-full'>
@@ -95,7 +108,15 @@ const TaskEditForm = ({taskQuery, task}) => {
                 onLoad: map => {mapRef.current = map}
               }), [])}
             >
-             <MapTaskMarker {...task} /> 
+              {
+                pipe(
+                  getPath(['data', 'crew']),
+                  chain(safe(isArray)),
+                  map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
+                  option(null),
+                )(crews)
+              }
+              <MapTaskMarker {...task} /> 
             </GoogleMap>
           ) : null
       }
@@ -225,71 +246,3 @@ const ObjectName = pipe(
 );
 
 export default TaskEditForm;
-
-
-// TASK MARKER
-
-const MapTaskMarker = pipe(
-  branch,
-  map(getTaskLatLngLiteral),
-  merge((task, mLatLngLiteral) => (
-    mLatLngLiteral.map(position => (
-      <OverlayView
-        key={`MapTaskMarker-${JSON.stringify(task)}`}
-        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-        position={position}
-      >
-        <div className='flex'>
-          <svg
-            width='32'
-            height='32'
-            viewBox='0 0 32 32'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-            className='-left-4 -top-4 relative'
-          >
-            <circle opacity='0.3' cx='16' cy='16' r='16' fill='#C32A2F'/>
-            <circle cx='16' cy='16' r='3' fill='#C32A2F' stroke='white' strokeWidth='2'/>
-          </svg>
-          {
-            pipe(
-              getProp('name'),
-              alt(getProp('id', task)),
-              chain(safe(and(isString, isTruthy))),
-              map(renderWithChildren(
-                <span role='tooltip' className={[
-                  '-translate-y-1/2',
-                  'absolute',
-                  'before:-left-[15px]',
-                  'before:-translate-y-1/2',
-                  'before:absolute',
-                  'before:block',
-                  'before:border-[10px]',
-                  'before:border-r-[10px]',
-                  'before:border-r-brick',
-                  'before:border-transparent',
-                  'before:content-[""]',
-                  'before:top-1/2',
-                  'bg-brick',
-                  'font-medium',
-                  'inline-block',
-                  'px-3',
-                  'py-2',
-                  'rounded-lg',
-                  'shadow-sm',
-                  'text-sm',
-                  'text-white',
-                  'tooltip',
-                  'translate-x-3',
-                  'whitespace-nowrap',
-                  'z-10',
-                ].join(' ')}/>
-              )),
-              option(null),
-            )(task)
-          }
-        </div>
-      </OverlayView>
-    )).option(null)
-  )),
-);
