@@ -10,25 +10,25 @@ import SuccessNotification from 'feature/ui-notifications/components/SuccessNoti
 import {useNotification} from 'feature/ui-notifications/context';
 import {getEmail, getName, getPhone} from 'feature/user/utils';
 import useSubscription from 'hook/useSubscription';
-import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
-import {renderWithProps} from 'util/react';
+import {renderWithChildren, renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
-import {getTaskAddress} from '../util';
+import {getTaskAddress, getTaskLatLngLiteral} from '../util';
 import TaskLogs from '../component/TaskLogDetail';
-import {GoogleMap} from '@react-google-maps/api';
+import {GoogleMap, OverlayView} from '@react-google-maps/api';
 import {useGoogleApiContext} from 'context/google';
 import {
   Maybe,
   Result,
+  alt,
   and,
   bimap,
   branch,
   chain,
   getPath,
-  flip,
   getProp,
   identity,
   isArray,
@@ -39,15 +39,14 @@ import {
   option,
   pathSatisfies,
   pipe,
-  propSatisfies,
   reduce,
   safe,
   setProp,
   tap,
-  isNumber
+  isString
 } from 'crocks';
+import {isPropNum} from 'util/pred';
 
-const isPropNum = flip(propSatisfies)(isNumber);
 const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
   const {isLoaded, onMapLoad, onMapUnload, mGoogleMaps} = useGoogleApiContext();
@@ -65,10 +64,11 @@ const TaskEditForm = ({taskQuery, task}) => {
     }))
   ), [task]);
 
+
   useEffect(() => {
     Maybe.of(map => m => coordinates => {
       map.fitBounds(new m.LatLngBounds(coordinates));
-      map.setZoom(17);
+      setTimeout(() => map.setZoom(17), 500)
     })
     .ap(mMap)
     .ap(mGoogleMaps)
@@ -87,10 +87,18 @@ const TaskEditForm = ({taskQuery, task}) => {
         </Detail>
       </aside>
       <div className='grow'>
-        {isLoaded ? <GoogleMap
-          mapContainerStyle={useMemo(() => ({width: '100%', height: '100%'}), [])}
-          onLoad={useCallback(map => {mapRef.current = map}, [])}
-          /> : null}
+        {isLoaded
+          ? (
+            <GoogleMap
+              {...useMemo(() => ({
+                mapContainerStyle: {width: '100%', height: '100%'},
+                onLoad: map => {mapRef.current = map}
+              }), [])}
+            >
+             <MapTaskMarker {...task} /> 
+            </GoogleMap>
+          ) : null
+      }
       </div>
       <div className='max-w-lg'>
         {caseMap(() => <AsideSelectCrew />, [
@@ -217,3 +225,71 @@ const ObjectName = pipe(
 );
 
 export default TaskEditForm;
+
+
+// TASK MARKER
+
+const MapTaskMarker = pipe(
+  branch,
+  map(getTaskLatLngLiteral),
+  merge((task, mLatLngLiteral) => (
+    mLatLngLiteral.map(position => (
+      <OverlayView
+        key={`MapTaskMarker-${JSON.stringify(task)}`}
+        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+        position={position}
+      >
+        <div className='flex'>
+          <svg
+            width='32'
+            height='32'
+            viewBox='0 0 32 32'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+            className='-left-4 -top-4 relative'
+          >
+            <circle opacity='0.3' cx='16' cy='16' r='16' fill='#C32A2F'/>
+            <circle cx='16' cy='16' r='3' fill='#C32A2F' stroke='white' strokeWidth='2'/>
+          </svg>
+          {
+            pipe(
+              getProp('name'),
+              alt(getProp('id', task)),
+              chain(safe(and(isString, isTruthy))),
+              map(renderWithChildren(
+                <span role='tooltip' className={[
+                  '-translate-y-1/2',
+                  'absolute',
+                  'before:-left-[15px]',
+                  'before:-translate-y-1/2',
+                  'before:absolute',
+                  'before:block',
+                  'before:border-[10px]',
+                  'before:border-r-[10px]',
+                  'before:border-r-brick',
+                  'before:border-transparent',
+                  'before:content-[""]',
+                  'before:top-1/2',
+                  'bg-brick',
+                  'font-medium',
+                  'inline-block',
+                  'px-3',
+                  'py-2',
+                  'rounded-lg',
+                  'shadow-sm',
+                  'text-sm',
+                  'text-white',
+                  'tooltip',
+                  'translate-x-3',
+                  'whitespace-nowrap',
+                  'z-10',
+                ].join(' ')}/>
+              )),
+              option(null),
+            )(task)
+          }
+        </div>
+      </OverlayView>
+    )).option(null)
+  )),
+);

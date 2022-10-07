@@ -1,5 +1,6 @@
 import {hasLength} from '@s-e/frontend/pred';
-import {not, curry, propSatisfies, isSame, Maybe} from 'crocks';
+import {not, curry, propSatisfies, isSame, Maybe, flip, isNumber} from 'crocks';
+
 
 export const gt = curry((a, b) => a < b);
 export const lt = curry((a, b) => a > b);
@@ -22,3 +23,5 @@ export const mPredCmp = curry((pred, m, lens, value) => (
 ));
 
 export const mIsSame = mPredCmp(isSame);
+
+export const isPropNum = flip(propSatisfies)(isNumber);
