@@ -28,7 +28,7 @@ export default function MapV2({zonePaths, crewId, zoneCoordinates, destinations 
             >
             <Marker
               icon={{
-                path: window.google.maps.SymbolPath.CIRCLE,
+                path: window.google.maps.SymbolPath.BACKWARD_OPEN_ARROW,
                 scale: 10,
                 fillColor: '#f37e17',
                 fillOpacity: 1,
