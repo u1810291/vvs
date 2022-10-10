@@ -1,0 +1,12 @@
+query GetQuestions {
+  user_question {
+    answer_type
+    created_at
+    id
+    message
+    status
+    user_id
+    updated_at
+    subject
+  }
+}

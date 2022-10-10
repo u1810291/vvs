@@ -9,9 +9,9 @@ query CrewBreachById ($id: uuid!) {
             name
             id
             status
-            zone {
-                nodes
-            }
+            # zone {
+            #     nodes
+            # }
         }
     }
 }

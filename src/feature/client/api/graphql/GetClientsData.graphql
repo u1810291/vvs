@@ -1,0 +1,18 @@
+query GetClient($id: uuid!) {
+  userById (id: $id) {
+    user {
+      firstName
+      id
+      lastName
+      username
+      mobilePhone
+    }
+  }
+  user_settings_by_pk (id: $id) {
+    is_online
+    is_send_report
+    is_company_admin
+    id
+    last_ping
+  }
+}

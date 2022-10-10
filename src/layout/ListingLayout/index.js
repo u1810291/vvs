@@ -70,7 +70,7 @@ const Listing = ({
       map(a => pipe(
         b => ({key: b.key, children: b.headerText}),
         renderWithProps(Button.NoBg),
-        btn => <Table.Th className='hover:text-black' key={a.key} onClick={() => setSortColumn(a.key)}>{btn}</Table.Th>,
+        btn => <Table.Th className='hover:text-black text-left' key={a.key} onClick={() => setSortColumn(a.key)}>{btn}</Table.Th>,
       )(a))
     )),
     option([]),
@@ -115,9 +115,9 @@ const Listing = ({
   return (
     <Index>
       <TitleBar>
-        <div className='xl:flex xl:items-center xl:space-between pt-5 xl:pb-5 space-y-4 xl:space-y-0 xl:space-x-4 grow shrink'>
+        <div className='xl:flex xl:items-center xl:space-between pt-5 xl:pb-5 space-y-4 xl:space-y-0 xl:space-x-4 w-full'>
           {breadcrumbs}
-          <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} className='grow shrink' />
+          <SearchInputGroup onChange={onInputEventOrEmpty(setQuery)} className='w-1/4' />
         </div>
         <div className='xl:justify-end justify-between flex items-center space-x-4'>
           <div className='flex flex-row md:space-x-4'>

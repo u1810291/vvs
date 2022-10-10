@@ -119,7 +119,7 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
   const forgotPassword = () => {
     if (!form['username']) return;
 
-    _forgot({userId: form['username']}).fork((error) => {
+    _forgot({loginId: form['username']}).fork((error) => {
       notify(
         <NotificationSimple
           Icon={XCircleIcon}
