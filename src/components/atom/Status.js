@@ -12,7 +12,7 @@ import {safe, getProp, propEq} from 'crocks';
 import {pipe} from 'crocks/helpers';
 import {isString} from 'crocks/predicates';
 import {chain, option} from 'crocks/pointfree';
-import {crewStatus as status, eventStatus} from 'constants/statuses';
+import {crewStatus as status, eventStatus, helpStatus} from 'constants/statuses';
 
 const is = propEq('status');
 
@@ -62,7 +62,11 @@ const DynamicStatus = caseMap(Status, [
   [is(eventStatus.EVENT_FINISHED), Status.InspectionDone],
   [is(eventStatus.EVENT_INSPECTION_DONE), Status.Inspection],
   [is(eventStatus.EVENT_CANCELLED), Status.WaitForCrewApproval],
-  [is(eventStatus.EVENT_WAIT_FOR_CREW_APPROVAL), Status.Finished]
+  [is(eventStatus.EVENT_WAIT_FOR_CREW_APPROVAL), Status.Finished],
+  // Help
+  [is(helpStatus.HELP_NEW), Status.New],
+  [is(helpStatus.HELP_COMPLETED), Status.Finished],
+
 ]);
 
 export default DynamicStatus;
