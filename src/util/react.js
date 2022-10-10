@@ -1,19 +1,25 @@
+import React, {cloneElement, Fragment, Suspense} from 'react';
+import {Route} from 'react-router-dom';
+import {caseMap} from '@s-e/frontend/flow-control';
+import {equals} from 'crocks/pointfree';
+import {isFunction, isTrue} from 'crocks/predicates';
+import {mapProps, omit} from 'crocks/helpers';
 import {
+  Maybe,
+  branch,
+  constant,
   curry,
-  map,
-  pipe,
+  getPath,
+  hasProp,
   identity,
   ifElse,
+  isArray,
   isString,
-  branch,
+  map,
   merge,
-  getPath,
+  pipe,
+  safe,
 } from 'crocks';
-import {mapProps} from 'crocks/helpers';
-import {isTrue} from 'crocks/predicates';
-import {equals} from 'crocks/pointfree';
-import React, {cloneElement, Suspense} from 'react';
-import {Route} from 'react-router-dom';
 
 const strToArray = ifElse(isString, str => str.split(' '), identity)
 
@@ -92,7 +98,6 @@ export const withComponentFactory = (Component, {mapSetupInComponent = identity,
   return A;
 };
 
-export const renderWithProps = curry((Component, props) => <Component {...props} />);
 export const renderWithChildren = curry((element, children) => cloneElement(element, element?.props, children));
 
 /**
@@ -148,3 +153,64 @@ export const dynamicSort = (property) => {
     return result * sortOrder;
   }
 }
+
+/**
+ * Use this if multiple components will reuse the same props
+ *
+ * Good for keeping code short and looks good in functional compositions.
+ *
+ * @type {(Component: Array<ReactNode>|import('react').ReactFragment|import('react').ReactNode|Array<Component>, item: Object) => Array<ReactNode>}
+ *
+ */
+export const renderWithProps = curry((Component, props) => {
+  if (isFunction(Component)) return <Component key={pipe(
+    omit(['children']),
+    JSON.stringify,
+  )(props)} {...props} />;
+
+  const mIterable = (
+    safe(isArray, Component)
+    .alt(Component?.type === Fragment ? getPath(['props', 'children'], Component) : Maybe.Nothing())
+
+    .alt(Maybe.of([Component]))
+    .map(ifElse(isArray, identity, a => [a]))
+  );
+
+  const cloneWithNewProps = curry((key, props, el) => cloneElement(
+    el,
+    {...el?.props, key, ...props},
+    props?.children || el?.props?.children || undefined
+  ));
+
+  return mIterable
+    .map(list => list.map((Element, index) => caseMap(constant(Element), [
+      [hasProp('props'), cloneWithNewProps(index, props)],
+      [isFunction, () => <Element {...{key: index, ...props}} />],
+    ], Element)))
+    .option(Component)
+})
+
+export const RenderWithProps = ({props, children}) => renderWithProps(children, props);
+
+export const interpolateTextToComponent = curry((fullTokenRegex, valueExtractionRegex, map, text) => {
+  if (!isString(text)) return text;
+
+  const tokens = text.match(fullTokenRegex)
+
+  if (!isArray(tokens)) return text;
+
+  return tokens.reduce((c, token) => {
+    const match = token.match(valueExtractionRegex);
+    const last = c[c.length - 1];
+    const update = [
+      ...c.slice(0, -1),
+      [
+        last.slice(0, last.indexOf(token)),
+        match?.length ? map(match) : '',
+        last.slice(last.indexOf(token) + token.length)
+      ].flat()
+    ].flat();
+
+    return update.every(isString) ? update.join(' ') : update;
+  }, [text]);
+})

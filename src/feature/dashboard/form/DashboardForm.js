@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
 
-import {permissionStatus as status} from 'constants/statuses';
 import SidebarRight from '../components/SidebarRight';
 import SidebarLeft from '../components/SidebarLeft';
 import {useNavigate} from 'react-router-dom';
@@ -14,15 +13,6 @@ import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/
 import {groupBy} from 'util/utils';
 
 // updated_at + duration - new Date()
-const timeLeft = (permission) => {
-  const temp = permission?.request?.duration?.split(':');
-  const date = new Date(permission.updated_at);
-  date.setHours(+temp[0] + date.getHours());
-  date.setMinutes(+temp[1] + date.getMinutes());
-  date.setSeconds(+temp[2] + date.getSeconds());
-  return permission.status === status.PERMISSION_ALLOWED ? date: null;
-}
-// TODO: calculate lost connection
 const lostConnection = (time) => {
   return new Date() - new Date(time) > 60000
 }
@@ -40,7 +30,6 @@ const DashboardForm = () => {
   const destinations = useMemo(() => crews?.data?.crew?.map((el) => ({id: el.id, crew: `${el.abbreviation} ${el.name}`, lat: el.latitude, lng: el.longitude})), [crews?.data?.crew]);
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
-      timeLeft: el.permissions.length ? timeLeft(el.permissions[0]): null,
       connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): false,
       ...el
     })

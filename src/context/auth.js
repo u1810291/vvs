@@ -1,14 +1,17 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import jwtDecode from 'jwt-decode';
 import refresh from 'feature/login/api/refresh';
 import useMergeReducer from 'hook/useMergeReducer';
 import {api, apiQuery} from 'api';
 import {createContext, useContext} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
+  Maybe,
   and,
   chain,
   getProp,
   isEmpty,
   isString,
+  isTruthy,
   map,
   not,
   objOf,
@@ -16,6 +19,7 @@ import {
   pipe,
   safe,
   tap,
+  tryCatch,
 } from 'crocks';
 
 /**
@@ -35,6 +39,17 @@ const AuthContextProvider = ({children}) => {
     token: null,
     refreshToken: null
   });
+
+  const userData = useMemo(() => pipe(
+    getProp('token'),
+    chain(safe(isTruthy)),
+    chain(token => (
+      tryCatch(() => jwtDecode(token))()
+      .either(Maybe.Nothing, Maybe.Just)
+    )),
+    chain(getProp('userData')),
+    option(null),
+  )(state), [state]);
 
   /**
    * @type {(variables: Object) => (query: string) => Async}
@@ -78,6 +93,7 @@ const AuthContextProvider = ({children}) => {
       update: setState,
       api: authorizedApi,
       apiQuery: authorizedApi(null),
+      userData
     }}>
       {children}
     </AuthContext.Provider>

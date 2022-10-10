@@ -1,46 +1,43 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useAuth} from 'context/auth';
 import ENV from 'env';
 import {createClient} from 'graphql-ws';
-import {identity, getPropOr} from 'crocks';
+import {identity, pipe, tap} from 'crocks';
 
 const useSubscription = (query, variables) => {
   const {token} = useAuth();
   const [data, setData] = useState();
   const [error, setError] = useState();
+  const clientRef = useRef();
 
   useEffect(() => {
-    if (!token) {
-      return;
+    if(clientRef.current) {
+      clientRef.current.dispose();
     }
 
-    const gqlClient = createClient({
-      url: `${ENV.API_SUBSCRIPTION_PROTOCOL}${ENV.API_ENDPOINT}`,
+    clientRef.current = createClient({
+      url: `${ENV.SUBSCRIPTION_PROTOCOL}${ENV.API_ENDPOINT}`,
+      lazy: false,
       connectionParams: {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       },
     });
-    gqlClient.subscribe(
-      {
-        query,
-        variables,
-      },
-      {
-        next: setData,
-        complete: identity,
-        error: setError,
-      },
-    );
+
+    clientRef.current?.subscribe({query, variables}, {
+      next: a => setData(a?.data || a),
+      complete: identity,
+      error: pipe(tap(console.error), setError),
+    });
 
     return () => {
-      gqlClient.dispose();
+      clientRef.current?.dispose();
     };
   }, [query, token, variables]);
 
   return {
-    data: getPropOr(data, 'data', data),
+    data,
     error,
   };
 };

@@ -1,5 +1,5 @@
 import {getAddress, getCoordinates} from 'feature/object/utils'
-import {getProp} from 'crocks';
+import {getProp, pipe, map} from 'crocks';
 
 export const getTaskAddress = task => (
   getAddress(task)
@@ -16,3 +16,11 @@ export const getTaskCoordinates = task => (
       .chain(getCoordinates)
   )
 )
+
+export const getTaskLatLngLiteral = pipe(
+  getTaskCoordinates,
+  map(a => ({
+    lat: a.latitude,
+    lng: a.longitude,
+  })),
+);

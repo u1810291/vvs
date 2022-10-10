@@ -4,6 +4,7 @@ import {getExactHiddenRoute, getExactRoute} from 'util/react';
 
 import EN from './i18n/en.json';
 import LT from './i18n/lt.json';
+import {Route, Navigate} from 'react-router-dom';
 
 // TODO: Adjust translations column names regarding response data
 i18next.addResourceBundle('en', 'task', EN);
@@ -17,6 +18,7 @@ const TaskRoute = (
   <>
     {TaskCreateRoute}
     {TaskEditRoute}
+    <Route exact path='/task/edit' element={<Navigate replace to={TaskListRoute.props.path} />}/>
   </>
 );
 

@@ -19,3 +19,10 @@ export const mapByMaybe = curry((getMaybeItem, items) => (
     .option(carry)
   ), [], items)
 ));
+
+/**
+ * @type {(fns: Array<CallableFunction>, item: any) => Array<any>}
+*
+ * invertMap :: [a -> b] -> a -> [ba]
+ */
+export const invertMap = curry((fns, item) => fns.map(fn => fn(item)));

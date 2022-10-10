@@ -3,8 +3,6 @@ import CrewDetail from 'feature/crew/component/CrewDetail';
 import {errorToText} from 'api/buildApiHook';
 import Button from 'components/Button';
 import Detail from 'components/Disclosure/AsideDisclosure';
-import {getPath, getProp, merge, pipe, branch, map, chain, safe, isTruthy, option, isArray, bimap, setProp, reduce, getPathOr, objOf, propSatisfies, identity, Result, tap} from 'crocks';
-import {equals} from 'crocks/pointfree';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import {getObjectName} from 'feature/object/utils';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
@@ -12,70 +10,137 @@ import SuccessNotification from 'feature/ui-notifications/components/SuccessNoti
 import {useNotification} from 'feature/ui-notifications/context';
 import {getEmail, getName, getPhone} from 'feature/user/utils';
 import useSubscription from 'hook/useSubscription';
-import raw from 'raw.macro';
-import {useMemo} from 'react';
+import {useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
 import {renderWithProps} from 'util/react';
 import useTask from '../api/useTask';
 import {TaskListRoute} from '../routes';
-import {getTaskAddress} from '../util';
-import TaskLogDetail from '../component/TaskLogDetail';
+import {getTaskAddress, getTaskLatLngLiteral} from '../util';
+import TaskLogs from '../component/TaskLogDetail';
+import {GoogleMap} from '@react-google-maps/api';
+import {useGoogleApiContext} from 'context/google';
+import {
+  Maybe,
+  Result,
+  alt,
+  bimap,
+  branch,
+  chain,
+  getPath,
+  getProp,
+  identity,
+  isArray,
+  isTruthy,
+  map,
+  merge,
+  objOf,
+  option,
+  pathSatisfies,
+  pipe,
+  reduce,
+  safe,
+  setProp,
+  tap
+} from 'crocks';
+import {getCrewLatLngLiteral} from 'feature/crew/utils';
+import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
+import MapTaskMarker from '../component/MapTaskMarker';
 
-const TASK_GQL = raw('../api/graphql/GetTaskById.graphql');
-
-const TaskEditForm = () => {
-  const UNINITIALIZED_SUBSCRIPTION = 'uninitialized';
-  const {id} = useParams();
+const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
-  const {data: task} = useTask({id});
-  const taskSubscription = useSubscription(
-    'query GetTaskById($id: uuid!) {events_by_pk(id: $id) {crew_id}}',
-    useMemo(() => ({id}), [id])
+  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+  const mapRef = useRef();
+
+  const mMap = useMemo(() => (
+    isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
+  ), [isLoaded, mapRef.current])
+
+  const crews = useSubscription(
+    useMemo(() => GQL, []),
+    useMemo(() => (
+      getPath(['object', 'id'], task)
+      .map(objOf('objectId'))
+      .option(undefined)
+    ), [task])
   );
 
-  const subscribedEvent = useMemo(() => getPathOr(UNINITIALIZED_SUBSCRIPTION, ['data', 'events_by_pk'], taskSubscription), [taskSubscription])
+  useEffect(() => {
+    Maybe.of(map => m => taskLatLng => crewsLatLngs => {
+      const bounds = new m.LatLngBounds();
+      [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
+      map.fitBounds(bounds);
+    })
+    .ap(mMap)
+    .ap(mGoogleMaps)
+    .ap(getTaskLatLngLiteral(task))
+      .ap(
+        pipe(
+          getPath(['data', 'crew']),
+          chain(safe(isArray)),
+          map(reduce((carry, item) => (
+            getCrewLatLngLiteral(item)
+            .map(latLng => [...carry, latLng])
+            .option(carry)
+          ), [])),
+          alt(Maybe.Just([]))
+        )(crews)
+      )
+  }, [task, mGoogleMaps, crews]);
 
   return (
-    <section className='min-h-screen h-full flex'>
-      <aside className={'border-r border-gray-border h-full'}>
+    <section className='flex w-full'>
+      <aside className='border-r border-gray-border h-full overflow-auto'>
         <div className='p-5 border-b border-gray-300 space-y-2'>
-          <ObjectName {...task} />
-          <Address {...task} />
+          <ObjectName {...taskQuery} />
+          <Address {...taskQuery} />
         </div>
         <Detail title={to`edit.responsiblePeople`}>
-          <RelatedUsers {...task} />
+          <RelatedUsers {...taskQuery} />
         </Detail>
       </aside>
-      {caseMap(() => <AsideSelectCrew />, [
-        [equals(UNINITIALIZED_SUBSCRIPTION), () => null],
-        [propSatisfies('crew_id', isTruthy), () => <AsideCancelableCrew />],
-      ], subscribedEvent)}
+      <div className='grow'>
+        {isLoaded
+          ? (
+            <GoogleMap
+              {...useMemo(() => ({
+                mapContainerStyle: {width: '100%', height: '100%'},
+                onLoad: map => {mapRef.current = map}
+              }), [])}
+            >
+              {
+                pipe(
+                  getPath(['data', 'crew']),
+                  chain(safe(isArray)),
+                  map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
+                  option(null),
+                )(crews)
+              }
+              <MapTaskMarker {...task} /> 
+            </GoogleMap>
+          ) : null
+      }
+      </div>
+      <div className='max-w-lg'>
+        {caseMap(() => <AsideSelectCrew />, [
+          [pathSatisfies(['crew', 'id'], isTruthy), () => <AsideCancelableCrew {...task}/>],
+        ], task)}
+      </div>
     </section>
   );
 };
 
-const AsideCancelableCrew = () => {
-  const {t} = useTranslation();
-  const {id} = useParams();
-  const sub = useSubscription(
-    useMemo(() => TASK_GQL, []),
-    useMemo(() => ({id}), [id]),
-  );
+const Crew = task => pipe(
+  getProp('crew'),
+  map(crew => ({crew, task})),
+  map(renderWithProps(CrewDetail)),
+  option(null)
+)(task);
 
-  const task = useMemo(() => getPathOr(null, ['data', 'events_by_pk'], sub));
-
-  const Crew = useMemo(() => () => pipe(
-    getPath(['data', 'events_by_pk', 'crew']),
-    map(crew => ({crew, task})),
-    map(renderWithProps(CrewDetail)),
-    option(null)
-  )(sub));
-
+const AsideCancelableCrew = task => {
   return (
-    <aside className={'border-r border-gray-border h-full'}>
-      <Crew />
-      <TaskLogDetail {...task} />
+    <aside className={'border-r border-gray-border h-full overflow-auto'}>
+      {renderWithProps([Crew, TaskLogs], task)}
     </aside>
   );
 };
@@ -112,7 +177,7 @@ const AsideSelectCrew = () => {
   );
 
   return (
-    <aside className={'border-r border-gray-border h-full'}>
+    <aside className={'border-r border-gray-border h-full overflow-auto'}>
       {
         pipe(
           getPath(['data', 'crew']),

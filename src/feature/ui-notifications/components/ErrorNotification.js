@@ -8,7 +8,7 @@ const ErrorNotification = props => {
     <NotificationSimple
       Icon={XCircleIcon}
       iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
-      heading={t`error`}
+      heading={t`error.genericError`}
       {...props}
     />
   )

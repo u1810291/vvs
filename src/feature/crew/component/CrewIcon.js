@@ -16,6 +16,26 @@ import {
   safe,
 } from 'crocks';
 
+export const CREW_STATUS_BORDER_CLASSNAME = {
+  'BUSY': 'border-brick',
+  'BREAK': 'border-tango',
+  'READY': 'border-forest',
+  'OFFLINE': 'border-brick',
+  'DRIVE_BACK': 'border-mantis',
+  'UNKNOWN': 'border-black',
+};
+
+export const CREW_STATUS_BG_CLASSNAME = {
+  'BUSY': 'bg-brick',
+  'BREAK': 'bg-tango',
+  'READY': 'bg-forest',
+  'OFFLINE': 'bg-brick',
+  'DRIVE_BACK': 'bg-mantis',
+  'UNKNOWN': 'bg-black',
+};
+
+const CLASS_NAME = 'w-10 h-10 bg-white font-semibold rounded-full border-4 truncate text-xs flex items-center justify-center';
+
 const isStatus = curry((value, obj) => pipe(
   safe(isObject),
   chain(getProp('status')),
@@ -30,25 +50,34 @@ const CrewIconBase = crew => (
   </div>
 );
 
-const CLASS_NAME = 'w-10 h-10 rounded-full border-4 truncate text-xs flex items-center justify-center';
+const CrewIcon = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.UNKNOWN}`, CrewIconBase);
+CrewIcon.Busy = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.BUSY}`, CrewIconBase);
+CrewIcon.Break = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.BREAK}`, CrewIconBase);
+CrewIcon.Ready = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.READY}`, CrewIconBase);
+CrewIcon.Offline = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.OFFLINE}`, CrewIconBase);
+CrewIcon.DriveBack = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.DRIVE_BACK}`, CrewIconBase);
 
-const CrewIcon = withMergedClassName(`${CLASS_NAME} border-black`, CrewIconBase);
-CrewIcon.Busy = withMergedClassName(`${CLASS_NAME} border-brick`, CrewIconBase);
-CrewIcon.Break = withMergedClassName(`${CLASS_NAME} border-tango`, CrewIconBase);
-CrewIcon.Ready = withMergedClassName(`${CLASS_NAME} border-forest`, CrewIconBase);
-CrewIcon.Offline = withMergedClassName(`${CLASS_NAME} border-brick`, CrewIconBase);
-CrewIcon.DriveBack = withMergedClassName(`${CLASS_NAME} border-mantis`, CrewIconBase);
 
-export default caseMap(CrewIcon, [
-  [isStatus('BUSY'), CrewIcon.Busy],
-  [
-    or(
-      isStatus('BREAK'),
-      pathSatisfies(['permissions', 0, 'expires_at'], isTruthy),
-    ),
-    CrewIcon.Break
-  ],
-  [isStatus('READY'), CrewIcon.Ready],
-  [isStatus('OFFLINE'), CrewIcon.Offline],
-  [isStatus('DRIVE_BACK'), CrewIcon.DriveBack]
+export const crewStatusAs = ({
+  onOffline,
+  onBreak,
+  onReady,
+  onBusy,
+  onDriveBack,
+  onFallback,
+}) => caseMap(onFallback, [
+  [isStatus('BUSY'), onBusy],
+  [or(isStatus('BREAK'), pathSatisfies(['permissions', 0, 'expires_at'], isTruthy)), onBreak],
+  [isStatus('READY'), onReady],
+  [isStatus('OFFLINE'), onOffline],
+  [isStatus('DRIVE_BACK'), onDriveBack]
 ]);
+
+export default crewStatusAs({
+  onOffline: CrewIcon.Offline,
+  onBreak: CrewIcon.Break,
+  onReady: CrewIcon.Ready,
+  onBusy: CrewIcon.Busy,
+  onDriveBack: CrewIcon.DriveBack,
+  onFallback: CrewIcon,
+});
