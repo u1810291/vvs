@@ -1,7 +1,6 @@
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 import {hasLength} from '@s-e/frontend/pred';
-import {mIsSame} from 'util/pred';
 import {
   Async,
   pick,
@@ -22,6 +21,8 @@ import {
   propEq,
   reduce,
   safe,
+  isSame,
+  Maybe,
 } from 'crocks';
 
 /**
@@ -73,7 +74,7 @@ const usersToIds = curry((userIdLens, users) => pipe(
 /**
  * @type {(auth: import('context/auth').AuthContextValue) => (userIdLens: import('crocks/Maybe').default) => (users: Array) => Async}
  */
-export const augmentsToUsers = curry((auth, userIdLens, users) => pipe(
+ export const augmentsToUsers = curry((auth, userIdLens, users) => pipe(
   branch,
   map(pipe(
     usersToIds(userIdLens),
@@ -81,7 +82,12 @@ export const augmentsToUsers = curry((auth, userIdLens, users) => pipe(
   )),
   merge((augments, asyncUsers) => Async.of(augments => users => (
     augments.map(augment => ({
-      ...(find(mIsSame(userIdLens(augments), getProp('id')), users).option({})),
+      ...(find(user => {
+          return Maybe.of(userId =>  augmentId => isSame(userId, augmentId))
+          .ap(getProp('id', user))
+          .ap(userIdLens(augment))
+          .option(false)
+        }, users).option({})),
       ...augment,
     }))
   ))

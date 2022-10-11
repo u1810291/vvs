@@ -15,6 +15,7 @@ import {
 import Detail from 'components/Disclosure/AsideDisclosure';
 import useQuestion from '../api/useQuestion';
 import {HelpListRoute} from '../routes';
+import {format} from 'date-fns';
 
 
 
@@ -45,7 +46,7 @@ const HelpEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     },
   });
 
-  // console.log({form});
+  // console.log(form['created_at']);
   
   // save 
   useQuestion({
@@ -66,10 +67,10 @@ const HelpEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
       </div>
       <aside className={'border-l border-gray-border'}>
         <Detail title={t`information`}>
-          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.client`}</span>} right={<span>{form['user_id']}</span>} />
-          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.created_at`}</span>} right={<span>{form['created_at']}</span>} />
-          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.subject`}</span>} right={<span>{form['subject']}</span>} />
-          <Detail.Item left={<span className='block min-w-[6rem] whitespace-nowrap'>{t`field.answer_type`}</span>} right={<span>{form['answer_type']}</span>} />
+          <Detail.Item left={t`field.client`} right={form['user']?.fullName} />
+          <Detail.Item left={t`field.created_at`} right={form['created_at'] && format(new Date(form['created_at']), 'Y-MM-dd HH:mm')} />
+          <Detail.Item left={t`field.subject`} right={form['subject']} />
+          <Detail.Item left={t`field.answer_type`} right={form['answer_type']} />
         </Detail>
       </aside>
     </section>

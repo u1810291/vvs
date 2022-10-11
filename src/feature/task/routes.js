@@ -18,7 +18,7 @@ const TaskRoute = (
   <>
     {TaskCreateRoute}
     {TaskEditRoute}
-    <Route exact path='/task/edit' element={<Navigate replace to={TaskListRoute.props.path} />}/>
+    <Route exact path='/task/edit' isHidden element={<Navigate replace to={TaskListRoute.props.path} />}/>
   </>
 );
 

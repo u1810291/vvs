@@ -43,6 +43,8 @@ const TaskEditLayout = () => {
     )
   };
 
+  console.log(queryData);
+
   const allowToReturn = () => {
     update(Result.of({id, crew_id: data?.crew?.id, status: 'FINISHED'})).fork(
       e => notify(

@@ -24,11 +24,12 @@ import {
   pipe,
   safe,
   option,
+  // getPath,
 } from 'crocks';
 import useQuestions from '../api/useQuestions';
 import {format} from 'date-fns';
 import DynamicStatus from 'components/atom/Status';
-import {useClientDropdown} from 'feature/client/api/useClients';
+
 
 const getColumn = curry((t, Component, key, mapper, status, styles) => ({
   Component,
@@ -57,9 +58,7 @@ const HelpListLayout = withPreparedProps(Listing, props => {
   // TODO: Prepare 'helps' data in Hasura to be fetched
   
   const api = useQuestions();
-  const clientsApi = useClientDropdown();
-
-  console.log(clientsApi, 'clients');
+  console.log(api?.data, 'listing');
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(HelpEditRoute.props.path, {id: props?.id})}>
@@ -88,7 +87,6 @@ const HelpListLayout = withPreparedProps(Listing, props => {
         <Innerlinks.Item isCurrent={true}>{tp('Help')}</Innerlinks.Item>
       </Innerlinks>
     ),
-    // TODO: Adjust column names regarding response data
     tableColumns: [
       c(
         'created_at',
@@ -99,22 +97,25 @@ const HelpListLayout = withPreparedProps(Listing, props => {
         ),
         true, null,
       ),
-      c('user_id', pipe(
-        getProp('user_id'),
-        chain(safe(not(isEmpty))),
-        map(id => clientsApi.data?.find(c => c.value === id)?.fullName)
-      ), true, 'text-steel'),
-      c('subject', pipe(
+      c('fullName', 
+        pipe(
+          getProp('fullName'),
+          chain(safe(not(isEmpty))),
+        ), true, 'text-steel'),
+      c('subject', 
+        pipe(
           getProp('subject'), 
         ), 
         true, null
       ),
-      c('answer_type', pipe(
+      c('answer_type', 
+        pipe(
           getProp('answer_type'),
         ),
         true, null
       ),
-      cs('status', pipe(
+      cs('status', 
+        pipe(
           getProp('status'), 
         ),
         true, null
