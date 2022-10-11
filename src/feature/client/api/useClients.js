@@ -3,24 +3,18 @@ import {augmentUser, getPathAsync} from 'api/buildUserQuery';
 import {
   getProp, 
   curry, 
-  // map, 
+  map, 
   pipe, 
-  // ifElse, 
   safe,
-  // option, 
   isEmpty, 
   not, 
-  // hasProps,
-  // tap,
-  // Async,
-  // chain
+  hasProps,
 } from 'crocks';
-// import {map} from 'crocks/pointfree';
 import raw from 'raw.macro';
 import {mapByMaybe} from 'util/array';
-// import {titleCase} from '@s-e/frontend/transformer/string';
+import {titleCase} from '@s-e/frontend/transformer/string';
 
-const LIST_PROPS = ['usersByQuery', 'users'];
+const LIST_PROPS = ['usersByRole', 'users'];
 const LIST_SETTINGS_PROPS = ['user_settings'];
 
 /**
@@ -63,27 +57,27 @@ export const useClientDropdown = createUseListWithAuth({
   asyncMapFromApi: auth => item => (
     getPathAsync(LIST_PROPS, item)
     .chain(augmentUser(getUserSettings(auth)))
-    // .map(map(a => (
-    //   {
-    //     value: a.id, 
-    //     name: getProp('fullName', a).chain(toStringValue)
-    //       .alt((
-    //         safe(hasProps(['firstName', 'middleName', 'lastName']), a)
-    //         .map(({firstName, middleName, lastName}) => `${firstName} ${middleName} ${lastName}`)
-    //         .chain(toStringValue)
-    //       ))
-    //       .alt((
-    //         safe(hasProps(['firstName', 'lastName']), a)
-    //         .map(({firstName, lastName}) => `${firstName} ${lastName}`)
-    //         .chain(toStringValue)
-    //       ))
-    //       .alt(getProp('firstName', a).chain(toStringValue))
-    //       .alt(getProp('lastName', a).chain(toStringValue))
-    //       .alt(getProp('id', a).chain(toStringValue))
-    //       .map(titleCase)
-    //       .option(null)
-    //   }
-    // )))
-    // .chain(obj => Async.of(console.log('asd', obj)))
+    
+    .map(map(a => (
+      {
+        value: a.id, 
+        name: getProp('fullName', a).chain(toStringValue)
+          .alt((
+            safe(hasProps(['firstName', 'middleName', 'lastName']), a)
+            .map(({firstName, middleName, lastName}) => `${firstName} ${middleName} ${lastName}`)
+            .chain(toStringValue)
+          ))
+          .alt((
+            safe(hasProps(['firstName', 'lastName']), a)
+            .map(({firstName, lastName}) => `${firstName} ${lastName}`)
+            .chain(toStringValue)
+          ))
+          .alt(getProp('firstName', a).chain(toStringValue))
+          .alt(getProp('lastName', a).chain(toStringValue))
+          .alt(getProp('id', a).chain(toStringValue))
+          .map(titleCase)
+          .option(null)
+      }
+    )))
   )
 });

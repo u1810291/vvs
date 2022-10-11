@@ -58,7 +58,6 @@ const HelpListLayout = withPreparedProps(Listing, props => {
   // TODO: Prepare 'helps' data in Hasura to be fetched
   
   const api = useQuestions();
-  console.log(api?.data, 'listing');
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(HelpEditRoute.props.path, {id: props?.id})}>
@@ -102,24 +101,9 @@ const HelpListLayout = withPreparedProps(Listing, props => {
           getProp('fullName'),
           chain(safe(not(isEmpty))),
         ), true, 'text-steel'),
-      c('subject', 
-        pipe(
-          getProp('subject'), 
-        ), 
-        true, null
-      ),
-      c('answer_type', 
-        pipe(
-          getProp('answer_type'),
-        ),
-        true, null
-      ),
-      cs('status', 
-        pipe(
-          getProp('status'), 
-        ),
-        true, null
-      ),
+      c('subject', pipe(getProp('subject')), true, null),
+      c('answer_type', pipe(getProp('answer_type')),true, null),
+      cs('status', pipe(getProp('status')),true, null),
     ],
   }
 });
