@@ -1,0 +1,9 @@
+mutation UpdateQuestionById (
+  $id: uuid!,
+  ) {
+  update_user_question_by_pk (_set: {
+    status: COMPLETED
+  }, pk_columns: {id: $id}) {
+    id
+  }
+}

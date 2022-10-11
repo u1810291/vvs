@@ -9,9 +9,9 @@ query GetBreaches($where: crew_breach_bool_exp = {}) {
         crew {
             name
             status
-            zone {
-                nodes
-            }
+            # zone {
+            #     nodes
+            # }
         }
     }
 }

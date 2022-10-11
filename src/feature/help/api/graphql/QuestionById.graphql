@@ -1,0 +1,11 @@
+query QuestionById ($id: uuid!) {
+  user_question_by_pk(id: $id) {
+    id
+    subject
+    user_id
+    message
+    answer_type
+    created_at
+    status
+  }
+}

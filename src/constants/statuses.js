@@ -26,3 +26,8 @@ export const permissionStatus = {
   PERMISSION_ALLOWED: 'ALLOWED',
   PERMISSION_ASKED: 'ASKED',
 }
+
+export const helpStatus = {
+  HELP_NEW: 'NEW',
+  HELP_COMPLETED: 'COMPLETED',
+}

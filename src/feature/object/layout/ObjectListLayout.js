@@ -60,8 +60,10 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   const {data: clientsDropdown} = useClientDropdown();
+  console.log(clientsDropdown, 'clients');
+
   const ne = not(isEmpty);
-  const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.value === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
+  const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.id === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
   const boolToStr = e => e ? t`YES` : t`NO`;
   const dateCol = (d) => format(new Date(d), 'Y-MM-dd HH:mm');
 
@@ -90,7 +92,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
       filter: 'autocomplete', 
       values: clientsDropdown || [] , 
       displayValue: (v) => {
-        return clientsDropdown?.find(c => c.value === v)?.name;
+        return clientsDropdown?.find(c => c.id === v)?.fullName;
       }
     },
   ];

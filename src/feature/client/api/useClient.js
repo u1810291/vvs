@@ -5,7 +5,7 @@ import {getPathAsync} from 'api/buildUserQuery';
 import {removeFalsyFields} from 'util/obj';
 
 export default createUseOne({
-  getGraphQl: raw('./graphql/GetClientInfo.graphql'),
+  getGraphQl: raw('./graphql/GetClientsData.graphql'),
   updateGraphQl: raw('./graphql/UpdateClientInfoData.graphql'),
   createGraphql: raw('./graphql/CreateClientNew.graphql'),
   asyncMapFromApi: pipe(
