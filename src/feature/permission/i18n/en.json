@@ -21,6 +21,7 @@
       "ASKED": "Asked",
       "COMPLETE": "Complete",
       "REJECTED": "Rejected",
+      "PREREJECTED": "Rejected",
       "CANCELLED": "Cancelled"
     }
   },
