@@ -22,11 +22,12 @@ import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
 import {useFilter} from 'hook/useFilter';
 import {useTranslation} from 'react-i18next';
 
-const getColumn = curry((t, Component, key, mapper, status, styles) => ({
+const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) => ({
   Component,
   headerText: t(key),
   key,
   status,
+  isSortable,
   itemToProps: item => pipe(
     mapper,
     alt(Maybe.Just('-')),
@@ -62,7 +63,7 @@ const BreachListLayout = withPreparedProps(Listing, () => {
         chain(safe(not(isEmpty))),
         map(date => format(new Date(date), 'Y-MM-dd HH:mm'))
       ),
-      true, null,
+      true, null, true
     ),
     column(
       'time_outside_the_zone',
@@ -76,14 +77,14 @@ const BreachListLayout = withPreparedProps(Listing, () => {
             })
           )
         )
-      ), true, null
+      ), true, null, false
     ),
-    column('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
+    column('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel', false),
     column('driver_user_id', pipe(
       getProp('driver_user_id'),
       chain(safe(not(isEmpty))),
       map(id => driverDropdown?.find(d => d.value === id)?.name)
-    ), true, 'text-steel'),
+    ), true, 'text-steel', false),
   ]
 
   const filtersData = [    
@@ -97,7 +98,7 @@ const BreachListLayout = withPreparedProps(Listing, () => {
     {key: 'time_outside_zone', label: 'Time outside zone (seconds)', filter: 'range'},
   ];
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'crew_breach',
     tableColumns,
     filtersData,
@@ -108,7 +109,7 @@ const BreachListLayout = withPreparedProps(Listing, () => {
   useEffect(() => {
     setExportData(list.data)
     list.mutate();
-  }, [queryParams]);
+  }, [queryParams, sortColumnKey]);
 
   return {
     list: safe(isArray, list?.data).option([]),
@@ -138,7 +139,9 @@ const BreachListLayout = withPreparedProps(Listing, () => {
     ),
     filters,
     tableColumns,
-    columns
+    columns,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

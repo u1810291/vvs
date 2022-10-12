@@ -2,14 +2,14 @@ import Breadcrumbs from 'components/Breadcrumbs';
 import Button from 'components/Button';
 import Innerlinks from 'components/Innerlinks';
 import Listing from 'layout/ListingLayout';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import withPreparedProps from 'hoc/withPreparedProps';
 import {KeyBoxEditRoute, KeyBoxCreateRoute} from '../routes';
 import {ModemListRoute} from 'feature/modem/routes';
 import {ObjectListRoute} from 'feature/object/routes';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
-import {titleCase} from '@s-e/frontend/transformer/string';
+// import {titleCase} from '@s-e/frontend/transformer/string';
 import {useKeyBoxes} from '../api';
 import {useTranslation} from 'react-i18next';
 import {
@@ -21,12 +21,16 @@ import {
   objOf,
   pipe,
   getPath,
+  safe,
+  isArray,
 } from 'crocks';
+import {useFilter} from 'hook/useFilter';
 
-const getColumn = curry((t, Component, key, mapper) => ({
+const getColumn = curry((t, Component, key, mapper, isSortable) => ({
   Component,
   headerText: t(key),
   key,
+  isSortable,
   itemToProps: item => pipe(
     mapper,
     map(objOf('children')),
@@ -48,8 +52,29 @@ const KeyBoxListLayout = withPreparedProps(Listing, () => {
     </Link>
   )), [t]);
 
+  const tableColumns = [
+    c('set_name', pipe(getProp('set_name')), true),
+    c('crew_name', pipe(getPath(['crew', 'name'])), false),
+  ];
+
+  const filtersData = [
+    {key: 'set_name', label: 'set_name', filter: 'text'},
+  ];
+
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
+    'keybox',
+    tableColumns,
+    filtersData,
+  );
+
+  const list = useKeyBoxes({filters: queryParams});
+  
+  useEffect(() => {
+    list.mutate();
+  }, [queryParams, sortColumnKey]);
+
   return {
-    list: useKeyBoxes()?.data || [],
+    list: safe(isArray, list?.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
@@ -68,10 +93,9 @@ const KeyBoxListLayout = withPreparedProps(Listing, () => {
         <Innerlinks.Item isCurrent={true}>{tp('Key Boxes')}</Innerlinks.Item>
       </Innerlinks>
     ),
-    tableColumns: [
-      c('set_name', pipe(getProp('set_name')), titleCase),
-      c('crew_name', pipe(getPath(['crew', 'name'])), ts),
-    ],
+    tableColumns,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

@@ -35,6 +35,8 @@ const DEFAULT_FILTER_NAME = 'New filter';
 const DEFAULT_SHORTCUT_NAME = 'FLTR';
 const APPLY_FILTER_PARAM = 'af';
 const SHORTCUT_MAXLENGTH = 4;
+const DIRECTION_ASC = 'asc_nulls_first';
+const DIRECTION_DESC = 'desc_nulls_first';
 
 const Mode = {
 	Default: 'default',
@@ -213,6 +215,13 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     starred: false,
     isDefault: false,
   })
+
+  // column sorting
+  // console.log(tableColumns, 'table columns');
+  const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? tableColumns[0].key : null);
+  const setSortColumn = (column) => {
+    setSortColumnKey(sortColumnKey && sortColumnKey === column ? `-${column}` : column);
+  }
 
   // column filtering
   const [columns, setColumns] = useState([]);
@@ -842,10 +851,12 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     
     return {
       where: {
-        _and: params
-      }
+        _and: params,        
+      },
+      orderBy: {[sortColumnKey?.replace('-', '')]: sortColumnKey && sortColumnKey[0] === '-' ? DIRECTION_DESC : DIRECTION_ASC}
     };
-  }, [state]);
+  }, [state, sortColumnKey]);
+
 
   return [
     queryParams,
@@ -853,7 +864,9 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     columns,
     getFilter(defaultFilterId),
     toggleFilter,
-    setExportData
+    setExportData,
+    sortColumnKey,
+    setSortColumn,
   ]
 }
 

@@ -1,5 +1,5 @@
-query GetTasks($where: events_bool_exp) {
-  events(where: $where) {
+query GetTasks($where: events_bool_exp, $orderBy: [events_order_by!]) {
+  events(where: $where, order_by: $orderBy) {
     created_at
     crew_id
     description

@@ -35,11 +35,12 @@ import TaskStatusTag from '../component/TaskStatusTag';
 
 const {Just} = Maybe;
 
-const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
+const getColumn = curry((t, Component, key, pred, mapper, status, styles, isSortable) => ({
   Component,
   headerText: t(key),
   key,
   status,
+  isSortable,
   itemToProps: item => pipe(
     getProp(key),
     chain(safe(pred)),
@@ -63,7 +64,6 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const {t: tc} = useTranslation('task', {keyPrefix: 'list.column'});
 
   const c = useMemo(() => getColumn(tc, props => (
-
     <Link className={props?.className} to={generatePath(TaskEditRoute.props.path, {id: props?.id})}>
         {props?.children}
     </Link>
@@ -87,11 +87,11 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const {data: objects} = useObjectsDropdown();
 
   const tableColumns = [
-    c('id', constant(true), nullToStr, false, 'text-regent'),
-    c('created_at', constant(true), formatDate, true, 'text-regent'),
-    c('object', constant(true), concatNameAdress, true, 'text-regent'),
-    c('name', constant(true), nullToStr, true, 'text-bluewood'),
-    c('crew', constant(true), getName, true, 'text-regent'),
+    c('id', constant(true), nullToStr, false, 'text-regent', true),
+    c('created_at', constant(true), formatDate, true, 'text-regent', true),
+    c('object', constant(true), concatNameAdress, true, 'text-regent', false),
+    c('name', constant(true), nullToStr, true, 'text-bluewood', true),
+    c('crew', constant(true), getName, true, 'text-regent', false),
     getColumn(
       tc,
       props => <TaskStatusTag {...props}/>,
@@ -99,16 +99,17 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       constant(true),
       nullToStr,
       true,
-      null
+      null,
+      true,
     ),
-    c('reason', constant(true), nullToStr, true, 'text-bluewood')
+    c('reason', constant(true), nullToStr, true, 'text-bluewood', true)
   ];
 
   const filtersData = [
     {key: 'created_at', label: tc('created_at'), filter: 'date'},
     // {key: 'operator', label: 'Operator', filter: 'multiselect', values: []},
     {
-      key: 'object',
+      key: 'object_id',
       label: tc('object'),
       filter: 'autocomplete',
       values: pipe(safe(not(isEmpty)), option([]))(objects),
@@ -137,7 +138,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     // {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', values: ['True', 'False']},
   ];
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'events',
     tableColumns,
     filtersData,
@@ -147,7 +148,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
 
   useEffect(() => {
     list.mutate();
-  }, [queryParams]);
+  }, [queryParams, sortColumnKey]);
   
   return {
     list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
@@ -176,7 +177,9 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     ),
     filters,
     tableColumns,
-    columns
+    columns,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

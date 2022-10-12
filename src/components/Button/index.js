@@ -49,4 +49,5 @@ Button.Pxl = Button.Primary = withMergedClassName(`${CLASS_NAME_PRIMARY} px-16 p
 Button.Sxl = Button.Secondary = withMergedClassName(`${CLASS_NAME_SECONDARY} px-16 py-4 text-base`, TailwindUiSecondary);
 Button.Dxl = Button.Danger = withMergedClassName(`${CLASS_NAME_DANGER} px-16 py-4 text-base`, TailwindUiDanger);
 
+
 export default Button;

@@ -1,5 +1,5 @@
-query($where: crew_permission_bool_exp = {}) {
-  crew_permission(where: $where) {
+query($where: crew_permission_bool_exp = {}, $orderBy: [crew_permission_order_by!]) {
+  crew_permission(where: $where, order_by: $orderBy) {
     id
     created_at
     updated_at

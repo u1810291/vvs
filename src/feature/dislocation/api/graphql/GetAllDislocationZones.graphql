@@ -1,5 +1,5 @@
-query GetDislocationZones {
-  crew_zone {
+query GetDislocationZones($orderBy: [crew_zone_order_by!]) {
+  crew_zone(order_by: $orderBy) {
     name
     id
   }

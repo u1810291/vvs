@@ -108,11 +108,11 @@ export const createUseApiList = ({
   graphQl, 
   asyncMapFromApi = Async.Resolved,
   mapFromApiUsingAuth = false,
-}) => () => {
+}) => ({filters}) => {
   const {api, ...auth} = useAuth();
 
-  return useAsyncSwr([graphQl], (query, params) => (
-    api(params, query)
+  return useAsyncSwr([graphQl, filters], (query) => (
+    api(filters, query)
     .chain(r => mapFromApiUsingAuth
       ? asyncMapFromApi({api, ...auth})(r)
       : asyncMapFromApi(r))

@@ -1,7 +1,7 @@
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import Innerlinks from 'components/Innerlinks';
 import Listing from '../../../layout/ListingLayout';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
 import {ClientListRoute} from 'feature/client/routes';
 import {HelpEditRoute} from '../routes';
@@ -24,18 +24,19 @@ import {
   pipe,
   safe,
   option,
-  // getPath,
 } from 'crocks';
 import useQuestions from '../api/useQuestions';
 import {format} from 'date-fns';
 import DynamicStatus from 'components/atom/Status';
+import {useFilter} from 'hook/useFilter';
 
 
-const getColumn = curry((t, Component, key, mapper, status, styles) => ({
+const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) => ({
   Component,
   headerText: t(key),
   key,
   status,
+  isSortable,
   itemToProps: item => pipe(
     mapper,
     alt(Maybe.Just('-')),
@@ -55,9 +56,8 @@ const HelpListLayout = withPreparedProps(Listing, props => {
   const {t: tb} = useTranslation('help', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('help', {keyPrefix: 'list.column'});
   const {t: tp} = useTranslation('help');
-  // TODO: Prepare 'helps' data in Hasura to be fetched
+
   
-  const api = useQuestions();
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(HelpEditRoute.props.path, {id: props?.id})}>
@@ -70,9 +70,49 @@ const HelpListLayout = withPreparedProps(Listing, props => {
       <DynamicStatus t={'help'} className={'w-20'} status={props?.status}/>
     </Link>
   )), [t]);
+ 
+  const tableColumns = [
+    c(
+      'created_at',
+      pipe(
+        getProp('created_at'),
+        chain(safe(not(isEmpty))),
+        map(date => format(new Date(date), 'Y-MM-dd HH:mm'))
+      ),
+      true, null, true
+    ),
+    c('fullName', 
+      pipe(
+        getProp('fullName'),
+        chain(safe(not(isEmpty))),
+      ), true, 'text-steel', false),
+    c('subject', pipe(getProp('subject')), true, null, true),
+    c('answer_type', pipe(getProp('answer_type')),true, null, true),
+    cs('status', pipe(getProp('status')),true, null, true),
+  ];
+
+  const filtersData = [
+    {key: 'created_at', label: 'created_at', filter: 'text'},
+    {key: 'subject', label: 'subject', filter: 'text'},
+    {key: 'answer_type', label: 'answer_type', filter: 'text'},
+    {key: 'status', label: 'status', filter: 'text'},
+  ];
+
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
+    'help',
+    tableColumns,
+    filtersData,
+  );
+  
+  const list = useQuestions({filters: queryParams});
+
+  useEffect(() => {
+    list.mutate();
+  }, [queryParams, sortColumnKey]);
+
 
   return {
-    list: safe(isArray, api?.data).option([]),
+    list: safe(isArray, list?.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
@@ -86,25 +126,9 @@ const HelpListLayout = withPreparedProps(Listing, props => {
         <Innerlinks.Item isCurrent={true}>{tp('Help')}</Innerlinks.Item>
       </Innerlinks>
     ),
-    tableColumns: [
-      c(
-        'created_at',
-        pipe(
-          getProp('created_at'),
-          chain(safe(not(isEmpty))),
-          map(date => format(new Date(date), 'Y-MM-dd HH:mm'))
-        ),
-        true, null,
-      ),
-      c('fullName', 
-        pipe(
-          getProp('fullName'),
-          chain(safe(not(isEmpty))),
-        ), true, 'text-steel'),
-      c('subject', pipe(getProp('subject')), true, null),
-      c('answer_type', pipe(getProp('answer_type')),true, null),
-      cs('status', pipe(getProp('status')),true, null),
-    ],
+    tableColumns,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

@@ -33,10 +33,11 @@ import {CrewListRoute} from 'feature/crew/routes';
 import {DriverListRoute} from 'feature/driver/routes';
 import Button from '../../../components/Button';
 
-const getColumn = curry((t, Component, key, pred, mapper) => ({
+const getColumn = curry((t, Component, key, pred, mapper, isSortable) => ({
   Component,
   headerText: t(key),
   key,
+  isSortable,
   itemToProps: item => pipe(
     getProp(key),
     chain(safe(pred)),
@@ -99,7 +100,7 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
       </Innerlinks>
     ),
     tableColumns: [
-      c('name', ne, identity),
+      c('name', ne, identity, false),
     ],
   }
 });

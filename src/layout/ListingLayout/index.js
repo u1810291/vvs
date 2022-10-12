@@ -7,7 +7,7 @@ import {componentToString} from '@s-e/frontend/react';
 import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
-import {renderWithProps, dynamicSort, withMergedClassName} from '../../util/react';
+import {renderWithProps, withMergedClassName} from '../../util/react';
 import {useCallback, useMemo, useState} from 'react';
 
 import {
@@ -23,8 +23,10 @@ import {
   option,
   pipe,
   safe,
+  isFunction
 } from 'crocks';
-import Button from 'components/Button';
+// import Button from 'components/Button';
+import SortButton from 'components/Button/SortButton';
 
 export const asciifyLT2 = string => string
   .replace(/a/gi, '(a|ą)')
@@ -59,26 +61,34 @@ const Listing = ({
   breadcrumbs,
   buttons,
   innerlinks,
+  sortColumnKey,
+  setSortColumn,
 }) => {
   const [query, setQuery] = useState('');
   const activeTableColumnPred = useCallback(column => isEmpty(columns) || columns.includes(column.key), [columns]);
-  const [sortColumnKey, setSortColumn] = useState('name');
+  
   const headerColumns = useMemo(() => pipe(
     safe(and(isArray, every(hasProps(['key', 'headerText'])))),
     map(pipe(
       filter(activeTableColumnPred),
       map(a => pipe(
         b => ({key: b.key, children: b.headerText}),
-        renderWithProps(Button.NoBg),
-        btn => <Table.Th className='hover:text-black text-left' key={a.key} onClick={() => setSortColumn(a.key)}>{btn}</Table.Th>,
+        b => {
+          let direction = null;
+          if (a.key === sortColumnKey) direction = 'asc';
+          else if (`-${a.key}` === sortColumnKey) direction = 'desc';
+          
+          return renderWithProps(SortButton, {...b, direction, isSortable: a.isSortable})
+        },
+        btn => <Table.Th className='hover:text-black text-left' key={a.key} onClick={() => {
+          isFunction(setSortColumn) && a.isSortable && setSortColumn(a.key)
+        }}>{btn}</Table.Th>,
       )(a))
     )),
     option([]),
   )(tableColumns), [tableColumns, activeTableColumnPred]);
   
   const rows = useMemo(() => pipe(
-    //sort
-    row => row.sort(dynamicSort(sortColumnKey)),
     // filter and render
     reduce((rs, r) => ifElse(
       r => tableColumns
@@ -111,7 +121,7 @@ const Listing = ({
       constant(rs),
       r,
     ), []),
-  )(list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query, sortColumnKey]);
+  )(list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
   return (
     <Index>
       <TitleBar>

@@ -33,11 +33,14 @@ import {
   constant,
 } from 'crocks';
 
-const getColumn = curry((t, Component, key, pred, mapper, status) => ({
+
+
+const getColumn = curry((t, Component, key, pred, mapper, status, isSortable) => ({
   Component,
   headerText: t(key),
   key,
   status,
+  isSortable,
   itemToProps: item => pipe(
     getProp(key),
     chain(safe(pred)),
@@ -68,14 +71,14 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const dateCol = (d) => format(new Date(d), 'Y-MM-dd HH:mm');
 
   const tableColumns = [
-    c('name', ne, identity, true),
-    c('city', ne, titleCase, true),
-    c('address', ne, identity, true),
-    c('contract_object_no', ne, identity, true),
-    c('contract_no', ne, identity, true),
-    c('is_crew_autoasigned', constant(true), boolToStr, true),
-    c('created_at', ne, dateCol, false),
-    c('users', constant(true), userToStr, false),
+    c('name', ne, identity, true, true),
+    c('city', ne, titleCase, true, true),
+    c('address', ne, identity, true, true),
+    c('contract_object_no', ne, identity, true, true),
+    c('contract_no', ne, identity, true, true),
+    c('is_crew_autoasigned', constant(true), boolToStr, true, true),
+    c('created_at', ne, dateCol, false, true),
+    c('users', constant(true), userToStr, false, false),
   ];
 
   const filtersData = [
@@ -97,7 +100,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     },
   ];
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'object',
     tableColumns,
     filtersData,
@@ -106,10 +109,9 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const list = useObjects({filters: queryParams})
   
   useEffect(() => {
-    // console.log(queryParams);
     list.mutate()
     setExportData(list.data);
-  }, [queryParams]);
+  }, [queryParams, sortColumnKey]);
 
  
   return {
@@ -141,6 +143,8 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     filters,
     tableColumns,
     columns,
+    sortColumnKey,
+    setSortColumn,
   }
 });
 

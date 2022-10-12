@@ -1,5 +1,5 @@
-query {
-  object_key_box {
+query($where: object_key_box_bool_exp, $orderBy: [object_key_box_order_by!]) {
+  object_key_box(where: $where, order_by: $orderBy) {
     crew_id
     set_name
     id

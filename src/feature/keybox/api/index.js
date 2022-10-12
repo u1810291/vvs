@@ -1,9 +1,9 @@
-import {createUseList, createUseOne, createUseWhereList} from 'api/buildApiHook';
+import {createUseOne, createUseWhereList} from 'api/buildApiHook';
 import {pipe, getProp, pick, Async} from 'crocks';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 
-export const useKeyBoxes = createUseList({
+export const useKeyBoxes = createUseWhereList({
   graphQl: raw('./graphql/GetKeyBoxes.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('prop "object_key_box" expected but not found.', getProp('object_key_box')),

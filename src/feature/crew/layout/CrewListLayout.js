@@ -22,11 +22,12 @@ import {useTranslation} from 'react-i18next';
 
 const {Just} = Maybe;
 
-const getColumn = curry((t, Component, key, pred, mapper, status, styles) => ({
+const getColumn = curry((t, Component, key, pred, mapper, status, styles, isSortable) => ({
   Component,
   headerText: t(key),
   key,
   status,
+  isSortable,
   itemToProps: item => pipe(
     getProp(key),
     chain(safe(pred)),
@@ -67,12 +68,12 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   const {data: crewZones} = useDislocationZonesDropdown();
 
   const tableColumns = [
-    c('id', constant(true), nullToStr, false, 'text-regent'),
-    c('name', constant(true), nullToStr, true, 'text-bluewood'),
-    c('abbreviation', constant(true), nullToStr, true, 'text-regent'),
-    c('calendars', constant(true), arrToStr, true, 'text-steel'),
-    cs('status', constant(true), nullToStr, true, null),
-    c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent')
+    c('id', constant(true), nullToStr, false, 'text-regent', true),
+    c('name', constant(true), nullToStr, true, 'text-bluewood', true),
+    c('abbreviation', constant(true), nullToStr, true, 'text-regent', true),
+    c('calendars', constant(true), arrToStr, true, 'text-steel', false),
+    cs('status', constant(true), nullToStr, true, null, true),
+    c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent', true)
   ];
 
   const filtersData = [
@@ -110,7 +111,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     }
   ];
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'crew',
     tableColumns,
     filtersData,
@@ -121,7 +122,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
   useEffect(() => {
     setExportData(list.data);
     list.mutate();
-  }, [queryParams]);
+  }, [queryParams, sortColumnKey]);
 
   return {
     list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
@@ -149,7 +150,9 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     ),
     filters,
     tableColumns,
-    columns
+    columns,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

@@ -41,11 +41,12 @@ import useDriversDropdown from 'feature/driver/api/useDriversDropdown';
 import {format} from 'date-fns';
 
 
-const getColumn = curry((t, Component, key, mapper, status, styles) => ({
+const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) => ({
   Component,
   headerText: t(key),
   key,
   status,
+  isSortable,
   itemToProps: item => pipe(
     mapper,
     map(objOf('children')),
@@ -88,11 +89,11 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
 
   const tableColumns = [
     // c('id', pipe(getProp('id')), false, null),
-    c('created_at', pipe(getProp('created_at'), map(d => format(new Date(d), 'Y-MM-dd HH:mm'))), true, null),
-    c('request_id', pipe(getProp('request_id')), true, null),
-    cs('status', pipe(getProp('status')), true, null),
-    c('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel'),
-    c('crew.driver_user_id', pipe(getPath(['crew', 'driver_user_id']), map(d => driverDropdown?.find(dr => dr.value === d)?.name)), true, 'text-steel'),
+    c('created_at', pipe(getProp('created_at'), map(d => format(new Date(d), 'Y-MM-dd HH:mm'))), true, null, true),
+    c('request_id', pipe(getProp('request_id')), true, null, true),
+    cs('status', pipe(getProp('status')), true, null, true),
+    c('crew_name', pipe(getPath(['crew', 'name'])), true, 'text-steel', false),
+    c('crew.driver_user_id', pipe(getPath(['crew', 'driver_user_id']), map(d => driverDropdown?.find(dr => dr.value === d)?.name)), true, 'text-steel', false),
   ];
 
   const filtersData = [
@@ -109,7 +110,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     }},
   ];
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'crew_permission',
     tableColumns,
     filtersData,
@@ -121,7 +122,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     // console.log(queryParams);
     setExportData(api.data);
     api.mutate()
-  }, [queryParams]);
+  }, [queryParams, sortColumnKey]);
 
   return {
     // list: safe(isArray, api?.data).option([]),
@@ -154,6 +155,8 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     tableColumns,
     filters,
     columns,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

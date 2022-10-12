@@ -34,11 +34,12 @@ import {
   flip,
 } from 'crocks';
 
-const getColumn = curry((t, Component, key, mapper, status, styles) => ({
+const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) => ({
   Component,
   headerText: t(key),
   key,
   status,
+  isSortable,
   itemToProps: item => pipe(
     mapper,
     map(objOf('children')),
@@ -192,7 +193,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
       .alt(getProp('firstName', a).chain(toStringValue))
       .alt(getProp('lastName', a).chain(toStringValue))
       .alt(getProp('id', a).chain(toStringValue))
-    ), true, null),
+    ), true, null, false),
     {
       key: 'status',
       headerText: tc`status`,
@@ -200,6 +201,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
       Component: withPreparedProps(DriverOnlineTag, identity),
       status: true,
       styles: null,
+      isSortable: true,
     }
   ];
 
@@ -208,7 +210,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     {key: 'status', label: 'Status', filter: 'multiselect', values: ['OFFLINE', 'ONLINE', 'DEACTIVATED']},
   ]
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'crew_driver',
     tableColumns,
     filtersData,
@@ -225,7 +227,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
       api.mutate();
     }
     setExportData(api.data);
-  }, [queryParams]);
+  }, [queryParams, sortColumnKey]);
 
   return {
     list: api?.data || [],
@@ -253,6 +255,8 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     tableColumns,
     columns,
     filters,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 
