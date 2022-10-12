@@ -74,7 +74,7 @@ const PermissionEditLayout = () => {
             {
               id ? (
                 <>
-                  <Button onClick={update('REJECTED')}>{t`button.reject`}</Button>
+                  <Button onClick={update('PREREJECTED')}>{t`button.reject`}</Button>
                   <Button onClick={update('ALLOWED')}>{t`button.approve`}</Button>
                 </>
               ) : (
