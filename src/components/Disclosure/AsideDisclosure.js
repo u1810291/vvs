@@ -13,6 +13,7 @@ export const AsideDisclosure = ({title,  ...props}) => (
 );
 
 export const ITEM_CLASSNAME = 'mx-4 py-4 flex justify-between items-center border-t border-gray-200';
+export const ITEM_NO_GUTTERS_CLASSNAME = 'py-4 flex justify-between items-center border-gray-200';
 
 export const AsideDisclosureItem = ({left, right, children, ...props}) => (
   <div className={ITEM_CLASSNAME} {...props}>
@@ -28,6 +29,7 @@ export const AsideDisclosureItem = ({left, right, children, ...props}) => (
 
 AsideDisclosure.ExtItem = withMergedClassName(ITEM_CLASSNAME, AsideDisclosureItem);
 AsideDisclosure.Item = AsideDisclosureItem;
+AsideDisclosure.ItemNoGutters = withMergedClassName(ITEM_NO_GUTTERS_CLASSNAME, AsideDisclosureItem);
 
 
 export default AsideDisclosure;

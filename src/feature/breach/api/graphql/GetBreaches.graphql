@@ -1,4 +1,4 @@
-query GetBreaches($where: crew_breach_bool_exp = {}, $orderBy: [crew_breach_order_by!]) {
+query GetBreaches($where: crew_breach_bool_exp = {}, $orderBy: [crew_breach_order_by]) {
     crew_breach(where: $where, order_by: $orderBy) {
         id
         end_time

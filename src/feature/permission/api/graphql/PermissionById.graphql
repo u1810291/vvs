@@ -3,20 +3,28 @@ query PermissionById ($id: uuid!) {
     id
     created_at
     updated_at
+    expires_at
     crew_id
     request_id
     status
     crew {
       id
-      name
       status
-      device_id
+      name
+      latitude
+      longitude
       driver_user_id
+      device_id
       abbreviation
-      phone_number
-      to_call_after
-      is_assigned_automatically
-      is_assigned_while_in_breaks
+      user_settings {
+        is_online
+        id
+        last_ping
+      }
+    }
+    request {
+      duration
+      value
     }
   }
 }

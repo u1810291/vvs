@@ -1,14 +1,10 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
-
-import {useGoogleApiContext} from 'context/google';
-
 import Nullable from 'components/atom/Nullable';
-
 import Map from 'feature/map/component/Map';
 import {useBreach} from 'feature/breach/api/breachEditApi';
 import BreachInfoCard from 'feature/breach/components/BreachInfoCard';
-import {getZoneItems, getFlatNodes, transformNodeContract} from 'feature/breach/utils';
+import {getZoneItems, getFlatNodes} from 'feature/breach/utils';
 import Marker from '../../map/component/Marker';
 import Polygon from '../../map/component/Polygon';
 
@@ -20,12 +16,14 @@ const BREACH_PATH_ICON = {
 
 const BreachEditForm = () => {
   const {id: breachId} = useParams();
-  const {googleMap, bounds, isLoaded} = useGoogleApiContext();
   const {data} = useBreach({id: breachId});
 
   const zonePath = getZoneItems(data?.crew);
   const zoneCoordinates = getFlatNodes(data?.crew);
-  const breachPath = transformNodeContract([data?.nodes]);
+  const breachPath = data?.nodes?.map(a => ({
+    lat: a.latitude,
+    lng: a.longitude,
+  }));
 
   return (
     <section className={'md:flex md:flex-row flex-1'}>

@@ -7,9 +7,7 @@ import {getProp, safe} from 'crocks';
 import {chain, option} from 'crocks/pointfree';
 import {isString, propEq} from 'crocks/predicates';
 
-
 const is = propEq('status');
-
 
 const PermissionStatusBase = (props) => {
   const {t} = useTranslation('permission', {keyPrefix: 'list.status'});
@@ -29,10 +27,10 @@ PermissionStatus.Complete = withMergedClassName(`${CLASS_NAME} bg-mantis`, Permi
 PermissionStatus.Asked = withMergedClassName(`${CLASS_NAME} bg-geyser`, PermissionStatusBase);
 PermissionStatus.Allowed = withMergedClassName(`${CLASS_NAME} bg-cyan-500`, PermissionStatusBase);
 
-// TODO: make a universal component? 
 const DynamicStatus = caseMap(PermissionStatus, [
   [is('CANCELLED'), PermissionStatus.Cancelled],
   [is('REJECTED'), PermissionStatus.Rejected],
+  [is('PREREJECTED'), PermissionStatus.Rejected],
   [is('ALLOWED'), PermissionStatus.Allowed],
   [is('COMPLETE'), PermissionStatus.Complete],
   [is('ASKED'), PermissionStatus.Asked],

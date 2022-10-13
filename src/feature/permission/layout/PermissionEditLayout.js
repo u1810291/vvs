@@ -11,7 +11,7 @@ import SuccessNotification from 'feature/ui-notifications/components/SuccessNoti
 import raw from 'raw.macro';
 import {PermissionListRoute} from '../routes';
 import {errorToText} from 'api/buildApiHook';
-import {getProp, identity, isFunction, isSame, pipe, tap} from 'crocks';
+import {getProp, identity, isFunction, isSame, pipe, tap, getPath} from 'crocks';
 import {useAuth} from '../../../context/auth';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
@@ -29,7 +29,7 @@ const PermissionEditLayout = () => {
   };
 
   const breadcrumb = (
-    getProp('crew_id', data)
+    getPath(['request', 'value'], data)
     .alt(getProp('id', data))
     .option(null)
   );
@@ -77,7 +77,7 @@ const PermissionEditLayout = () => {
               id ? (
                 <>
                   <Nullable on={isSame(data?.status, permissionStatus.PERMISSION_ASKED)}>
-                    <Button className='bg-red-700 w-40 hover:bg-red-800' onClick={update('REJECTED')}>{t`button.reject`}</Button>
+                    <Button className='bg-red-700 w-40 hover:bg-red-800' onClick={update('PREREJECTED')}>{t`button.reject`}</Button>
                   </Nullable>
 
                   <Nullable on={isSame(data?.status, permissionStatus.PERMISSION_ALLOWED)}>

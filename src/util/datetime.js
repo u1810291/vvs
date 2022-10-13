@@ -21,11 +21,11 @@ const extractMinutes = regexDurationPart(DENOTION_MINUTE);
 const extractSeconds = regexDurationPart(DENOTION_SECOND);
 
 /**
- * mIsoPerdiodToDuration :: string -> import('date-fns/docs/Duration').Duration
+ * mIsoPeriodToDuration :: string -> import('date-fns/docs/Duration').Duration
  *
  * @type {(a: string) => import('crocks/Maybe').default}
  */
-export const mIsoPerdiodToDuration = pipe(
+export const mIsoPeriodToDuration = pipe(
   safe(isString),
   map(str => ({
     days: parseInt(str.match(/P.*(\d+)D/i)?.[1]),
