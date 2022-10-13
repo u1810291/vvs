@@ -50,7 +50,7 @@ const PermissionEditLayout = () => {
               </Link>
             </Breadcrumbs.Item>
             <Nullable on={breadcrumb}>
-              <Breadcrumbs.Item>
+              <Breadcrumbs.Item hideSlash>
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
             </Nullable>

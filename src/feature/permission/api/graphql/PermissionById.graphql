@@ -9,6 +9,14 @@ query PermissionById ($id: uuid!) {
     crew {
       id
       name
+      status
+      device_id
+      driver_user_id
+      abbreviation
+      phone_number
+      to_call_after
+      is_assigned_automatically
+      is_assigned_while_in_breaks
     }
   }
 }

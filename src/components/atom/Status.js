@@ -12,7 +12,7 @@ import {safe, getProp, propEq} from 'crocks';
 import {pipe} from 'crocks/helpers';
 import {isString} from 'crocks/predicates';
 import {chain, option} from 'crocks/pointfree';
-import {crewStatus as status, eventStatus, helpStatus} from 'constants/statuses';
+import {crewStatus as status, eventStatus, helpStatus, permissionStatus} from 'constants/statuses';
 
 const is = propEq('status');
 
@@ -55,6 +55,14 @@ const DynamicStatus = caseMap(Status, [
   [is(status.CREW_OFFLINE), Status.Offline],
   [is(status.CREW_ASKED), Status.Offline],
   [is(status.CREW_DRIVE_BACK), Status.DriveBack],
+  
+  // Permissions
+  [is(permissionStatus.PERMISSION_COMPLETE), Status.Finished],
+  [is(permissionStatus.PERMISSION_ASKED), Status.Offline],
+  [is(permissionStatus.PERMISSION_ALLOWED), Status.New],
+  [is(permissionStatus.PERMISSION_REJECTED), Status.Break],
+  [is(permissionStatus.PERMISSION_CANCELLED), Status.Busy],
+
   // Task (Event)
   [is(eventStatus.EVENT_NEW), Status.New],
   [is(eventStatus.EVENT_INSPECTION), Status.OnTheRoad],
@@ -63,10 +71,10 @@ const DynamicStatus = caseMap(Status, [
   [is(eventStatus.EVENT_INSPECTION_DONE), Status.Inspection],
   [is(eventStatus.EVENT_CANCELLED), Status.WaitForCrewApproval],
   [is(eventStatus.EVENT_WAIT_FOR_CREW_APPROVAL), Status.Finished],
+
   // Help
   [is(helpStatus.HELP_NEW), Status.New],
   [is(helpStatus.HELP_COMPLETED), Status.Finished],
-
 ]);
 
 export default DynamicStatus;

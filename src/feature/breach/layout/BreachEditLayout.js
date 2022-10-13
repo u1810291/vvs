@@ -19,7 +19,7 @@ function BreachEditLayout() {
           <Breadcrumbs>
             <RouteAsBreadcrumb route={BreachListRoute} />
             <Nullable on={breachId}>
-              <Breadcrumbs.Item>
+              <Breadcrumbs.Item hideSlash>
                 <span className={'font-semibold'}>{breachId}</span>
               </Breadcrumbs.Item>
             </Nullable>

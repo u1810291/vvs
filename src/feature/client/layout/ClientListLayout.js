@@ -40,10 +40,11 @@ const ClientListLayout = withPreparedProps(Listing, () => {
   const {t: tp} = useTranslation('client');
   const nav = useNavigate();
 
-  const c = (prop, mapper = identity, status) => ({
+  const c = (prop, mapper = identity, status, isSortable) => ({
     key: prop,
     headerText: tc(prop),
     status,
+    isSortable,
     itemToProps: item => pipe(
       safe(and(hasProp('id'), propSatisfies(prop, isTruthy))),
       map(item => ({id: item?.id, children: mapper(item?.[prop])})),
@@ -79,7 +80,7 @@ const ClientListLayout = withPreparedProps(Listing, () => {
 
   // custom filter
   const clientsFilter = useCallback((state, filtersData) => {
-    // console.log(state);
+    console.log(state);
 
     if (state['object_id']) {
       _search({where: {
@@ -214,10 +215,10 @@ const ClientListLayout = withPreparedProps(Listing, () => {
 
   // TODO: Adjust column names regarding response data
   const tableColumns = [
-    c('fullName', identity, true),
-    c('contract_no', identity, true),
-    c('mobilePhone', identity, true),
-    c('username', identity, true),
+    c('fullName', identity, true, false),
+    c('contract_no', identity, true, false),
+    c('mobilePhone', identity, true, false),
+    c('username', identity, true, false),
   ];
 
   const filtersData = [
@@ -230,7 +231,7 @@ const ClientListLayout = withPreparedProps(Listing, () => {
     }},
   ]
 
-  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData] = useFilter(
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'client',
     tableColumns,
     filtersData,
@@ -242,9 +243,10 @@ const ClientListLayout = withPreparedProps(Listing, () => {
   // console.log(api?.data);
 
   useEffect(() => {
+    // console.log(queryParams);
     setExportData(api.data);
     api.mutate()
-  }, [queryParams]);
+  }, [queryParams, sortColumnKey]);
 
   
   return {
@@ -273,6 +275,8 @@ const ClientListLayout = withPreparedProps(Listing, () => {
     tableColumns,
     columns,
     filters,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

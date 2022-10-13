@@ -200,7 +200,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   const [exportData, setExportData] = useState();
   const handleExport = useCallback(() => exportTableToExcel(exportData, new Date()), [exportData]);
 
-  const [showFilter, setShowFilter] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const [params] = useSearchParams();
 

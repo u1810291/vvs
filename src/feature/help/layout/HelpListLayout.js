@@ -116,8 +116,7 @@ const HelpListLayout = withPreparedProps(Listing, props => {
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
-        <Breadcrumbs.Item><span className='font-semibold'>{tb`helps`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item hideSlash>{tb`allData`}</Breadcrumbs.Item>
+        <Breadcrumbs.Item hideSlash><span className='font-semibold'>{tb`helps`}</span></Breadcrumbs.Item>
       </Breadcrumbs>
     ),
     innerlinks: (

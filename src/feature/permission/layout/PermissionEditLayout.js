@@ -5,21 +5,22 @@ import ErrorNotification from 'feature/ui-notifications/components/ErrorNotifica
 import Header from 'components/atom/Header';
 import Nullable from 'components/atom/Nullable';
 import PermissionEditForm from '../form/PermissionEditForm';
-import React, {useMemo, useRef} from 'react';
+import React, {useMemo} from 'react';
 import SidebarLayout from 'layout/SideBarLayout';
 import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
 import raw from 'raw.macro';
 import {PermissionListRoute} from '../routes';
 import {errorToText} from 'api/buildApiHook';
-import {getProp, identity, isFunction, pipe, tap} from 'crocks';
+import {getProp, identity, isFunction, isSame, pipe, tap} from 'crocks';
 import {useAuth} from '../../../context/auth';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
 import {usePermission} from '../api';
 import {useTranslation} from 'react-i18next';
+import {permissionStatus} from 'constants/statuses';
+
 
 const PermissionEditLayout = () => {
-  const saveRef = useRef(identity);
   const {id} = useParams();
   const {data} = usePermission({id});
   const {t} = useTranslation('permission', {keyPrefix: 'edit'});
@@ -37,6 +38,7 @@ const PermissionEditLayout = () => {
   const navigate = useNavigate();
   const status = getProp('status', data).option(null);
   const {api} = useAuth();
+
   const update = useMemo(() => status => () => (
     api({id, status}, raw('../api/graphql/UpdatePermissionStatusById.graphql')).fork(
       error => notify(
@@ -58,7 +60,7 @@ const PermissionEditLayout = () => {
           <Breadcrumbs>
             <RouteAsBreadcrumb route={PermissionListRoute}/>
             <Nullable on={breadcrumb}>
-              <Breadcrumbs.Item>
+              <Breadcrumbs.Item hideSlash>
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
               <Nullable on={status}>
@@ -74,8 +76,17 @@ const PermissionEditLayout = () => {
             {
               id ? (
                 <>
-                  <Button onClick={update('REJECTED')}>{t`button.reject`}</Button>
-                  <Button onClick={update('ALLOWED')}>{t`button.approve`}</Button>
+                  <Nullable on={isSame(data?.status, permissionStatus.PERMISSION_ASKED)}>
+                    <Button className='bg-red-700 w-40 hover:bg-red-800' onClick={update('REJECTED')}>{t`button.reject`}</Button>
+                  </Nullable>
+
+                  <Nullable on={isSame(data?.status, permissionStatus.PERMISSION_ALLOWED)}>
+                    <Button className='bg-red-700 w-40 hover:bg-red-800' onClick={update('CANCELLED')}>{t`button.cancel`}</Button>
+                  </Nullable>
+
+                  <Nullable on={isSame(data?.status, permissionStatus.PERMISSION_ASKED)}>
+                    <Button className='w-40' onClick={update('ALLOWED')}>{t`button.approve`}</Button>
+                  </Nullable>
                 </>
               ) : (
                 <Button onClick={send}>send</Button>
@@ -84,7 +95,7 @@ const PermissionEditLayout = () => {
           </div>
         </>
       </Header>
-      <PermissionEditForm saveRef={saveRef}/>
+      <PermissionEditForm />
     </SidebarLayout>
   );
 };

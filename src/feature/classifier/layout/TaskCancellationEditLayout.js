@@ -47,7 +47,7 @@ const TaskCancellationEditLayout = () => {
           <Breadcrumbs>
             <RouteAsBreadcrumb route={TaskCancellationListRoute}/>
             <Nullable on={breadcrumb}>
-              <Breadcrumbs.Item>
+              <Breadcrumbs.Item hideSlash>
                 <span className='font-semibold'>{breadcrumb}</span>
               </Breadcrumbs.Item>
             </Nullable>
