@@ -4,6 +4,7 @@ query CrewBreachById ($id: uuid!) {
         end_time
         start_time
         nodes
+        dislocation_nodes
         driver_user_id
         crew {
             name

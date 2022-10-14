@@ -86,7 +86,7 @@ const TaskEditForm = ({taskQuery, task}) => {
           alt(Maybe.Just([]))
         )(crews)
       )
-  }, [task, mGoogleMaps, crews]);
+  }, [task, mGoogleMaps, crews, mMap]);
 
   return (
     <section className='flex w-full'>

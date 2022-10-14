@@ -73,7 +73,7 @@ const BreachListLayout = withPreparedProps(Listing, () => {
           formatDuration(
             intervalToDuration({
               start: new Date(start_time),
-              end: new Date(end_time)
+              end: end_time ? new Date(end_time) : new Date()
             })
           )
         )

@@ -57,18 +57,18 @@ const DashboardForm = () => {
     .ap(mMap)
     .ap(mGoogleMaps)
     .ap(getTaskLatLngLiteral(tasks?.data?.events[1]))
-      .ap(
-        pipe(
-          getPath(['data', 'crew']),
-          chain(safe(isArray)),
-          map(reduce((carry, item) => (
-            getCrewLatLngLiteral(item)
-            .map(latLng => [...carry, latLng])
-            .option(carry)
-          ), [])),
-          alt(Maybe.Just([]))
-        )(crews)
-      )
+    .ap(
+      pipe(
+        getPath(['data', 'crew']),
+        chain(safe(isArray)),
+        map(reduce((carry, item) => (
+          getCrewLatLngLiteral(item)
+          .map(latLng => [...carry, latLng])
+          .option(carry)
+        ), [])),
+        alt(Maybe.Just([]))
+      )(crews)
+    )
   }, [tasks, mGoogleMaps, crews]);
 
   return (
