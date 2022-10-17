@@ -1,9 +1,11 @@
 import React from 'react';
 import AsideDisclosure from 'components/Disclosure/AsideDisclosure'
 import Item from './Item';
-import {curry, pipe, safe, map, chain, not, isEmpty, isArray, getPath} from 'crocks';
+import {curry, pipe, safe, map, chain, not, isEmpty, isArray, getPath, option} from 'crocks';
 import {useTranslation} from 'react-i18next';
 import {crewStatus} from 'constants/statuses';
+import {renderWithProps} from 'util/react';
+import CrewDetail from 'feature/crew/component/CrewDetail';
 
 const detailsOf = curry((
   detailsProps,
@@ -16,13 +18,41 @@ const detailsOf = curry((
   map(data => <AsideDisclosure {...detailsProps}>{data}</AsideDisclosure>),
 )(items));
 
-export default function SidebarRight({crews}) {
+export default function SidebarRight({crews, tasks}) {
   const {t} = useTranslation('dashboard');
   const activeCrew = (crew) => crew.status === crewStatus.CREW_READY || crew.status === crewStatus.CREW_BREAK;
+  const events = pipe(
+      getPath(['data', 'events']),
+      chain(safe(isArray)),
+      map(map((task) => task.status === 'NEW'? task : null)),
+      option(null),
+    )(tasks)
+  console.log(events)
   return (
     <>
       <div>
-        {getPath(['data'], crews)
+      {
+        pipe(
+          getPath(['data']),
+          chain(safe(isArray)),
+          map(map(pipe(
+            (crew) => ({
+              key: crew.id,
+              crew,
+              crews,
+              title: JSON.stringify(crew, null, '  '), 
+            }),
+            renderWithProps(CrewDetail),
+          ))),
+          map(list => ({
+            title: t`right.active`,
+            children: list
+          })),
+          map(renderWithProps(AsideDisclosure)),
+          option(null),
+        )(crews)
+      }
+        {/* {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.active`, className: 'text-gray-400'}, (crew) => activeCrew(crew) && (
             <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>
               <Item
@@ -36,7 +66,7 @@ export default function SidebarRight({crews}) {
             </AsideDisclosure.Item>
           )))
           .option()
-        }
+        } */}
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.in_task`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BUSY && (
             <AsideDisclosure.Item key={crew?.id} className='bg-white p-4 border-b'>

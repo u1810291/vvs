@@ -52,7 +52,6 @@ const DashboardForm = () => {
       const bounds = new m.LatLngBounds();
       [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
-      console.log(bounds);
     })
     .ap(mMap)
     .ap(mGoogleMaps)
@@ -116,7 +115,7 @@ const DashboardForm = () => {
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>
-          <SidebarRight crews={temp} />
+          <SidebarRight crews={temp} tasks={tasks} />
         </aside>
       </section>
     </>
