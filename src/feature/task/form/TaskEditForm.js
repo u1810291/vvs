@@ -121,8 +121,7 @@ const TaskEditForm = ({taskQuery, task}) => {
                     filter(propSatisfies('type', isSame('DB_TRIGGER::crew_location'))),
                     mapByMaybe(pipe(
                       safe(pathSatisfies(['content', 'crew'], isObject)),
-                      getPath(['content', 'crew']),
-                      map(eventLogId => <MapBreachNodeMarker {...eventLogId.crew} key={eventLogId.id}/>),
+                      map(log => <MapBreachNodeMarker {...log.content.crew} key={log.id} />),
                     ))
                   )),
                   option(null),
