@@ -1,20 +1,14 @@
-// import {renderWithChildren} from 'util/react';
 const {parseISO, differenceInSeconds} = require('date-fns');
 const {useCyclicalTransformation} = require('hook/useCyclicalTransformation');
 const {
   getProp,
   safe,
-  isInteger,
   pipe,
-  Maybe,
-  map,
   constant
 } = require('crocks');
 
-
 const secondsToHMS = pipe(
   sec => {
-    console.log(sec, 'sec');
     let date = new Date(null);
     date.setSeconds(sec)
     return date.toISOString().substr(11, 8);

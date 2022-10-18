@@ -92,10 +92,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       label: tc('calendars'),
       filter: 'autocomplete',
       values: crewZones || [],
-      displayValue: (v) => {
-        // console.log(v);
-        return crewZones?.find(c => c.value === v)?.name;
-      }
+      displayValue: (v) => crewZones?.find(c => c.value === v)?.name,
     },
     {
       key: 'status',

@@ -219,7 +219,6 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
   );
  
   const api = useDrivers({filters: queryParams});
-  // console.log(api?.data);
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {

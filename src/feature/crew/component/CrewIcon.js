@@ -3,16 +3,19 @@ import {withMergedClassName} from 'util/react';
 import {
   chain,
   curry,
+  find,
   getProp,
   isObject,
   isSame,
   isString,
   isTruthy,
   map,
+  not,
   option,
   or,
   pathSatisfies,
   pipe,
+  propSatisfies,
   safe,
 } from 'crocks';
 
@@ -20,18 +23,18 @@ export const CREW_STATUS_BORDER_CLASSNAME = {
   'BUSY': 'border-brick',
   'BREAK': 'border-tango',
   'READY': 'border-forest',
-  'OFFLINE': 'border-brick',
   'DRIVE_BACK': 'border-mantis',
   'UNKNOWN': 'border-black',
+  'OFFLINE': 'border-brick',
 };
 
 export const CREW_STATUS_BG_CLASSNAME = {
   'BUSY': 'bg-brick',
   'BREAK': 'bg-tango',
   'READY': 'bg-forest',
-  'OFFLINE': 'bg-brick',
   'DRIVE_BACK': 'bg-mantis',
   'UNKNOWN': 'bg-black',
+  'OFFLINE': 'border-brick',
 };
 
 const CLASS_NAME = 'w-10 h-10 bg-white font-semibold rounded-full border-4 truncate text-xs flex items-center justify-center';
@@ -43,6 +46,14 @@ const isStatus = curry((value, obj) => pipe(
   map(a => isSame(a.toUpperCase(), value.toUpperCase())),
   option(false),
 )(obj));
+
+const isUserOnline = pipe(
+  safe(isObject),
+  chain(getProp('user_settings')),
+  chain(find(propSatisfies('is_online', isTruthy))),
+  map(Boolean),
+  option(false),
+);
 
 const CrewIconBase = crew => (
   <div className='w-10 h-10 rounded-full border-4 truncate text-xs flex items-center justify-center bg-red-500' {...crew}>
@@ -57,7 +68,6 @@ CrewIcon.Ready = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNA
 CrewIcon.Offline = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.OFFLINE}`, CrewIconBase);
 CrewIcon.DriveBack = withMergedClassName(`${CLASS_NAME} ${CREW_STATUS_BORDER_CLASSNAME.DRIVE_BACK}`, CrewIconBase);
 
-
 export const crewStatusAs = ({
   onOffline,
   onBreak,
@@ -66,12 +76,12 @@ export const crewStatusAs = ({
   onDriveBack,
   onFallback,
 }) => caseMap(onFallback, [
-  [isStatus('BUSY'), onBusy],
-  [or(isStatus('BREAK'), pathSatisfies(['permissions', 0, 'expires_at'], isTruthy)), onBreak],
-  [isStatus('READY'), onReady],
-  [isStatus('OFFLINE'), onOffline],
-  [isStatus('DRIVE_BACK'), onDriveBack]
-]);
+    [isStatus('BUSY'), onBusy],
+    [or(isStatus('BREAK'), pathSatisfies(['permissions', 0, 'expires_at'], isTruthy)), onBreak],
+    [isStatus('READY'), onReady],
+    [not(isUserOnline), onOffline],
+    [isStatus('DRIVE_BACK'), onDriveBack]
+  ]);
 
 export default crewStatusAs({
   onOffline: CrewIcon.Offline,

@@ -1,11 +1,15 @@
-import React, {useEffect, useMemo, useRef} from 'react';
-import {useParams} from 'react-router-dom';
-
-import {useBreach} from 'feature/breach/api/breachEditApi';
 import BreachInfoCard from 'feature/breach/components/BreachInfoCard';
-import {getBreachLatLngLiteral} from 'feature/breach/utils';
-import {useGoogleApiContext} from 'context/google';
+import Nullable from 'components/atom/Nullable';
+import POLYGON_OPTIONS from 'feature/dislocation/constants';
+import React, {useEffect, useMemo, useRef} from 'react';
+import shortid from 'shortid';
 import {GoogleMap, Polygon} from '@react-google-maps/api';
+import {MapBreachNodeMarker} from '../components/MapBreachMarker';
+import {getBreachLatLngLiteral} from 'feature/breach/utils';
+import {getDislocationLatLngLiteral} from 'feature/dislocation/ultis';
+import {useBreach} from 'feature/breach/api/breachEditApi';
+import {useGoogleApiContext} from 'context/google';
+import {useParams} from 'react-router-dom';
 import {
   pipe, 
   isArray, 
@@ -19,15 +23,6 @@ import {
   reduce,
   alt, 
 } from 'crocks';
-import {MapBreachNodeMarker} from '../components/MapBreachMarker';
-import {getDislocationLatLngLiteral} from 'feature/dislocation/ultis';
-import POLYGON_OPTIONS from 'feature/dislocation/constants';
-import Nullable from 'components/atom/Nullable';
-import shortid from 'shortid';
-
-// import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
-
-
 
 const BREACH_PATH_ICON = {
   path: 'M 1, 1 1, 1',
@@ -79,8 +74,6 @@ const BreachEditForm = () => {
       )(data)
     )
   }, [data, mGoogleMaps, mMap]);
-
-  // console.log('data', data);
 
   return (
     <section className={'md:flex md:flex-row flex-1'}>

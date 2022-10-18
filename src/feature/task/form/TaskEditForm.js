@@ -1,25 +1,30 @@
-import {caseMap} from '@s-e/frontend/flow-control';
-import CrewDetail from 'feature/crew/component/CrewDetail';
-import {errorToText} from 'api/buildApiHook';
 import Button from 'components/Button';
+import CrewDetail from 'feature/crew/component/CrewDetail';
 import Detail from 'components/Disclosure/AsideDisclosure';
-import {GQL} from 'feature/crew/api/useCrewsForEvent';
-import {getObjectName} from 'feature/object/utils';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
+import MapTaskMarker from '../component/MapTaskMarker';
 import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
-import {useNotification} from 'feature/ui-notifications/context';
-import {getEmail, getName, getPhone} from 'feature/user/utils';
-import useSubscription from 'hook/useSubscription';
-import {useEffect, useMemo, useRef} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
-import {renderWithProps} from 'util/react';
-import useTask from '../api/useTask';
-import {TaskListRoute} from '../routes';
-import {getTaskAddress, getTaskLatLngLiteral} from '../util';
 import TaskLogs from '../component/TaskLogDetail';
+import useSubscription from 'hook/useSubscription';
+import useTask from '../api/useTask';
+import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import {GoogleMap} from '@react-google-maps/api';
+import {MapBreachNodeMarker} from 'feature/breach/components/MapBreachMarker';
+import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
+import {TaskListRoute} from '../routes';
+import {caseMap} from '@s-e/frontend/flow-control';
+import {errorToText} from 'api/buildApiHook';
+import {getCrewLatLngLiteral} from 'feature/crew/utils';
+import {getEmail, getName, getPhone} from 'feature/user/utils';
+import {getObjectName} from 'feature/object/utils';
+import {getTaskAddress, getTaskLatLngLiteral} from '../util';
+import {mapByMaybe} from 'util/array';
+import {renderWithProps} from 'util/react';
+import {useEffect, useMemo, useRef} from 'react';
 import {useGoogleApiContext} from 'context/google';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useNotification} from 'feature/ui-notifications/context';
+import {useTranslation} from 'react-i18next';
 import {
   Maybe,
   Result,
@@ -27,10 +32,12 @@ import {
   bimap,
   branch,
   chain,
+  filter,
   getPath,
   getProp,
   identity,
   isArray,
+  isSame,
   isTruthy,
   map,
   merge,
@@ -38,14 +45,13 @@ import {
   option,
   pathSatisfies,
   pipe,
+  propSatisfies,
   reduce,
   safe,
   setProp,
-  tap
+  tap,
+  isObject,
 } from 'crocks';
-import {getCrewLatLngLiteral} from 'feature/crew/utils';
-import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
-import MapTaskMarker from '../component/MapTaskMarker';
 
 const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
@@ -108,6 +114,20 @@ const TaskEditForm = ({taskQuery, task}) => {
                 onLoad: map => {mapRef.current = map}
               }), [])}
             >
+              {
+                pipe(
+                  getProp('logs'),
+                  map(pipe(
+                    filter(propSatisfies('type', isSame('DB_TRIGGER::crew_location'))),
+                    mapByMaybe(pipe(
+                      safe(pathSatisfies(['content', 'crew'], isObject)),
+                      getPath(['content', 'crew']),
+                      map(eventLogId => <MapBreachNodeMarker {...eventLogId.crew} key={eventLogId.id}/>),
+                    ))
+                  )),
+                  option(null),
+                )(task)
+              }
               {
                 pipe(
                   getPath(['data', 'crew']),

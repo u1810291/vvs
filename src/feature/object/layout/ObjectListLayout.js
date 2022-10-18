@@ -63,8 +63,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   const {data: clientsDropdown} = useClientDropdown();
-  // console.log(clientsDropdown, 'clients');
-
   const ne = not(isEmpty);
   const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.value === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
   const boolToStr = e => e ? t`YES` : t`NO`;

@@ -80,21 +80,14 @@ const ClientListLayout = withPreparedProps(Listing, () => {
 
   // custom filter
   const clientsFilter = useCallback((state, filtersData) => {
-    console.log(state);
-
     if (state['object_id']) {
       _search({where: {
         users: {
           object_id: {_in: state['object_id']}
         }
       }}).fork(console.error, (users) => {
-        // console.log(users.object[0]?.users);
-
         const ids = users.object[0]?.users.map(u => u.user_id);
-        // console.log(ids);
-
         const mustFilter = [];
-
         state['fullName']?.split(' ').forEach(s => {
           mustFilter.push({
             'wildcard': {
@@ -142,7 +135,6 @@ const ClientListLayout = withPreparedProps(Listing, () => {
         }
 
         _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
-          // console.log(data, 'byQuery');
           api.mutate(data.usersByQuery.users);
         })
       });
@@ -204,8 +196,6 @@ const ClientListLayout = withPreparedProps(Listing, () => {
       }
     })
 
-    // console.log(mustFilter);
-
     return {query: JSON.stringify({
       'bool': {
         'must': mustFilter
@@ -240,11 +230,9 @@ const ClientListLayout = withPreparedProps(Listing, () => {
   );
 
   const api = useClients({filters: queryParams});
-  console.log(api?.data);
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {
-      console.log(queryParams);
       api.mutate();
     }    
     setExportData(api.data);

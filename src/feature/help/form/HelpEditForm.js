@@ -1,54 +1,22 @@
-import useResultForm from 'hook/useResultForm';
-import {useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-import {
-  constant,
-  chain,
-  getProp,
-  isEmpty,
-  map,
-  not,
-  option,
-  pipe,
-  safe,
-} from 'crocks';
 import Detail from 'components/Disclosure/AsideDisclosure';
 import useQuestion from '../api/useQuestion';
+import useResultForm from 'hook/useResultForm';
 import {HelpListRoute} from '../routes';
+import {constant} from 'crocks';
 import {format} from 'date-fns';
+import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
-
-
-const displayValue = mapper => pipe(
-  getProp('value'),
-  chain(safe(not(isEmpty))),
-  map(mapper),
-  option(''),
-  constant,
-)
-
-
-
-const onChange = ({set}) => ({value}) => set(value);
-
-const HelpEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
+const HelpEditForm = ({saveRef}) => {
   const {id} = useParams();
-
   const {t} = useTranslation('help', {keyPrefix: 'edit'});
-  const {t: tf} = useTranslation('help', {keyPrefix: 'edit.field'});
-  
-  
-
-  const {ctrl, result, form, setForm} = useResultForm({
+  const {result, form, setForm} = useResultForm({
     id: {
       initial: id,
       validator: constant(true),
     },
   });
 
-  // console.log(form['created_at']);
-  
-  // save 
   useQuestion({
     id,
     formResult: result,
@@ -56,7 +24,6 @@ const HelpEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     saveRef,
     successRedirectPath: HelpListRoute.props.path,
   });
-
 
   return (
     <section className={'flex flex-col lg:flex-row lg:min-h-full'}>
