@@ -1,21 +1,23 @@
 import {format, isPast, isToday} from 'date-fns';
 import {useTranslation} from 'react-i18next';
 import {
-  pipe,
-  find,
-  propEq,
-  getProp,
-  getPath,
-  map,
-  chain,
-  safe,
-  option,
-  branch,
-  merge,
-  ifElse,
   Maybe,
-  isObject,
+  filter,
+  propSatisfies,
+  branch,
+  chain,
   constant,
+  find,
+  getPath,
+  getProp,
+  ifElse,
+  isObject,
+  map,
+  merge,
+  option,
+  pipe,
+  propEq,
+  safe,
 } from 'crocks';
 import {always} from 'util/func';
 import {interpolateTextToComponent, renderWithChildren, renderWithProps} from 'util/react';
@@ -119,8 +121,11 @@ const TaskLog = log => (
   </Detail.Item>
 );
 
+const isHidableCrewLocationLog = value => value !== 'DB_TRIGGER::crew_location';
+
 const TaskLogs = pipe(
   getProp('logs'),
+  map(filter(propSatisfies('type', isHidableCrewLocationLog))),
   map(map(renderWithProps(TaskLog))),
   option(null),
 );
