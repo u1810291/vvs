@@ -9,19 +9,19 @@ import {map} from 'crocks/pointfree';
 
 const POLYGON_OPTIONS = {
   strokeOpacity: 1,
-  fillOpacity: 0.4,
+  fillOpacity: 0.2,
   strokeWeight: 0.8,
   fillColor: '#F37E16',
   strokeColor: '#F37E16',
 };
 
-const Polygon = memo(({path}) => (
+const Polygon = memo(({path, options = POLYGON_OPTIONS}) => (
   <>
     {map(nodes =>
         <GooglePolygon
           key={generate()}
           paths={nodes}
-          options={POLYGON_OPTIONS}
+          options={options}
         />,
       path
     )}

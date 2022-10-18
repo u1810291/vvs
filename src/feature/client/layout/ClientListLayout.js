@@ -240,12 +240,14 @@ const ClientListLayout = withPreparedProps(Listing, () => {
   );
 
   const api = useClients({filters: queryParams});
-  // console.log(api?.data);
+  console.log(api?.data);
 
   useEffect(() => {
-    // console.log(queryParams);
+    if (!isEmpty(queryParams)) {
+      console.log(queryParams);
+      api.mutate();
+    }    
     setExportData(api.data);
-    api.mutate()
   }, [queryParams, sortColumnKey]);
 
   

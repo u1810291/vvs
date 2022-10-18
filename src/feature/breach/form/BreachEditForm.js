@@ -80,6 +80,8 @@ const BreachEditForm = () => {
     )
   }, [data, mGoogleMaps, mMap]);
 
+  // console.log('data', data);
+
   return (
     <section className={'md:flex md:flex-row flex-1'}>
       <div className='grow'>

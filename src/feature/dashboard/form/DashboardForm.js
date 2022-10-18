@@ -71,6 +71,8 @@ const DashboardForm = () => {
     )
   }, [tasks, mGoogleMaps, crews]);
 
+  console.log('crews', crews);
+
   return (
     <>
       <section className='flex flex-col h-screen scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>

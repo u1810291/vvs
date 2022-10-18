@@ -223,7 +223,6 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {
-      // console.log(queryParams);
       api.mutate();
     }
     setExportData(api.data);
