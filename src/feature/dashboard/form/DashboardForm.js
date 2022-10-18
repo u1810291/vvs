@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 import SidebarRight from '../components/SidebarRight';
 import SidebarLeft from '../components/SidebarLeft';
@@ -43,16 +43,22 @@ const DashboardForm = () => {
       ...el
     })
   )}), [crews?.data?.crew]);
+
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
-  ), [isLoaded, mapRef.current])
+  ), [isLoaded, mapRef.current])  
   
+  const [initialLoad, setInitialLoad] = useState(false);
+
   useEffect(() => {
     Maybe.of(map => m => taskLatLng => crewsLatLngs => {
       const bounds = new m.LatLngBounds();
       [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
-      map.fitBounds(bounds);
-      // console.log(bounds);
+      
+      if (!initialLoad) {
+        map.fitBounds(bounds);
+        setInitialLoad(true);
+      }
     })
     .ap(mMap)
     .ap(mGoogleMaps)
@@ -69,7 +75,9 @@ const DashboardForm = () => {
         alt(Maybe.Just([]))
       )(crews)
     )
-  }, [tasks, mGoogleMaps, crews]);
+  }, [mGoogleMaps, mMap, tasks, crews]);
+
+
 
   // console.log('crews', crews);
 
