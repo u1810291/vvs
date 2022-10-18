@@ -52,12 +52,19 @@
   },
   "status": {
     "new": "Nauja",
+    "NEW": "Nauja",
     "cancelled": "Atšaukta",
+    "CANCELLED": "Atšaukta",
     "onRoad": "Kelyje",
+    "ON_THE_ROAD": "Kelyje",
     "inspection": "Vykdoma",
+    "INSPECTION": "Vykdoma",
     "inspectionDone": "Peržiūra atlikta",
+    "INSPECTION_DONE": "Peržiūra atlikta",
     "finished": "Atlikta",
+    "FINISHED": "Atlikta",
     "waitForApproval": "Laukiama patvirtinimo",
+    "WAIT_FOR_APPROVAL": "Laukiama patvirtinimo",
     "unknown": "Nežinoma"
   },
   "field": {

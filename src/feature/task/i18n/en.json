@@ -52,12 +52,19 @@
   },
   "status": {
     "new": "New",
+    "NEW": "New",
     "cancelled": "Cancelled",
+    "CANCELLED": "Cancelled",
     "onRoad": "On road",
+    "ON_THE_ROAD": "On road",
     "inspection": "Inspection",
+    "INSPECTION": "Inspection",
     "inspectionDone": "Inspection done",
+    "INSPECTION_DONE": "Inspection done",
     "finished": "Finished",
+    "FINISHED": "Finished",
     "waitForApproval": "Wait for approval",
+    "WAIT_FOR_APPROVAL": "Wait for approval",
     "unknown": "unknown"
   },
   "field": {

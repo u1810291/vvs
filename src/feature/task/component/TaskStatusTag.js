@@ -29,7 +29,7 @@ const lensCase = (lens, pred) => pipe(
 *   props: (obj: object),
 * ) => any}
 */
-const getStatus = curry(
+export const getStatus = curry(
   (
     statusLens,
     onNew,

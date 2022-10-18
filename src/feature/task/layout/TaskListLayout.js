@@ -105,6 +105,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     c('reason', constant(true), nullToStr, true, 'text-bluewood', true)
   ];
 
+
   const filtersData = [
     {key: 'created_at', label: tc('created_at'), filter: 'date'},
     // {key: 'operator', label: 'Operator', filter: 'multiselect', values: []},
@@ -124,7 +125,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       filter: 'multiselect',
       values: [
         'NEW',
-        'WAIT_FOR_CREW_APPROVAL',
+        'WAIT_FOR_APPROVAL',
         'ON_THE_ROAD',
         'INSPECTION',
         'INSPECTION_DONE',
@@ -149,6 +150,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   useEffect(() => {
     list.mutate();
   }, [queryParams, sortColumnKey]);
+
+  
   
   return {
     list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),

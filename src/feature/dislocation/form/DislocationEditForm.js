@@ -1,10 +1,9 @@
-import React, {useEffect, useRef, useMemo} from 'react';
+import React, {useEffect, useRef, useMemo, useCallback} from 'react';
 
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import {useGoogleApiContext} from 'context/google';
-
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 
 import Button from 'components/Button';
@@ -33,8 +32,7 @@ import {
   reduce,
   alt,
 } from 'crocks';
-import {DrawingManager, GoogleMap, Polygon} from '@react-google-maps/api';
-// import {LITHUANIA_COORDINATES} from 'feature/map/component/Map';
+import {GoogleMap, Polygon} from '@react-google-maps/api';
 import {getDislocationLatLngLiteral} from 'feature/dislocation/ultis';
 
 const POLYGON_OPTIONS = {
@@ -47,11 +45,19 @@ const POLYGON_OPTIONS = {
   editable: true,
 };
 
+const INITIAL_COORDINATES = [
+  {lat: 55.82907781071856, lng: 22.14990544085954},
+  {lat: 54.923659939894556, lng: 24.67197859084832}
+]
+
 const DislocationEditForm = ({saveRef, removeRef}) => {
+  const {t} = useTranslation('dislocation', {keyPrefix: 'edit'});
+  
   const {id: dislocationZoneId} = useParams();
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   const mapRef = useRef();
-  const {t} = useTranslation('dislocation', {keyPrefix: 'edit'});
+  const polygonRef = useRef(null);
+  const listenersRef = useRef([]);  
 
   const {ctrl, result, form, setForm} = useResultForm({
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
@@ -62,7 +68,6 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
   const zonePath = getZoneItems(nodes);
 
 
-  const drawingManager = useRef();
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])
@@ -70,7 +75,13 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
   useEffect(() => {
     Maybe.of(map => m => zoneNodes => {
       const bounds = new m.LatLngBounds();
-      [...zoneNodes].forEach(latLng => bounds.extend(latLng));
+      
+      if (dislocationZoneId) {
+        [...zoneNodes].forEach(latLng => bounds.extend(latLng));
+      } else {
+        [...INITIAL_COORDINATES].forEach(latLng => bounds.extend(latLng));
+      }
+
       map.fitBounds(bounds);
     })
     .ap(mMap) 
@@ -88,11 +99,8 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
         alt(Maybe.Just([]))
       )(nodes)
     )
-  }, [form, mGoogleMaps, mMap]);
-  
-  console.log('nodes', nodes);
-
-  
+  }, [form['nodes'], mGoogleMaps, mMap]);
+    
 
   useDisclocation({
     id: dislocationZoneId,
@@ -105,13 +113,45 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
 
   const remove = () => isFunction(removeRef.current) && removeRef.current([{id: dislocationZoneId}]);
 
-  const onDragEnd = polygon => {
-    console.log(polygon.latLng)
-  }
 
-  const onPolygonComplete = polygon => {
-    console.log(polygon);
-  }
+  // // Call setPath with new edited path
+  const onEdit = useCallback(() => {
+    console.log('on edit');
+
+    if (polygonRef.current) {
+      const newPath = polygonRef.current
+        .getPath()        
+        .getArray()
+        .map(latLng => {
+          return {lat: latLng.lat(), lng: latLng.lng()};
+        });
+      setForm({nodes: newPath});
+    }
+  }, [nodes]);
+
+  // // Bind refs to current Polygon and listeners
+  const onLoad = useCallback(
+    polygon => {
+      polygonRef.current = polygon;
+      const path = polygon.getPath();
+      console.log('path', path);
+
+      listenersRef.current.push(
+        path.addListener('set_at', onEdit),
+        path.addListener('insert_at', onEdit),
+        path.addListener('remove_at', onEdit)
+      );
+    },
+    [onEdit]
+  );
+
+  // Clean up refs
+  const onUnmount = useCallback(() => {
+    listenersRef.current.forEach(lis => lis.remove());
+    polygonRef.current = null;
+  }, []);
+
+  console.log('nodes', nodes);
 
   return (
     <section className={'m-6 h-full flex md:flex-col lg:flex-row'}>
@@ -131,25 +171,33 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
               pipe(
                 safe(and(not(isEmpty), isArray)),
                 chain(getPath([0])),
-                map(coordinates => <Polygon key={dislocationZoneId} paths={coordinates} options={POLYGON_OPTIONS} onDragEnd={onDragEnd} />),
+                map(coordinates => <Polygon 
+                  key={dislocationZoneId} 
+                  path={coordinates} 
+                  options={POLYGON_OPTIONS} 
+                  onDragEnd={onEdit} 
+                  onLoad={onLoad}
+                  onUnmount={onUnmount}
+                  onEdit={onEdit}
+                />),
                 option(null),                
               )(nodes)
             }
 
-            <DrawingManager
+            {/* draw polygons on create */}
+            {/* <DrawingManager
               ref={drawingManager}
-              drawingMode={null}
+              drawingMode={'polygon'}
               options={{
                 drawingControl: true,
                 drawingControlOptions: {
                   drawingModes: [],
                   position: 3.0
                 },
-                polygonOptions: POLYGON_OPTIONS
+                polygonOptions: polygonsOptions
               }}
               onPolygonComplete={onPolygonComplete}
-            />
-            
+            /> */}
           </GoogleMap>
         </Nullable>
       </div>
