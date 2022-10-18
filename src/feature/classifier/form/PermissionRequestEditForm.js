@@ -38,10 +38,7 @@ const PermissionRequestEditForm = ({saveRef, removeRef}) => {
     }),
     duration: FORM_FIELD.TEXT({
       label: t`duration`,
-      validator: (v) => {
-        // console.log(v);
-        return true;
-      },
+      validator: constant(true),
       message: t`validation.duration`,
       showValidationBelow: true,
       props: {

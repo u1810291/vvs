@@ -23,8 +23,6 @@ const Box = ({
   below,
   ...props
 }) => {
-  // console.log('selectbox initial value', value);
-
   const onChangeValue = (e) => {
     onChange(e.props.value)
   };

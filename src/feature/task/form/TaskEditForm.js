@@ -50,6 +50,7 @@ import {
   safe,
   setProp,
   tap,
+  isObject,
 } from 'crocks';
 
 const TaskEditForm = ({taskQuery, task}) => {
@@ -119,8 +120,9 @@ const TaskEditForm = ({taskQuery, task}) => {
                   map(pipe(
                     filter(propSatisfies('type', isSame('DB_TRIGGER::crew_location'))),
                     mapByMaybe(pipe(
+                      safe(pathSatisfies(['content', 'crew'], isObject)),
                       getPath(['content', 'crew']),
-                      map(MapBreachNodeMarker),
+                      map(eventLogId => <MapBreachNodeMarker {...eventLogId.crew} key={eventLogId.id}/>),
                     ))
                   )),
                   option(null),

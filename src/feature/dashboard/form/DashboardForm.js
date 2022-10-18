@@ -52,7 +52,6 @@ const DashboardForm = () => {
       const bounds = new m.LatLngBounds();
       [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
-      // console.log(bounds);
     })
     .ap(mMap)
     .ap(mGoogleMaps)
@@ -70,8 +69,6 @@ const DashboardForm = () => {
       )(crews)
     )
   }, [tasks, mGoogleMaps, crews]);
-
-  // console.log('crews', crews);
 
   return (
     <>

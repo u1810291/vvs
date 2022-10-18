@@ -1,31 +1,10 @@
-import React, {useMemo, useEffect, useState} from 'react';
-import {generatePath, Link, useNavigate} from 'react-router-dom';
-
+import React, {useMemo, useEffect} from 'react';
+import {generatePath, Link} from 'react-router-dom';
 import Listing from 'layout/ListingLayout';
 import Breadcrumbs from 'components/Breadcrumbs';
 import withPreparedProps from 'hoc/withPreparedProps';
-
 import {useTranslation} from 'react-i18next';
-
-import {
-  curry,
-  getPropOr,
-  isEmpty,
-  map,
-  not,
-  objOf,
-  pipe,
-  safe,
-  isString,
-  option,
-  getProp,
-  Maybe,
-  getPath,
-  // tap,
-  // chain,
-} from 'crocks';
 import {alt} from 'crocks/pointfree';
-
 import {PermissionEditRoute} from '../routes';
 import {useCrewRequestDropdown, usePermissions} from '../api';
 import DashboardRoute from 'feature/dashboard/routes';
@@ -39,7 +18,19 @@ import DynamicStatus from 'feature/permission/component/PermissionStatus';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
 import useDriversDropdown from 'feature/driver/api/useDriversDropdown';
 import {format} from 'date-fns';
-
+import {
+  curry,
+  getPropOr,
+  map,
+  objOf,
+  pipe,
+  safe,
+  isString,
+  option,
+  getProp,
+  Maybe,
+  getPath,
+} from 'crocks';
 
 const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) => ({
   Component,
@@ -59,17 +50,10 @@ const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) 
   )(styles)
 }));
 
-const ne = not(isEmpty);
-const nullToStr = e => !e ? '-' : e;
-
 const PermissionListLayout = withPreparedProps(Listing, () => {
-  const [data, setData] = useState();
   const {t: tb} = useTranslation('permission', {keyPrefix: 'breadcrumbs'});
   const {t: tp} = useTranslation('permission');
-  const {t: ts} = useTranslation('permission', {keyPrefix: 'status'});
   const {t} = useTranslation('permission', {keyPrefix: 'list.column'});
-  const nav = useNavigate();
-
 
   const c = useMemo(() => getColumn(t, props => (
     props?.id && <Link className={props?.className} to={generatePath(PermissionEditRoute.props.path, {id: props?.id})}>
@@ -88,7 +72,6 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   const {data: driverDropdown} = useDriversDropdown();
 
   const tableColumns = [
-    // c('id', pipe(getProp('id')), false, null),
     c('created_at', pipe(getProp('created_at'), map(d => format(new Date(d), 'Y-MM-dd HH:mm'))), true, null, true),
     c('request_id', pipe(getProp('request_id')), true, null, true),
     cs('status', pipe(getProp('status')), true, null, true),
@@ -119,13 +102,11 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   const api = usePermissions({filters: queryParams})
   
   useEffect(() => {
-    // console.log(queryParams);
     setExportData(api.data);
     api.mutate()
   }, [queryParams, sortColumnKey]);
 
   return {
-    // list: safe(isArray, api?.data).option([]),
     list: api?.data || [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
@@ -138,11 +119,6 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
           </Button.NoBg>
         </Breadcrumbs.Item>
       </Breadcrumbs>
-    ),
-    buttons: (
-      <>
-        {/* <Button onClick={useCallback(() => nav(PermissionCreateRoute.props.path), [nav])}>{tp('create')}</Button> */}
-      </>
     ),
     innerlinks: (
       <Innerlinks>
