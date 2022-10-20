@@ -109,6 +109,7 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
     }
   }, [nodes]);
 
+
   const onLoad = useCallback(
     polygon => {
       polygonRef.current = polygon;

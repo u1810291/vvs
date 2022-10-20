@@ -43,7 +43,7 @@ import {
  */
 const CrewDetail = ({crew, crews, task, children}) => (
   <Detail.Item>
-    <div className='flex items-start space-x-4 w-full'>
+    <div className='flex items-start space-x-4 w-full bg-white'>
       <CrewIcon {...crew} />
       <div className='flex-1'>
         <CrewName {...crew}/>

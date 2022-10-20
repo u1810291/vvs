@@ -37,7 +37,7 @@ export const CREW_STATUS_BG_CLASSNAME = {
   'OFFLINE': 'border-brick',
 };
 
-const CLASS_NAME = 'w-10 h-10 bg-white font-semibold rounded-full border-4 truncate text-xs flex items-center justify-center';
+const CLASS_NAME = 'w-8 h-8 bg-white font-semibold rounded-full border-4 truncate text-xs flex items-center justify-center';
 
 const isStatus = curry((value, obj) => pipe(
   safe(isObject),
@@ -56,7 +56,7 @@ const isUserOnline = pipe(
 );
 
 const CrewIconBase = crew => (
-  <div className='w-10 h-10 rounded-full border-4 truncate text-xs flex items-center justify-center bg-red-500' {...crew}>
+  <div className='w-8 h-8 rounded-full border-4 truncate text-xs flex items-center justify-center bg-red-500' {...crew}>
     {(crew?.abbreviation || crew?.name || '?').slice(0, 3)}
   </div>
 );
