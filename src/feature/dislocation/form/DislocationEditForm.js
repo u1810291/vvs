@@ -1,10 +1,10 @@
 import Button from 'components/Button';
 import InputGroup from 'components/atom/input/InputGroup';
 import Nullable from 'components/atom/Nullable';
-import React, {useEffect, useRef, useMemo, useCallback} from 'react';
+import React, {useEffect, useRef, useMemo, useCallback, useState} from 'react';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
 import {DislocationListRoute} from 'feature/dislocation/routes';
-import {GoogleMap, Polygon} from '@react-google-maps/api';
+import {GoogleMap, Polygon, DrawingManager} from '@react-google-maps/api';
 import {getDislocationLatLngLiteral} from 'feature/dislocation/ultis';
 import {useDisclocation} from 'feature/dislocation/api/dislocationEditApi';
 import {useGoogleApiContext} from 'context/google';
@@ -47,27 +47,44 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
   const {t} = useTranslation('dislocation', {keyPrefix: 'edit'});
   const {id: dislocationZoneId} = useParams();
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+
   const mapRef = useRef();
+  const fitBoundsCounter = useRef(0);
   const polygonRef = useRef(null);
   const listenersRef = useRef([]);  
+  const drawingManager = useRef();
+
   const {ctrl, result, form, setForm} = useResultForm({
     name: FORM_FIELD.TEXT({label: t`field.name`, validator: () => true}),
     nodes: FORM_FIELD.ARRAY({label: null, validator: () => true})
   });   
   const {value: nodes} = ctrl('nodes');
+
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])
 
+  const [mode, setMode] = useState('polygon');
+
   useEffect(() => {
     Maybe.of(map => m => zoneNodes => {
       const bounds = new m.LatLngBounds();
-      if (dislocationZoneId) {
-        [...zoneNodes].forEach(latLng => bounds.extend(latLng));
-      } else {
+
+      if (!polygonRef.current) {
         [...INITIAL_COORDINATES].forEach(latLng => bounds.extend(latLng));
+        map.fitBounds(bounds);
+        return;
       }
+       
+      const newBounds = [...zoneNodes];
+        
+      if (newBounds.length <= fitBoundsCounter.current) {
+        return;
+      }
+
+      newBounds.forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
+      fitBoundsCounter.current = newBounds.length;
     })
     .ap(mMap) 
     .ap(mGoogleMaps)
@@ -84,7 +101,7 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
         alt(Maybe.Just([]))
       )(nodes)
     )
-  }, [form['nodes'], mGoogleMaps, mMap]);
+  }, [nodes, mGoogleMaps, mMap]);
     
   useDisclocation({
     id: dislocationZoneId,
@@ -105,24 +122,42 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
         .map(latLng => {
           return {lat: latLng.lat(), lng: latLng.lng()};
         });
+
       setForm({nodes: newPath});
     }
   }, [nodes]);
 
+  // update listeners
+  useEffect(() => {
+    onLoad(polygonRef.current);
+  }, nodes);
+  
+  const onPolygonComplete = useCallback(polygon => {
+    polygonRef.current = polygon;
+    const path = polygonRef.current.getPath(); 
 
-  const onLoad = useCallback(
-    polygon => {
-      polygonRef.current = polygon;
-      const path = polygon.getPath();
+    listenersRef.current.push(
+      path.addListener('set_at', onEdit),
+      path.addListener('insert_at', onEdit),
+      path.addListener('remove_at', onEdit)
+    );
 
-      listenersRef.current.push(
-        path.addListener('set_at', onEdit),
-        path.addListener('insert_at', onEdit),
-        path.addListener('remove_at', onEdit)
-      );
-    },
-    [onEdit]
-  );
+    onEdit();
+    setMode(null);
+  }, [polygonRef.current]);
+
+  const onLoad = useCallback(polygon => {
+    if (polygon == null) return;
+  
+    polygonRef.current = polygon;
+    const path = polygonRef.current.getPath();
+
+    listenersRef.current.push(
+      path.addListener('set_at', onEdit),
+      path.addListener('insert_at', onEdit),
+      path.addListener('remove_at', onEdit)
+    );
+  }, [polygonRef.current])
 
   const onUnmount = useCallback(() => {
     listenersRef.current.forEach(lis => lis.remove());
@@ -143,22 +178,40 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
               onLoad: map => {mapRef.current = map}
             }), [])}
           >
-            {
-              pipe(
-                safe(and(not(isEmpty), isArray)),
-                chain(getPath([0])),
-                map(coordinates => <Polygon 
-                  key={dislocationZoneId} 
-                  path={coordinates} 
-                  options={POLYGON_OPTIONS} 
-                  onDragEnd={onEdit} 
-                  onLoad={onLoad}
-                  onUnmount={onUnmount}
-                  onEdit={onEdit}
-                />),
-                option(null),                
-              )(nodes)
-            }
+            <Nullable on={dislocationZoneId}>
+              {
+                pipe(
+                  safe(and(not(isEmpty), isArray)),
+                  chain(getPath([0])),
+                  map(coordinates => <Polygon 
+                    key={dislocationZoneId} 
+                    path={coordinates} 
+                    options={POLYGON_OPTIONS} 
+                    onDragEnd={onEdit} 
+                    onLoad={onLoad}
+                    onUnmount={onUnmount}
+                    onEdit={onLoad}
+                  />),
+                  option(null),                
+                )(nodes)
+              }
+            </Nullable>
+            
+            <Nullable on={!dislocationZoneId}>
+              <DrawingManager
+                ref={drawingManager}
+                drawingMode={mode}
+                options={{
+                  drawingControl: true,
+                  drawingControlOptions: {
+                    drawingModes: [],
+                    position: 3.0
+                  },
+                  polygonOptions: POLYGON_OPTIONS
+                }}
+                onPolygonComplete={onPolygonComplete}
+              />
+            </Nullable>
           </GoogleMap>
         </Nullable>
       </div>
