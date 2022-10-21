@@ -27,6 +27,7 @@ import {
   reduce,
   alt,
 } from 'crocks';
+import {POLYGON_OPTIONS} from '../component/MapDislocationZone';
 
 
 // TODO: move to map component's folder

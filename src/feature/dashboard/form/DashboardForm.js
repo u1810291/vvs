@@ -67,7 +67,6 @@ const DashboardForm = () => {
     .ap(mGoogleMaps)
   }, [mGoogleMaps, mMap]);
 
-  console.log(crews);
 
   return (
     <>
@@ -92,6 +91,7 @@ const DashboardForm = () => {
               onLoad: map => {mapRef.current = map}
             }), [])}
           >
+            {/* dislocation zones */}
             {
               pipe(
                 getPath(['data', 'crew_zone']),
@@ -100,6 +100,8 @@ const DashboardForm = () => {
                 option(null),
               )(zones)
             }
+
+            {/* crew icons */}
             {
               pipe(
                 getPath(['data', 'crew']),
@@ -108,6 +110,8 @@ const DashboardForm = () => {
                 option(null),
               )(crews)
             }
+
+            {/* tasks */}
             {
               pipe(
                 getPath(['data', 'events']),
@@ -118,6 +122,8 @@ const DashboardForm = () => {
                 option(null),
               )(tasks)
             }
+
+            {/* when crew is driving back -> show labels on top of its dislocation zone */}
           </GoogleMap>
         ) : null
       }

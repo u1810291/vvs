@@ -25,7 +25,7 @@ export const CREW_STATUS_BORDER_CLASSNAME = {
   'READY': 'border-forest',
   'DRIVE_BACK': 'border-tango',
   'UNKNOWN': 'border-black',
-  'OFFLINE': 'border-brick',
+  'OFFLINE': 'border-gray-border',
 };
 
 export const CREW_STATUS_BG_CLASSNAME = {
@@ -34,7 +34,7 @@ export const CREW_STATUS_BG_CLASSNAME = {
   'READY': 'bg-forest',
   'DRIVE_BACK': 'bg-tango',
   'UNKNOWN': 'bg-black',
-  'OFFLINE': 'border-brick',
+  'OFFLINE': 'border-gray-border',
 };
 
 const CLASS_NAME = 'w-8 h-8 bg-white font-semibold rounded-full border-4 truncate text-xs flex items-center justify-center';

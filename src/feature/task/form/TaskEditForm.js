@@ -57,6 +57,7 @@ const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   const mapRef = useRef();
+  const fitBoundsCounter = useRef(0);
 
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
@@ -70,12 +71,22 @@ const TaskEditForm = ({taskQuery, task}) => {
       .option(undefined)
     ), [task])
   );
+  
 
   useEffect(() => {
     Maybe.of(map => m => taskLatLng => crewsLatLngs => {
       const bounds = new m.LatLngBounds();
-      [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
+      const newBounds = [taskLatLng, ...crewsLatLngs];
+      
+      newBounds.forEach(latLng => bounds.extend(latLng));
+
+      if (newBounds.length <= fitBoundsCounter.current) {
+        return;
+      }
+      
+      newBounds.forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
+      fitBoundsCounter.current = newBounds.length;
     })
     .ap(mMap)
     .ap(mGoogleMaps)
