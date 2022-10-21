@@ -69,7 +69,7 @@ const DashboardForm = () => {
     .ap(mGoogleMaps)
   }, [mGoogleMaps, mMap]);
 
-  console.log(tasks);
+  console.log(crews);
 
   return (
     <>
@@ -106,7 +106,7 @@ const DashboardForm = () => {
               pipe(
                 getPath(['data', 'crew']),
                 chain(safe(isArray)),
-                map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
+                map(map(crew => ['BUSY', 'BREAK'].includes(crew?.status) && <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
                 option(null),
               )(crews)
             }
