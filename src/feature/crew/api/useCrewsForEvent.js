@@ -2,13 +2,16 @@ const gql = a => a[0];
 
 export const GQL = gql`
   subscription crewsForEvent($objectId: [uuid!] = [""]) {
-  crew(order_by: [
-      {status: desc_nulls_last},
-      {permissions_aggregate: {count: asc_nulls_first}},
-      {event_aggregate: {count: asc_nulls_first}},
-      {name: asc_nulls_last},
-      {abbreviation: asc_nulls_last},
-    ]) {
+  crew(
+      order_by: [
+        {statuses: {comment: asc_nulls_last}},
+        {permissions_aggregate: {count: asc_nulls_first}},
+        {event_aggregate: {count: asc_nulls_first}},
+        {name: asc_nulls_last},
+        {abbreviation: asc_nulls_last},
+      ],
+  	where: {user_settings:{is_online: {_eq: true}}}
+      ) {
       id
       status
       name
