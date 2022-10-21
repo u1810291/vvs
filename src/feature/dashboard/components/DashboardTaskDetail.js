@@ -4,17 +4,38 @@ import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 import {useTranslation} from 'react-i18next';
 import Nullable from 'components/atom/Nullable';
-import {generatePath, Link} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {TaskEditRoute} from 'feature/task/routes';
+import {eventStatus} from 'constants/statuses';
+import Button from 'components/Button';
+import {flip, identity} from 'crocks';
+import {useAuth} from 'context/auth';
+import raw from 'raw.macro';
 
 export default function DashboardTaskDetail({id, title, status, name, description, connectionLost, durationTime, component, distance, waiting}) {
-  const {t} = useTranslation('dashboard');
+  const {t} = useTranslation('dashboard', {keyPrefix: 'task'});
+  const nav = useNavigate();
   const [duration, setDuration] = useState(durationTime)
   const [time, setTime] = useState(connectionLost)
   const onTimerUpdate = ({time, duration}) => {
     setDuration(duration);
     setTime(time);
   }
+
+  const auth = useAuth();
+  const _update = flip(auth.api)(raw('../api/graphql/UpdateEventStatus.graphql'));
+
+  // 
+  const assign = (e) => {
+    e.preventDefault();
+    nav(generatePath(TaskEditRoute.props.path, {id: id}));
+  };
+
+  const confirm = (e) => {
+    e.preventDefault();
+    _update({id: id, status: 'CANCELLED_BY_CLIENT_CONFIRMED'}).fork(console.error, identity);
+  }
+
   return (
     <Link to={generatePath(TaskEditRoute.props.path, {id: id})}>
       <div className='flex flex-row justify-between w-full'>
@@ -26,32 +47,43 @@ export default function DashboardTaskDetail({id, title, status, name, descriptio
           </div>
         </div>
         <div className='grid grid-rows-2	gap-1'>
-          <Nullable on={component} nullish={<div/>}>
-            <div className='min-w-4'>{component}</div>
+          {/* when status is NEW */}
+          <Nullable on={status === eventStatus.EVENT_NEW} nullish={<div/>}>
+            <div className='min-w-4'>
+              <Button.Sm onClick={assign} className='py-1 px-3 rounded-md'>{t`assign`}</Button.Sm>
+            </div>
           </Nullable>
+
+          {/* when status is CANCELLED_BY_CLIENT */}
+          <Nullable on={status === eventStatus.EVENT_CANCELLED_BY_CLIENT} nullish={<div/>}>
+            <div className='min-w-4'>
+              <Button.Sm onClick={confirm} className='py-1 px-3 rounded-md'>{t`confirm`}</Button.Sm>
+            </div>
+          </Nullable>
+
+
+
           <Nullable on={waiting}>
             <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
-              <a className='flex flex-row text-xs'>
+              <div className='flex flex-row text-xs'>
                 <Timer active duration={null} onTimerUpdate={onTimerUpdate}>
                   <Timecode time={waiting} />
                 </Timer>
                 <span className='pl-0.5'>s</span>
-              </a>
+              </div>
             </div>
           </Nullable>
           <Nullable on={distance}>
             <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
-              <a className='flex flex-row text-xs'>{distance}</a>
+              <span className='flex flex-row text-xs'>{distance}</span>
             </div>
           </Nullable>
           <Nullable on={connectionLost}>
             <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
-              <a className='flex flex-row text-xs'>
-                <Timer active duration={duration * 60 * 1000} onTimerUpdate={onTimerUpdate}>
-                  <Timecode time={new Date() - duration} />
-                </Timer>
-                <span className='pl-0.5'>s</span>
-              </a>
+              <Timer active duration={duration * 60 * 1000} onTimerUpdate={onTimerUpdate}>
+                <Timecode time={new Date() - duration} />
+              </Timer>
+              <span className='pl-0.5'>s</span>
             </div>
           </Nullable>
         </div>

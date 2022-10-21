@@ -124,13 +124,14 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       label: tc('status'),
       filter: 'multiselect',
       values: [
-        'NEW',
-        'WAIT_FOR_APPROVAL',
-        'ON_THE_ROAD',
-        'INSPECTION',
-        'INSPECTION_DONE',
-        'FINISHED',
-        'CANCELLED'
+        ts('NEW'),
+        ts('WAIT_FOR_APPROVAL'),
+        ts('ON_THE_ROAD'),
+        ts('INSPECTION'),
+        ts('INSPECTION_DONE'),
+        ts('FINISHED'),
+        ts('CANCELLED'),
+        ts('CANCELLED_BY_CLIENT'),
       ]
     },
     // {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},

@@ -18,12 +18,12 @@ const detailsOf = curry((
 
 export default function SidebarRight({crews}) {
   const {t} = useTranslation('dashboard');
-  const activeCrew = (crew) => crew.status === crewStatus.CREW_READY || crew.status === crewStatus.CREW_BREAK;
+  const activeCrew = (crew) => crew.status === crewStatus.CREW_READY || crew.status === crewStatus.CREW_BREAK || crew.status === crewStatus.CREW_DRIVE_BACK;
   return (
     <>
       <div>
         {getPath(['data'], crews)
-          .chain(detailsOf({title: t`right.active`, className: 'text-gray-400'}, (crew) => activeCrew(crew) && (
+          .chain(detailsOf({title: t`right.active`, className: 'text-gray-400', isStatic: true}, (crew) => activeCrew(crew) && (
             <AsideDisclosure.Item key={crew?.id} className='bg-white'>
               {/* <Item
                 id={crew.id}
@@ -41,7 +41,7 @@ export default function SidebarRight({crews}) {
           .option()
         }
         {getPath(['data'], crews)
-          .chain(detailsOf({title: t`right.in_task`, className: 'text-gray-400'}, (crew) => crew.status === crewStatus.CREW_BUSY && (
+          .chain(detailsOf({title: t`right.in_task`, className: 'text-gray-400', isStatic: true}, (crew) => crew.status === crewStatus.CREW_BUSY && (
             <AsideDisclosure.Item key={crew?.id} className='bg-white'>
               <CrewDetail crew={crew} />
             </AsideDisclosure.Item>

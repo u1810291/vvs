@@ -9,11 +9,11 @@ export const Panel = props => (
   <_Disclosure.Panel {...props} />
 );
 
-export const Disclosure = ({Button, Panel, text, children, ...props}) => {
+export const Disclosure = ({Button, Panel, text, isStatic, children, ...props}) => {
   return (
     <_Disclosure {...props}>
       <Button>{text}</Button>
-      <Panel>{children}</Panel>
+      <Panel static={isStatic}>{children}</Panel>
     </_Disclosure>
   )
 }

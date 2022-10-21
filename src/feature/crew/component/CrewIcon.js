@@ -23,7 +23,7 @@ export const CREW_STATUS_BORDER_CLASSNAME = {
   'BUSY': 'border-brick',
   'BREAK': 'border-tango',
   'READY': 'border-forest',
-  'DRIVE_BACK': 'border-mantis',
+  'DRIVE_BACK': 'border-tango',
   'UNKNOWN': 'border-black',
   'OFFLINE': 'border-brick',
 };
@@ -32,7 +32,7 @@ export const CREW_STATUS_BG_CLASSNAME = {
   'BUSY': 'bg-brick',
   'BREAK': 'bg-tango',
   'READY': 'bg-forest',
-  'DRIVE_BACK': 'bg-mantis',
+  'DRIVE_BACK': 'bg-tango',
   'UNKNOWN': 'bg-black',
   'OFFLINE': 'border-brick',
 };

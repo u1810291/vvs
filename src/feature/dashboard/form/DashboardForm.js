@@ -96,7 +96,7 @@ const DashboardForm = () => {
               pipe(
                 getPath(['data', 'crew_zone']),
                 chain(safe(isArray)),
-                map(map(zone => <MapDislocationZone key={`MapDislocationZonw-${zone?.id}`} zone={zone} />)),
+                map(map(zone => <MapDislocationZone key={`MapDislocationZone-${zone?.id}`} zone={zone} />)),
                 option(null),
               )(zones)
             }
@@ -104,7 +104,7 @@ const DashboardForm = () => {
               pipe(
                 getPath(['data', 'crew']),
                 chain(safe(isArray)),
-                map(map(crew => ['BUSY', 'BREAK'].includes(crew?.status) && <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
+                map(map(crew => !['LOGGED_OUT', null].includes(crew?.status) && <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
                 option(null),
               )(crews)
             }
@@ -113,7 +113,7 @@ const DashboardForm = () => {
                 getPath(['data', 'events']),
                 chain(safe(isArray)),
                 map(
-                  map(task => !['FINISHED', 'CANCELLED'].includes(task?.status) && <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />),
+                  map(task => !['FINISHED', 'CANCELLED', 'CANCELLED_BY_CLIENT_CONFIRMED', null].includes(task?.status) && <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />),
                 ),
                 option(null),
               )(tasks)

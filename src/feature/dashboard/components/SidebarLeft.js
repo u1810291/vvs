@@ -24,7 +24,7 @@ export default function SidebarRight({tasks}) {
   return (
     <>
       {getPath(['data','events'], tasks)
-        .chain(detailsOf({title: t`left.not_assigned`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_NEW && (
+        .chain(detailsOf({title: t`left.not_assigned`, className: 'text-gray-400', isStatic: true}, (task) => task.status === status.EVENT_NEW && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <DashboardTaskDetail
               id={task.id}
@@ -38,7 +38,7 @@ export default function SidebarRight({tasks}) {
         )))
         .option(null)}
       {getPath(['data','events'], tasks)
-        .chain(detailsOf({title: t`left.requests`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_REQUESTS && (
+        .chain(detailsOf({title: t`left.requests`, className: 'text-gray-400', isStatic: true}, (task) => task.status === status.EVENT_REQUESTS && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <DashboardTaskDetail
               id={task.id}
@@ -57,7 +57,7 @@ export default function SidebarRight({tasks}) {
         )))
         .option(null)}
       {getPath(['data','events'], tasks)
-        .chain(detailsOf({title: t`left.wait_confirmation`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_WAIT_FOR_APPROVAL && (
+        .chain(detailsOf({title: t`left.wait_confirmation`, className: 'text-gray-400', isStatic: true}, (task) => task.status === status.EVENT_WAIT_FOR_APPROVAL && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <DashboardTaskDetail
               id={task.id}
@@ -71,7 +71,7 @@ export default function SidebarRight({tasks}) {
         )))
         .option(null)}
       {getPath(['data','events'], tasks)
-        .chain(detailsOf({title: t`left.drives_facility`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_ON_THE_ROAD && (
+        .chain(detailsOf({title: t`left.drives_facility`, className: 'text-gray-400', isStatic: true}, (task) => task.status === status.EVENT_ON_THE_ROAD && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <DashboardTaskDetail
               id={task.id}
@@ -85,7 +85,7 @@ export default function SidebarRight({tasks}) {
         )))
         .option(null)}
       {getPath(['data','events'], tasks)
-        .chain(detailsOf({title: t`left.object_inspect`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_INSPECTION && (
+        .chain(detailsOf({title: t`left.object_inspect`, className: 'text-gray-400', isStatic: true}, (task) => task.status === status.EVENT_INSPECTION && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <DashboardTaskDetail
               id={task.id}
@@ -99,7 +99,7 @@ export default function SidebarRight({tasks}) {
         )))
         .option(null)}
       {getPath(['data','events'], tasks)
-        .chain(detailsOf({title: t`left.permission_to_return`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_INSPECTION_DONE && (
+        .chain(detailsOf({title: t`left.permission_to_return`, className: 'text-gray-400', isStatic: true}, (task) => task.status === status.EVENT_INSPECTION_DONE && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <DashboardTaskDetail
               id={task.id}
@@ -114,7 +114,7 @@ export default function SidebarRight({tasks}) {
         )))
         .option(null)}
       {getPath(['data','events'], tasks)
-        .chain(detailsOf({title: t`left.canceled_by_responsible`, className: 'text-gray-400'}, (task) => task.status === status.EVENT_CANCELLED_BY_CLIENT && (
+        .chain(detailsOf({title: t`left.canceled_by_responsible`, className: 'text-gray-400', isStatic: true}, (task) => task.status === status.EVENT_CANCELLED_BY_CLIENT && (
           <AsideDisclosure.Item key={task.id} className='bg-white p-4 border-b'>
             <DashboardTaskDetail
               id={task.id}
@@ -122,7 +122,6 @@ export default function SidebarRight({tasks}) {
               description={task.address || task.object?.address}
               name={task.name}
               status={task.status}
-              component={<Button.Sm className='max-h-1'>{t`left.close`}</Button.Sm>}
             />
           </AsideDisclosure.Item>
         )))

@@ -2,12 +2,13 @@ import Nullable from 'components/atom/Nullable';
 import {withMergedClassName} from 'util/react';
 import Disclosure from '.';
 
-export const AsideDisclosure = ({title,  ...props}) => (
+export const AsideDisclosure = ({title, isStatic,  ...props}) => (
   <Disclosure
     text={<span title={title} className='block px-4 py-4 font-semibold w-full truncate'>{title}</span>}
     defaultOpen
     className='border-b border-gray-300'
     as='div'
+    isStatic={isStatic}
     {...props}
   />
 );
