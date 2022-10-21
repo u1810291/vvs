@@ -115,7 +115,7 @@ const DashboardForm = () => {
                 getPath(['data', 'events']),
                 chain(safe(isArray)),
                 map(
-                  map(task => task?.status !== 'FINISHED' && <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />),
+                  map(task => !['FINISHED', 'CANCELLED'].includes(task?.status) && <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />),
                 ),
                 option(null),
               )(tasks)

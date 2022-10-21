@@ -33,7 +33,7 @@ const MapTaskMarker = pipe(
         position={position}
       >
         <div className='flex'>
-        <svg
+          <svg
             width='32'
             height='32'
             viewBox='0 0 32 32'
@@ -44,45 +44,9 @@ const MapTaskMarker = pipe(
             <circle opacity='0.3' cx='16' cy='16' r='16' fill='#C32A2F'/>
             <circle cx='16' cy='16' r='3' fill='#C32A2F' stroke='white' strokeWidth='2'/>
           </svg>
-          {/* {
-            pipe(
-              getProp('status'),
-              alt(getProp('name', task)),
-              chain(safe(and(isString, isTruthy))),
-              map(status => renderWithChildren(
-                <span role='tooltip' className={[
-                  '-translate-y-1/2',
-                  'absolute',
-                  'before:-left-[15px]',
-                  'before:-translate-y-1/2',
-                  'before:absolute',
-                  'before:block',
-                  'before:border-[10px]',
-                  'before:border-r-[10px]',
-                  'before:border-r-brick',
-                  'before:border-transparent',
-                  'before:content-[""]',
-                  'before:top-1/2',
-                  'bg-brick',
-                  'font-medium',
-                  'inline-block',
-                  'px-3',
-                  'py-2',
-                  'rounded-lg',
-                  'shadow-sm',
-                  'text-sm',
-                  'text-white',
-                  'translate-x-3',
-                  'whitespace-nowrap',
-                  'z-10',
-                ].join(' ')} />
-              )(status)),
-              option(null),
-            )(task)
-          } */}
 
           <div role='tooltip' className={[
-            task?.status === 'INSPECTION_DONE' ? 'before:border-r-orange-500' : 'before:border-r-brick',
+            task?.status === 'INSPECTION_DONE' ? 'before:border-r-orange-500' : 'before:border-r-red',
             '-translate-y-1/2', 'absolute', 'before:-left-[15px]', 'before:-translate-y-1/2',
             'before:absolute', 'before:block', 'before:border-[10px]', 'before:border-r-[10px]',
             'before:border-transparent', 'before:content-[""]',
@@ -93,7 +57,7 @@ const MapTaskMarker = pipe(
               {t(task?.status)}
             </div>
             
-            <Nullable on={['ON_THE_ROAD', 'INSPECTION', 'INSPECTION_DONE'].includes(task?.status)}>
+            <Nullable on={['ON_THE_ROAD', 'INSPECTION', 'INSPECTION_DONE', 'CANCELLED_BY_CLIENT'].includes(task?.status)}>
               <div key={task.status} className='bg-white text-brick px-2 py-2 rounded-tr-xl rounded-br-xl'>{task?.name}</div>
             </Nullable>
           </div>

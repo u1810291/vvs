@@ -55,6 +55,7 @@
     "NEW": "New",
     "cancelled": "Cancelled",
     "CANCELLED": "Cancelled",
+    "CANCELLED_BY_CLIENT": "Cancelled by client",
     "onRoad": "On road",
     "ON_THE_ROAD": "On road",
     "inspection": "Inspection",

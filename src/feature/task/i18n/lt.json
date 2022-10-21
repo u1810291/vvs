@@ -55,6 +55,7 @@
     "NEW": "Nauja",
     "cancelled": "Atšaukta",
     "CANCELLED": "Atšaukta",
+    "CANCELLED_BY_CLIENT": "Atšaukta atsakingo",
     "onRoad": "Kelyje",
     "ON_THE_ROAD": "Kelyje",
     "inspection": "Vykdoma",
