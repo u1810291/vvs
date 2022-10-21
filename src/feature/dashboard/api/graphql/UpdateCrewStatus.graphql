@@ -1,0 +1,5 @@
+mutation UpdateCrewStatus($status: crew_status_enum, $id: uuid!) {
+  update_crew_by_pk(pk_columns: {id: $id}, _set: {status: $status}) {
+    id
+  }
+}

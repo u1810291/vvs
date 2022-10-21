@@ -12,7 +12,7 @@ import {flip, identity} from 'crocks';
 import {useAuth} from 'context/auth';
 import raw from 'raw.macro';
 
-export default function DashboardTaskDetail({id, title, status, name, description, connectionLost, durationTime, component, distance, waiting}) {
+export default function DashboardTaskDetail({task, id, title, status, name, description, connectionLost, durationTime, component, distance, waiting}) {
   const {t} = useTranslation('dashboard', {keyPrefix: 'task'});
   const nav = useNavigate();
   const [duration, setDuration] = useState(durationTime)
@@ -24,16 +24,25 @@ export default function DashboardTaskDetail({id, title, status, name, descriptio
 
   const auth = useAuth();
   const _update = flip(auth.api)(raw('../api/graphql/UpdateEventStatus.graphql'));
+  const _updateCrew = flip(auth.api)(raw('../api/graphql/UpdateCrewStatus.graphql'));
 
-  // 
+  // assign a crew for the task
   const assign = (e) => {
     e.preventDefault();
     nav(generatePath(TaskEditRoute.props.path, {id: id}));
   };
 
+  // approve crew to drive back
+  const approveReturn = (e) => {
+    e.preventDefault();
+    _update({id: task?.id, status: 'FINISHED'}).fork(console.error, identity);
+    _updateCrew({id: task?.crew?.id, status: 'DRIVE_BACK'}).fork(console.error, identity);
+  }
+
+  // confirm client's cancellation
   const confirm = (e) => {
     e.preventDefault();
-    _update({id: id, status: 'CANCELLED_BY_CLIENT_CONFIRMED'}).fork(console.error, identity);
+    _update({id: task?.id, status: 'CANCELLED_BY_CLIENT_CONFIRMED'}).fork(console.error, identity);
   }
 
   return (
@@ -48,14 +57,21 @@ export default function DashboardTaskDetail({id, title, status, name, descriptio
         </div>
         <div className='grid grid-rows-2	gap-1'>
           {/* when status is NEW */}
-          <Nullable on={status === eventStatus.EVENT_NEW} nullish={<div/>}>
+          <Nullable on={status === eventStatus.EVENT_NEW}>
             <div className='min-w-4'>
               <Button.Sm onClick={assign} className='py-1 px-3 rounded-md'>{t`assign`}</Button.Sm>
             </div>
           </Nullable>
 
+          {/* when status is NEW */}
+          <Nullable on={status === eventStatus.EVENT_INSPECTION_DONE}>
+            <div className='min-w-4'>
+              <Button.Sm onClick={approveReturn} className='py-1 px-3 rounded-md'>{t`return`}</Button.Sm>
+            </div>
+          </Nullable>
+
           {/* when status is CANCELLED_BY_CLIENT */}
-          <Nullable on={status === eventStatus.EVENT_CANCELLED_BY_CLIENT} nullish={<div/>}>
+          <Nullable on={status === eventStatus.EVENT_CANCELLED_BY_CLIENT}>
             <div className='min-w-4'>
               <Button.Sm onClick={confirm} className='py-1 px-3 rounded-md'>{t`confirm`}</Button.Sm>
             </div>

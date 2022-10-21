@@ -18,23 +18,13 @@ const detailsOf = curry((
 
 export default function SidebarRight({crews}) {
   const {t} = useTranslation('dashboard');
-  const activeCrew = (crew) => crew.status === crewStatus.CREW_READY || crew.status === crewStatus.CREW_BREAK || crew.status === crewStatus.CREW_DRIVE_BACK;
+  const activeCrew = (crew) => [crewStatus.CREW_READY, crewStatus.CREW_BREAK, crewStatus.CREW_DRIVE_BACK].includes(crew?.status);
   return (
     <>
       <div>
         {getPath(['data'], crews)
           .chain(detailsOf({title: t`right.active`, className: 'text-gray-400', isStatic: true}, (crew) => activeCrew(crew) && (
             <AsideDisclosure.Item key={crew?.id} className='bg-white'>
-              {/* <Item
-                id={crew.id}
-                name={crew.abbreviation}
-                title={`${crew.abbreviation} ${crew.name}`}
-                description={crew.permissions[0]?.request_id || crew.permissions[0]?.comment}
-                isOnline={crew.user_settings?.some((el) => el.is_online === true)}
-                connectionLost={crew.connectionLost}
-                status={crew.status}
-              /> */}
-              
               <CrewDetail crew={crew} />
             </AsideDisclosure.Item>
           )))

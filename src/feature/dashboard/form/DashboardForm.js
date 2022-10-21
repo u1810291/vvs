@@ -57,8 +57,6 @@ const DashboardForm = () => {
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])  
   
-  const fitBoundsCounter = useRef(0);
-
   useEffect(() => {
     Maybe.of(map => m => {
       const bounds = new m.LatLngBounds();
@@ -68,6 +66,8 @@ const DashboardForm = () => {
     .ap(mMap)
     .ap(mGoogleMaps)
   }, [mGoogleMaps, mMap]);
+
+  console.log(crews);
 
   return (
     <>
