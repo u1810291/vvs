@@ -69,8 +69,6 @@ const DashboardForm = () => {
     .ap(mGoogleMaps)
   }, [mGoogleMaps, mMap]);
 
-  console.log(crews);
-
   return (
     <>
       <section className='flex flex-col h-screen scrollbar-gone overflow-y-auto w-1/4 bg-gray-100'>
