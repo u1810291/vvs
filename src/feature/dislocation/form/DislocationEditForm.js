@@ -28,17 +28,9 @@ import {
   alt,
 } from 'crocks';
 
-const POLYGON_OPTIONS = {
-  strokeOpacity: 1,
-  fillOpacity: 0.4,
-  strokeWeight: 0.8,
-  fillColor: '#F37E16',
-  strokeColor: '#F37E16',
-  draggable: true,
-  editable: true,
-};
 
-const INITIAL_COORDINATES = [
+// TODO: move to map component's folder
+export const INITIAL_COORDINATES = [
   {lat: 55.82907781071856, lng: 22.14990544085954},
   {lat: 54.923659939894556, lng: 24.67197859084832}
 ]

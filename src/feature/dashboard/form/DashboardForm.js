@@ -6,28 +6,36 @@ import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
 import {GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
+import {GQL as ZONE_GQL} from 'feature/dislocation/api/useZonesForDashboard';
 import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
 import useSubscription from 'hook/useSubscription';
 import {GoogleMap} from '@react-google-maps/api';
 import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
 import {useGoogleApiContext} from 'context/google';
-import {pipe, getPath, chain, isArray, safe, map, option, Maybe, reduce, alt, isTruthy, objOf} from 'crocks';
-import {getTaskLatLngLiteral} from 'feature/task/util';
-import {getCrewLatLngLiteral} from 'feature/crew/utils';
+import {pipe, getPath, chain, isArray, safe, map, option, Maybe, isTruthy, objOf} from 'crocks';
 import MapTaskMarker from 'feature/task/component/MapTaskMarker';
+import MapDislocationZone from 'feature/dislocation/component/MapDislocationZone';
+
 
 // updated_at + duration - new Date()
 const lostConnection = (time) => {
   return new Date() - new Date(time) > 60000
 }
 
+// TODO: move to map component's folder
+const INITIAL_COORDINATES = [
+  {lat: 54.760541960832775, lng: 25.20713162298808},
+  {lat: 54.637933723847745, lng: 25.387719376875395}
+]
+
 const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
   const mapRef = useRef();
 
   const nav = useNavigate();
-  const tasksQuery = useMemo(() => TASK_GQL, []);
-  const tasks = useSubscription(tasksQuery);
+
+  const zones = useSubscription(useMemo(() => ZONE_GQL, []));
+  const tasks = useSubscription(useMemo(() => TASK_GQL, []));
   const crews = useSubscription(
     useMemo(() => CREW_GQL, []),
     useMemo(() => (
@@ -37,6 +45,7 @@ const DashboardForm = () => {
     ), [tasks?.data?.events])
   );
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): false,
@@ -51,36 +60,16 @@ const DashboardForm = () => {
   const fitBoundsCounter = useRef(0);
 
   useEffect(() => {
-    Maybe.of(map => m => taskLatLng => crewsLatLngs => {
+    Maybe.of(map => m => {
       const bounds = new m.LatLngBounds();
-      const newBounds = [taskLatLng, ...crewsLatLngs];
-      
-      if (newBounds.length <= fitBoundsCounter.current) {
-        return;
-      }
-
-      fitBoundsCounter.current = newBounds.length;
-      newBounds.forEach(latLng => bounds.extend(latLng));      
+      [...INITIAL_COORDINATES].forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
     })
     .ap(mMap)
     .ap(mGoogleMaps)
-    .ap(getTaskLatLngLiteral(tasks?.data?.events[1]))
-    .ap(
-      pipe(
-        getPath(['data', 'crew']),
-        chain(safe(isArray)),
-        map(reduce((carry, item) => (
-          getCrewLatLngLiteral(item)
-          .map(latLng => [...carry, latLng])
-          .option(carry)
-        ), [])),
-        alt(Maybe.Just([]))
-      )(crews)
-    )
-  }, [mGoogleMaps, mMap, tasks, crews]);
+  }, [mGoogleMaps, mMap]);
 
-  console.log(crews);
+  console.log(tasks);
 
   return (
     <>
@@ -107,6 +96,14 @@ const DashboardForm = () => {
           >
             {
               pipe(
+                getPath(['data', 'crew_zone']),
+                chain(safe(isArray)),
+                map(map(zone => <MapDislocationZone key={`MapDislocationZonw-${zone?.id}`} zone={zone} />)),
+                option(null),
+              )(zones)
+            }
+            {
+              pipe(
                 getPath(['data', 'crew']),
                 chain(safe(isArray)),
                 map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
@@ -117,7 +114,9 @@ const DashboardForm = () => {
               pipe(
                 getPath(['data', 'events']),
                 chain(safe(isArray)),
-                map(map(task => <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />)),
+                map(
+                  map(task => task?.status !== 'FINISHED' && <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />),
+                ),
                 option(null),
               )(tasks)
             }

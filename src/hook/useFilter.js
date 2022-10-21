@@ -196,7 +196,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     starred: false,
     isDefault: false,
   })
-  const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? tableColumns[0].key : null);
+  const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? `-${tableColumns[0].key}` : null);
   const setSortColumn = (column) => {
     setSortColumnKey(sortColumnKey && sortColumnKey === column ? `-${column}` : column);
   }

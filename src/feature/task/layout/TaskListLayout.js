@@ -87,8 +87,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const {data: objects} = useObjectsDropdown();
 
   const tableColumns = [
-    c('id', constant(true), nullToStr, false, 'text-regent', true),
     c('created_at', constant(true), formatDate, true, 'text-regent', true),
+    c('id', constant(true), nullToStr, false, 'text-regent', true),
     c('object', constant(true), concatNameAdress, true, 'text-regent', false),
     c('name', constant(true), nullToStr, true, 'text-bluewood', true),
     c('crew', constant(true), getName, true, 'text-regent', false),
