@@ -10,27 +10,22 @@ import {useSearchParams} from 'react-router-dom';
 import InputGroup from 'components/atom/input/InputGroup';
 import CheckBox from 'components/atom/input/CheckBox';
 import Filter from 'components/Filter';
-import {
-  hasProps,
-  isArray,
-  isFunction,
-  // isFunction,
-  map,
-  option,
-  pipe,
-  safe,
-} from 'crocks';
 import {renderWithProps} from 'util/react';
 import SelectBox from 'components/atom/input/SelectBox';
 import ComboBox from 'components/atom/input/ComboBox';
 import {unflatten} from 'util/obj';
 import {exportTableToExcel} from 'util/utils';
+import {
+  hasProps,
+  isArray,
+  isFunction,
+  map,
+  option,
+  pipe,
+  safe,
+} from 'crocks';
 
-
-
-// CONST
 const LS_KEY_NAME = 'listingFilters';
-const DEFAULT_FILTER = 'allData';
 const DEFAULT_FILTER_NAME = 'New filter';
 const DEFAULT_SHORTCUT_NAME = 'FLTR';
 const APPLY_FILTER_PARAM = 'af';
@@ -39,16 +34,13 @@ const DIRECTION_ASC = 'asc_nulls_first';
 const DIRECTION_DESC = 'desc_nulls_first';
 
 const Mode = {
-	Default: 'default',
-	Create: 'create',
-	Edit: 'edit',
+  Default: 'default',
+  Create: 'create',
+  Edit: 'edit',
 }
-
 
 const updater = (state, action) => {
   const prevState = {...state};
-
-  // console.log('dispatch', state, action);
 
   switch (action.type) {
     case 'TEXT':
@@ -119,8 +111,6 @@ const updater = (state, action) => {
 
     case 'MULTISELECT':
     case 'AUTOCOMPLETE':
-      // console.log('dispatcher', action.value);
-
       if (!(action.key in prevState)) {
         prevState[action.key] = [action.value];
       } else {
@@ -159,10 +149,6 @@ const prepInitials = (filters) => {
   return initials;
 }
 
-
-
-
-
 const getAllFilters = () => {
   return JSON.parse(localStorage.getItem(LS_KEY_NAME)) ?? {};
 }
@@ -195,16 +181,11 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
-  // console.log('filters initial state', initialState);
-  // TODO: Needs to be updated to callback
   const [exportData, setExportData] = useState();
   const handleExport = useCallback(() => exportTableToExcel(exportData, new Date()), [exportData]);
-
   const [showFilter, setShowFilter] = useState(false);
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const [params] = useSearchParams();
-
-  // get saved for 'tableName' from filters
   const [savedFilters, setSavedFilters] = useState(getSavedFilters(tableName)); // TODO: is this a heavy operation? maybe 'useMemo'...
   const [defaultFilterId, setDefaultFiterId] = useState(getDefaultFilterId(savedFilters));
   const [mode, setMode] = useState(Mode.Default);
@@ -215,29 +196,22 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     starred: false,
     isDefault: false,
   })
-
-  // column sorting
-  // console.log(tableColumns, 'table columns');
-  const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? tableColumns[0].key : null);
+  const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? `-${tableColumns[0].key}` : null);
   const setSortColumn = (column) => {
     setSortColumnKey(sortColumnKey && sortColumnKey === column ? `-${column}` : column);
   }
 
-  // column filtering
   const [columns, setColumns] = useState([]);
 
-  // load from global shortcut - is this ok way?
   useEffect(() => {
     if (params.get(APPLY_FILTER_PARAM)) {
       applyFilter(params.get(APPLY_FILTER_PARAM));
       return;
     }
 
-    // apply default filter
     applyFilter(defaultFilterId);
   }, []);
 
-  // watch query param changed (when applying starred filter of the same page
   useEffect(() => {
     if (params.get(APPLY_FILTER_PARAM)) {
       applyFilter(params.get(APPLY_FILTER_PARAM));
@@ -245,16 +219,9 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   }, [params]);
 
   useEffect(() => {
-    // save to local storage
     saveToStorage();
   }, [savedFilters]);
 
-  // for testing
-  // useEffect(() => {
-  //   // console.log(state);
-  // }, [state]);
-  
-  // show only picked columns
   const pickedColumns = useMemo(() => pipe(
     safe(isArray),
     map(map(pipe(
@@ -271,7 +238,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     option(null)
   )(tableColumns), [tableColumns]);
 
-  // save to localstorage
   const saveToStorage = () => {
     const allSaved = getAllFilters();
     allSaved[tableName] = savedFilters;
@@ -396,7 +362,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   }
   
   const onFilterApply = (e) => {
-    // console.log('on filter apply clicked', e.currentTarget.id);
     const id = e.currentTarget.id;
     applyFilter(id);
   }
@@ -414,7 +379,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   const onModeEdit = (e) => {
     const id = e.target.id;
     const filter = getFilter(id);
-    // console.log(filter);
 
     setFormState({
       id: filter.id,
@@ -767,12 +731,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    // console.log('state changed', state);
-
-    // if custom filter logic was provided
     if (isFunction(customFilter)) return customFilter(state, filtersData);
-
-    // standard graphql filtering
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
@@ -819,7 +778,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         else if (filter.key.includes('.')) {
           const columns = filter.key.split('.');
           for (c of columns) {
-            // console.log(c);
           }
         }
 

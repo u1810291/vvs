@@ -97,8 +97,6 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     })
   });
 
-  // console.log(form);
-
   const api = useClient({
     id,
     formResult: result,

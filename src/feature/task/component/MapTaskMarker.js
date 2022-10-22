@@ -1,27 +1,32 @@
 import {OverlayView} from '@react-google-maps/api';
+import Nullable from 'components/atom/Nullable';
 import {
   pipe,
   branch,
   merge,
-  getProp,
-  alt,
-  chain,
-  safe,
-  and,
-  isString,
-  option,
-  isTruthy,
   map,
+  // getProp,
+  // alt,
+  // chain,
+  // safe,
+  // and,
+  // isString,
+  // option,
+  // isTruthy,
+  // pick,
 } from 'crocks';
-import {renderWithChildren} from 'util/react';
+import {useTranslation} from 'react-i18next';
+// import {renderWithChildren} from 'util/react';
 import {getTaskLatLngLiteral} from '../util';
 
 
 const MapTaskMarker = pipe(
   branch,
   map(getTaskLatLngLiteral),
-  merge((task, mLatLngLiteral) => (
-    mLatLngLiteral.map(position => (
+  merge((task, mLatLngLiteral) => {
+    const {t} = useTranslation('task', {keyPrefix: 'status'});
+
+    return (mLatLngLiteral.map(position => (
       <OverlayView
         key={`MapTaskMarker-${JSON.stringify(task)}`}
         mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
@@ -39,46 +44,27 @@ const MapTaskMarker = pipe(
             <circle opacity='0.3' cx='16' cy='16' r='16' fill='#C32A2F'/>
             <circle cx='16' cy='16' r='3' fill='#C32A2F' stroke='white' strokeWidth='2'/>
           </svg>
-          {
-            pipe(
-              getProp('name'),
-              alt(getProp('id', task)),
-              chain(safe(and(isString, isTruthy))),
-              map(renderWithChildren(
-                <span role='tooltip' className={[
-                  '-translate-y-1/2',
-                  'absolute',
-                  'before:-left-[15px]',
-                  'before:-translate-y-1/2',
-                  'before:absolute',
-                  'before:block',
-                  'before:border-[10px]',
-                  'before:border-r-[10px]',
-                  'before:border-r-brick',
-                  'before:border-transparent',
-                  'before:content-[""]',
-                  'before:top-1/2',
-                  'bg-brick',
-                  'font-medium',
-                  'inline-block',
-                  'px-3',
-                  'py-2',
-                  'rounded-lg',
-                  'shadow-sm',
-                  'text-sm',
-                  'text-white',
-                  'translate-x-3',
-                  'whitespace-nowrap',
-                  'z-10',
-                ].join(' ')}/>
-              )),
-              option(null),
-            )(task)
-          }
+
+          <div role='tooltip' className={[
+            task?.status === 'INSPECTION_DONE' ? 'before:border-r-orange-500' : 'before:border-r-red',
+            '-translate-y-1/2', 'absolute', 'before:-left-[15px]', 'before:-translate-y-1/2',
+            'before:absolute', 'before:block', 'before:border-[10px]', 'before:border-r-[10px]',
+            'before:border-transparent', 'before:content-[""]',
+            'before:top-1/2', , 'font-medium', 'inline-block', 'rounded-xl', 'shadow-sm', 'text-sm', 'text-white',
+            'translate-x-3', 'whitespace-nowrap', 'z-10', 'flex', 'bg-white'
+          ].join(' ')}>
+            <div className={`${task?.status === 'INSPECTION_DONE' ? 'bg-orange-500' : 'bg-brick'} flex  px-3 py-2 rounded-xl shadow`}>
+              {t(task?.status)}
+            </div>
+            
+            <Nullable on={['ON_THE_ROAD', 'INSPECTION', 'INSPECTION_DONE', 'CANCELLED_BY_CLIENT'].includes(task?.status)}>
+              <div key={task.status} className='bg-white text-brick px-2 py-2 rounded-tr-xl rounded-br-xl'>{task?.name}</div>
+            </Nullable>
+          </div>
         </div>
       </OverlayView>
     )).option(null)
-  )),
+  )}),
 );
 
 export default MapTaskMarker;

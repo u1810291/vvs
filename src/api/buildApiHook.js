@@ -208,7 +208,6 @@ export const createUseOne = ({
   const create = useMemo(() => pipe(
     resultToAsync,
     chain(asyncMapToApi),
-    // chain(tap(console.log)),  
     chain(flip(api)(createGraphql))
   ), [api]);
 
@@ -216,7 +215,6 @@ export const createUseOne = ({
     resultToAsync,
     map(a => ({...a, id})),
     chain(asyncMapToApi),  
-    // chain(tap(console.log)),  
     chain(flip(api)(updateGraphQl))
   ), [api, id]);
 

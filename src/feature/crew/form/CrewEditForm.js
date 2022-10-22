@@ -25,6 +25,7 @@ import {getProp} from 'crocks';
 import {isFunction} from 'crocks/predicates';
 import {mapProps, pipe} from 'crocks/helpers';
 import {differenceInMinutes} from 'date-fns';
+import OPTION_POLYGONS from 'feature/dislocation/constants';
 
 const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
@@ -173,7 +174,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
           coordinates={zoneCoordinates}
         >
           <Nullable on={zonePath}>
-            <Polygon path={zonePath} />
+            <Polygon path={zonePath} options={OPTION_POLYGONS} />
           </Nullable>
         </Map>
       </div>

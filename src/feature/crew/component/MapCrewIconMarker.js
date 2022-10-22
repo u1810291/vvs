@@ -8,7 +8,7 @@ export const CREW_STATUS_BEFORE_BORDER_T_CLASSNAME = {
   'BREAK': 'before:border-t-tango',
   'READY': 'before:border-t-forest',
   'OFFLINE': 'before:border-t-brick',
-  'DRIVE_BACK': 'before:border-t-mantis',
+  'DRIVE_BACK': 'before:border-t-tango',
   'UNKNOWN': 'before:border-t-black',
 };
 

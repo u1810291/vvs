@@ -1,7 +1,6 @@
 import {OverlayView} from '@react-google-maps/api';
 import {getBreachLatLngLiteral} from '../utils';
 
-
 export const MapBreachNodeMarker = node => (
   getBreachLatLngLiteral(node)
   .map(position => (

@@ -87,8 +87,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const {data: objects} = useObjectsDropdown();
 
   const tableColumns = [
-    c('id', constant(true), nullToStr, false, 'text-regent', true),
     c('created_at', constant(true), formatDate, true, 'text-regent', true),
+    c('id', constant(true), nullToStr, false, 'text-regent', true),
     c('object', constant(true), concatNameAdress, true, 'text-regent', false),
     c('name', constant(true), nullToStr, true, 'text-bluewood', true),
     c('crew', constant(true), getName, true, 'text-regent', false),
@@ -104,6 +104,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     ),
     c('reason', constant(true), nullToStr, true, 'text-bluewood', true)
   ];
+
 
   const filtersData = [
     {key: 'created_at', label: tc('created_at'), filter: 'date'},
@@ -123,13 +124,14 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       label: tc('status'),
       filter: 'multiselect',
       values: [
-        'NEW',
-        'WAIT_FOR_CREW_APPROVAL',
-        'ON_THE_ROAD',
-        'INSPECTION',
-        'INSPECTION_DONE',
-        'FINISHED',
-        'CANCELLED'
+        ts('NEW'),
+        ts('WAIT_FOR_APPROVAL'),
+        ts('ON_THE_ROAD'),
+        ts('INSPECTION'),
+        ts('INSPECTION_DONE'),
+        ts('FINISHED'),
+        ts('CANCELLED'),
+        ts('CANCELLED_BY_CLIENT'),
       ]
     },
     // {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
@@ -149,6 +151,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   useEffect(() => {
     list.mutate();
   }, [queryParams, sortColumnKey]);
+
+  
   
   return {
     list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),

@@ -67,9 +67,6 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     }),
   });
 
-  // console.log({form});
-  
-  // save key box
   useKeyBox({
     id,
     formResult: result,
