@@ -37,7 +37,7 @@ Status.Break = withMergedClassName(`${CLASS_NAME} bg-tango`, StatusBase);
 Status.Ready = withMergedClassName(`${CLASS_NAME} bg-mantis`, StatusBase);
 Status.Busy = withMergedClassName(`${CLASS_NAME} bg-burgundy`, StatusBase);
 Status.DriveBack = withMergedClassName(`${CLASS_NAME} bg-tango`, StatusBase);
-Status.Offline = withMergedClassName(`${CLASS_NAME} bg-geyser text-black`, StatusBase);
+Status.Offline = withMergedClassName(`${CLASS_NAME} bg-geyser text-white`, StatusBase);
 // Task (Event)
 Status.New = withMergedClassName(`${CLASS_NAME} bg-curious`, StatusBase);
 Status.Finished = withMergedClassName(`${CLASS_NAME} bg-mantis`, StatusBase);
@@ -51,6 +51,7 @@ Status.WaitForCrewApproval = withMergedClassName(`${CLASS_NAME} bg-tango`, Statu
 
 const DynamicStatus = caseMap(Status, [
   // Crew
+  [is(status.CREW_LOGGED_OUT), Status.Offline],
   [is(status.CREW_BUSY), Status.Busy],
   [is(status.CREW_BREAK), Status.Break],
   [is(status.CREW_READY), Status.Ready],
