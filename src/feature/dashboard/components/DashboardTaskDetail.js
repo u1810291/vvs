@@ -12,7 +12,7 @@ import {flip, identity} from 'crocks';
 import {useAuth} from 'context/auth';
 import raw from 'raw.macro';
 
-export default function DashboardTaskDetail({task, id, title, status, name, description, connectionLost, durationTime, component, distance, waiting}) {
+export default function DashboardTaskDetail({task, id, title, status, name, description, connectionLost}) {
   const {t} = useTranslation('dashboard', {keyPrefix: 'task'});
   const nav = useNavigate();
   const [duration, setDuration] = useState(durationTime)
@@ -63,7 +63,7 @@ export default function DashboardTaskDetail({task, id, title, status, name, desc
             </div>
           </Nullable>
 
-          {/* when status is NEW */}
+          {/* when status is INSPECTIN_DONE */}
           <Nullable on={status === eventStatus.EVENT_INSPECTION_DONE}>
             <div className='min-w-4'>
               <Button.Sm onClick={approveReturn} className='py-1 px-3 rounded-md'>{t`return`}</Button.Sm>
@@ -77,8 +77,6 @@ export default function DashboardTaskDetail({task, id, title, status, name, desc
             </div>
           </Nullable>
 
-
-
           <Nullable on={waiting}>
             <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
               <div className='flex flex-row text-xs'>
@@ -87,19 +85,6 @@ export default function DashboardTaskDetail({task, id, title, status, name, desc
                 </Timer>
                 <span className='pl-0.5'>s</span>
               </div>
-            </div>
-          </Nullable>
-          <Nullable on={distance}>
-            <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
-              <span className='flex flex-row text-xs'>{distance}</span>
-            </div>
-          </Nullable>
-          <Nullable on={connectionLost}>
-            <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
-              <Timer active duration={duration * 60 * 1000} onTimerUpdate={onTimerUpdate}>
-                <Timecode time={new Date() - duration} />
-              </Timer>
-              <span className='pl-0.5'>s</span>
             </div>
           </Nullable>
         </div>

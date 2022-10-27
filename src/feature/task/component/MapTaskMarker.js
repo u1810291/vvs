@@ -54,7 +54,7 @@ const MapTaskMarker = pipe(
             'translate-x-3', 'whitespace-nowrap', 'z-10', 'flex', 'bg-white'
           ].join(' ')}>
             <div className={`${task?.status === 'INSPECTION_DONE' ? 'bg-orange-500' : 'bg-brick'} flex  px-3 py-2 rounded-xl shadow`}>
-              {t(task?.status)}
+              {['INSPECTION', 'INSPECTION_DONE'].includes(task?.status) ? t(task?.status) : task?.name}
             </div>
             
             <Nullable on={['ON_THE_ROAD', 'INSPECTION', 'INSPECTION_DONE', 'CANCELLED_BY_CLIENT'].includes(task?.status)}>

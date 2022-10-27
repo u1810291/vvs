@@ -46,14 +46,9 @@ const DashboardForm = () => {
   );
   const offlineCrews = useSubscription(
     useMemo(() => CREW_OFFLINE_GQL, []),
-    // useMemo(() => (
-    //   getPath([''])
-    // ))
   )
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   
-  console.log(offlineCrews?.data);
-
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): false,
