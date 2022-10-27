@@ -5,7 +5,7 @@ import SidebarLeft from '../components/SidebarLeft';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
-import {GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
+import {CREW_OFFLINE_GQL, GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
 import {GQL as ZONE_GQL} from 'feature/dislocation/api/useZonesForDashboard';
 import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
 import useSubscription from 'hook/useSubscription';
@@ -44,7 +44,15 @@ const DashboardForm = () => {
       .option(undefined)
     ), [tasks?.data?.events])
   );
+  const offlineCrews = useSubscription(
+    useMemo(() => CREW_OFFLINE_GQL, []),
+    // useMemo(() => (
+    //   getPath([''])
+    // ))
+  )
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+  
+  console.log(offlineCrews?.data);
 
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
@@ -52,7 +60,7 @@ const DashboardForm = () => {
       ...el
     })
   )}), [crews?.data?.crew]);
-
+  
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])  
@@ -130,7 +138,7 @@ const DashboardForm = () => {
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>
-          <SidebarRight crews={temp} tasks={tasks} />
+          <SidebarRight crews={temp} offlineCrews={offlineCrews?.data?.crew} />
         </aside>
       </section>
     </>

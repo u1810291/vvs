@@ -73,7 +73,8 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     c('abbreviation', constant(true), nullToStr, true, 'text-regent', true),
     c('calendars', constant(true), arrToStr, true, 'text-steel', false),
     cs('status', constant(true), nullToStr, true, null, true),
-    c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent', true)
+    c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent', true),
+    c('device_id', constant(true), nullToStr, false, 'text-regent', true),
   ];
 
   const filtersData = [
@@ -88,6 +89,11 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       filter: 'text'
     },
     {
+      key: 'device_id',
+      label: tc('device_id'),
+      filter: 'text'
+    },
+    {
       key: 'calendars.crew_zone.id',
       label: tc('calendars'),
       filter: 'autocomplete',
@@ -98,7 +104,8 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       key: 'status',
       label: tc('status'),
       filter: 'multiselect',
-      values: ['BREAK', 'BUSY', 'OFFLINE', 'READY', 'DRIVE_BACK']
+      values: ['BREAK', 'BUSY', 'READY', 'DRIVE_BACK', 'LOGGED_OUT'], // TODO: from database ?
+      displayValue: (v) => v,
     },
     {
       key: 'is_assigned_automatically',

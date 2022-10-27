@@ -1,4 +1,5 @@
 export const crewStatus = {
+  CREW_LOGGED_OUT: 'LOGGED_OUT',
   CREW_BUSY: 'BUSY',
   CREW_BREAK: 'BREAK',
   CREW_READY: 'READY',
