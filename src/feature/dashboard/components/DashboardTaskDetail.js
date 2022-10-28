@@ -1,7 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import DynamicIcon from './CrewIcon';
-import Timer from 'react-timer-wrapper';
-import Timecode from 'react-timecode';
 import {useTranslation} from 'react-i18next';
 import Nullable from 'components/atom/Nullable';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
@@ -11,16 +9,12 @@ import Button from 'components/Button';
 import {flip, identity} from 'crocks';
 import {useAuth} from 'context/auth';
 import raw from 'raw.macro';
+import DashboardTaskTimer from './DashboardTaskTimer';
+import {CrewDistanceDetails} from 'feature/crew/component/CrewDetail';
 
 export default function DashboardTaskDetail({task, id, title, status, name, description, connectionLost}) {
   const {t} = useTranslation('dashboard', {keyPrefix: 'task'});
   const nav = useNavigate();
-  const [duration, setDuration] = useState(durationTime)
-  const [time, setTime] = useState(connectionLost)
-  const onTimerUpdate = ({time, duration}) => {
-    setDuration(duration);
-    setTime(time);
-  }
 
   const auth = useAuth();
   const _update = flip(auth.api)(raw('../api/graphql/UpdateEventStatus.graphql'));
@@ -55,7 +49,7 @@ export default function DashboardTaskDetail({task, id, title, status, name, desc
             <span className='text-xs text-gray-400'>{connectionLost ? t`left.lost_connection`: description}</span>
           </div>
         </div>
-        <div className='grid grid-rows-2	gap-1'>
+        <div className='grid'>
           {/* when status is NEW */}
           <Nullable on={status === eventStatus.EVENT_NEW}>
             <div className='min-w-4'>
@@ -63,10 +57,33 @@ export default function DashboardTaskDetail({task, id, title, status, name, desc
             </div>
           </Nullable>
 
+          {/* when status is WAIT_FOR_APPROVAL */}
+          <Nullable on={status === eventStatus.EVENT_WAIT_FOR_APPROVAL}>
+            <div>
+              <DashboardTaskTimer task={task} />
+            </div>
+          </Nullable>
+
+          {/* when status is ON_THE_ROAD */}
+          <Nullable on={status === eventStatus.EVENT_ON_THE_ROAD}>
+            <div className='flex flex-col space-y-1'>
+              <CrewDistanceDetails crew={task?.crew} task={task} onlyDistance={true} />
+              <DashboardTaskTimer task={task} />
+            </div>
+          </Nullable>
+
+          {/* when status is INSPECTION */}
+          <Nullable on={status === eventStatus.EVENT_INSPECTION}>
+            <div>
+              <DashboardTaskTimer task={task} />
+            </div>
+          </Nullable>
+
           {/* when status is INSPECTIN_DONE */}
           <Nullable on={status === eventStatus.EVENT_INSPECTION_DONE}>
-            <div className='min-w-4'>
+            <div className='min-w-4 flex flex-col space-y-1'>
               <Button.Sm onClick={approveReturn} className='py-1 px-3 rounded-md'>{t`return`}</Button.Sm>
+              <DashboardTaskTimer task={task} />
             </div>
           </Nullable>
 
@@ -77,7 +94,7 @@ export default function DashboardTaskDetail({task, id, title, status, name, desc
             </div>
           </Nullable>
 
-          <Nullable on={waiting}>
+          {/* <Nullable on={waiting}>
             <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
               <div className='flex flex-row text-xs'>
                 <Timer active duration={null} onTimerUpdate={onTimerUpdate}>
@@ -86,7 +103,7 @@ export default function DashboardTaskDetail({task, id, title, status, name, desc
                 <span className='pl-0.5'>s</span>
               </div>
             </div>
-          </Nullable>
+          </Nullable> */}
         </div>
       </div>
     </Link>

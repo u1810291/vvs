@@ -107,6 +107,18 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
 
   const remove = () => isFunction(removeRef.current) && removeRef.current([{id: dislocationZoneId}]);
 
+  const onRemovePoint = (event) => {
+    if (polygonRef.current && event.vertex !== undefined) {
+      const newPath = polygonRef.current.getPath();
+      newPath.removeAt(event.vertex);
+      
+      setForm({nodes: newPath.getArray()
+        .map(latLng => {
+          return {lat: latLng.lat(), lng: latLng.lng()};
+        })});
+    }
+  }
+
   const onEdit = useCallback(() => {
     if (polygonRef.current) {
       const newPath = polygonRef.current
@@ -128,6 +140,8 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
   const onPolygonComplete = useCallback(polygon => {
     polygonRef.current = polygon;
     const path = polygonRef.current.getPath(); 
+
+    polygon.addListener('rightclick', event => onRemovePoint(event));
 
     listenersRef.current.push(
       path.addListener('set_at', onEdit),
@@ -184,6 +198,7 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
                     onLoad={onLoad}
                     onUnmount={onUnmount}
                     onEdit={onLoad}
+                    onRightClick={onRemovePoint}
                   />),
                   option(null),                
                 )(nodes)

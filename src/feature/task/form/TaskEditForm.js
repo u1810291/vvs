@@ -12,7 +12,6 @@ import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import {GoogleMap} from '@react-google-maps/api';
 import {MapBreachNodeMarker} from 'feature/breach/components/MapBreachMarker';
 import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
-import {TaskListRoute} from '../routes';
 import {caseMap} from '@s-e/frontend/flow-control';
 import {errorToText} from 'api/buildApiHook';
 import {getCrewLatLngLiteral} from 'feature/crew/utils';
@@ -225,7 +224,7 @@ const AsideSelectCrew = () => {
       ),
       pipe(
         () => notify(<SuccessNotification heading={t`success`} />),
-        tap(() => navigate(TaskListRoute.props.path)),
+        tap(() => navigate(-1)),
       ),
     )
   );
