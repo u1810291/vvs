@@ -12,14 +12,17 @@ import DynamicIcon from 'feature/crew/component/CrewIcon';
 import {useCrew, useCrewZones, useCrewById} from 'feature/crew/api/crewEditApi';
 import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
 import {lengthGt} from 'util/pred';
-import {getProp, safe, isTruthy, isArray, map, option, Maybe, reduce, alt,} from 'crocks';
+import {
+  getProp, safe, isTruthy, Maybe,
+  isArray, map, option,  
+} from 'crocks';
 import {isFunction} from 'crocks/predicates';
 import {mapProps, pipe} from 'crocks/helpers';
 import {differenceInMinutes} from 'date-fns';
 import {useGoogleApiContext} from 'context/google';
 import MapDislocationZone from 'feature/dislocation/component/MapDislocationZone';
 import {GoogleMap} from '@react-google-maps/api';
-import {getDislocationLatLngLiteral} from 'feature/dislocation/ultis';
+import {INITIAL_COORDINATES} from 'feature/dislocation/form/DislocationEditForm';
 
 
 
@@ -71,7 +74,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   // map
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   const mapRef = useRef();
-
+  const fitBoundsCounter = useRef(0);
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])
@@ -79,28 +82,27 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   useEffect(() => {
     Maybe.of(map => m => zoneLatLngs => {
       const bounds = new m.LatLngBounds();
-      // console.log(zoneLatLngs);
+      const newBounds = [...zoneLatLngs];
 
-      [...zoneLatLngs].forEach(latLng => bounds.extend(latLng));
+      if (zoneLatLngs.length == 0) {
+        [...INITIAL_COORDINATES].forEach(latLng => bounds.extend(latLng));
+        map.fitBounds(bounds);
+        return;
+      }
+        
+      if (newBounds.length <= fitBoundsCounter.current) {
+        return;
+      }
+
+      newBounds.forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
+      fitBoundsCounter.current = newBounds.length;
     })
     .ap(mMap)
     .ap(mGoogleMaps)
-    .ap(
-      pipe(
-        safe(isArray),
-        map(reduce((carry, item) => (
-          getDislocationLatLngLiteral(item)
-          .map(latLng => [...carry, latLng])
-          .option(carry)
-        ), [])),
-        alt(Maybe.Just([]))
-      )(zonePath)
-    )
+    .ap(Maybe.of(zonePath.flat()))
     
   }, [zonePath, mGoogleMaps, mMap]);
-
-  console.log(zonePath);
 
   // form data
   const {value: name} = ctrl('name');
@@ -212,7 +214,10 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
                 {
                   pipe(
                     safe(isArray),
-                    map(map((zone, index) => <MapDislocationZone key={`MapDislocationZone-${index}`} zone={zone} />)),
+                    map(map((path) => <MapDislocationZone 
+                      key={`MapDislocationZone-${JSON.stringify(path)}`} 
+                      zone={{id: JSON.stringify(path), nodes: path}} 
+                    />)),
                     option(null),
                   )(zonePath)
                 }
