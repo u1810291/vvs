@@ -102,7 +102,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       null,
       true,
     ),
-    c('reason', constant(true), nullToStr, true, 'text-bluewood', true)
+    c('reason', constant(true), nullToStr, true, 'text-bluewood', true),
+    c('guess', constant(true), boolToStr, false, 'text-regent', true),
   ];
 
 
@@ -124,15 +125,20 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       label: tc('status'),
       filter: 'multiselect',
       values: [
-        ts('NEW'),
-        ts('WAIT_FOR_APPROVAL'),
-        ts('ON_THE_ROAD'),
-        ts('INSPECTION'),
-        ts('INSPECTION_DONE'),
-        ts('FINISHED'),
-        ts('CANCELLED'),
-        ts('CANCELLED_BY_CLIENT'),
-      ]
+        'NEW',
+        'WAIT_FOR_APPROVAL',
+        'ON_THE_ROAD',
+        'INSPECTION',
+        'INSPECTION_DONE',
+        'FINISHED',
+        'CANCELLED',
+        'CANCELLED_BY_CLIENT',
+      ],
+      custom: (value) => {
+        const statuses = value.map(v => v.toUpperCase());
+        if (statuses.includes('CANCELLED_BY_CLIENT')) statuses.push('CANCELLED_BY_CLIENT_CONFIRMED');
+        return {_in: statuses}
+      }
     },
     // {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
     // {key: 'crew', label: 'Crew', filter: 'multiselect', values: []},
@@ -149,6 +155,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const list = useTasks({filters: queryParams});
 
   useEffect(() => {
+    console.log(queryParams);
     list.mutate();
   }, [queryParams, sortColumnKey]);
 
