@@ -48,7 +48,7 @@ const TaskEditLayout = () => {
       ),
       pipe(
         tap(() => notify(<SuccessNotification />)),
-        tap(() => navigate(TaskListRoute.props.path)),
+        tap(() => navigate(-1)),
         tap(() => {
           pipe(
             getPath(['crew', 'id']),
@@ -56,19 +56,37 @@ const TaskEditLayout = () => {
             maybeToAsync('unable to retrieve'),
             chain(flip(api)(UPDATE_CREW_STATUS))
           )(data).fork(
-              e => notify(
-                <ErrorNotification>
-                  {errorToText(identity, e)}
-                </ErrorNotification>
-              ),
-              identity,
-            )
+            // e => notify(
+            //   <ErrorNotification>
+            //     {errorToText(identity, e)}
+            //   </ErrorNotification>
+            // ),
+            identity,
+            identity,
+          )
         })
       )
     )
   };
 
+  const updateStatus = (status) => {
+    if (!confirm(t('Are you sure you want to perform this task?'))) return;
+
+    update(Result.of({id, crew_id: data?.crew?.id, status: status})).fork(
+      e => notify(
+        <ErrorNotification>
+          {errorToText(identity, e)}
+        </ErrorNotification>
+      ),
+      pipe(
+        tap(() => notify(<SuccessNotification />)),
+      )
+    )
+  }
+
   const allowToReturn = () => {
+    if (!confirm(t('Are you sure you want to perform this task?'))) return;
+
     update(Result.of({id, crew_id: data?.crew?.id, status: 'FINISHED'})).fork(
       e => notify(
         <ErrorNotification>
@@ -77,7 +95,6 @@ const TaskEditLayout = () => {
       ),
       pipe(
         tap(() => notify(<SuccessNotification />)),
-        tap(() => navigate(TaskListRoute.props.path)),
       )
     )
   };
@@ -98,10 +115,37 @@ const TaskEditLayout = () => {
               () => (
                 <div className='space-x-4'> 
                   <Button.Dxl onClick={archive}>{t`button.cancel`}</Button.Dxl>
-                  <span className='text-slate-400 py-1 p-6'>{t`button.assignCrew`}</span>
+                  <Button.NoBg className='text-slate-400 py-1 p-6'>{t`button.assignCrew`}</Button.NoBg>
                 </div>
               ),
               [
+                [
+                  and(propEq('status', STATUS.WAIT_FOR_APPROVAL), pathSatisfies(['crew', 'id'])),
+                  () => (
+                    <div className='space-x-4'> 
+                      <Button.Dxl onClick={archive}>{t`button.cancel`}</Button.Dxl>
+                      <Button.NoBg onClick={() => updateStatus('ON_THE_ROAD')} className='text-slate-400 py-1 p-6'>{t`button.waiting_for_approval`}</Button.NoBg>
+                    </div>
+                  )
+                ],
+                [
+                  and(propEq('status', STATUS.ON_THE_ROAD), pathSatisfies(['crew', 'id'])),
+                  () => (
+                    <div className='space-x-4'> 
+                      <Button.Dxl onClick={archive}>{t`button.cancel`}</Button.Dxl>
+                      <Button.NoBg onClick={() => updateStatus('INSPECTION')} className='text-slate-400 py-1 p-6'>{t`button.crew_on_the_way`}</Button.NoBg>
+                    </div>
+                  )
+                ],
+                [
+                  and(propEq('status', STATUS.INSPECTION), pathSatisfies(['crew', 'id'])),
+                  () => (
+                    <div className='space-x-4'> 
+                      <Button.Dxl onClick={archive}>{t`button.cancel`}</Button.Dxl>
+                      <Button.NoBg onClick={() => updateStatus('INSPECTION_DONE')} className='text-slate-400 py-1 p-6'>{t`button.crew_is_inspecting_the_facility`}</Button.NoBg>
+                    </div>
+                  )
+                ],
                 [
                   and(propEq('status', STATUS.INSPECTION_DONE), pathSatisfies(['crew', 'id'])),
                   () => (
@@ -111,6 +155,7 @@ const TaskEditLayout = () => {
                   )
                 ],
                 [propEq('status', STATUS.FINISHED), () => null],
+                [propEq('status', STATUS.CANCELLED), () => null],
               ],
               data
             )

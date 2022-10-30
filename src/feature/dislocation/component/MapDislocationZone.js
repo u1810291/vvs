@@ -10,6 +10,14 @@ export const POLYGON_OPTIONS = {
   editable: true,
 };
 
+export const POLYGON_OPTIONS_TASK_MAP = {
+  strokeOpacity: 1,
+  fillOpacity: 0.3,
+  strokeWeight: 0.8,
+  fillColor: '#92C46B',
+  strokeColor: '#92C46B'
+};
+
 export const POLYGON_OPTIONS_DISPLAY = {
   strokeOpacity: 1,
   fillOpacity: 0.4,
@@ -18,11 +26,11 @@ export const POLYGON_OPTIONS_DISPLAY = {
   strokeColor: '#F37E16',
 };
 
-const MapDislocationZone = ({zone}) => (
+const MapDislocationZone = ({zone, options = POLYGON_OPTIONS_DISPLAY}) => (
   <Polygon 
     key={zone.id} 
     path={zone.nodes} 
-    options={POLYGON_OPTIONS_DISPLAY}
+    options={options}
   />
 );
 

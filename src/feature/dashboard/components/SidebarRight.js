@@ -20,8 +20,6 @@ export default function SidebarRight({crews, offlineCrews}) {
   const {t} = useTranslation('dashboard');
   const activeCrew = (crew) => [crewStatus.CREW_READY, crewStatus.CREW_BREAK, crewStatus.CREW_DRIVE_BACK].includes(crew?.status);
 
-  console.log({offlineCrews});
-
   return (
     <>
       <div>

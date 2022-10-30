@@ -1,31 +1,30 @@
-import React, {useEffect} from 'react';
-
+import React, {useEffect, useMemo, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-
 import Button from 'components/Button';
 import Card from 'components/atom/Card';
-import Nullable from 'components/atom/Nullable';
 import CheckBox from 'components/atom/input/CheckBox';
 import InputGroup from 'components/atom/input/InputGroup';
 import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
-
-import Map from 'feature/map/component/Map';
 import {CrewListRoute} from 'feature/crew/routes';
-import Polygon from 'feature/map/component/Polygon';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
 import {useCrew, useCrewZones, useCrewById} from 'feature/crew/api/crewEditApi';
 import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
-
 import {lengthGt} from 'util/pred';
-
-import {getProp} from 'crocks';
+import {
+  getProp, safe, isTruthy, Maybe,
+  isArray, map, option,  
+} from 'crocks';
 import {isFunction} from 'crocks/predicates';
 import {mapProps, pipe} from 'crocks/helpers';
 import {differenceInMinutes} from 'date-fns';
-import OPTION_POLYGONS from 'feature/dislocation/constants';
+import {useGoogleApiContext} from 'context/google';
+import MapDislocationZone from 'feature/dislocation/component/MapDislocationZone';
+import {GoogleMap} from '@react-google-maps/api';
+import {INITIAL_COORDINATES} from 'feature/dislocation/form/DislocationEditForm';
+
+
 
 const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
@@ -72,6 +71,40 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const zonePath = getZoneItemsThroughCalendar(crew);
   const zoneCoordinates = getFlatNodesThroughCalendar(crew);
 
+  // map
+  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+  const mapRef = useRef();
+  const fitBoundsCounter = useRef(0);
+  const mMap = useMemo(() => (
+    isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
+  ), [isLoaded, mapRef.current])
+
+  useEffect(() => {
+    Maybe.of(map => m => zoneLatLngs => {
+      const bounds = new m.LatLngBounds();
+      const newBounds = [...zoneLatLngs];
+
+      if (zoneLatLngs.length == 0) {
+        [...INITIAL_COORDINATES].forEach(latLng => bounds.extend(latLng));
+        map.fitBounds(bounds);
+        return;
+      }
+        
+      if (newBounds.length <= fitBoundsCounter.current) {
+        return;
+      }
+
+      newBounds.forEach(latLng => bounds.extend(latLng));
+      map.fitBounds(bounds);
+      fitBoundsCounter.current = newBounds.length;
+    })
+    .ap(mMap)
+    .ap(mGoogleMaps)
+    .ap(Maybe.of(zonePath.flat()))
+    
+  }, [zonePath, mGoogleMaps, mMap]);
+
+  // form data
   const {value: name} = ctrl('name');
   const {value: status} = ctrl('status');
   const {value: driver} = ctrl('driver');
@@ -167,16 +200,31 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
             </div>
           </div>
         </Card.Sm>
-        <Map
-          zoom={12}
-          path={zonePath}
-          id={`crew-map-${crewId}`}
-          coordinates={zoneCoordinates}
-        >
-          <Nullable on={zonePath}>
-            <Polygon path={zonePath} options={OPTION_POLYGONS} />
-          </Nullable>
-        </Map>
+
+        <div className='grow'>
+          {isLoaded
+            ? (
+              <GoogleMap
+                {...useMemo(() => ({
+                  mapContainerStyle: {width: '100%', height: '100%'},
+                  onLoad: map => {mapRef.current = map}
+                }), [])}
+              >
+                {/* dislocation zones */}
+                {
+                  pipe(
+                    safe(isArray),
+                    map(map((path) => <MapDislocationZone 
+                      key={`MapDislocationZone-${JSON.stringify(path)}`} 
+                      zone={{id: JSON.stringify(path), nodes: path}} 
+                    />)),
+                    option(null),
+                  )(zonePath)
+                }
+              </GoogleMap>
+            ) : null
+          }
+        </div>
       </div>
     </section>
   );

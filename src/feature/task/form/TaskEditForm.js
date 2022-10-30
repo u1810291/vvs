@@ -7,11 +7,11 @@ import SuccessNotification from 'feature/ui-notifications/components/SuccessNoti
 import TaskLogs from '../component/TaskLogDetail';
 import useSubscription from 'hook/useSubscription';
 import useTask from '../api/useTask';
+import {GQL as ZONE_GQL} from 'feature/dislocation/api/useZonesForDashboard';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
 import {GoogleMap} from '@react-google-maps/api';
 import {MapBreachNodeMarker} from 'feature/breach/components/MapBreachMarker';
 import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
-import {TaskListRoute} from '../routes';
 import {caseMap} from '@s-e/frontend/flow-control';
 import {errorToText} from 'api/buildApiHook';
 import {getCrewLatLngLiteral} from 'feature/crew/utils';
@@ -52,6 +52,8 @@ import {
   tap,
   isObject,
 } from 'crocks';
+import MapDislocationZone, {POLYGON_OPTIONS_TASK_MAP} from 'feature/dislocation/component/MapDislocationZone';
+import Nullable from 'components/atom/Nullable';
 
 const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
@@ -63,6 +65,7 @@ const TaskEditForm = ({taskQuery, task}) => {
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])
 
+  const zones = useSubscription(useMemo(() => ZONE_GQL, []));
   const crews = useSubscription(
     useMemo(() => GQL, []),
     useMemo(() => (
@@ -77,11 +80,17 @@ const TaskEditForm = ({taskQuery, task}) => {
     Maybe.of(map => m => taskLatLng => crewsLatLngs => {
       const bounds = new m.LatLngBounds();
       const newBounds = [taskLatLng, ...crewsLatLngs];
-      
       newBounds.forEach(latLng => bounds.extend(latLng));
 
       if (newBounds.length <= fitBoundsCounter.current) {
         return;
+      }
+
+      if (task?.crew !== null) {
+        newBounds.push({
+          lat: task.crew?.latitude,
+          lng: task.crew?.longitude
+        });
       }
       
       newBounds.forEach(latLng => bounds.extend(latLng));
@@ -104,6 +113,7 @@ const TaskEditForm = ({taskQuery, task}) => {
         )(crews)
       )
   }, [task, crews]);
+
 
   return (
     <section className='flex w-full'>
@@ -138,14 +148,36 @@ const TaskEditForm = ({taskQuery, task}) => {
                   option(null),
                 )(task)
               }
-              {
-                pipe(
-                  getPath(['data', 'crew']),
-                  chain(safe(isArray)),
-                  map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
-                  option(null),
-                )(crews)
-              }
+
+              <Nullable on={task?.status === 'NEW'}>
+                {/* dislocation zones */}
+                {
+                  pipe(
+                    getPath(['data', 'crew_zone']),
+                    chain(safe(isArray)),
+                    map(map(zone => <MapDislocationZone 
+                      key={`MapDislocationZone-${zone?.id}`} zone={zone} 
+                      options={POLYGON_OPTIONS_TASK_MAP}
+                    />)),
+                    option(null),
+                  )(zones)
+                }
+                {/* crews */}
+                {
+                  pipe(
+                    getPath(['data', 'crew']),
+                    chain(safe(isArray)),
+                    map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />),),
+                    option(null),
+                  )(crews)
+                }
+              </Nullable>
+
+              <Nullable on={task?.crew !== null}>
+                <MapCrewIconMarker key={`MapCrewIconMarker-${task?.crew?.id}`} {...task?.crew} />
+              </Nullable>              
+
+              {/* task */}
               <MapTaskMarker {...task} /> 
             </GoogleMap>
           ) : null
@@ -192,7 +224,7 @@ const AsideSelectCrew = () => {
       ),
       pipe(
         () => notify(<SuccessNotification heading={t`success`} />),
-        tap(() => navigate(TaskListRoute.props.path)),
+        tap(() => navigate(-1)),
       ),
     )
   );
@@ -231,7 +263,7 @@ const AsideSelectCrew = () => {
             title: t`availableCrews`,
             children: list
           })),
-          map(renderWithProps(Detail)),
+          map(renderWithProps(<div />)),
           option(null),
         )(crews)
       }

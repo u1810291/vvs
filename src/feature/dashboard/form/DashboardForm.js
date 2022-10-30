@@ -8,6 +8,7 @@ import Button from 'components/Button';
 import {CREW_OFFLINE_GQL, GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
 import {GQL as ZONE_GQL} from 'feature/dislocation/api/useZonesForDashboard';
 import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
+import {GQL as PERMISSIONS_GQL} from 'feature/permission/api/usePermissionsForDashboard';
 import useSubscription from 'hook/useSubscription';
 import {GoogleMap} from '@react-google-maps/api';
 import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
@@ -31,10 +32,8 @@ const INITIAL_COORDINATES = [
 const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
   const mapRef = useRef();
-
   const nav = useNavigate();
 
-  const zones = useSubscription(useMemo(() => ZONE_GQL, []));
   const tasks = useSubscription(useMemo(() => TASK_GQL, []));
   const crews = useSubscription(
     useMemo(() => CREW_GQL, []),
@@ -44,23 +43,18 @@ const DashboardForm = () => {
       .option(undefined)
     ), [tasks?.data?.events])
   );
-  const offlineCrews = useSubscription(
-    useMemo(() => CREW_OFFLINE_GQL, []),
-    // useMemo(() => (
-    //   getPath([''])
-    // ))
-  )
-  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+  const offlineCrews = useSubscription(useMemo(() => CREW_OFFLINE_GQL, []));
+  const zones = useSubscription(useMemo(() => ZONE_GQL, []));
+  const permissions = useSubscription(useMemo(() => PERMISSIONS_GQL, []));
   
-  console.log(offlineCrews?.data);
-
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): false,
       ...el
     })
   )}), [crews?.data?.crew]);
-  
+
+  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])  
@@ -87,7 +81,7 @@ const DashboardForm = () => {
           </Button.Pxl>
         </div>
         <aside className='border-l border-gray-border min-w-fit'>
-          <SidebarLeft tasks={tasks} />
+          <SidebarLeft tasks={tasks} permissions={permissions} />
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
