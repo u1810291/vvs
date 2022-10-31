@@ -184,18 +184,19 @@ const KeyObjectList = ({boxId, assignRef, removeRef}) => {
                 {...ctrl('object_id')} 
                 value={form['object_id']}
                 data-id={form['object_id']}
-                displayValue={v => objects?.data?.find(o => o.id === v)?.name}
+                displayValue={v => objects?.data?.flat().find(o => o.id === v)?.name}
                 onChange={(v) => {
                   const theForm = {...form};
                   theForm['object_id'] = v;
                   setForm(theForm);
                 }}
+                api={objects}
               >
                 {map(object => (
                   <ComboBox.Option key={object.id} value={object.id}>
                     {titleCase(object.name || object.id)}
                   </ComboBox.Option>
-                ), (objects?.data || []))}
+                ), (objects?.data?.flat() || []))}
               </ComboBox>
             </div>
 

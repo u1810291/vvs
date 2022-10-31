@@ -1,5 +1,5 @@
-query($where: object_key_box_bool_exp, $orderBy: [object_key_box_order_by!]) {
-  object_key_box(where: $where, order_by: $orderBy) {
+query($where: object_key_box_bool_exp, $orderBy: [object_key_box_order_by!], $limit: Int = 25, $offset: Int = 0) {
+  object_key_box(where: $where, order_by: $orderBy, limit: $limit, offset: $offset) {
     crew_id
     set_name
     id

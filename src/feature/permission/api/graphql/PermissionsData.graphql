@@ -1,5 +1,5 @@
-query($where: crew_permission_bool_exp = {}, $orderBy: [crew_permission_order_by!]) {
-  crew_permission(where: $where, order_by: $orderBy) {
+query($where: crew_permission_bool_exp = {}, $orderBy: [crew_permission_order_by!], $limit: Int = 25, $offset: Int = 0) {
+  crew_permission(where: $where, order_by: $orderBy, limit: $limit, offset: $offset) {
     id
     created_at
     updated_at

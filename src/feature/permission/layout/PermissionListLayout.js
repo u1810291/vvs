@@ -50,6 +50,8 @@ const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) 
   )(styles)
 }));
 
+
+
 const PermissionListLayout = withPreparedProps(Listing, () => {
   const {t: tb} = useTranslation('permission', {keyPrefix: 'breadcrumbs'});
   const {t: tp} = useTranslation('permission');
@@ -107,7 +109,8 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
   }, [queryParams, sortColumnKey]);
 
   return {
-    list: api?.data || [],
+    api: api,
+    list: api?.data?.flat() || [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

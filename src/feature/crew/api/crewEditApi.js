@@ -23,7 +23,8 @@ export const useCrews = createUseWhereList({
   graphQl: raw('./graphql/GetAllCrews.graphql'),
   asyncMapFromApi: pipe(
     maybeToAsync('expected prop "crew" does not exist', getProp('crew'))
-  )
+  ),
+  infinite: true,
 });
 
 export const useCrew = createUseOne({

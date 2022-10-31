@@ -8,7 +8,7 @@ import {every} from '../../util/array';
 import {onInputEventOrEmpty} from '@s-e/frontend/callbacks/event/input';
 import {reduce} from 'crocks/pointfree';
 import {renderWithProps, withMergedClassName} from '../../util/react';
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState, useRef} from 'react';
 
 import {
   and,
@@ -53,6 +53,7 @@ export const asciifyLT2 = string => string
  * @param {TableColumnComponent[]} props.tableColumns
  */
 const Listing = ({
+  api,
   list = [],
   rowKeyLens,
   filters,
@@ -80,7 +81,7 @@ const Listing = ({
           
           return renderWithProps(SortButton, {...b, direction, isSortable: a.isSortable})
         },
-        btn => <Table.Th className='hover:text-black text-left' key={a.key} onClick={() => {
+        btn => <Table.Th className='hover:text-black text-left sticky top-0 z-1 bg-gray-50' key={a.key} onClick={() => {
           isFunction(setSortColumn) && a.isSortable && setSortColumn(a.key)
         }}>{btn}</Table.Th>,
       )(a))
@@ -122,6 +123,18 @@ const Listing = ({
       r,
     ), []),
   )(list), [list, tableColumns, activeTableColumnPred, rowKeyLens, query]);
+
+  // on table scroll
+  const tableWrapperRef = useRef(null);
+  const onScroll = () => {
+    if (tableWrapperRef.current && api) {
+      const {scrollTop, scrollHeight, clientHeight} = tableWrapperRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        api.setSize(api.size + 1);
+      }
+    }
+  }
+
   return (
     <Index>
       <TitleBar>
@@ -143,14 +156,16 @@ const Listing = ({
           {filters}
         </div>
       </Nullable>
-      <Table id='tableId'>
-        <Table.Head>
-          <Table.Tr>
-            {headerColumns}
-          </Table.Tr>
-        </Table.Head>
-        <Table.Body>{rows}</Table.Body>
-      </Table>
+      <div className='overflow-x-auto' ref={tableWrapperRef} onScroll={onScroll}>
+        <Table id='tableId'>
+          <Table.Head>
+            <Table.Tr>
+              {headerColumns}
+            </Table.Tr>
+          </Table.Head>
+          <Table.Body>{rows}</Table.Body>
+        </Table>
+      </div>
     </Index>
   );
 }

@@ -7,7 +7,6 @@ import Listing from 'layout/ListingLayout';
 
 import withPreparedProps from 'hoc/withPreparedProps';
 
-import {useAuth} from 'context/auth';
 import {useFilter} from 'hook/useFilter';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -28,7 +27,7 @@ import {not} from 'crocks/logic';
 import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
-import {isArray, isObject, isString, isEmpty, hasProps} from 'crocks/predicates';
+import {isString, isEmpty, hasProps} from 'crocks/predicates';
 
 import {format} from 'date-fns';
 import TaskStatusTag from '../component/TaskStatusTag';
@@ -56,7 +55,6 @@ const getColumn = curry((t, Component, key, pred, mapper, status, styles, isSort
 }));
 
 const TaskListLayout = withPreparedProps(Listing, props => {
-  const {api} = useAuth();
   const nav = useNavigate();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('task', {keyPrefix: 'list.header'});
@@ -152,17 +150,17 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     filtersData,
   );
 
-  const list = useTasks({filters: queryParams});
+  const api = useTasks({filters: queryParams});
 
   useEffect(() => {
-    console.log(queryParams);
-    list.mutate();
+    api.mutate();
   }, [queryParams, sortColumnKey]);
 
   
   
   return {
-    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

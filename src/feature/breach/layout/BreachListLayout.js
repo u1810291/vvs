@@ -15,12 +15,14 @@ import {alt, chain} from 'crocks/pointfree';
 import {format, intervalToDuration, formatDuration} from 'date-fns';
 import {generatePath, Link} from 'react-router-dom';
 import {getPropOr, objOf, pipe} from 'crocks/helpers';
-import {isEmpty, hasProps, isArray, isString} from 'crocks/predicates';
+import {isEmpty, hasProps, isString} from 'crocks/predicates';
 import {not} from 'crocks/logic';
 import {useBreaches} from '../api/breachEditApi';
 import {useCrewDropdown} from 'feature/crew/api/crewEditApi';
 import {useFilter} from 'hook/useFilter';
 import {useTranslation} from 'react-i18next';
+
+
 
 const getColumn = curry((t, Component, key, mapper, status, styles, isSortable) => ({
   Component,
@@ -104,15 +106,16 @@ const BreachListLayout = withPreparedProps(Listing, () => {
     filtersData,
   );
 
-  const list = useBreaches({filters: queryParams})
+  const api = useBreaches({filters: queryParams})
 
   useEffect(() => {
-    setExportData(list.data)
-    list.mutate();
+    setExportData(api.data)
+    api.mutate();
   }, [queryParams, sortColumnKey]);
 
   return {
-    list: safe(isArray, list?.data).option([]),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

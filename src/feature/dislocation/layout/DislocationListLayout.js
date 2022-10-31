@@ -1,21 +1,16 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
-
 import Listing from '../../../layout/ListingLayout';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import withPreparedProps from '../../../hoc/withPreparedProps';
-
 import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../../context/auth';
-import useAsync from '../../../hook/useAsync';
-
 import {
   chain,
   curry,
   getProp,
   getPropOr,
   identity,
-  isArray,
   isEmpty,
   map,
   Maybe,
@@ -25,13 +20,12 @@ import {
   safe
 } from 'crocks';
 import {alt} from 'crocks/pointfree';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-
 import {DislocationCreateRoute, DislocationEditRoute} from '../routes';
 import Innerlinks from 'components/Innerlinks';
 import {CrewListRoute} from 'feature/crew/routes';
 import {DriverListRoute} from 'feature/driver/routes';
 import Button from '../../../components/Button';
+import useDislocationZones from '../api/useDislocationZones';
 
 const getColumn = curry((t, Component, key, pred, mapper, isSortable) => ({
   Component,
@@ -58,18 +52,8 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
   const {t: th} = useTranslation('dislocation', {keyPrefix: 'list.header'});
   const {t: tb} = useTranslation('dislocation', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('dislocation', {keyPrefix: 'list.column'});
-  const [state, fork] = useAsync(chain(maybeToAsync('"crew_zone" prop is expected in the response', getProp('crew_zone')),
-    apiQuery(
-      `
-        query {
-          crew_zone {
-            id
-            name
-          }
-        }
-      `
-    ))
-  );
+  
+  const api = useDislocationZones({filters: {}});
 
   const c = useMemo(() => getColumn(t, props => (
     <Link to={generatePath(DislocationEditRoute.props.path, {id: props?.id})}>
@@ -77,10 +61,10 @@ const DislocationListLayout = withPreparedProps(Listing, props => {
     </Link>
   )), [t]);
 
-  useEffect(() => fork(), []);
 
   return {
-    list: safe(isArray, state.data).option([]),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

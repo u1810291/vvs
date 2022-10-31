@@ -29,5 +29,6 @@ export default createUseApiList({
       // .map(objectUsers => setPath(['object', 'users'], objectUsers, questions))
       .alt(Async.Resolved(questions))
     ))    
-  )
+  ),
+  infinite: true,
 });

@@ -1,5 +1,5 @@
-query Objects($where: object_bool_exp, $orderBy: [object_order_by!]) {
-  object(where: $where, order_by: $orderBy) {
+query Objects($where: object_bool_exp, $orderBy: [object_order_by!], $limit: Int = 25, $offset: Int = 0) {
+  object(where: $where, order_by: $orderBy, limit: $limit, offset: $offset) {
     address
     city
     contract_no
