@@ -42,8 +42,6 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
   const {t} = useTranslation('key', {keyPrefix: 'edit'});
   const {t: tf} = useTranslation('key', {keyPrefix: 'edit.field'});
   
-  const crews = useCrews({filters: {}});
-
   const {ctrl, result, form, setForm} = useResultForm({
     set_name: FORM_FIELD.TEXT({
       label: tf`set_name`, 
@@ -60,7 +58,7 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
       props: {
         isRequired: constant(true),      
         displayValue: displayValue((v) => {
-          const crew = crews?.data?.find(c => c.id === v);
+          const crew = crews?.data?.flat().find(c => c.id === v);
           return titleCase(crew?.name || crew?.id);
         }),
       }
@@ -78,6 +76,7 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
     newObjectPath: ['insert_object_key_box_one', 'id'],
   });
 
+  const crews = useCrews({filters: {}});
 
   return (
     <section className={'flex flex-col'}>
@@ -92,7 +91,8 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
           {...ctrl('crew_id')} 
           value={form['crew_id']}
           data-id={form['crew_id']}
-          displayValue={v => crews?.data?.find(o => o.id === v)?.name}
+          displayValue={v => crews?.data?.flat().find(o => o.id === v)?.name}
+          api={crews}
           onChange={(v) => {
             const theForm = {...form};
             theForm['crew_id'] = v;
@@ -103,7 +103,7 @@ const KeyBoxEditForm = ({saveRef, removeRef, assignRef, removeRelRef}) => {
             <ComboBox.Option key={crew.id} value={crew.id}>
               {titleCase(crew.name || crew.id)}
             </ComboBox.Option>
-          ), (crews?.data || []))}
+          ), (crews?.data?.flat() || []))}
         </ComboBox>
       </div>
 

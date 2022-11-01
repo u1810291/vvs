@@ -203,7 +203,6 @@ const ClientListLayout = withPreparedProps(Listing, () => {
     })};
   }, []);
 
-  // TODO: Adjust column names regarding response data
   const tableColumns = [
     c('fullName', identity, true, false),
     c('contract_no', identity, true, false),

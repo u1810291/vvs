@@ -21,6 +21,7 @@ import {
   safe,
   find,
 } from 'crocks';
+import {useDebounce} from 'hook/useDebounce';
 
 const DEFAULTS = {
   displayValue: (value, all) => pipe(
@@ -62,6 +63,7 @@ const Box = ({
   placeholder,  
   showAllOptions = false,
   value, 
+  api = null,
   ...props
 }) => {
   const [query, setQuery] = useState('');
@@ -81,6 +83,15 @@ const Box = ({
   const onInputChange = (e) => setQuery(e.target.value);
   const onChangeValue = (e) => onChange(e.props.value);
   const onDeselect = (e) => onChange(e.target.dataset.value);
+
+  // filter
+  useDebounce(() => {
+    if (query) onQuery();
+  }, 500, [query]);
+  
+  const onQuery = () => {
+    if (api) api.mutate();
+  }
 
   return (
     <Combobox as='div' value={value} onChange={onChangeValue} {...props}>
@@ -116,7 +127,7 @@ const Box = ({
             </Options>
           )],
           [constant(not(isEmpty, filteredChildren)), constant(
-            <Options>
+            <Options api={api}>
               {filteredChildren.map((component) => (
                 <Option 
                   {...component.props} 

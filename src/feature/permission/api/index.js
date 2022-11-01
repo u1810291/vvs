@@ -9,6 +9,7 @@ export const usePermissions = createUseWhereList({
   asyncMapFromApi: pipe(
     maybeToAsync('prop "crew_permission" expected but not found.', getProp('crew_permission')),
   ),
+  infinite: true,
 });
 
 export const usePermission = createUseOne({

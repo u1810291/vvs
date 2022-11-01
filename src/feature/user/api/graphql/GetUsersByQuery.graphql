@@ -1,0 +1,21 @@
+query GetUsers($query: String) {
+  usersByQuery(query: $query) {
+    users {
+      active
+      birthDate
+      email
+      firstName
+      id
+      lastName
+      middleName
+      mobilePhone
+      username
+      verified
+      fullName
+      registrations {
+        applicationId
+        roles
+      }
+    }
+  }
+}

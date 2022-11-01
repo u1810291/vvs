@@ -24,6 +24,7 @@ import {
   pipe,
   safe,
 } from 'crocks';
+import {useTranslation} from 'react-i18next';
 
 const LS_KEY_NAME = 'listingFilters';
 const DEFAULT_FILTER_NAME = 'New filter';
@@ -181,8 +182,8 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
+  const {t} = useTranslation('filter');
   const [exportData, setExportData] = useState();
-  const handleExport = useCallback(() => exportTableToExcel(exportData, new Date()), [exportData]);
   const [showFilter, setShowFilter] = useState(false);
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const [params] = useSearchParams();
@@ -196,10 +197,15 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     starred: false,
     isDefault: false,
   })
+
   const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? `-${tableColumns[0].key}` : null);
   const setSortColumn = (column) => {
     setSortColumnKey(sortColumnKey && sortColumnKey === column ? `-${column}` : column);
   }
+
+  
+  const handleExport = useCallback(() => exportTableToExcel(exportData, new Date()), [exportData]);
+  const search = useCallback(() => dispatch({action: 'SEARCH'}), [state]);
 
   const [columns, setColumns] = useState([]);
 
@@ -597,7 +603,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
                   return <SelectBox
                     className={'w-full'}
                     key={key} 
-                    label={label} 
+                    label={label}
+                    twLabel={'text-sm'} 
                     onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
                     multiple={filter === 'multiselect' ? true : false}  
                     value={currentValue} 
@@ -712,13 +719,18 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
               <span className='text-sm'>Column order</span>
               <Filter onValues={setColumns}>{pickedColumns}</Filter>
             </div>
-            <div className='mt-4'>
+
+            {/*  */}
+            <div className='mt-4 flex'>
               <Nullable on={defaultFilterId}>
-                <Button.Xs id={defaultFilterId} className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={onSaveFilterShortcut}>Save Filter</Button.Xs>
+                <Button.NoBg id={defaultFilterId} className={'bg-gray-200 px-6 py-0 hover:bg-gray-500 text-white'} onClick={onSaveFilterShortcut}>{t('save_filter')}</Button.NoBg>
               </Nullable>
-              <div className='flex justify-end gap-8 align-center'>
-                <span className='flex align-center text-gray-500'><DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' /> Eksportuoti</span>
-                <Button.Sm id='search_Ieškoti' className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={()=>{}}>Search</Button.Sm>
+              <div className='flex flex-1 justify-end gap-8 align-center'>
+                <Button.NoBg onClick={handleExport} className='flex align-center text-gray-500 focus:ring-0 shadow-none hover:text-gray-900 hover:bg-gray-50'>
+                  <DocumentDownloadIcon className='w-6 h-6 text-gray-300 cursor-pointer inline-block focus:ring-0' /> 
+                  {t('export')}
+                </Button.NoBg>
+                <Button.Sm id='search_Ieškoti' className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={search}>{t('search')}</Button.Sm>
               </div>
             </div>
           </div>
@@ -758,13 +770,20 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
       else {
         // array filter / multiselect
         if (isArray(value)) {
+          // custom filtering
+          if (filter.custom !== undefined && isFunction(filter.custom)) {
+            params[key] = filter.custom(value);
+            continue;
+          }
+          
+          // filter in relationship
           if (filter.key.includes('.')) {
-            const columns = filter.key.split('.');
-            
+            const columns = filter.key.split('.');            
             params[columns[0]] = unflatten({[filter.key.replace(`${columns[0]}.`, '')]: {_in: value.map(v => v)}});
             continue;
           }
 
+          // default
           params[key] = {_in: value.map(v => v)};
         }
 

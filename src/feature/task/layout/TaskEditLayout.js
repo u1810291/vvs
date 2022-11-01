@@ -85,8 +85,6 @@ const TaskEditLayout = () => {
   }
 
   const allowToReturn = () => {
-    if (!confirm(t('Are you sure you want to perform this task?'))) return;
-
     update(Result.of({id, crew_id: data?.crew?.id, status: 'FINISHED'})).fork(
       e => notify(
         <ErrorNotification>

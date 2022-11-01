@@ -14,7 +14,7 @@ import {alt, chain, map, option} from 'crocks/pointfree';
 import {constant} from 'crocks/combinators';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
-import {isArray, isBoolean, isObject, isString} from 'crocks/predicates';
+import {isBoolean, isString} from 'crocks/predicates';
 import {useCrews} from 'feature/crew/api/crewEditApi';
 import {useDislocationZonesDropdown} from 'feature/dislocation/api/dislocationEditApi';
 import {useFilter} from 'hook/useFilter';
@@ -121,15 +121,16 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     filtersData,
   );
 
-  const list = useCrews({filters: queryParams});
+  const api = useCrews({filters: queryParams});
   
   useEffect(() => {
-    setExportData(list.data);
-    list.mutate();
+    setExportData(api.data);
+    api.mutate();
   }, [queryParams, sortColumnKey]);
 
   return {
-    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

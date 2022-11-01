@@ -14,6 +14,7 @@ export const UserListRoute = getExactRoute('user', 'menu.list', '/user',  lazy((
 
 const UserRoute = (
   <>
+    {UserListRoute}
     {UserEditRoute}
   </>
 );

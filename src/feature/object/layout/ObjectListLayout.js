@@ -23,7 +23,6 @@ import {
   getProp,
   getPropOr,
   identity,
-  isArray,
   isEmpty,
   map,
   not,
@@ -104,16 +103,17 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     filtersData,
   );
   
-  const list = useObjects({filters: queryParams})
+  const api = useObjects({filters: queryParams})
   
   useEffect(() => {
-    list.mutate()
-    setExportData(list.data);
+    api.mutate()
+    setExportData(api.data);
   }, [queryParams, sortColumnKey]);
 
  
   return {
-    list: safe(isArray, list?.data).option([]),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

@@ -7,7 +7,6 @@ import Listing from 'layout/ListingLayout';
 
 import withPreparedProps from 'hoc/withPreparedProps';
 
-import {useAuth} from 'context/auth';
 import {useFilter} from 'hook/useFilter';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -28,7 +27,7 @@ import {not} from 'crocks/logic';
 import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
-import {isArray, isObject, isString, isEmpty, hasProps} from 'crocks/predicates';
+import {isString, isEmpty, hasProps} from 'crocks/predicates';
 
 import {format} from 'date-fns';
 import TaskStatusTag from '../component/TaskStatusTag';
@@ -56,7 +55,6 @@ const getColumn = curry((t, Component, key, pred, mapper, status, styles, isSort
 }));
 
 const TaskListLayout = withPreparedProps(Listing, props => {
-  const {api} = useAuth();
   const nav = useNavigate();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('task', {keyPrefix: 'list.header'});
@@ -102,7 +100,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       null,
       true,
     ),
-    c('reason', constant(true), nullToStr, true, 'text-bluewood', true)
+    c('reason', constant(true), nullToStr, true, 'text-bluewood', true),
+    c('guess', constant(true), boolToStr, false, 'text-regent', true),
   ];
 
 
@@ -124,15 +123,20 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       label: tc('status'),
       filter: 'multiselect',
       values: [
-        ts('NEW'),
-        ts('WAIT_FOR_APPROVAL'),
-        ts('ON_THE_ROAD'),
-        ts('INSPECTION'),
-        ts('INSPECTION_DONE'),
-        ts('FINISHED'),
-        ts('CANCELLED'),
-        ts('CANCELLED_BY_CLIENT'),
-      ]
+        'NEW',
+        'WAIT_FOR_APPROVAL',
+        'ON_THE_ROAD',
+        'INSPECTION',
+        'INSPECTION_DONE',
+        'FINISHED',
+        'CANCELLED',
+        'CANCELLED_BY_CLIENT',
+      ],
+      custom: (value) => {
+        const statuses = value.map(v => v.toUpperCase());
+        if (statuses.includes('CANCELLED_BY_CLIENT')) statuses.push('CANCELLED_BY_CLIENT_CONFIRMED');
+        return {_in: statuses}
+      }
     },
     // {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
     // {key: 'crew', label: 'Crew', filter: 'multiselect', values: []},
@@ -146,16 +150,17 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     filtersData,
   );
 
-  const list = useTasks({filters: queryParams});
+  const api = useTasks({filters: queryParams});
 
   useEffect(() => {
-    list.mutate();
+    api.mutate();
   }, [queryParams, sortColumnKey]);
 
   
   
   return {
-    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

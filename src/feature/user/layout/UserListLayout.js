@@ -1,82 +1,202 @@
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import Innerlinks from 'components/Innerlinks';
 import Listing from '../../../layout/ListingLayout';
-import React, {useEffect, useMemo} from 'react';
-import maybeToAsync from 'crocks/Async/maybeToAsync';
-import useAsync from '../../../hook/useAsync';
+import React, {useCallback, useEffect} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
 import {SettingListRoute} from 'feature/setting/routes';
 import {TaskCancellationListRoute} from 'feature/classifier/routes';
 import {UserEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
 import {generatePath, Link} from 'react-router-dom';
-import {useAuth} from '../../../context/auth';
 import {useTranslation} from 'react-i18next';
 import {
-  chain,
-  curry,
-  getProp,
   getPropOr,
   identity,
-  isArray,
   isEmpty,
   map,
-  Maybe,
   not,
-  objOf,
   pipe,
-  safe
+  safe,
+  and,
+  hasProp,
+  propSatisfies,
+  isTruthy,
+  pick,
 } from 'crocks';
+import useUsers from '../api/useUsers';
+import {FilterIcon} from '@heroicons/react/solid';
+import Button from 'components/Button';
+import {useFilter} from 'hook/useFilter';
 
-const getColumn = curry((t, Component, key, pred, mapper) => ({
-  Component,
-  headerText: t(key),
-  key,
-  itemToProps: item => pipe(
-    getProp(key),
-    chain(safe(pred)),
-    map(mapper),
-    map(objOf('children')),
-    map(a => ({...item, ...a})),
-    alt(Maybe.Just(item)),
-  )(item),
-}));
 
 const ne = not(isEmpty);
 
 const UserListLayout = withPreparedProps(Listing, props => {
-  const {apiQuery} = useAuth();
   const {t: tb} = useTranslation('user', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('user', {keyPrefix: 'list.column'});
   const {t: tp} = useTranslation('user');
-  // TODO: Prepare 'users' data in Hasura to be fetched
-  const [state, fork] = useAsync(chain(maybeToAsync('"user" prop is expected in the response', getProp('user')),
-    apiQuery(
-      `
-        query {
-          user {
-          
+
+  const c = (prop, mapper = identity, status, isSortable) => ({
+    key: prop,
+    headerText: t(prop),
+    status,
+    isSortable,
+    itemToProps: item => pipe(
+      safe(and(hasProp('id'), propSatisfies(prop, isTruthy))),
+      map(item => ({id: item?.id, children: mapper(item?.[prop])})),
+      alt(pipe(
+        safe(hasProp('id')),
+        map(pick(['id'])),
+      )(item)),
+    )(item),
+    Component: ({id, children, fallback = '—'}) => {
+      if (!id && !children) return fallback;
+      if (!id) return children || fallback;
+      return (
+        <Link to={generatePath(UserEditRoute.props.path, {id})}>
+          {children || fallback}
+        </Link>
+      )
+    },
+  });
+  
+  const roleToStr = (reg) => {
+    return reg.find(r => r.applicationId === 'efd4e504-4179-42d8-b6b2-97886a5b6c29').roles.join(', ');
+  }
+
+  const customFilter = useCallback((state, filtersData) => {
+    if (state['object_id']) {
+      _search({where: {
+        users: {
+          object_id: {_in: state['object_id']}
+        }
+      }}).fork(console.error, (users) => {
+        const ids = users.object[0]?.users.map(u => u.user_id);
+        const mustFilter = [];
+        state['fullName']?.split(' ').forEach(s => {
+          mustFilter.push({
+            'wildcard': {
+              'fullName': {
+                'value': `*${s.replaceAll('%', '')}*`
+              }
+            }
+          });
+        });
+
+        // add ids
+        mustFilter.push({
+          'terms': {
+            'id': ids || []
+          }
+        });
+
+        // by role 'customer'
+        mustFilter.push({
+          'nested': {
+            'path': 'registrations',
+            'query': {
+              'bool': {
+                'must': [
+                  {
+                    'match': {
+                      'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
+                    }
+                  },
+                  {
+                    'match': {
+                      'registrations.roles': 'customer'
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        })
+
+        const query = {
+          'bool': {
+            'must': mustFilter
           }
         }
-      `
-    ))
+
+        _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
+          api.mutate(data.usersByQuery.users);
+        })
+      });
+
+      return {};
+    }
+    
+    const mustFilter = [];
+    
+    state['fullName']?.split(' ').forEach(s => {
+      mustFilter.push({
+        'wildcard': {
+          'fullName': {
+            'value': `*${s.replaceAll('%', '')}*`
+          }
+        }
+      })
+    })
+
+    const filterEmail = {
+      'wildcard': {
+        'username': {
+          'value': `${state['username'] ? `*${state['username'].replaceAll('%', '')}*` : '*'}`
+        }
+      }
+    };
+
+    if (state['username']) mustFilter.push(filterEmail);
+    
+    return {query: JSON.stringify({
+      'bool': {
+        'must': mustFilter
+      }
+    })};
+  }, []);
+
+  const tableColumns = [
+    c('fullName', identity, true, false),
+    c('registrations', roleToStr, true, false),
+    c('status', identity, true, false),
+  ];
+
+  const filtersData = [
+    {key: 'fullName', label: 'Name Surname', filter: 'text'},
+    {key: 'username', label: 'Email', filter: 'text'},
+    {key: 'status', label: 'Status', filter: 'text'},
+  ]
+
+  const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
+    'user',
+    tableColumns,
+    filtersData,
+    [],
+    customFilter,
   );
 
-  const c = useMemo(() => getColumn(t, props => (
-    <Link to={generatePath(UserEditRoute.props.path, {id: props?.id})}>
-      {props?.children}
-    </Link>
-  )), [t]);
+  const api = useUsers({filters: queryParams});
 
-  useEffect(() => fork(), []);
+  console.log(api?.data);
+
+  useEffect(() => {
+    if (!isEmpty(queryParams)) {
+      api.mutate();
+    }    
+    setExportData(api.data);
+  }, [queryParams, sortColumnKey]);
 
   return {
-    list: safe(isArray, state.data).option([]),
+    list: api?.data ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
         <Breadcrumbs.Item><span className='font-semibold'>{tb`users`}</span></Breadcrumbs.Item>
-        <Breadcrumbs.Item hideSlash>{tb`allData`}</Breadcrumbs.Item>
+        <Button.NoBg onClick={toggleFilter}>
+          {defaultFilter.id ? defaultFilter.name : tb('allData') }
+          <FilterIcon className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' />
+        </Button.NoBg>
       </Breadcrumbs>
     ),
     innerlinks: (
@@ -86,12 +206,11 @@ const UserListLayout = withPreparedProps(Listing, props => {
         <Innerlinks.Item isCurrent={true}>{tp('Users')}</Innerlinks.Item>
       </Innerlinks>
     ),
-    // TODO: Adjust column names regarding response data
-    tableColumns: [
-      c('id', ne, identity),
-      c('name', ne, identity),
-      c('status', ne, identity),
-    ],
+    tableColumns,
+    columns,
+    filters,
+    sortColumnKey, 
+    setSortColumn
   }
 });
 

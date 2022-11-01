@@ -14,7 +14,6 @@ import {
   curry,
   getProp,
   getPropOr,
-  isArray,
   isEmpty,
   isString,
   map,
@@ -104,15 +103,16 @@ const HelpListLayout = withPreparedProps(Listing, props => {
     filtersData,
   );
   
-  const list = useQuestions({filters: queryParams});
+  const api = useQuestions({filters: queryParams});
 
   useEffect(() => {
-    list.mutate();
+    api.mutate();
   }, [queryParams, sortColumnKey]);
 
 
   return {
-    list: safe(isArray, list?.data).option([]),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>
