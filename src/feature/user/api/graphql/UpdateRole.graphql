@@ -1,0 +1,11 @@
+mutation UpdateRole(
+  $userId: uuid!
+  $roles: String
+) {
+  updateRegister(
+    userId: $userId,
+    roles: $roles
+  ) {
+    userId
+  }
+}

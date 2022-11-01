@@ -18,7 +18,7 @@ export const InputGroup = ({
   inputWrapperWhenLabel = 'mt-1',
   inputwrapperClassName = 'relative rounded-md',
   label,
-  twLabel,
+  twLabel = 'text-[13px]',
   isRequired,
   twRequired,
   below,
