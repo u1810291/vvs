@@ -1,6 +1,6 @@
-mutation UpdateRole(
-  $userId: uuid!
-  $roles: String
+query UpdateRole(
+  $userId: String!
+  $roles: String!
 ) {
   updateRegister(
     userId: $userId,

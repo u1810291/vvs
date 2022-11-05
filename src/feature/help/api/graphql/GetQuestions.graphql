@@ -8,5 +8,6 @@ query GetQuestions($where: user_question_bool_exp, $orderBy: [user_question_orde
     user_id
     updated_at
     subject
+    archived_at
   }
 }

@@ -20,6 +20,12 @@ mutation UpdateClientInfoData(
     }
   }
 
+  updateRegister(userId: $id, roles: $role) {
+    registration {
+      id
+    }
+  }
+
   update_user_settings_by_pk (_set: {
     duties: $duties,
     monas_id: $monas_id,

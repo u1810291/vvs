@@ -106,6 +106,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   const api = useObjects({filters: queryParams})
   
   useEffect(() => {
+    console.log(queryParams);
     api.mutate()
     setExportData(api.data);
   }, [queryParams, sortColumnKey]);

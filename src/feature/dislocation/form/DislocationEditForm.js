@@ -1,4 +1,3 @@
-import Button from 'components/Button';
 import InputGroup from 'components/atom/input/InputGroup';
 import Nullable from 'components/atom/Nullable';
 import React, {useEffect, useRef, useMemo, useCallback, useState} from 'react';
@@ -8,10 +7,9 @@ import {GoogleMap, Polygon, DrawingManager} from '@react-google-maps/api';
 import {getDislocationLatLngLiteral} from 'feature/dislocation/ultis';
 import {useDisclocation} from 'feature/dislocation/api/dislocationEditApi';
 import {useGoogleApiContext} from 'context/google';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {
-  isFunction, 
   isTruthy, 
   safe, 
   Maybe, 
@@ -26,8 +24,16 @@ import {
   getPath, 
   reduce,
   alt,
+  flip,
 } from 'crocks';
 import {POLYGON_OPTIONS} from '../component/MapDislocationZone';
+import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME}from 'feature/ui-notifications/components/NotificationSimple';
+import {useAuth}from 'context/auth';
+import raw from 'raw.macro';
+import {CheckCircleIcon, XCircleIcon}from '@heroicons/react/solid';
+import {errorToText}from 'api/buildApiHook';
+import Button from 'components/Button';
+import {useNotification} from 'feature/ui-notifications/context';
 
 
 // TODO: move to map component's folder
@@ -40,7 +46,8 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
   const {t} = useTranslation('dislocation', {keyPrefix: 'edit'});
   const {id: dislocationZoneId} = useParams();
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
-
+  const nav = useNavigate();
+  
   const mapRef = useRef();
   const fitBoundsCounter = useRef(0);
   const polygonRef = useRef(null);
@@ -96,7 +103,7 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
     )
   }, [nodes, mGoogleMaps, mMap]);
     
-  useDisclocation({
+  const {data} = useDisclocation({
     id: dislocationZoneId,
     formResult: result,
     saveRef,
@@ -105,7 +112,63 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
     successRedirectPath: DislocationListRoute.props.path,
   });
 
-  const remove = () => isFunction(removeRef.current) && removeRef.current([{id: dislocationZoneId}]);
+  const auth = useAuth();
+  const {notify} = useNotification();
+  const _archive = flip(auth.api)(raw('../api/graphql/ArchiveById.graphql'));
+
+  // archive
+  const archive = () => {
+    // if (!confirm('Are you sure you want to archive the dislocation zone?')) return;
+
+    _archive({id: dislocationZoneId, archived_at: new Date()}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+    }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+      
+      nav(DislocationListRoute.props.path);
+    })
+  }
+
+  // unarchive
+  const unarchive = () => {
+    // if (!confirm('Are you sure you want to restore the dislocation zone?')) return;
+
+    _archive({id: dislocationZoneId, archived_at: null}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+    }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+      
+      nav(DislocationListRoute.props.path);
+    })
+  }
 
   const onRemovePoint = (event) => {
     if (polygonRef.current && event.vertex !== undefined) {
@@ -175,7 +238,19 @@ const DislocationEditForm = ({saveRef, removeRef}) => {
     <section className={'m-6 h-full flex md:flex-col lg:flex-row'}>
       <div className={'md:w-5/12 lg:w-3/12 mr-6 flex flex-col justify-between items-start'}>
         <InputGroup className={'w-2/3'} isRequired={true} {...ctrl('name')} />
-        <Button.Dxl onClick={remove}>{t('button.delete')}</Button.Dxl>
+
+        <Nullable on={dislocationZoneId && !data?.archived_at}>
+          <section className={'flex'}>
+            <Button.NoBg onClick={() => archive()} className={'bg-red-500 text-white w-min'}>{t`archive`}</Button.NoBg>
+          </section>
+        </Nullable>
+
+        <Nullable on={dislocationZoneId && data?.archived_at}>
+          <section className={'flex flex-col'}>
+            {/* {t`archived_at`}: {data?.archived_at} */}
+            <Button.NoBg onClick={() => unarchive()} className={'bg-blue-500 text-white w-min'}>{t`restore`}</Button.NoBg>
+          </section>
+        </Nullable>
       </div>
       <div className={'md:w-7/12 lg:w-9/12 -my-6 -mr-6'}>
         <Nullable on={isLoaded}>

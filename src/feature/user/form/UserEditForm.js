@@ -24,7 +24,6 @@ const UserEditForm = ({saveRef}) => {
   const {id} = useParams();
   const {t} = useTranslation('user');
   
-
   const setFullName = (firstName, lastName) => {
     const theForm = {...form};
     theForm['firstName'] = firstName;
@@ -164,8 +163,6 @@ const UserEditForm = ({saveRef}) => {
 
   useEffect(() => {
     if (!id) return;
-
-    // setForm({role: form['registrations']?.find(r => r.applicationId === 'efd4e504-4179-42d8-b6b2-97886a5b6c29').roles[0]});
 
     // create user settings if don't exist
     _getSettings({where: {id: {_eq: id}}}).fork(identity, (data) => {

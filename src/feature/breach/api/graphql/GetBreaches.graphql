@@ -13,5 +13,6 @@ query GetBreaches($where: crew_breach_bool_exp = {}, $orderBy: [crew_breach_orde
             #     nodes
             # }
         }
+        archived_at
     }
 }

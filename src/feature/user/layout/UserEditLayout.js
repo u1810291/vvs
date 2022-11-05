@@ -72,7 +72,7 @@ const UserEditLayout = () => {
 
   // save
   const save = () => {
-    isFunction(saveRef.current) && saveRef.current((pk) => {
+    isFunction(saveRef.current) && saveRef.current((pk) => {      
       if (!pk?.register) return;
       
       // create user_settings row
@@ -94,7 +94,7 @@ const UserEditLayout = () => {
 
   // archive
   const archive = () => {
-    if (!confirm('Are you sure you want to archive the user?')) return;
+    // if (!confirm('Are you sure you want to archive the user?')) return;
     _archive({id, archived_at: new Date()}).fork((error) => {
       notify(
         <NotificationSimple
@@ -113,12 +113,14 @@ const UserEditLayout = () => {
           heading={t`success`}
           />
       );
+
+      nav(UserListRoute.props.path);
    })
  }
 
   // unarchive
   const unarchive = () => {
-    if (!confirm('Are you sure you want to restore the user?')) return;
+    // if (!confirm('Are you sure you want to restore the user?')) return;
     _archive({id, archived_at: null}).fork((error) => {
       notify(
         <NotificationSimple
@@ -137,6 +139,8 @@ const UserEditLayout = () => {
           heading={t`success`}
           />
       );
+
+      nav(UserListRoute.props.path);
    })
  }
 
@@ -178,7 +182,7 @@ const UserEditLayout = () => {
 
       <Nullable on={id && data?.archived_at}>
         <section className={'flex flex-col p-6'}>
-          {t`archived_at`}: {data?.archived_at}
+          {/* {t`archived_at`}: {data?.archived_at} */}
           <Button.NoBg onClick={() => unarchive()} className={'bg-blue-500 text-white w-min'}>{t`restore`}</Button.NoBg>
         </section>
       </Nullable>

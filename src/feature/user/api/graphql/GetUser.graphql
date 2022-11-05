@@ -22,5 +22,6 @@ query GetClient($id: uuid!) {
     monas_id
     duties
     whitelisted_ip
+    archived_at
   }
 }

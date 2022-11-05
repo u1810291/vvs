@@ -197,6 +197,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     starred: false,
     isDefault: false,
   })
+  const [hideArchived, setHideArchived] = useState(true);
 
   const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? `-${tableColumns[0].key}` : null);
   const setSortColumn = (column) => {
@@ -726,6 +727,14 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
                 <Button.NoBg id={defaultFilterId} className={'bg-gray-200 px-6 py-0 hover:bg-gray-500 text-white'} onClick={onSaveFilterShortcut}>{t('save_filter')}</Button.NoBg>
               </Nullable>
               <div className='flex flex-1 justify-end gap-8 align-center'>
+                <Nullable on={hideArchived}>
+                  <Button.NoBg className='text-gray-300' onClick={() => setHideArchived(false)}>{t('show_archived')}</Button.NoBg>
+                </Nullable>
+
+                <Nullable on={!hideArchived}>
+                  <Button.NoBg className='text-gray-300' onClick={() => setHideArchived(true)}>{t('hide_archived')}</Button.NoBg>
+                </Nullable>
+
                 <Button.NoBg onClick={handleExport} className='flex align-center text-gray-500 focus:ring-0 shadow-none hover:text-gray-900 hover:bg-gray-50'>
                   <DocumentDownloadIcon className='w-6 h-6 text-gray-300 cursor-pointer inline-block focus:ring-0' /> 
                   {t('export')}
@@ -738,7 +747,7 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         </div>
       </div>
     )}, 
-    [state, savedFilters, mode, formState, showFilter, pickedColumns]
+    [state, savedFilters, mode, formState, showFilter, pickedColumns, hideArchived]
   );
   
   // query params to be sent to GraphQl
@@ -828,11 +837,11 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     
     return {
       where: {
-        _and: params,        
+        _and: hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},        
       },
       orderBy: {[sortColumnKey?.replace('-', '')]: sortColumnKey && sortColumnKey[0] === '-' ? DIRECTION_DESC : DIRECTION_ASC}
     };
-  }, [state, sortColumnKey]);
+  }, [state, sortColumnKey, hideArchived]);
 
 
   return [

@@ -3,5 +3,6 @@ query GetUserSettings ($where: user_settings_bool_exp = {}){
     id
     is_online
     last_ping
+    archived_at
   }
 }

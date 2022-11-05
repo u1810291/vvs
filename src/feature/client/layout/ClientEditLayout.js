@@ -83,6 +83,7 @@ const ClientEditLayout = () => {
   // archive
   const archive = () => {
     if (!confirm('Are you sure you want to archive the client?')) return;
+
     _archive({id, archived_at: new Date()}).fork((error) => {
       notify(
         <NotificationSimple
@@ -101,6 +102,8 @@ const ClientEditLayout = () => {
           heading={t`success`}
           />
       );
+      
+      nav(ClientListRoute.props.path);
     })
   }
 
@@ -125,6 +128,8 @@ const ClientEditLayout = () => {
           heading={t`success`}
           />
       );
+      
+      nav(ClientListRoute.props.path);
     })
   }
 
@@ -159,7 +164,7 @@ const ClientEditLayout = () => {
 
       <Nullable on={id && data?.archived_at}>
         <section className={'flex flex-col p-6'}>
-          {t`archived_at`}: {data?.archived_at}
+          {/* {t`archived_at`}: {data?.archived_at} */}
           <Button.NoBg onClick={() => unarchive()} className={'bg-blue-500 text-white w-min'}>{t`restore`}</Button.NoBg>
         </section>
       </Nullable>

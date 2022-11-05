@@ -11,5 +11,6 @@ query($where: crew_permission_bool_exp = {}, $orderBy: [crew_permission_order_by
     }
     request_id
     status
+    archived_at
   }
 }
