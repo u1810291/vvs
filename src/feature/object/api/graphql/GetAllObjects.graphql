@@ -19,5 +19,6 @@ query Objects($where: object_bool_exp, $orderBy: [object_order_by!], $limit: Int
     users {
       user_id
     }
+    archived_at
   }
 }

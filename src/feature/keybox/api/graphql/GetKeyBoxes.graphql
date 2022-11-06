@@ -7,5 +7,6 @@ query($where: object_key_box_bool_exp, $orderBy: [object_key_box_order_by!], $li
       id
       name
     }
+    archived_at
   }
 }

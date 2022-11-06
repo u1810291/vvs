@@ -9,12 +9,14 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'user', EN);
 i18next.addResourceBundle('lt', 'user', LT);
 
+
+export const UserCreateRoute = getExactHiddenRoute('user', 'menu.create', '/user/new', lazy(() => import('./layout/UserEditLayout')), null);
 export const UserEditRoute = getExactHiddenRoute('user', 'menu.edit', '/user/:id', lazy(() => import('./layout/UserEditLayout')), null);
 export const UserListRoute = getExactRoute('user', 'menu.list', '/user',  lazy(() => import('./layout/UserListLayout')), null);
 
 const UserRoute = (
   <>
-    {UserListRoute}
+    {UserCreateRoute}
     {UserEditRoute}
   </>
 );

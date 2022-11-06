@@ -5,7 +5,12 @@ query GetClient($id: uuid!) {
       id
       lastName
       username
+      email
       mobilePhone
+      registrations {
+        applicationId
+        roles
+      }
     }
   }
   user_settings_by_pk (id: $id) {
@@ -14,6 +19,9 @@ query GetClient($id: uuid!) {
     is_company_admin
     id
     last_ping
+    monas_id
+    duties
+    whitelisted_ip
     archived_at
   }
 }

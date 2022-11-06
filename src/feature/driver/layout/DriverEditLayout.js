@@ -15,7 +15,7 @@ import DriverOnlineTag from '../component/DriverOnlineTag';
 import {getName} from 'feature/user/utils';
 import {useNotification} from 'feature/ui-notifications/context';
 import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
-import {XCircleIcon} from '@heroicons/react/solid';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
 import {errorToText} from 'api/buildApiHook';
 import {useAuth} from 'context/auth';
 import raw from 'raw.macro';
@@ -37,6 +37,7 @@ const DriverEditLayout = () => {
 
   const auth = useAuth();
   const _createSettings = flip(auth.api)(raw('../api/graphql/CreateDriverSettings.graphql'));
+  const _archive = flip(auth.api)(raw('../api/graphql/ArchiveById.graphql'));
   const {notify} = useNotification();
 
   // save
@@ -57,6 +58,58 @@ const DriverEditLayout = () => {
       })
     });
   }
+
+  // archive
+  const archive = () => {
+    // if (!confirm('Are you sure you want to archive the user?')) return;
+    _archive({id, archived_at: new Date()}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+   }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+
+      nav(DriverListRoute.props.path);
+   })
+ }
+
+  // unarchive
+  const unarchive = () => {
+    // if (!confirm('Are you sure you want to restore the user?')) return;
+    _archive({id, archived_at: null}).fork((error) => {
+      notify(
+        <NotificationSimple
+          Icon={XCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.DANGER}
+          heading={t`apiError`}
+        >
+          {errorToText(identity, error)}
+        </NotificationSimple>
+      )
+   }, () => {
+      notify(
+        <NotificationSimple
+          Icon={CheckCircleIcon}
+          iconClassName={NOTIFICATION_ICON_CLASS_NAME.SUCCESS}
+          heading={t`success`}
+          />
+      );
+
+      nav(DriverListRoute.props.path);
+   })
+ }
 
   return (
     <SidebarLayout>
@@ -79,7 +132,22 @@ const DriverEditLayout = () => {
           </div>
         </>
       </Header>
+
       <DriverEditForm saveRef={saveRef}/>
+
+      <Nullable on={id && !data?.archived_at}>
+        <section className={'flex p-6'}>
+          <Button.NoBg onClick={() => archive()} className={'bg-red-500 text-white w-min'}>{t`archive`}</Button.NoBg>
+        </section>
+      </Nullable>
+
+      <Nullable on={id && data?.archived_at}>
+        <section className={'flex flex-col p-6'}>
+          {/* {t`archived_at`}: {data?.archived_at} */}
+          <Button.NoBg onClick={() => unarchive()} className={'bg-blue-500 text-white w-min'}>{t`restore`}</Button.NoBg>
+        </section>
+      </Nullable>
+
     </SidebarLayout>
   )
 };

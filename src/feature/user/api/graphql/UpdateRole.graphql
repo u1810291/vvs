@@ -1,0 +1,11 @@
+query UpdateRole(
+  $userId: String!
+  $roles: String!
+) {
+  updateRegister(
+    userId: $userId,
+    roles: $roles
+  ) {
+    userId
+  }
+}

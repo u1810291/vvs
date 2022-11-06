@@ -203,6 +203,7 @@ const ClientListLayout = withPreparedProps(Listing, () => {
     })};
   }, []);
 
+
   const tableColumns = [
     c('fullName', identity, true, false),
     c('contract_no', identity, true, false),

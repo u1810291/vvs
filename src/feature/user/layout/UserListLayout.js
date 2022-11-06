@@ -5,9 +5,9 @@ import React, {useCallback, useEffect} from 'react';
 import withPreparedProps from '../../../hoc/withPreparedProps';
 import {SettingListRoute} from 'feature/setting/routes';
 import {TaskCancellationListRoute} from 'feature/classifier/routes';
-import {UserEditRoute} from '../routes';
+import {UserCreateRoute, UserEditRoute} from '../routes';
 import {alt} from 'crocks/pointfree';
-import {generatePath, Link} from 'react-router-dom';
+import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {
   getPropOr,
@@ -35,6 +35,7 @@ const UserListLayout = withPreparedProps(Listing, props => {
   const {t: tb} = useTranslation('user', {keyPrefix: 'breadcrumbs'});
   const {t} = useTranslation('user', {keyPrefix: 'list.column'});
   const {t: tp} = useTranslation('user');
+  const nav = useNavigate();
 
   const c = (prop, mapper = identity, status, isSortable) => ({
     key: prop,
@@ -64,69 +65,7 @@ const UserListLayout = withPreparedProps(Listing, props => {
     return reg.find(r => r.applicationId === 'efd4e504-4179-42d8-b6b2-97886a5b6c29').roles.join(', ');
   }
 
-  const customFilter = useCallback((state, filtersData) => {
-    if (state['object_id']) {
-      _search({where: {
-        users: {
-          object_id: {_in: state['object_id']}
-        }
-      }}).fork(console.error, (users) => {
-        const ids = users.object[0]?.users.map(u => u.user_id);
-        const mustFilter = [];
-        state['fullName']?.split(' ').forEach(s => {
-          mustFilter.push({
-            'wildcard': {
-              'fullName': {
-                'value': `*${s.replaceAll('%', '')}*`
-              }
-            }
-          });
-        });
-
-        // add ids
-        mustFilter.push({
-          'terms': {
-            'id': ids || []
-          }
-        });
-
-        // by role 'customer'
-        mustFilter.push({
-          'nested': {
-            'path': 'registrations',
-            'query': {
-              'bool': {
-                'must': [
-                  {
-                    'match': {
-                      'registrations.applicationId': 'efd4e504-4179-42d8-b6b2-97886a5b6c29'
-                    }
-                  },
-                  {
-                    'match': {
-                      'registrations.roles': 'customer'
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        })
-
-        const query = {
-          'bool': {
-            'must': mustFilter
-          }
-        }
-
-        _getByQuery({query: JSON.stringify(query)}).fork(console.error, (data) => {
-          api.mutate(data.usersByQuery.users);
-        })
-      });
-
-      return {};
-    }
-    
+  const customFilter = useCallback((state, filtersData) => {    
     const mustFilter = [];
     
     state['fullName']?.split(' ').forEach(s => {
@@ -148,6 +87,17 @@ const UserListLayout = withPreparedProps(Listing, props => {
     };
 
     if (state['username']) mustFilter.push(filterEmail);
+
+    mustFilter.push({
+      'nested': {
+        'path': 'registrations',
+        'query': {
+          'terms': {
+            'registrations.roles': state['roles'] ?? ['admin', 'operator', 'master_operator', 'support']
+          }
+        }
+      }
+    })
     
     return {query: JSON.stringify({
       'bool': {
@@ -165,7 +115,7 @@ const UserListLayout = withPreparedProps(Listing, props => {
   const filtersData = [
     {key: 'fullName', label: 'Name Surname', filter: 'text'},
     {key: 'username', label: 'Email', filter: 'text'},
-    {key: 'status', label: 'Status', filter: 'text'},
+    {key: 'roles', label: 'Role', filter: 'multiselect', values: ['admin', 'master_operator', 'operator', 'support']},
   ]
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
@@ -177,8 +127,6 @@ const UserListLayout = withPreparedProps(Listing, props => {
   );
 
   const api = useUsers({filters: queryParams});
-
-  console.log(api?.data);
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {
@@ -205,6 +153,11 @@ const UserListLayout = withPreparedProps(Listing, props => {
         <Innerlinks.Item to={TaskCancellationListRoute.props.path}>{tp('Classifiers')}</Innerlinks.Item>
         <Innerlinks.Item isCurrent={true}>{tp('Users')}</Innerlinks.Item>
       </Innerlinks>
+    ),    
+    buttons: (
+      <>
+        <Button onClick={() => nav(UserCreateRoute.props.path)}>{tp('create')}</Button>
+      </>
     ),
     tableColumns,
     columns,

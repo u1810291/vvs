@@ -15,5 +15,6 @@ query Crews($where: crew_bool_exp, $orderBy: [crew_order_by!], $limit: Int = 25,
         name
       }
     }
+    archived_at
   }
 }

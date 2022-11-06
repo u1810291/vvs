@@ -18,5 +18,6 @@ query GetTasks($where: events_bool_exp, $orderBy: [events_order_by!], $limit: In
       address
       name
     }
+    archived_at
   }
 }

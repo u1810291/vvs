@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-import Button from 'components/Button';
 import Card from 'components/atom/Card';
 import CheckBox from 'components/atom/input/CheckBox';
 import InputGroup from 'components/atom/input/InputGroup';
@@ -16,7 +15,6 @@ import {
   getProp, safe, isTruthy, Maybe,
   isArray, map, option,  
 } from 'crocks';
-import {isFunction} from 'crocks/predicates';
 import {mapProps, pipe} from 'crocks/helpers';
 import {differenceInMinutes} from 'date-fns';
 import {useGoogleApiContext} from 'context/google';
@@ -112,7 +110,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const {firstName} = driver;
   const {lastName} = driver;
   
-  const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
+  // const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
 
   useEffect(() => {
     pipe(
@@ -175,7 +173,6 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
             {...ctrl('calendars')}
           />
         </div>
-        <Button.Dxl className={'flex-0 self-start'} onClick={remove}>{t('button.delete')}</Button.Dxl>
       </div>
       <div className={'mt-6 flex flex-col w-full aspect-square lg:h-full md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:h-auto lg:-mt-6 lg:-mb-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
         <Card.Sm className={'shadow-none'}>

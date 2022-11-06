@@ -3,5 +3,6 @@ query GetDislocationZoneById($id: uuid!) {
         id
         name
         nodes
+        archived_at
     }
 }
