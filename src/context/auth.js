@@ -20,6 +20,7 @@ import {
   safe,
   tap,
   tryCatch,
+  isFunction,
 } from 'crocks';
 
 /**
