@@ -9,8 +9,8 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'modem', EN);
 i18next.addResourceBundle('lt', 'modem', LT);
 
-export const ModemEditRoute = getExactHiddenRoute('modem', 'menu.edit', '/modem/:id', lazy(() => import('./layout/ModemEditLayout')), null);
-export const ModemListRoute = getExactRoute('modem', 'menu.list', '/modem', lazy(() => import('./layout/ModemListLayout')), null);
+export const ModemEditRoute = getExactHiddenRoute('modem', 'menu.edit', '/modem/:id', lazy(() => import('./layout/ModemEditLayout')), null, ['admin', 'master_operator']);
+export const ModemListRoute = getExactRoute('modem', 'menu.list', '/modem', lazy(() => import('./layout/ModemListLayout')), null, ['admin', 'master_operator']);
 
 const ModemRoute = (
   <>

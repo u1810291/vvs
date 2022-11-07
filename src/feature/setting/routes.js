@@ -12,8 +12,8 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'setting', EN);
 i18next.addResourceBundle('lt', 'setting', LT);
 
-export const SettingEditRoute = getExactHiddenRoute('setting', 'menu.edit', '/setting/:id', lazy(() => import('./layout/SettingEditLayout')), null);
-export const SettingListRoute = getExactRoute('setting', 'menu.list', '/setting', lazy(() => import('./layout/SettingListLayout')), null);
+export const SettingEditRoute = getExactHiddenRoute('setting', 'menu.edit', '/setting/:id', lazy(() => import('./layout/SettingEditLayout')), null, ['admin', 'master_operator']);
+export const SettingListRoute = getExactRoute('setting', 'menu.list', '/setting', lazy(() => import('./layout/SettingListLayout')), null, ['admin', 'master_operator']);
 
 const SettingRoute = (
   <>

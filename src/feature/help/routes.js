@@ -9,8 +9,8 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'help', EN);
 i18next.addResourceBundle('lt', 'help', LT);
 
-export const HelpEditRoute = getExactHiddenRoute('help', 'menu.edit', '/help/:id', lazy(() => import('./layout/HelpEditLayout')), null);
-export const HelpListRoute = getExactRoute('help', 'menu.list', '/helps', lazy(() => import('./layout/HelpListLayout')), null);
+export const HelpEditRoute = getExactHiddenRoute('help', 'menu.edit', '/help/:id', lazy(() => import('./layout/HelpEditLayout')), null, ['admin', 'master_operator', 'operator', 'support']);
+export const HelpListRoute = getExactRoute('help', 'menu.list', '/helps', lazy(() => import('./layout/HelpListLayout')), null, ['admin', 'master_operator', 'operator', 'support']);
 
 const HelpRoute = (
   <>

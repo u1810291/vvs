@@ -12,9 +12,9 @@ import LT from './i18n/lt.json'
 i18next.addResourceBundle('en', 'crew', EN);
 i18next.addResourceBundle('lt', 'crew', LT);
 
-export const CrewListRoute = getExactRoute('crew', 'menu.list', '/crew', lazy(() => import('./layout/CrewListLayout')), null);
-export const CrewEditRoute = getExactHiddenRoute('crew', 'menu.edit', '/crew/:id', lazy(() => import('./layout/CrewEditLayout')), null);
-export const CrewCreateRoute = getExactHiddenRoute('crew', 'menu.create', '/crew/new', lazy(() => import('./layout/CrewCreateLayout')), null);
+export const CrewListRoute = getExactRoute('crew', 'menu.list', '/crew', lazy(() => import('./layout/CrewListLayout')), null, ['admin', 'master_operator']);
+export const CrewEditRoute = getExactHiddenRoute('crew', 'menu.edit', '/crew/:id', lazy(() => import('./layout/CrewEditLayout')), null, ['admin', 'master_operator']);
+export const CrewCreateRoute = getExactHiddenRoute('crew', 'menu.create', '/crew/new', lazy(() => import('./layout/CrewCreateLayout')), null, ['admin', 'master_operator']);
 
 const CrewRoute = (
   <>

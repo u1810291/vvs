@@ -3,6 +3,10 @@ import {useEffect} from 'react';
 import {Outlet, useNavigate} from 'react-router-dom';
 import {LOGIN_PAGE} from 'feature/login/routes';
 
+
+
+
+
 const AuthorizedOutlet = () => {
   const {isAuthorized} = useAuth();
   const nav = useNavigate();

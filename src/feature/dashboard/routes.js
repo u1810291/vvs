@@ -12,7 +12,7 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'dashboard', EN);
 i18next.addResourceBundle('lt', 'dashboard', LT);
 
-export const DashboardEditRoute = getExactRoute('dashboard', 'menu.main', '/', lazy(() => import('./layout/DashboardLayout')), null);
+export const DashboardEditRoute = getExactRoute('dashboard', 'menu.main', '/', lazy(() => import('./layout/DashboardLayout')), null, ['admin', 'master_operator', 'operator']);
 
 const DashboardRoute = (
   <>

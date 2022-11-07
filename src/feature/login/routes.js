@@ -12,7 +12,8 @@ const LoginRoute = getExactHiddenRoute(
   'menu.main',
   LOGIN_PAGE,
   lazy(() => import('./layout/MainLoginLayout')),
-  null
+  null,
+  [],
 );
 
 export default LoginRoute;

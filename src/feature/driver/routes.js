@@ -9,9 +9,9 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'driver', EN);
 i18next.addResourceBundle('lt', 'driver', LT);
 
-export const DriverCreateRoute = getExactHiddenRoute('driver', 'menu.edit', '/driver/new', lazy(() => import('./layout/DriverEditLayout')), null);
-export const DriverEditRoute = getExactHiddenRoute('driver', 'menu.edit', '/driver/:id', lazy(() => import('./layout/DriverEditLayout')), null);
-export const DriverListRoute = getExactRoute('driver', 'menu.list', '/driver', lazy(() => import('./layout/DriverListLayout')), null);
+export const DriverCreateRoute = getExactHiddenRoute('driver', 'menu.edit', '/driver/new', lazy(() => import('./layout/DriverEditLayout')), null, ['admin', 'master_operator']);
+export const DriverEditRoute = getExactHiddenRoute('driver', 'menu.edit', '/driver/:id', lazy(() => import('./layout/DriverEditLayout')), null, ['admin', 'master_operator']);
+export const DriverListRoute = getExactRoute('driver', 'menu.list', '/driver', lazy(() => import('./layout/DriverListLayout')), null, ['admin', 'master_operator']);
 
 const DriverRoute = (
   <>
