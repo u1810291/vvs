@@ -110,8 +110,6 @@ export const ProtectedRoute = ({children, requiredRoles, denied}) => {
   const roles = userData?.registrations?.find(r => r?.applicationId === 'efd4e504-4179-42d8-b6b2-97886a5b6c29')?.roles;
   const canAccess = roles?.some(role => requiredRoles.includes(role));
 
-  console.log(roles);
-
   if (canAccess || requiredRoles?.length === 0) return (<Fragment>{children}</Fragment>);
   return (<Navigate replace to={denied} />);
 }

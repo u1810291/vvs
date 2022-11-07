@@ -8,7 +8,7 @@ import {LOGIN_PAGE} from 'feature/login/routes';
 
 
 const AuthorizedOutlet = () => {
-  const {isAuthorized} = useAuth();
+  const {isAuthorized, userData} = useAuth();
   const nav = useNavigate();
 
   useEffect(() => {
