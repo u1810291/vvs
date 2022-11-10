@@ -2,29 +2,31 @@ import Button from 'components/Button';
 import CrewDetail from 'feature/crew/component/CrewDetail';
 import Detail from 'components/Disclosure/AsideDisclosure';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
-import MapTaskMarker from '../component/MapTaskMarker';
 import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
 import TaskLogs from '../component/TaskLogDetail';
 import useSubscription from 'hook/useSubscription';
 import useTask from '../api/useTask';
 import {GQL as ZONE_GQL} from 'feature/dislocation/api/useZonesForDashboard';
 import {GQL} from 'feature/crew/api/useCrewsForEvent';
-import {GoogleMap} from '@react-google-maps/api';
-import {MapBreachNodeMarker} from 'feature/breach/components/MapBreachMarker';
-import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
-import {caseMap} from '@s-e/frontend/flow-control';
 import {errorToText} from 'api/buildApiHook';
 import {getCrewLatLngLiteral} from 'feature/crew/utils';
 import {getEmail, getName, getPhone} from 'feature/user/utils';
 import {getObjectName} from 'feature/object/utils';
 import {getTaskAddress, getTaskLatLngLiteral} from '../util';
-import {mapByMaybe} from 'util/array';
 import {renderWithProps} from 'util/react';
 import {useEffect, useMemo, useRef} from 'react';
 import {useGoogleApiContext} from 'context/google';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
 import {useTranslation} from 'react-i18next';
+import {GoogleMap} from '@react-google-maps/api';
+import {MapBreachNodeMarker} from 'feature/breach/components/MapBreachMarker';
+import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
+import {caseMap} from '@s-e/frontend/flow-control';
+import {mapByMaybe} from 'util/array';
+import MapTaskMarker from '../component/MapTaskMarker';
+import MapDislocationZone, {POLYGON_OPTIONS_TASK_MAP} from 'feature/dislocation/component/MapDislocationZone';
+import Nullable from 'components/atom/Nullable';
 import {
   Maybe,
   Result,
@@ -32,28 +34,28 @@ import {
   bimap,
   branch,
   chain,
-  filter,
   getPath,
   getProp,
   identity,
   isArray,
-  isSame,
   isTruthy,
   map,
   merge,
   objOf,
   option,
-  pathSatisfies,
   pipe,
-  propSatisfies,
   reduce,
   safe,
   setProp,
   tap,
   isObject,
+  propSatisfies,
+  isSame,
+  filter,
+  pathSatisfies,
 } from 'crocks';
-import MapDislocationZone, {POLYGON_OPTIONS_TASK_MAP} from 'feature/dislocation/component/MapDislocationZone';
-import Nullable from 'components/atom/Nullable';
+import {formatDistance} from 'date-fns';
+
 
 const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
@@ -114,7 +116,6 @@ const TaskEditForm = ({taskQuery, task}) => {
       )
   }, [task, crews]);
 
-
   return (
     <section className='flex w-full'>
       <aside className='border-r border-gray-border h-full overflow-auto'>
@@ -149,8 +150,7 @@ const TaskEditForm = ({taskQuery, task}) => {
                 )(task)
               }
 
-              <Nullable on={task?.status === 'NEW'}>
-                {/* dislocation zones */}
+              <Nullable on={task?.status === 'NEW'}>                
                 {
                   pipe(
                     getPath(['data', 'crew_zone']),
@@ -161,8 +161,7 @@ const TaskEditForm = ({taskQuery, task}) => {
                     />)),
                     option(null),
                   )(zones)
-                }
-                {/* crews */}
+                }                
                 {
                   pipe(
                     getPath(['data', 'crew']),
@@ -177,7 +176,6 @@ const TaskEditForm = ({taskQuery, task}) => {
                 <MapCrewIconMarker key={`MapCrewIconMarker-${task?.crew?.id}`} {...task?.crew} />
               </Nullable>              
 
-              {/* task */}
               <MapTaskMarker {...task} /> 
             </GoogleMap>
           ) : null
@@ -192,6 +190,40 @@ const TaskEditForm = ({taskQuery, task}) => {
   );
 };
 
+
+const TaskDetails = task => {
+  console.log({task});
+  return ( 
+    <aside className='flex flex-col p-4'>
+      <TaskReason {...task} />
+      <TaskDuration {...task} />
+    </aside>
+  );
+}
+
+const TaskReason = task => pipe(
+  getProp('reason'),
+  map(r => (
+    <div className='flex space-x-4'>
+      <p className='text-sm text-gray-500'>Reason:</p>
+      <p className='text-sm text-oxford'>{r}</p>
+    </div>
+  )),
+  option(null)
+)(task);
+
+const TaskDuration = task => pipe(
+  safe(isObject),
+  map(time => (
+    <div className='flex space-x-4'>
+      <p className='text-sm text-gray-500'>Duration:</p>
+      <p className='text-sm text-oxford'>{formatDistance(new Date(time?.created_at), new Date(time?.updated_at), {includeSeconds: true})}</p>
+    </div>
+  )),
+  option(null)
+)(task);
+
+
 const Crew = task => pipe(
   getProp('crew'),
   map(crew => ({crew, task})),
@@ -202,7 +234,7 @@ const Crew = task => pipe(
 const AsideCancelableCrew = task => {
   return (
     <aside className={'border-r border-gray-border h-full overflow-auto'}>
-      {renderWithProps([Crew, TaskLogs], task)}
+      {renderWithProps([TaskDetails, Crew, TaskLogs], task)}
     </aside>
   );
 };
@@ -302,6 +334,7 @@ const Address = pipe(
 
 const ObjectName = pipe(
   getProp('object'),
+  tap(console.log),
   chain(getObjectName),
   map(str => <p key={str} className='text-lg text-black'>{str}</p>),
   option(null),

@@ -56,11 +56,6 @@ const TaskEditLayout = () => {
             maybeToAsync('unable to retrieve'),
             chain(flip(api)(UPDATE_CREW_STATUS))
           )(data).fork(
-            // e => notify(
-            //   <ErrorNotification>
-            //     {errorToText(identity, e)}
-            //   </ErrorNotification>
-            // ),
             identity,
             identity,
           )
