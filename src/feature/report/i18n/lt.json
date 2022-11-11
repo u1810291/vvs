@@ -1,0 +1,12 @@
+{
+  "menu": {
+    "list": "Ataskaitos"
+  },
+  "dislocationZoneActivityForecast": {
+    "edit": {
+      "new": "Dislokacijos zonos užimtumo prognozė",
+      "cancel": "Atšaukti",
+      "save": "Saugoti"
+    }
+  }
+}

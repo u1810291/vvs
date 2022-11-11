@@ -1,0 +1,12 @@
+{
+  "menu": {
+    "list": "Reports"
+  },
+  "dislocationZoneActivityForecast": {
+    "edit": {
+      "new": "Dislocation zone activity forecast",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  }
+}
