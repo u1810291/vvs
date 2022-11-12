@@ -3,7 +3,8 @@
   "save": "Save",
   "cancel": "Cancel",
   "menu": {
-    "list": "Reports"
+    "list": "Reports",
+    "listSecondary": "Dislocation Zone Activity Forecast"
   },
   "breadcrumbs": {
     "requests": "Requests",

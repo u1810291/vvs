@@ -11,7 +11,8 @@
   "save": "Saugoti",
   "cancel": "Atšaukti",
   "menu": {
-    "list": "Ataskaitos"
+    "list": "Ataskaitos",
+    "listSecondary": "Dislocation Zone Activity Forecast"
   },
   "breadcrumbs": {
     "requests": "Užklausos",
