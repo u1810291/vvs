@@ -33,10 +33,19 @@ export const DislocationZoneActivityForecastListRoute = getExactRoute(
   null,
  ['admin', 'master_operator']
 );
+export const DislocationZoneActivityForecastList2Route = getExactRoute(
+  'request',
+  'menu.list2',
+  '/report/dislocation-zone-activity-forecast',
+  lazy(() => import('./layout/RequestListLayout')),
+  null,
+ ['admin', 'master_operator']
+);
 
 const DislocationZoneActivityForecastRoute = (
   <>
     {DislocationZoneActivityForecastListRoute}
+    {DislocationZoneActivityForecastList2Route}
     {DislocationZoneActivityForecastEditRoute}
     {DislocationZoneActivityForecastNewRoute}
   </>

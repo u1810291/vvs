@@ -3,7 +3,8 @@
   "save": "Save",
   "cancel": "Cancel",
   "menu": {
-    "list": "Reports"
+    "list": "Reports",
+    "list2": "Employment forecast"
   },
   "breadcrumbs": {
     "requests": "Requests",
