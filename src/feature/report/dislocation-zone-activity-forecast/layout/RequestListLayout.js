@@ -35,11 +35,12 @@ import {
   isTruthy,
   unsetPath,
   pathSatisfies,
+  identity,
 } from 'crocks';
 import {getValue, getName} from '../component/Locations';
 import withPreparedProps from 'hoc/withPreparedProps';
 import Listing from 'layout/ListingLayout';
-import {AuthContextProvider} from '../context/auth';
+import {AuthContextProvider, useAuth} from '../context/auth';
 
 const locationsFilterList = pipe(
   safe(isArray),
@@ -88,6 +89,8 @@ const RequestListLayout = withPreparedProps(Listing, () => {
   const {t} = useTranslation('request');
   const navigate = useNavigate();
   const onCreateClick = useMemo(() => () => navigate(RequestNewRoute.props.path), [navigate]);
+
+  const auth = useAuth();
 
   const tableColumns = [
     {
@@ -245,11 +248,16 @@ const RequestListLayout = withPreparedProps(Listing, () => {
 
   const requests = useRequests({filters: transformQueryFilters(queryParams)});
 
+  /**
+   * Workaround: useFilter is depending on manual work
+   *
+   * When auth recreated,
+   * mutate can refetch data with correct auth headers.
+   */
   useEffect(() => {
+    identity(auth);
     requests.mutate();
-  }, [queryParams, sortColumnKey]);
-
-  console.log({...requests});
+  }, [queryParams, sortColumnKey, auth]);
 
   return {
     list: safe(isArray, requests.data).option([]),
