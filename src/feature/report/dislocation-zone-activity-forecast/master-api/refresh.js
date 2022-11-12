@@ -1,5 +1,5 @@
 import {apiQuery} from '../master-api';
-import {getProp, pipe, chain, safe, hasProps, not, isEmpty, tap} from 'crocks';
+import {getProp, pipe, chain, safe, hasProps, not, isEmpty} from 'crocks';
 import maybeToAsync from 'crocks/Async/maybeToAsync';
 
 const REFRESH_QUERY = `
@@ -12,7 +12,6 @@ const REFRESH_QUERY = `
 `;
 
 const refresh = pipe(
-  tap(console.warn),
   pipe(
     safe(not(isEmpty)),
     maybeToAsync(new Error('"refreshToken" prop must be present')),

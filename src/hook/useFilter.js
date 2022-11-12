@@ -834,10 +834,14 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         }
       }
     }
-    
+
+
+
     return {
       where: {
-        _and: hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},        
+        // TODO: not everybody needs archived_at!
+        // _and: hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},
+        _and: hideArchived ? {...params} : {...params},        
       },
       orderBy: {[sortColumnKey?.replace('-', '')]: sortColumnKey && sortColumnKey[0] === '-' ? DIRECTION_DESC : DIRECTION_ASC}
     };

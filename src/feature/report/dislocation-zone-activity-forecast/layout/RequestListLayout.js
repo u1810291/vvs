@@ -249,6 +249,8 @@ const RequestListLayout = withPreparedProps(Listing, () => {
     requests.mutate();
   }, [queryParams, sortColumnKey]);
 
+  console.log({...requests});
+
   return {
     list: safe(isArray, requests.data).option([]),
     rowKeyLens: getPropOr(0, 'id'),

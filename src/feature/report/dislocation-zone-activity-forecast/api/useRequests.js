@@ -2,7 +2,7 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 import {createUseListWithAuthQuery} from '../master-api/buildApiHook';
 import {pipe, getProp, chain, getPath, find, propEq} from 'crocks';
-import {augmentsToUsersNoMerge} from 'api/buildUserQuery';
+import {augmentsToUsersNoMerge} from '../master-api/buildUserQuery';
 
 const PROP = 'request';
 

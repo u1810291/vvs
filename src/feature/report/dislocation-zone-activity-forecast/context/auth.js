@@ -7,6 +7,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   Maybe,
   and,
+  identity,
   chain,
   getProp,
   isEmpty,
@@ -71,7 +72,6 @@ const AuthContextProvider = ({children}) => {
   )(state), [state]);
 
   const fail = useCallback((error) => {
-    console.error(error);
     setAuthorized(false);
     setState({token: null, refreshToken: null});
   }, [setAuthorized, setState]);
@@ -107,11 +107,9 @@ const AuthContextProvider = ({children}) => {
       option(null),
       login,
       map(tap(setState)),
-      a => a.fork(console.error, console.log),
+      a => a.fork(console.error, identity),
     )(formRef)
   };
-
-  console.log(state);
 
   return (
     <AuthContext.Provider value={{

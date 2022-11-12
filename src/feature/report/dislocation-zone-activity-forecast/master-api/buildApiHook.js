@@ -5,8 +5,7 @@ import {every} from 'util/array';
 import {removeFalsyFields} from 'util/obj';
 import {useAsyncEffect} from 'hook/useAsync';
 import {useAuth} from '../context/auth';
-import {useEffect} from 'react';
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useNotification} from 'feature/ui-notifications/context';
 import {useTranslation} from 'react-i18next';
@@ -103,8 +102,6 @@ export const createUseList = ({graphQl, asyncMapFromApi = Async.Resolved}) => ()
   ));
 }
 
-
-
 export const createUseApiList = ({
   graphQl, 
   asyncMapFromApi = Async.Resolved,
@@ -119,12 +116,6 @@ export const createUseApiList = ({
       : asyncMapFromApi(r))
   ));
 }
-
-
-
-
-
-
 
 /**
  * @param {object} props
