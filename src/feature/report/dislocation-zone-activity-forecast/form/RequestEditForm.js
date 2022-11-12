@@ -72,10 +72,11 @@ const RequestEditForm = ({saveRef, ...props}) => {
           a => a.filter(isTruthy),
         ),
       }),
-      setProp('user_id', auth.userData.id),
+      setProp('user_id', auth?.userData?.id),
     )),
     setForm: setForm,
   });
+
 
   return (
     <div {...props}>

@@ -1,4 +1,15 @@
-import {identity, ifElse, isArray, curry, isFunction, propSatisfies, reduce} from 'crocks';
+import {
+  curry,
+  pipe,
+  getPropOr,
+  identity,
+  ifElse,
+  isArray,
+  isFunction,
+  propSatisfies,
+  reduce,
+  setProp,
+} from 'crocks';
 
 export const putIntoArray = ifElse(isArray, identity, (value) => [value]);
 

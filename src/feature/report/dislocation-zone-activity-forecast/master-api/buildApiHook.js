@@ -286,6 +286,10 @@ export const createUseOne = ({
     );    
   }, [removeRef?.current, t, nav, notify, successRedirectPath]);
 
+    useEffect(() => {
+      getSwr.mutate();
+    }, [api]);
+
   return {
     ...getSwr,
     update,
