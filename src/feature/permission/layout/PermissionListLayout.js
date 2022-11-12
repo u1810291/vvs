@@ -99,6 +99,7 @@ const PermissionListLayout = withPreparedProps(Listing, () => {
     'crew_permission',
     tableColumns,
     filtersData,
+    {canArchive: true}
   );
 
   const api = usePermissions({filters: queryParams})

@@ -120,6 +120,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     'crew',
     tableColumns,
     filtersData,
+    {canArchive: true}
   );
 
   const api = useCrews({filters: queryParams});

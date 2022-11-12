@@ -214,6 +214,7 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     'crew_driver',
     tableColumns,
     filtersData,
+    {canArchive: true},
     [],
     driversFilter
   );

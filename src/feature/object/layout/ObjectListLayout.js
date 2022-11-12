@@ -101,6 +101,7 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     'object',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
   
   const api = useObjects({filters: queryParams})

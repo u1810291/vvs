@@ -148,6 +148,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
     'events',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
 
   const api = useTasks({filters: queryParams});
