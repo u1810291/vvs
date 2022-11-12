@@ -1,0 +1,26 @@
+query UsersById ($ids: [uuid]) {
+  usersSearch (ids: $ids) {
+    users {
+      active
+      breachedPasswordLastCheckedInstant
+      birthDate
+      connectorId
+      email
+      expiry
+      firstName
+      fullName
+      id
+      imageUrl
+      lastLoginInstant
+      lastName
+      middleName
+      mobilePhone
+      passwordChangeRequired
+      passwordLastUpdateInstant
+      usernameStatus
+      username
+      verified
+      password
+    }
+  }
+}

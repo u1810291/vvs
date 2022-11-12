@@ -18,8 +18,7 @@ import DislocationFeature from 'feature/dislocation/routes';
 import SettingFeature from 'feature/setting/routes';
 import UserFeature from 'feature/user/routes';
 import ClassifierFeature from 'feature/classifier/routes';
-
-
+import DislocationZoneActivityForecastRoute from 'feature/report/dislocation-zone-activity-forecast/routes';
 
 const Routes = (
   <>
@@ -39,6 +38,7 @@ const Routes = (
     {SettingFeature}
     {ClassifierFeature}
     {UserFeature}
+    {DislocationZoneActivityForecastRoute}
     <Route isHidden path='/denied' element={<DeniedLayout />} />
     <Route isHidden path='*' element={<NotFoundLayout />} />
   </>

@@ -834,7 +834,9 @@ export const useFilter = (tableName, tableColumns, filtersData, filterOptions, i
         }
       }
     }
-    
+
+
+
     return {
       where: {
         _and: !filterOptions?.canArchive ? {...params} : hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},        

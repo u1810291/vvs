@@ -1,0 +1,37 @@
+{
+  "back": "Back",
+  "save": "Save",
+  "cancel": "Cancel",
+  "menu": {
+    "list": "Reports"
+  },
+  "breadcrumbs": {
+    "requests": "Requests",
+    "allData": "All Data",
+    "new": "Create a request"
+  },
+  "listing": {
+    "button": {
+      "new": "Create"
+    }
+  },
+  "field": {
+    "id": "ID",
+    "locations": "Locations",
+    "created_at": "Created at",
+    "userCompany": "Company",
+    "dateRange": "Dates",
+    "answer": "Answer",
+    "date_from": "From",
+    "date_to": "To",
+    "dateFromTo": "Date from - to"
+  },
+  "form": {
+    "addLocation": "Add location",
+    "removeLocation": "Remove"
+  },
+  "table": {
+    "date": "Date",
+    "answer": "Car count"
+  }
+}

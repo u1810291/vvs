@@ -98,6 +98,14 @@ const usersToIds = curry((userIdLens, users) => pipe(
 )(users));
 
 /**
+ * @type {(auth: import('context/auth').AuthContextValue) => (userIdLens: import('crocks/Maybe').default) => (users: Array) => Async}
+ */
+export const augmentsToUsersNoMerge = curry((auth, userIdLens, users) => pipe(
+  usersToIds(userIdLens),
+  idsToSearchUsersResponse(auth),
+)(users));
+
+/**
  * @type {(auth: import('context/auth').AuthContextValue) => (userIdProp: String) => (user: Object) => Async}
  */
 export const augmentToUser = curry((auth, userIdProp, user) => (
@@ -108,11 +116,3 @@ export const augmentToUser = curry((auth, userIdProp, user) => (
   ))
   .map(omit([userIdProp]))
 ))
-
-/**
- * @type {(auth: import('context/auth').AuthContextValue) => (userIdLens: import('crocks/Maybe').default) => (users: Array) => Async}
- */
-export const augmentsToUsersNoMerge = curry((auth, userIdLens, users) => pipe(
-  usersToIds(userIdLens),
-  idsToSearchUsersResponse(auth),
-)(users));
