@@ -122,6 +122,7 @@ const UserListLayout = withPreparedProps(Listing, props => {
     'user',
     tableColumns,
     filtersData,
+    {canArchive: true},
     [],
     customFilter,
   );

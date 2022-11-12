@@ -7,7 +7,7 @@ import Header from './Header';
 import {useTranslation} from 'react-i18next';
 import Footer from './Footer';
 
-const Menu = ({sidebarOpen, setSidebarOpen}) => {
+const Menu = ({sidebarOpen, setSidebarOpen, logout}) => {
   const {t} = useTranslation();
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -30,7 +30,7 @@ const Menu = ({sidebarOpen, setSidebarOpen}) => {
                   <button className='mb-4 text-lilac font-normal hover:text-geyser'>
                     {t('Sidebar.myAccount')}
                   </button>
-                  <button className='mb-4 text-lilac font-normal hover:text-geyser'>
+                  <button onClick={() => logout()} className='mb-4 text-lilac font-normal hover:text-geyser'>
                     {t('Sidebar.signOut')}
                   </button>
                 </Footer>

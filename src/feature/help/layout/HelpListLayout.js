@@ -101,6 +101,7 @@ const HelpListLayout = withPreparedProps(Listing, props => {
     'help',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
   
   const api = useQuestions({filters: queryParams});

@@ -9,9 +9,9 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'keybox', EN);
 i18next.addResourceBundle('lt', 'keybox', LT);
 
-export const KeyBoxEditRoute = getExactHiddenRoute('keybox', 'menu.edit', '/keybox/:id', lazy(() => import('./layout/KeyBoxEditLayout')), null);
-export const KeyBoxListRoute = getExactRoute('keybox', 'menu.list', '/keybox', lazy(() => import('./layout/KeyBoxListLayout')), null);
-export const KeyBoxCreateRoute = getExactHiddenRoute('keybox', 'menu.create', '/keybox/new', lazy(() => import('./layout/KeyBoxEditLayout')), null);
+export const KeyBoxEditRoute = getExactHiddenRoute('keybox', 'menu.edit', '/keybox/:id', lazy(() => import('./layout/KeyBoxEditLayout')), null, ['admin', 'master_operator']);
+export const KeyBoxListRoute = getExactRoute('keybox', 'menu.list', '/keybox', lazy(() => import('./layout/KeyBoxListLayout')), null, ['admin', 'master_operator']);
+export const KeyBoxCreateRoute = getExactHiddenRoute('keybox', 'menu.create', '/keybox/new', lazy(() => import('./layout/KeyBoxEditLayout')), null, ['admin', 'master_operator']);
 
 const KeyBoxRoute = (
   <>

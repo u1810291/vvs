@@ -181,7 +181,7 @@ const getDefaultFilterId = (filters) => {
   return defaultFilter ? defaultFilter.id : null;
 }
 
-export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
+export const useFilter = (tableName, tableColumns, filtersData, filterOptions, initialState, customFilter) => {
   const {t} = useTranslation('filter');
   const [exportData, setExportData] = useState();
   const [showFilter, setShowFilter] = useState(false);
@@ -727,11 +727,11 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
                 <Button.NoBg id={defaultFilterId} className={'bg-gray-200 px-6 py-0 hover:bg-gray-500 text-white'} onClick={onSaveFilterShortcut}>{t('save_filter')}</Button.NoBg>
               </Nullable>
               <div className='flex flex-1 justify-end gap-8 align-center'>
-                <Nullable on={hideArchived}>
+                <Nullable on={hideArchived && filterOptions?.canArchive}>
                   <Button.NoBg className='text-gray-300' onClick={() => setHideArchived(false)}>{t('show_archived')}</Button.NoBg>
                 </Nullable>
 
-                <Nullable on={!hideArchived}>
+                <Nullable on={!hideArchived && filterOptions?.canArchive}>
                   <Button.NoBg className='text-gray-300' onClick={() => setHideArchived(true)}>{t('hide_archived')}</Button.NoBg>
                 </Nullable>
 
@@ -837,11 +837,11 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     
     return {
       where: {
-        _and: hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},        
+        _and: !filterOptions?.canArchive ? {...params} : hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},        
       },
       orderBy: {[sortColumnKey?.replace('-', '')]: sortColumnKey && sortColumnKey[0] === '-' ? DIRECTION_DESC : DIRECTION_ASC}
     };
-  }, [state, sortColumnKey, hideArchived]);
+  }, [state, sortColumnKey, filterOptions, hideArchived]);
 
 
   return [

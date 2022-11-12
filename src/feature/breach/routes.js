@@ -9,8 +9,8 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'breach', EN);
 i18next.addResourceBundle('lt', 'breach', LT);
 
-export const BreachEditRoute = getExactHiddenRoute('breach', 'menu.edit', '/breach/:id', lazy(() => import('./layout/BreachEditLayout')), null);
-export const BreachListRoute = getExactRoute('breach', 'menu.list', '/breach', lazy(() => import('./layout/BreachListLayout')), null);
+export const BreachEditRoute = getExactHiddenRoute('breach', 'menu.edit', '/breach/:id', lazy(() => import('./layout/BreachEditLayout')), null, ['admin', 'master_operator', 'operator']);
+export const BreachListRoute = getExactRoute('breach', 'menu.list', '/breach', lazy(() => import('./layout/BreachListLayout')), null, ['admin', 'master_operator', 'operator']);
 
 const BreachRoute = (
   <>

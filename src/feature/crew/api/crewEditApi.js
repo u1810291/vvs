@@ -2,8 +2,8 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 import raw from 'raw.macro';
 import useAsyncSwr from 'hook/useAsyncSwr';
 import {Async, safe, omit, getProp, setProp, not, ifElse, isEmpty, constant, map, option, chain, pipe, pick, objOf, mapProps} from 'crocks'
-import {augmentToUser} from '../../../api/buildUserQuery';
-import {createUseList, createUseOne, createUseWhereList, mapToNullableString} from 'api/buildApiHook';
+import {augmentsToUsers, augmentToUser} from '../../../api/buildUserQuery';
+import {createUseApiList, createUseList, createUseOne, mapToNullableString} from 'api/buildApiHook';
 import {useAuth} from 'context/auth';
 
 const {Resolved, Rejected} = Async;
@@ -19,10 +19,30 @@ const mapOnActionIdentification = obj => ifElse(
   )
 );
 
-export const useCrews = createUseWhereList({
+
+const LIST_PROPS = ['usersByQuery', 'users'];
+
+// export const useCrews = createUseWhereList({
+//   graphQl: raw('./graphql/GetAllCrews.graphql'),
+//   asyncMapFromApi: pipe(
+//     maybeToAsync('expected prop "crew" does not exist', getProp('crew'))
+//   ),
+//   infinite: true,
+// });
+
+export const useCrews = createUseApiList({
   graphQl: raw('./graphql/GetAllCrews.graphql'),
-  asyncMapFromApi: pipe(
-    maybeToAsync('expected prop "crew" does not exist', getProp('crew'))
+  mapFromApiUsingAuth: true,
+  asyncMapFromApi: auth => pipe(
+    maybeToAsync('prop "crew" was expected', getProp('crew')),
+    chain(crews => (
+      augmentsToUsers(
+        auth,
+        getProp('user_id'),
+        crews
+      )
+      .alt(Async.Resolved(crews))
+    ))    
   ),
   infinite: true,
 });

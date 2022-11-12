@@ -11,9 +11,9 @@ i18next.addResourceBundle('en', 'client', EN);
 i18next.addResourceBundle('lt', 'client', LT);
 
 
-export const ClientCreateRoute = getExactHiddenRoute('client', 'menu.create', '/client/new', lazy(() => import('./layout/ClientEditLayout')), null);
-export const ClientEditRoute = getExactHiddenRoute('client', 'menu.edit', '/client/:id', lazy(() => import('./layout/ClientEditLayout')), null);
-export const ClientListRoute = getExactRoute('client', 'menu.list', '/client', lazy(() => import('./layout/ClientListLayout')), null);
+export const ClientCreateRoute = getExactHiddenRoute('client', 'menu.create', '/client/new', lazy(() => import('./layout/ClientEditLayout')), null, ['admin', 'master_operator']);
+export const ClientEditRoute = getExactHiddenRoute('client', 'menu.edit', '/client/:id', lazy(() => import('./layout/ClientEditLayout')), null, ['admin', 'master_operator']);
+export const ClientListRoute = getExactRoute('client', 'menu.list', '/client', lazy(() => import('./layout/ClientListLayout')), null, ['admin', 'master_operator']);
 
 const ClientRoute = (
   <>

@@ -225,6 +225,7 @@ const ClientListLayout = withPreparedProps(Listing, () => {
     'client',
     tableColumns,
     filtersData,
+    {canArchive: true},
     [],
     clientsFilter,
   );

@@ -16,7 +16,7 @@ import {useNavigate} from 'react-router-dom';
 
 const MainLoginForm = () => {
   const nav = useNavigate()
-  const {isAuthorized, update} = useAuth();
+  const {isAuthorized, userData, update} = useAuth();
   const {t} = useTranslation('login', {keyPrefix: 'mainForm'});
   const {result, ctrl} = useResultForm({
     username: {
@@ -63,7 +63,14 @@ const MainLoginForm = () => {
   const submit = useCallback((event) => { event.preventDefault(); fork() }, [fork]);
 
   useEffect(() => {
-    if (isAuthorized === true) nav('/');
+    let homePage = '/';
+
+    if (userData) {
+      const roles = userData?.registrations?.find(r => r?.applicationId === 'efd4e504-4179-42d8-b6b2-97886a5b6c29')?.roles;
+      if (roles.includes('support')) homePage = '/helps';
+    }
+
+    if (isAuthorized === true) nav(homePage);
   }, [isAuthorized]);
 
   return (

@@ -104,6 +104,7 @@ const BreachListLayout = withPreparedProps(Listing, () => {
     'crew_breach',
     tableColumns,
     filtersData,
+    {canArchive: true}
   );
 
   const api = useBreaches({filters: queryParams})

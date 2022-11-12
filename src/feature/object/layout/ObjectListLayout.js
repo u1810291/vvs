@@ -101,12 +101,12 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     'object',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
   
   const api = useObjects({filters: queryParams})
   
   useEffect(() => {
-    console.log(queryParams);
     api.mutate()
     setExportData(api.data);
   }, [queryParams, sortColumnKey]);

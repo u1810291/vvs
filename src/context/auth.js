@@ -20,6 +20,7 @@ import {
   safe,
   tap,
   tryCatch,
+  isFunction,
 } from 'crocks';
 
 /**
@@ -70,7 +71,20 @@ const AuthContextProvider = ({children}) => {
     setState({token: null, refreshToken: null});
   }, [setAuthorized, setState]);
 
-  const success = useCallback(() => setAuthorized(true), [setAuthorized]);
+  const success = useCallback(() => { 
+    setAuthorized(true);
+  }, [setAuthorized]);
+
+  const logout = useCallback((callback) => {
+    setAuthorized(false);
+    setState({token: null, refreshToken: null, user: null});
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    isFunction(callback) && callback();
+  }, [state, setAuthorized]);
+
 
   useEffect(() => {
     getProp('refreshToken', state)
@@ -93,6 +107,7 @@ const AuthContextProvider = ({children}) => {
       update: setState,
       api: authorizedApi,
       apiQuery: authorizedApi(null),
+      logout,
       userData
     }}>
       {children}

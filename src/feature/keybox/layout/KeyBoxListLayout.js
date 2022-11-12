@@ -65,6 +65,7 @@ const KeyBoxListLayout = withPreparedProps(Listing, () => {
     'keybox',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
 
   const api = useKeyBoxes({filters: queryParams});

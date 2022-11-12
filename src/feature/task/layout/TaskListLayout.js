@@ -107,7 +107,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
 
   const filtersData = [
     {key: 'created_at', label: tc('created_at'), filter: 'date'},
-    // {key: 'operator', label: 'Operator', filter: 'multiselect', values: []},
+    {key: 'changed_by_user_id', label: 'Operator', filter: 'multiselect', values: []},
     {
       key: 'object_id',
       label: tc('object'),
@@ -115,9 +115,9 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       values: pipe(safe(not(isEmpty)), option([]))(objects),
       displayValue: (v) => objects?.find(c => c.value === v)?.name
     },
-    // {key: 'address', label: 'Object\'s address', filter: 'text'},
-    // {key: 'type', label: 'Type', filter: 'multiselect', values: []},
-    // {key: 'groups', label: 'Groups (?)', filter: 'multiselect', values: []},
+    {key: 'address', label: 'Object\'s address', filter: 'text'},
+    {key: 'event_type', label: 'Type', filter: 'multiselect', values: ['APVAŽIAVIMAS', 'INKASACIJA', 'KITA']},
+    {key: 'group', label: 'Group (?)', filter: 'multiselect', values: []},
     {
       key: 'status',
       label: tc('status'),
@@ -138,16 +138,17 @@ const TaskListLayout = withPreparedProps(Listing, props => {
         return {_in: statuses}
       }
     },
-    // {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
-    // {key: 'crew', label: 'Crew', filter: 'multiselect', values: []},
-    // {key: 'driver', label: 'Driver', filter: 'multiselect', values: []},
-    // {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', values: ['True', 'False']},
+    {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
+    {key: 'crew_id', label: 'Crew', filter: 'multiselect', values: []},
+    {key: 'crew.driver_user_id', label: 'Driver', filter: 'multiselect', values: []},
+    {key: 'on_time', label: 'On time (T/F)?', filter: 'multiselect', values: ['Yes', 'No']},
   ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'events',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
 
   const api = useTasks({filters: queryParams});

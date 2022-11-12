@@ -55,11 +55,12 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     </Link>
   )), [tc]);
 
-  const cs = useMemo(() => getColumn(tc, props => (
-    <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
+  const cs = useMemo(() => getColumn(tc, props => {
+    console.log(props);
+    return <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
       <DynamicStatus t={'crew'} className={'w-20'} status={props?.status}/>
     </Link>
-  )), [tc]);
+  }), [tc]);
 
   const nullToStr = e => !e ? '-' : e;
   const boolToStr = e => e ? ts`YES` : ts`NO`;
@@ -119,6 +120,7 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     'crew',
     tableColumns,
     filtersData,
+    {canArchive: true}
   );
 
   const api = useCrews({filters: queryParams});

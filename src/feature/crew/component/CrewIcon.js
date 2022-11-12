@@ -76,11 +76,11 @@ export const crewStatusAs = ({
   onDriveBack,
   onFallback,
 }) => caseMap(onFallback, [
+    [not(isUserOnline), onOffline],
     [isStatus('DRIVE_BACK'), onDriveBack],
     [isStatus('BUSY'), onBusy],
-    [or(isStatus('BREAK'), pathSatisfies(['permissions', 0, 'expires_at'], isTruthy)), onBreak],
     [isStatus('READY'), onReady],
-    [not(isUserOnline), onOffline],
+    [or(isStatus('BREAK'), pathSatisfies(['permissions', 0, 'expires_at'], isTruthy)), onBreak],
   ]);
 
 export default crewStatusAs({
