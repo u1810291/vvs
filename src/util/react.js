@@ -217,4 +217,10 @@ export const interpolateTextToComponent = curry((fullTokenRegex, valueExtraction
 
     return update.every(isString) ? update.join(' ') : update;
   }, [text]);
-})
+});
+
+export const Repeater = ({children, list, passIndex = false}) => isArray(list) ? list?.map((props, index) => cloneElement(
+  children,
+  {key: index, ...(passIndex ? {index} : {}), ...props},
+  props?.children
+)) : null;

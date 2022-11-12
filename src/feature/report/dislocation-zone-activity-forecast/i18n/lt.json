@@ -1,0 +1,45 @@
+{
+  "auth": {
+    "context": {
+      "heading": "AI Prisijungti",
+      "username": "El. paštas",
+      "password": "Slaptažodis",
+      "submit": "Jungtis"
+    }
+  },
+  "back": "Atgal",
+  "save": "Saugoti",
+  "cancel": "Atšaukti",
+  "menu": {
+    "list": "Ataskaitos"
+  },
+  "breadcrumbs": {
+    "requests": "Užklausos",
+    "allData": "Visi duomenys",
+    "new": "Nauja užklausa"
+  },
+  "listing": {
+    "button": {
+      "new": "Kurti"
+    }
+  },
+  "field": {
+    "id": "ID",
+    "locations": "Lokacijos",
+    "created_at": "Užklausos data",
+    "userCompany": "Įmonė",
+    "dateRange": "Užimtumo data",
+    "answer": "Užimtumas",
+    "date_from": "From",
+    "date_to": "To",
+    "dateFromTo": "Data nuo - iki"
+  },
+  "form": {
+    "addLocation": "Pridėti lokaciją",
+    "removeLocation": "Trinti"
+  },
+  "table": {
+    "date": "Data",
+    "answer": "Automobilių kiekis"
+  }
+}

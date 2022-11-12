@@ -26,3 +26,26 @@ export const mapByMaybe = curry((getMaybeItem, items) => (
  * invertMap :: [a -> b] -> a -> [ba]
  */
 export const invertMap = curry((fns, item) => fns.map(fn => fn(item)));
+
+export const groupByMaybe = curry((m, list) => reduce((carry, item) => (
+  m(item)
+  .map(key => setProp(
+    key,
+    [...getPropOr([], key, carry), item],
+    carry
+  ))
+  .option(carry)
+), {}, list))
+
+export const groupByMaybeAsArray = curry((m, list) => pipe(
+  reduce((carry, item) => (
+    m(item)
+    .map(key => setProp(
+      key,
+      [...getPropOr([], key, carry), item],
+      carry
+    ))
+    .option(carry)
+  ), {}),
+  Object.values,
+)(list))
