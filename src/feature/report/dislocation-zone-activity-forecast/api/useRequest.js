@@ -4,6 +4,7 @@ import maybeToAsync from 'crocks/Async/maybeToAsync';
 import {map} from 'crocks/pointfree';
 import raw from 'raw.macro';
 import {getValue} from '../component/Locations';
+import {format} from 'date-fns';
 
 const PROP = 'request_by_pk';
 
@@ -25,8 +26,8 @@ export default createUseOne({
   asyncMapToApi: pipe(
     a => ({
       ...a,
-      date_from: a?.date_from || a?.dateFrom,
-      date_to: a?.date_to || a?.dateTo,
+      date_from: format(a?.date_from || a?.dateFrom, 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX'),
+      date_to: format(a?.date_to || a?.dateTo, 'Y-MM-dd\'T\'HH:mm:ss.SSSXXX'),
     }),
     pick([
       'date_from',
