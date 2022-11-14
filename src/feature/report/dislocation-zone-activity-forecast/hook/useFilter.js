@@ -205,7 +205,7 @@ const getDefaultFilterId = (filters) => {
 }
 
 export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
-  const {t} = useTranslation('filter');
+  const {t} = useTranslation('request', {keyPrefix: 'filters'});
   const [showFilter, setShowFilter] = useState(false);
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const [params] = useSearchParams();
