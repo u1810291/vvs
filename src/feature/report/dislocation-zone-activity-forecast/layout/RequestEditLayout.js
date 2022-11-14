@@ -83,13 +83,13 @@ const RequestEditLayout = () => {
   useEffect(() => {
     clearTimeout(timer.current);
 
-    if (isTruthy(request?.data?.answer)) () => clearTimeout(timer.current);
-
     timer.current = setTimeout(() => {
       if (!isTruthy(request?.data?.answer)) {
         request.mutate();
       }    
     }, 1000);
+
+    if (isTruthy(request?.data?.answer)) return;
 
     return () => clearTimeout(timer.current);
   }, [request?.data]);
