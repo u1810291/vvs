@@ -1,0 +1,1568 @@
+[
+  {
+    "city": "Utena",
+    "suburb": "Dauniškis",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Žvėrynas",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Mazeikiai",
+    "suburb": "Old Town",
+    "latitude": 56.309244,
+    "longitude": 22.341468
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Žirmūnai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Aleksotas",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Kirtimai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Aukštasis Pavilnys",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Gedminai",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Smeltė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Vilkpėdės seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Linksmadvaris",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Rumpiškė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Rokai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujamiesčio seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Šnipiškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Bajorai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Smėlis",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujininkai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Janydžiai",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Panerių seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Šančių seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujoji Vilnia",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Vilijampolė",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Utena",
+    "suburb": "Rašė",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Dainavos seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Dainava",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Alytus",
+    "suburb": "Putinai",
+    "latitude": 54.396294,
+    "longitude": 24.045876
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Pabaliai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Butsargių dvaras",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Žaliakalnis",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Gričiupis",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Pašilaičių seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Birutė I",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Luizė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujamiestis",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Kunigiškiai",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Pilaitės seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Salininkai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Gegužiai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Aukštoji Freda",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Panerys",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Antakalnis Eldership",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Naujasodis",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Didždvaris",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Kryžiokai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Šveicarija",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Draugystė",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "New Town",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Julijanava",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Antakalnis",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Centras",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Aukštieji Paneriai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Visoriai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Gytariai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Kvietiškis",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Fabijoniškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Šilainių seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Verduliai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Lietuvos elektrinė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Eiguliai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Alytus",
+    "suburb": "Alytus I",
+    "latitude": 54.396294,
+    "longitude": 24.045876
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Rasos eldership",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Šeškinė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Markučiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Aukštakalnis",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Smėliai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Žemieji Paneriai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Balsiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Besarabija",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Tarandė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Rokantiškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Pašilaičiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Baltupiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Pramonės rajonas",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Vanagupė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Smiltynė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Piktmiškis",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Nartas",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Kairėnai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Pilaitė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Valakupiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Užupis",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujosios Vilnios seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Šlaitai",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Sendvaris",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Kalniukas",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Zokniai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Gudeliai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Amaliai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Ožkiniai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Gubernija",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Žirmūnų seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Turniškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Liudvinavas",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Viršuliškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Dainai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujininkų seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Užkirkis",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Mažieji Gulbinai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Žvėryno seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Margiai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Verkių seniūnija",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Ąžuolija",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Dvarykščiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Dvarčionys",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Vyturiai",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Šančiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Verkiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Alytus",
+    "suburb": "Ratnyčia",
+    "latitude": 54.396294,
+    "longitude": 24.045876
+  },
+  {
+    "city": "Utena",
+    "suburb": "Jurzdikas",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Tauralaukis",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Gariūnai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Mazeikiai",
+    "suburb": "\"SB \"\"Ašva\"\"\"",
+    "latitude": 56.309244,
+    "longitude": 22.341468
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Saltoniškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Vytėnai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Bireliai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Panemunė",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Žemasis Pavilnys",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "SB „Dituva“",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Grigiškės Eldership",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Pelenynas",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Pakartuvės",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Utena",
+    "suburb": "Krašuona",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Murava",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Žaliakalnio seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Birutė II",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Petrašiūnai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Vaidegiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Giruliai",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Triobiškiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Šilainiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Šimšė",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Mažasis Tauralaukio dvaras",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Panevezys",
+    "suburb": "Pagojys",
+    "latitude": 55.734792,
+    "longitude": 24.357477
+  },
+  {
+    "city": "Utena",
+    "suburb": "Užupiečiai",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Medelynas",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Karoliniškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Sodų bendrija Šventupis",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Justiniškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Paneriai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Rasos",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Armališkės",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Kazbėjai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Prendzeliava",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Bačiūnai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Buurt 2741",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Maironiškiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Pavilionys",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Lazdynėliai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Santariškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Klevinė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Lieporiai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Milikoniai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Riešė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Tirkiliškiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Lazdynai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Palemonas",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Šventoji",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Senieji Bukčiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Laikštė",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Jeruzalė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Lypkiai",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Karmelitai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Daniliškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Utena",
+    "suburb": "Šilinė",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Kalniečiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Utena",
+    "suburb": "Juodakampis",
+    "latitude": 55.50004,
+    "longitude": 25.609385
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Veršvai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Žaliūkės",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Kaukazas",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Bachmano dvaras",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujieji Bukčiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Lepšiai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Zuikinė",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Bališkės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Labrenciškės",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Žardė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Romainiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Melnragė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Naugardiškė",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Gureliai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Mazeikiai",
+    "suburb": "Mastis",
+    "latitude": 56.309244,
+    "longitude": 22.341468
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Lazdynai eldership",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Sargėnai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Žemutiniai Kaniūkai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Klausmyliai",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Mančiškė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Raisteniškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Pranciškonys",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Trakų Vokė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Birzai",
+    "suburb": "Krantinė",
+    "latitude": 56.201772,
+    "longitude": 24.756012
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Pušynas",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Dvariškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Šiaudinė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Kauno laisvoji ekonominė zona",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Paringuvio ūkis",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Linkuva",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Tekliūnai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Eigulių seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Manciškė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Kompelis",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Rėkyva",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Jiesia",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Babiniai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Tarpučiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Vaišvydava",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Nemirseta",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Kučkuriškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Kareivinės",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Blūdikalnis",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Aukštutiniai Kaniūkai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Skaisčiūnai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Budriai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Lampėdžiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Panevezys",
+    "suburb": "Pašilė",
+    "latitude": 55.734792,
+    "longitude": 24.357477
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Pramonė",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Smeltės uostas",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Būtingė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Aukštieji Rusokai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Petrašiūnų seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Budelkiemis",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Degučiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Nemėžis",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Taurage",
+    "suburb": "Žalgiriai",
+    "latitude": 55.250366,
+    "longitude": 22.29095
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Malkų įlanka",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Naujieji Verkiai",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Mažoji Riešė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Lankiškiai",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Masionys",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Bugeluvka",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Rokeliai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "SB „Draugystė“",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "\"Sodininkų bendrija \"\"Šilojai\"\"\"",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Mačiuliškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Žemoji Freda",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Preila",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Girdiškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Narsiečiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Siauliai",
+    "suburb": "Sodai",
+    "latitude": 55.934908,
+    "longitude": 23.313682
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Vičiūnai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Mokolai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Žiežmariai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Ryliškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Rimkai",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Skruzdynė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Dobrovolė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Alytus",
+    "suburb": "Vaišupis",
+    "latitude": 54.396294,
+    "longitude": 24.045876
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Panemunės seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Nida",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Kulokiškės",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Šaulių dvaras",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Mazeikiai",
+    "suburb": "Lygumai",
+    "latitude": 56.309244,
+    "longitude": 22.341468
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Verkių Riešė",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Gričiupio seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Panevezys",
+    "suburb": "Panevėžio LEZ",
+    "latitude": 55.734792,
+    "longitude": 24.357477
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Kazliškiai",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Kaunas",
+    "suburb": "Vilijampolės seniūnija",
+    "latitude": 54.898521,
+    "longitude": 23.903596
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Užukampis",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Vilnius",
+    "suburb": "Pagulianka",
+    "latitude": 54.687156,
+    "longitude": 25.279651
+  },
+  {
+    "city": "Klaipeda",
+    "suburb": "Smeltalė",
+    "latitude": 55.703295,
+    "longitude": 21.144279
+  },
+  {
+    "city": "Taurage",
+    "suburb": "Jovarai",
+    "latitude": 55.250366,
+    "longitude": 22.29095
+  }
+]
