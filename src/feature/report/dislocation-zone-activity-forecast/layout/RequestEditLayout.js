@@ -89,7 +89,7 @@ const RequestEditLayout = () => {
       }    
     }, 1000);
 
-    if (isTruthy(request?.data?.answer)) return;
+    if (isTruthy(request?.data?.answer)) return () => clearTimeout(timer.current);
 
     return () => clearTimeout(timer.current);
   }, [request?.data]);
