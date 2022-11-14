@@ -30,6 +30,7 @@ import {Circle, GoogleMap} from '@react-google-maps/api';
 import {useGoogleApiContext} from 'context/google';
 import {selectValueToObject} from '../utils';
 import {AuthContextProvider} from '../context/auth';
+import SpinnerGif from 'assets/assets/spinner.gif'
 
 const INITIAL_COORDINATES = {lat: 55.2282442, lng: 24.2904923};
 
@@ -76,6 +77,22 @@ const RequestEditLayout = () => {
   }, [mGoogleMaps, mMap]);
 
   const nav = useNavigate();
+
+  // mutate before answer is loaded
+  const timer = useRef();
+  useEffect(() => {
+    clearTimeout(timer.current);
+
+    if (isTruthy(request?.data?.answer)) () => clearTimeout(timer.current);
+
+    timer.current = setTimeout(() => {
+      if (!isTruthy(request?.data?.answer)) {
+        request.mutate();
+      }    
+    }, 1000);
+
+    return () => clearTimeout(timer.current);
+  }, [request?.data]);
 
   return (
     <SidebarLayout>
@@ -126,6 +143,12 @@ const RequestEditLayout = () => {
             )(selectedLocations)}
           </GoogleMap>
         </Nullable>
+
+        {/* Loader */}
+        <Nullable on={isCreated && !request?.data?.answer}>
+          <img src={SpinnerGif} />
+        </Nullable>
+
         <RequestGraphs {...request} />
         <RequestTables {...request} />
       </div>

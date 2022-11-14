@@ -16,7 +16,8 @@ import {Transition} from 'components/Dropdown';
 import {every} from 'util/array';
 import {joinString} from '@s-e/frontend/transformer/array';
 import {selectValueToObject} from '../utils';
-import {useAuth} from '../context/auth';
+import {useAuth} from 'context/auth';
+import {DislocationZoneActivityForecastEditRoute as RequestEditRoute} from '../routes';
 
 const RequestEditForm = ({saveRef, ...props}) => {
   const params = useParams();
@@ -72,11 +73,12 @@ const RequestEditForm = ({saveRef, ...props}) => {
           a => a.filter(isTruthy),
         ),
       }),
-      setProp('user_id', auth?.userData?.id),
+      setProp('user_id', auth.userData.id),
     )),
     setForm: setForm,
+    editRedirectPath: RequestEditRoute.props.path,
+    newObjectPath: ['insert_request_one', 'id'],
   });
-
 
   return (
     <div {...props}>

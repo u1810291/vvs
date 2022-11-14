@@ -1,14 +1,16 @@
 import Breadcrumbs from 'components/Breadcrumbs';
+import {AuthContextProvider, useAuth} from '../context/auth';
 import {FilterIcon} from '@heroicons/react/solid';
 import Button from 'components/Button';
 import React, {useMemo, useEffect} from 'react';
 import useRequests from '../api/useRequests';
+import withPreparedProps from 'hoc/withPreparedProps';
 import {DislocationZoneActivityForecastEditRoute as RequestEditRoute, DislocationZoneActivityForecastNewRoute as RequestNewRoute} from '../routes';
 import {format} from 'date-fns';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {joinString} from '@s-e/frontend/transformer/array';
 import {predictionOutputToSingleDigit} from '../utils';
-import {useFilter} from 'hook/useFilter';
+import {useFilter} from '../hook/useFilter';
 import {useTranslation} from 'react-i18next';
 import locationsData from '../data/locations.json';
 import {
@@ -21,6 +23,7 @@ import {
   getPathOr,
   getProp,
   getPropOr,
+  reduce,
   hasProps,
   isArray,
   isEmpty,
@@ -35,12 +38,14 @@ import {
   isTruthy,
   unsetPath,
   pathSatisfies,
+  flip,
   identity,
 } from 'crocks';
 import {getValue, getName} from '../component/Locations';
-import withPreparedProps from 'hoc/withPreparedProps';
 import Listing from 'layout/ListingLayout';
-import {AuthContextProvider, useAuth} from '../context/auth';
+import useUsers from 'feature/user/api/useUsers';
+import raw from 'raw.macro';
+import {GRAPHQL_MAX_INT} from 'graphql';
 
 const locationsFilterList = pipe(
   safe(isArray),
@@ -85,24 +90,20 @@ const transformQueryFilters = pipe(
   fixUserCompanQuery,
 );
 
+const answerToOutput = pipe(
+  getProp('answer'),
+  chain(safe(isTruthy)),
+  map(map(getPathOr(0, ['prediction', 'output']))),
+  map(predictionOutputToSingleDigit),
+  option('-'),
+);
+
 const RequestListLayout = withPreparedProps(Listing, () => {
   const {t} = useTranslation('request');
   const navigate = useNavigate();
   const onCreateClick = useMemo(() => () => navigate(RequestNewRoute.props.path), [navigate]);
 
-  const auth = useAuth();
-
   const tableColumns = [
-    {
-      key: 'id',
-      headerText: t`field.id`,
-      itemToProps: Maybe.Just,
-      Component: props => (
-        <Link to={generatePath(RequestEditRoute.props.path, {id: props?.id})}>
-          {props?.id}
-        </Link>
-      ),
-    },
     {
       key: 'created_at',
       headerText: t`field.created_at`,
@@ -119,6 +120,20 @@ const RequestListLayout = withPreparedProps(Listing, () => {
           )(props)}
         </Link>
       ),
+      status: true,
+      isSortable: true,
+    },
+    {
+      key: 'id',
+      headerText: t`field.id`,
+      itemToProps: Maybe.Just,
+      Component: props => (
+        <Link to={generatePath(RequestEditRoute.props.path, {id: props?.id})}>
+          {props?.id}
+        </Link>
+      ),
+      status: true,
+      isSortable: true,
     },
     {
       key: 'userCompany',
@@ -129,6 +144,7 @@ const RequestListLayout = withPreparedProps(Listing, () => {
           {getPathOr('-', ['user', 'company'], props)}
         </Link>
       ),
+      status: true,
     },
     {
       key: 'locations',
@@ -148,6 +164,7 @@ const RequestListLayout = withPreparedProps(Listing, () => {
           </Link>
         )
       },
+      status: true,
     },
     {
       key: 'dateRange',
@@ -166,6 +183,7 @@ const RequestListLayout = withPreparedProps(Listing, () => {
           </Link>
         )
       },
+      status: true,
     },
     {
       key: 'answer',
@@ -174,26 +192,47 @@ const RequestListLayout = withPreparedProps(Listing, () => {
       Component: props => {
         return (
           <Link className='truncate inline-block max-w-xs' to={generatePath(RequestEditRoute.props.path, {id: props?.id})}>
-            {pipe(
-              getProp('answer'),
-              chain(safe(isTruthy)),
-              map(map(getPathOr(0, ['prediction', 'output']))),
-              map(predictionOutputToSingleDigit),
-              option('-'),
-            )(props)}
+            {answerToOutput(props)}
           </Link>
         )
       },
+      status: true,
     },
   ];
 
   const requestsUnfiltered = useRequests({});
+  const users = useUsers({});
+
+  const auth = useAuth();
+  const _byLat = flip(auth.api)(raw('../api/graphql/GetByLatitude.graphql'));
+  const _byLng = flip(auth.api)(raw('../api/graphql/GetByLongitude.graphql'));
+
+  // const updateFilterQuery = (key, params) => {
+  //   console.log(params);
+  //   const newQueryParams = {...queryParams};
+  //   newQueryParams?.where?._and = {
+  //     [key]: {...newParams?.where?._and?.[key], ...params}
+  //   } 
+  //   queryParams = newQU
+  // }
 
   const requestsFilterList = pipe(
     safe(isArray),
     map(map(a => ({value: a?.id, name: a?.id}))),
     option([]),
   )((requestsUnfiltered?.data || []));
+
+  const userCompanyFilterList = pipe(
+    safe(isArray),
+    map(reduce((carry, item) => (
+      getPath(['company'], item)
+      .chain(safe(isTruthy))
+      .map(company => [...new Set([...carry, company])])
+      .option(carry)
+    ), [])),
+    map(map(a => ({value: a, name: a}))),
+    option([]),
+  )((users?.data || []));
 
   const filtersData = [
     {
@@ -210,7 +249,18 @@ const RequestListLayout = withPreparedProps(Listing, () => {
     {
       key: 'created_at',
       label: t`field.created_at`,
-      filter: 'date',
+      filter: 'daterange',
+    },
+    {
+      key: 'userCompany',
+      label: t`field.userCompany`,
+      filter: 'autocomplete',
+      values: userCompanyFilterList,
+      displayValue: pipe(
+        v => find(propEq('value', v), userCompanyFilterList),
+        chain(getProp('name')),
+        option('?'),
+      )
     },
     {
       key: 'locations',
@@ -226,27 +276,78 @@ const RequestListLayout = withPreparedProps(Listing, () => {
     {
       key: 'date_from',
       label: t`field.date_from`,
-      filter: 'date',
+      filter: 'date_from',
+      custom: (v, filters) => {
+        if (filters?.date_from && filters?.date_to) {
+          return {date_from: {_gte: filters?.date_from}, date_to: {_lte: filters?.date_to}}; 
+        } else {
+          return {_or: [{date_from: {_gte: filters?.date_from}}, {date_to: {_gte: filters?.date_from}}]};
+        }
+      }
     },
     {
       key: 'date_to',
       label: t`field.date_to`,
-      filter: 'date',
+      filter: 'date_to',
+      custom: (v, filters) => {
+        if (filters?.date_from && filters?.date_to) {
+          return {date_from: {_gte: filters?.date_from}, date_to: {_lte: filters?.date_to}}; 
+        } else {
+          return {_or: [{date_from: {_lte: filters?.date_to}}, {date_to: {_lte: filters?.date_to}}]};
+        }
+      }
+    },
+    {
+      key: 'latitude',
+      label: t`field.latitude`,
+      filter: 'range',
+      custom: (v, filters) => {
+        _byLat({from: filters?.latitude_start, to: filters?.latitude_end ?? GRAPHQL_MAX_INT}).fork(console.log, (res) => {
+          const ids = res?.request_by_lat?.map(r => r.id);
+          const uniqueIds = [...new Set(ids)];
+
+          // const prevIds = queryParams?.where?._and?.id?._in;
+          // queryParams['where']['_and']['id']['_in'] = prevIds != undefined ? {...prevIds, ...uniqueIds} : uniqueIds;
+          // requests.mutate();
+          // console.log(queryParams);
+        });
+      }
     },
   ];
 
   const [
-  queryParams,
-  filters,
-  columns,
-  defaultFilter,
-  toggleFilter,
-  setExportData,
-  sortColumnKey,
-  setSortColumn
+    queryParams,
+    filters,
+    columns,
+    defaultFilter,
+    toggleFilter,
+    setExportData,
+    sortColumnKey,
+    setSortColumn
   ] = useFilter('request', tableColumns, filtersData);
 
   const requests = useRequests({filters: transformQueryFilters(queryParams)});
+
+  // export data
+  useEffect(() => {
+    const res = [];
+
+    for (let j = 0; j < requests?.data?.length; j++) {
+      const item = requests?.data[j];
+
+      for (let i = 0; i < item?.answer?.length; i++) {
+        res.push({
+          'id': getPropOr('-', 'id', item),
+          'location': `${item.answer[i].request?.city} ${item.answer[i].request?.suburb}`,
+          'company': getPathOr('-', ['user', 'company'], item),
+          'date': item.answer[i].request?.date,
+          'answer': item.answer[i].prediction?.output[0]
+        })
+      }
+    }
+
+    setExportData(res);
+  }, [requests?.data]);
 
   /**
    * Workaround: useFilter is depending on manual work

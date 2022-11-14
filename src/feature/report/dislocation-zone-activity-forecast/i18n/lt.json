@@ -31,8 +31,8 @@
     "userCompany": "Įmonė",
     "dateRange": "Užimtumo data",
     "answer": "Užimtumas",
-    "date_from": "From",
-    "date_to": "To",
+    "date_from": "Data nuo",
+    "date_to": "Data iki",
     "dateFromTo": "Data nuo - iki"
   },
   "form": {
