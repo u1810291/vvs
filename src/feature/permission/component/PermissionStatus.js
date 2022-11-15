@@ -18,7 +18,7 @@ const PermissionStatusBase = (props) => {
   );
 };
 
-const CLASS_NAME = 'flex flex-col items-start justify-center rounded-md bg-white w-20 p-1 text-white text-xs font-normal text-center';
+const CLASS_NAME = 'flex flex-col items-start justify-center rounded-md w-20 p-1 text-white text-xs font-normal text-center';
 
 const PermissionStatus = withMergedClassName(`${CLASS_NAME} bg-white text-black`, PermissionStatusBase);
 PermissionStatus.Cancelled = withMergedClassName(`${CLASS_NAME} bg-burgundy`, PermissionStatusBase);
