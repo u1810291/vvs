@@ -13,7 +13,7 @@ import DashboardTaskTimer from './DashboardTaskTimer';
 import {CrewDistanceDetails} from 'feature/crew/component/CrewDetail';
 
 export default function DashboardTaskDetail({task, id, title, status, name, description, connectionLost}) {
-  const {t} = useTranslation('dashboard', {keyPrefix: 'task'});
+  const {t} = useTranslation('dashboard', {keyPrefix: 'left'});
   const nav = useNavigate();
 
   const auth = useAuth();
