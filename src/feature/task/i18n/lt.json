@@ -16,7 +16,8 @@
   "button": {
     "cancel": "Atšaukti",
     "assignCrew": "Priskirkite ekipažą",
-    "allowToReturn": "Leisti grįžti"
+    "allowToReturn": "Leisti grįžti",
+    "assign": "Priskirti"
   },
   "create": {
     "header": {
@@ -27,7 +28,7 @@
     }
   },
   "edit": {
-    "untitledTask": "Užduatis"
+    "untitledTask": "Užduotis"
   },
   "list": {
     "header": {

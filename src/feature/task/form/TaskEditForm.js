@@ -243,7 +243,7 @@ const AsideSelectCrew = () => {
   const navigate = useNavigate();
   const {id} = useParams();
   const {notify} = useNotification();
-  const {t} = useTranslation();
+  const {t} = useTranslation('task');
   const {data: task, update} = useTask({id});
 
   const assign = crewId => () => (
@@ -284,7 +284,7 @@ const AsideSelectCrew = () => {
               task,
               children: (
                 <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>
-                  {t`assignTask`}
+                  {t`button.assign`}
                 </Button.Sm>
               ),
               title: JSON.stringify(crew, null, '  '), 
