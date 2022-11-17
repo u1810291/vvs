@@ -16,8 +16,7 @@ const lensCase = (lens, pred) => pipe(
 
 /**
 * @type {(
-*   statusLens: object => any, 
-*   ) => (
+*   statusLens: (arg: any) => Maybe, 
 *   onNew: (obj: object) => any,
 *   onCancelled: (obj: object) => any,
 *   onCancelledByClient: (obj: object) => any,
