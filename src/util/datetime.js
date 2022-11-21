@@ -1,5 +1,19 @@
-import {map, curry, isString, pipe, safe, chain, Sum, mreduce, Maybe, and, isNumber} from 'crocks';
-import {formatISODuration} from 'date-fns';
+import {joinString} from '@s-e/frontend/transformer/array';
+import {
+  Maybe,
+  Sum,
+  and,
+  chain,
+  curry,
+  isNumber,
+  filter,
+  isString,
+  map,
+  mreduce,
+  pipe,
+  safe,
+} from 'crocks';
+import {formatISODuration, intervalToDuration} from 'date-fns';
 
 export const DENOTION_HOUR = ['h', 'hr', 'hours', 'v', 'val'];
 export const DENOTION_MINUTE = ['m', 'min.?'];
@@ -78,3 +92,15 @@ export const mStrToIsoPeriod = value => {
     ))
   );
 };
+
+export const formatDuration = pipe(
+  dateStr => new Date(dateStr),
+  start => intervalToDuration({start, end: new Date()}),
+  Object.values,
+  filter(a => a > 0),
+  map(pipe(
+    String,
+    str => str.padStart(2, '0')
+  )),
+  joinString(':'),
+)
