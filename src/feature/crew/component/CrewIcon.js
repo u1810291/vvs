@@ -57,7 +57,7 @@ const isUserOnline = pipe(
 
 const CrewIconBase = crew => (
   <div className='w-8 h-8 rounded-full border-4 truncate text-xs flex items-center justify-center bg-red-500' {...crew}>
-    {(crew?.abbreviation || crew?.name || '?').slice(0, 3)}
+    {(crew?.abbreviation || crew?.name || ' ').slice(0, 3)}
   </div>
 );
 
