@@ -1,111 +1,177 @@
-import React from 'react';
-import DynamicIcon from './CrewIcon';
-import {useTranslation} from 'react-i18next';
-import Nullable from 'components/atom/Nullable';
-import {generatePath, Link, useNavigate} from 'react-router-dom';
+import {Translation, useTranslation} from 'react-i18next';
+import Detail from 'components/Disclosure/AsideDisclosure';
+import CrewIcon from 'feature/crew/component/CrewIcon';
+import {
+  Maybe,
+  Result,
+  and,
+  bimap,
+  branch,
+  chain,
+  constant,
+  getProp,
+  isSame,
+  isString,
+  isTruthy,
+  map,
+  merge,
+  option,
+  or,
+  pipe,
+  propSatisfies,
+  safe,
+  isFalsy,
+} from 'crocks';
+import {titleCase} from '@s-e/frontend/transformer/string';
+import {renderWithChildren, RenderWithProps, withMergedClassName} from 'util/react';
+import {CLASS_NAME_PRIMARY, CLASS_NAME_SECONDARY} from 'components/Button';
+import {generatePath, Link} from 'react-router-dom';
 import {TaskEditRoute} from 'feature/task/routes';
-import {eventStatus} from 'constants/statuses';
-import Button from 'components/Button';
-import {flip, identity} from 'crocks';
-import {useAuth} from 'context/auth';
-import raw from 'raw.macro';
-import DashboardTaskTimer from './DashboardTaskTimer';
-import {CrewDistanceDetails} from 'feature/crew/component/CrewDetail';
+import {useCyclicalTransformation} from 'hook/useCyclicalTransformation';
+import Tag from 'components/atom/Tag';
+import {formatDuration} from 'util/datetime';
+import useTask from 'feature/task/api/useTask';
+import {STATUS} from 'feature/task/consts';
+import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
+import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
+import {useNotification} from 'feature/ui-notifications/context';
 
-export default function DashboardTaskDetail({task, id, title, status, name, description, connectionLost}) {
-  const {t} = useTranslation('dashboard', {keyPrefix: 'left'});
-  const nav = useNavigate();
+const BTN_CLASS = 'px-2 pt-1.5 pb-1 text-sm leading-none';
+const CLASS_NAME = {
+  BTN_PRIMARY: `${CLASS_NAME_PRIMARY} ${BTN_CLASS}`,
+  BTN_SECONDARY: `${CLASS_NAME_SECONDARY} ${BTN_CLASS}`,
+};
 
-  const auth = useAuth();
-  const _update = flip(auth.api)(raw('../api/graphql/UpdateEventStatus.graphql'));
-  const _updateCrew = flip(auth.api)(raw('../api/graphql/UpdateCrewStatus.graphql'));
-
-  // assign a crew for the task
-  const assign = (e) => {
-    e.preventDefault();
-    nav(generatePath(TaskEditRoute.props.path, {id: id}));
-  };
-
-  // approve crew to drive back
-  const approveReturn = (e) => {
-    e.preventDefault();
-    _update({id: task?.id, status: 'FINISHED'}).fork(console.error, identity);
-    _updateCrew({id: task?.crew?.id, status: 'DRIVE_BACK'}).fork(console.error, identity);
-  }
-
-  // confirm client's cancellation
-  const confirm = (e) => {
-    e.preventDefault();
-    _update({id: task?.id, status: 'CANCELLED_BY_CLIENT_CONFIRMED'}).fork(console.error, identity);
-  }
-
-  return (
-    <Link to={generatePath(TaskEditRoute.props.path, {id: id})}>
-      <div className='flex flex-row justify-between w-full'>
-        <div className='flex'>
-          <DynamicIcon status={status} name={name} />
-          <div className='flex flex-col text-black font-normal text-sm ml-2'>
-            {title}
-            <span className='text-xs text-gray-400'>{connectionLost ? t`left.lost_connection`: description}</span>
-          </div>
-        </div>
-        <div className='grid'>
-          {/* when status is NEW */}
-          <Nullable on={status === eventStatus.EVENT_NEW}>
-            <div className='min-w-4'>
-              <Button.Sm onClick={assign} className='py-1 px-3 rounded-md'>{t`assign`}</Button.Sm>
-            </div>
-          </Nullable>
-
-          {/* when status is WAIT_FOR_APPROVAL */}
-          <Nullable on={status === eventStatus.EVENT_WAIT_FOR_APPROVAL}>
-            <div>
-              <DashboardTaskTimer task={task} />
-            </div>
-          </Nullable>
-
-          {/* when status is ON_THE_ROAD */}
-          <Nullable on={status === eventStatus.EVENT_ON_THE_ROAD}>
-            <div className='flex flex-col space-y-1'>
-              <CrewDistanceDetails crew={task?.crew} task={task} onlyDistance={true} />
-              <DashboardTaskTimer task={task} />
-            </div>
-          </Nullable>
-
-          {/* when status is INSPECTION */}
-          <Nullable on={status === eventStatus.EVENT_INSPECTION}>
-            <div>
-              <DashboardTaskTimer task={task} />
-            </div>
-          </Nullable>
-
-          {/* when status is INSPECTIN_DONE */}
-          <Nullable on={status === eventStatus.EVENT_INSPECTION_DONE}>
-            <div className='min-w-4 flex flex-col space-y-1'>
-              <Button.Sm onClick={approveReturn} className='py-1 px-3 rounded-md'>{t`return`}</Button.Sm>
-              <DashboardTaskTimer task={task} />
-            </div>
-          </Nullable>
-
-          {/* when status is CANCELLED_BY_CLIENT */}
-          <Nullable on={status === eventStatus.EVENT_CANCELLED_BY_CLIENT}>
-            <div className='min-w-4'>
-              <Button.Sm onClick={confirm} className='py-1 px-3 rounded-md'>{t`confirm`}</Button.Sm>
-            </div>
-          </Nullable>
-
-          {/* <Nullable on={waiting}>
-            <div className='flex justify-center items-end rounded-sm px-1.5 border border-transparent text-xs font-normal text-gray-600 font-montserrat hover:shadow-none bg-gray-200 focus:outline-none'>
-              <div className='flex flex-row text-xs'>
-                <Timer active duration={null} onTimerUpdate={onTimerUpdate}>
-                  <Timecode time={waiting} />
-                </Timer>
-                <span className='pl-0.5'>s</span>
-              </div>
-            </div>
-          </Nullable> */}
-        </div>
+const DashboardTaskDetail = task => (
+  <Detail.Item title={task?.description}>
+    <div className='flex items-start space-x-4 w-full bg-white'>
+      <CrewIcon {...task?.crew} />
+      <div className='flex-1'>
+        <RenderWithProps props={task}>
+          <Title />
+          <Subtitle/>
+        </RenderWithProps>
       </div>
+      <div className='flex flex-col justify-end space-y-1'>
+        <RenderWithProps props={task}>
+          <AssignButton />
+          <FinishButton />
+          <ConfirmCancelButton />
+          <Timer />
+        </RenderWithProps>
+      </div>
+    </div>
+  </Detail.Item>
+);
+
+const Title = pipe(
+  branch,
+  bimap(
+    pipe(
+      getProp('event_type'),
+      chain(safe(isTruthy)),
+      map(titleCase),
+    ),
+    pipe(
+      getProp('name'),
+      chain(safe(isTruthy)),
+    ),
+  ),
+  merge((mType, mName) => (
+    Maybe.of(type => name => `${type}: ${name}`)
+    .ap(mType)
+    .ap(mName)
+    .alt(mName)
+    .map(renderWithChildren(<span className='block font-semibold'/>))
+    .option(null)
+  )),
+);
+
+const Subtitle = pipe(
+  getProp('address'),
+  chain(safe(and(isString, isTruthy))),
+  map(renderWithChildren(<span className='block text-sm'/>)),
+  option(null),
+);
+
+const AssignButton = pipe(
+  safe(and(
+    propSatisfies('status', isSame(STATUS.NEW)),
+    propSatisfies('crew', isFalsy)
+  )),
+  chain(getProp('id')),
+  chain(safe(isTruthy)),
+  map(id => (
+    <Link className={CLASS_NAME.BTN_PRIMARY} to={generatePath(TaskEditRoute.props.path, {id})}>
+      <Translation ns='dashboard' keyPrefix='left'>
+        {t => t`assign`}
+      </Translation>
     </Link>
-  )
-}
+  )),
+  option(null),
+);
+
+const FinishButton = task => {
+  const {update} = useTask({id: task?.id})
+  const {notify} = useNotification();
+  const {t} = useTranslation('dashboard', {keyPrefix: 'left'});
+
+  const onClick = () => (
+    update(Result.of({id: task?.id, status: STATUS.FINISHED, crew_id: task?.crew?.id}))
+    .fork(
+      e => notify(
+        <ErrorNotification>
+          {errorToText(identity, e)}
+        </ErrorNotification>
+      ),
+      () => notify(<SuccessNotification />),
+    )
+  );
+
+  return pipe(
+    safe(propSatisfies('status', isSame(STATUS.INSPECTION_DONE))),
+    map(() => <button className={CLASS_NAME.BTN_PRIMARY} onClick={onClick}>{t`return`}</button>),
+    option(null),
+  )(task);
+};
+
+const ConfirmCancelButton = task => {
+  const {update} = useTask({id: task?.id})
+  const {notify} = useNotification();
+  const {t} = useTranslation('dashboard', {keyPrefix: 'left'});
+
+  const onClick = () => (
+    update(Result.of({id: task?.id, status: STATUS.CANCELLED_BY_CLIENT_CONFIRMED}))
+    .fork(
+      e => notify(
+        <ErrorNotification>
+          {errorToText(identity, e)}
+        </ErrorNotification>
+      ),
+      () => notify(<SuccessNotification />),
+    )
+  );
+
+  return pipe(
+    safe(propSatisfies('status', or(
+      isSame(STATUS.CANCELLED),
+      isSame(STATUS.CANCELLED_BY_CLIENT_CONFIRMED),
+    ))),
+    map(() => <button className={CLASS_NAME.BTN_PRIMARY} onClick={onClick}>{t`close`}</button>),
+    option(null),
+  )(task);
+};
+
+const Timer = ({className, prop = 'updated_at', ...task}) => (
+  useCyclicalTransformation(1000, getProp(prop, task), safe(constant(true)))
+  .map(pipe(
+    formatDuration,
+    renderWithChildren(<Tag_ className={className}/>)
+  ))
+  .option('')
+);
+
+const Tag_ = withMergedClassName('bg-gray-200 text-black whitespace-nowrap', Tag.Sm);
+
+export default DashboardTaskDetail;
+

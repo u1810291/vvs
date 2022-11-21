@@ -127,7 +127,7 @@ export const CrewDistanceDetails = ({crew, task, onlyDistance = false}) => {
   .map(maps => a => new maps.LatLng(a.latitude, a.longitude))
   .option(identity);
 
-  const {data: distanceResponse, ...and} = useAsyncSwr({distanceToObject: 'yup', crew, task}, () => (
+  const {data: distanceResponse} = useAsyncSwr({distanceToObject: 'yup', crew, task}, () => (
     Async.of(origin => destination => route(origin, destination))
     .ap(maybeToAsync('no crew coordinates', getCrewCoordinates(crew).map(toLatLng)))
     .ap(maybeToAsync('no task coordinates', getTaskCoordinates(task).map(toLatLng)))
