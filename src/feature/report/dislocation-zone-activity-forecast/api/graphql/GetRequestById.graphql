@@ -1,0 +1,10 @@
+query GetRequestByPk ($id: uuid!) {
+  request_by_pk(id: $id) {
+    answer
+    created_at
+    date_from
+    date_to
+    id
+    locations
+  }
+}

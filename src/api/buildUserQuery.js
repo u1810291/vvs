@@ -108,3 +108,11 @@ export const augmentToUser = curry((auth, userIdProp, user) => (
   ))
   .map(omit([userIdProp]))
 ))
+
+/**
+ * @type {(auth: import('context/auth').AuthContextValue) => (userIdLens: import('crocks/Maybe').default) => (users: Array) => Async}
+ */
+export const augmentsToUsersNoMerge = curry((auth, userIdLens, users) => pipe(
+  usersToIds(userIdLens),
+  idsToSearchUsersResponse(auth),
+)(users));

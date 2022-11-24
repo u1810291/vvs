@@ -9,7 +9,7 @@ import raw from 'raw.macro';
 import {PermissionEditRoute} from 'feature/permission/routes';
 
 export default function DashboardPermissionDetail({permission}) {
-  const {t} = useTranslation('dashboard', {keyPrefix: 'permission'});
+  const {t} = useTranslation('dashboard', {keyPrefix: 'left'});
   const nav = useNavigate();
 
   const auth = useAuth();

@@ -760,6 +760,13 @@ export const useFilter = (tableName, tableColumns, filtersData, filterOptions, i
       if (!filter) continue;
       
       if (value === undefined || value === null || value === '') continue;
+
+      // custom filtering
+      if (filter.custom !== undefined && isFunction(filter.custom)) {
+        params[key] = filter.custom(value, state);
+        continue;
+      }
+
       if (key.includes('_end')) continue;
 
       // range filters: range, datepicker (single)
@@ -779,12 +786,6 @@ export const useFilter = (tableName, tableColumns, filtersData, filterOptions, i
       else {
         // array filter / multiselect
         if (isArray(value)) {
-          // custom filtering
-          if (filter.custom !== undefined && isFunction(filter.custom)) {
-            params[key] = filter.custom(value);
-            continue;
-          }
-          
           // filter in relationship
           if (filter.key.includes('.')) {
             const columns = filter.key.split('.');            
@@ -834,7 +835,9 @@ export const useFilter = (tableName, tableColumns, filtersData, filterOptions, i
         }
       }
     }
-    
+
+
+
     return {
       where: {
         _and: !filterOptions?.canArchive ? {...params} : hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},        

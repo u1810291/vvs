@@ -1,38 +1,63 @@
 import {OverlayView} from '@react-google-maps/api';
-import Nullable from 'components/atom/Nullable';
+import {useTranslation} from 'react-i18next';
+import {getTaskLatLngLiteral} from '../util';
 import {
+  and,
+  safe,
+  option,
+  isObject,
   pipe,
+  constant,
   branch,
   merge,
   map,
-  // getProp,
-  // alt,
-  // chain,
-  // safe,
-  // and,
-  // isString,
-  // option,
-  // isTruthy,
-  // pick,
+  getProp,
+  not,
+  isEmpty,
+  propSatisfies,
 } from 'crocks';
-import {useTranslation} from 'react-i18next';
-// import {renderWithChildren} from 'util/react';
-import {getTaskLatLngLiteral} from '../util';
+import {getStatus} from './TaskStatusTag';
+import {caseMap} from '@s-e/frontend/flow-control';
 
+const taskToStyle = getStatus(
+  getProp('status'),
+  constant('text-white bg-curious'),
+  constant('text-white bg-oxford'),
+  constant('text-white bg-oxford'),
+  constant('text-white bg-oxford'),
+  constant('text-white bg-brick'),
+  constant('text-white bg-brick'),
+  constant('text-white bg-tango'),
+  constant('text-white bg-mantis'),
+  constant('text-white bg-tango'),
+  constant('text-white bg-gray-600'),
+);
+
+const taskToSecondaryStyle = getStatus(
+  getProp('status'),
+  constant('bg-white text-curious'),
+  constant('bg-white text-oxford'),
+  constant('bg-white text-oxford'),
+  constant('bg-white text-oxford'),
+  constant('bg-white text-brick'),
+  constant('bg-white text-brick'),
+  constant('bg-white text-tango'),
+  constant('bg-white text-mantis'),
+  constant('bg-white text-tango'),
+  constant('bg-white text-gray-600'),
+);
 
 const MapTaskMarker = pipe(
   branch,
   map(getTaskLatLngLiteral),
   merge((task, mLatLngLiteral) => {
-    const {t} = useTranslation('task', {keyPrefix: 'status'});
-
     return (mLatLngLiteral.map(position => (
       <OverlayView
         key={`MapTaskMarker-${JSON.stringify(task)}`}
         mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
         position={position}
       >
-        <div className='flex'>
+        <div title={task?.description}>
           <svg
             width='32'
             height='32'
@@ -45,26 +70,40 @@ const MapTaskMarker = pipe(
             <circle cx='16' cy='16' r='3' fill='#C32A2F' stroke='white' strokeWidth='2'/>
           </svg>
 
-          <div role='tooltip' className={[
-            task?.status === 'INSPECTION_DONE' ? 'before:border-r-orange-500' : 'before:border-r-red',
-            '-translate-y-1/2', 'absolute', 'before:-left-[15px]', 'before:-translate-y-1/2',
-            'before:absolute', 'before:block', 'before:border-[10px]', 'before:border-r-[10px]',
-            'before:border-transparent', 'before:content-[""]',
-            'before:top-1/2', , 'font-medium', 'inline-block', 'rounded-xl', 'shadow-sm', 'text-sm', 'text-white',
-            'translate-x-3', 'whitespace-nowrap', 'z-10', 'flex', 'bg-white'
-          ].join(' ')}>
-            <div className={`${task?.status === 'INSPECTION_DONE' ? 'bg-orange-500' : 'bg-brick'} flex  px-3 py-2 rounded-xl shadow`}>
-              {['INSPECTION', 'INSPECTION_DONE'].includes(task?.status) ? t(task?.status) : task?.name}
-            </div>
-            
-            <Nullable on={['ON_THE_ROAD', 'INSPECTION', 'INSPECTION_DONE', 'CANCELLED_BY_CLIENT'].includes(task?.status)}>
-              <div key={task.status} className='bg-white text-brick px-2 py-2 rounded-tr-xl rounded-br-xl'>{task?.name}</div>
-            </Nullable>
-          </div>
+          {caseMap(CrewlessTag, [
+            [propSatisfies('crew', and(isObject, not(isEmpty))), CrewTag]
+          ], task)}
+
         </div>
       </OverlayView>
     )).option(null)
   )}),
 );
+
+const CrewlessTag = pipe(
+  safe(propSatisfies('status', not(isEmpty))),
+  map(task => (
+    <div className='absolute top-0 left-0 transform translate-x-3 -translate-y-1/2 flex'>
+      <div role='tooltip' className={`arr-1.5 arr-brick arr-l ${taskToStyle(task)}`} />
+      <span className={`px-2 py-1 rounded font-medium text-sm whitespace-nowrap ${taskToStyle(task)}`}>
+        {task?.name}
+      </span>
+    </div>
+  )),
+  option(null)
+);
+
+const CrewTag = task => {
+  const {t} = useTranslation('crew', {keyPrefix: 'list.status'});
+  return (
+    <div className='absolute top-0 left-0 transform translate-x-3 -translate-y-1/2 flex'>
+      <span className={`shadow block relative px-2 py-1 rounded font-medium text-sm whitespace-nowrap z-20 ${taskToStyle(task)}`}>
+        {(`${task?.crew?.name} ${t(task?.crew?.status)}`).trim()}
+      </span>
+      <div role='tooltip' className={`z-30 arr-1.5 arr-blue-500 arr-l ${taskToStyle(task)}`} />
+      <span className={`shadow block relative -left-2 pl-4 pr-2 py-1 rounded-br rounded-tr z-10 font-medium text-sm whitespace-nowrap ${taskToSecondaryStyle(task)}`}>{task?.name}</span>
+    </div>
+  )
+};
 
 export default MapTaskMarker;

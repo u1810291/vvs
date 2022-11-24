@@ -1,0 +1,25 @@
+mutation CreateRequest(
+  $date_from: date,
+  $date_to: date,
+  $locations: jsonb,
+  $user_id: uuid!
+) {
+  insert_request_one(object: {
+    date_from: $date_from,
+    date_to: $date_to,
+    locations: $locations,
+    user_id: $user_id
+  }) {
+    id
+    locations
+    date_to
+    date_from
+    created_at
+    answer
+    user { 
+      id
+      company
+      address
+    }
+  }
+}

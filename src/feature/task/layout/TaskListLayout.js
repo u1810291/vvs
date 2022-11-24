@@ -132,7 +132,7 @@ const TaskListLayout = withPreparedProps(Listing, props => {
         'CANCELLED',
         'CANCELLED_BY_CLIENT',
       ],
-      custom: (value) => {
+      custom: (value, filters) => {
         const statuses = value.map(v => v.toUpperCase());
         if (statuses.includes('CANCELLED_BY_CLIENT')) statuses.push('CANCELLED_BY_CLIENT_CONFIRMED');
         return {_in: statuses}

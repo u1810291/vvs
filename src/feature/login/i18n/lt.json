@@ -1,0 +1,15 @@
+{
+  "menu": {
+    "main": "Prisijungti"
+  },
+  "mainForm": {
+    "label": {
+      "email": "El. paštas",
+      "password": "Slaptažodis",
+      "rememberMe": "Prisiminti mane"
+    },
+    "button": {
+      "submit": "Prisijungti"
+    }
+  }
+}

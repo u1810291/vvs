@@ -1,0 +1,15 @@
+query GetRequests ($where: request_bool_exp = {}, $orderBy: [request_order_by!], $limit: Int = 25, $offset: Int = 0) {
+  request (where: $where, order_by: $orderBy, limit: $limit, offset: $offset) {
+    locations
+    id
+    date_to
+    date_from
+    created_at
+    answer
+    user {
+      id
+      company
+      address
+    }
+  }
+}

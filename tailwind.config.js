@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
@@ -29,5 +32,85 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
+    plugin(({matchComponents, addComponents, theme}) => {
+      const makeTriangle = ({name, side}) => ({
+        [`.arr-${name || side}`]: {
+          '&:before': {
+            'content': '""',
+            'display': 'block',
+            'position': 'absolute',
+            'border-top-color': 'transparent',
+            'border-bottom-color': 'transparent',
+
+            ...(side === 'left' && {
+              'transform': 'translate(-95%, -50%)',
+              'top': '50%',
+              'left': '0',
+              'border-top-width': 'var(--tw-arrow-size)',
+              'border-right-width': 'var(--tw-arrow-size)',
+              'border-bottom-width': 'var(--tw-arrow-size)',
+              'border-left-width': '0',
+              'border-top-color': 'transparent',
+              'border-right-color': 'var(--tw-arrow-color)',
+              'border-bottom-color': 'transparent',
+              'border-left-color': 'transparent',
+            }),
+
+            ...(side === 'right' && {
+              'transform': 'translate(95%, -50%)',
+              'top': '50%',
+              'right': '0',
+              'border-top-width': 'var(--tw-arrow-size)',
+              'border-right-width': '0',
+              'border-bottom-width': 'var(--tw-arrow-size)',
+              'border-left-width': 'var(--tw-arrow-size)',
+              'border-top-color': 'transparent',
+              'border-right-color': 'transparent',
+              'border-bottom-color': 'transparent',
+              'border-left-color': 'var(--tw-arrow-color)',
+            }),
+
+            ...(side === 'bottom' && {
+              'transform': 'translate(-50%, 95%)',
+              'bottom': '0',
+              'left': '50%',
+              'border-top-width': 'var(--tw-arrow-size)',
+              'border-right-width': 'var(--tw-arrow-size)',
+              'border-bottom-width': '0',
+              'border-left-width': 'var(--tw-arrow-size)',
+              'border-top-color': 'var(--tw-arrow-color)',
+              'border-right-color': 'transparent',
+              'border-bottom-color': 'transparent',
+              'border-left-color': 'transparent',
+            }),
+
+            ...(side === 'top' && {
+              'transform': 'translate(-50%, -95%)',
+              'top': '0',
+              'left': '50%',
+              'border-top-width': '0',
+              'border-right-width': 'var(--tw-arrow-size)',
+              'border-bottom-width': 'var(--tw-arrow-size)',
+              'border-left-width': 'var(--tw-arrow-size)',
+              'border-top-color': 'transparent',
+              'border-right-color': 'transparent',
+              'border-bottom-color': 'var(--tw-arrow-color)',
+              'border-left-color': 'transparent',
+            }),
+          }
+        }
+      });
+
+      matchComponents({'arr': value => ({'--tw-arrow-color': value})}, {values: theme('colors')});
+      matchComponents({'bg': value => ({'--tw-arrow-color': value})}, {values: theme('colors')});
+      matchComponents({'arr': value => ({'--tw-arrow-size': value})}, {values: theme('width')});
+
+      addComponents({
+        ...makeTriangle({name: 'r', side: 'right'}),
+        ...makeTriangle({name: 'l', side: 'left'}),
+        ...makeTriangle({name: 'b', side: 'bottom'}),
+        ...makeTriangle({name: 't', side: 'top'}),
+      })
+    }),
   ],
 }

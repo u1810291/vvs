@@ -81,7 +81,7 @@ const PermissionEditLayout = () => {
                   </Nullable>
 
                   <Nullable on={isSame(data?.status, permissionStatus.PERMISSION_ALLOWED)}>
-                    <Button className='bg-red-700 w-40 hover:bg-red-800' onClick={update('CANCELLED')}>{t`button.cancel`}</Button>
+                    <Button className='bg-red-700 w-40 hover:bg-red-800' onClick={update('CANCELLED')}>{t`button.reject`}</Button>
                   </Nullable>
 
                   <Nullable on={isSame(data?.status, permissionStatus.PERMISSION_ASKED)}>
