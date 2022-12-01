@@ -12,5 +12,6 @@ query GetDriver ($id: uuid!) {
     crew {
       name
     }
+    archived_at
   }
 }

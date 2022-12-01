@@ -23,8 +23,6 @@ const Box = ({
   below,
   ...props
 }) => {
-  // console.log('selectbox initial value', value);
-
   const onChangeValue = (e) => {
     onChange(e.props.value)
   };
@@ -51,7 +49,7 @@ const Box = ({
                         {...component.props}
                         value={component}
                         key={component?.key || component?.props?.key || component.props.children}
-                        selected={multiple && value ? value?.toString().includes(component?.key) : value === component?.key}
+                        selected={multiple && value ? value?.split(', ').includes(component?.key) : value === component?.key}
                         className={optionClassNameFn}
                       />
                     ))}

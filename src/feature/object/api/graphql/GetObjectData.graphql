@@ -32,5 +32,6 @@ query ObjectById ($id: uuid!) {
       id
       src
     }
+    archived_at
   }
 }

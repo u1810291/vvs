@@ -1,0 +1,5 @@
+query MyQuery($from: float8, $to: float8) {
+  request_by_lng(args: {fr: $from, tt: $to}) {
+    id
+  }
+}

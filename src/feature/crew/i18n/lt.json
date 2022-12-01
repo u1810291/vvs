@@ -18,9 +18,10 @@
       "NO": "Ne",
       "READY": "Laisvas",
       "BREAK": "Pertrauka",
-      "BUSSY": "Užimtas",
+      "BUSY": "Užimtas",
       "OFFLINE": "Neprisijungęs",
       "DRIVE_BACK": "Grįžta",
+      "LOGGED_OUT": "Atsijungęs",
       "-": "-"
     },
     "column": {

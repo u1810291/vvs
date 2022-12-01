@@ -43,7 +43,7 @@ import {
  */
 const CrewDetail = ({crew, crews, task, children}) => (
   <Detail.Item>
-    <div className='flex items-start space-x-4 w-full'>
+    <div className='flex items-start space-x-4 w-full bg-white'>
       <CrewIcon {...crew} />
       <div className='flex-1'>
         <CrewName {...crew}/>
@@ -96,7 +96,7 @@ const CrewPermission = crew => {
   );
 }
 
-export const DirectionsTag = props => <Tag.Sm className='bg-gray-300 text-black whitespace-nowrap' {...props} />
+export const DirectionsTag = props => <Tag.Sm className='bg-gray-200 text-black whitespace-nowrap' {...props} />
 
 /**
  * @type {(directionsResponse: google.maps.DirectionsResult) => import('react').ReactNode}
@@ -121,13 +121,13 @@ export const CrewToTaskETA = pipe(
 /**
  * @type {(crew: Object, task: object) => import('react').ReactNode}
  */
-export const CrewDistanceDetails = ({crew, task}) => {
+export const CrewDistanceDetails = ({crew, task, onlyDistance = false}) => {
   const {route, mGoogleMaps} = useGoogleApiContext();
   const toLatLng = mGoogleMaps
   .map(maps => a => new maps.LatLng(a.latitude, a.longitude))
   .option(identity);
 
-  const {data: distanceResponse, ...and} = useAsyncSwr({distanceToObject: 'yup', crew, task}, () => (
+  const {data: distanceResponse} = useAsyncSwr({distanceToObject: 'yup', crew, task}, () => (
     Async.of(origin => destination => route(origin, destination))
     .ap(maybeToAsync('no crew coordinates', getCrewCoordinates(crew).map(toLatLng)))
     .ap(maybeToAsync('no task coordinates', getTaskCoordinates(task).map(toLatLng)))
@@ -136,7 +136,7 @@ export const CrewDistanceDetails = ({crew, task}) => {
 
   return (
   <>
-    <CrewToTaskETA {...distanceResponse} />
+    <Nullable on={!onlyDistance}></Nullable>
     <CrewToTaskDistance {...distanceResponse} />
   </>
   );

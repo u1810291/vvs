@@ -14,7 +14,8 @@ import raw from 'raw.macro';
 import {mapByMaybe} from 'util/array';
 import {titleCase} from '@s-e/frontend/transformer/string';
 
-const LIST_PROPS = ['usersByRole', 'users'];
+const LIST_PROPS = ['usersByQuery', 'users'];
+const LIST_ROLE_PROPS = ['usersByRole', 'users'];
 const LIST_SETTINGS_PROPS = ['user_settings'];
 
 /**
@@ -55,7 +56,7 @@ const toStringValue = pipe(
 export const useClientDropdown = createUseListWithAuth({
   graphQl: raw('./graphql/GetClientInfo.graphql'),
   asyncMapFromApi: auth => item => (
-    getPathAsync(LIST_PROPS, item)
+    getPathAsync(LIST_ROLE_PROPS, item)
     .chain(augmentUser(getUserSettings(auth)))
     
     .map(map(a => (

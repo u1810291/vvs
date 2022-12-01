@@ -214,16 +214,15 @@ const DriverListLayout = withPreparedProps(ListingLayout, () => {
     'crew_driver',
     tableColumns,
     filtersData,
+    {canArchive: true},
     [],
     driversFilter
   );
  
   const api = useDrivers({filters: queryParams});
-  // console.log(api?.data);
 
   useEffect(() => {
     if (!isEmpty(queryParams)) {
-      // console.log(queryParams);
       api.mutate();
     }
     setExportData(api.data);

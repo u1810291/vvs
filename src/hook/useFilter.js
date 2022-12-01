@@ -10,27 +10,23 @@ import {useSearchParams} from 'react-router-dom';
 import InputGroup from 'components/atom/input/InputGroup';
 import CheckBox from 'components/atom/input/CheckBox';
 import Filter from 'components/Filter';
-import {
-  hasProps,
-  isArray,
-  isFunction,
-  // isFunction,
-  map,
-  option,
-  pipe,
-  safe,
-} from 'crocks';
 import {renderWithProps} from 'util/react';
 import SelectBox from 'components/atom/input/SelectBox';
 import ComboBox from 'components/atom/input/ComboBox';
 import {unflatten} from 'util/obj';
 import {exportTableToExcel} from 'util/utils';
+import {
+  hasProps,
+  isArray,
+  isFunction,
+  map,
+  option,
+  pipe,
+  safe,
+} from 'crocks';
+import {useTranslation} from 'react-i18next';
 
-
-
-// CONST
 const LS_KEY_NAME = 'listingFilters';
-const DEFAULT_FILTER = 'allData';
 const DEFAULT_FILTER_NAME = 'New filter';
 const DEFAULT_SHORTCUT_NAME = 'FLTR';
 const APPLY_FILTER_PARAM = 'af';
@@ -39,16 +35,13 @@ const DIRECTION_ASC = 'asc_nulls_first';
 const DIRECTION_DESC = 'desc_nulls_first';
 
 const Mode = {
-	Default: 'default',
-	Create: 'create',
-	Edit: 'edit',
+  Default: 'default',
+  Create: 'create',
+  Edit: 'edit',
 }
-
 
 const updater = (state, action) => {
   const prevState = {...state};
-
-  // console.log('dispatch', state, action);
 
   switch (action.type) {
     case 'TEXT':
@@ -119,8 +112,6 @@ const updater = (state, action) => {
 
     case 'MULTISELECT':
     case 'AUTOCOMPLETE':
-      // console.log('dispatcher', action.value);
-
       if (!(action.key in prevState)) {
         prevState[action.key] = [action.value];
       } else {
@@ -159,10 +150,6 @@ const prepInitials = (filters) => {
   return initials;
 }
 
-
-
-
-
 const getAllFilters = () => {
   return JSON.parse(localStorage.getItem(LS_KEY_NAME)) ?? {};
 }
@@ -194,17 +181,12 @@ const getDefaultFilterId = (filters) => {
   return defaultFilter ? defaultFilter.id : null;
 }
 
-export const useFilter = (tableName, tableColumns, filtersData, initialState, customFilter) => {
-  // console.log('filters initial state', initialState);
-  // TODO: Needs to be updated to callback
+export const useFilter = (tableName, tableColumns, filtersData, filterOptions, initialState, customFilter) => {
+  const {t} = useTranslation('filter');
   const [exportData, setExportData] = useState();
-  const handleExport = useCallback(() => exportTableToExcel(exportData, new Date()), [exportData]);
-
   const [showFilter, setShowFilter] = useState(false);
   const [state, dispatch] = useReducer(updater, initialState ?? prepInitials(filtersData));
   const [params] = useSearchParams();
-
-  // get saved for 'tableName' from filters
   const [savedFilters, setSavedFilters] = useState(getSavedFilters(tableName)); // TODO: is this a heavy operation? maybe 'useMemo'...
   const [defaultFilterId, setDefaultFiterId] = useState(getDefaultFilterId(savedFilters));
   const [mode, setMode] = useState(Mode.Default);
@@ -215,29 +197,28 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     starred: false,
     isDefault: false,
   })
+  const [hideArchived, setHideArchived] = useState(true);
 
-  // column sorting
-  // console.log(tableColumns, 'table columns');
-  const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? tableColumns[0].key : null);
+  const [sortColumnKey, setSortColumnKey] = useState(tableColumns.length > 0 ? `-${tableColumns[0].key}` : null);
   const setSortColumn = (column) => {
     setSortColumnKey(sortColumnKey && sortColumnKey === column ? `-${column}` : column);
   }
 
-  // column filtering
+  
+  const handleExport = useCallback(() => exportTableToExcel(exportData, new Date()), [exportData]);
+  const search = useCallback(() => dispatch({action: 'SEARCH'}), [state]);
+
   const [columns, setColumns] = useState([]);
 
-  // load from global shortcut - is this ok way?
   useEffect(() => {
     if (params.get(APPLY_FILTER_PARAM)) {
       applyFilter(params.get(APPLY_FILTER_PARAM));
       return;
     }
 
-    // apply default filter
     applyFilter(defaultFilterId);
   }, []);
 
-  // watch query param changed (when applying starred filter of the same page
   useEffect(() => {
     if (params.get(APPLY_FILTER_PARAM)) {
       applyFilter(params.get(APPLY_FILTER_PARAM));
@@ -245,16 +226,9 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   }, [params]);
 
   useEffect(() => {
-    // save to local storage
     saveToStorage();
   }, [savedFilters]);
 
-  // for testing
-  // useEffect(() => {
-  //   // console.log(state);
-  // }, [state]);
-  
-  // show only picked columns
   const pickedColumns = useMemo(() => pipe(
     safe(isArray),
     map(map(pipe(
@@ -271,7 +245,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
     option(null)
   )(tableColumns), [tableColumns]);
 
-  // save to localstorage
   const saveToStorage = () => {
     const allSaved = getAllFilters();
     allSaved[tableName] = savedFilters;
@@ -396,7 +369,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   }
   
   const onFilterApply = (e) => {
-    // console.log('on filter apply clicked', e.currentTarget.id);
     const id = e.currentTarget.id;
     applyFilter(id);
   }
@@ -414,7 +386,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
   const onModeEdit = (e) => {
     const id = e.target.id;
     const filter = getFilter(id);
-    // console.log(filter);
 
     setFormState({
       id: filter.id,
@@ -633,7 +604,8 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
                   return <SelectBox
                     className={'w-full'}
                     key={key} 
-                    label={label} 
+                    label={label}
+                    twLabel={'text-sm'} 
                     onChange={v => dispatch({type: filter.toUpperCase(), value: v, key: key})}
                     multiple={filter === 'multiselect' ? true : false}  
                     value={currentValue} 
@@ -748,13 +720,26 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
               <span className='text-sm'>Column order</span>
               <Filter onValues={setColumns}>{pickedColumns}</Filter>
             </div>
-            <div className='mt-4'>
+
+            {/*  */}
+            <div className='mt-4 flex'>
               <Nullable on={defaultFilterId}>
-                <Button.Xs id={defaultFilterId} className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={onSaveFilterShortcut}>Save Filter</Button.Xs>
+                <Button.NoBg id={defaultFilterId} className={'bg-gray-200 px-6 py-0 hover:bg-gray-500 text-white'} onClick={onSaveFilterShortcut}>{t('save_filter')}</Button.NoBg>
               </Nullable>
-              <div className='flex justify-end gap-8 align-center'>
-                <span className='flex align-center text-gray-500'><DocumentDownloadIcon onClick={handleExport} className='w-6 h-6 ml-2 text-gray-300 cursor-pointer inline-block focus:ring-0' /> Eksportuoti</span>
-                <Button.Sm id='search_Ieškoti' className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={()=>{}}>Search</Button.Sm>
+              <div className='flex flex-1 justify-end gap-8 align-center'>
+                <Nullable on={hideArchived && filterOptions?.canArchive}>
+                  <Button.NoBg className='text-gray-300' onClick={() => setHideArchived(false)}>{t('show_archived')}</Button.NoBg>
+                </Nullable>
+
+                <Nullable on={!hideArchived && filterOptions?.canArchive}>
+                  <Button.NoBg className='text-gray-300' onClick={() => setHideArchived(true)}>{t('hide_archived')}</Button.NoBg>
+                </Nullable>
+
+                <Button.NoBg onClick={handleExport} className='flex align-center text-gray-500 focus:ring-0 shadow-none hover:text-gray-900 hover:bg-gray-50'>
+                  <DocumentDownloadIcon className='w-6 h-6 text-gray-300 cursor-pointer inline-block focus:ring-0' /> 
+                  {t('export')}
+                </Button.NoBg>
+                <Button.Sm id='search_Ieškoti' className={'bg-oxford px-6 py-0 hover:bg-gray-700'} onClick={search}>{t('search')}</Button.Sm>
               </div>
             </div>
           </div>
@@ -762,17 +747,12 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         </div>
       </div>
     )}, 
-    [state, savedFilters, mode, formState, showFilter, pickedColumns]
+    [state, savedFilters, mode, formState, showFilter, pickedColumns, hideArchived]
   );
   
   // query params to be sent to GraphQl
   const queryParams = useMemo(() => {
-    // console.log('state changed', state);
-
-    // if custom filter logic was provided
     if (isFunction(customFilter)) return customFilter(state, filtersData);
-
-    // standard graphql filtering
     const params = {};
     
     for (const [key, value] of Object.entries(state)) {
@@ -780,6 +760,13 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
       if (!filter) continue;
       
       if (value === undefined || value === null || value === '') continue;
+
+      // custom filtering
+      if (filter.custom !== undefined && isFunction(filter.custom)) {
+        params[key] = filter.custom(value, state);
+        continue;
+      }
+
       if (key.includes('_end')) continue;
 
       // range filters: range, datepicker (single)
@@ -799,13 +786,14 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
       else {
         // array filter / multiselect
         if (isArray(value)) {
+          // filter in relationship
           if (filter.key.includes('.')) {
-            const columns = filter.key.split('.');
-            
+            const columns = filter.key.split('.');            
             params[columns[0]] = unflatten({[filter.key.replace(`${columns[0]}.`, '')]: {_in: value.map(v => v)}});
             continue;
           }
 
+          // default
           params[key] = {_in: value.map(v => v)};
         }
 
@@ -819,7 +807,6 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         else if (filter.key.includes('.')) {
           const columns = filter.key.split('.');
           for (c of columns) {
-            // console.log(c);
           }
         }
 
@@ -848,14 +835,16 @@ export const useFilter = (tableName, tableColumns, filtersData, initialState, cu
         }
       }
     }
-    
+
+
+
     return {
       where: {
-        _and: params,        
+        _and: !filterOptions?.canArchive ? {...params} : hideArchived ? {...params, archived_at: {_is_null: true}} : {...params, archived_at: {_is_null: false}},        
       },
       orderBy: {[sortColumnKey?.replace('-', '')]: sortColumnKey && sortColumnKey[0] === '-' ? DIRECTION_DESC : DIRECTION_ASC}
     };
-  }, [state, sortColumnKey]);
+  }, [state, sortColumnKey, filterOptions, hideArchived]);
 
 
   return [

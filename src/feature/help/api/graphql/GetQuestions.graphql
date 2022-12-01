@@ -1,5 +1,5 @@
-query GetQuestions($where: user_question_bool_exp, $orderBy: [user_question_order_by!]) {
-  user_question(where: $where, order_by: $orderBy) {
+query GetQuestions($where: user_question_bool_exp, $orderBy: [user_question_order_by!], $limit: Int = 25, $offset: Int = 0) {
+  user_question(where: $where, order_by: $orderBy, limit: $limit, offset: $offset) {
     answer_type
     created_at
     id
@@ -8,5 +8,6 @@ query GetQuestions($where: user_question_bool_exp, $orderBy: [user_question_orde
     user_id
     updated_at
     subject
+    archived_at
   }
 }

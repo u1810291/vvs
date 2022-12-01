@@ -1,5 +1,5 @@
-query Crews($where: crew_bool_exp, $orderBy: [crew_order_by!]) {
-  crew(where: $where, order_by: $orderBy) {
+query Crews($where: crew_bool_exp, $orderBy: [crew_order_by!], $limit: Int = 25, $offset: Int = 0) {
+  crew(where: $where, order_by: $orderBy, limit: $limit, offset: $offset) {
     id
     is_assigned_automatically
     is_assigned_while_in_breaks
@@ -15,5 +15,6 @@ query Crews($where: crew_bool_exp, $orderBy: [crew_order_by!]) {
         name
       }
     }
+    archived_at
   }
 }

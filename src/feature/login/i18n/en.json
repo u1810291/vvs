@@ -1,15 +1,15 @@
 {
-	"menu": {
-		"main": "Login"
-	},
-	"mainForm": {
-		"label": {
-			"email": "Email",
-			"password": "Password",
-			"rememberMe": "Remember Me"
-		},
-		"button": {
-			"submit": "Sign in"
-		}
-	}
+  "menu": {
+    "main": "Login"
+  },
+  "mainForm": {
+    "label": {
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember Me"
+    },
+    "button": {
+      "submit": "Sign in"
+    }
+  }
 }

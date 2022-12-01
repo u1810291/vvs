@@ -7,7 +7,6 @@ import Listing from 'layout/ListingLayout';
 
 import withPreparedProps from 'hoc/withPreparedProps';
 
-import {useAuth} from 'context/auth';
 import {useFilter} from 'hook/useFilter';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -28,7 +27,7 @@ import {not} from 'crocks/logic';
 import {constant} from 'crocks/combinators';
 import {alt, chain, map, option} from 'crocks/pointfree';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
-import {isArray, isObject, isString, isEmpty, hasProps} from 'crocks/predicates';
+import {isString, isEmpty, hasProps} from 'crocks/predicates';
 
 import {format} from 'date-fns';
 import TaskStatusTag from '../component/TaskStatusTag';
@@ -56,7 +55,6 @@ const getColumn = curry((t, Component, key, pred, mapper, status, styles, isSort
 }));
 
 const TaskListLayout = withPreparedProps(Listing, props => {
-  const {api} = useAuth();
   const nav = useNavigate();
   const {t: tb} = useTranslation('task', {keyPrefix: 'breadcrumbs'});
   const {t: th} = useTranslation('task', {keyPrefix: 'list.header'});
@@ -87,8 +85,8 @@ const TaskListLayout = withPreparedProps(Listing, props => {
   const {data: objects} = useObjectsDropdown();
 
   const tableColumns = [
-    c('id', constant(true), nullToStr, false, 'text-regent', true),
     c('created_at', constant(true), formatDate, true, 'text-regent', true),
+    c('id', constant(true), nullToStr, false, 'text-regent', true),
     c('object', constant(true), concatNameAdress, true, 'text-regent', false),
     c('name', constant(true), nullToStr, true, 'text-bluewood', true),
     c('crew', constant(true), getName, true, 'text-regent', false),
@@ -102,12 +100,14 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       null,
       true,
     ),
-    c('reason', constant(true), nullToStr, true, 'text-bluewood', true)
+    c('reason', constant(true), nullToStr, true, 'text-bluewood', true),
+    c('guess', constant(true), boolToStr, false, 'text-regent', true),
   ];
+
 
   const filtersData = [
     {key: 'created_at', label: tc('created_at'), filter: 'date'},
-    // {key: 'operator', label: 'Operator', filter: 'multiselect', values: []},
+    {key: 'changed_by_user_id', label: 'Operator', filter: 'multiselect', values: []},
     {
       key: 'object_id',
       label: tc('object'),
@@ -115,43 +115,53 @@ const TaskListLayout = withPreparedProps(Listing, props => {
       values: pipe(safe(not(isEmpty)), option([]))(objects),
       displayValue: (v) => objects?.find(c => c.value === v)?.name
     },
-    // {key: 'address', label: 'Object\'s address', filter: 'text'},
-    // {key: 'type', label: 'Type', filter: 'multiselect', values: []},
-    // {key: 'groups', label: 'Groups (?)', filter: 'multiselect', values: []},
+    {key: 'address', label: 'Object\'s address', filter: 'text'},
+    {key: 'event_type', label: 'Type', filter: 'multiselect', values: ['APVAŽIAVIMAS', 'INKASACIJA', 'KITA']},
+    {key: 'group', label: 'Group (?)', filter: 'multiselect', values: []},
     {
       key: 'status',
       label: tc('status'),
       filter: 'multiselect',
       values: [
         'NEW',
-        'WAIT_FOR_CREW_APPROVAL',
+        'WAIT_FOR_APPROVAL',
         'ON_THE_ROAD',
         'INSPECTION',
         'INSPECTION_DONE',
         'FINISHED',
-        'CANCELLED'
-      ]
+        'CANCELLED',
+        'CANCELLED_BY_CLIENT',
+      ],
+      custom: (value, filters) => {
+        const statuses = value.map(v => v.toUpperCase());
+        if (statuses.includes('CANCELLED_BY_CLIENT')) statuses.push('CANCELLED_BY_CLIENT_CONFIRMED');
+        return {_in: statuses}
+      }
     },
-    // {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
-    // {key: 'crew', label: 'Crew', filter: 'multiselect', values: []},
-    // {key: 'driver', label: 'Driver', filter: 'multiselect', values: []},
-    // {key: 'guess', type: 'String', label: 'On time (T/F)?', filter: 'multiselect', values: ['True', 'False']},
+    {key: 'reason', label: 'Reason', filter: 'multiselect', values: []},
+    {key: 'crew_id', label: 'Crew', filter: 'multiselect', values: []},
+    {key: 'crew.driver_user_id', label: 'Driver', filter: 'multiselect', values: []},
+    {key: 'on_time', label: 'On time (T/F)?', filter: 'multiselect', values: ['Yes', 'No']},
   ];
 
   const [queryParams, filters, columns, defaultFilter, toggleFilter, setExportData, sortColumnKey, setSortColumn] = useFilter(
     'events',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
 
-  const list = useTasks({filters: queryParams});
+  const api = useTasks({filters: queryParams});
 
   useEffect(() => {
-    list.mutate();
+    api.mutate();
   }, [queryParams, sortColumnKey]);
+
+  
   
   return {
-    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

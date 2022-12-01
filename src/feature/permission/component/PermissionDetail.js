@@ -2,10 +2,12 @@ import CrewDriverName from 'feature/crew/component/CrewDriverName';
 import CrewIcon from 'feature/crew/component/CrewIcon';
 import CrewName from 'feature/crew/component/CrewName';
 import Detail from 'components/Disclosure/AsideDisclosure';
+import {caseMap} from '@s-e/frontend/flow-control';
 import {differenceInSeconds, intervalToDuration, isFuture, parseISO} from 'date-fns';
 import {joinString} from '@s-e/frontend/transformer/array';
+import {mPgIntervalToStr} from 'util/datetime';
+import {permissionStatus} from 'constants/statuses';
 import {renderWithChildren} from 'util/react';
-// import {titleCaseWord} from '@s-e/frontend/transformer/string';
 import {useEffect, useRef, useState} from 'react';
 import {
   Maybe,
@@ -21,9 +23,6 @@ import {
   isTruthy,
   isInteger,
 } from 'crocks';
-import {permissionStatus} from 'constants/statuses';
-import {caseMap} from '@s-e/frontend/flow-control';
-import {mPgIntervalToStr} from 'util/datetime';
 
 /**
  * @type {(crew: Object, crews: Array<Object>, task: Object: children: ReactNode) => import('react').ReactNode}
@@ -101,7 +100,6 @@ const formatExpiration = pipe(
   str => str.replace(/00:/g, ''),
 );
 
-
 /**
  * @type {(crewPermission: Object) => import('react').ReactNode}
  */
@@ -145,7 +143,6 @@ const CrewPermission = permissionM => {
     </>
   );
 }
-
 
 /**
  * CrewPermissionTimer :: Maybe<Permission> -> ReactNode
@@ -202,8 +199,6 @@ const secondsToHMS = sec => {
 const CrewPermissionCountdown = permissionM => {
   const [initialInterval, setInitialInterval] = useState(permissionM.chain(getInitialDurationM));
   const timer = useRef();
-
-  // console.log('initial', map(initialInterval));
 
   useEffect(() => {
     clearTimeout(timer.current);

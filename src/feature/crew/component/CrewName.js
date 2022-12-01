@@ -1,8 +1,10 @@
 import {getProp} from 'crocks';
+import {Link, generatePath} from 'react-router-dom';
+import {CrewEditRoute} from '../routes';
 
 const CrewName = crew => (
   getProp('name', crew)
-  .map(value => <p key={value} className='text-black'>{value}</p>)
+  .map(value => <Link to={generatePath(CrewEditRoute.props.path, {id: crew.id})} key={value} className='text-black'>{value}</Link>)
   .option(null)
 );
 

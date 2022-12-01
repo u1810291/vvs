@@ -1,0 +1,67 @@
+{
+  "filters": {
+    "all_data": "Visi duomenys",
+    "export": "Eksportuoti",
+    "save_filter": "Išsaugoti filtrą",
+    "search": "Ieškoti",
+    "add_filter": "Pridėti filtrą",
+    "edit_filter": "Redaguoti filtrą",
+    "title": "Pavadinimas",
+    "shortcut": "Trumpinys",
+    "save_to_menu": "Išsaugoti į meniu",
+    "make_as_default": "Padaryti numatytuoju",
+    "delete": "Ištreinti",
+    "cancel": "Atšaukti",
+    "save": "Išsaugoti",
+    "select_date": "Pasirinkti datą...",
+    "select_period": "Pasirinkti periodą...",
+    "search_multiple_choices": "Ieškoti",
+    "column_order": "Stulpeliai",
+    "are_you_sure_you_want_to_delete": "Ar tikrai norite ištrinti?",
+    "provide_filter_title_name": "Filtro pavadinimas ir trumpas pavadinimas turi būti įvesti"
+  },
+  "auth": {
+    "context": {
+      "heading": "AI Prisijungti",
+      "username": "El. paštas",
+      "password": "Slaptažodis",
+      "submit": "Jungtis"
+    }
+  },
+  "back": "Atgal",
+  "save": "Saugoti",
+  "cancel": "Atšaukti",
+  "menu": {
+    "list": "Ataskaitos",
+    "list2": "Užimtumo prognozė"
+  },
+  "breadcrumbs": {
+    "requests": "Užklausos",
+    "allData": "Visi duomenys",
+    "new": "Nauja užklausa"
+  },
+  "listing": {
+    "button": {
+      "new": "Kurti"
+    }
+  },
+  "field": {
+    "id": "ID",
+    "locations": "Lokacijos",
+    "created_at": "Užklausos data",
+    "userCompany": "Įmonė",
+    "dateRange": "Užimtumo data",
+    "answer": "Užimtumas",
+    "date_from": "Data nuo",
+    "date_to": "Data iki",
+    "dateFromTo": "Data nuo - iki"
+  },
+  "form": {
+    "addLocation": "Pridėti lokaciją",
+    "removeLocation": "Trinti"
+  },
+  "table": {
+    "date": "Data",
+    "answer": "Automobilių kiekis"
+  }
+}

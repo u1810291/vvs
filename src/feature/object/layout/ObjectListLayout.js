@@ -23,7 +23,6 @@ import {
   getProp,
   getPropOr,
   identity,
-  isArray,
   isEmpty,
   map,
   not,
@@ -63,8 +62,6 @@ const ObjectList = withPreparedProps(Listing, (props) => {
   )), [t]);
 
   const {data: clientsDropdown} = useClientDropdown();
-  // console.log(clientsDropdown, 'clients');
-
   const ne = not(isEmpty);
   const userToStr = e => !e?.length ? '-' : e?.map(({user_id}, ixd) => `${clientsDropdown?.find(c => c.value === user_id)?.name}${ixd !== e.length - 1 ? ', ' : ''}`);
   const boolToStr = e => e ? t`YES` : t`NO`;
@@ -104,18 +101,20 @@ const ObjectList = withPreparedProps(Listing, (props) => {
     'object',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
   
-  const list = useObjects({filters: queryParams})
+  const api = useObjects({filters: queryParams})
   
   useEffect(() => {
-    list.mutate()
-    setExportData(list.data);
+    api.mutate()
+    setExportData(api.data);
   }, [queryParams, sortColumnKey]);
 
  
   return {
-    list: safe(isArray, list?.data).option([]),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

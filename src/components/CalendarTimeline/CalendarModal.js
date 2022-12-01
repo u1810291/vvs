@@ -1,17 +1,15 @@
 import React, {useState, useCallback, useEffect} from 'react';
-
 import Modal from '../atom/Modal';
 import SelectBox from '../atom/input/SelectBox';
 import TimePicker from '../obsolete/input/TimePicker';
-
 import useLanguage from '../../hook/useLanguage';
 import useWeekDays from '../../hook/useWeekDays';
 import useValidation from '../../hook/useValidation';
-
 import {isEmpty} from 'crocks';
 import {format, getDay, setDay} from 'date-fns';
-
 import {generate} from 'shortid';
+import ComboBox from 'components/atom/input/ComboBox';
+import {map} from 'crocks/pointfree';
 
 const CalendarModal = ({
   id,
@@ -99,7 +97,7 @@ const CalendarModal = ({
         setOpen={setOpen}
         title={t('eurocash.addDislocationArea')}
       >
-        <SelectBox
+        {/* <SelectBox
           label={t('eurocash.dislocationZone')}
           value={selectedDislocationZone}
           displayValue={(v) => crewZones.find(z => z.value === v)?.key}
@@ -110,7 +108,28 @@ const CalendarModal = ({
               {crewZone?.key}
             </SelectBox.Option>
           ))}
-        </SelectBox>
+        </SelectBox> */}
+
+        <ComboBox 
+          labelText={t('eurocash.dislocationZone')}
+          placeholder={'Search [single choice]'}
+          className={'w-full'}
+          value={selectedDislocationZone}
+          onChange={setSelectedDislocationZone}
+          multiple={false}
+          displayValue={(v) => crewZones.find(z => z.value === v)?.key}
+        >
+          {map(
+            crewZone => (
+              <ComboBox.Option key={crewZone?.key} value={crewZone?.value}>
+                {crewZone?.key}
+              </ComboBox.Option>
+            ),
+            crewZones ?? []
+          )}
+        </ComboBox>    
+
+
         <div className={'grid grid-cols-3 pt-4 pb-8'}>
           <SelectBox
             label={t('eurocash.day')}

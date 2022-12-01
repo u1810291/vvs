@@ -8,7 +8,7 @@ import {useGoogleApiContext} from 'context/google';
 
 import {map} from 'crocks/pointfree';
 
-const LITHUANIA_COORDINATES = {
+export const LITHUANIA_COORDINATES = {
   lat: 55.437229,
   lng: 23.907873
 };
@@ -18,29 +18,32 @@ const MAP_CONTAINER_STYLES = {
   height: '100%',
 };
 
-const Map = memo(({id, zoom, coordinates, path, children}) => {
-  const {bounds, googleMap, isLoaded, onMapLoad, onMapUnmount, setBounds} = useGoogleApiContext();
+const Map = memo(({id, zoom, coordinates, path, children, onLoad}) => {
+  const {bounds, googleMap, isLoaded, onMapUnmount, setBounds} = useGoogleApiContext();
   if (!isLoaded) return null;
+
   useEffect(() => {
     if (googleMap && bounds) {
       // TODO: Fix polygon shapes
       if (coordinates?.length) map(coordinate => bounds.extend(coordinate), coordinates);
       else if (!coordinates?.length) bounds.extend(LITHUANIA_COORDINATES);
+
       setBounds(new google.maps.LatLngBounds());
       googleMap.setCenter({lat: bounds.getCenter().lat(), lng: bounds.getCenter().lng()});
+
       const listener = new google.maps.event.addListener(googleMap, 'idle',() => {
         if (zoom) googleMap.setZoom(zoom)
         else if (!zoom && googleMap.getZoom() > 7) googleMap.setZoom(7);
         new google.maps.event.removeListener(listener);
       });
     }
-  }, [googleMap, coordinates, zoom]);
+  }, [googleMap, isLoaded, zoom]);
 
   return (
     <div className='w-full h-full relative'>
       <GoogleMap
         id={id}
-        onLoad={onMapLoad}
+        onLoad={onLoad}
         onUnmount={onMapUnmount}
         mapContainerStyle={MAP_CONTAINER_STYLES}
       >

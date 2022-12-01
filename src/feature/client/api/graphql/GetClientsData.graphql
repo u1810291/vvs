@@ -14,5 +14,6 @@ query GetClient($id: uuid!) {
     is_company_admin
     id
     last_ping
+    archived_at
   }
 }

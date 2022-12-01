@@ -1,5 +1,5 @@
 import React, {cloneElement, Fragment, Suspense} from 'react';
-import {Route} from 'react-router-dom';
+import {Navigate, Route} from 'react-router-dom';
 import {caseMap} from '@s-e/frontend/flow-control';
 import {equals} from 'crocks/pointfree';
 import {isFunction, isTrue} from 'crocks/predicates';
@@ -20,6 +20,8 @@ import {
   pipe,
   safe,
 } from 'crocks';
+import {useAuth} from 'context/auth';
+
 
 const strToArray = ifElse(isString, str => str.split(' '), identity)
 
@@ -100,6 +102,19 @@ export const withComponentFactory = (Component, {mapSetupInComponent = identity,
 
 export const renderWithChildren = curry((element, children) => cloneElement(element, element?.props, children));
 
+
+// auth by roles
+export const ProtectedRoute = ({children, requiredRoles, denied}) => {
+  // TODO: remove such dependency in utils file
+  const {userData, isAuthorized} = useAuth();
+  const roles = userData?.registrations?.find(r => r?.applicationId === 'efd4e504-4179-42d8-b6b2-97886a5b6c29')?.roles;
+  const canAccess = roles?.some(role => requiredRoles.includes(role));
+
+  if (canAccess || requiredRoles?.length === 0) return (<Fragment>{children}</Fragment>);
+  return (<Navigate replace to={denied} />);
+}
+
+
 /**
  * @type {(exact: bool, isHidden: bool, translationNs: string, translationKey: string, path: string, Component: import('react').ComponentType, children: import('react').ComponentType) => Route}
  */
@@ -111,6 +126,7 @@ export const getRoute = curry((
   path,
   Component,
   children,
+  roles
 ) => (
   <Route
     exact={exact}
@@ -118,7 +134,12 @@ export const getRoute = curry((
     translationKey={translationKey}
     translationNs={translationNs}
     path={path}
-    element={<Suspense><Component/></Suspense>}
+    element={
+    <Suspense>
+      <ProtectedRoute requiredRoles={roles} denied={'/denied'}>
+        <Component />
+      </ProtectedRoute>
+    </Suspense>}
   >
     {children}
   </Route>
@@ -136,23 +157,6 @@ export const compareMemo = (...paths) => (prevProps, nextProps) => (
     ))
     .every(isTrue)
 )
-
-export const dynamicSort = (property) => {
-  var sortOrder = 1;
-  if(property[0] === '-') {
-      sortOrder = -1;
-      property = property.substr(1);
-  }
-  return (a,b) => {
-    var result;
-    if(typeof a[property] === 'object' || typeof b[property] === 'object'){
-      result = (a[property]?.name < b[property]?.name) ? -1 : (a[property]?.name > b[property]?.name) ? 1 : 0;
-    }else {
-      result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-    }
-    return result * sortOrder;
-  }
-}
 
 /**
  * Use this if multiple components will reuse the same props
@@ -213,4 +217,10 @@ export const interpolateTextToComponent = curry((fullTokenRegex, valueExtraction
 
     return update.every(isString) ? update.join(' ') : update;
   }, [text]);
-})
+});
+
+export const Repeater = ({children, list, passIndex = false}) => isArray(list) ? list?.map((props, index) => cloneElement(
+  children,
+  {key: index, ...(passIndex ? {index} : {}), ...props},
+  props?.children
+)) : null;

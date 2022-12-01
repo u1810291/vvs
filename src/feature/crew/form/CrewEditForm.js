@@ -1,30 +1,28 @@
-import React, {useEffect} from 'react';
-
+import React, {useEffect, useMemo, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-
 import useResultForm, {FORM_FIELD} from 'hook/useResultForm';
-
-import Button from 'components/Button';
 import Card from 'components/atom/Card';
-import Nullable from 'components/atom/Nullable';
 import CheckBox from 'components/atom/input/CheckBox';
 import InputGroup from 'components/atom/input/InputGroup';
 import CalendarTimeline from 'components/CalendarTimeline/CalendarTimeline';
-
-import Map from 'feature/map/component/Map';
 import {CrewListRoute} from 'feature/crew/routes';
-import Polygon from 'feature/map/component/Polygon';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
 import {useCrew, useCrewZones, useCrewById} from 'feature/crew/api/crewEditApi';
 import {getFlatNodesThroughCalendar, getZoneItemsThroughCalendar} from 'feature/breach/utils';
-
 import {lengthGt} from 'util/pred';
-
-import {getProp} from 'crocks';
-import {isFunction} from 'crocks/predicates';
+import {
+  getProp, safe, isTruthy, Maybe,
+  isArray, map, option,  
+} from 'crocks';
 import {mapProps, pipe} from 'crocks/helpers';
 import {differenceInMinutes} from 'date-fns';
+import {useGoogleApiContext} from 'context/google';
+import MapDislocationZone from 'feature/dislocation/component/MapDislocationZone';
+import {GoogleMap} from '@react-google-maps/api';
+import {INITIAL_COORDINATES} from 'feature/dislocation/form/DislocationEditForm';
+
+
 
 const CrewEditLayout = ({saveRef, removeRef}) => {
   const {id: crewId} = useParams();
@@ -71,6 +69,40 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const zonePath = getZoneItemsThroughCalendar(crew);
   const zoneCoordinates = getFlatNodesThroughCalendar(crew);
 
+  // map
+  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+  const mapRef = useRef();
+  const fitBoundsCounter = useRef(0);
+  const mMap = useMemo(() => (
+    isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
+  ), [isLoaded, mapRef.current])
+
+  useEffect(() => {
+    Maybe.of(map => m => zoneLatLngs => {
+      const bounds = new m.LatLngBounds();
+      const newBounds = [...zoneLatLngs];
+
+      if (zoneLatLngs.length == 0) {
+        [...INITIAL_COORDINATES].forEach(latLng => bounds.extend(latLng));
+        map.fitBounds(bounds);
+        return;
+      }
+        
+      if (newBounds.length <= fitBoundsCounter.current) {
+        return;
+      }
+
+      newBounds.forEach(latLng => bounds.extend(latLng));
+      map.fitBounds(bounds);
+      fitBoundsCounter.current = newBounds.length;
+    })
+    .ap(mMap)
+    .ap(mGoogleMaps)
+    .ap(Maybe.of(zonePath.flat()))
+    
+  }, [zonePath, mGoogleMaps, mMap]);
+
+  // form data
   const {value: name} = ctrl('name');
   const {value: status} = ctrl('status');
   const {value: driver} = ctrl('driver');
@@ -78,7 +110,7 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
   const {firstName} = driver;
   const {lastName} = driver;
   
-  const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
+  // const remove = () => isFunction(removeRef.current) && removeRef.current([{crewId}]);
 
   useEffect(() => {
     pipe(
@@ -141,7 +173,6 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
             {...ctrl('calendars')}
           />
         </div>
-        <Button.Dxl className={'flex-0 self-start'} onClick={remove}>{t('button.delete')}</Button.Dxl>
       </div>
       <div className={'mt-6 flex flex-col w-full aspect-square lg:h-full md:w-5/12 md:mt-0 md:aspect-auto md:h-screen lg:h-auto lg:-mt-6 lg:-mb-6 lg:-mr-6 lg:-mb-6 xl:w-3/12'}>
         <Card.Sm className={'shadow-none'}>
@@ -166,16 +197,31 @@ const CrewEditLayout = ({saveRef, removeRef}) => {
             </div>
           </div>
         </Card.Sm>
-        <Map
-          zoom={12}
-          path={zonePath}
-          id={`crew-map-${crewId}`}
-          coordinates={zoneCoordinates}
-        >
-          <Nullable on={zonePath}>
-            <Polygon path={zonePath} />
-          </Nullable>
-        </Map>
+
+        <div className='grow'>
+          {isLoaded
+            ? (
+              <GoogleMap
+                {...useMemo(() => ({
+                  mapContainerStyle: {width: '100%', height: '100%'},
+                  onLoad: map => {mapRef.current = map}
+                }), [])}
+              >
+                {/* dislocation zones */}
+                {
+                  pipe(
+                    safe(isArray),
+                    map(map((path) => <MapDislocationZone 
+                      key={`MapDislocationZone-${JSON.stringify(path)}`} 
+                      zone={{id: JSON.stringify(path), nodes: path}} 
+                    />)),
+                    option(null),
+                  )(zonePath)
+                }
+              </GoogleMap>
+            ) : null
+          }
+        </div>
       </div>
     </section>
   );

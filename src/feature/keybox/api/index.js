@@ -8,6 +8,7 @@ export const useKeyBoxes = createUseWhereList({
   asyncMapFromApi: pipe(
     maybeToAsync('prop "object_key_box" expected but not found.', getProp('object_key_box')),
   ),
+  infinite: true,
 });
 
 export const useKeyBox = createUseOne({

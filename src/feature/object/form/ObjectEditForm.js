@@ -80,7 +80,7 @@ const ObjectEditForm = ({saveRef}) => {
 
 
   return (
-    <section className={'flex flex-col lg:flex-row lg:min-h-full'}>
+    <section className={'flex flex-col lg:flex-row'}>
       <div className='flex flex-col flex-grow'>
         <div className={'p-6 space-y-4 lg:space-y-0 lg:flex lg:space-x-4 '}>
           <div className={'lg:inline-block lg:w-1/2 space-y-4'}>

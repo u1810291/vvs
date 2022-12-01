@@ -2,7 +2,7 @@ const gql = a => a[0];
 
 export const GQL = gql`
   subscription tasksForEvent($objectId: [uuid!] = [""]) {
-    events(order_by: { status: asc }) {
+    events(order_by: {created_at: desc}) {
       id
       address
       description

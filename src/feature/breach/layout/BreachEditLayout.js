@@ -8,7 +8,7 @@ import Breadcrumbs, {RouteAsBreadcrumb} from 'components/Breadcrumbs';
 import SidebarLayout from 'layout/SideBarLayout';
 
 import {BreachListRoute} from 'feature/breach/routes';
-import BreachEditForm from 'feature/breach/form/BreachEditFrom';
+import BreachEditForm from 'feature/breach/form/BreachEditForm';
 
 function BreachEditLayout() {
   const {id: breachId} = useParams();

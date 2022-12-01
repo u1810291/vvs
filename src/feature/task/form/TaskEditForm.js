@@ -1,25 +1,32 @@
-import {caseMap} from '@s-e/frontend/flow-control';
-import CrewDetail from 'feature/crew/component/CrewDetail';
-import {errorToText} from 'api/buildApiHook';
 import Button from 'components/Button';
+import CrewDetail from 'feature/crew/component/CrewDetail';
 import Detail from 'components/Disclosure/AsideDisclosure';
-import {GQL} from 'feature/crew/api/useCrewsForEvent';
-import {getObjectName} from 'feature/object/utils';
 import ErrorNotification from 'feature/ui-notifications/components/ErrorNotification';
 import SuccessNotification from 'feature/ui-notifications/components/SuccessNotification';
-import {useNotification} from 'feature/ui-notifications/context';
-import {getEmail, getName, getPhone} from 'feature/user/utils';
-import useSubscription from 'hook/useSubscription';
-import {useEffect, useMemo, useRef} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
-import {renderWithProps} from 'util/react';
-import useTask from '../api/useTask';
-import {TaskListRoute} from '../routes';
-import {getTaskAddress, getTaskLatLngLiteral} from '../util';
 import TaskLogs from '../component/TaskLogDetail';
-import {GoogleMap} from '@react-google-maps/api';
+import useSubscription from 'hook/useSubscription';
+import useTask from '../api/useTask';
+import {GQL as ZONE_GQL} from 'feature/dislocation/api/useZonesForDashboard';
+import {GQL} from 'feature/crew/api/useCrewsForEvent';
+import {errorToText} from 'api/buildApiHook';
+import {getCrewLatLngLiteral} from 'feature/crew/utils';
+import {getEmail, getName, getPhone} from 'feature/user/utils';
+import {getObjectName} from 'feature/object/utils';
+import {getTaskAddress, getTaskLatLngLiteral} from '../util';
+import {renderWithProps} from 'util/react';
+import {useEffect, useMemo, useRef} from 'react';
 import {useGoogleApiContext} from 'context/google';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useNotification} from 'feature/ui-notifications/context';
+import {useTranslation} from 'react-i18next';
+import {GoogleMap} from '@react-google-maps/api';
+import {MapBreachNodeMarker} from 'feature/breach/components/MapBreachMarker';
+import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
+import {caseMap} from '@s-e/frontend/flow-control';
+import {mapByMaybe} from 'util/array';
+import MapTaskMarker from '../component/MapTaskMarker';
+import MapDislocationZone, {POLYGON_OPTIONS_TASK_MAP} from 'feature/dislocation/component/MapDislocationZone';
+import Nullable from 'components/atom/Nullable';
 import {
   Maybe,
   Result,
@@ -36,26 +43,31 @@ import {
   merge,
   objOf,
   option,
-  pathSatisfies,
   pipe,
   reduce,
   safe,
   setProp,
-  tap
+  tap,
+  isObject,
+  propSatisfies,
+  isSame,
+  filter,
+  pathSatisfies,
 } from 'crocks';
-import {getCrewLatLngLiteral} from 'feature/crew/utils';
-import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
-import MapTaskMarker from '../component/MapTaskMarker';
+import {formatDistance} from 'date-fns';
+
 
 const TaskEditForm = ({taskQuery, task}) => {
   const {t: to} = useTranslation('object');
   const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   const mapRef = useRef();
+  const fitBoundsCounter = useRef(0);
 
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
   ), [isLoaded, mapRef.current])
 
+  const zones = useSubscription(useMemo(() => ZONE_GQL, []));
   const crews = useSubscription(
     useMemo(() => GQL, []),
     useMemo(() => (
@@ -64,12 +76,28 @@ const TaskEditForm = ({taskQuery, task}) => {
       .option(undefined)
     ), [task])
   );
+  
 
   useEffect(() => {
     Maybe.of(map => m => taskLatLng => crewsLatLngs => {
       const bounds = new m.LatLngBounds();
-      [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
+      const newBounds = [taskLatLng, ...crewsLatLngs];
+      newBounds.forEach(latLng => bounds.extend(latLng));
+
+      if (newBounds.length <= fitBoundsCounter.current) {
+        return;
+      }
+
+      if (task?.crew !== null) {
+        newBounds.push({
+          lat: task.crew?.latitude,
+          lng: task.crew?.longitude
+        });
+      }
+      
+      newBounds.forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
+      fitBoundsCounter.current = newBounds.length;
     })
     .ap(mMap)
     .ap(mGoogleMaps)
@@ -86,7 +114,7 @@ const TaskEditForm = ({taskQuery, task}) => {
           alt(Maybe.Just([]))
         )(crews)
       )
-  }, [task, mGoogleMaps, crews]);
+  }, [task, crews]);
 
   return (
     <section className='flex w-full'>
@@ -110,12 +138,44 @@ const TaskEditForm = ({taskQuery, task}) => {
             >
               {
                 pipe(
-                  getPath(['data', 'crew']),
-                  chain(safe(isArray)),
-                  map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
+                  getProp('logs'),
+                  map(pipe(
+                    filter(propSatisfies('type', isSame('DB_TRIGGER::crew_location'))),
+                    mapByMaybe(pipe(
+                      safe(pathSatisfies(['content', 'crew'], isObject)),
+                      map(log => <MapBreachNodeMarker {...log.content.crew} key={log.id} />),
+                    ))
+                  )),
                   option(null),
-                )(crews)
+                )(task)
               }
+
+              <Nullable on={task?.status === 'NEW'}>                
+                {
+                  pipe(
+                    getPath(['data', 'crew_zone']),
+                    chain(safe(isArray)),
+                    map(map(zone => <MapDislocationZone 
+                      key={`MapDislocationZone-${zone?.id}`} zone={zone} 
+                      options={POLYGON_OPTIONS_TASK_MAP}
+                    />)),
+                    option(null),
+                  )(zones)
+                }                
+                {
+                  pipe(
+                    getPath(['data', 'crew']),
+                    chain(safe(isArray)),
+                    map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />),),
+                    option(null),
+                  )(crews)
+                }
+              </Nullable>
+
+              <Nullable on={task?.crew !== null}>
+                <MapCrewIconMarker key={`MapCrewIconMarker-${task?.crew?.id}`} {...task?.crew} />
+              </Nullable>              
+
               <MapTaskMarker {...task} /> 
             </GoogleMap>
           ) : null
@@ -130,6 +190,40 @@ const TaskEditForm = ({taskQuery, task}) => {
   );
 };
 
+
+const TaskDetails = task => {
+  console.log({task});
+  return ( 
+    <aside className='flex flex-col p-4'>
+      <TaskReason {...task} />
+      <TaskDuration {...task} />
+    </aside>
+  );
+}
+
+const TaskReason = task => pipe(
+  getProp('reason'),
+  map(r => (
+    <div className='flex space-x-4'>
+      <p className='text-sm text-gray-500'>Reason:</p>
+      <p className='text-sm text-oxford'>{r}</p>
+    </div>
+  )),
+  option(null)
+)(task);
+
+const TaskDuration = task => pipe(
+  safe(isObject),
+  map(time => (
+    <div className='flex space-x-4'>
+      <p className='text-sm text-gray-500'>Duration:</p>
+      <p className='text-sm text-oxford'>{formatDistance(new Date(time?.created_at), new Date(time?.updated_at), {includeSeconds: true})}</p>
+    </div>
+  )),
+  option(null)
+)(task);
+
+
 const Crew = task => pipe(
   getProp('crew'),
   map(crew => ({crew, task})),
@@ -140,7 +234,7 @@ const Crew = task => pipe(
 const AsideCancelableCrew = task => {
   return (
     <aside className={'border-r border-gray-border h-full overflow-auto'}>
-      {renderWithProps([Crew, TaskLogs], task)}
+      {renderWithProps([TaskDetails, Crew, TaskLogs], task)}
     </aside>
   );
 };
@@ -149,7 +243,7 @@ const AsideSelectCrew = () => {
   const navigate = useNavigate();
   const {id} = useParams();
   const {notify} = useNotification();
-  const {t} = useTranslation();
+  const {t} = useTranslation('task');
   const {data: task, update} = useTask({id});
 
   const assign = crewId => () => (
@@ -162,7 +256,7 @@ const AsideSelectCrew = () => {
       ),
       pipe(
         () => notify(<SuccessNotification heading={t`success`} />),
-        tap(() => navigate(TaskListRoute.props.path)),
+        tap(() => navigate(-1)),
       ),
     )
   );
@@ -190,7 +284,7 @@ const AsideSelectCrew = () => {
               task,
               children: (
                 <Button.Sm className='rounded-md py-1' onClick={assign(crew.id)}>
-                  {t`assignTask`}
+                  {t`button.assign`}
                 </Button.Sm>
               ),
               title: JSON.stringify(crew, null, '  '), 
@@ -201,7 +295,7 @@ const AsideSelectCrew = () => {
             title: t`availableCrews`,
             children: list
           })),
-          map(renderWithProps(Detail)),
+          map(renderWithProps(<div />)),
           option(null),
         )(crews)
       }
@@ -240,6 +334,7 @@ const Address = pipe(
 
 const ObjectName = pipe(
   getProp('object'),
+  tap(console.log),
   chain(getObjectName),
   map(str => <p key={str} className='text-lg text-black'>{str}</p>),
   option(null),

@@ -1,0 +1,17 @@
+mutation RegisterClient (
+  $birthDate: String = null,
+  $username: String!,
+  $firstName: String = "",
+  $lastName: String = "",
+  $mobilePhone: String = null,
+  $password: String!,
+  $email: String = null,
+  $role: String!
+  ) {
+  register(birthDate: $birthDate, username: $username, firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, password: $password, email: $email, role: $role) {
+    token
+    user {
+      id
+    }
+  }
+}

@@ -19,6 +19,7 @@ import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notif
 import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/solid';
 import {errorToText} from 'api/buildApiHook';
 import Nullable from 'components/atom/Nullable';
+import {useEffect} from 'react';
 
 
 const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
@@ -97,8 +98,6 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     })
   });
 
-  // console.log(form);
-
   const api = useClient({
     id,
     formResult: result,
@@ -112,9 +111,22 @@ const ClientEditForm = ({saveRef, assignRef, removeRelRef}) => {
     newObjectPath: ['register', 'user', 'id'],
   });
 
+  const {notify} = useNotification();
   const auth = useAuth();
   const _forgot = flip(auth.api)(raw('../api/graphql/ForgotPassword.graphql'));
-  const {notify} = useNotification();
+  const _getSettings = flip(auth.api)(raw('../api/graphql/GetUserSettingsWithPing.graphql'));
+  const _createSettings = flip(auth.api)(raw('../api/graphql/CreateClientSettings.graphql'));
+
+  useEffect(() => {
+    if (!id) return;
+
+    // create user settings if don't exist
+    _getSettings({where: {id: {_eq: id}}}).fork(identity, (data) => {
+      if (data?.user_settings.length == 0) {
+        _createSettings({id}).fork(identity, identity)
+      }
+    });
+  }, [])
 
   const forgotPassword = () => {
     if (!form['username']) return;

@@ -8,9 +8,9 @@ import LT from './i18n/lt.json';
 i18next.addResourceBundle('en', 'dislocation', EN);
 i18next.addResourceBundle('lt', 'dislocation', LT);
 
-export const DislocationListRoute = getExactRoute('dislocation', 'menu.list', '/dislocation', lazy(() => import('./layout/DislocationListLayout')), null);
-export const DislocationCreateRoute = getExactHiddenRoute('dislocation', 'menu.create', '/dislocation/new', lazy(() => import('./layout/DislocationCreateLayout')), null);
-export const DislocationEditRoute = getExactHiddenRoute('dislocation', 'menu.edit', '/dislocation/:id', lazy(() => import('./layout/DislocationEditLayout')), null);
+export const DislocationListRoute = getExactRoute('dislocation', 'menu.list', '/dislocation', lazy(() => import('./layout/DislocationListLayout')), null, ['admin', 'master_operator']);
+export const DislocationCreateRoute = getExactHiddenRoute('dislocation', 'menu.create', '/dislocation/new', lazy(() => import('./layout/DislocationCreateLayout')), null, ['admin', 'master_operator']);
+export const DislocationEditRoute = getExactHiddenRoute('dislocation', 'menu.edit', '/dislocation/:id', lazy(() => import('./layout/DislocationEditLayout')), null, ['admin', 'master_operator']);
 
 const DislocationRoute = (
   <>

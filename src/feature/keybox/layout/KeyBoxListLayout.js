@@ -21,10 +21,10 @@ import {
   objOf,
   pipe,
   getPath,
-  safe,
-  isArray,
 } from 'crocks';
 import {useFilter} from 'hook/useFilter';
+
+
 
 const getColumn = curry((t, Component, key, mapper, isSortable) => ({
   Component,
@@ -65,16 +65,18 @@ const KeyBoxListLayout = withPreparedProps(Listing, () => {
     'keybox',
     tableColumns,
     filtersData,
+    {canArchive: true},
   );
 
-  const list = useKeyBoxes({filters: queryParams});
+  const api = useKeyBoxes({filters: queryParams});
   
   useEffect(() => {
-    list.mutate();
+    api.mutate();
   }, [queryParams, sortColumnKey]);
 
   return {
-    list: safe(isArray, list?.data).option([]),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

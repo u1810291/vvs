@@ -7,5 +7,6 @@ query QuestionById ($id: uuid!) {
     answer_type
     created_at
     status
+    archived_at
   }
 }

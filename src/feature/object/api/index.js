@@ -25,9 +25,9 @@ import {
 export const useObjects = createUseWhereList({
   graphQl: raw('./graphql/GetAllObjects.graphql'),
   asyncMapFromApi: pipe(
-    maybeToAsync('prop "object" expected but not found.', getProp('object')),
-    
+    maybeToAsync('prop "object" expected but not found.', getProp('object')),    
   ),
+  infinite: true,
 })
 
 export const useObject = createUseOne({

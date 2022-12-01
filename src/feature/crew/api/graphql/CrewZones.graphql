@@ -3,6 +3,5 @@ query CrewZones {
         id
         name
         nodes
-        crew_id
     }
 }

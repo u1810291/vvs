@@ -27,4 +27,5 @@ export const useBreaches = createUseWhereList({
   asyncMapFromApi: pipe(
     maybeToAsync('prop "crew_breach" expected but not found.', getProp('crew_breach')),
   ),
+  infinite: true,
 })

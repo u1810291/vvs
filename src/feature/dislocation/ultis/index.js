@@ -1,8 +1,8 @@
 import {getPath, safe} from 'crocks';
-import {pipe} from 'crocks/helpers';
+import {pick, pipe} from 'crocks/helpers';
 import {and, not} from 'crocks/logic';
 import {chain, map, option, reduce} from 'crocks/pointfree';
-import {isEmpty, isArray} from 'crocks/predicates';
+import {isEmpty, isArray, propSatisfies, isNumber} from 'crocks/predicates';
 
 export const getZoneItems = pipe(
   safe(and(not(isEmpty), isArray)),
@@ -26,3 +26,27 @@ export const getFlatNodes = pipe(
 );
 
 
+export const getCoordinates = node => (
+  safe(
+    and(
+      propSatisfies('lat', and(isNumber, isFinite)),
+      propSatisfies('lng', and(isNumber, isFinite)),
+    ),
+    node,
+  )
+  .map(pick(['lat', 'lng']))
+);
+
+
+
+export const getDislocationCoordinates = node => (
+  getCoordinates(node)
+)
+
+export const getDislocationLatLngLiteral = pipe(
+  getDislocationCoordinates,
+  map(a => ({
+    lat: a.lat,
+    lng: a.lng,
+  })),
+);

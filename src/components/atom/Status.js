@@ -36,19 +36,22 @@ const Status = withMergedClassName(`${CLASS_NAME} text-black`, StatusBase);
 Status.Break = withMergedClassName(`${CLASS_NAME} bg-tango`, StatusBase);
 Status.Ready = withMergedClassName(`${CLASS_NAME} bg-mantis`, StatusBase);
 Status.Busy = withMergedClassName(`${CLASS_NAME} bg-burgundy`, StatusBase);
-Status.DriveBack = withMergedClassName(`${CLASS_NAME} bg-mantis`, StatusBase);
-Status.Offline = withMergedClassName(`${CLASS_NAME} bg-geyser text-black`, StatusBase);
+Status.DriveBack = withMergedClassName(`${CLASS_NAME} bg-tango`, StatusBase);
+Status.Offline = withMergedClassName(`${CLASS_NAME} bg-geyser text-white`, StatusBase);
 // Task (Event)
 Status.New = withMergedClassName(`${CLASS_NAME} bg-curious`, StatusBase);
 Status.Finished = withMergedClassName(`${CLASS_NAME} bg-mantis`, StatusBase);
 Status.OnTheRoad = withMergedClassName(`${CLASS_NAME} bg-brick`, StatusBase);
 Status.Cancelled = withMergedClassName(`${CLASS_NAME} bg-oxford`, StatusBase);
+Status.CancelledByClient = withMergedClassName(`${CLASS_NAME} bg-oxford`, StatusBase);
+Status.CancelledByCientConfirmed = withMergedClassName(`${CLASS_NAME} bg-oxford`, StatusBase);
 Status.Inspection = withMergedClassName(`${CLASS_NAME} bg-brick`, StatusBase);
 Status.InspectionDone = withMergedClassName(`${CLASS_NAME} bg-tango`, StatusBase);
 Status.WaitForCrewApproval = withMergedClassName(`${CLASS_NAME} bg-tango`, StatusBase);
 
 const DynamicStatus = caseMap(Status, [
   // Crew
+  [is(status.CREW_LOGGED_OUT), Status.Offline],
   [is(status.CREW_BUSY), Status.Busy],
   [is(status.CREW_BREAK), Status.Break],
   [is(status.CREW_READY), Status.Ready],
@@ -70,6 +73,8 @@ const DynamicStatus = caseMap(Status, [
   [is(eventStatus.EVENT_FINISHED), Status.InspectionDone],
   [is(eventStatus.EVENT_INSPECTION_DONE), Status.Inspection],
   [is(eventStatus.EVENT_CANCELLED), Status.WaitForCrewApproval],
+  [is(eventStatus.EVENT_CANCELLED_BY_CLIENT), Status.CancelledByClient],
+  [is(eventStatus.EVENT_CANCELLED_BY_CLIENT_CONFIRMED), Status.CancelledByCientConfirmed],
   [is(eventStatus.EVENT_WAIT_FOR_CREW_APPROVAL), Status.Finished],
 
   // Help

@@ -25,12 +25,10 @@ const TailwindUiDanger = props => (
   />
 );
 
-const CLASS_NAME_PRIMARY = 'inline-flex items-center justify-center border border-transparent loading-none font-medium rounded-sm shadow-sm text-white bg-oxford hover:bg-oxford-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford';
-const CLASS_NAME_SECONDARY = 'inline-flex items-center justify-center border border-transparent loading-none font-medium rounded-sm shadow-sm text-regent bg-geyser hover:bg-geyser-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford';
-const CLASS_NAME_DANGER = 'inline-flex items-center justify-center border border-transparent loading-none font-medium rounded-sm shadow-sm text-white bg-brick hover:bg-brick-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford';
+export const CLASS_NAME_PRIMARY = 'inline-flex items-center justify-center border border-transparent loading-none font-medium rounded-md shadow-sm text-white bg-oxford hover:bg-oxford-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford';
+export const CLASS_NAME_SECONDARY = 'inline-flex items-center justify-center border border-transparent loading-none font-medium rounded-md shadow-sm text-regent bg-geyser hover:bg-geyser-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford';
+export const CLASS_NAME_DANGER = 'inline-flex items-center justify-center border border-transparent loading-none font-medium rounded-md shadow-sm text-white bg-brick hover:bg-brick-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford';
 const CLASS_NAME_NO_BG = 'inline-flex items-center justify-center loading-none font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford';
-
-// TODO: Imporove Button logic with Secondary etc. types
 
 const Button = withMergedClassName(`${CLASS_NAME_PRIMARY} px-2 py-2 text-base`, TailwindUiPrimary);
 

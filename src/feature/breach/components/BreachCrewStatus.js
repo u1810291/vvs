@@ -1,11 +1,11 @@
 import React from 'react';
 import DynamicIcon from 'feature/crew/component/CrewIcon';
 
-const BreachCrewStatus = ({crew, driver}) => {
-  const {name, status} = crew;
-  const {firstName, lastName} = driver;
+const BreachCrewStatus = ({breach}) => {
+  const {name, status} = breach?.crew;
+  const {firstName, lastName} = breach?.driver;
   return (
-    <>
+    <div className='flex'>
       <DynamicIcon
         className='mr-4'
         status={status}
@@ -24,7 +24,7 @@ const BreachCrewStatus = ({crew, driver}) => {
           </p>
         </div>
       </div>
-    </>
+    </div>
   )
 };
 

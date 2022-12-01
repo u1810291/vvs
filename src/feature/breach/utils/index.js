@@ -4,6 +4,8 @@ import {chain, map, option, reduce} from 'crocks/pointfree';
 import {hasProps, isArray, isEmpty, isObject} from 'crocks/predicates';
 import {getPath, getProp, pipe, safe} from 'crocks';
 
+import {getCoordinates} from 'feature/object/utils';
+
 const isNodeArrayValid = and(isArray, a => a.every(hasProps(['latitude', 'longitude'])));
 
 const transformNode = map(({latitude, longitude}) => ({
@@ -79,3 +81,17 @@ export const getZoneItemsThroughCalendar =
     getZonePathThroughCalendar,
     map((nodes) => nodes?.crew_zone?.nodes)
   );
+
+
+
+export const getBreachCoordinates = node => (
+  getCoordinates(node)
+)
+
+export const getBreachLatLngLiteral = pipe(
+  getBreachCoordinates,
+  map(a => ({
+    lat: a.latitude,
+    lng: a.longitude,
+  })),
+);

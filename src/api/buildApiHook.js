@@ -1,5 +1,5 @@
 import NotificationSimple, {NOTIFICATION_ICON_CLASS_NAME} from 'feature/ui-notifications/components/NotificationSimple';
-import useAsyncSwr from 'hook/useAsyncSwr';
+import useAsyncSwr, {useAsyncSwrInfinite} from 'hook/useAsyncSwr';
 import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
 import {every} from 'util/array';
 import {removeFalsyFields} from 'util/obj';
@@ -108,8 +108,18 @@ export const createUseApiList = ({
   graphQl, 
   asyncMapFromApi = Async.Resolved,
   mapFromApiUsingAuth = false,
+  infinite = false,
 }) => ({filters}) => {
   const {api, ...auth} = useAuth();
+
+  if (infinite) {
+    return useAsyncSwrInfinite([graphQl, filters], (params) => (
+      api(params[1], params[0])
+      .chain(r => mapFromApiUsingAuth
+        ? asyncMapFromApi({api, ...auth})(r)
+        : asyncMapFromApi(r))
+    ));
+  }
 
   return useAsyncSwr([graphQl, filters], (query) => (
     api(filters, query)
@@ -130,8 +140,15 @@ export const createUseApiList = ({
  * @param {string} props.graphQl
  * @param {(data) => import('crocks/Async').default} props.asyncMapFromApi
  */
-export const createUseWhereList = ({graphQl, asyncMapFromApi}) => ({filters}) => {
+export const createUseWhereList = ({graphQl, asyncMapFromApi, infinite = false}) => ({filters}) => {
   const {api} = useAuth();
+
+  if (infinite) {
+    return useAsyncSwrInfinite([graphQl, filters], (params) => (
+      api(params[1], params[0])
+      .chain(asyncMapFromApi)
+    ));
+  }
 
   return useAsyncSwr([graphQl, filters], (query) => (
     api(filters, query)
@@ -208,7 +225,6 @@ export const createUseOne = ({
   const create = useMemo(() => pipe(
     resultToAsync,
     chain(asyncMapToApi),
-    // chain(tap(console.log)),  
     chain(flip(api)(createGraphql))
   ), [api]);
 
@@ -216,7 +232,6 @@ export const createUseOne = ({
     resultToAsync,
     map(a => ({...a, id})),
     chain(asyncMapToApi),  
-    // chain(tap(console.log)),  
     chain(flip(api)(updateGraphQl))
   ), [api, id]);
 
@@ -310,6 +325,7 @@ export const createUseEnum = ({
 }) => (isSimplified = false) => {
   const {apiQuery} = useAuth();
   const effect = useAsyncEffect(apiQuery(graphQl));
+
   if (isSimplified) return (
     getPath(['data', itemsProp], effect)
     .chain(safe(isArray))
@@ -319,5 +335,6 @@ export const createUseEnum = ({
     ))
     .option([])
   )
+  
   return effect;
 };

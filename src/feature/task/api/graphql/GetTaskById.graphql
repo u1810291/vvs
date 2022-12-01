@@ -39,6 +39,7 @@ query GetTaskById($id: uuid!) {
     name
     reason
     status
+    created_at
     updated_at
     object {
       id

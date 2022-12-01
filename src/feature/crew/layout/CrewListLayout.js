@@ -14,7 +14,7 @@ import {alt, chain, map, option} from 'crocks/pointfree';
 import {constant} from 'crocks/combinators';
 import {curry, getPropOr, objOf, pipe} from 'crocks/helpers';
 import {generatePath, Link, useNavigate} from 'react-router-dom';
-import {isArray, isBoolean, isObject, isString} from 'crocks/predicates';
+import {isBoolean, isString} from 'crocks/predicates';
 import {useCrews} from 'feature/crew/api/crewEditApi';
 import {useDislocationZonesDropdown} from 'feature/dislocation/api/dislocationEditApi';
 import {useFilter} from 'hook/useFilter';
@@ -55,11 +55,12 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     </Link>
   )), [tc]);
 
-  const cs = useMemo(() => getColumn(tc, props => (
-    <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
+  const cs = useMemo(() => getColumn(tc, props => {
+    console.log(props);
+    return <Link to={generatePath(CrewEditRoute.props.path, {id: props?.id})}>
       <DynamicStatus t={'crew'} className={'w-20'} status={props?.status}/>
     </Link>
-  )), [tc]);
+  }), [tc]);
 
   const nullToStr = e => !e ? '-' : e;
   const boolToStr = e => e ? ts`YES` : ts`NO`;
@@ -73,7 +74,8 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     c('abbreviation', constant(true), nullToStr, true, 'text-regent', true),
     c('calendars', constant(true), arrToStr, true, 'text-steel', false),
     cs('status', constant(true), nullToStr, true, null, true),
-    c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent', true)
+    c('is_assigned_automatically', isBoolean, boolToStr, true, 'text-regent', true),
+    c('device_id', constant(true), nullToStr, false, 'text-regent', true),
   ];
 
   const filtersData = [
@@ -88,20 +90,23 @@ const CrewListLayout = withPreparedProps(Listing, () => {
       filter: 'text'
     },
     {
+      key: 'device_id',
+      label: tc('device_id'),
+      filter: 'text'
+    },
+    {
       key: 'calendars.crew_zone.id',
       label: tc('calendars'),
       filter: 'autocomplete',
       values: crewZones || [],
-      displayValue: (v) => {
-        // console.log(v);
-        return crewZones?.find(c => c.value === v)?.name;
-      }
+      displayValue: (v) => crewZones?.find(c => c.value === v)?.name,
     },
     {
       key: 'status',
       label: tc('status'),
       filter: 'multiselect',
-      values: ['BREAK', 'BUSY', 'OFFLINE', 'READY', 'DRIVE_BACK']
+      values: ['BREAK', 'BUSY', 'READY', 'DRIVE_BACK', 'LOGGED_OUT'], // TODO: from database ?
+      displayValue: (v) => v,
     },
     {
       key: 'is_assigned_automatically',
@@ -115,17 +120,19 @@ const CrewListLayout = withPreparedProps(Listing, () => {
     'crew',
     tableColumns,
     filtersData,
+    {canArchive: true}
   );
 
-  const list = useCrews({filters: queryParams});
+  const api = useCrews({filters: queryParams});
   
   useEffect(() => {
-    setExportData(list.data);
-    list.mutate();
+    setExportData(api.data);
+    api.mutate();
   }, [queryParams, sortColumnKey]);
 
   return {
-    list: pipe(safe(isObject), chain(getProp('data')), chain(safe(isArray)), option([]))(list),
+    api,
+    list: api?.data?.flat() ?? [],
     rowKeyLens: getPropOr(0, 'id'),
     breadcrumbs: (
       <Breadcrumbs>

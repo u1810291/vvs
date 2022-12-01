@@ -52,12 +52,23 @@
   },
   "status": {
     "new": "New",
+    "NEW": "New",
     "cancelled": "Cancelled",
+    "cancelledByClient": "Cancelled by client",
+    "cancelledByClientConfirmed": "Cancelled by client",
+    "CANCELLED": "Cancelled",
+    "CANCELLED_BY_CLIENT": "Cancelled by client",
+    "CANCELLED_BY_CLIENT_CONFIRMED": "Cancelled by client",
     "onRoad": "On road",
+    "ON_THE_ROAD": "On road",
     "inspection": "Inspection",
+    "INSPECTION": "Inspection",
     "inspectionDone": "Inspection done",
+    "INSPECTION_DONE": "Inspection done",
     "finished": "Finished",
+    "FINISHED": "Finished",
     "waitForApproval": "Wait for approval",
+    "WAIT_FOR_APPROVAL": "Wait for approval",
     "unknown": "unknown"
   },
   "field": {

@@ -1,0 +1,59 @@
+{
+  "filter": {
+    "all_data": "All data",
+    "export": "Export",
+    "save_filter": "Save filter",
+    "search": "Search",
+    "add_filter": "Add filter",
+    "edit_filter": "edit filter",
+    "title": "Title",
+    "shortcut": "Shortcut",
+    "save_to_menu": "Save to menu",
+    "make_as_default": "Make as default",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "select_date": "Select date...",
+    "select_period": "Select period...",
+    "search_multiple_choices": "Search [multiple choices]",
+    "column_order": "Column order",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete?",
+    "provide_filter_title_name": "Provide filter's title & shortcut, please"
+  },
+  "back": "Back",
+  "save": "Save",
+  "cancel": "Cancel",
+  "menu": {
+    "list": "Reports",
+    "list2": "Employment forecast"
+  },
+  "breadcrumbs": {
+    "requests": "Requests",
+    "allData": "All Data",
+    "new": "Create a request"
+  },
+  "listing": {
+    "button": {
+      "new": "Create"
+    }
+  },
+  "field": {
+    "id": "ID",
+    "locations": "Locations",
+    "created_at": "Created at",
+    "userCompany": "Company",
+    "dateRange": "Dates",
+    "answer": "Answer",
+    "date_from": "From",
+    "date_to": "To",
+    "dateFromTo": "Date from - to"
+  },
+  "form": {
+    "addLocation": "Add location",
+    "removeLocation": "Remove"
+  },
+  "table": {
+    "date": "Date",
+    "answer": "Car count"
+  }
+}

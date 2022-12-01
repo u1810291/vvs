@@ -5,29 +5,36 @@ import SidebarLeft from '../components/SidebarLeft';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Button from 'components/Button';
-import {GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
+import {CREW_OFFLINE_GQL, GQL as CREW_GQL} from 'feature/crew/api/useCrewsForEvent';
+import {GQL as ZONE_GQL} from 'feature/dislocation/api/useZonesForDashboard';
 import {GQL as TASK_GQL} from 'feature/task/api/useTasksForEvent';
+import {GQL as PERMISSIONS_GQL} from 'feature/permission/api/usePermissionsForDashboard';
 import useSubscription from 'hook/useSubscription';
 import {GoogleMap} from '@react-google-maps/api';
 import {MapCrewIconMarker} from 'feature/crew/component/MapCrewIconMarker';
 import {useGoogleApiContext} from 'context/google';
-import {pipe, getPath, chain, isArray, safe, map, option, Maybe, reduce, alt, isTruthy, objOf} from 'crocks';
-import {getTaskLatLngLiteral} from 'feature/task/util';
-import {getCrewLatLngLiteral} from 'feature/crew/utils';
+import {pipe, getPath, chain, isArray, safe, map, option, Maybe, isTruthy, objOf} from 'crocks';
 import MapTaskMarker from 'feature/task/component/MapTaskMarker';
+import MapDislocationZone from 'feature/dislocation/component/MapDislocationZone';
+
 
 // updated_at + duration - new Date()
 const lostConnection = (time) => {
   return new Date() - new Date(time) > 60000
 }
 
+// TODO: move to map component's folder
+const INITIAL_COORDINATES = [
+  {lat: 54.760541960832775, lng: 25.20713162298808},
+  {lat: 54.637933723847745, lng: 25.387719376875395}
+]
+
 const DashboardForm = () => {
   const {t} = useTranslation('dashboard');
   const mapRef = useRef();
-
   const nav = useNavigate();
-  const tasksQuery = useMemo(() => TASK_GQL, []);
-  const tasks = useSubscription(tasksQuery);
+
+  const tasks = useSubscription(useMemo(() => TASK_GQL, []));
   const crews = useSubscription(
     useMemo(() => CREW_GQL, []),
     useMemo(() => (
@@ -36,40 +43,32 @@ const DashboardForm = () => {
       .option(undefined)
     ), [tasks?.data?.events])
   );
-  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
+  const offlineCrews = useSubscription(useMemo(() => CREW_OFFLINE_GQL, []));
+  const zones = useSubscription(useMemo(() => ZONE_GQL, []));
+  const permissions = useSubscription(useMemo(() => PERMISSIONS_GQL, []));
+  
   const temp = useMemo(() => ({
     data: crews?.data?.crew?.map((el) => ({
       connectionLost: el.user_settings.length ? lostConnection(el.user_settings[0]?.last_ping): false,
       ...el
     })
   )}), [crews?.data?.crew]);
+
+  const {isLoaded, mGoogleMaps} = useGoogleApiContext();
   const mMap = useMemo(() => (
     isLoaded ? safe(isTruthy, mapRef.current) : Maybe.Nothing()
-  ), [isLoaded, mapRef.current])
+  ), [isLoaded, mapRef.current])  
   
   useEffect(() => {
-    Maybe.of(map => m => taskLatLng => crewsLatLngs => {
+    Maybe.of(map => m => {
       const bounds = new m.LatLngBounds();
-      [taskLatLng, ...crewsLatLngs].forEach(latLng => bounds.extend(latLng));
+      [...INITIAL_COORDINATES].forEach(latLng => bounds.extend(latLng));
       map.fitBounds(bounds);
-      console.log(bounds);
     })
     .ap(mMap)
     .ap(mGoogleMaps)
-    .ap(getTaskLatLngLiteral(tasks?.data?.events[1]))
-      .ap(
-        pipe(
-          getPath(['data', 'crew']),
-          chain(safe(isArray)),
-          map(reduce((carry, item) => (
-            getCrewLatLngLiteral(item)
-            .map(latLng => [...carry, latLng])
-            .option(carry)
-          ), [])),
-          alt(Maybe.Just([]))
-        )(crews)
-      )
-  }, [tasks, mGoogleMaps, crews]);
+  }, [mGoogleMaps, mMap]);
+
 
   return (
     <>
@@ -82,7 +81,7 @@ const DashboardForm = () => {
           </Button.Pxl>
         </div>
         <aside className='border-l border-gray-border min-w-fit'>
-          <SidebarLeft tasks={tasks} />
+          <SidebarLeft tasks={tasks} permissions={permissions} />
         </aside>
       </section>
       <section className='flex flex-col h-screen justify-between w-2/4 bg-gray-100'>
@@ -94,29 +93,46 @@ const DashboardForm = () => {
               onLoad: map => {mapRef.current = map}
             }), [])}
           >
+            {/* dislocation zones */}
+            {
+              pipe(
+                getPath(['data', 'crew_zone']),
+                chain(safe(isArray)),
+                map(map(zone => <MapDislocationZone key={`MapDislocationZone-${zone?.id}`} zone={zone} />)),
+                option(null),
+              )(zones)
+            }
+
+            {/* crew icons */}
             {
               pipe(
                 getPath(['data', 'crew']),
                 chain(safe(isArray)),
-                map(map(crew => <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
+                map(map(crew => !['LOGGED_OUT', null].includes(crew?.status) && <MapCrewIconMarker key={`MapCrewIconMarker-${crew?.id}`} {...crew} />)),
                 option(null),
               )(crews)
             }
+
+            {/* tasks */}
             {
               pipe(
                 getPath(['data', 'events']),
                 chain(safe(isArray)),
-                map(map(task => <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />)),
+                map(
+                  map(task => !['FINISHED', 'CANCELLED', 'CANCELLED_BY_CLIENT_CONFIRMED', null].includes(task?.status) && <MapTaskMarker key={`MapTaskIconMarker-${task.id}`} {...task} />),
+                ),
                 option(null),
               )(tasks)
             }
+
+            {/* when crew is driving back -> show labels on top of its dislocation zone */}
           </GoogleMap>
         ) : null
       }
       </section>
       <section className='flex flex-col h-screen justify-between overflow-y-auto w-1/4 bg-gray-100'>
         <aside className='border-l border-gray-border min-w-fit'>
-          <SidebarRight crews={temp} />
+          <SidebarRight crews={temp} offlineCrews={offlineCrews?.data?.crew} />
         </aside>
       </section>
     </>
